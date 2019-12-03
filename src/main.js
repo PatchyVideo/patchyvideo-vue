@@ -1,24 +1,23 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+import Vue from "vue";
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
+import axios from "axios";
+import VueAxios from "vue-axios";
+import ElementUI from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
 Vue.use(ElementUI);
-console.log(this);
+// console.log(this);
 
-console.log("这是main里的this");
-import login from './views/Login.vue'
-import $ from 'jquery'
+import login from "./views/Login.vue";
+import $ from "jquery";
 Vue.config.productionTip = false;
-Vue.use(VueAxios,axios);
+Vue.use(VueAxios, axios);
 
 Vue.prototype.$axios = axios;
 
- var vm = new Vue({
+var vm = new Vue({
   router,
   store,
   render: h => h(App)
-}).$mount('#app')
+}).$mount("#app");
