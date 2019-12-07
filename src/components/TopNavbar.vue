@@ -1,14 +1,16 @@
 <!--    vue组件：TopNavbar.vue     -->
 <!--
-    组件：左侧的标签导航栏
+    组件：左侧的热门标签导航栏
     大小：100% * 70px
     功能：网站主导航栏
     必要传入参数：无
     更新日志：
     12/1/2019: v1.0 
-        release
+      release
     12/3/2019：v1.1
-        修复了导航栏因为边框导致网站宽度大于浏览器宽度的问题
+      1.修复了导航栏因为边框导致网站宽度大于浏览器宽度的问题
+    12/7/2019: v1.2
+      2.新增退出登录效果
 -->
 
 <template>
@@ -51,7 +53,21 @@
             <router-link to="/login">{{this.$store.state.username}}</router-link>
           </li>
           <li>
-            <a href="/logout" @click="cleanLocalStorage">Log out</a>
+            <a @click="dialogVisible = true">Log out</a>
+
+            <!-- 退出登录的弹出框 -->
+            <el-dialog
+              title="提示"
+              :visible.sync="dialogVisible"
+              width="30%"
+              :before-close="handleClose"
+            >
+              <span>你确定要退出登录吗?</span>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="cleanLocalStorage">确 定</el-button>
+              </span>
+            </el-dialog>
           </li>
         </div>
       </ul>
@@ -63,10 +79,29 @@
 export default {
   data() {
     return {
+      // 控制退出登录的弹出框
+      dialogVisible: false,
       isLogin: true
     };
   },
-  methods: {},
+  methods: {
+    cleanLocalStorage: function() {
+      // 清除所有session值(退出登录)
+      sessionStorage.clear();
+      // 清除用户名
+      this.$store.commit("clearUserName");
+      window.location.reload();
+      this.dialogVisible = false;
+    },
+    // 控制退出登录的弹出框自带函数
+    handleClose(done) {
+      this.$confirm("确认关闭？")
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
+    }
+  },
   components: {}
 };
 </script>

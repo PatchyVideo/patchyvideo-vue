@@ -5,7 +5,9 @@ Vue.use(Vuex);
 var isfirst = true;
 export default new Vuex.Store({
   state: {
+    // 页面所处的位置（主页，播放列表，上传视频，增加标签等）
     bgcMark: "home",
+    // 用户名
     username: "Login",
     maxpage: 0,
     whichPage: 1,
@@ -14,6 +16,9 @@ export default new Vuex.Store({
   mutations: {
     getUserName(state, e) {
       state.username = e;
+    },
+    clearUserName(state) {
+      state.username = "Login";
     },
     changeBgc(state, e) {
       state.bgcMark = e;

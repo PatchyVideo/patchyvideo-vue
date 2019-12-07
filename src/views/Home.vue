@@ -10,17 +10,24 @@
       1.修复了页面宽度大于浏览器默认宽度的问题 
       2.增加了播放列表的背景图片 
       3.调整了介绍的排版，从原来的最多显示三行到现在的最多显示四行，剩下的内容使用省略号代替
+    12/7/2019: v1.0.2
+      1.修改了分页器设计,使用了ElementUI的标准样式,并可以调整页面显示的视频数量或者跳到某一页
+      2.新增加载界面,切换页面的时候网站会有加载效果
+      3.视频列表刷新(翻页,改变页面显示的视频数量)的时候会自动返回网页顶部
 -->
 <template>
   <div>
     <topnavbar />
 
-    <div class="w main-page-background-img">
+    <!-- home页面的正文 -->
+    <div class="w main-page-background-img" v-loading="loading">
       <left_navbar :msg="tags"></left_navbar>
+
       <div class="content">
+        <!-- 播放列表的抬头 -->
         <div class="video-list-header">
           <p>Showing {{count}} out of {{maxcount}} videos</p>
-          <el-select id="select-order" v-model="couponSelected" @change="getCouponSelected">
+          <el-select id="select-order" v-model="couponSelected">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -30,6 +37,7 @@
           </el-select>
         </div>
 
+        <!-- 播放列表正文 -->
         <ul>
           <li class="list-item" v-for="item in listvideo" :key="item._id.$oid">
             <div class="video-thumbnail">
@@ -58,7 +66,19 @@
             </div>
           </li>
         </ul>
-        <p class="page-selector"></p>
+
+        <!-- ElementUI自带的分页器 -->
+        <el-pagination
+          background
+          class="page-selector"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          layout="jumper, prev, pager, next, sizes"
+          :current-page="this.page"
+          :total="this.maxcount"
+          :page-size="10"
+          :page-sizes="[10, 20, 30, 40]"
+        ></el-pagination>
       </div>
     </div>
 
@@ -70,152 +90,97 @@
 import topnavbar from "../components/TopNavbar.vue";
 import left_navbar from "../components/LeftNavbar.vue";
 import Footer from "../components/Footer.vue";
-var test = 0;
 export default {
   data() {
     return {
-      testNum: [],
-      combo1: 1, //判断用户是否多次点击
-      combo2: 1, //判断用户是否多次点击
-      pageif: 1, //分页判断
+      // 视频列表的排序规则
       options: [
         { value: "latest      ", label: "Latest Post  " },
         { value: "oldest      ", label: "Oldest Post  " },
         { value: "video_latest", label: "Latest Upload" },
         { value: "video_oldest", label: "Oldest Upload" }
       ],
+      // 当前视频列表的排列顺序
       couponSelected: "",
+      // 当前页数
       page: 1,
+      // 全部分页数
       maxpage: 1,
-      count: 0,
+      // 每一页的视频数量
+      count: 10,
+      // 视频的全部数量
       maxcount: 0,
+      // 请求到的标签列表
       tags: [],
-      listvideo: []
+      // 请求到的视频列表
+      listvideo: [],
+      // 视频列表是否属于加载状态的判断
+      loading: true
     };
   },
   created() {
+    // 初始化页面名为home
     this.$store.commit("changeBgc", "home");
+    // 初始化排列顺序为最新上传排序
     this.couponSelected = this.options[0].value;
-    this.getListViedeo(this.page);
+    // 获取视频列表
+    this.getListViedeo(this.page, this.count);
   },
 
   mounted() {},
-  updated() {
-    if (this.pageif == 1) {
-      const p_obj = $(".page-selector");
-      p_obj.empty();
-      console.log("清空上一次分页栏...");
-      console.log("重新创建分页栏...");
-      this.objcreate(this.page, this.maxpage);
-    }
-    console.log("——————updated————");
-    console.log(this.$route.params);
-  },
+  updated() {},
   methods: {
-    getCouponSelected: function() {
-      console.log(this.couponSelected);
+    // 当前播放列表的页面切换的时候调用
+    handleCurrentChange(val) {
+      this.page = val;
     },
-    objcreate: function(selected_page, page_count) {
-      var that = this;
-      const p_obj = $(".page-selector");
-
-      if (selected_page > page_count || page_count < 1) return null;
-
-      if (page_count == 1) {
-        p_obj.append($(`<span>‹</span>`));
-        p_obj.append($(`<span>1</span>`));
-        p_obj.append($(`<span>›</span>`));
-        return p_obj;
-      }
-
-      if (selected_page == 1) {
-        p_obj.append($(`<span>‹</span>`));
-        p_obj.append($(`<span>1</span>`));
-      } else {
-        p_obj.append($(`<a  id="${selected_page - 1}")>‹</a>`));
-        p_obj.append($(`<a  id="1">1</a>`));
-      }
-      var start = Math.max(2, selected_page - 4);
-      var end = Math.min(page_count - 1, selected_page + 4);
-      if (start > 2) p_obj.append($(`<span>...</span>`));
-      for (let i = start; i <= end; ++i) {
-        if (i == selected_page) p_obj.append($(`<span>${i}</span>`));
-        else p_obj.append($(`<a id="${i}">${i}</a>`));
-      }
-      if (end < page_count - 1) p_obj.append($(`<span>...</span>`));
-      if (selected_page == page_count) {
-        p_obj.append($(`<span>${page_count}</span>`));
-        p_obj.append($(`<span>›</span>`));
-      } else {
-        p_obj.append($(`<a id="${page_count}">${page_count}</a>`));
-        p_obj.append($(`<a id="${selected_page + 1}">›</a>`));
-      }
-      $(".page-selector>a,.page-selector>span").css({
-        display: "inline-block",
-        "width        ": "30px        ",
-        "height       ": "30px        ",
-        cursor: " pointer",
-        "margin-left": "10px",
-        "border-radius": "50%         ",
-        "font-size    ": "30px        "
-      });
-      p_obj.on("click", "a", function() {
-        console.log($(this).attr("id"));
-        /*    $(this).trigger("create");*/
-        that.page = parseInt($(this).attr("id"));
-      });
-      return p_obj;
+    // 当前页面显示视频条数切换的时候调用
+    handleSizeChange(val) {
+      this.count = val;
+      console.log(`每页 ${val} 条`);
     },
+    // 储存播放列表的信息
     listvideoToStore() {
       this.$store.commit("getwhichPage", this.page);
       this.$store.commit("getVideoObj", this.listvideo);
     },
-    goToPage(page) {},
-    getListViedeo: function(e) {
-      console.log(
-        "combo1:" +
-          this.combo1 +
-          "______combo2:" +
-          this.combo2 +
-          "________page:" +
-          e
-      );
-      test++;
-      console.log("请求了" + test + "次");
+    // 请求播放列表数据
+    getListViedeo: function(e, count) {
+      // 先使页面出于加载状态
+      this.loading = true;
+
       this.axios({
         method: "post",
         url: "https://www.patchyvideo.com/listvideo.do",
-        data: { page: e, page_size: 20 }
+        data: { page: e, page_size: count }
       }).then(result => {
-        console.log("请求第：" + this.page + "页的数据");
-        console.log(result.data.data);
-
         if (this.maxcount == 0) {
           //第一次请求接口
           this.maxcount = result.data.data.count;
-          this.maxpage = Math.ceil(result.data.data.count / 20); //取得总页数制作分页
+          //取得总页数制作分页
+          this.maxpage = Math.ceil(result.data.data.count / count);
           this.$store.commit("getMaxPage", this.maxpage);
         }
-        this.count = result.data.data.videos.length;
         this.listvideo = result.data.data.videos;
         this.tags = result.data.data.tags;
+
+        // 加载结束,加载动画消失
+        this.loading = false;
+
+        // 回到顶部
+        if ($("html").scrollTop()) {
+          //动画效果
+          $("html").animate({ scrollTop: 0 }, 100);
+        }
       });
     }
   },
   watch: {
-    pageif(v1, v2) {
-      console.log("监听到pageif发生了改变");
-      const p_obj = $(".page-selector");
-      p_obj.empty();
-      console.log("清空上一次分页栏...");
-      this.objcreate(this.page, this.maxpage);
-      console.log("重新创建分页栏...");
-    },
     page(v) {
-      console.log("监听到page发生了改变");
-      console.log("重新请求新的页面数据...");
-      this.getListViedeo(this.page);
-      this.pageif++;
+      this.getListViedeo(this.page, this.count);
+    },
+    count(v) {
+      this.getListViedeo(this.page, this.count);
     },
     listvideo() {
       this.listvideoToStore();
@@ -228,38 +193,13 @@ export default {
 <style scoped>
 .content {
   background-color: #ffffffc9;
-  /* width: 85%; */
 }
-/* .footer {
-  height: 100px;
-  width: calc(100% - 20px);
-  background-color: #fff;
-  border-top: 1px solid #c5464a;
-  text-align: left;
-  line-height: 100px;
-  font-size: 14px;
-  color: #73777a;
-  letter-spacing: 0.5px;
-} */
+
 .page-selector {
   display: block;
   text-align: center;
 }
-.page-selector span {
-  display: block;
-  width: 100px;
-  height: 100px;
-  background-color: black;
-}
-.page-selector > a {
-  cursor: pointer;
-  margin-left: 10px;
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  font-size: 20px;
-}
+
 .video-list-header p {
   display: inline;
 }
@@ -270,12 +210,12 @@ export default {
   white-space: pre-wrap;
   overflow: hidden;
   height: 4.3rem;
-  /* 使文字变为最多显示4行，多余的使用省略号代替 */
-  overflow: hidden;
-  text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
+  /* 使文字变为最多显示4行，多余的使用省略号代替 */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .video-detail > div {
   position: absolute;
@@ -286,16 +226,20 @@ export default {
   height: 125px;
   position: relative;
 }
+
 .video-thumbnail {
   margin-right: 20px;
   float: left;
 }
+
 .list-item {
   padding-bottom: 10px;
 }
+
 .fa-copy:hover {
   color: olive;
 }
+
 .video-list-header p {
   display: inline-block;
   height: 25px;
@@ -314,6 +258,7 @@ export default {
   width: 100%;
   height: 50px;
 }
+
 .el-select {
   width: 200px;
   display: inline-block;
@@ -336,7 +281,8 @@ export default {
   background-image: url("./../static/img/imoto3.jpg");
   background-repeat: no-repeat;
   background-color: rgb(255, 255, 255);
-  min-height: 1000px;
+  min-height: 800px;
   width: 85%;
+  margin-top: 20px;
 }
 </style>

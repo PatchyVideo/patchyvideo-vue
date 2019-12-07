@@ -20,6 +20,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   width: 100%;
+  min-width: 1500px;
   height: 100%;
 }
 .home {
