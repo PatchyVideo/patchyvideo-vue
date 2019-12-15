@@ -14,6 +14,14 @@
       1.修改了分页器设计,使用了ElementUI的标准样式,并可以调整页面显示的视频数量或者跳到某一页
       2.新增加载界面,切换页面的时候网站会有加载效果
       3.视频列表刷新(翻页,改变页面显示的视频数量)的时候会自动返回网页顶部
+    12/10/2019: v1.0.3
+      1.点击播放列表的时候打开新的窗口而不是在本窗口跳转页面
+      2.精简了一下css的代码,修改了复制图标的css样式
+    12/14/2019: v1.0.4
+      1.实现了播放列表里链接的复制功能
+      2.对或许视频列表的接口进行了修改，可以进行视频的排序了
+    ★待解决问题：
+      播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
 -->
 <template>
   <div>
@@ -26,7 +34,7 @@
       <div class="content">
         <!-- 播放列表的抬头 -->
         <div class="video-list-header">
-          <p>Showing {{count}} out of {{maxcount}} videos</p>
+          <p>Showing {{ count }} out of {{ maxcount }} videos</p>
           <el-select id="select-order" v-model="couponSelected">
             <el-option
               v-for="item in options"
@@ -39,7 +47,7 @@
 
         <!-- 播放列表正文 -->
         <ul>
-          <li class="list-item" v-for="item in listvideo" :key="item._id.$oid">
+          <li class="list-item" v-for="(item, index) in listvideo" :key="item._id.$oid">
             <div class="video-thumbnail">
               <img
                 src="/images/covers/f5da2d4dd9eac171d47eb1100339cbad90e4648556a2f99a.png"
@@ -50,18 +58,20 @@
             <div class="video-detail">
               <h4>
                 <router-link
-                  :to="{path:'/video',query:{id:item._id.$oid}}"
+                  target="_blank"
+                  :to="{ path: '/video', query: { id: item._id.$oid } }"
                   tag="a"
-                >{{item.item.title}}</router-link>
+                >{{ item.item.title }}</router-link>
               </h4>
-              <p>{{item.item.desc}}</p>
+              <p>{{ item.item.desc }}</p>
               <div>
-                <img :src="'./img/'+item.item.site+'.ico'" width="16px" />
-                <a :href="item.item.url" id="link_5dd0262f9052645806fc1d54">{{item.item.url}}</a>
-                <i
-                  onclick="javascript:copyToClipboard($('#link_5dd0262f9052645806fc1d54'));"
-                  class="fa fa-copy fa-lg"
-                ></i>
+                <img :src="'./img/' + item.item.site + '.ico'" width="16px" />
+                <a :href="item.item.url" :id="'link' + (index)">
+                  {{
+                  item.item.url
+                  }}
+                </a>
+                <i @click="copyVideoLink(index)" class="fa fa-copy fa-lg"></i>
               </div>
             </div>
           </li>
@@ -90,13 +100,14 @@
 import topnavbar from "../components/TopNavbar.vue";
 import left_navbar from "../components/LeftNavbar.vue";
 import Footer from "../components/Footer.vue";
+import { copyToClipboard } from "../static/js/generic";
 export default {
   data() {
     return {
       // 视频列表的排序规则
       options: [
-        { value: "latest      ", label: "Latest Post  " },
-        { value: "oldest      ", label: "Oldest Post  " },
+        { value: "latest", label: "Latest Post  " },
+        { value: "oldest", label: "Oldest Post  " },
         { value: "video_latest", label: "Latest Upload" },
         { value: "video_oldest", label: "Oldest Upload" }
       ],
@@ -137,22 +148,28 @@ export default {
     // 当前页面显示视频条数切换的时候调用
     handleSizeChange(val) {
       this.count = val;
-      console.log(`每页 ${val} 条`);
     },
     // 储存播放列表的信息
     listvideoToStore() {
       this.$store.commit("getwhichPage", this.page);
       this.$store.commit("getVideoObj", this.listvideo);
     },
+    // 复制视频连接
+    // -------------------------危险提示-------------------------
+    //          此函数因为直接操纵dom可能导致网站受到攻击!
+    // -------------------------危险提示-------------------------
+    copyVideoLink: function(index) {
+      copyToClipboard($("#link" + index));
+    },
     // 请求播放列表数据
-    getListViedeo: function(e, count) {
+    getListViedeo: function(e, count, order) {
       // 先使页面出于加载状态
       this.loading = true;
 
       this.axios({
         method: "post",
         url: "https://www.patchyvideo.com/listvideo.do",
-        data: { page: e, page_size: count }
+        data: { page: e, page_size: count, order: this.couponSelected }
       }).then(result => {
         if (this.maxcount == 0) {
           //第一次请求接口
@@ -184,6 +201,9 @@ export default {
     },
     listvideo() {
       this.listvideoToStore();
+    },
+    couponSelected() {
+      this.getListViedeo(this.page, this.count);
     }
   },
   components: { left_navbar, topnavbar, Footer }
@@ -238,6 +258,7 @@ export default {
 
 .fa-copy:hover {
   color: olive;
+  cursor: pointer;
 }
 
 .video-list-header p {
@@ -280,7 +301,6 @@ export default {
 .main-page-background-img {
   background-image: url("./../static/img/imoto3.jpg");
   background-repeat: no-repeat;
-  background-color: rgb(255, 255, 255);
   min-height: 800px;
   width: 85%;
   margin-top: 20px;

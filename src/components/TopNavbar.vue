@@ -10,7 +10,9 @@
     12/3/2019：v1.1
       1.修复了导航栏因为边框导致网站宽度大于浏览器宽度的问题
     12/7/2019: v1.2
-      2.新增退出登录效果
+      1.新增退出登录效果
+    12/14/2019: v1.3
+      1.导航条中文化完成
 -->
 
 <template>
@@ -18,16 +20,16 @@
     <div class="nav_left">
       <ul>
         <li>
-          <router-link to="/home">Home</router-link>
+          <router-link to="/home">主页</router-link>
         </li>
         <li>
-          <router-link to="/lists">Playlists</router-link>
+          <router-link to="/lists">播放列表</router-link>
         </li>
         <li>
-          <router-link to="/postvideo">Post Video</router-link>
+          <router-link to="/postvideo">发布视频</router-link>
         </li>
         <li>
-          <router-link to="/edittag">Tags</router-link>
+          <router-link to="/edittag">标签</router-link>
         </li>
       </ul>
     </div>
@@ -35,17 +37,17 @@
       <ul>
         <li id="s1">
           <select class="form_select">
-            <option value="0">Tags</option>
+            <option value="0">标签</option>
           </select>
-          <input id="search-bar-query" name="query" type="text" placeholder="Search" value />
-          <input id="search-bar-submit" type="submit" value="Search" />
+          <input id="search-bar-query" name="query" type="text" placeholder="请输入搜索内容" value />
+          <input id="search-bar-submit" type="submit" value="搜索" />
         </li>
         <div class="loginUser" v-show="!isLogin">
           <li>
-            <router-link to="/login">Login</router-link>
+            <router-link to="/login">登录</router-link>
           </li>
           <li>
-            <a href="/logout">Log out</a>
+            <a href="/logout">注册</a>
           </li>
         </div>
         <div class="userHome" v-show="isLogin">
@@ -53,7 +55,7 @@
             <router-link to="/login">{{this.$store.state.username}}</router-link>
           </li>
           <li>
-            <a @click="dialogVisible = true">Log out</a>
+            <a @click="dialogVisible = true">注销</a>
 
             <!-- 退出登录的弹出框 -->
             <el-dialog
@@ -81,7 +83,7 @@ export default {
     return {
       // 控制退出登录的弹出框
       dialogVisible: false,
-      isLogin: true
+      isLogin: false
     };
   },
   methods: {

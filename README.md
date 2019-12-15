@@ -59,6 +59,7 @@
 - stylus
 - jquery
 - webpack
+- font-awesome
 
 项目依赖：
 
@@ -125,8 +126,7 @@
 
 一、listvideo.do
 
-输入：  
-
+输入：
 
 > page：数字，代表第几页
 
