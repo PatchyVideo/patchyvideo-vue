@@ -9,87 +9,117 @@
     12/14/2019: v1.0.1
       1.实现了播放列表里链接的复制功能
       2.对网站排版进行了部分修改
+    12/22/2019: v1.0.2
+      1.实现了网站标题和视频标题相一致的功能
+    12/26/2019：v1.1.0
+      1.使用直接向后端请求视频数据的方法重构了页面
+    ★待解决问题：
+      1.侧导航条的标签列表的标签内容显示有问题
+      2.与播放列表的链接有待更新     
+      3.视频介绍里的链接功能尚未实现 
+      4.会不定期的出现浏览器无法请求数据的问题，控制台报错：Uncaught (in promise) TypeError: ns.GetCommandSrc is not a function
+        IE，Edge：打不开任何网站
+        Chrome：进入视频详情后点击“前一篇”、“后一篇”累计超过两次会出现该错误
+        FireFox：点击视频详情后便出现该错误
+        Safari：进入主页就出现该错误（ipad版从局域网连接进入，且不能进入开发者模式，其具体原因可能有所不同）
+        手机自带浏览器：打不开网站（具体情况同上）
+        由于无法确定该bug产生的条件，尚未发现bug出现的原因，该bug曾经不定期的出现于开发初期，后来消失，现在重新出现
+        但发现启用VPN之后情况有所改善，推测可能和代理服务器有关，但有待进一步的检验
 -->
 <template>
   <div>
     <topnavbar />
 
     <!-- Detail页面的正文 -->
-    <div class="w detail-page-background-img">
-      <left_navbar :msg="tags"></left_navbar>
+    <div class="w detail-page-background-img" v-loading="loading">
+      <left_navbar :msg="myVideoData.tag_by_category"></left_navbar>
 
       <div class="content">
         <!-- 推荐视频栏开始  -->
         <div class="recommend">
-          <!-- 视频标题 -->
           <div class="re_top">
-            <h2>{{ myVideoData.item.title }}</h2>
+            <h2>{{ myVideoData.video.item.title }}</h2>
           </div>
-          <!-- 视频的链接 -->
           <h4 class="video_link">
-            <a id="video_link" :href="myVideoData.item.url">{{ myVideoData.item.url }}</a>
+            <a id="video_link" :href="myVideoData.video.item.url">{{
+              myVideoData.video.item.url
+            }}</a>
             <!-- 一键复制的小图标 -->
             <i @click="copyVideoLink" class="fa fa-copy fa-1x"></i>
           </h4>
+          <!-- 视频上传时间（？） -->
+          <h5 style="text-align: center;">{{ videodate }}</h5>
 
-          <h5 style="text-align: center;">2019-11-16 13:05:22.562000 UTC</h5>
-
+          <!-- 视频详细信息 -->
           <div class="re_video">
             <img
               src="/images/covers/f5da2d4dd9eac171d47eb1100339cbad90e4648556a2f99a.png"
               width="320px"
               height="200px"
             />
-            <!-- :title="myVideoData.item.title" -->
             <!-- :alt="myVideoData.item.title" -->
-            <!-- <p>{{ myVideoData.item.desc }}</p> -->
+            <!-- :title="myVideoData.item.title" -->
+            <p>{{ myVideoData.video.item.desc }}</p>
           </div>
         </div>
-        <!-- 推荐视频栏结束  -->
 
+        <!-- 副本列表 -->
         <div class="Copies_blibili">
           <div class="new_top">
-            <h2>Copies</h2>This video has no other copies.
+            <h2>副本</h2>
+            <p v-if="myVideoData.copies == ''">此视频不存在副本</p>
+            <p v-else>此视频有{{ myVideoData.copies.length }}个副本</p>
           </div>
-          <ul></ul>
+          <ul v-for="item in myVideoData.copies" :key="toString(item._id.$oid)">
+            <!-- 将页面参数刷新并重载页面，其中@click.native应该是router-link为了阻止a标签的默认跳转事件 -->
+            <router-link
+              :to="{ path: '/video', query: { id: item._id.$oid } }"
+              tag="a"
+              @click.native="reload"
+              >{{ item.item.title }}</router-link
+            >
+          </ul>
         </div>
 
+        <!-- 播放列表 -->
         <div class="Playlists">
-          <!-- 新视频栏开始  -->
-
           <div class="new_top">
-            <h2>Playlists</h2>
-
-            <p style="display: inline;">This video is not included in any playlists.</p>
+            <h2>播放列表</h2>
+            <p v-if="myVideoData.playlists == ''">
+              本视频不包含于任何播放列表中
+            </p>
+            <p v-else>
+              此视频存在于{{ myVideoData.playlists.length }}个播放列表中
+            </p>
           </div>
-        </div>
-        <ul></ul>
-        <div id="tag">
-          <i class="fa fa-close fa-2x" id="close"></i>
-          <i class="fa fa-circle-o fa-3x" id="save"></i>
-          <div class="minibox">
-            <div class="m_bg"></div>
-            <div class="m_a">
-              <ul class="Taglist Copyright"></ul>
-              <ul class="Taglist Language"></ul>
-              <ul class="Taglist Character"></ul>
-              <ul class="Taglist Author"></ul>
-              <ul class="Taglist General"></ul>
-              <ul class="Taglist Meta"></ul>
-            </div>
-            <div class="m_b">
-              <div>
-                <textarea id="ipt"></textarea>
-                <!--<input class="fa fa-plus-square" type="button"value="add">-->
-                <span id="addtag">
-                  <i class="fa fa-plus-square fa-2x"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-          <span class="tag_title">Edit Tags</span>
-          <span class="tag_title" style="opacity: 0;">Tag already exist</span>
-          <span class="tag_title" style="opacity: 0;">Tag not exist</span>
+          <ul
+            v-for="item in myVideoData.playlists"
+            :key="toString(item._id.$oid)"
+          >
+            <!-- 将页面参数刷新并重载页面，其中@click.native应该是router-link为了阻止a标签的默认跳转事件 -->
+            <router-link
+              v-if="item.prev != ''"
+              :to="{ path: '/video', query: { id: item.prev } }"
+              tag="a"
+              @click.native="reload"
+              >【前一篇】</router-link
+            >
+            <router-link
+              target="_blank"
+              :to="{ path: '/video', query: { id: item._id.$oid } }"
+              tag="a"
+              @click.native="reload"
+              >{{ item.title.english }}</router-link
+            >
+            <router-link
+              v-if="item.next != ''"
+              :to="{ path: '/video', query: { id: item.next } }"
+              tag="a"
+              @click.native="reload"
+              style="float:right"
+              >【后一篇】</router-link
+            >
+          </ul>
         </div>
       </div>
     </div>
@@ -106,17 +136,68 @@ import { copyToClipboard } from "../static/js/generic";
 export default {
   data() {
     return {
-      myVideoData: {},
-      tags: [],
-      localStorageNum: []
+      // 视频的详细信息
+      myVideoData: {
+        // 视频的副本列表
+        copies: [],
+        // 视频的播放列表
+        playlists: [],
+        // 视频的标签列表(已分类)
+        tag_by_category: {},
+        video: {
+          item: {
+            // 视频的标题
+            title: "",
+            // 视频介绍
+            desc: "",
+            // 视频上传时间(时间戳对象)
+            upload_time: {
+              $date: ""
+            },
+            // 视频的链接
+            url: ""
+          }
+        }
+      },
+      // 视频列表是否属于加载状态的判断
+      loading: true
+      // 获取到的所有视频，以页数为第一维组成二维数组(和localStorage存储一起使用，已被弃用）
+      // localStorageNum: []
     };
   },
+  computed: {
+    // 视频的上传日期
+    videodate() {
+      var upload_time = new Date(this.myVideoData.video.item.upload_time.$date);
+      var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
+      var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+      var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+      var h = upload_time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
+      var m = upload_time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
+      var s = upload_time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+      return (
+        "视频发布于 " +
+        y +
+        "-" +
+        M +
+        "-" +
+        d +
+        " " +
+        h +
+        ":" +
+        m +
+        ":" +
+        s +
+        " GMT+0800"
+      );
+    }
+  },
   created() {
-    window.localStorage.removeItem("loglevel:webpack-dev-server");
-    console.log(this.$route.query.id);
+    // 改变侧导航条的标题
+    this.$store.commit("changeLeftNavBarTitle", "标签");
+    // 删除本地储存(和localStorage存储一起使用，已被弃用）
+    // window.localStorage.removeItem("loglevel:webpack-dev-server");
     this.searchVideo();
-    this.tagsObjToArry();
-    this.tagtest();
   },
   mounted() {},
   methods: {
@@ -124,76 +205,62 @@ export default {
     copyVideoLink: function() {
       copyToClipboard($("#video_link"));
     },
-    searchVideo() {
-      /*
-             vuex存储:
-
-             for(let j=0;j<this.$store.state.videoObj.length;j++)
-                for(let i=0;i<this.$store.state.videoObj[j].length;++i)
-                {
-
-
-
-                    if(this.$store.state.videoObj[j][i]._id.$oid==this.$route.query.id)
-                    {
-         //找到了
-                        console.log("Detaail页面下的数据找到了");
-                        console.log(this.$store.state.videoObj[j][i]);
-                        this.myVideoData=this.$store.state.videoObj[j][i];
-                    }
-                }*/
-
-      //localStorage存储：
-      {
-        let maxnums = [];
-        for (let i in Object.keys(window.localStorage)) {
-          maxnums.push(parseInt(Object.keys(window.localStorage)[i]));
-        }
-        for (let i = 0; i < Math.max(...maxnums); ++i) {
-          if (this.localStorageNum[i] === undefined) {
-            this.localStorageNum[i] = [];
-          }
-        }
-        console.log(maxnums);
+    // 查询视频详细信息
+    searchVideo: function() {
+      // vuex存储:(已被弃用)
+      while (0) {
+        // for (let j = 0; j < this.$store.state.videoObj.length; j++) {
+        //   for (let i = 0; i < this.$store.state.videoObj[j].length; ++i) {
+        //     if (this.$store.state.videoObj[j][i]._id.$oid == this.$route.query.id) {
+        //       this.myVideoData = this.$store.state.videoObj[j][i];
+        //     }
+        //   }
+        // }
       }
-
-      for (let m in window.localStorage) {
-        if (typeof window.localStorage[m] == "string") {
-          this.localStorageNum[parseInt(m)] = JSON.parse(
-            window.localStorage[m]
-          );
-        }
+      // localStorage存储：(已被弃用)
+      while (0) {
+        // 初始化localStorageNum
+        // let maxnums = [];
+        // for (let i in Object.keys(window.localStorage)) {
+        //   maxnums.push(parseInt(Object.keys(window.localStorage)[i]));
+        // }
+        // for (let i = 0; i < Math.max(...maxnums); ++i) {
+        //   if (this.localStorageNum[i] === undefined) {
+        //     this.localStorageNum[i] = [];
+        //   }
+        // }
+        // for (let m in window.localStorage) {
+        //   if (typeof window.localStorage[m] == "string") {
+        //     this.localStorageNum[parseInt(m)] = JSON.parse(
+        //       window.localStorage[m]
+        //     );
+        //   }
+        // }
+        // // 根据传进来的视频ID寻找对应的视频详细信息
+        // for (let j = 0; j < this.localStorageNum.length; j++)
+        //   for (let i = 0; i < this.localStorageNum[j].length; ++i) {
+        //     if (this.localStorageNum[j][i]._id.$oid == this.$route.query.id) {
+        //       this.myVideoData = this.localStorageNum[j][i];
+        //     }
+        //   }
       }
-      for (let j = 0; j < this.localStorageNum.length; j++)
-        for (let i = 0; i < this.localStorageNum[j].length; ++i) {
-          if (this.localStorageNum[j][i]._id.$oid == this.$route.query.id) {
-            //找到了`
-            console.log("Detaail页面下的数据找到了");
-            console.log(this.localStorageNum[j][i]);
-            this.myVideoData = this.localStorageNum[j][i];
-          }
-        }
-      console.log("localStorageNum:");
-      console.log(this.localStorageNum);
-      console.log("myVideoData:");
-      console.log(this.myVideoData);
-      console.log("分割");
-    },
-    tagsObjToArry() {
-      /*     this.myVideoData.tags.forEach((item,i)=>{
-                    this.tags.push(item);
-                })
-                console.log(this.tags);*/
-    },
-    tagtest() {
+      // 直接向后端请求视频数据
       this.axios({
         method: "post",
-        url: "https://www.patchyvideo.com/tags/query_tag_categories.do",
-        data: { tags: this.myVideoData.tags }
+        url: "https://www.patchyvideo.com/getvideo.do",
+        data: { vid: this.$route.query.id }
       }).then(result => {
-        console.log(result.data.data.categorie_map);
-        this.tags = result.data.data.categorie_map;
+        this.myVideoData = result.data.data;
+
+        // 修改网站标题
+        document.title = this.myVideoData.video.item.title;
+        // 加载结束,加载动画消失
+        this.loading = false;
       });
+    },
+    // 刷新页面
+    reload: function() {
+      this.$router.go(0);
     }
   },
   components: { left_navbar, topnavbar, Footer }
@@ -206,14 +273,16 @@ export default {
   cursor: pointer;
 }
 
-.recommend,
-.Copies_blibili,
+.Copies_blibili ul a {
+  cursor: pointer;
+  text-align: center;
+}
 .Playlists {
   display: block;
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 
-.re_top h2,
 .new_top h2 {
   word-wrap: break-word;
   word-break: normal;
@@ -237,6 +306,9 @@ export default {
 .new_top {
   padding-bottom: 10px;
   border-bottom: 3px solid red;
+}
+.re_top {
+  text-align: center;
 }
 .new_top {
   border-bottom: 3px solid #21c6ef;
