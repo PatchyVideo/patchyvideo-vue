@@ -17,14 +17,7 @@
       1.侧导航条的标签列表的标签内容显示有问题
       2.与播放列表的链接有待更新     
       3.视频介绍里的链接功能尚未实现 
-      4.会不定期的出现浏览器无法请求数据的问题，控制台报错：Uncaught (in promise) TypeError: ns.GetCommandSrc is not a function
-        IE，Edge：打不开任何网站
-        Chrome：进入视频详情后点击“前一篇”、“后一篇”累计超过两次会出现该错误
-        FireFox：点击视频详情后便出现该错误
-        Safari：进入主页就出现该错误（ipad版从局域网连接进入，且不能进入开发者模式，其具体原因可能有所不同）
-        手机自带浏览器：打不开网站（具体情况同上）
-        由于无法确定该bug产生的条件，尚未发现bug出现的原因，该bug曾经不定期的出现于开发初期，后来消失，现在重新出现
-        但发现启用VPN之后情况有所改善，推测可能和代理服务器有关，但有待进一步的检验
+      4.按下浏览器的后退按钮网站没有刷新数据
 -->
 <template>
   <div>
@@ -41,9 +34,11 @@
             <h2>{{ myVideoData.video.item.title }}</h2>
           </div>
           <h4 class="video_link">
-            <a id="video_link" :href="myVideoData.video.item.url">{{
+            <a id="video_link" :href="myVideoData.video.item.url">
+              {{
               myVideoData.video.item.url
-            }}</a>
+              }}
+            </a>
             <!-- 一键复制的小图标 -->
             <i @click="copyVideoLink" class="fa fa-copy fa-1x"></i>
           </h4>
@@ -76,8 +71,7 @@
               :to="{ path: '/video', query: { id: item._id.$oid } }"
               tag="a"
               @click.native="reload"
-              >{{ item.item.title }}</router-link
-            >
+            >{{ item.item.title }}</router-link>
           </ul>
         </div>
 
@@ -85,40 +79,30 @@
         <div class="Playlists">
           <div class="new_top">
             <h2>播放列表</h2>
-            <p v-if="myVideoData.playlists == ''">
-              本视频不包含于任何播放列表中
-            </p>
-            <p v-else>
-              此视频存在于{{ myVideoData.playlists.length }}个播放列表中
-            </p>
+            <p v-if="myVideoData.playlists == ''">本视频不包含于任何播放列表中</p>
+            <p v-else>此视频存在于{{ myVideoData.playlists.length }}个播放列表中</p>
           </div>
-          <ul
-            v-for="item in myVideoData.playlists"
-            :key="toString(item._id.$oid)"
-          >
+          <ul v-for="item in myVideoData.playlists" :key="toString(item._id.$oid)">
             <!-- 将页面参数刷新并重载页面，其中@click.native应该是router-link为了阻止a标签的默认跳转事件 -->
             <router-link
               v-if="item.prev != ''"
               :to="{ path: '/video', query: { id: item.prev } }"
               tag="a"
               @click.native="reload"
-              >【前一篇】</router-link
-            >
+            >【前一篇】</router-link>
             <router-link
               target="_blank"
               :to="{ path: '/video', query: { id: item._id.$oid } }"
               tag="a"
               @click.native="reload"
-              >{{ item.title.english }}</router-link
-            >
+            >{{ item.title.english }}</router-link>
             <router-link
               v-if="item.next != ''"
               :to="{ path: '/video', query: { id: item.next } }"
               tag="a"
               @click.native="reload"
               style="float:right"
-              >【后一篇】</router-link
-            >
+            >【后一篇】</router-link>
           </ul>
         </div>
       </div>
@@ -322,7 +306,6 @@ export default {
 
 .re_video img {
   display: block;
-  vertical-align: middle;
   margin: 20px auto;
   float: none;
 }
