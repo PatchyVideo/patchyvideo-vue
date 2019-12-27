@@ -21,7 +21,8 @@
       1.实现了播放列表里链接的复制功能
       2.对或许视频列表的接口进行了修改，可以进行视频的排序了
     ★待解决问题：
-      播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
+      1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
+      2.侧导航条的标签列表的标签内容显示有问题
 -->
 <template>
   <div>
@@ -66,11 +67,7 @@
               <p>{{ item.item.desc }}</p>
               <div>
                 <img :src="'./img/' + item.item.site + '.ico'" width="16px" />
-                <a :href="item.item.url" :id="'link' + (index)">
-                  {{
-                  item.item.url
-                  }}
-                </a>
+                <a :href="item.item.url" :id="'link' + (index)">{{item.item.url}}</a>
                 <i @click="copyVideoLink(index)" class="fa fa-copy fa-lg"></i>
               </div>
             </div>
@@ -86,7 +83,7 @@
           layout="jumper, prev, pager, next, sizes"
           :current-page="this.page"
           :total="this.maxcount"
-          :page-size="10"
+          :page-size="20"
           :page-sizes="[10, 20, 30, 40]"
         ></el-pagination>
       </div>
@@ -118,12 +115,12 @@ export default {
       // 全部分页数
       maxpage: 1,
       // 每一页的视频数量
-      count: 10,
+      count: 20,
       // 视频的全部数量
       maxcount: 0,
       // 请求到的标签列表
       tags: [],
-      // 请求到的视频列表
+      // 请求到的视频列表（本页的视频列表）
       listvideo: [],
       // 视频列表是否属于加载状态的判断
       loading: true
@@ -136,6 +133,10 @@ export default {
     this.couponSelected = this.options[0].value;
     // 获取视频列表
     this.getListViedeo(this.page, this.count);
+    // 改变侧导航条的标题
+    this.$store.commit("changeLeftNavBarTitle", "热门标签");
+    // 修改网站标题
+    document.title = "patchyvideo";
   },
 
   mounted() {},

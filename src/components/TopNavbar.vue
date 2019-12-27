@@ -39,7 +39,13 @@
           <select class="form_select">
             <option value="0">标签</option>
           </select>
-          <input id="search-bar-query" name="query" type="text" placeholder="请输入搜索内容" value />
+          <input
+            id="search-bar-query"
+            name="query"
+            type="text"
+            placeholder="请输入搜索内容"
+            value
+          />
           <input id="search-bar-submit" type="submit" value="搜索" />
         </li>
         <div class="loginUser" v-show="!isLogin">
@@ -52,7 +58,9 @@
         </div>
         <div class="userHome" v-show="isLogin">
           <li>
-            <router-link to="/login">{{this.$store.state.username}}</router-link>
+            <router-link to="/login">{{
+              this.$store.state.username
+            }}</router-link>
           </li>
           <li>
             <a @click="dialogVisible = true">注销</a>
@@ -67,7 +75,9 @@
               <span>你确定要退出登录吗?</span>
               <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="cleanLocalStorage">确 定</el-button>
+                <el-button type="primary" @click="cleanLocalStorage"
+                  >确 定</el-button
+                >
               </span>
             </el-dialog>
           </li>
@@ -114,7 +124,7 @@ export default {
 .top-navbar {
   margin: 0 auto;
   height: 70px;
-  width: calc(100% - 20px);
+  width: calc(100%-20px);
   display: flex;
   align-items: center;
   overflow: hidden;
