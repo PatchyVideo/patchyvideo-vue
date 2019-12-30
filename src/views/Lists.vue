@@ -103,8 +103,8 @@ export default {
     };
   },
   created() {
-    // 初始化页面名为home
-    this.$store.commit("changeBgc", "home");
+    // 初始化页面名为list
+    this.$store.commit("changeBgc", "list");
     // 获取视频列表列表
     this.getVideoList(this.page, this.count);
     // 修改网站标题

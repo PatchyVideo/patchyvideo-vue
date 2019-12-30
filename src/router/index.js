@@ -68,17 +68,25 @@ const router = new VueRouter({
   routes
 });
 
+// -------------------------危险提示-------------------------
+//   此函数将用户名保存在本地数据中且未加密，有泄露的风险！！！
+// -------------------------危险提示-------------------------
 router.beforeEach((to, from, next) => {
   // to将要访问的路径
   // from从哪个路径跳转而来
   //next('/xxx')表示放行,或强制跳转到/xxx
-  // console.log(store.state.username);
+
+  // 从本地储存提取登录状态
+  var loginflag = localStorage.getItem("isLogin");
+  var username = localStorage.getItem("username");
+  store.commit("getUserName", username);
+
   if (to.path == "/login" || to.path == "/home") {
     // console.log("无权限页面放行");
     return next();
   }
   if (to.path == "/postvideo" || to.path == "/edittag") {
-    if (store.state.username != "Login") {
+    if (store.state.username != "") {
       // console.log("已登录放行");
       return next();
     } else {

@@ -89,10 +89,6 @@ export default {
 </script>
 
 <style scoped>
-.left_list ul:hover .tag {
-  /*       width:expression(varWidth + "px")*/
-}
-
 .left_list li {
   width: 100%;
   transition: all 2s ease;
