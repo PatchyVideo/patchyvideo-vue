@@ -20,9 +20,15 @@
     12/14/2019: v1.0.4
       1.实现了播放列表里链接的复制功能
       2.对或许视频列表的接口进行了修改，可以进行视频的排序了
+    12/27/2019: v1.0.5
+      1.修复了“getListVideo”方法名的拼写错误,注释进行优化
+      2.去掉了“getListVideo”方法里视频列表是否第一次请求的判断
+    12/29/2019: v1.0.5
+      1.修复了网站链接前的小图标无法正常显示的问题,同时调整了图标间的距离
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
       2.侧导航条的标签列表的标签内容显示有问题
+      3.图片链接尚未完工
 -->
 <template>
   <div>
@@ -66,9 +72,13 @@
               </h4>
               <p>{{ item.item.desc }}</p>
               <div>
-                <img :src="'./img/' + item.item.site + '.ico'" width="16px" />
+                <img
+                  :src="require('../static/img/' + item.item.site + '.png')"
+                  width="16px"
+                  style="margin-right:2px"
+                />
                 <a :href="item.item.url" :id="'link' + (index)">{{item.item.url}}</a>
-                <i @click="copyVideoLink(index)" class="fa fa-copy fa-lg"></i>
+                <i @click="copyVideoLink(index)" class="fa fa-copy fa-lg" style="margin-left:2px"></i>
               </div>
             </div>
           </li>
@@ -132,7 +142,7 @@ export default {
     // 初始化排列顺序为最新上传排序
     this.couponSelected = this.options[0].value;
     // 获取视频列表
-    this.getListViedeo(this.page, this.count);
+    this.getListVideo(this.page, this.count);
     // 改变侧导航条的标题
     this.$store.commit("changeLeftNavBarTitle", "热门标签");
     // 修改网站标题
@@ -159,26 +169,25 @@ export default {
     // -------------------------危险提示-------------------------
     //          此函数因为直接操纵dom可能导致网站受到攻击!
     // -------------------------危险提示-------------------------
+    // 此外，此函数在其他页面也有调用，在优化的时候请注意其他页面的同步
     copyVideoLink: function(index) {
       copyToClipboard($("#link" + index));
     },
     // 请求播放列表数据
-    getListViedeo: function(e, count, order) {
+    getListVideo: function(e, count, order) {
       // 先使页面出于加载状态
       this.loading = true;
 
+      // 请求数据
       this.axios({
         method: "post",
         url: "https://www.patchyvideo.com/listvideo.do",
         data: { page: e, page_size: count, order: this.couponSelected }
       }).then(result => {
-        if (this.maxcount == 0) {
-          //第一次请求接口
-          this.maxcount = result.data.data.count;
-          //取得总页数制作分页
-          this.maxpage = Math.ceil(result.data.data.count / count);
-          this.$store.commit("getMaxPage", this.maxpage);
-        }
+        this.maxcount = result.data.data.count;
+        //取得总页数制作分页
+        this.maxpage = Math.ceil(result.data.data.count / count);
+        this.$store.commit("getMaxPage", this.maxpage);
         this.listvideo = result.data.data.videos;
         this.tags = result.data.data.tags;
 
@@ -195,16 +204,16 @@ export default {
   },
   watch: {
     page(v) {
-      this.getListViedeo(this.page, this.count);
+      this.getListVideo(this.page, this.count);
     },
     count(v) {
-      this.getListViedeo(this.page, this.count);
+      this.getListVideo(this.page, this.count);
     },
     listvideo() {
       this.listvideoToStore();
     },
     couponSelected() {
-      this.getListViedeo(this.page, this.count);
+      this.getListVideo(this.page, this.count);
     }
   },
   components: { left_navbar, topnavbar, Footer }
@@ -231,10 +240,10 @@ export default {
   white-space: pre-wrap;
   overflow: hidden;
   height: 4.3rem;
+  /* 使文字变为最多显示4行，多余的使用省略号代替 */
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
-  /* 使文字变为最多显示4行，多余的使用省略号代替 */
   overflow: hidden;
   text-overflow: ellipsis;
 }

@@ -2,12 +2,14 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import lists from "../views/Lists.vue";
+import listdetail from "../views/ListDetail.vue";
 import postvideo from "../views/PostVideo.vue";
 import detail from "../views/Detail.vue";
 import login from "../views/Login.vue";
 import signup from "../views/SignUp.vue";
 import edittag from "../views/Edittag.vue";
 import store from "../store/index.js";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -28,26 +30,34 @@ const routes = [
     component: lists
   },
   {
+    path: "/listdetail",
+
+    component: listdetail
+  },
+  {
     path: "/postvideo",
 
     component: postvideo
   },
   {
     path: "/video",
+
     component: detail
   },
 
   {
     path: "/login",
+
     component: login
-    /*  component: () => import('../views/Login.vue')*/
   },
   {
     path: "/signup",
+
     component: signup
   },
   {
     path: "/edittag",
+
     component: edittag
   }
 ];

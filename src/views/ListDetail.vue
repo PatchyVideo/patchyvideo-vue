@@ -1,65 +1,60 @@
-<!--    vue页面：List.vue     -->
+<!--    vue页面：ListDetail.vue     -->
 <!--
-    页面：paychyvideo的播放列表页面
-    功能：展示网站收录的所有视频列表
-    包含组件：TopNavbar.vue、Foot.vue
+    页面：视频列表的详细信息
+    功能：展示展示视频列表的详细信息
+    包含组件：LeftNavbar.vue、TopNavbar.vue、Foot.vue
     更新日志：
-    12/27/2019: v1.0 
+    12/29/2019: v1.0 
       release
     ★待解决问题：
-    1.图片链接尚未完工
-    2.作者链接尚未完工
-    3.由于标题可能会超过一行导致视频列表高度变高，从而导致排版不太好看
-    4.制作播放列表的功能尚未完成
+      1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
+      2.图片链接尚未完工
 -->
 <template>
   <div>
     <topnavbar />
 
-    <!-- list页面的正文 -->
+    <!-- listdetail页面的正文 -->
     <div class="w main-page-background-img" v-loading="loading">
       <div class="content">
         <!-- 视频列表介绍 -->
         <div class="deemo shadow">
           <div class="d_t">
-            <img src="../static/img/4.png" style="float:left" />
-            <img src="../static/img/3.png" style="float:right" />
-            <p>
-              Playlists help people organize videos of the same series or have other attributes in common that require order.
-              <br />Use playlist ONLY IF order is a must, otherwise using tags falls better in line with the site's design.
-              <br />播放列表功能的核心是为视频提供顺序，如果顺序不是必须要求则使用tag是更好的选择。
-            </p>
-            <el-button type="primary" plain class="createPlayListButton">创建播放列表</el-button>
+            <img src="../static/img/5.png" style="float:left;margin-top:50px;" />
+            <img src="../static/img/1.png" style="float:right;margin-top:50px;" />
+            <h2>{{ videolistName }}</h2>
+            <img src="../static/img/videolistPic.png" />
+            <p>{{ videolistDesc }}</p>
           </div>
         </div>
 
-        <!-- 视频列表列表 -->
+        <!-- 视频列表 -->
         <div class="recommend">
-          <div class="minbox shadow" v-for="item in videolist" :key="item._id.$oid">
-            <!-- 视频列表标题 -->
-            <div class="re_top">
-              <h2>
-                <router-link
-                  target="_blank"
-                  :to="{ path: '/listdetail', query: { id: item._id.$oid } }"
-                  tag="a"
-                >{{ item.title.english }}</router-link>
-              </h2>
-              <h5 style="float: right;">共{{ item.videos }}个视频</h5>
-            </div>
-            <!-- 视频列表详情 -->
+          <!-- 视频详情 -->
+          <div class="minbox shadow" v-for="(item, index) in videolistVideos" :key="item._id.$oid">
             <div class="re_video">
-              <img src="../static/img/videolistPic.png" />
+              <h1>{{ index+1 }}</h1>
+              <img class="re_video_img" src="../static/img/videolistPic.png" />
               <div class="re_video_desc">
-                <p>
-                  <strong>{{ item.desc.english }}</strong>
-                </p>
+                <h3>
+                  <router-link
+                    target="_blank"
+                    :to="{ path: '/video', query: { id: item._id.$oid } }"
+                    tag="a"
+                  >{{ item.item.title }}</router-link>
+                </h3>
+                <p>{{ item.item.desc }}</p>
+                <div>
+                  <img
+                    :src="require('../static/img/' + item.item.site + '.png')"
+                    width="16px"
+                    style="margin-right:2px"
+                  />
+                  <a :href="item.item.url" :id="'link' + (index)">{{ item.item.url }}</a>
+                  <i @click="copyVideoLink(index)" class="fa fa-copy fa-lg" style="margin-left:2px"></i>
+                </div>
               </div>
             </div>
-            <p class="minbox_creater">
-              作者：
-              <a href="/users/5d39bccc10f25ebf56fd0f62">{{ item.user_detail.profile.username }}</a>
-            </p>
           </div>
         </div>
 
@@ -85,30 +80,34 @@
 <script>
 import topnavbar from "../components/TopNavbar.vue";
 import Footer from "../components/Footer.vue";
+import { copyToClipboard } from "../static/js/generic";
+
 export default {
   data() {
     return {
+      // 视频列表的详细信息
+      videolistDetail: {},
+      // 视频列表的名称
+      videolistName: "",
+      // 视频列表的介绍
+      videolistDesc: "",
+      // 视频列表里的视频
+      videolistVideos: [],
       // 当前页数
       page: 1,
       // 全部分页数
       maxpage: 1,
-      // 每一页的视频列表数量
+      // 每一页的视频数量
       count: 20,
-      // 视频列表的全部数量
+      // 视频的全部数量
       maxcount: 0,
-      // 请求到的视频列表列表（本页的视频列表列表）
-      videolist: [],
       // 视频列表是否属于加载状态的判断
       loading: true
     };
   },
+  computed: {},
   created() {
-    // 初始化页面名为home
-    this.$store.commit("changeBgc", "home");
-    // 获取视频列表列表
     this.getVideoList(this.page, this.count);
-    // 修改网站标题
-    document.title = "patchyvideo";
   },
   methods: {
     // 当前播放列表的页面切换的时候调用
@@ -119,20 +118,22 @@ export default {
     handleSizeChange(val) {
       this.count = val;
     },
-    // 请求播放列表列表数据
+    // 请求单个播放列表详细数据
     getVideoList: function(e, count) {
       // 先使页面出于加载状态
       this.loading = true;
 
-      // 请求数据
       this.axios({
         method: "post",
-        url: "https://www.patchyvideo.com/lists/all.do",
-        data: { page: e, page_size: count }
+        url: "https://www.patchyvideo.com/lists/get_playlist.do",
+        data: { page: e, page_size: count, pid: this.$route.query.id }
       }).then(result => {
+        this.videolistDetail = result.data.data;
+        this.videolistName = this.videolistDetail.playlist.title.english;
+        this.videolistDesc = this.videolistDetail.playlist.desc.english;
+        this.videolistVideos = this.videolistDetail.videos;
         this.maxcount = result.data.data.count;
         this.maxpage = result.data.data.page_count;
-        this.videolist = result.data.data.playlists;
 
         // 加载结束,加载动画消失
         this.loading = false;
@@ -143,6 +144,10 @@ export default {
           $("html").animate({ scrollTop: 0 }, 100);
         }
       });
+    },
+    // 复制视频连接
+    copyVideoLink: function(index) {
+      copyToClipboard($("#link" + index));
     }
   },
   watch: {
@@ -163,10 +168,8 @@ export default {
   width: 80%;
   position: relative;
   flex: 1;
-  background-color: #ffffffc9;
 }
 .main-page-background-img {
-  background-image: url("./../static/img/imoto3.jpg");
   background-repeat: no-repeat;
   min-height: 800px;
   width: 85%;
@@ -177,40 +180,26 @@ export default {
   margin-bottom: 0px;
   padding-bottom: 20px;
 }
-.d_t:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-.d_t a {
-  display: block;
-  width: 300px;
-  margin: auto;
+.d_t h2 {
+  padding-top: 20px;
 }
 .d_t p {
-  display: block;
   width: 60%;
-  color: #fb8ca2;
   text-align: center;
-  padding-top: 100px;
-  margin: 0px auto 30px;
+  white-space: pre-line;
+  margin: 0px auto;
 }
 .d_t img {
   height: 200px;
   margin: 10px;
   background-color: rgba(255, 255, 255, 0);
 }
-.createPlayListButton {
-  width: 30%;
-}
 
 .minbox {
-  display: inline-block;
-  width: calc(50% - 50px);
+  width: 1200px;
   margin-left: 12.5px;
   margin-right: 12.5px;
-  margin-top: 40px;
-}
-.minbox_creater {
-  padding-bottom: 20px;
+  margin-top: 30px;
 }
 
 .re_top {
@@ -225,32 +214,39 @@ export default {
 }
 .re_video {
   text-align: left;
+  /* height: 150px; */
   margin-left: 10px;
   margin-right: 10px;
   margin-top: 20px;
-  vertical-align: middle;
+  padding-top: 20px;
 }
-.re_video img {
+.re_video h1 {
   display: inline-block;
-  width: calc(50% - 20px);
+  font-size: 80px;
+  margin-right: 30px;
+  position: relative;
+  bottom: 35px;
+  color: rgb(98, 169, 231);
+}
+.re_video_img {
+  display: inline-block;
+  width: 200px;
   margin-right: 20px;
-  min-width: 240px;
-  min-height: 150px;
 }
 .re_video_desc {
-  width: 45%;
-  height: auto;
-  min-width: 270px;
-  min-height: 150px;
-  margin-top: 40px;
+  width: 850px;
   display: inline-block;
   vertical-align: top;
   white-space: pre-wrap;
   height: 4.3rem;
 }
 .re_video_desc p {
-  font-size: 1.2rem;
-  text-align: center;
+  font-size: 1rem;
+  line-height: 1.1rem;
+  height: 4.3rem;
+  white-space: pre-wrap;
+  margin-top: 10px;
+  margin-bottom: 10px;
   /* 使文字变为最多显示4行，多余的使用省略号代替 */
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
@@ -263,5 +259,10 @@ export default {
   display: block;
   text-align: center;
   margin-top: 20px;
+}
+
+.fa-copy:hover {
+  color: olive;
+  cursor: pointer;
 }
 </style>

@@ -4,22 +4,56 @@
     大小：15% * 100%
     功能：home页面下对标签进行导航
     必要传入参数：
-      1.从https://www.patchyvideo.com/listvideo.do请求来的数据的data.data.tags
-      2.标题的名称(从vuex的"leftNavBarTitle"参数里获取)
+      1.标题的名称(从vuex的"leftNavBarTitle"参数里获取)
+      2.（Home页面下）从https://www.patchyvideo.com/listvideo.do请求来的数据的data.data.tags
+      3.（Detail页面下）从https://www.patchyvideo.com/getvideo.do请求来的数据的data.data.tag_by_category
     更新日志：
     12/1/2019: v1.0 
       release
     12/23/2019: v1.0.1
       1.实现了动态调整标题的功能
+    12/30/2019：v1.0.2
+      1.实现了根据tag类型自动渲染tag颜色的功能
+      2.实现了将Home页面渲染的导航栏和Detail页面渲染的导航栏分开的功能
+    ★待解决问题：
+      1.与搜索界面的联动（现在标签不可点击）
 -->
 
 <template>
   <div class="left-navbar">
     <div class="left_list">
       <h1>{{ title }}</h1>
-      <ul ref="test">
-        <li class="tag" v-for="(item,i) in msg">
-          <router-link :to="'href=+/search?query='+i">{{i}}</router-link>
+      <!-- 在Home页面渲染的侧导航条内容 -->
+      <ul ref="test" v-if="title=='热门标签'">
+        <li class="tag" v-for="(val,key) in msg" :key="key">
+          <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
+          <!-- 根据tag名称自动渲染tag颜色 -->
+          <p
+            v-bind:class="{Copyright:val=='Copyright',
+            Language:val=='Language',
+            Character:val=='Character',
+            Author:val=='Author',
+            General:val=='General',
+            Meta:val=='Meta'}"
+          >{{key}}</p>
+        </li>
+      </ul>
+
+      <!-- 在Detail页面渲染的侧导航条内容 -->
+      <ul ref="test" v-if="title=='标签'">
+        <li class="tag" v-for="(key, val) in msg" :key="val">
+          <h3>{{ val }}</h3>
+          <!-- 根据tag名称自动渲染tag颜色 -->
+          <p
+            v-for="item in key"
+            :key="item"
+            v-bind:class="{Copyright:val=='Copyright',
+            Language:val=='Language',
+            Character:val=='Character',
+            Author:val=='Author',
+            General:val=='General',
+            Meta:val=='Meta'}"
+          >{{ item }}</p>
         </li>
       </ul>
     </div>
@@ -85,8 +119,15 @@ export default {
   line-height: 1.5em;
   padding-left: 20px;
   margin-top: 20px;
+  color: #000;
 }
-.left_list li a {
+.left_list h3 {
+  font-family: Tahoma, Verdana, Helvetica, sans-serif;
+  color: #000;
+  line-height: 1.2em;
+  margin-top: 10px;
+}
+.left_list li p {
   line-height: 30px;
   text-decoration: none;
 }
@@ -98,5 +139,24 @@ export default {
   width: 15%;
   margin-right: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+/* 针对列表调整颜色 */
+.Copyright {
+  color: #a0a;
+}
+.Language {
+  color: #585455;
+}
+.Character {
+  color: #0a0;
+}
+.Author {
+  color: #a00;
+}
+.General {
+  color: #0073ff;
+}
+.Meta {
+  color: #f80;
 }
 </style>
