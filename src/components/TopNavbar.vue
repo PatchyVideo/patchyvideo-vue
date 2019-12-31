@@ -69,7 +69,7 @@
         <!-- 登录成功后的用户界面 -->
         <div class="userHome" v-show="isLogin">
           <li>
-            <router-link to="/login">{{ this.$store.state.username}}</router-link>
+            <router-link to="/users">{{ this.$store.state.username}}</router-link>
           </li>
           <li>
             <a @click="dialogVisible = true" style="cursor:pointer">登出</a>

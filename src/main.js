@@ -7,9 +7,10 @@ import VueAxios from "vue-axios";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import "font-awesome/css/font-awesome.min.css";
+import echarts from 'echarts';
 Vue.use(ElementUI);
 // console.log(this);
-
+Vue.prototype.$echarts = echarts;
 import login from "./views/Login.vue";
 import $ from "jquery";
 Vue.config.productionTip = false;

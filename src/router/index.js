@@ -9,7 +9,7 @@ import login from "../views/Login.vue";
 import signup from "../views/SignUp.vue";
 import edittag from "../views/Edittag.vue";
 import store from "../store/index.js";
-
+import User from "../views/User";
 Vue.use(VueRouter);
 
 const routes = [
@@ -59,6 +59,10 @@ const routes = [
     path: "/edittag",
 
     component: edittag
+  },
+  {
+    path:'/users',
+    component:User
   }
 ];
 
@@ -85,7 +89,7 @@ router.beforeEach((to, from, next) => {
     // console.log("无权限页面放行");
     return next();
   }
-  if (to.path == "/postvideo" || to.path == "/edittag") {
+  if (to.path == "/postvideo" || to.path == "/edittag"||to.path=="/users") {
     if (store.state.username != "") {
       // console.log("已登录放行");
       return next();
