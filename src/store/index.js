@@ -7,7 +7,7 @@ export default new Vuex.Store({
     // 页面所处的位置（主页，播放列表，上传视频，增加标签等）
     bgcMark: "home",
     // 用户名
-    username: "Login",
+    username: "",
     maxpage: 0,
     whichPage: 1,
     // 视频的数据列表(所有视频按照页数组成二维数组)
@@ -20,7 +20,7 @@ export default new Vuex.Store({
       state.username = e;
     },
     clearUserName(state) {
-      state.username = "Login";
+      state.username = "";
     },
     changeBgc(state, e) {
       state.bgcMark = e;

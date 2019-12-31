@@ -1,4 +1,4 @@
-<!--    vue页面：Home.vue     -->
+<!--    vue页面：Detail.vue     -->
 <!--
     页面：视频的详细信息
     功能：展示展示视频的详细信息
@@ -13,9 +13,11 @@
       1.实现了网站标题和视频标题相一致的功能
     12/26/2019：v1.1.0
       1.使用直接向后端请求视频数据的方法重构了页面
+    12/29/2019：v1.1.1
+      1.当视频为视频列表第一个或最后一个的时候对“【前一篇】”，“【后一篇】”按钮进行优化
+      2.加入了副本链接前对应副本指向网站的小图标
     ★待解决问题：
       1.侧导航条的标签列表的标签内容显示有问题
-      2.与播放列表的链接有待更新     
       3.视频介绍里的链接功能尚未实现 
       4.按下浏览器的后退按钮网站没有刷新数据
 -->
@@ -65,7 +67,12 @@
             <p v-if="myVideoData.copies == ''">此视频不存在副本</p>
             <p v-else>此视频有{{ myVideoData.copies.length }}个副本</p>
           </div>
-          <ul v-for="item in myVideoData.copies" :key="toString(item._id.$oid)">
+          <ul v-for="item in myVideoData.copies" :key="item._id.$oid">
+            <img
+              :src="require('../static/img/' + item.item.site + '.png')"
+              width="16px"
+              style="margin-right:2px"
+            />
             <!-- 将页面参数刷新并重载页面，其中@click.native应该是router-link为了阻止a标签的默认跳转事件 -->
             <router-link
               :to="{ path: '/video', query: { id: item._id.$oid } }"
@@ -82,7 +89,7 @@
             <p v-if="myVideoData.playlists == ''">本视频不包含于任何播放列表中</p>
             <p v-else>此视频存在于{{ myVideoData.playlists.length }}个播放列表中</p>
           </div>
-          <ul v-for="item in myVideoData.playlists" :key="toString(item._id.$oid)">
+          <ul v-for="item in myVideoData.playlists" :key="item._id.$oid">
             <!-- 将页面参数刷新并重载页面，其中@click.native应该是router-link为了阻止a标签的默认跳转事件 -->
             <router-link
               v-if="item.prev != ''"
@@ -90,9 +97,9 @@
               tag="a"
               @click.native="reload"
             >【前一篇】</router-link>
+            <span v-else>【没有前一篇了哦】</span>
             <router-link
-              target="_blank"
-              :to="{ path: '/video', query: { id: item._id.$oid } }"
+              :to="{ path: '/listDetail', query: { id: item._id.$oid } }"
               tag="a"
               @click.native="reload"
             >{{ item.title.english }}</router-link>
@@ -103,6 +110,7 @@
               @click.native="reload"
               style="float:right"
             >【后一篇】</router-link>
+            <span v-else style="float:right">【没有后一篇了哦】</span>
           </ul>
         </div>
       </div>

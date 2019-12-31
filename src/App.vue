@@ -23,22 +23,4 @@ export default {
   min-width: 1500px;
   height: 100%;
 }
-.home {
-}
-.login {
-  height: 100%;
-  width: 100%;
-  background: url(static/img/login.jpg) no-repeat top center;
-  /* background-position: 200px 0; */
-  background-size: cover;
-  background-attachment: fixed;
-}
-.signup {
-  height: 100%;
-  width: 100%;
-  background: url(static/img/sign_up.jpg) no-repeat top center;
-  /* background-position: 200px 0; */
-  background-size: cover;
-  background-attachment: fixed;
-}
 </style>

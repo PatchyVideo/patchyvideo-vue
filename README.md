@@ -37,7 +37,7 @@
 网页大致分为七个区域
 
 - Home √
-- Playlists X
+- Playlists √
 - Post Viddeo X
 - Tags X
 - Deatil √
