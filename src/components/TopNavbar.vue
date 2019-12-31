@@ -15,6 +15,8 @@
       1.导航条中文化完成
     12/30/2019: v1.0.4
       1.导航条登录功能完善
+    12/31/2019：v1.0.5
+      1.导航条注册链接完成
     ★待解决问题：
       1.搜索框相关功能未实现
       2.用户个人界面未完善
@@ -60,7 +62,7 @@
             <router-link to="/login">登录</router-link>
           </li>
           <li>
-            <a href="/logout">注册</a>
+            <router-link to="/signup">注册</router-link>
           </li>
         </div>
 

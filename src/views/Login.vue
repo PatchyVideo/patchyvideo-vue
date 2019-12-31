@@ -10,6 +10,9 @@
       1.实现了使用session登录的功能
       2.加入了一些特效
       3.使用本地储存确保登录信息保留（关联于TopNavbar.vue和index.js(router目录下的)里的函数）
+    12/31/2019：v1.0.2
+      1.完善了登录验证的相关问题
+      2.对注释进行少量更改
     ★待解决问题：
       1.利用本地储存确保登录信息保留可能会导致信息不安全
 -->
@@ -22,9 +25,9 @@
         <router-link to="/home">PatchyVideo</router-link>
       </h1>
       <div class="top in">
-        <router-link to="/login">Login</router-link>
+        <router-link to="/login">登录</router-link>
         <b>·</b>
-        <router-link to="/signup">Sign up</router-link>
+        <router-link to="/signup">注册</router-link>
       </div>
 
       <!-- 输入账号和密码的框 -->
@@ -49,12 +52,12 @@
             prefix-icon="el-icon-lock"
           ></el-input>
         </el-form-item>
-        <p id="status" style="text-align: center;">就绪</p>
+        <p id="status" style="text-align: center;" v-bind:class="{alert:status!='就绪'}">{{ status }}</p>
       </el-form>
 
       <!-- 登录按钮 -->
       <div class="bottom in">
-        <div @click="login" class="login in">Login</div>
+        <div @click="login" class="login in">登录</div>
       </div>
     </div>
   </div>
@@ -70,6 +73,7 @@ export default {
         login_name: "",
         login_password: ""
       },
+      // 事先向服务器请求的session值
       session: "",
       // 表单验证规则
       rules: {
@@ -82,6 +86,8 @@ export default {
           { min: 6, max: 64, message: "长度在 6 到 64 个字符", trigger: "blur" }
         ]
       },
+      // 登录状态
+      status: "就绪",
       // 视频列表是否属于加载状态的判断
       loading: false
     };
@@ -109,7 +115,7 @@ export default {
     },
 
     // 用户登录
-    login() {
+    login: function() {
       // 先使页面出于加载状态
       this.loading = true;
 
@@ -153,17 +159,20 @@ export default {
                     this.loginFormRef.login_name
                   );
 
+                  // 回到上一个页面
                   this.$router.go(-1);
                 } else {
                   this.open3();
                 }
               } else {
-                console.log("请求失败");
+                this.status = "请求失败";
               }
             });
           });
         } else {
-          console.log("error submit!!");
+          this.status = "error submit!!";
+          // 加载结束,加载动画消失
+          this.loading = false;
           return false;
         }
       });
@@ -182,6 +191,9 @@ export default {
   background-size: cover;
   background-attachment: fixed;
   background-color: #646257;
+}
+.alert {
+  color: red;
 }
 input::-webkit-input-placeholder {
   color: #c8c8c8;
