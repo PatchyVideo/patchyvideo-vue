@@ -1,0 +1,401 @@
+<!--
+    页面：paychyvideo的个人投稿视频页面
+    功能：展示用户投稿所有的视频信息以及TAG数据统计
+    更新日志：
+    12/31/2019: v1.0
+
+    ★待解决问题：
+     因个人界面接口较特殊，需登录后才能获取，登录需携带Cookie，请先在官网登录后再打开此页面。
+     本地登录提示错误暂未做处理。
+     没做分页，默认展示所有视频，如果用户视频多，数据可能会很庞大会有卡顿现象。
+-->
+
+<template>
+<div>
+
+    <div class="bigbox standard"  v-loading="loading">
+
+
+        <el-container>
+            <el-aside width="800px">
+
+                <p v-if="this.videoCount==0">您没有上传视频，目前还没有数据哦</p>
+                 <canvas id="myChart" width="800" height="800"></canvas>
+
+            </el-aside>
+            <el-main >
+                <p v-if="this.videoCount==0">您没有上传视频，目前还没有数据哦</p>
+                <div class="minibox" v-if="this.videoCount!=0">
+                   <div class="minibox_top">
+                       <h3>投稿视频</h3>
+                       <i @click="changeLine">点我</i>
+                   </div>
+
+                      <div class="video_lineUp"v-if="flag">
+                          <router-link  class="list-item"
+                                        target="_blank"
+                                        :to="{ path: '/video', query: { id: i._id.$oid } }"
+                                        tag="a"
+                                        v-for="i in videoData":key="i._id.$oid">
+                              <img src="../static/img/test.png" alt="">
+                              <h4><a href="">{{i.item.title}}</a></h4>
+                          </router-link>
+                      </div>
+                       <div class="video_straightColumn" v-if="!flag">
+                        <router-link class="list-item"
+                                     target="_blank"
+                                     :to="{ path: '/video', query: { id: i._id.$oid } }"
+                                     tag="a"
+                                     v-for="i in videoData":key="i._id.$oid">
+                            <img src="../static/img/test.png" alt="">
+                            <div class="list-item_content">
+                                <h4><a href="">{{i.item.title}}</a></h4>
+                                <p>{{i.item.desc}}
+                                </p>
+                                <a href="">{{i.item.url}}</a>
+                            </div>
+                        </router-link>
+
+                    </div>
+                </div>
+            </el-main>
+
+
+
+        </el-container>
+
+    </div>
+
+
+
+</div>
+
+</template>
+
+<script>
+
+    export default {
+        data() {
+
+            return {
+                flag:true,  //视频排列顺序,默认栅格
+                TagData:[], //所有视频的TAG数据
+                videoCount:0, //视频总数
+                videoData:[], //视频数据
+                //绘制图表用，使用教程移至：https://www.echartsjs.com/zh/tutorial.html#
+                CopyrightObj:[],
+                GeneralObj:[],
+                CharacterObj:[],
+                CopyrightObj:[],
+                AuthorObj:[],
+                MetaObj:[],
+                LanguageObj:[],
+                //绘制图表用，统计TAG占比
+                General_count:0,
+                Character_count:0,
+                Copyright_count:0,
+                Author_count:0,
+                Meta_count:0,
+                Language_count:0,
+
+                loading: true    //读取状态
+            }
+        },
+        created(){
+            console.log(this.TagData);
+            this.getData();
+        },
+
+        mounted(){
+
+        },
+
+        methods: {
+            getData(){
+                this.axios({
+                    method:'post',
+                    url:"https://www.patchyvideo.com/listmyvideo.do",
+                    withCredentials:true,        //携带cookie当配置了 withCredentials = true时，必须在后端增加 response 头信息Access-Control-Allow-Origin，且必须指定域名，而不能指定为*
+                    async:true,
+                    data:{
+                        "page":1,
+                        "page_size":9999999
+                    }
+                }).then(result=>{
+                    this.TagData = result.data.data.tags;
+                    this.videoData = result.data.data.videos;
+                    this.getTagCategories();
+                    this.videoCount =result.data.data.count;
+                    this.loading =false;
+                }).catch(err=>{
+                    console.log(err);
+                })
+            },
+            getTagCategories(){  //绘制图表用
+                let AarryAll=[];
+                let Aarryname=[];
+                for(let i in this.TagData){
+                    AarryAll.push({value:this.TagData[i].count,name:this.TagData[i].tag});
+                    Aarryname.push(this.TagData[i].tag);
+                }
+                this.axios({
+                    async:true,
+                    method: 'post',
+                    url:'https://patchyvideo.com/tags/query_tag_categories.do',
+                    data:{
+                        "tags":Aarryname
+                    }
+                }).then(result=>{
+                    this.totallNum(result.data.data.categorie_map);
+                    this.drawLine();
+                });
+            },
+            getcount(name){
+                //统计计数
+            return    this.TagData.filter(function (element,index,array) {
+                    if(element.tag==name){
+                        return element.count
+                    }
+                })[0].count
+            },
+            totallNum(arr){
+                //依次将接口获取的原数据按照echarts中的数据规范转换
+            for(let i in arr){
+                console.log(arr[i]);
+                if(arr[i]=="Copyright"){
+                    this.Copyright_count++;
+                    this.CopyrightObj.push({value:this.getcount(i),name:i});
+                }
+                if(arr[i]=="General"){
+                    this.General_count++;
+                    this.GeneralObj.push({value:this.getcount(i),name:i})
+                }
+                if(arr[i]=="Character"){
+                    this.Character_count++;
+                    this.CharacterObj.push({value:this.getcount(i),name:i})
+                }
+                if(arr[i]=="Author"){
+                    this.Author_count++;
+                    this.AuthorObj.push({value:this.getcount(i),name:i})
+                }
+                if(arr[i]=="Meta"){
+                    this.Meta_count++;
+                    this.MetaObj.push({value:this.getcount(i),name:i})
+                }
+                if(arr[i]=="Language"){
+                    this. Language_count++;
+                    this.LanguageObj.push({value:this.getcount(i),name:i})
+                }
+            }
+
+               for(let i in this.CopyrightObj) { //东方占比太大导致图形过度密集，可去除
+                   if (this.CopyrightObj[i].name == "东方") {
+                       this.CopyrightObj.splice(this.CopyrightObj.indexOf(this.CopyrightObj[i]), 1);
+                   }
+               }
+
+            },
+            drawLine(){
+                // 基于准备好的dom，初始化echarts实例
+                // 绘制图表
+                let myChart = this.$echarts.init(document.getElementById('myChart'));
+                    myChart.setOption({
+                    series: {
+                        type: 'sunburst',
+                        highlightPolicy: 'ancestor',
+                        radius: [0, '95%'],
+                        sort: null,
+
+                        data: [{
+
+                            name: 'General',
+                            /*  value: this.General_count,*/
+                            children: this.GeneralObj
+                        },
+                            {
+                                name: 'Character',
+                                /*          value: this.Character_count,*/
+                                children: this.CharacterObj
+                            },
+                            {
+                                name: 'Copyright',
+                                /*       value: this.Copyright_count,*/
+                                children:this.CopyrightObj
+                            },{
+                                name:'Author',
+                                /*  value: this.Author_count,*/
+                                children:this.AuthorObj
+                            },{
+                                name:'Meta',
+                                /*        value: this.Meta_count,*//*        value: this.Meta_count,*/
+                                children:this.MetaObj
+                            }]
+                    },
+                });
+
+            },
+            changeLine(){//切换视频排列顺序
+                this.flag=!this.flag;
+            }
+        },
+        components: {}
+    }
+
+
+</script>
+
+<style  lang="less" scoped>
+    .bigbox {
+
+      height: 900px;
+        display: flex;
+        background-color: white;
+        opacity: 0.9;
+    }
+    .el-container{
+
+        .el-aside{
+                p{
+                    position: absolute;
+                    top: 50%;
+                    left: 25%;
+                    transform: translate(-50%,50%);
+                };
+            }
+
+        .el-main{
+            border: 1px solid #e5e9ef;
+            box-sizing: border-box;
+            p{
+                position: absolute;
+                top: 50%;
+                right: 25%;
+                transform: translate(50%,50%);
+
+            };
+        }
+    }
+#myChart{
+    width: 800px;
+    height: 800px;
+}
+.minibox{
+
+
+   .minibox_top{
+       position: relative;
+       h3{
+           height: 50px;
+           line-height: 50px;
+       }
+       i{
+           background-color: #73777a;
+           line-height: 50px;
+           width: 50px;
+           height: 100%;
+           position: absolute;
+           right: 0px;
+           top: 0px;
+
+       }
+   }
+
+  .video_lineUp{
+      display: flex;
+  /*    justify-content: space-around;*/
+      justify-content: flex-start;
+      flex-direction: row;
+      flex-wrap: wrap;
+      overflow: auto;
+      max-height: 700px;
+      .list-item{
+          box-shadow: 0 1px 10px rgba(0,0,0,.1);
+          flex: 0 0 31%;
+          box-sizing: border-box;
+          margin: 10px 5px 5px;
+          transition: all 0.3s ease;
+          img{
+              width: 233px;
+              height: 145px;
+          }
+          h4{
+              width: 233px;
+          }
+          &:hover{
+
+              box-shadow: 0 15px 30px rgba(0,0,0,.1);
+              transform: translate3d(0,-2px,0);
+
+          }
+
+      }
+  }
+    .video_straightColumn{
+
+
+        flex-wrap: wrap;
+        overflow: auto;
+        max-height: 700px;
+        .list-item{
+            box-shadow: 0 1px 10px rgba(0,0,0,.1);
+            height: 220px;
+            margin: 10px 5px 5px;
+            display: flex;
+            flex-direction: row;
+            box-sizing: border-box;
+            padding:5px  10px ;
+            border-bottom: 1px solid #e5e9ef;
+            transition: all .3s ease;
+            &:hover{
+
+              /*  background-color: #DDDDDD;
+                color: #333333*/
+                box-shadow: 0 15px 30px rgba(0,0,0,.1);
+                transform: translate3d(0,-2px,0);
+
+            }
+            img{
+
+                width: 320px;
+                height: 199px;
+            }
+            .list-item_content{
+                height: 199px;
+                flex: 1;
+                h4{
+                    font-size: 23px;
+                    line-height: 23px;
+                    height: 23px;
+                }
+                p{
+                    height: 150px;
+                    overflow: hidden;
+                    box-sizing: border-box;
+                    padding: 10px 20px;
+                    margin-bottom:7px;
+
+                }
+                a{
+                    display: inline-block;
+                    width: 88%;
+                    height: 26px;
+                    text-align: left;
+                    overflow: hidden;
+                    font-size: 18px;
+                    line-height: 26px;
+                }
+            }
+        }
+    }
+
+}
+
+
+
+
+
+    .grid-content{
+     background-color: cornflowerblue;
+ }
+
+</style>
