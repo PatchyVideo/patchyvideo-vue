@@ -7,19 +7,25 @@ import VueAxios from "vue-axios";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import "font-awesome/css/font-awesome.min.css";
-import echarts from 'echarts';
-Vue.use(ElementUI);
-// console.log(this);
-Vue.prototype.$echarts = echarts;
+import echarts from "echarts";
 import login from "./views/Login.vue";
 import $ from "jquery";
+
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
+Vue.use(ElementUI);
 
 Vue.prototype.$axios = axios;
+Vue.prototype.$echarts = echarts;
 
 var vm = new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount("#app");
+
+// 服务器部署测试：
+// 服务器名称：patchyvideo-vue
+// 服务器IP：159.65.66.110
+// 用户名：root
+// 密码：patchyvideo-vue2020
