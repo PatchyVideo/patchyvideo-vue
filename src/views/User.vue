@@ -114,14 +114,14 @@ h4 {
 }
 
 .content {
-  /* width: 1600px;
+   width: 1600px;
   height: 100%;
+  /*
+    background: url("../static/img/imoto.jpg") no-repeat top center;
 
-  background: url("../static/img/imoto.jpg") no-repeat top center;
-
-  opacity: 0.9;
-  background-size: cover;
-  background-attachment: fixed; */
+    opacity: 0.9;
+    background-size: cover;
+    background-attachment: fixed; */
   background-color: #ffffffc9;
   margin-top: 30px;
 }

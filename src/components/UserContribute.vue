@@ -19,12 +19,12 @@
         <el-container>
             <el-aside width="800px">
 
-                <p v-if="this.videoCount==0">您没有上传视频，目前还没有数据哦</p>
+                <p v-if="this.videoCount==0" class="nulldata-left">您没有上传视频，目前还没有数据哦</p>
                  <canvas id="myChart" width="800" height="800"></canvas>
 
             </el-aside>
             <el-main >
-                <p v-if="this.videoCount==0">您没有上传视频，目前还没有数据哦</p>
+                <p v-if="this.videoCount==0" class="nulldata-right">您没有上传视频，目前还没有数据哦</p>
                 <div class="minibox" v-if="this.videoCount!=0">
                    <div class="minibox_top">
                        <h3>投稿视频</h3>
@@ -37,7 +37,7 @@
                                         :to="{ path: '/video', query: { id: i._id.$oid } }"
                                         tag="a"
                                         v-for="i in videoData":key="i._id.$oid">
-                              <img src="../static/img/test.png" alt="">
+                              <img   :src="'/images/covers/'+i.item.cover_image" alt="">
                               <h4><a href="">{{i.item.title}}</a></h4>
                           </router-link>
                       </div>
@@ -47,7 +47,7 @@
                                      :to="{ path: '/video', query: { id: i._id.$oid } }"
                                      tag="a"
                                      v-for="i in videoData":key="i._id.$oid">
-                            <img src="../static/img/test.png" alt="">
+                            <img :src="'/images/covers/'+i.item.cover_image"  alt="">
                             <div class="list-item_content">
                                 <h4><a href="">{{i.item.title}}</a></h4>
                                 <p>{{i.item.desc}}
@@ -114,7 +114,7 @@
             getData(){
                 this.axios({
                     method:'post',
-                    url:"https://www.patchyvideo.com/listmyvideo.do",
+                    url:"be/listmyvideo.do",
                     withCredentials:true,        //携带cookie当配置了 withCredentials = true时，必须在后端增加 response 头信息Access-Control-Allow-Origin，且必须指定域名，而不能指定为*
                     async:true,
                     data:{
@@ -141,7 +141,7 @@
                 this.axios({
                     async:true,
                     method: 'post',
-                    url:'https://patchyvideo.com/tags/query_tag_categories.do',
+                    url:'be/tags/query_tag_categories.do',
                     data:{
                         "tags":Aarryname
                     }
@@ -207,7 +207,6 @@
                         sort: null,
 
                         data: [{
-
                             name: 'General',
                             /*  value: this.General_count,*/
                             children: this.GeneralObj
@@ -255,7 +254,7 @@
     .el-container{
 
         .el-aside{
-                p{
+            .nulldata-left{
                     position: absolute;
                     top: 50%;
                     left: 25%;
@@ -264,9 +263,10 @@
             }
 
         .el-main{
+
             border: 1px solid #e5e9ef;
             box-sizing: border-box;
-            p{
+            .nulldata-right{
                 position: absolute;
                 top: 50%;
                 right: 25%;
@@ -284,6 +284,7 @@
 
    .minibox_top{
        position: relative;
+
        h3{
            height: 50px;
            line-height: 50px;

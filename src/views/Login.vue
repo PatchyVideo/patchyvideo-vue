@@ -125,7 +125,7 @@ export default {
           // 验证成功，先获取session
           this.axios({
             method: "post",
-            url: "https://www.patchyvideo.com/auth/get_session.do",
+            url: "be/auth/get_session.do",
             data: {
               type: "LOGIN"
             }
@@ -135,7 +135,7 @@ export default {
             // 请求登录
             this.axios({
               method: "post",
-              url: "https://www.patchyvideo.com/login.do",
+              url: "be/login.do",
               data: {
                 username: this.loginFormRef.login_name,
                 password: this.loginFormRef.login_password,
@@ -151,7 +151,6 @@ export default {
                   );
                   // 加载结束,加载动画消失
                   this.loading = false;
-
                   // 利用本地储存储存登录状态
                   localStorage.setItem("isLogin", true);
                   localStorage.setItem(
