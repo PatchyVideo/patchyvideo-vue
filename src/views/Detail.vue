@@ -50,7 +50,7 @@
           <!-- 视频详细信息 -->
           <div class="re_video">
             <img
-              src="/images/covers/f5da2d4dd9eac171d47eb1100339cbad90e4648556a2f99a.png"
+             :src="'/images/covers/'+myVideoData.video.item.cover_image"
               width="320px"
               height="200px"
             />
@@ -147,7 +147,9 @@ export default {
               $date: ""
             },
             // 视频的链接
-            url: ""
+            url: ""   ,
+            //视频封面
+            cover_image:""
           }
         }
       },
@@ -239,7 +241,7 @@ export default {
       // 直接向后端请求视频数据
       this.axios({
         method: "post",
-        url: "https://www.patchyvideo.com/getvideo.do",
+        url: "be/getvideo.do",
         data: { vid: this.$route.query.id }
       }).then(result => {
         this.myVideoData = result.data.data;

@@ -25,7 +25,7 @@
       <h1>{{ title }}</h1>
       <!-- 在Home页面渲染的侧导航条内容 -->
       <ul ref="test" v-if="title=='热门标签'">
-        <li class="tag" v-for="(val,key) in msg" :key="key">
+        <li class="tag belong-to-home" v-for="(val,key) in msg" :key="key" >
           <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
           <!-- 根据tag名称自动渲染tag颜色 -->
           <p
@@ -35,13 +35,14 @@
             Author:val=='Author',
             General:val=='General',
             Meta:val=='Meta'}"
+            @click="gotoHome(key)"
           >{{key}}</p>
         </li>
       </ul>
 
       <!-- 在Detail页面渲染的侧导航条内容 -->
       <ul ref="test" v-if="title=='标签'">
-        <li class="tag" v-for="(key, val) in msg" :key="val">
+        <li class="tag belong-to-detail" v-for="(key, val) in msg" :key="val" >
           <h3>{{ val }}</h3>
           <!-- 根据tag名称自动渲染tag颜色 -->
           <p
@@ -53,6 +54,7 @@
             Author:val=='Author',
             General:val=='General',
             Meta:val=='Meta'}"
+            @click="gotoHome(item)"
           >{{ item }}</p>
         </li>
       </ul>
@@ -69,7 +71,17 @@ export default {
     };
   },
   created() {},
-  methods: {},
+  methods: {
+    gotoHome(key){
+      console.log(key);
+      if(key!=''){
+        this.$router.push({ path: '/home' , query: { keyword: key }}).catch(err => {return  err});
+      }else {
+        this.$router.push({ path: '/home'});
+      }
+
+    }
+  },
   components: {},
   watch: {
     msg(newV, oldV) {
@@ -89,8 +101,19 @@ export default {
 </script>
 
 <style scoped>
+  .belong-to-home p{
+    display: inline;
+  }
+  .belong-to-detail{
+
+  }
+  .left_list ul li p{
+    cursor: pointer;
+  }
+  .left_list ul li p:hover {
+    color: #ff88a0;
+  }
 .left_list li {
-  width: 100%;
   transition: all 2s ease;
 }
 .left_list ul {
@@ -124,6 +147,7 @@ export default {
   margin-top: 10px;
 }
 .left_list li p {
+
   line-height: 30px;
   text-decoration: none;
 }

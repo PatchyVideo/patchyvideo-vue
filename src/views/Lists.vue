@@ -49,7 +49,7 @@
             </div>
             <!-- 视频列表详情 -->
             <div class="re_video">
-              <img src="../static/img/videolistPic.png" />
+              <img         :src="'/images/covers/'+item.cover" />
               <div class="re_video_desc">
                 <p>
                   <strong>{{ item.desc.english }}</strong>
@@ -127,7 +127,7 @@ export default {
       // 请求数据
       this.axios({
         method: "post",
-        url: "https://www.patchyvideo.com/lists/all.do",
+        url: "be/lists/all.do",
         data: { page: e, page_size: count }
       }).then(result => {
         this.maxcount = result.data.data.count;
@@ -158,6 +158,10 @@ export default {
 </script>
 
 <style scoped>
+  .recommend {
+    display: flex;
+    flex-wrap: wrap;
+  }
 .content {
   top: 3px;
   width: 80%;

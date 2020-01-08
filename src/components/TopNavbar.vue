@@ -28,7 +28,7 @@
     <div class="nav_left">
       <ul>
         <li>
-          <router-link to="/home">主页</router-link>
+          <router-link to="/home" @click.native="cleanIptV">主页</router-link>
         </li>
         <li>
           <router-link to="/lists">播放列表</router-link>
@@ -52,8 +52,8 @@
             <option value="0">标签</option>
           </select>
           <!-- 搜索框 -->
-          <input id="search-bar-query" name="query" type="text" placeholder="请输入搜索内容" value />
-          <input id="search-bar-submit" type="submit" value="搜索" />
+          <input id="search-bar-query" name="query" type="text" placeholder="请输入搜索内容" v-model="iptVal"/>
+          <input id="search-bar-submit" type="submit" value="搜索" @click="gotoHome"/>
         </li>
 
         <!-- 登录和注册按钮 -->
@@ -95,19 +95,27 @@
 </template>
 
 <script>
-export default {
+
+  export default {
   data() {
     return {
       // 控制退出登录的弹出框
       dialogVisible: false,
-      isLogin: false
+      isLogin: false,
+      iptVal:''
     };
   },
   created() {
     // 查看是否登录
-    if (this.$store.state.username != "") {
+    if (JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "") {
       this.isLogin = true;
     }
+  },
+    mounted(){
+      this.iptVal = this.$route.query.keyword;
+    },
+  updated(){
+    console.log("子组件 updated");
   },
   methods: {
     cleanLocalStorage: function() {
@@ -134,6 +142,19 @@ export default {
           done();
         })
         .catch(_ => {});
+    },
+    gotoHome(){
+      if(this.iptVal!=''){
+        this.$router.push({ path: '/home' , query: { keyword: this.iptVal }}).catch(err => {return  err});
+      }else {
+        this.$router.push({ path: '/home'});
+      }
+
+/*    , query: { keyword: this.iptVal }*/
+    },
+    cleanIptV(){
+      console.log("???");
+      this.iptVal=''
     }
   },
   components: {}
@@ -147,7 +168,7 @@ export default {
   margin: 0 auto;
   height: 70px;
   width: calc(100% - 20px);
-  display: flex;
+  display: flex !important;
   align-items: center;
   overflow: hidden;
   position: relative;

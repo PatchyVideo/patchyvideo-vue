@@ -11,8 +11,11 @@
       2.图片链接尚未完工
 -->
 <template>
-  <div>
+  <div class="listDetail">
     <topnavbar />
+    <!-- EditTags组件-->
+
+      <EditTags :msg="videolistPid" :visible.sync="showTagPanel" ></EditTags>
 
     <!-- listdetail页面的正文 -->
     <div class="w main-page-background-img" v-loading="loading">
@@ -23,18 +26,18 @@
             <img src="../static/img/5.png" style="float:left;margin-top:50px;" />
             <img src="../static/img/1.png" style="float:right;margin-top:50px;" />
             <h2>{{ videolistName }}</h2>
-            <img src="../static/img/videolistPic.png" />
+            <img       :src="'/images/covers/'+videolistDetail.playlist.cover" />
             <p>{{ videolistDesc }}</p>
           </div>
         </div>
-
+        <h3 @click="openEditTags">Edit Common Tags</h3>
         <!-- 视频列表 -->
         <div class="recommend">
           <!-- 视频详情 -->
           <div class="minbox shadow" v-for="(item, index) in videolistVideos" :key="item._id.$oid">
             <div class="re_video">
               <h1>{{ index+1 }}</h1>
-              <img class="re_video_img" src="../static/img/videolistPic.png" />
+              <img class="re_video_img" :src="'/images/covers/'+item.item.cover_image"/>
               <div class="re_video_desc">
                 <h3>
                   <router-link
@@ -80,13 +83,18 @@
 <script>
 import topnavbar from "../components/TopNavbar.vue";
 import Footer from "../components/Footer.vue";
+import EditTags from "../components/EditTags.vue"
 import { copyToClipboard } from "../static/js/generic";
 
 export default {
   data() {
     return {
       // 视频列表的详细信息
-      videolistDetail: {},
+      videolistDetail: {
+      playlist:{
+        cover:''
+      }
+      },
       // 视频列表的名称
       videolistName: "",
       // 视频列表的介绍
@@ -101,8 +109,11 @@ export default {
       count: 20,
       // 视频的全部数量
       maxcount: 0,
+      videolistPid:'',
       // 视频列表是否属于加载状态的判断
-      loading: true
+      loading: true,
+      ifOpenTag:false,
+      showTagPanel:false,
     };
   },
   computed: {},
@@ -125,13 +136,14 @@ export default {
 
       this.axios({
         method: "post",
-        url: "https://www.patchyvideo.com/lists/get_playlist.do",
+        url: "be/lists/get_playlist.do",
         data: { page: e, page_size: count, pid: this.$route.query.id }
       }).then(result => {
         this.videolistDetail = result.data.data;
         this.videolistName = this.videolistDetail.playlist.title.english;
         this.videolistDesc = this.videolistDetail.playlist.desc.english;
         this.videolistVideos = this.videolistDetail.videos;
+        this.videolistPid = this.videolistDetail.playlist._id.$oid;
         this.maxcount = result.data.data.count;
         this.maxpage = result.data.data.page_count;
 
@@ -148,6 +160,9 @@ export default {
     // 复制视频连接
     copyVideoLink: function(index) {
       copyToClipboard($("#link" + index));
+    },
+    openEditTags:function () {
+     this.showTagPanel =true;
     }
   },
   watch: {
@@ -158,7 +173,7 @@ export default {
       this.getVideoList(this.page, this.count);
     }
   },
-  components: { topnavbar, Footer }
+  components: { topnavbar, Footer ,EditTags}
 };
 </script>
 

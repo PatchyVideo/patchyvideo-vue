@@ -39,12 +39,12 @@
                   v-for="i in myListVideoData"
                   :key="i._id.$oid"
                   tag="a" >
-                 <img src="../static/img/test.png" alt="">
+                 <img :src="'/images/covers/'+i.cover"  alt="">
                  <p>{{i.desc.english}}</p>
                  <h3>{{i.title.english}}</h3>
                     <div>
                        <span> videos:{{i.videos}}</span>
-                       <span>views:{{ i.views}}</span>
+                      <!-- <span>views:{{ i.views}}</span>-->
                    </div>
           </router-link>
 
@@ -75,7 +75,9 @@
                 maxcount:0,
                 count: 20,
                 activeName: '1',
-                myListVideoData:[],
+                myListVideoData:[
+
+                ],
                 couponSelected:"",
                 options: [
                     { value: "latest", label: "Latest Post  " },
@@ -105,7 +107,7 @@
             getVideoMaxCount(){
                 this.axios({
                     method:'post',
-                    url:'https://www.patchyvideo.com/lists/myplaylists',
+                    url:'be/lists/myplaylists',
                     data:{
                         "page":1,
                         "page_size":9999999, //无法确认视频总个数,第一次请求仅为获取视频总个数
@@ -113,14 +115,15 @@
                     },
                     withCredentials:true,
                 }).then(res=>{
-                    this.maxcount=res.data.data.length; //获取总的视频个数制作分页后开始第二次请求获取当前页面的数据
+                    console.log(res);
+                    this.maxcount=res.data.data.count; //获取总的视频个数制作分页后开始第二次请求获取当前页面的数据
                     this.getVideoData(this.page,this.count);
                 })
             },
             getVideoData(e, count){
               this.axios({
                   method:'post',
-                  url:'https://www.patchyvideo.com/lists/myplaylists',
+                  url:'be/lists/myplaylists',
                   data:{
                       "page":e,
                       "page_size":count,
@@ -128,7 +131,7 @@
                   },
                       withCredentials:true,
                   }).then(result=>{
-                  this.myListVideoData =result.data.data;
+                  this.myListVideoData =result.data.data.playlists;
                   this.loading =false;
               })
 
