@@ -2,10 +2,12 @@
 <!--
     页面：视频列表的详细信息
     功能：展示展示视频列表的详细信息
-    包含组件：LeftNavbar.vue、TopNavbar.vue、Foot.vue
+    包含组件：LeftNavbar.vue、TopNavbar.vue、Foot.vue、EditTags
     更新日志：
     12/29/2019: v1.0 
       release
+    1/9/2020：v1.0.1
+      1.加入了Tag编辑功能
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
       2.图片链接尚未完工
@@ -14,8 +16,7 @@
   <div class="listDetail">
     <topnavbar />
     <!-- EditTags组件-->
-
-      <EditTags :msg="videolistPid" :visible.sync="showTagPanel" ></EditTags>
+    <EditTags :msg="videolistPid" :visible.sync="showTagPanel"></EditTags>
 
     <!-- listdetail页面的正文 -->
     <div class="w main-page-background-img" v-loading="loading">
@@ -26,18 +27,20 @@
             <img src="../static/img/5.png" style="float:left;margin-top:50px;" />
             <img src="../static/img/1.png" style="float:right;margin-top:50px;" />
             <h2>{{ videolistName }}</h2>
-            <img       :src="'/images/covers/'+videolistDetail.playlist.cover" />
+            <img :src="'/images/covers/'+videolistDetail.playlist.cover" style="min-height:200px" />
             <p>{{ videolistDesc }}</p>
           </div>
+          <!-- 打开Tag编辑页面 -->
+          <el-button type="primary" @click="openEditTags" class="EditTagsButton">编辑标签</el-button>
         </div>
-        <h3 @click="openEditTags">Edit Common Tags</h3>
+
         <!-- 视频列表 -->
         <div class="recommend">
           <!-- 视频详情 -->
           <div class="minbox shadow" v-for="(item, index) in videolistVideos" :key="item._id.$oid">
             <div class="re_video">
               <h1>{{ index+1 }}</h1>
-              <img class="re_video_img" :src="'/images/covers/'+item.item.cover_image"/>
+              <img class="re_video_img" :src="'/images/covers/'+item.item.cover_image" />
               <div class="re_video_desc">
                 <h3>
                   <router-link
@@ -83,7 +86,7 @@
 <script>
 import topnavbar from "../components/TopNavbar.vue";
 import Footer from "../components/Footer.vue";
-import EditTags from "../components/EditTags.vue"
+import EditTags from "../components/EditTags.vue";
 import { copyToClipboard } from "../static/js/generic";
 
 export default {
@@ -91,9 +94,9 @@ export default {
     return {
       // 视频列表的详细信息
       videolistDetail: {
-      playlist:{
-        cover:''
-      }
+        playlist: {
+          cover: ""
+        }
       },
       // 视频列表的名称
       videolistName: "",
@@ -109,11 +112,11 @@ export default {
       count: 20,
       // 视频的全部数量
       maxcount: 0,
-      videolistPid:'',
+      videolistPid: "",
       // 视频列表是否属于加载状态的判断
       loading: true,
-      ifOpenTag:false,
-      showTagPanel:false,
+      ifOpenTag: false,
+      showTagPanel: false
     };
   },
   computed: {},
@@ -161,8 +164,9 @@ export default {
     copyVideoLink: function(index) {
       copyToClipboard($("#link" + index));
     },
-    openEditTags:function () {
-     this.showTagPanel =true;
+    // 打开Tag编辑页面
+    openEditTags: function() {
+      this.showTagPanel = true;
     }
   },
   watch: {
@@ -173,7 +177,7 @@ export default {
       this.getVideoList(this.page, this.count);
     }
   },
-  components: { topnavbar, Footer ,EditTags}
+  components: { topnavbar, Footer, EditTags }
 };
 </script>
 
@@ -193,7 +197,7 @@ export default {
 .d_t {
   width: 100%;
   margin-bottom: 0px;
-  padding-bottom: 20px;
+  padding-bottom: 5px;
 }
 .d_t h2 {
   padding-top: 20px;
@@ -208,6 +212,11 @@ export default {
   height: 200px;
   margin: 10px;
   background-color: rgba(255, 255, 255, 0);
+}
+
+.EditTagsButton {
+  width: 70%;
+  margin-bottom: 20px;
 }
 
 .minbox {
@@ -247,6 +256,8 @@ export default {
   display: inline-block;
   width: 200px;
   margin-right: 20px;
+  min-width: 200px;
+  min-height: 125px;
 }
 .re_video_desc {
   width: 850px;

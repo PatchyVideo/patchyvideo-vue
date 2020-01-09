@@ -6,8 +6,9 @@
     更新日志：
     12/27/2019: v1.0 
       release
+    1/9/2020: v1.0.1
+      1.解决了图片连接的问题
     ★待解决问题：
-    1.图片链接尚未完工
     2.作者链接尚未完工
     3.由于标题可能会超过一行导致视频列表高度变高，从而导致排版不太好看
     4.制作播放列表的功能尚未完成
@@ -49,7 +50,7 @@
             </div>
             <!-- 视频列表详情 -->
             <div class="re_video">
-              <img         :src="'/images/covers/'+item.cover" />
+              <img :src="'/images/covers/'+item.cover" />
               <div class="re_video_desc">
                 <p>
                   <strong>{{ item.desc.english }}</strong>
@@ -158,10 +159,10 @@ export default {
 </script>
 
 <style scoped>
-  .recommend {
-    display: flex;
-    flex-wrap: wrap;
-  }
+.recommend {
+  display: flex;
+  flex-wrap: wrap;
+}
 .content {
   top: 3px;
   width: 80%;
