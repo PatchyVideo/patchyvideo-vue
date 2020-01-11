@@ -11,8 +11,10 @@
       2.加入了一些特效
       3.实现了注册后直接登录的功能
       4.实现了填写用户名的时候自动校验是否已经存在的功能
+    1/9/2020：v1.0.2
+      1.修改了当前页面下的网站标题
     ★待解决问题：
-      1.Email格式校验功能有待完善
+      暂无
 -->
 <template>
   <div class="signupPic">
@@ -142,7 +144,11 @@ export default {
           { min: 6, max: 64, message: "长度在 6 到 64 个字符", trigger: "blur" }
         ],
         signup_email: [
-          // { min: 6, max: 64, message: "长度在 6 到 64 个字符", trigger: "blur" }
+          {
+            type: "email",
+            message: "请输入正确的邮箱地址",
+            trigger: ["blur", "change"]
+          }
         ]
       },
       // 登录状态
@@ -155,7 +161,7 @@ export default {
     // 初始化页面名为signup
     this.$store.commit("changeBgc", "signup");
     // 修改网站标题
-    document.title = "patchyvideo";
+    document.title = "注册 - Patchyvideo";
   },
   methods: {
     open2() {

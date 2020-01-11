@@ -29,6 +29,8 @@
     1/8/2020：v1.0.6
       1.现在home页面也可以显示搜索结果
       2.现在播放列表进行重新排序/搜索标签时播放列表页数会跳转到第一页
+    1/9/2020：v1.0.7
+      1.修改了当前页面下的网站标题
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
 -->
@@ -149,7 +151,7 @@ export default {
     // 改变侧导航条的标题
     this.$store.commit("changeLeftNavBarTitle", "热门标签");
     // 修改网站标题
-    document.title = "patchyvideo";
+    document.title = "Patchyvideo";
 
     // 检验传入的数据判断是否应该为搜索页
     if (JSON.stringify(this.$route.query) == "{}") {

@@ -13,6 +13,10 @@
     12/31/2019：v1.0.2
       1.完善了登录验证的相关问题
       2.对注释进行少量更改
+    1/9/2020：v1.0.3
+      1.修改了当前页面下的网站标题
+    1/10/2020：v1.0.4
+      1.输入密码之后按下回车会自动登录
     ★待解决问题：
       1.利用本地储存确保登录信息保留可能会导致信息不安全
 -->
@@ -50,6 +54,7 @@
             v-model="loginFormRef.login_password"
             show-password
             prefix-icon="el-icon-lock"
+            @keyup.enter.native="login"
           ></el-input>
         </el-form-item>
         <p id="status" style="text-align: center;" v-bind:class="{alert:status!='就绪'}">{{ status }}</p>
@@ -96,7 +101,7 @@ export default {
     // 初始化页面名为login
     this.$store.commit("changeBgc", "login");
     // 修改网站标题
-    document.title = "patchyvideo";
+    document.title = "登录 - Patchyvideo";
   },
   mounted() {},
   methods: {

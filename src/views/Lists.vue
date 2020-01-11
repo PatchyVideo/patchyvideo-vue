@@ -8,6 +8,7 @@
       release
     1/9/2020: v1.0.1
       1.解决了图片连接的问题
+      2.修改了当前页面下的网站标题
     ★待解决问题：
     2.作者链接尚未完工
     3.由于标题可能会超过一行导致视频列表高度变高，从而导致排版不太好看
@@ -109,7 +110,7 @@ export default {
     // 获取视频列表列表
     this.getVideoList(this.page, this.count);
     // 修改网站标题
-    document.title = "patchyvideo";
+    document.title = "视频列表 - Patchyvideo";
   },
   methods: {
     // 当前播放列表的页面切换的时候调用
