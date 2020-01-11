@@ -151,6 +151,7 @@ export default {
                   );
                   // 加载结束,加载动画消失
                   this.loading = false;
+                  console.log("cookies");
                   // 利用本地储存储存登录状态
                   localStorage.setItem("isLogin", true);
                   localStorage.setItem(
@@ -160,6 +161,7 @@ export default {
 
                   // 回到上一个页面
                   this.$router.go(-1);
+        /*          this.$router.push({ path: '/home'});*/
                 } else {
                   this.open3();
                 }

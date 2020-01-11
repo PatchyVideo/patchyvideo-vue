@@ -7,19 +7,27 @@
     ★待解决问题：
      因个人界面接口较特殊，需登录后才能获取，登录需携带Cookie，请先在官网登录后再打开此页面。
      本地登录提示错误暂未做处理。
+
+       更新日志：
+       1/11/2020
+       问题：
+       1.登录机制需要做成cookie保存验证判断,现有的登录有问题暂时没有解决，
+       2.由于User组件被改动，与原先的单独渲染相反，现在的所有子组件渲染几乎同时完成，意味着只要用户进入user界面，其他三个页面就已经加载完成。
+       3.该组件应当采用大驼峰命名，下次更新时修改。
+
+
 -->
 <template>
 
     <div>
-        <div class="bigbox standard">
+        <div class="bigbox standard" v-if="this.$route.params.id=='me'"   v-loading="loading">
             <div class="bigbox_left"></div>
             <div class="bigbox_left" id="imoto2"></div>
             <div class="bigbox_right">
-
                 <div class="desc">
-                    <div class="desc_name">{{userData.username}}</div>
+                    <div class="desc_name">{{myData.username}}</div>
                     <div class="text-form">
-                        <textarea name="" id="" cols="30" rows="10">{{userData.desc}}</textarea>
+                        <textarea name="" id="" cols="30" rows="10">{{myData.desc}}</textarea>
                     </div>
                     <button>保存</button>
                 </div>
@@ -39,6 +47,24 @@
 
 
         </div>
+        <div class="bigbox standard" v-if="this.$route.params.id!='me'"   v-loading="loading">
+            <div class="bigbox_left"></div>
+            <div class="bigbox_left" id="imoto2"></div>
+            <div class="bigbox_right">
+                <div class="desc">
+                    <div class="desc_name">{{userData.username}}</div>
+                    <div class="text-form">
+                        <textarea name="" id="" cols="30" rows="10" disabled="disabled">{{userData.desc}}</textarea>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+
+        </div>
     </div>
 </template>
 
@@ -46,19 +72,33 @@
     export default {
         data() {
             return {
-                userData:{
+                myData:{
                     "username": "null",
                     "desc":"null"
-                }
+                },
+                userData:{
+                    desc: "null",
+                    email: "null",
+                    image: "null",
+                    pubkey: "null",
+                    username: "null",
+                },
+                loading:true
             }
         },
         created(){
-            console.log(this.userData);
-            this.getUserData();
+            console.log(this.myData);
+            if(this.$route.params.id=='me'){
+                this.getMyData();
+            }
+            if(this.$route.params.id!='me'){
+                this.getUserData();
+            }
+            console.log(this.$route);
 
         },
         methods: {
-            getUserData(){
+            getMyData(){
                 this.axios({
                     method:'post',
                     url:"/be/user/myprofile.do",
@@ -67,17 +107,30 @@
                     withCredentials:true,
                 }).then(res=>{
                     if(res.data.status=='ERROR'){
-                        console.log("登录状态异常,请在官网确认是否登录，否则无法查看个人信息");
+                        //火狐浏览器有BUG 暂时先这样跳，等cookie登陆做完后再在user页面判断。
+                        this.$router.push("/login");
                         console.log(res.data.data);
                     }
                     if(res.data.status=='SUCCEED')
                     {
-                        this.userData = res.data.data.profile;
+                        this.myData = res.data.data.profile;
                     }
-
+                    this.loading =false;
                 }).catch(err=>{
                     console.log(err);
                 })
+            },
+            getUserData(){
+                this.axios({
+                    method: "post",
+                    url:"be/user/profile.do",
+                    data:{"uid":this.$route.params.id}
+                }).then(res=>{
+                    this.userData =res.data.data.profile;
+                    console.log(res);
+                    this.loading =false;
+                });
+
             }
         },
         components: {}

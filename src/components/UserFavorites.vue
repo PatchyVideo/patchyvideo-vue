@@ -1,4 +1,4 @@
-
+﻿
 <!--
     页面：paychyvideo的个人收藏夹页面
     功能：展示用户创建的所有收藏夹信息
@@ -13,14 +13,12 @@
 
 
 <template>
-<div   v-loading="loading">
-     <div class="data_null standard"v-if="maxcount==0">
-         <p>你目前没有任何视频数据哦</p>
-     </div>
+<div v-loading="loading">
+    <div class="data_null standard"v-if="maxcount==0">
+        <p>你目前没有任何视频数据哦</p>
+    </div>
     <div class="bigbox standard" v-if="maxcount!=0">
 
-
-         <h2>我的收藏</h2>
         <el-select id="select-order" v-model="couponSelected">
             <el-option
                     v-for="item in options"
@@ -30,26 +28,26 @@
             ></el-option>
         </el-select>
 
-         <div class="fav">
+        <div class="fav">
 
-          <router-link
-                  target="_blank"
-                  :to="{ path: '/listdetail', query: { id: i._id.$oid} }"
-                  class="list-item"
-                  v-for="i in myListVideoData"
-                  :key="i._id.$oid"
-                  tag="a" >
-                 <img :src="'/images/covers/'+i.cover"  alt="">
-                 <p>{{i.desc.english}}</p>
-                 <h3>{{i.title.english}}</h3>
-                    <div>
-                       <span> videos:{{i.videos}}</span>
-                      <!-- <span>views:{{ i.views}}</span>-->
-                   </div>
-          </router-link>
+            <router-link
+                    target="_blank"
+                    :to="{ path: '/listdetail', query: { id: i._id.$oid} }"
+                    class="list-item"
+                    v-for="i in myListVideoData"
+                    :key="i._id.$oid"
+                    tag="a" >
+                <img :src="'/images/covers/'+i.cover"  alt="">
+                <p>{{i.desc.english}}</p>
+                <h3>{{i.title.english}}</h3>
+                <div>
+                    <span> videos:{{i.videos}}</span>
+                    <!-- <span>views:{{ i.views}}</span>-->
+                </div>
+            </router-link>
 
 
-         </div>
+        </div>
 
         <el-pagination
                 background
@@ -105,35 +103,73 @@
                 console.log(val);
             },
             getVideoMaxCount(){
-                this.axios({
-                    method:'post',
-                    url:'be/lists/myplaylists',
-                    data:{
-                        "page":1,
-                        "page_size":9999999, //无法确认视频总个数,第一次请求仅为获取视频总个数
-                        "order":this.couponSelected
-                    },
-                    withCredentials:true,
-                }).then(res=>{
-                    console.log(res);
-                    this.maxcount=res.data.data.count; //获取总的视频个数制作分页后开始第二次请求获取当前页面的数据
-                    this.getVideoData(this.page,this.count);
-                })
+                if(this.$route.params.id=='me'){
+                    this.axios({
+                        method:'post',
+                        url:'be/lists/myplaylists',
+                        data:{
+                            "page":1,
+                            "page_size":9999999, //无法确认视频总个数,第一次请求仅为获取视频总个数
+                            "order":this.couponSelected
+                        },
+                        withCredentials:true,
+                    }).then(res=>{
+
+                        this.maxcount=res.data.data.count; //获取总的视频个数制作分页后开始第二次请求获取当前页面的数据
+                        this.getVideoData(this.page,this.count);
+                    });
+                }
+                if(this.$route.params.id!='me'){
+                    //POST /lists/yourplaylists
+                    // {"page":1,"page_size":10,"uid":"用户的uid",可选项"order":"排序顺序，可以是'latest', 'oldest', 'last_modified'"}
+
+                    this.axios({
+                        method:'post',
+                        url:"be/lists/yourplaylists",
+                        data:{
+                            "page":1,
+                            "page_size":9999999,
+                            "uid":this.$route.params.id,
+                            "order":this.couponSelected
+                        }
+                    }).then(res=>{
+                        this.maxcount=res.data.data.count; //获取总的视频个数制作分页后开始第二次请求获取当前页面的数据
+                        this.getVideoData(this.page,this.count);
+                    })
+                }
+
             },
             getVideoData(e, count){
-              this.axios({
-                  method:'post',
-                  url:'be/lists/myplaylists',
-                  data:{
-                      "page":e,
-                      "page_size":count,
-                      "order":this.couponSelected
-                  },
-                      withCredentials:true,
-                  }).then(result=>{
-                  this.myListVideoData =result.data.data.playlists;
-                  this.loading =false;
-              })
+               if(this.$route.params.id=='me'){
+                    this.axios({
+                        method:'post',
+                        url:'be/lists/myplaylists',
+                        data:{
+                            "page":e,
+                            "page_size":count,
+                            "order":this.couponSelected
+                        },
+                        withCredentials:true,
+                    }).then(result=>{
+                        this.myListVideoData =result.data.data.playlists;
+                        this.loading =false;
+                    })
+                }
+                if(this.$route.params.id!='me'){
+                    this.axios({
+                        method:'post',
+                        url:"be/lists/yourplaylists",
+                        data:{
+                            "page":e,
+                            "page_size":count,
+                            "uid":this.$route.params.id,
+                            "order":this.couponSelected
+                        }
+                    }).then(result=>{
+                        this.myListVideoData =result.data.data.playlists;
+                        this.loading =false;
+                    })
+                }
 
             }
         },
@@ -173,8 +209,6 @@
 
         }
         .fav{
-
-
             border: 1px solid #e5e9ef;
             display: flex;
             justify-content: flex-start;
