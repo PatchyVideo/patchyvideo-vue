@@ -13,6 +13,10 @@
     12/31/2019：v1.0.2
       1.完善了登录验证的相关问题
       2.对注释进行少量更改
+          1/9/2020：v1.0.3
+      1.修改了当前页面下的网站标题
+    1/10/2020：v1.0.4
+      1.输入密码之后按下回车会自动登录
     ★待解决问题：
       1.利用本地储存确保登录信息保留可能会导致信息不安全
 -->
@@ -151,7 +155,6 @@ export default {
                   );
                   // 加载结束,加载动画消失
                   this.loading = false;
-                  console.log("cookies");
                   // 利用本地储存储存登录状态
                   localStorage.setItem("isLogin", true);
                   localStorage.setItem(

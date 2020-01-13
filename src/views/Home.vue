@@ -14,7 +14,7 @@
       1.修改了分页器设计,使用了ElementUI的标准样式,并可以调整页面显示的视频数量或者跳到某一页
       2.新增加载界面,切换页面的时候网站会有加载效果
       3.视频列表刷新(翻页,改变页面显示的视频数量)的时候会自动返回网页顶部
-    12/10/2019: v1.0.3
+   12/10/2019: v1.0.3
       1.点击播放列表的时候打开新的窗口而不是在本窗口跳转页面
       2.精简了一下css的代码,修改了复制图标的css样式
     12/14/2019: v1.0.4
@@ -25,10 +25,13 @@
       2.去掉了“getListVideo”方法里视频列表是否第一次请求的判断
     12/29/2019: v1.0.5
       1.修复了网站链接前的小图标无法正常显示的问题,同时调整了图标间的距离
+    1/8/2020：v1.0.6
+      1.现在home页面也可以显示搜索结果
+      2.现在播放列表进行重新排序/搜索标签时播放列表页数会跳转到第一页
+    1/9/2020：v1.0.7
+      1.修改了当前页面下的网站标题
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
-      2.侧导航条的标签列表的标签内容显示有问题
-      3.图片链接尚未完工
 -->
 <template>
   <div>
@@ -153,7 +156,7 @@ export default {
     // 修改网站标题
     document.title = "patchyvideo";
 
-
+      // 检验传入的数据判断是否应该为搜索页
       if(JSON.stringify(this.$route.query)=="{}"){
           this.ifSearch=false;
           return
@@ -236,20 +239,28 @@ export default {
             this.maxpage = Math.ceil(result.data.data.count / count);
             this.listvideo = result.data.data.videos;
             this.tags = result.data.data.tags;
-            if(result.data.data.videos.length==0){ //当前页数大于搜索Tag页数时需要重新请求正确的页数数据。
-                this.axios({
-                    method: "post",
-                    url: "be/queryvideo.do",
-                    data: { page:this.maxpage, page_size: 20, order: this.couponSelected ,query:str}
-                }).then(res=>{
-                    this.maxcount = res.data.data.count;
-                    //取得总页数制作分页
-                    this.maxpage = Math.ceil(res.data.data.count / count);
-                    this.listvideo = res.data.data.videos;
-                    this.tags = res.data.data.tags;
-                    this.loading = false;
-                })
-            } //
+            //当前页数大于搜索Tag页数时需要重新请求正确的页数数据,现暂时无用注释掉待观察
+            if (0) {
+                // if (result.data.data.videos.length == 0) {
+                //   this.axios({
+                //     method: "post",
+                //     url: "be/queryvideo.do",
+                //     data: {
+                //       page: this.maxpage,
+                //       page_size: 20,
+                //       order: this.couponSelected,
+                //       query: str
+                //     }
+                //   }).then(res => {
+                //     this.maxcount = res.data.data.count;
+                //     //取得总页数制作分页
+                //     this.maxpage = Math.ceil(res.data.data.count / count);
+                //     this.listvideo = res.data.data.videos;
+                //     this.tags = res.data.data.tags;
+                //     this.loading = false;
+                //   });pagechange
+                // }
+            }
             this.loading = false;
         })
     }
@@ -304,7 +315,7 @@ export default {
       }
       },
       $route(newV,oldV){
-
+          this.handleCurrentChange(1);
         //监听路由query的值，当query的值为空时，说明默认是首页，调用 this.getListVideo获取首页数据并渲染。
 
          if(JSON.stringify(this.$route.query)=="{}") {

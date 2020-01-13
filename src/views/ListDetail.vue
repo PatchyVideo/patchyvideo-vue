@@ -6,9 +6,11 @@
     更新日志：
     12/29/2019: v1.0 
       release
+    1/9/2020：v1.0.1
+      1.加入了Tag编辑功能
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
-      2.图片链接尚未完工
+      2.EditTags组件应仅对当前收藏列表持有者展示
 -->
 <template>
   <div class="listDetail">
@@ -30,7 +32,8 @@
             <p>{{ videolistDesc }}</p>
           </div>
         </div>
-        <h3 @click="openEditTags">Edit Common Tags</h3>
+        <!-- 打开Tag编辑页面 -->
+        <el-button type="primary" @click="openEditTags" class="EditTagsButton">编辑标签</el-button>
         <!-- 视频列表 -->
         <div class="recommend">
           <!-- 视频详情 -->

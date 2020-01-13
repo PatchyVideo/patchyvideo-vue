@@ -12,13 +12,20 @@ main.js文件下需要添加：
 import echarts from 'echarts';
 Vue.prototype.$echarts = echarts;
 
-    更新日志：
-    1/11/2020：
-    现在可以查看其他用户界面。
-    新增UserFolder模块，待完成。
+   vue页面：User.vue
 
+    页面：paychyvideo的注册页面
+    功能：用户由此注册账号
+    包含组件：UserContribute、UserFavorites、Userprofile
+    更新日志：
+    1/1/2020: v1.0
+    现在可以查看其他用户界面。
+
+    ★待解决问题：
     问题：1. 页面布局不是依照100%宽度做的，所以并不能适应，最终展示分辨率大小还有待商榷
           2. 当用户输入的UID非法时，应跳转至404页面，暂时没做
+          3. 预订取消userfolder模块。
+
 
 -->
 
@@ -82,19 +89,20 @@ Vue.prototype.$echarts = echarts;
                 activeIndex: "1",
                 activeIndex2: "1",
                 activeName: "first",
-                info:[["用户管理","配置管理","角色管理"],["用户信息","他的投稿","他的收藏"]],
-                labelInfo:["用户管理","配置管理","角色管理"]
+                info:[["我的信息","我的投稿","我的收藏"],["用户信息","他的投稿","他的收藏"]],
+                labelInfo:["我的信息","我的投稿","我的收藏"]
             }
         },
        created(){
             //判断url阶段,
            // 如果用户输入的路径为me,将User渲染为个人界面
            // 如果用户输入的路径不为me,先判断此uid是否存在，存在则渲染其他用户界面，不存在则跳到404
-           if(this.$route.params.id=="me"){ //如果用户输入的路径为me,将User渲染为个人界面
+           if(this.$route.params.id=="me"){
+               //如果用户输入的路径为me,将User渲染为个人界面，已经在上面的条件渲染中体现
 
            }
            if(this.$route.params.id!="me" ){
-               //当路径不为me，判断输入uid是否合法，      //SUCCEED FAILED
+               //当路径不为me，判断输入uid是否合法，     SUCCEED FAILED
                this.isUidNull();
            }
         },
@@ -117,18 +125,13 @@ Vue.prototype.$echarts = echarts;
                     if(res.data.status=="FAILED"){
                         console.log("404");
                         this.$router.push("/home");
-                        //跳到404
+                        //跳到404 暂时没做所以先跳到主页了
                     }
                     if(res.data.status =="SUCCEED"){
                         //uid合法 渲染该uid的用户数据
                         this.labelInfo = this.info[1];
-
                     }
-
-
                });
-
-
             }
 
         },
