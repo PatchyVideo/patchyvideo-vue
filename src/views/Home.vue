@@ -1,8 +1,9 @@
 ﻿<!--    vue页面：Home.vue     -->
 <!--
     页面：paychyvideo的主页面
-    功能：展示网站收录的所有视频
+    功能：展示网站收录的所有视频/展示搜索结果
     包含组件：LeftNavbar.vue、TopNavbar.vue、Foot.vue
+    其他说明：显示搜索结果的时候要用query变量向页面传入关键字
     更新日志：
     12/1/2019: v1.0
       release
@@ -44,7 +45,7 @@
       <div class="content">
         <!-- 播放列表的抬头 -->
         <div class="video-list-header">
-          <p>Showing {{ count }} out of {{ maxcount }} videos</p>
+          <p @click="pagechange">Showing {{ count }} out of {{ maxcount }} videos</p>
           <el-select id="select-order" v-model="couponSelected">
             <el-option
               v-for="item in options"
@@ -59,12 +60,8 @@
         <ul>
           <li class="list-item" v-for="(item, index) in listvideo" :key="item._id.$oid">
             <div class="video-thumbnail">
-<!--              src="/images/covers/f5da2d4dd9eac171d47eb1100339cbad90e4648556a2f99a.png"-->
-              <img
-                :src="'/images/covers/'+item.item.cover_image"
-                width="200px"
-                height="125px"
-              />
+              <!--              src="/images/covers/f5da2d4dd9eac171d47eb1100339cbad90e4648556a2f99a.png"-->
+              <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
             </div>
             <div class="video-detail">
               <h4>
@@ -137,44 +134,38 @@ export default {
       // 请求到的视频列表（本页的视频列表）
       listvideo: [],
       // 视频列表是否属于加载状态的判断
-        loading: true,
-        //搜索关键字
-        searchKeyWord:"",
-        //是否渲染的是搜索的数据，默认false为主页数据
-        ifSearch:false,
+      loading: true,
+      //搜索关键字
+      searchKeyWord: "",
+      //是否渲染的是搜索的数据，默认false为主页数据
+      ifSearch: false
     };
   },
   created() {
-      // 初始化页面名为home
+    // 初始化页面名为home
     this.$store.commit("changeBgc", "home");
     // 初始化排列顺序为最新上传排序
     this.couponSelected = this.options[0].value;
     // 获取视频列表
-     /* this.getListVideo(this.page, this.count);*/
+    /* this.getListVideo(this.page, this.count);*/
     // 改变侧导航条的标题
     this.$store.commit("changeLeftNavBarTitle", "热门标签");
     // 修改网站标题
-    document.title = "patchyvideo";
+    document.title = "Patchyvideo";
 
-      // 检验传入的数据判断是否应该为搜索页
-      if(JSON.stringify(this.$route.query)=="{}"){
-          this.ifSearch=false;
-          return
-      }
-      if(JSON.stringify(this.$route.query)!="{}"){
-          this.searchKeyWord = this.$route.query.keyword;
-          this.ifSearch=true;
-          return;
-      }
-
+    // 检验传入的数据判断是否应该为搜索页
+    if (JSON.stringify(this.$route.query) == "{}") {
+      this.ifSearch = false;
+      return;
+    }
+    if (JSON.stringify(this.$route.query) != "{}") {
+      this.searchKeyWord = this.$route.query.keyword;
+      this.ifSearch = true;
+      return;
+    }
   },
-
-  mounted() {
-
-  },
-  updated() {
-
-  },
+  mounted() {},
+  updated() {},
   methods: {
     // 当前播放列表的页面切换的时候调用
     handleCurrentChange(val) {
@@ -198,141 +189,142 @@ export default {
       copyToClipboard($("#link" + index));
     },
     // 请求播放列表数据
-      getListVideo: function(e, count, order) {
-          // 先使页面出于加载状态
-          this.loading = true;
+    getListVideo: function(e, count, order) {
+      // 先使页面出于加载状态
+      this.loading = true;
 
-          // 请求数据
-          this.axios({
-              method: "post",
-              url: "/be/listvideo.do",
-              data: { page: e, page_size: count, order: this.couponSelected }
-          }).then(result => {
-              this.maxcount = result.data.data.count;
-              //取得总页数制作分页
-              this.maxpage = Math.ceil(result.data.data.count / count);
-              this.$store.commit("getMaxPage", this.maxpage);
-              this.listvideo = result.data.data.videos;
-              this.tags = result.data.data.tags;
+      // 请求数据
+      this.axios({
+        method: "post",
+        url: "/be/listvideo.do",
+        data: { page: e, page_size: count, order: this.couponSelected }
+      }).then(result => {
+        this.maxcount = result.data.data.count;
+        //取得总页数制作分页
+        this.maxpage = Math.ceil(result.data.data.count / count);
+        this.$store.commit("getMaxPage", this.maxpage);
+        this.listvideo = result.data.data.videos;
+        this.tags = result.data.data.tags;
 
-              // 加载结束,加载动画消失
-              this.loading = false;
+        // 加载结束,加载动画消失
+        this.loading = false;
 
-              // 回到顶部
-              if ($("html").scrollTop()) {
-                  //动画效果
-                  $("html").animate({ scrollTop: 0 }, 100);
-              }
-          });
-      },
-    getSearchData:function (e, count,str) {
-        this.loading = true;
-        this.axios({
-            method: "post",
-            url: "be/queryvideo.do",
-            data: { page:e, page_size: count, order: this.couponSelected ,query:str}
-        }).then(result => {
-            console.log(result);
-            console.log(this.maxcount, this.listvideo);
-            this.maxcount = result.data.data.count;
-            //取得总页数制作分页
-            this.maxpage = Math.ceil(result.data.data.count / count);
-            this.listvideo = result.data.data.videos;
-            this.tags = result.data.data.tags;
-            //当前页数大于搜索Tag页数时需要重新请求正确的页数数据,现暂时无用注释掉待观察
-            if (0) {
-                // if (result.data.data.videos.length == 0) {
-                //   this.axios({
-                //     method: "post",
-                //     url: "be/queryvideo.do",
-                //     data: {
-                //       page: this.maxpage,
-                //       page_size: 20,
-                //       order: this.couponSelected,
-                //       query: str
-                //     }
-                //   }).then(res => {
-                //     this.maxcount = res.data.data.count;
-                //     //取得总页数制作分页
-                //     this.maxpage = Math.ceil(res.data.data.count / count);
-                //     this.listvideo = res.data.data.videos;
-                //     this.tags = res.data.data.tags;
-                //     this.loading = false;
-                //   });pagechange
-                // }
-            }
-            this.loading = false;
-        })
+        // 回到顶部
+        if ($("html").scrollTop()) {
+          //动画效果
+          $("html").animate({ scrollTop: 0 }, 100);
+        }
+      });
+    },
+    // 请求搜索结果列表
+    getSearchData: function(e, count, str) {
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "be/queryvideo.do",
+        data: {
+          page: e,
+          page_size: count,
+          order: this.couponSelected,
+          query: str
+        }
+      }).then(result => {
+        this.maxcount = result.data.data.count;
+        //取得总页数制作分页
+        this.maxpage = Math.ceil(result.data.data.count / count);
+        this.listvideo = result.data.data.videos;
+        this.tags = result.data.data.tags;
+        //当前页数大于搜索Tag页数时需要重新请求正确的页数数据,现暂时无用注释掉待观察
+        if (0) {
+          // if (result.data.data.videos.length == 0) {
+          //   this.axios({
+          //     method: "post",
+          //     url: "be/queryvideo.do",
+          //     data: {
+          //       page: this.maxpage,
+          //       page_size: 20,
+          //       order: this.couponSelected,
+          //       query: str
+          //     }
+          //   }).then(res => {
+          //     this.maxcount = res.data.data.count;
+          //     //取得总页数制作分页
+          //     this.maxpage = Math.ceil(res.data.data.count / count);
+          //     this.listvideo = res.data.data.videos;
+          //     this.tags = res.data.data.tags;
+          //     this.loading = false;
+          //   });
+          // }
+        }
+        this.loading = false;
+      });
+    },
+    pagechange: function() {
+      this.page = 3;
     }
   },
 
   watch: {
     page(v) {
-        if(this.ifSearch===false){
-            this.getListVideo(this.page, this.count);
-            return
-        }
-        if(this.ifSearch===true){
-            this.getSearchData(this.page, this.count,this.searchKeyWord);
-            return;
-        }
-
+      if (this.ifSearch === false) {
+        this.getListVideo(this.page, this.count);
+        return;
+      }
+      if (this.ifSearch === true) {
+        this.getSearchData(this.page, this.count, this.searchKeyWord);
+        return;
+      }
     },
     count(v) {
-        if(this.ifSearch===false){
-            this.getListVideo(this.page, this.count);
-            return
-        }
-        if(this.ifSearch===true){
-            this.getSearchData(this.page, this.count,this.searchKeyWord);
-            return;
-        }
+      if (this.ifSearch === false) {
+        this.getListVideo(this.page, this.count);
+        return;
+      }
+      if (this.ifSearch === true) {
+        this.getSearchData(this.page, this.count, this.searchKeyWord);
+        return;
+      }
     },
     listvideo() {
       this.listvideoToStore();
     },
     couponSelected() {
-        if(this.ifSearch===false){
-            this.getListVideo(this.page, this.count);
-            return
-        }
-        if(this.ifSearch===true){
-            this.getSearchData(this.page, this.count,this.searchKeyWord);
-            return;
-        }
-
+      this.handleCurrentChange(1);
+      if (this.ifSearch === false) {
+        this.getListVideo(this.page, this.count);
+      }
+      if (this.ifSearch === true) {
+        this.getSearchData(this.page, this.count, this.searchKeyWord);
+      }
     },
-      ifSearch(newV,oldV){
-        //是否渲染的是搜索的数据，默认false为主页数据，清空搜索关键词
-          if(newV===false){
-              this.searchKeyWord ='';
-            this.getListVideo(this.page, this.count);
-        }
-          //当监听到的ifSearch为true时，根据搜索的值渲染数据。
-           if(newV===true){
-
-           this.getSearchData(this.page, this.count,this.searchKeyWord)
+    ifSearch(newV, oldV) {
+      this.handleCurrentChange(1);
+      //是否渲染的是搜索的数据，默认false为主页数据，清空搜索关键词
+      if (newV === false) {
+        this.searchKeyWord = "";
+        this.getListVideo(this.page, this.count);
       }
-      },
-      $route(newV,oldV){
-          this.handleCurrentChange(1);
-        //监听路由query的值，当query的值为空时，说明默认是首页，调用 this.getListVideo获取首页数据并渲染。
-
-         if(JSON.stringify(this.$route.query)=="{}") {
-             this.ifSearch = false;
-             this.getListVideo(this.page, this.count);
-             return
-          }
-          //监听路由query的值，当用户连续输入的搜索值不一样时，更新搜索关键词，调用 this.getSearchData获取搜索数据并渲染。
-          if(newV.query.keyword!=oldV.query.keyword){
-              this.ifSearch=true;
-               this.searchKeyWord =newV.query.keyword;
-              this.getSearchData(this.page, this.count,newV.query.keyword)
-              return;
-          }
-
+      //当监听到的ifSearch为true时，根据搜索的值渲染数据。
+      if (newV === true) {
+        this.getSearchData(this.page, this.count, this.searchKeyWord);
       }
-
+    },
+    $route(newV, oldV) {
+      this.handleCurrentChange(1);
+      //监听路由query的值，当query的值为空时，说明默认是首页，调用this.getListVideo获取首页数据并渲染。
+      if (JSON.stringify(this.$route.query) == "{}") {
+        this.ifSearch = false;
+        this.getListVideo(this.page, this.count);
+        return;
+      }
+      //监听路由query的值，当用户连续输入的搜索值不一样时，更新搜索关键词，调用 this.getSearchData获取搜索数据并渲染。
+      if (newV.query.keyword != oldV.query.keyword) {
+        this.ifSearch = true;
+        this.searchKeyWord = newV.query.keyword;
+        this.getSearchData(this.page, this.count, newV.query.keyword);
+        return;
+      }
+    }
   },
   components: { left_navbar, topnavbar, Footer }
 };

@@ -1,10 +1,10 @@
 ﻿import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+import detail from "../views/Detail.vue";
 import lists from "../views/Lists.vue";
 import listdetail from "../views/ListDetail.vue";
 import postvideo from "../views/PostVideo.vue";
-import detail from "../views/Detail.vue";
 import login from "../views/Login.vue";
 import signup from "../views/SignUp.vue";
 import edittag from "../views/Edittag.vue";
@@ -17,7 +17,7 @@ Vue-router在3.1之后把$router.push()方法改为了Promise。所以假如没�
 vue-router是先报了一个Uncaught (in promise)的错误(因为push没加回调)，然后再点击路由的时候才会触发NavigationDupli
  cated的错误(路由出现的错误，全局错误处理打印了出来)。
 
- 方案1
+方案1
 固定vue-router版本到3.0.7以下。这个方案没什么说的，就是简单粗暴，没有任何理由。但是你能确保以后不升级vue-router吗？
 
 方案2
@@ -41,7 +41,7 @@ router.push('/location').catch(err => {err})
 只能选择暂时不升级Vue-router。
 
 好消息是Element-UI已经有了解决方案，预计在2.13.0版本会解决这个问题。参考Github上issue#17269。
- */
+*/
 
 const routes = [
   {
@@ -102,7 +102,6 @@ const router = new VueRouter({
   base: process.env.BASE_URL,*/
   routes
 });
-
 
 // -------------------------危险提示-------------------------
 //   此函数将用户名保存在本地数据中且未加密，有泄露的风险！！！

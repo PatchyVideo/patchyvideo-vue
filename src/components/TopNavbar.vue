@@ -17,8 +17,10 @@
       1.导航条登录功能完善
     12/31/2019：v1.0.5
       1.导航条注册链接完成
+    1/9/2020：v1.0.6
+      1.搜索框部分功能完成（搜索功能完成，还差正则表达式的匹配）
     ★待解决问题：
-      1.搜索框相关功能未实现
+      1.搜索框相关功能未实现（需要加入引导说明机制）
       2.用户个人界面未完善
 -->
 
@@ -52,8 +54,14 @@
             <option value="0">标签</option>
           </select>
           <!-- 搜索框 -->
-          <input id="search-bar-query" name="query" type="text" placeholder="请输入搜索内容" v-model="iptVal"/>
-          <input id="search-bar-submit" type="submit" value="搜索" @click="gotoHome"/>
+          <input
+            id="search-bar-query"
+            name="query"
+            type="text"
+            placeholder="请输入搜索内容"
+            v-model="iptVal"
+          />
+          <input id="search-bar-submit" type="submit" value="搜索" @click="gotoHome" />
         </li>
 
         <!-- 登录和注册按钮 -->
@@ -95,29 +103,32 @@
 </template>
 
 <script>
-
-  export default {
+export default {
   data() {
     return {
       // 控制退出登录的弹出框
       dialogVisible: false,
+      // 判断是否登录
       isLogin: false,
-      iptVal:''
+      // 搜索框搜索的关键字
+      iptVal: ""
     };
   },
   created() {
     // 查看是否登录
-    if (JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "") {
+    if (
+      JSON.stringify(this.$store.state.username) != "null" &&
+      this.$store.state.username != ""
+    ) {
       this.isLogin = true;
     }
   },
-    mounted(){
-      this.iptVal = this.$route.query.keyword;
-    },
-  updated(){
-    console.log("子组件 updated");
+  mounted() {
+    this.iptVal = this.$route.query.keyword;
   },
+  updated() {},
   methods: {
+    // 退出时清除所有数据
     cleanLocalStorage: function() {
       this.isLogin = false;
       // 清除所有session值(退出登录)
@@ -143,18 +154,21 @@
         })
         .catch(_ => {});
     },
-    gotoHome(){
-      if(this.iptVal!=''){
-        this.$router.push({ path: '/home' , query: { keyword: this.iptVal }}).catch(err => {return  err});
-      }else {
-        this.$router.push({ path: '/home'});
+    // 点击搜索按钮使home页面显示搜索结果
+    gotoHome() {
+      if (this.iptVal != "") {
+        this.$router
+          .push({ path: "/home", query: { keyword: this.iptVal } })
+          .catch(err => {
+            return err;
+          });
+      } else {
+        this.$router.push({ path: "/home" });
       }
-
-/*    , query: { keyword: this.iptVal }*/
     },
-    cleanIptV(){
-      console.log("???");
-      this.iptVal=''
+    // 清除搜索结果
+    cleanIptV() {
+      this.iptVal = "";
     }
   },
   components: {}

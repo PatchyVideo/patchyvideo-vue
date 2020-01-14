@@ -2,7 +2,7 @@
 <!--
     页面：视频列表的详细信息
     功能：展示展示视频列表的详细信息
-    包含组件：LeftNavbar.vue、TopNavbar.vue、Foot.vue
+    包含组件：LeftNavbar.vue、TopNavbar.vue、Foot.vue、EditTags
     更新日志：
     12/29/2019: v1.0 
       release
@@ -16,8 +16,7 @@
   <div class="listDetail">
     <topnavbar />
     <!-- EditTags组件-->
-
-      <EditTags :msg="videolistPid" :visible.sync="showTagPanel" ></EditTags>
+    <EditTags :msg="videolistPid" :visible.sync="showTagPanel"></EditTags>
 
     <!-- listdetail页面的正文 -->
     <div class="w main-page-background-img" v-loading="loading">
@@ -28,7 +27,7 @@
             <img src="../static/img/5.png" style="float:left;margin-top:50px;" />
             <img src="../static/img/1.png" style="float:right;margin-top:50px;" />
             <h2>{{ videolistName }}</h2>
-            <img       :src="'/images/covers/'+videolistDetail.playlist.cover" />
+            <img :src="'/images/covers/'+videolistDetail.playlist.cover" style="min-height:200px" />
             <p>{{ videolistDesc }}</p>
           </div>
           <!-- 打开Tag编辑页面 -->
@@ -41,7 +40,7 @@
           <div class="minbox shadow" v-for="(item, index) in videolistVideos" :key="item._id.$oid">
             <div class="re_video">
               <h1>{{ index+1 }}</h1>
-              <img class="re_video_img" :src="'/images/covers/'+item.item.cover_image"/>
+              <img class="re_video_img" :src="'/images/covers/'+item.item.cover_image" />
               <div class="re_video_desc">
                 <h3>
                   <router-link
@@ -87,7 +86,7 @@
 <script>
 import topnavbar from "../components/TopNavbar.vue";
 import Footer from "../components/Footer.vue";
-import EditTags from "../components/EditTags.vue"
+import EditTags from "../components/EditTags.vue";
 import { copyToClipboard } from "../static/js/generic";
 
 export default {
@@ -95,9 +94,9 @@ export default {
     return {
       // 视频列表的详细信息
       videolistDetail: {
-      playlist:{
-        cover:''
-      }
+        playlist: {
+          cover: ""
+        }
       },
       // 视频列表的名称
       videolistName: "",
@@ -113,11 +112,11 @@ export default {
       count: 20,
       // 视频的全部数量
       maxcount: 0,
-      videolistPid:'',
+      videolistPid: "",
       // 视频列表是否属于加载状态的判断
       loading: true,
-      ifOpenTag:false,
-      showTagPanel:false,
+      ifOpenTag: false,
+      showTagPanel: false
     };
   },
   computed: {},
@@ -165,8 +164,9 @@ export default {
     copyVideoLink: function(index) {
       copyToClipboard($("#link" + index));
     },
-    openEditTags:function () {
-     this.showTagPanel =true;
+    // 打开Tag编辑页面
+    openEditTags: function() {
+      this.showTagPanel = true;
     }
   },
   watch: {
@@ -177,7 +177,7 @@ export default {
       this.getVideoList(this.page, this.count);
     }
   },
-  components: { topnavbar, Footer ,EditTags}
+  components: { topnavbar, Footer, EditTags }
 };
 </script>
 
