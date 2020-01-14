@@ -124,8 +124,9 @@
             </div>
           </div>
         </div>
+        <i class="fa fa-circle-o fa-3x" id="save" @click="saveTag()"></i>
       </div>
-      <i class="fa fa-circle-o fa-3x" id="save" @click="saveTag()"></i>
+
     </div>
   </transition>
 </template>
