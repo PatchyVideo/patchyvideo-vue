@@ -31,9 +31,10 @@
             <img       :src="'/images/covers/'+videolistDetail.playlist.cover" />
             <p>{{ videolistDesc }}</p>
           </div>
+          <!-- 打开Tag编辑页面 -->
+          <el-button type="primary" @click="openEditTags" class="EditTagsButton">编辑标签</el-button>
         </div>
-        <!-- 打开Tag编辑页面 -->
-        <el-button type="primary" @click="openEditTags" class="EditTagsButton">编辑标签</el-button>
+
         <!-- 视频列表 -->
         <div class="recommend">
           <!-- 视频详情 -->
@@ -181,106 +182,113 @@ export default {
 </script>
 
 <style scoped>
-.content {
-  top: 3px;
-  width: 80%;
-  position: relative;
-  flex: 1;
-}
-.main-page-background-img {
-  background-repeat: no-repeat;
-  min-height: 800px;
-  width: 85%;
-  margin-top: 20px;
-}
-.d_t {
-  width: 100%;
-  margin-bottom: 0px;
-  padding-bottom: 20px;
-}
-.d_t h2 {
-  padding-top: 20px;
-}
-.d_t p {
-  width: 60%;
-  text-align: center;
-  white-space: pre-line;
-  margin: 0px auto;
-}
-.d_t img {
-  height: 200px;
-  margin: 10px;
-  background-color: rgba(255, 255, 255, 0);
-}
+  .content {
+    top: 3px;
+    width: 80%;
+    position: relative;
+    flex: 1;
+  }
+  .main-page-background-img {
+    background-repeat: no-repeat;
+    min-height: 800px;
+    width: 85%;
+    margin-top: 20px;
+  }
+  .d_t {
+    width: 100%;
+    margin-bottom: 0px;
+    padding-bottom: 5px;
+  }
+  .d_t h2 {
+    padding-top: 20px;
+  }
+  .d_t p {
+    width: 60%;
+    text-align: center;
+    white-space: pre-line;
+    margin: 0px auto;
+  }
+  .d_t img {
+    height: 200px;
+    margin: 10px;
+    background-color: rgba(255, 255, 255, 0);
+  }
 
-.minbox {
-  width: 1200px;
-  margin-left: 12.5px;
-  margin-right: 12.5px;
-  margin-top: 30px;
-}
+  .EditTagsButton {
+    width: 70%;
+    margin-bottom: 20px;
+  }
 
-.re_top {
-  width: calc(100% - 20px);
-  margin: 0 auto;
-  margin-top: 20px;
-  padding-bottom: 20px;
-  border-bottom: 3px solid red;
-}
-.re_top h5 {
-  margin-right: 5px;
-}
-.re_video {
-  text-align: left;
-  /* height: 150px; */
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-top: 20px;
-  padding-top: 20px;
-}
-.re_video h1 {
-  display: inline-block;
-  font-size: 80px;
-  margin-right: 30px;
-  position: relative;
-  bottom: 35px;
-  color: rgb(98, 169, 231);
-}
-.re_video_img {
-  display: inline-block;
-  width: 200px;
-  margin-right: 20px;
-}
-.re_video_desc {
-  width: 850px;
-  display: inline-block;
-  vertical-align: top;
-  white-space: pre-wrap;
-  height: 4.3rem;
-}
-.re_video_desc p {
-  font-size: 1rem;
-  line-height: 1.1rem;
-  height: 4.3rem;
-  white-space: pre-wrap;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  /* 使文字变为最多显示4行，多余的使用省略号代替 */
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-}
+  .minbox {
+    width: 1200px;
+    margin-left: 12.5px;
+    margin-right: 12.5px;
+    margin-top: 30px;
+  }
 
-.page-selector {
-  display: block;
-  text-align: center;
-  margin-top: 20px;
-}
+  .re_top {
+    width: calc(100% - 20px);
+    margin: 0 auto;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid red;
+  }
+  .re_top h5 {
+    margin-right: 5px;
+  }
+  .re_video {
+    text-align: left;
+    /* height: 150px; */
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+  }
+  .re_video h1 {
+    display: inline-block;
+    font-size: 80px;
+    margin-right: 30px;
+    position: relative;
+    bottom: 35px;
+    color: rgb(98, 169, 231);
+  }
+  .re_video_img {
+    display: inline-block;
+    width: 200px;
+    margin-right: 20px;
+    min-width: 200px;
+    min-height: 125px;
+  }
+  .re_video_desc {
+    width: 850px;
+    display: inline-block;
+    vertical-align: top;
+    white-space: pre-wrap;
+    height: 4.3rem;
+  }
+  .re_video_desc p {
+    font-size: 1rem;
+    line-height: 1.1rem;
+    height: 4.3rem;
+    white-space: pre-wrap;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    /* 使文字变为最多显示4行，多余的使用省略号代替 */
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+  }
 
-.fa-copy:hover {
-  color: olive;
-  cursor: pointer;
-}
+  .page-selector {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .fa-copy:hover {
+    color: olive;
+    cursor: pointer;
+  }
 </style>
