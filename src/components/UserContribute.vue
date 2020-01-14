@@ -102,7 +102,7 @@
             }
         },
         created(){
-            console.log(this.TagData);
+
             this.getData();
         },
 
@@ -112,24 +112,50 @@
 
         methods: {
             getData(){
-                this.axios({
-                    method:'post',
-                    url:"be/listmyvideo.do",
-                    withCredentials:true,        //携带cookie当配置了 withCredentials = true时，必须在后端增加 response 头信息Access-Control-Allow-Origin，且必须指定域名，而不能指定为*
-                    async:true,
-                    data:{
-                        "page":1,
-                        "page_size":9999999
-                    }
-                }).then(result=>{
-                    this.TagData = result.data.data.tags;
-                    this.videoData = result.data.data.videos;
-                    this.getTagCategories();
-                    this.videoCount =result.data.data.count;
-                    this.loading =false;
-                }).catch(err=>{
-                    console.log(err);
-                })
+                if(this.$route.params.id=='me'){
+                    this.axios({
+                        method:'post',
+                        url:"be/listmyvideo.do",
+                        withCredentials:true,        //携带cookie当配置了 withCredentials = true时，必须在后端增加 response 头信息Access-Control-Allow-Origin，且必须指定域名，而不能指定为*
+                        async:true,
+                        data:{
+                            "page":1,
+                            "page_size":9999999
+                        }
+                    }).then(result=>{
+                        this.TagData = result.data.data.tags;
+                        this.videoData = result.data.data.videos;
+                        this.getTagCategories();
+                        this.videoCount =result.data.data.count;
+                        this.loading =false;
+                    }).catch(err=>{
+                        console.log(err);
+                    })
+                    return
+                }
+                if(this.$route.params.id!='me'){
+                    console.log(this.$route.params.id);
+                    this.axios({
+                        method:'post',
+                        url:"be/listyourvideo.do",
+                        data:{
+                            "page":1,
+                            "page_size":9999999,
+                            "uid":this.$route.params.id
+                        }
+                    }).then(result=>{
+                        this.TagData = result.data.data.tags;
+                        this.videoData = result.data.data.videos;
+                        this.getTagCategories();
+                        this.videoCount =result.data.data.count;
+                        this.loading =false;
+
+                    }).catch(err=>{
+                        console.log(err);
+                    })
+                    return;
+                }
+
             },
             getTagCategories(){  //绘制图表用
                 let AarryAll=[];
@@ -161,7 +187,7 @@
             totallNum(arr){
                 //依次将接口获取的原数据按照echarts中的数据规范转换
             for(let i in arr){
-                console.log(arr[i]);
+
                 if(arr[i]=="Copyright"){
                     this.Copyright_count++;
                     this.CopyrightObj.push({value:this.getcount(i),name:i});
@@ -207,6 +233,7 @@
                         sort: null,
 
                         data: [{
+
                             name: 'General',
                             /*  value: this.General_count,*/
                             children: this.GeneralObj
@@ -237,7 +264,12 @@
                 this.flag=!this.flag;
             }
         },
-        components: {}
+        components: {},
+        watch:{
+            $route(){
+                location.reload();
+            }
+        }
     }
 
 
@@ -263,7 +295,6 @@
             }
 
         .el-main{
-
             border: 1px solid #e5e9ef;
             box-sizing: border-box;
             .nulldata-right{
@@ -284,7 +315,6 @@
 
    .minibox_top{
        position: relative;
-
        h3{
            height: 50px;
            line-height: 50px;

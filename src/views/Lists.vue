@@ -60,7 +60,7 @@
             </div>
             <p class="minbox_creater">
               作者：
-              <a href="/users/5d39bccc10f25ebf56fd0f62">{{ item.user_detail.profile.username }}</a>
+              <router-link :to="'/users/'+item.user_detail._id.$oid">{{ item.user_detail.profile.username }}</router-link>
             </p>
           </div>
         </div>

@@ -1,10 +1,12 @@
 
 <!--
-使用方法：
-需要父组件绑定 1.msg属性 值为视频的Pid
-               2.visible.sync属性 值为布尔值，true打开，false关闭。默认false关闭.
-保存功能、检验Tag的添加是否合法没做，无接口。
-觉得问题大可以重做。
+    更新日志：
+    1/11/2020：
+     新增保存功能 TAG校验功能，功能基本已完成
+     使用方法：
+     需要父组件绑定 1.msg属性 值为视频的Pid
+                    2.visible.sync属性 值为布尔值，true打开，false关闭。默认false关闭.
+
 -->
 <template>
   <transition mode="out-in">
@@ -122,164 +124,230 @@
             </div>
           </div>
         </div>
-
-        <i class="fa fa-circle-o fa-3x" id="save"></i>
       </div>
+      <i class="fa fa-circle-o fa-3x" id="save" @click="saveTag()"></i>
     </div>
   </transition>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      tags: [],
-      tagsForRec: [],
-      TagCategoriesData: {},
-      recTags: [],
-      iptVal: "",
-      pid: "",
-      infoTip: [
-        { name: "infoTip_1", isHidden: false },
-        { name: "infoTip_2", isHidden: false },
-        { name: "infoTip_3", isHidden: false }
-      ],
-      recTagsWatch: true
-    };
-  },
-  methods: {
-    getCommonTags() {
-      console.log("getCommonTags");
-      this.axios({
-        method: "post",
-        url: "be/list/getcommontags.do",
-        data: { pid: this.msg }
-      })
-        .then(res => {
-          console.log(res);
-          this.tags = res.data.data;
-          this.tagsForRec = JSON.parse(JSON.stringify(this.tags));
-          this.getTagCategories(this.tags);
-          this.getRecTags(this.tags);
-        })
-        .catch(err => {});
-    },
-    getTagCategories(str) {
-      this.axios({
-        method: "post",
-        url: "be/tags/query_tag_categories.do ",
-        data: { tags: str }
-      })
-        .then(res => {
-          this.TagCategoriesData = res.data.data.categorie_map;
-        })
-        .catch(err => {});
-    },
-    getRecTags(tags) {
-      this.axios({
-        method: "post",
-        url: "be/tags/get_related_tags.do",
-        data: { tags: tags }
-      })
-        .then(res => {
-          this.recTags = res.data.data.tags;
-        })
-        .catch(err => {});
-    },
-    deleteObj(i, item) {
-      this.$delete(this.TagCategoriesData, item);
-      this.tags.forEach(function(value, index, array) {
-        if (value == item) {
-          this.tags.splice(index, 1);
-          return;
-        }
-      });
-    },
-    selected(i, item) {
-      if (this.tagsForRec.indexOf(item) != -1) {
-        this.tagsForRec.splice(this.tagsForRec.indexOf(item), 1);
-        return;
-      }
-      if (this.tagsForRec.indexOf(item) === -1) {
-        this.tagsForRec.push(item);
-        return;
-      }
-    },
-    getiptVal(i, item) {
-      this.iptVal = Object.keys(i)[0];
-    },
-    addTag() {
-      this.infoTip[0].isHidden = true;
-      if (this.tags.indexOf(this.iptVal) === -1) {
-        //Tag是否合法未作检测，无接口
-        this.tags.push(this.iptVal);
-        this.getTagCategories(this.tags);
-        return;
-      }
-      if (this.tags.indexOf(this.iptVal) != -1) {
-        console.log("true");
-        this.infoTip[1].isHidden = true;
-        let _that = this;
-        setTimeout(function() {
-          _that.infoTip[1].isHidden = false;
-        }, 2000);
-        return;
-      }
-    },
-    closeTagPanel() {
-      this.$emit("update:visible", false);
-    },
-    infoTipEvent(event) {
-      if (event == true) {
-        this.infoTip[0].isHidden = true;
-        return;
-      }
-      if (event == false) {
-        this.infoTip[0].isHidden = false;
-        return;
-      }
+    export default {
+        data() {
+            return {
+                tags:[],
+                tagsForRec:[],
+                TagCategoriesData:{},
+                recTags:[],
+                iptVal:'',
+                pid:'',
+                infoTip:[
+                    {name:"infoTip_1",isHidden:false},
+                    {name:"infoTip_2",isHidden:false},
+                    {name:"infoTip_3",isHidden:false}
+                ],
+                recTagsWatch:true,
+            }
+        },
+        created(){
+            this.getCommonTags();//防止组件更新时没有调用
+        },
+        methods: {
+              getCommonTags(){
+                this.axios({
+                    method:'post',
+                    url:"be/list/getcommontags.do",
+                    data:{ "pid":this.msg}
+                }).then(res=>{
+                    this.tags= res.data.data;                                //原始数据
+                    this.tagsForRec =  JSON.parse(JSON.stringify(this.tags)); //深拷贝，推荐Tag数据用
+                    this.getTagCategories(this.tags);                       //范围转换后展示原始数据
+                    this.getRecTags(this.tags);                             //获取推荐TAG
+                }).catch(error=>{
+                })
+            },
+              getTagCategories(str){
+
+            this.axios({
+                    method:'post',
+                    url:"be/tags/query_tag_categories.do ",
+                    data:{"tags":str}
+                }).then(res=>{
+                    this.TagCategoriesData = res.data.data.categorie_map;
+                }).catch(err=>{
+                    console.log(err.response);
+
+            })
+
+            },
+            getTagCategoriesForAdd(str){
+              let strToArray = str.split();
+              let _that =this;
+                this.axios({
+                    method:'post',
+                    url:"be/tags/query_tag_categories.do ",
+                    data:{"tags":strToArray}
+                }).then(res=>{
+                    if(JSON.stringify(res.data.data.categorie_map)=="{}") {
+                        console.log("请输入合法的TAG");
+                        return;
+                    }
+                    if(this.tags.indexOf(this.iptVal)===-1){
+                        //不存在则添加
+                        this.tags.push(this.iptVal);
+                        this.getTagCategories(this.tags);
+                        return ;
+                    }
+                    if(this.tags.indexOf(this.iptVal)!=-1){
+                        //存在则不允许添加
+                        this.infoTip[1].isHidden=true;
+                        setTimeout(function () {
+                            _that.infoTip[1].isHidden=false;
+                        },2000);
+                        return;
+                    }
+                }).catch(err=>{
+                })
+
+            },
+            getRecTags(tags){
+                this.axios({
+                    method:"post",
+                    url:"be/tags/get_related_tags.do",
+                    data:{"tags":tags}
+                }).then(res=>{
+                    this.recTags = res.data.data.tags;
+                }).catch(err=>{
+
+                })
+            },
+            deleteObj(i,item){
+                this.$delete(this.TagCategoriesData,item);
+
+                this.tags.forEach(function (value, index, array) {
+                        if(value==item){
+                            console.log(item +index);
+                            array.splice(index,1);
+                            return
+                        }
+                    });
+            },
+            selected(i,item){
+                  //选中取消高亮后渲染剩余的对应推荐TAG
+                if(this.tagsForRec.indexOf(item)!=-1){
+                    this.tagsForRec.splice(this.tagsForRec.indexOf(item),1);
+                    return;
+                }
+                if(this.tagsForRec.indexOf(item)===-1){
+                    this.tagsForRec.push(item);
+                    return;
+                }
+            },
+            getiptVal(i,item){
+                   this.iptVal=Object.keys(i)[0];
+            },
+         addTag(){
+                 //方案二,所有操作都在函数的成功和失败回调中进行，代码冗余
+             this.infoTip[0].isHidden=true;
+             this.getTagCategoriesForAdd(this.iptVal);
+                 /*    方案一已废弃，
+                    console.time("start");
+                    console.log("开始计算时间");
+                    this.infoTip[0].isHidden=true;       // 第一轮Event Loop 同步任务立即执行
+                    this.getTagCategories(this.iptVal);  // 进入函数发现有promise函数初始化后排微任务
+                      let _that =this;
+                     setTimeout(function () //异步宏任务 ,先挂起,将代码移出本次执行,放入任务队列,等到下一轮Event Loop
+                     {
+                        console.log("开始执行定时器");
+
+                    if( _that.islegalIptVal=="BAD"){
+                        console.log("添加的TAG必须在现有的数据库中存在")
+                        return;
+                    }
+                    if(_that.tags.indexOf(_that.iptVal)===-1){
+                        //Tag是否合法未作检测，无接口
+                        _that.tags.push(_that.iptVal);
+                        _that.getTagCategories(_that.tags);
+                        return ;
+                    }
+                    if(_that.tags.indexOf(_that.iptVal)!=-1){
+                        console.log("true");
+                        _that.infoTip[1].isHidden=true;
+                        setTimeout(function () {
+                            _that.infoTip[1].isHidden=false;
+                        },2000);
+                        return;
+                    }
+
+
+                },600);
+                     console.log("end");//同步任务立即执行，执行完后开始执行 this.getTagCategories()函数中微任务
+                      // 第一轮 Event Loop 结束 开始第二轮执行setTimeout*/
+            },
+            saveTag(){
+                this.axios({
+                    method:'post',
+                    url:'be/list/setcommontags.do',
+                    data:{"pid":this.msg,"tags":this.tags}
+                }).then(res=>{
+                    this.closeTagPanel();
+                })
+            },
+            closeTagPanel(){
+               this.$emit("update:visible",false);
+            },
+            infoTipEvent(event){
+                  //添加TAG行为消息提示
+                if(event==true){
+                    this.infoTip[0].isHidden=true;
+                    return;
+                }
+               if(event==false){
+                    this.infoTip[0].isHidden=false;
+                    return;
+                }
+
+            }
+        },
+        watch:{
+            tagsForRec(newVal,oldVal){
+                if(JSON.stringify(oldVal)!="{}"){
+                    this.recTagsWatch=!this.recTagsWatch;
+                    let _that =this;
+                    setTimeout(function () {
+                        _that.recTagsWatch=!_that.recTagsWatch;
+                        _that.getRecTags(newVal);
+                    },300);
+                }
+            },
+            msg(){
+                this.getCommonTags();
+            },
+        },
+        props:{
+           msg:{},
+            visible:{
+               type:Boolean,
+               defulet:false
+           }
+        },
+        components: {}
     }
-  },
-  watch: {
-    tagsForRec(newVal, oldVal) {
-      if (JSON.stringify(oldVal) != "{}") {
-        this.recTagsWatch = !this.recTagsWatch;
-        let _that = this;
-        setTimeout(function() {
-          _that.recTagsWatch = !_that.recTagsWatch;
-          _that.getRecTags(newVal);
-        }, 300);
-      }
-    },
-    msg() {
-      this.getCommonTags();
-    }
-  },
-  props: {
-    msg: {},
-    visible: {
-      type: Boolean,
-      defulet: false
-    }
-  },
-  components: {}
-};
 </script>
 
 <style lang="less" scoped>
-.v-enter,
-.v-leave-to {
-  opacity: 0;
-}
+    .v-enter,
+    .v-leave-to {
+        opacity: 0;
+    }
 
-.v-enter-active,
-.v-leave-active {
-  transition: all 0.8s ease;
-}
+    .v-enter-active,
+    .v-leave-active {
+        transition: all 0.8s ease;
+    }
 
-* {
-  font-family: "Microsoft YaHei", "Lantinghei SC", "Open Sans", Arial,
-    "Hiragino Sans GB", "STHeiti", "WenQuanYi Micro Hei", "SimSun", sans-serif;
+    *{
+
+        font-family: 'Microsoft YaHei','Lantinghei SC','Open Sans',Arial,'Hiragino Sans GB','STHeiti','WenQuanYi Micro Hei','SimSun',sans-serif;
 }
 
 div {

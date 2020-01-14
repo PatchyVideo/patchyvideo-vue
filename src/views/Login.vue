@@ -165,6 +165,7 @@ export default {
 
                   // 回到上一个页面
                   this.$router.go(-1);
+        /*          this.$router.push({ path: '/home'});*/
                 } else {
                   this.open3();
                 }

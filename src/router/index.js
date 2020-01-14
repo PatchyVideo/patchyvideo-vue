@@ -1,4 +1,4 @@
-import Vue from "vue";
+﻿import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import detail from "../views/Detail.vue";
@@ -92,8 +92,8 @@ const routes = [
     component: edittag
   },
   {
-    path: "/users",
-    component: User
+    path:'/users/:id',
+    component:User
   }
 ];
 
@@ -120,7 +120,7 @@ router.beforeEach((to, from, next) => {
     // console.log("无权限页面放行");
     return next();
   }
-  if (to.path == "/postvideo" || to.path == "/edittag" || to.path == "/users") {
+  if (to.path == "/postvideo" || to.path == "/edittag"||to.path=="/users/me") {
     if (store.state.username != "") {
       // console.log("已登录放行");
       return next();
