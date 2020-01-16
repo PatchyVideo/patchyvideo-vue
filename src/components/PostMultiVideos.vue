@@ -10,17 +10,34 @@
 -->
 
 <template>
-  <div class="postBox"></div>
+  <div class="postBox">
+    <el-input
+      type="textarea"
+      :autosize="{ minRows: 4}"
+      placeholder="请输入视频的URL, 一行一个"
+      v-model="URLs"
+    ></el-input>
+    <el-button class="postButton" type="primary" @click="postMultiVideos">
+      上传视频
+      <i class="el-icon-upload el-icon--right"></i>
+    </el-button>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
-    return {};
+    return {
+      URLs: ""
+    };
   },
   created() {},
   mounted() {},
-  methods: {},
+  methods: {
+    postMultiVideos() {
+      console.log(this.URLs);
+    }
+  },
   components: {}
 };
 </script>
@@ -30,5 +47,10 @@ export default {
   width: 100%;
   min-height: 800px;
   background-color: #ffffffc9;
+}
+.postButton {
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 </style>

@@ -7,6 +7,7 @@
     更新日志：
     ★待解决问题：
       1.视频URL的验证逻辑有待进一步改进
+      2.在播放列表里上传视频的时候的接口有待改进
 -->
 
 <template>
@@ -15,13 +16,36 @@
     <el-input v-model="VideoURL" @keyup.enter.native="onFetchVideo_Click" placeholder="视频地址">
       <el-button slot="append" @click="onFetchVideo_Click">获取信息</el-button>
     </el-input>
-    <!-- 视频详情 -->
+    <!-- 视频URL验证成功的时候出现的内容 -->
     <el-collapse-transition>
+      <!-- 视频详情 -->
       <div class="videoDetail" v-show="show">
         <img :src="thumbnail" />
         <h2>{{title}}</h2>
         <p>{{desc}}</p>
-        <el-button class="postButton" type="primary">
+        <!-- 标签编辑 -->
+        <div class="tagsEdit">
+          <h3>标签编辑</h3>
+          <el-tag
+            :key="tag"
+            v-for="tag in tags"
+            closable
+            :disable-transitions="false"
+            @close="handleClose(tag)"
+          >{{tag}}</el-tag>
+          <el-input
+            class="input-new-tag"
+            v-if="inputVisible"
+            v-model="inputValue"
+            ref="saveTagInput"
+            size="small"
+            @keyup.enter.native="handleInputConfirm"
+            @blur="handleInputConfirm"
+          ></el-input>
+          <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+        </div>
+        <!-- 视频上传 -->
+        <el-button class="postButton" type="primary" @click="postSingleVideo">
           上传视频
           <i class="el-icon-upload el-icon--right"></i>
         </el-button>
@@ -46,6 +70,18 @@ export default {
       loading: false,
       // 视频详情是否打开的判断
       show: false,
+      // 视频的等级，默认为-1
+      rank: -1,
+      // 视频所在收藏夹的pid
+      pid: "",
+      // 视频的副本
+      copy: "",
+      // 视频的标签数组
+      tags: [],
+      // 标签的相关设置
+      inputVisible: false,
+      // 正在编辑中的标签的数据
+      inputValue: "",
       // 匹配短地址，用以扩展成完整地址
       EXPANDERS: {},
       // 匹配URL并请求视频数据
@@ -387,11 +423,99 @@ export default {
       this.title = title;
       this.desc = desc;
       this.loading = false;
-      this.show = true;
+      if (thumbnail != "" && title != "" && desc != "") {
+        this.show = true;
+      }
     },
     // 判断字符串是否为空
     isEmpty(str) {
       return !str || 0 === str.length;
+    },
+    // 编辑标签的相关设置
+    handleClose(tag) {
+      this.tags.splice(this.tags.indexOf(tag), 1);
+    },
+    showInput() {
+      this.inputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+    handleInputConfirm() {
+      let inputValue = this.inputValue;
+      // 检查标签是否重复
+      for (var i = 0; i < this.tags.length; i++) {
+        var item = this.tags[i];
+        if (inputValue == item) {
+          this.inputValue = "";
+          this.open();
+          return;
+        }
+      }
+      if (inputValue) {
+        this.tags.push(inputValue);
+      }
+      this.inputVisible = false;
+      this.inputValue = "";
+    },
+    open() {
+      this.$message({
+        message: "您输入了重复的标签，请重新输入！",
+        type: "warning"
+      });
+    },
+    open2() {
+      this.$message({
+        message: "视频上传失败！",
+        type: "error"
+      });
+    },
+    open3(errorTag) {
+      this.$message({
+        message: "标签 " + errorTag + " 不存在！",
+        type: "error"
+      });
+    },
+    open4() {
+      this.$message({
+        message: "上传成功！",
+        type: "success"
+      });
+    },
+    open5() {
+      this.$message({
+        message: "未知错误",
+        type: "error"
+      });
+    },
+    // 上传视频
+    postSingleVideo() {
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "be/postvideo.do",
+        data: {
+          rank: this.rank,
+          pid: this.pid,
+          copy: this.copy,
+          url: this.VideoURL,
+          tags: this.tags
+        }
+      }).then(result => {
+        if (result.data.status == "SUCCEED") {
+          this.open4();
+        } else if (result.data.status == "FAILED") {
+          if (result.data.data.reason == "TAG_NOT_EXIST") {
+            var errorTag = result.data.data.aux;
+            this.open3(errorTag);
+          } else {
+            this.open2("视频上传失败！");
+          }
+        } else {
+          this.open5();
+        }
+        this.loading = false;
+      });
     }
   },
   components: {}
@@ -418,6 +542,31 @@ export default {
 }
 .videoDetail img {
   width: 320px;
+}
+.tagsEdit {
+  width: 60%;
+  min-height: 50px;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+.tagsEdit h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.input-new-tag {
+  width: 90px;
+  margin-left: 10px;
+  vertical-align: bottom;
 }
 .postButton {
   width: 60%;
