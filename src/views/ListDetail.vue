@@ -16,7 +16,8 @@
   <div class="listDetail">
     <topnavbar />
     <!-- EditTags组件-->
-    <EditTags :msg="videolistPid" :visible.sync="showTagPanel"></EditTags>
+  <EditTags :msg="videolistPid" :visible.sync="showTagPanel"></EditTags>
+<!--    <EditTags :msg="test" :visible.sync="showTagPanel" @getEditTagsData="editTagsData"></EditTags>-->
 
     <!-- listdetail页面的正文 -->
     <div class="w main-page-background-img" v-loading="loading">
@@ -116,7 +117,9 @@ export default {
       // 视频列表是否属于加载状态的判断
       loading: true,
       ifOpenTag: false,
-      showTagPanel: false
+      showTagPanel: false,
+      test:"",
+      testSonVal:""
     };
   },
   computed: {},
@@ -167,7 +170,12 @@ export default {
     // 打开Tag编辑页面
     openEditTags: function() {
       this.showTagPanel = true;
+    },
+    editTagsData:function (data) {
+      console.log("dwqdq");
+      console.log(data);
     }
+
   },
   watch: {
     page(v) {
