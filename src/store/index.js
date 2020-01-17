@@ -13,9 +13,14 @@ export default new Vuex.Store({
     // 视频的数据列表(所有视频按照页数组成二维数组)
     videoObj: [],
     // 侧导航条(LeftNavBar.vue)的标题
-    leftNavBarTitle: "标签"
+    leftNavBarTitle: "标签",
+    refreshCount:0
+
   },
   mutations: {
+    refreshPage(state,e){
+      state.refreshCount++;
+    },
     getUserName(state, e) {
       state.username = e;
     },

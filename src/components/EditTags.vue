@@ -247,7 +247,8 @@
                    this.iptVal=Object.keys(i)[0];
             },
          addTag(){
-                 //方案二,所有操作都在函数的成功和失败回调中进行，代码冗余
+           console.log(this.tags);
+           //方案二,所有操作都在函数的成功和失败回调中进行，代码冗余
              this.infoTip[0].isHidden=true;
              this.getTagCategoriesForAdd(this.iptVal);
                  /*    方案一已废弃，
@@ -285,13 +286,20 @@
                       // 第一轮 Event Loop 结束 开始第二轮执行setTimeout*/
             },
             saveTag(){
+              console.dir(this.msg);
+              if(this.msg===""){ //如果没有pid,则处在提交视频界面，返回给父组件tags
+                this.$emit('getEditTagsData',this.tags);
+                this.closeTagPanel();
+              }else {    //如果有pid按照正常路线走
                 this.axios({
-                    method:'post',
-                    url:'be/list/setcommontags.do',
-                    data:{"pid":this.msg,"tags":this.tags}
+                  method:'post',
+                  url:'be/list/setcommontags.do',
+                  data:{"pid":this.msg,"tags":this.tags}
                 }).then(res=>{
-                    this.closeTagPanel();
+                  this.closeTagPanel();
                 })
+              }
+
             },
             closeTagPanel(){
                this.$emit("update:visible",false);

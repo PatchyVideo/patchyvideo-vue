@@ -202,7 +202,7 @@ username: 储存的用户名
 
 一、
 
-非常感谢 zyddnys 允许一个初学者来参与他的网站建设。  
+非常感谢 zyddnys 允许我来参与网站建设。  
 zyddnys 最初的设计理念是偏向 Danbooru、 Gelbooru 风格的。  
 我也是将他最开始的布局延展至今。
 
