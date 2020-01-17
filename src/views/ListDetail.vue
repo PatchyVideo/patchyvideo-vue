@@ -11,12 +11,16 @@
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
       2.EditTags组件应仅对当前收藏列表持有者展示
+      1/16/2020:v1.0.2
+      增加EditTags对Postvideo的支持。
+      增加Move、DeleteVideo、SetCover 操作页面的组件，样式微调。
 -->
 <template>
   <div class="listDetail">
     <topnavbar />
     <!-- EditTags组件-->
-    <EditTags :msg="videolistPid" :visible.sync="showTagPanel"></EditTags>
+  <EditTags :msg="videolistPid" :visible.sync="showTagPanel"></EditTags>  <!--如果有Pid的情况下-->
+<!--    <EditTags :msg="test" :visible.sync="showTagPanel" @getEditTagsData="editTagsData"></EditTags> 如果没有Pid的情况下 test=""  -->
 
     <!-- listdetail页面的正文 -->
     <div class="w main-page-background-img" v-loading="loading">
@@ -39,9 +43,21 @@
           <!-- 视频详情 -->
           <div class="minbox shadow" v-for="(item, index) in videolistVideos" :key="item._id.$oid">
             <div class="re_video">
-              <h1>{{ index+1 }}</h1>
+
+              <div class="edit">
+                <h1 id="edit_first">{{ index+1 }}</h1>
+                <div id="edit_second">
+                      <Move class="move" :msg="PlaylistItemOp(item,index)"></Move>  <!--上移-->
+                   </div>
+              </div>
+
+
+
               <img class="re_video_img" :src="'/images/covers/'+item.item.cover_image" />
               <div class="re_video_desc">
+                <router-link :to="{path:'./postvideo',query:{insert_id:videolistPid}}" class="insert-video">
+                  <i class="fa fa fa-plus" aria-hidden="true"></i>
+                </router-link>
                 <h3>
                   <router-link
                     target="_blank"
@@ -59,6 +75,10 @@
                   <a :href="item.item.url" :id="'link' + (index)">{{ item.item.url }}</a>
                   <i @click="copyVideoLink(index)" class="fa fa-copy fa-lg" style="margin-left:2px"></i>
                 </div>
+              </div>
+              <div class="item_end">
+                <SetCover class="set-cover":msg="PlaylistItemOp(item,index)"></SetCover>
+                <DeleteVideo class="delete-video":msg="PlaylistItemOp(item,index)"></DeleteVideo>
               </div>
             </div>
           </div>
@@ -87,6 +107,9 @@
 import topnavbar from "../components/TopNavbar.vue";
 import Footer from "../components/Footer.vue";
 import EditTags from "../components/EditTags.vue";
+import Move from "../components/Move.vue"
+import DeleteVideo from "../components/DeleteVideo.vue";
+import SetCover from "../components/SetCover.vue";
 import { copyToClipboard } from "../static/js/generic";
 
 export default {
@@ -116,7 +139,15 @@ export default {
       // 视频列表是否属于加载状态的判断
       loading: true,
       ifOpenTag: false,
-      showTagPanel: false
+      showTagPanel: false,
+      test:"",
+      testSonVal:"",
+    /*  PlaylistItemOp:{ //移动组件所需要的数据
+        "pid":"",
+        "vid":"",
+        "page":"",
+        "page_size":""
+      }*/
     };
   },
   computed: {},
@@ -124,6 +155,16 @@ export default {
     this.getVideoList(this.page, this.count);
   },
   methods: {
+    PlaylistItemOp(e,i){
+      let obj={ //移动组件所需要的数据
+                "pid":this.videolistPid,
+                "vid":e._id.$oid,
+                "page":this.page,
+                "page_size":this.maxcount
+      };
+
+      return obj;
+    },
     // 当前播放列表的页面切换的时候调用
     handleCurrentChange(val) {
       this.page = val;
@@ -167,6 +208,15 @@ export default {
     // 打开Tag编辑页面
     openEditTags: function() {
       this.showTagPanel = true;
+    },
+    editTagsData:function (data) {
+      console.log(data);
+    }
+
+  },
+  computed:{
+    f1(){
+      return  this.$store.state.refreshCount;
     }
   },
   watch: {
@@ -175,13 +225,131 @@ export default {
     },
     count(v) {
       this.getVideoList(this.page, this.count);
-    }
+    },
+    f1(){
+      this.getVideoList(this.page, this.count);
+       }
+
+
   },
-  components: { topnavbar, Footer, EditTags }
+  components: { topnavbar, Footer, EditTags ,Move,DeleteVideo,SetCover}
 };
 </script>
 
-<style scoped>
+<style scoped lang="less">
+  .insert-video{
+    position: absolute;
+  left: 35%;
+  transform: translateY(-50px);
+     i{
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      color: white;
+      border: 3px solid #006D88;
+      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228DFF, 0 0 40px #228DFF;
+      text-align: center;
+      background-color: black;
+
+      z-index: 1;
+      font-size: 25px;
+      transition: all .3s ease;
+    }
+  }
+  .re_video{
+    display: flex;
+    .edit{
+      width: 15%;
+      display: flex;
+      #edit_first{ //h1
+        font-size: 54px;
+        margin-right: 30px;
+        position: relative;
+        bottom: 35px;
+        color: rgb(98, 169, 231);
+       flex-grow: 1;
+        transform: translate(50%,50%);
+      }
+      #edit_second{  //icon
+
+        margin-right: 20px;
+
+        .move{
+          flex: 1;
+          height: 100%;
+          font: normal normal normal 14px/1 FontAwesome;
+          font-size: inherit;
+          text-rendering: auto;
+          -webkit-font-smoothing: antialiased;
+
+          /deep/ .move-up{
+
+            font-size: 40px;
+            height: 40px;
+            color: #808080;
+            transition: all .4s ease;
+     /*       position: absolute;
+            top: -20px;*/
+            &:hover{
+              color: white;
+              text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228DFF, 0 0 40px #228DFF;
+            }
+          }
+          /deep/ .move-down{
+
+              font-size: 40px;
+              height: 40px;
+              color: #808080;
+              transition: all .4s ease;
+             transform: translateY(120%);
+              /*          position: absolute;
+                        bottom: 0px;*/
+
+                &:hover{
+                  color: white;
+                  text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228DFF, 0 0 40px #228DFF;
+                }
+
+
+
+        }
+
+
+        }
+      }
+    }
+    .item_end{
+      width: 10%;
+      display: flex;
+      justify-content: center;
+
+      .delete-video{
+
+        flex: 1;
+        height: 30px;
+        font-size: 30px;
+        text-align: center;
+        /deep/ i{
+          &:hover{        transition: all .4s ease;
+            color: white;
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228DFF, 0 0 40px #228DFF;
+          }
+        }
+      }
+      .set-cover{
+
+        text-align: center;
+        font-size: 30px;
+        height: 30px;
+        flex: 1;
+        &:hover{    transition: all .4s ease;
+          color: white;
+          text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228DFF, 0 0 40px #228DFF;
+        }
+      }
+    }
+  }
+
   .content {
     top: 3px;
     width: 80%;
@@ -224,6 +392,7 @@ export default {
     margin-left: 12.5px;
     margin-right: 12.5px;
     margin-top: 30px;
+    padding:20px 0px;
   }
 
   .re_top {
@@ -242,19 +411,15 @@ export default {
     margin-left: 10px;
     margin-right: 10px;
     margin-top: 20px;
-    padding-top: 20px;
+
   }
   .re_video h1 {
-    display: inline-block;
-    font-size: 80px;
-    margin-right: 30px;
-    position: relative;
-    bottom: 35px;
-    color: rgb(98, 169, 231);
+
   }
   .re_video_img {
     display: inline-block;
     width: 200px;
+    height: 125px;
     margin-right: 20px;
     min-width: 200px;
     min-height: 125px;
@@ -264,7 +429,7 @@ export default {
     display: inline-block;
     vertical-align: top;
     white-space: pre-wrap;
-    height: 4.3rem;
+    position: relative;
   }
   .re_video_desc p {
     font-size: 1rem;
