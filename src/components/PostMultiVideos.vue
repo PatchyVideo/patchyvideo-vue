@@ -11,16 +11,34 @@
 
 <template>
   <div class="postBox">
+    <!-- 输入URL的文本框 -->
     <el-input
       type="textarea"
-      :autosize="{ minRows: 4}"
+      :autosize="{ minRows: 8}"
       placeholder="请输入视频的URL, 一行一个"
       v-model="URLs"
     ></el-input>
-    <el-button class="postButton" type="primary" @click="postMultiVideos">
-      上传视频
-      <i class="el-icon-upload el-icon--right"></i>
-    </el-button>
+    <div class="editTags">
+      <el-button round class="editTagsButton" type="success">编辑标签</el-button>
+    </div>
+    <!-- 高级选项 -->
+    <p class="advancedOptions" @click="showAdvancedOptions">
+      高级选项
+      <i class="el-icon-caret-bottom" v-if="!advancedOptions"></i>
+      <i class="el-icon-caret-top" v-else></i>
+    </p>
+    <el-collapse-transition style="margin-bottom:20px">
+      <div v-show="advancedOptions" class="options">
+        <el-checkbox v-model="copies" style="margin-top:10px">视频互为副本</el-checkbox>
+      </div>
+    </el-collapse-transition>
+    <!-- 上传视频的按钮 -->
+    <div style="text-align: center;">
+      <el-button class="postButton" type="primary" @click="postMultiVideos">
+        上传视频
+        <i class="el-icon-upload el-icon--right"></i>
+      </el-button>
+    </div>
   </div>
 </template>
 
@@ -28,12 +46,21 @@
 export default {
   data() {
     return {
-      URLs: ""
+      // 文本域内的文本
+      URLs: "",
+      // 是否互为副本
+      copies: false,
+      // 是否显示高级选项的标志
+      advancedOptions: false
     };
   },
   created() {},
   mounted() {},
   methods: {
+    // 显示高级选项
+    showAdvancedOptions() {
+      this.advancedOptions = !this.advancedOptions;
+    },
     postMultiVideos() {
       console.log(this.URLs);
     }
@@ -48,8 +75,26 @@ export default {
   min-height: 800px;
   background-color: #ffffffc9;
 }
-.postButton {
+.editTags {
+  margin-top: 20px;
+  text-align: center;
   width: 100%;
+}
+.editTagsButton {
+  width: 60%;
+}
+.advancedOptions {
+  margin-top: 20px;
+  cursor: pointer;
+}
+.advancedOptions:hover {
+  color: #409eff;
+}
+.options {
+  margin-top: 5px;
+}
+.postButton {
+  width: 80%;
   margin-top: 20px;
   margin-bottom: 20px;
 }
