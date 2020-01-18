@@ -11,6 +11,7 @@
 
 <template>
   <div class="postBox">
+    <EditTags :msg="noData" :visible.sync="showTagPanel" @getEditTagsData="TagShow"></EditTags>
     <!-- 输入URL的文本框 -->
     <el-input
       type="textarea"
@@ -43,9 +44,16 @@
 </template>
 
 <script>
+import EditTags from "../components/EditTags";
 export default {
   data() {
     return {
+      // 标签页面是否打开
+      showTagPanel: false,
+      // 标签页面传入的参数
+      noData: "",
+      // 视频的标签数组
+      tags: [],
       // 文本域内的文本
       URLs: "",
       // 是否互为副本
@@ -57,22 +65,27 @@ export default {
   created() {},
   mounted() {},
   methods: {
+    // 显示标签编辑组件
+    TagShow: function(data) {
+      this.tags = data;
+    },
     // 显示高级选项
     showAdvancedOptions() {
       this.advancedOptions = !this.advancedOptions;
     },
+    // 上传视频
     postMultiVideos() {
       console.log(this.URLs);
     }
   },
-  components: {}
+  components: { EditTags }
 };
 </script>
 
 <style scoped>
 .postBox {
   width: 100%;
-  min-height: 800px;
+  min-height: 1000px;
   background-color: #ffffffc9;
 }
 .editTags {

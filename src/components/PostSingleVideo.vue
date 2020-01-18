@@ -4,6 +4,7 @@
     大小：100% * 800(最小高度)
     功能：上传单个视频
     必要传入参数：无
+    包含组件：EditTags.vue
     更新日志：
     ★待解决问题：
       1.视频URL的验证逻辑有待进一步改进
@@ -12,6 +13,7 @@
 
 <template>
   <div class="postBox" v-loading="loading">
+    <EditTags :msg="noData" :visible.sync="showTagPanel" @getEditTagsData="TagShow"></EditTags>
     <!-- 视频输入框 -->
     <el-input v-model="VideoURL" @keyup.enter.native="onFetchVideo_Click" placeholder="视频地址">
       <el-button slot="append" @click="onFetchVideo_Click">获取信息</el-button>
@@ -25,8 +27,12 @@
         <p>{{desc}}</p>
         <!-- 标签编辑 -->
         <div class="tagsEdit">
-          <h3>标签编辑</h3>
-          <el-tag
+          <h3>标签</h3>
+          <div class="tagBox">
+            <p v-if="tags==''" style="margin-bottom:10px;">暂无标签！</p>
+            <el-tag effect="dark" v-else v-for="item in tags" :key="item">{{item}}</el-tag>
+          </div>
+          <!-- <el-tag
             :key="tag"
             v-for="tag in tags"
             closable
@@ -42,7 +48,8 @@
             @keyup.enter.native="handleInputConfirm"
             @blur="handleInputConfirm"
           ></el-input>
-          <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+          <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>-->
+          <el-button @click="openTagEdit" class="openTagEdit" round>编辑标签</el-button>
         </div>
         <!-- 视频上传 -->
         <el-button class="postButton" type="primary" @click="postSingleVideo">
@@ -55,6 +62,7 @@
 </template>
 
 <script>
+import EditTags from "../components/EditTags";
 export default {
   data() {
     return {
@@ -76,6 +84,10 @@ export default {
       pid: "",
       // 视频的副本
       copy: "",
+      // 标签页面是否打开
+      showTagPanel: false,
+      // 标签页面传入的参数
+      noData: "",
       // 视频的标签数组
       tags: [],
       // 标签的相关设置
@@ -458,6 +470,13 @@ export default {
       this.inputVisible = false;
       this.inputValue = "";
     },
+    openTagEdit() {
+      this.showTagPanel = true;
+    },
+    // 传入编辑的标签
+    TagShow: function(data) {
+      this.tags = data;
+    },
     open() {
       this.$message({
         message: "您输入了重复的标签，请重新输入！",
@@ -518,14 +537,14 @@ export default {
       });
     }
   },
-  components: {}
+  components: { EditTags }
 };
 </script>
 
 <style scoped>
 .postBox {
   width: 100%;
-  min-height: 800px;
+  min-height: 1000px;
   background-color: #ffffffc9;
 }
 
@@ -553,6 +572,9 @@ export default {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+.openTagEdit {
+  width: 60%;
+}
 .el-tag + .el-tag {
   margin-left: 10px;
 }
@@ -567,6 +589,11 @@ export default {
   width: 90px;
   margin-left: 10px;
   vertical-align: bottom;
+}
+.tagBox {
+  width: 100%;
+  margin-bottom: 10px;
+  text-align: left;
 }
 .postButton {
   width: 60%;
