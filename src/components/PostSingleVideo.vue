@@ -13,26 +13,26 @@
 
 <template>
   <div class="postBox" v-loading="loading">
-    <EditTags :msg="noData" :visible.sync="showTagPanel" @getEditTagsData="TagShow"></EditTags>
-    <!-- 视频输入框 -->
-    <el-input v-model="VideoURL" @keyup.enter.native="onFetchVideo_Click" placeholder="视频地址">
-      <el-button slot="append" @click="onFetchVideo_Click">获取信息</el-button>
-    </el-input>
-    <!-- 视频URL验证成功的时候出现的内容 -->
-    <el-collapse-transition>
-      <!-- 视频详情 -->
-      <div class="videoDetail" v-show="show">
-        <img :src="thumbnail" />
-        <h2>{{title}}</h2>
-        <p>{{desc}}</p>
-        <!-- 标签编辑 -->
-        <div class="tagsEdit">
-          <h3>标签</h3>
-          <div class="tagBox">
-            <p v-if="tags==''" style="margin-bottom:10px;">暂无标签！</p>
-            <el-tag effect="dark" v-else v-for="item in tags" :key="item">{{item}}</el-tag>
-          </div>
-          <!-- <el-tag
+    <div class="content">
+      <!-- 视频输入框 -->
+      <el-input v-model="VideoURL" @keyup.enter.native="onFetchVideo_Click" placeholder="视频地址">
+        <el-button slot="append" @click="onFetchVideo_Click">获取信息</el-button>
+      </el-input>
+      <!-- 视频URL验证成功的时候出现的内容 -->
+      <el-collapse-transition>
+        <!-- 视频详情 -->
+        <div class="videoDetail" v-show="show">
+          <img :src="thumbnail" />
+          <h2>{{title}}</h2>
+          <p>{{desc}}</p>
+          <!-- 标签编辑 -->
+          <div class="tagsEdit">
+            <h3>标签</h3>
+            <div class="tagBox">
+              <p v-if="tags==''" style="margin-bottom:10px;">暂无标签！</p>
+              <el-tag effect="dark" v-else v-for="item in tags" :key="item">{{item}}</el-tag>
+            </div>
+            <!-- <el-tag
             :key="tag"
             v-for="tag in tags"
             closable
@@ -48,16 +48,25 @@
             @keyup.enter.native="handleInputConfirm"
             @blur="handleInputConfirm"
           ></el-input>
-          <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>-->
-          <el-button @click="openTagEdit" class="openTagEdit" round>编辑标签</el-button>
+            <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>-->
+            <el-button @click="openTagEdit" class="openTagEdit" round>编辑标签</el-button>
+          </div>
+          <!-- 视频上传 -->
+          <el-button class="postButton" type="primary" @click="postSingleVideo">
+            上传视频
+            <i class="el-icon-upload el-icon--right"></i>
+          </el-button>
         </div>
-        <!-- 视频上传 -->
-        <el-button class="postButton" type="primary" @click="postSingleVideo">
-          上传视频
-          <i class="el-icon-upload el-icon--right"></i>
-        </el-button>
-      </div>
-    </el-collapse-transition>
+      </el-collapse-transition>
+    </div>
+    <div class="EditTags">
+      <EditTags
+        :msg="noData"
+        :visible.sync="showTagPanel"
+        @getEditTagsData="TagShow"
+        class="EditTags2"
+      ></EditTags>
+    </div>
   </div>
 </template>
 
@@ -85,7 +94,7 @@ export default {
       // 视频的副本
       copy: "",
       // 标签页面是否打开
-      showTagPanel: false,
+      showTagPanel: true,
       // 标签页面传入的参数
       noData: "",
       // 视频的标签数组
@@ -544,8 +553,17 @@ export default {
 <style scoped>
 .postBox {
   width: 100%;
-  min-height: 1000px;
+  min-height: 950px;
   background-color: #ffffffc9;
+  overflow: hidden;
+  display: flex;
+  margin: auto;
+}
+
+.content {
+  float: left;
+  width: 50%;
+  display: block;
 }
 
 .videoDetail {
@@ -599,5 +617,13 @@ export default {
   width: 60%;
   margin-top: 20px;
   margin-bottom: 20px;
+}
+.EditTags {
+  float: left;
+  width: 50%;
+  display: block;
+}
+.EditTags2 {
+  /* width: 50%; */
 }
 </style>
