@@ -147,12 +147,38 @@
                     {name:"infoTip_3",isHidden:false}
                 ],
                 recTagsWatch:true,
+                msgMark:0,
+                animeMark:0,
             }
         },
         created(){
+          if(this.msg!=""){
             this.getCommonTags();//防止组件更新时没有调用
+          }
+
+
         },
         methods: {
+          open1() {
+            this.$message('这是一条消息提示');
+          },
+          open2() {
+            this.$message({
+              message: 'Tag添加成功！',
+              type: 'success'
+            });
+          },
+
+          open3() {
+            this.$message({
+              message: 'Tag已存在！',
+              type: 'warning'
+            });
+          },
+
+          open4() {
+            this.$message.error('请输入合法的Tag!');
+          },
               getCommonTags(){
                 this.axios({
                     method:'post',
@@ -163,6 +189,9 @@
                     this.tagsForRec =  JSON.parse(JSON.stringify(this.tags)); //深拷贝，推荐Tag数据用
                     this.getTagCategories(this.tags);                       //范围转换后展示原始数据
                     this.getRecTags(this.tags);                             //获取推荐TAG
+
+
+
                 }).catch(error=>{
                 })
             },
@@ -174,6 +203,10 @@
                     data:{"tags":str}
                 }).then(res=>{
                     this.TagCategoriesData = res.data.data.categorie_map;
+                   if(this.msgMark!=0){
+                     this.open2();
+                   }
+                    this.msgMark++;
                 }).catch(err=>{
                     console.log(err.response);
 
@@ -189,18 +222,20 @@
                     data:{"tags":strToArray}
                 }).then(res=>{
                     if(JSON.stringify(res.data.data.categorie_map)=="{}") {
-                        console.log("请输入合法的TAG");
+                      this.open4();
                         return;
                     }
                     if(this.tags.indexOf(this.iptVal)===-1){
                         //不存在则添加
                         this.tags.push(this.iptVal);
                         this.getTagCategories(this.tags);
+
                         return ;
                     }
                     if(this.tags.indexOf(this.iptVal)!=-1){
                         //存在则不允许添加
-                        this.infoTip[1].isHidden=true;
+                        /*this.infoTip[1].isHidden=true;*/
+                      this.open3();
                         setTimeout(function () {
                             _that.infoTip[1].isHidden=false;
                         },2000);
@@ -217,6 +252,13 @@
                     data:{"tags":tags}
                 }).then(res=>{
                     this.recTags = res.data.data.tags;
+                    if(this.animeMark!=0){
+                      console.log(this.animeMark);
+                      console.log("????");
+                      this.recTagsWatch=!this.recTagsWatch;
+                    }
+                  this.animeMark++;
+
                 }).catch(err=>{
 
                 })
@@ -224,13 +266,14 @@
             deleteObj(i,item){
                 this.$delete(this.TagCategoriesData,item);
 
-                this.tags.forEach(function (value, index, array) {
+                this.tagsForRec.forEach(function (value, index, array) {
                         if(value==item){
                             console.log(item +index);
                             array.splice(index,1);
                             return
                         }
                     });
+              console.log(this.recTags);
             },
             selected(i,item){
                   //选中取消高亮后渲染剩余的对应推荐TAG
@@ -319,17 +362,23 @@
         },
         watch:{
             tagsForRec(newVal,oldVal){
-                if(JSON.stringify(oldVal)!="{}"){
-                    this.recTagsWatch=!this.recTagsWatch;
-                    let _that =this;
-                    setTimeout(function () {
-                        _that.recTagsWatch=!_that.recTagsWatch;
-                        _that.getRecTags(newVal);
-                    },300);
+              console.log(oldVal);
+              console.log(this.recTagsWatch);
+              if(JSON.stringify(oldVal)!="[]"||this.animeMark!=0){
+
+                  this.recTagsWatch=!this.recTagsWatch;
+                    this.getRecTags(newVal);
+               /*   let _that =this;
+                  setTimeout(function () {
+                    _that.recTagsWatch=!_that.recTagsWatch;
+                    _that.getRecTags(newVal);
+                  },300);*/
                 }
             },
             msg(){
-                this.getCommonTags();
+    if(this.msg!=""){
+      this.getCommonTags();
+    }
             },
         },
         props:{
@@ -426,6 +475,7 @@ div {
         max-height: 40%;
         overflow: auto;
         padding-top: 35px;
+
         box-sizing: border-box;
         ul {
           li {
@@ -441,6 +491,7 @@ div {
             cursor: pointer;
             list-style: none;
             border-radius: 20px;
+            box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.5);
             p {
               display: inline;
               margin-right: 4px;
@@ -512,7 +563,8 @@ div {
             background: white;
             border: none;
             padding-left: 8px;
-            box-shadow: 0 0 10px #fff !important;
+            /*box-shadow: 0 0 10px #fff !important;*/
+            box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.5);
             transform: translateY(50%) rotateX(0deg) !important;
             transform-origin: left top !important;
           }
@@ -542,8 +594,10 @@ div {
         .infoTip_1 {
           //编辑标签
           color: white;
-          text-shadow: 0 0 10px #fff, 0 0 40px #ff7777, -1px 0 #ff7777,
-            -1px 1px #ff7777;
+       /*   text-shadow: 0 0 10px #fff, 0 0 40px #ff7777, -1px 0 #ff7777,
+            -1px 1px #ff7777;*/
+          text-shadow: 0 0 10px #fff, 0 0 40px #ff7777, 0 0 70px #ff7777,
+          0 0 80px #ff7777;
 
           display: block;
         }
@@ -591,6 +645,7 @@ div {
               cursor: pointer;
               list-style: none;
               border-radius: 20px;
+              box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.5);
               p {
                 display: inline;
                 margin-right: 4px;
