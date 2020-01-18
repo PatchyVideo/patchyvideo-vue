@@ -6,6 +6,8 @@
     必要传入参数：无
     包含组件：EditTags.vue
     更新日志：
+    1/18/2020：
+      release
     ★待解决问题：
       1.视频URL的验证逻辑有待进一步改进
       2.在播放列表里上传视频的时候的接口有待改进
@@ -32,24 +34,6 @@
               <p v-if="tags==''" style="margin-bottom:10px;">暂无标签！</p>
               <el-tag effect="dark" v-else v-for="item in tags" :key="item">{{item}}</el-tag>
             </div>
-            <!-- <el-tag
-            :key="tag"
-            v-for="tag in tags"
-            closable
-            :disable-transitions="false"
-            @close="handleClose(tag)"
-          >{{tag}}</el-tag>
-          <el-input
-            class="input-new-tag"
-            v-if="inputVisible"
-            v-model="inputValue"
-            ref="saveTagInput"
-            size="small"
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm"
-          ></el-input>
-            <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>-->
-            <el-button @click="openTagEdit" class="openTagEdit" round>编辑标签</el-button>
           </div>
           <!-- 视频上传 -->
           <el-button class="postButton" type="primary" @click="postSingleVideo">
@@ -59,14 +43,12 @@
         </div>
       </el-collapse-transition>
     </div>
-    <div class="EditTags">
-      <EditTags
-        :msg="noData"
-        :visible.sync="showTagPanel"
-        @getEditTagsData="TagShow"
-        class="EditTags2"
-      ></EditTags>
-    </div>
+    <EditTags
+      :msg="noData"
+      :visible.sync="showTagPanel"
+      @getEditTagsData="TagShow"
+      class="EditTags"
+    ></EditTags>
   </div>
 </template>
 
@@ -77,7 +59,7 @@ export default {
     return {
       // 视频的URL(与输入框绑定)
       VideoURL: "",
-      // 视频缩略图的地址
+      // 视频缩略图的地址,默认为加载中的图片
       thumbnail: require("../static/img/LoadingThumbnail.png"),
       // 视频标题
       title: "",
@@ -99,10 +81,6 @@ export default {
       noData: "",
       // 视频的标签数组
       tags: [],
-      // 标签的相关设置
-      inputVisible: false,
-      // 正在编辑中的标签的数据
-      inputValue: "",
       // 匹配短地址，用以扩展成完整地址
       EXPANDERS: {},
       // 匹配URL并请求视频数据
@@ -452,46 +430,40 @@ export default {
     isEmpty(str) {
       return !str || 0 === str.length;
     },
-    // 编辑标签的相关设置
-    handleClose(tag) {
-      this.tags.splice(this.tags.indexOf(tag), 1);
-    },
-    showInput() {
-      this.inputVisible = true;
-      this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus();
-      });
-    },
-    handleInputConfirm() {
-      let inputValue = this.inputValue;
-      // 检查标签是否重复
-      for (var i = 0; i < this.tags.length; i++) {
-        var item = this.tags[i];
-        if (inputValue == item) {
-          this.inputValue = "";
-          this.open();
-          return;
-        }
-      }
-      if (inputValue) {
-        this.tags.push(inputValue);
-      }
-      this.inputVisible = false;
-      this.inputValue = "";
-    },
-    openTagEdit() {
-      this.showTagPanel = true;
-    },
     // 传入编辑的标签
     TagShow: function(data) {
       this.tags = data;
     },
-    open() {
-      this.$message({
-        message: "您输入了重复的标签，请重新输入！",
-        type: "warning"
+    // 上传视频
+    postSingleVideo() {
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "be/postvideo.do",
+        data: {
+          rank: this.rank,
+          pid: this.pid,
+          copy: this.copy,
+          url: this.VideoURL,
+          tags: this.tags
+        }
+      }).then(result => {
+        if (result.data.status == "SUCCEED") {
+          this.open4();
+        } else if (result.data.status == "FAILED") {
+          if (result.data.data.reason == "TAG_NOT_EXIST") {
+            var errorTag = result.data.data.aux;
+            this.open3(errorTag);
+          } else {
+            this.open2();
+          }
+        } else {
+          this.open5();
+        }
+        this.loading = false;
       });
     },
+    // 各种各样的报错警告
     open2() {
       this.$message({
         message: "视频上传失败！",
@@ -515,35 +487,6 @@ export default {
         message: "未知错误",
         type: "error"
       });
-    },
-    // 上传视频
-    postSingleVideo() {
-      this.loading = true;
-      this.axios({
-        method: "post",
-        url: "be/postvideo.do",
-        data: {
-          rank: this.rank,
-          pid: this.pid,
-          copy: this.copy,
-          url: this.VideoURL,
-          tags: this.tags
-        }
-      }).then(result => {
-        if (result.data.status == "SUCCEED") {
-          this.open4();
-        } else if (result.data.status == "FAILED") {
-          if (result.data.data.reason == "TAG_NOT_EXIST") {
-            var errorTag = result.data.data.aux;
-            this.open3(errorTag);
-          } else {
-            this.open2("视频上传失败！");
-          }
-        } else {
-          this.open5();
-        }
-        this.loading = false;
-      });
     }
   },
   components: { EditTags }
@@ -553,7 +496,7 @@ export default {
 <style scoped>
 .postBox {
   width: 100%;
-  min-height: 950px;
+  min-height: 800px;
   background-color: #ffffffc9;
   overflow: hidden;
   display: flex;
@@ -561,8 +504,8 @@ export default {
 }
 
 .content {
-  float: left;
-  width: 50%;
+  width: calc(60% - 10px);
+  padding-right: 10px;
   display: block;
 }
 
@@ -590,24 +533,6 @@ export default {
   margin-top: 10px;
   margin-bottom: 10px;
 }
-.openTagEdit {
-  width: 60%;
-}
-.el-tag + .el-tag {
-  margin-left: 10px;
-}
-.button-new-tag {
-  margin-left: 10px;
-  height: 32px;
-  line-height: 30px;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-.input-new-tag {
-  width: 90px;
-  margin-left: 10px;
-  vertical-align: bottom;
-}
 .tagBox {
   width: 100%;
   margin-bottom: 10px;
@@ -619,11 +544,12 @@ export default {
   margin-bottom: 20px;
 }
 .EditTags {
-  float: left;
-  width: 50%;
+  width: 40%;
   display: block;
 }
-.EditTags2 {
-  /* width: 50%; */
+.EditTags /deep/ #tag {
+  width: 100% !important;
+  position: relative;
+  background-size:cover;
 }
 </style>
