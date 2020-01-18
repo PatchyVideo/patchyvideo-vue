@@ -10,7 +10,7 @@
 -->
 <template>
   <transition mode="out-in">
-    <div v-if="visible" class="EditTags">
+    <div v-if="visible" class="EditTags":class="{active:this.msg!=''}">
       <div id="tag">
         <i class="fa fa-close fa-2x" id="close" @click="closeTagPanel"></i>
         <div class="minibox">
@@ -362,10 +362,14 @@
 div {
   transition: all 0.6s ease;
 }
-.EditTags {
+    .active {
+      position: relative;
+      z-index: 100;
+    }
+/*.EditTags {
   position: relative;
   z-index: 100;
-}
+}*/
 .hidden {
   display: none !important;
 }
