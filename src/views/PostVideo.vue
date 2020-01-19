@@ -5,7 +5,8 @@
     包含组件：TopNavbar.vue、Foot.vue、PostSingleVideo.vue、PostMultiVideos.vue
     其他说明：1.用户必须登录才能进入此页面；2.本页面暂时只支持a站，b站，n站，推特和油管的视频上传
     更新日志：
-
+    1/18/2020：
+      release
 -->
 
 <template>
@@ -60,11 +61,12 @@ export default {
   text-align: left;
 }
 .main-page-background-img {
-  background-image: url("./../static/img/imoto3.jpg");
+  /* background-image: url("./../static/img/imoto3.jpg"); */
   background-repeat: no-repeat;
   min-height: 800px;
-  width: 85%;
+  width: 100%;
   margin-top: 20px;
+  padding: 0px;
 }
 .topTabs {
   margin: 0 auto;
