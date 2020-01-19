@@ -55,7 +55,7 @@
 
               <img class="re_video_img" :src="'/images/covers/'+item.item.cover_image" />
               <div class="re_video_desc">
-                <router-link :to="{path:'./postvideo',query:{insert_id:videolistPid}}" class="insert-video">
+                <router-link :to="{path:'./postvideo',query:getInsertData(item,index)}" class="insert-video">
                   <i class="fa fa fa-plus" aria-hidden="true"></i>
                 </router-link>
                 <h3>
@@ -142,6 +142,7 @@ export default {
       showTagPanel: false,
       test:"",
       testSonVal:"",
+
     /*  PlaylistItemOp:{ //移动组件所需要的数据
         "pid":"",
         "vid":"",
@@ -155,6 +156,13 @@ export default {
     this.getVideoList(this.page, this.count);
   },
   methods: {
+    getInsertData(e,i){
+      let obj= {
+        pid:this.videolistPid,
+        rank:e.rank
+      }
+      return obj;
+    },
     PlaylistItemOp(e,i){
       let obj={ //移动组件所需要的数据
                 "pid":this.videolistPid,

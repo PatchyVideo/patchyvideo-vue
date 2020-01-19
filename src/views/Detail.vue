@@ -64,8 +64,20 @@
         <div class="Copies_blibili">
           <div class="new_top">
             <h2>副本</h2>
-            <p v-if="myVideoData.copies == ''">此视频不存在副本</p>
-            <p v-else>此视频有{{ myVideoData.copies.length }}个副本</p>
+            <p v-if="myVideoData.copies == ''">
+              此视频不存在副本
+              <router-link :to="{path:'./postvideo',query:{copy:this.pid}}" tag="a"><el-button type="text">[添加副本]</el-button></router-link>
+            </p>
+            <p v-else>
+              此视频有{{ myVideoData.copies.length }}个副本
+
+              <router-link :to="{path:'./postvideo',query:{copy:this.pid}}" tag="a"><el-button type="text">[添加副本]</el-button></router-link>
+              <!--    <a @click="breaklink()">[删除此副本] </a>-->
+              <el-button type="text" @click="dialogVisible = true;">[删除此副本] </el-button>
+              <el-button type="text"@click="broadcastTags()">[同步副本标签]</el-button>
+
+            </p>
+
           </div>
           <ul v-for="item in myVideoData.copies" :key="item._id.$oid">
             <img
@@ -86,8 +98,15 @@
         <div class="Playlists">
           <div class="new_top">
             <h2>播放列表</h2>
-            <p v-if="myVideoData.playlists == ''">本视频不包含于任何播放列表中</p>
-            <p v-else>此视频存在于{{ myVideoData.playlists.length }}个播放列表中</p>
+            <p v-if="myVideoData.playlists == ''">
+              本视频不包含于任何播放列表中
+              <el-button type="text" @click="newFromSingleVideo()">[由此视频创建播放列表]</el-button>
+            </p>
+            <p v-else>
+              此视频存在于{{ myVideoData.playlists.length }}个播放列表中
+              <el-button type="text" @click="newFromSingleVideo()">[由此视频创建播放列表]</el-button>
+            </p>
+
           </div>
           <ul v-for="item in myVideoData.playlists" :key="item._id.$oid">
             <!-- 将页面参数刷新并重载页面，其中@click.native应该是router-link为了阻止a标签的默认跳转事件 -->
@@ -114,6 +133,17 @@
           </ul>
         </div>
       </div>
+      <el-dialog
+              title="提示"
+              :visible.sync="dialogVisible"
+              width="30%"
+              :before-close="handleClose">
+        <span>确认删除？</span>
+        <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false;breaklink();">确 定</el-button>
+  </span>
+      </el-dialog>
     </div>
 
     <Footer></Footer>
@@ -152,7 +182,10 @@ export default {
             cover_image:""
           }
         }
+
       },
+      dialogVisible: false, //删除提示框
+      pid:"", //视频的id值
       // 视频列表是否属于加载状态的判断
       loading: true
       // 获取到的所有视频，以页数为第一维组成二维数组(和localStorage存储一起使用，已被弃用）
@@ -193,8 +226,71 @@ export default {
     // window.localStorage.removeItem("loglevel:webpack-dev-server");
     this.searchVideo();
   },
-  mounted() {},
+  mounted() {
+
+  },
   methods: {
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+              .then(_ => {
+
+                done();
+              })
+              .catch(_ => {});
+    },
+    open1() {
+      this.$message('这是一条消息提示');
+    },
+    open2() {
+      this.$message({
+        message: '同步成功！',
+        type: 'success'
+      });
+    },
+
+    open3() {
+      this.$message({
+        message: 'Tag已存在！',
+        type: 'warning'
+      });
+    },
+
+    open4() {
+      this.$message.error('请输入合法的Tag!');
+    },
+    newFromSingleVideo(){
+      this.axios({
+        method:"post",
+        url:"be/lists/newfromsinglevideo.do",
+        data:{"vid":this.pid}
+      }).then(res=>{
+        console.log(res);
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+    breaklink(){
+      this.axios({
+        method: "post",
+        url:"be/videos/breaklink.do",
+        data:{"video_id":this.pid}
+      }).then(res=>{
+        console.log(res);
+        this.$router.go(0);
+      })
+
+    },
+    broadcastTags(){
+      this.axios({
+        method:"post",
+        url:"be/videos/broadcasttags.do",
+        data:{"src":this.pid}
+      }).then(res=>{
+        this.open2();
+        console.log(res);
+      })
+
+    },
     // 复制视频连接
     copyVideoLink: function() {
       copyToClipboard($("#video_link"));
@@ -248,6 +344,7 @@ export default {
 
         // 修改网站标题
         document.title = this.myVideoData.video.item.title;
+        this.pid = this.myVideoData.video._id.$oid;
         // 加载结束,加载动画消失
         this.loading = false;
       });

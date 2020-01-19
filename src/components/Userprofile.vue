@@ -154,6 +154,7 @@
         position: absolute;
 
         width: 50%;
+        max-width: 800px;
         height: 900px;
         background: url("../static/img/imoto_left.jpg") no-repeat;
         background-size: 100% 100%;
