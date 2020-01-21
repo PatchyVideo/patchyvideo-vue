@@ -211,6 +211,6 @@ export default {
 .EditTags /deep/ #tag {
   width: 100% !important;
   position: relative;
-  background-size:cover;
+  background-size: cover;
 }
 </style>

@@ -38,6 +38,7 @@
       2.用户界面进一步完善
       3.Tag编辑模块完成
                                    by wrzrmzx
+
 ---
 
 ### 这是一个基于 Vue 开发的东方 project 视频索引网站
@@ -61,9 +62,9 @@
 - Playlists √
 - Detail(Playlists) √
 - Create Playlists ×
-- Post Video X
+- Post Video √
 - Tags X
-- Login \ Sign Up √
+- Login \ Sign Up \ resetpassword √
 - Users √
 
 #### X:无进度
@@ -84,6 +85,9 @@
 - vue-infinite-scroll
 - Less
 - jquery
+- jquery-textcomplete（已经无用）
+- textcomplete（已经无用）
+- v-textcomplete
 - webpack
 - echarts
 - font-awesome
@@ -108,14 +112,14 @@
 
 1.数据的渲染  
 2.分页功能实现  
-3.element-ui 排序美化   
+3.element-ui 排序美化  
 4.导航栏处 Search 功能的完善
 
 二、Deatil(Video & Playlists)
 
 1.数据的渲染  
 2.各个链接间的通道
-3.Edit Tags 样式位置调整  
+3.Edit Tags 样式位置调整
 
 三、Playlists
 
@@ -140,14 +144,12 @@
 
 二、Deatil(Video)
 
-1.点击相应的 Tags 渲染筛选出的视频  
-2.Edit Tags 样式位置调整  
-3.Copies 和 Playlists 区的功能完善
+1.Edit Tags 样式位置调整  
+2.Copies 和 Playlists 区的功能完善
 
 三、Playlists
 
-1.指向列表作者的链接尚未完工  
-2.由于标题可能会超过一行导致视频列表高度变高，从而导致排版不太好看
+1.由于标题可能会超过一行导致视频列表高度变高，从而导致排版不太好看
 
 四、Detail(Playlists)
 
@@ -226,7 +228,7 @@ written by suwadaimyojin
 用 vue 重构网站的过程并不是一帆风顺，很多时候会遇到各种各样奇怪的问题，但自己坚信，现在的努力，是不会没有意义的。  
 曾经 vocaloid 的粉丝们用自己的双手搭建出了 Mikufans，东方的粉丝们也一定可以做到同样的事情，甚至做的会更好。
 如果每一个东方众都为东方做出自己的贡献的话，东方就会永远向前。  
-前辈们教会了自己这个道理，希望大家也能一起向前，不仅仅是 patchyvideo，还有所有的，东方的回忆，    
+前辈们教会了自己这个道理，希望大家也能一起向前，不仅仅是 patchyvideo，还有所有的，东方的回忆，  
 都能被永远的铭记。
 
 written by wrzrmzx(freesia)
