@@ -61,9 +61,9 @@ Vue.prototype.$echarts = echarts;
                 <el-tab-pane :label="labelInfo[2]" name="third">
                     <userfavorites></userfavorites>
                 </el-tab-pane>
-                <el-tab-pane label="文件管理" name="four">
+              <!--  <el-tab-pane label="文件管理" name="four">
                     <userfolder></userfolder>
-                </el-tab-pane>
+                </el-tab-pane>-->
             </el-tabs>
 
             <!--其他用户界面-->

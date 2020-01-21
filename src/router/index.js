@@ -67,7 +67,6 @@ const routes = [
   },
   {
     path: "/postvideo",
-
     component: postvideo
   },
   {

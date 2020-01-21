@@ -156,7 +156,6 @@
             this.getCommonTags();//防止组件更新时没有调用
           }
 
-
         },
         methods: {
           open1() {
@@ -233,12 +232,12 @@
                         return ;
                     }
                     if(this.tags.indexOf(this.iptVal)!=-1){
-                        //存在则不允许添加
+                      //存在则不允许添加
                         /*this.infoTip[1].isHidden=true;*/
                       this.open3();
-                        setTimeout(function () {
+                   /*     setTimeout(function () {
                             _that.infoTip[1].isHidden=false;
-                        },2000);
+                        },2000);*/
                         return;
                     }
                 }).catch(err=>{
@@ -252,28 +251,31 @@
                     data:{"tags":tags}
                 }).then(res=>{
                     this.recTags = res.data.data.tags;
-                    if(this.animeMark!=0){
-                      console.log(this.animeMark);
-                      console.log("????");
+
+                  if(this.animeMark!=0){
                       this.recTagsWatch=!this.recTagsWatch;
                     }
                   this.animeMark++;
 
                 }).catch(err=>{
-
                 })
             },
             deleteObj(i,item){
                 this.$delete(this.TagCategoriesData,item);
+              this.tags.forEach(function (value, index, array) {
+                if(value==item){
+                  array.splice(index,1);
+                  return
+                }
+              });
 
                 this.tagsForRec.forEach(function (value, index, array) {
                         if(value==item){
-                            console.log(item +index);
                             array.splice(index,1);
                             return
                         }
                     });
-              console.log(this.recTags);
+
             },
             selected(i,item){
                   //选中取消高亮后渲染剩余的对应推荐TAG
@@ -290,7 +292,7 @@
                    this.iptVal=Object.keys(i)[0];
             },
          addTag(){
-           console.log(this.tags);
+
            //方案二,所有操作都在函数的成功和失败回调中进行，代码冗余
              this.infoTip[0].isHidden=true;
              this.getTagCategoriesForAdd(this.iptVal);
@@ -329,10 +331,9 @@
                       // 第一轮 Event Loop 结束 开始第二轮执行setTimeout*/
             },
             saveTag(){
-              console.dir(this.msg);
               if(this.msg===""){ //如果没有pid,则处在提交视频界面，返回给父组件tags
                 this.$emit('getEditTagsData',this.tags);
-                this.closeTagPanel();
+      /*          this.closeTagPanel();*/
               }else {    //如果有pid按照正常路线走
                 this.axios({
                   method:'post',
@@ -362,18 +363,22 @@
         },
         watch:{
             tagsForRec(newVal,oldVal){
-              console.log(oldVal);
-              console.log(this.recTagsWatch);
+              if(this.msg===""){
+                this.animeMark=1;
+              }
+              console.log(this.animeMark);
               if(JSON.stringify(oldVal)!="[]"||this.animeMark!=0){
-
                   this.recTagsWatch=!this.recTagsWatch;
-                    this.getRecTags(newVal);
-               /*   let _that =this;
-                  setTimeout(function () {
-                    _that.recTagsWatch=!_that.recTagsWatch;
-                    _that.getRecTags(newVal);
-                  },300);*/
+                  this.getRecTags(newVal);
+                  /*   let _that =this;
+                     setTimeout(function () {
+                       _that.recTagsWatch=!_that.recTagsWatch;
+                       _that.getRecTags(newVal);
+                     },300);*/
                 }
+
+
+
             },
             msg(){
     if(this.msg!=""){
