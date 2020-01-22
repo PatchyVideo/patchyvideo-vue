@@ -1,4 +1,4 @@
-
+﻿
 
 
 
@@ -16,100 +16,96 @@
     <div class="bigbox standard">
 
             <div class="aside">
-    <div class="new-create" ><i class="el-icon-circle-plus-outline"></i><a>新建文件夹</a> </div>
-                <ul class="folder">
-                    <li><i class="el-icon-folder"></i><a>文件夹 1</a></li>
-                    <li><i class="el-icon-folder"></i><a>文件夹 2</a></li>
-                    <li><i class="el-icon-folder"></i><a>文件夹 3</a></li>
-                    <li><i class="el-icon-folder"></i><a>文件夹 4</a></li>
-                </ul>
+         <div class="new-create"  @click=changeDoingSatate() :class="{active:doingState}" ><i class="el-icon-goblet-square" ></i><a>待处理投稿</a> </div>
+         <div class="new-create"  @click=changeFailedSatate() :class="{active:failedState}"><i class="el-icon-goblet-full"></i><a>已失败投稿</a> </div>
 
 
             </div>
             <div class="main">
-               <div class="info-box">
+                <div class="fav null"v-if="doingState" >
 
-           <img src="../static/img/test.png" alt="">
-           <div class="favInfo-details">
-               <h3>默认收藏夹</h3>
-          <div class="fav-meta">
-                   <span class="fav-up-name">创建者：鳥居朔音</span>
-               </div>
-               <div class="fav-meta">
-               <span>4个内容</span>
-               <span class="dot">·</span>
-               <span>公开</span>
-           </div>
-           </div>
-
-       </div>
-                <div class="fav null">
-             <!--       <el-link icon="el-icon-edit">编辑</el-link>-->
                          <div class="add-list">
-                           <i class="el-icon-plus"></i>
+                           <el-table
+                                     ref="singleTable"
+                                     :data="tableData2"
+                                     highlight-current-row
+                                     @current-change="handleCurrentChange"
+                                 >
+                                 <el-table-column
+                                         type="index"
+                                         width="50">
+                                 </el-table-column>
+                                 <el-table-column
+                                         property="url"
+                                         label="URL"
+                                         align="center">
+                                 </el-table-column>
+                                 <el-table-column
+                                         property="tags"
+                                         label="TAGS"
+                                         align="center">
+                                 </el-table-column>
+                             </el-table>
+
                          </div>
                 </div>
-                <div class="fav notnull"v-if="false">
-                    <a href="" class="list-item">
-                        <img src="../static/img/test.png" alt="">
-                     <!--   <p>DEC描述</p>-->
-                        <h3>标题</h3>
-                        <div>
-                            <span> videos:4</span>
-                            <!-- <span>views:{{ i.views}}</span>-->
-                        </div>
+                <div class="fav notnull "v-if="failedState">
 
-                    </a>
+              <div class="second">
+                  <el-switch
+                          style="display: block"
+                          v-model="value"
+                          active-color="#13ce66"
+                          inactive-color="#ff4949"
+                          active-text="仅显示url"
+                          inactive-text="显示错误信息">
+                  </el-switch>
+                  <transition mode="out-in">
+                  <el-table
+                          :data="tableData"
+                          style="width: 100%"
+                          :row-class-name="tableRowClassName" v-show="value">
 
-                    <a href="" class="list-item">
-                        <img src="../static/img/test.png" alt="">
-                        <!--   <p>DEC描述</p>-->
-                        <h3>标题</h3>
-                        <div>
-                            <span> videos:4</span>
-                            <!-- <span>views:{{ i.views}}</span>-->
-                        </div>
+                      <el-table-column
+                              prop="url"
+                              label="URL"
 
-                    </a>
-                    <a href="" class="list-item">
-                    <img src="../static/img/test.png" alt="">
-                    <!--   <p>DEC描述</p>-->
-                    <h3>标题</h3>
-                    <div>
-                        <span> videos:4</span>
-                        <!-- <span>views:{{ i.views}}</span>-->
-                    </div>
+                              align="center">
 
-                </a>     <a href="" class="list-item">
-                    <img src="../static/img/test.png" alt="">
-                    <!--   <p>DEC描述</p>-->
-                    <h3>标题</h3>
-                    <div>
-                        <span> videos:4</span>
-                        <!-- <span>views:{{ i.views}}</span>-->
-                    </div>
+                      </el-table-column>
 
-                </a>
-                    <a href="" class="list-item">
-                        <img src="../static/img/test.png" alt="">
-                        <!--   <p>DEC描述</p>-->
-                        <h3>标题</h3>
-                        <div>
-                            <span> videos:4</span>
-                            <!-- <span>views:{{ i.views}}</span>-->
-                        </div>
 
-                    </a>
-                    <a href="" class="list-item">
-                        <img src="../static/img/test.png" alt="">
-                        <!--   <p>DEC描述</p>-->
-                        <h3>标题</h3>
-                        <div>
-                            <span> videos:4</span>
-                            <!-- <span>views:{{ i.views}}</span>-->
-                        </div>
 
-                    </a>
+
+                  </el-table>
+                  </transition>
+                  <transition mode="out-in">
+                  <el-table
+                          :data="tableData"
+                          stripe
+                          style="width: 100%" v-show="!value">
+                      <el-table-column
+                              prop="url"
+                              label="URL"
+
+                              align="center">
+                      </el-table-column>
+                      <el-table-column
+                              prop="status"
+                              label="STATUS"
+
+                              align="center">
+                      </el-table-column>
+                      <el-table-column
+                              prop="exception"
+                              label="EXCEPTION"
+                              align="center">
+                      </el-table-column>
+                  </el-table>
+                  </transition>
+              </div>
+
+
                 </div>
 
             </div>
@@ -124,15 +120,109 @@
     export default {
         data() {
             return {
-                centerDialogVisible: false
+                failedData:[],
+                doingData:[],
+                currentRow: null,
+                tableData2:[{
+
+                }],
+                tableData: [{
+
+                }],
+                centerDialogVisible: false,
+                value: true,
+                doingState:true,
+                failedState:false,
             }
         },
-        methods: {},
-        components: {}
+        created(){
+            this.axios({
+                method:"post",
+                url:"be/posts/list_pending.do",
+                data:{"page":1,"page_size":9999}
+            }).then(res=>{
+                let obj =  res.data.data;
+                let array=[];
+                for(let i in obj){
+                    array.push({url:obj[i].url,tags:JSON.parse(JSON.stringify(obj[i].tags).replace(/(\",)+/g, "、\","))});
+                }
+                this.tableData2 =array;
+            });
+            this.axios({
+                method:"post",
+                url:"be/posts/list_failed.do",
+                data:{"page":1,"page_size":99999}
+            }).then(res=>{
+                this.failedData =   res.data.data.posts;
+                let _that=this;
+                let array=[];
+                (function () {
+                  let m =  _that.failedData.map((item)=>{
+                     return  [{"url":item.post_param.url},{"status":item.ret.result_obj.status},{"exception":item.ret.result_obj.data.exception}]
+                    });
+                    for(let i in  m){
+                        let obj={};
+                      for(let s=0;s<m[i].length;++s){
+                      Object.assign(obj,m[i][s]);
+                      }
+                        array[i]=obj;
+                    }
+                })();
+                 this.tableData =array;
+            })
+        },
+        methods: {
+            handleCurrentChange(val) {
+                this.currentRow = val;
+            },
+            changeDoingSatate(){
+
+                this.failedState =false;
+                this.doingState = true;
+            },
+            changeFailedSatate(){
+                this.doingState = false;
+               this.failedState =true;
+
+            },
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex === 1) {
+                    return 'warning-row';
+                } else if (rowIndex === 3) {
+                    return 'success-row';
+                }
+                return '';
+            }
+        },
+        components: {},
+        watch:{
+            value(n){
+
+            }
+        }
     }
 </script>
 
 <style lang="less" scoped>
+    .active{
+        background-color: #f4f5f7;
+    }
+    .v-enter,
+    .v-leave-to {
+        opacity: 0;
+    }
+
+    .v-enter-active,
+    .v-leave-active {
+        transition: all 0.8s ease;
+    }
+    .el-table .warning-row {
+        background: oldlace;
+    }
+
+    .el-table .success-row {
+        background: #f0f9eb;
+    }
 .el-dialog{
     position: absolute;
     z-index: 9999;
@@ -141,86 +231,37 @@
         height: 700px;
     }
     .fav{
-
+        height:100%;
+        overflow: auto;
         display: flex;
         justify-content: flex-start;
         flex-wrap: wrap;
         margin-bottom: 50px;
-            .add-list{
-                i{
-                    display: inline-block;
-                    width: 200px;
-                    height: 200px;
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    line-height: 200px;
-                    transform: translate(50%,-50%);
-
-                    border: 2px dashed #73777a;
-                    font-size: 50px;
-                }
+        /deep/ .el-table__header-wrapper{
+            height: 115px;
+            .table{
+                height: 100%;
             }
+        }
 
-        .list-item{
-            box-shadow: 0 1px 10px rgba(0,0,0,.1);
-            flex: 0 0 22%;
-            margin-left: 2.5%;
-            margin-top: 2%;
-            max-width:  25%;
-            padding-bottom: 2%;
-            transition: all 0.3s ease;
-            background-color: #fff;
-            &:hover{
-
-                box-shadow: 0 15px 30px rgba(0,0,0,.1);
-                transform: translate3d(0,-2px,0);
-            }
-            img{
-display: block;
-                margin: auto;
-                margin-top: 9%;
-                width: 250px;
-                height: 166.66px;
-
-            }
-            h3{
-                display: block;
-                margin: auto;
-                width: 80%;
-                 margin-top: 18px;
-                height: 100px;
-                  word-break: break-word;
-                line-height: 25px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                margin-bottom: 20px;
-
-
-            }
-            p{
-                display: block;
-                height: 108px;
-                margin: 10px auto;
-                width: 250px;
-
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-            div{
-                height: 80px;
-                line-height: 80px;
-                span:nth-child(2){
-                    margin-left: 20px;
-                    transition: all 0.1s ease;
-                }
-            }
-            &:hover span{
-
-            }
-
+        .first{
 
         }
+        .second{
+            position: relative;
+            width: 100%;
+            height:100%;
+
+            .el-table{
+
+             position: absolute;
+
+
+            }
+        }
+            .add-list{
+                width: 100%;
+            }
 
     }
 
@@ -236,12 +277,15 @@ display: block;
         div{
             width: 100%;
             height: 60px;
+
             position: relative;
             padding-left: 20px;
             transition: background-color .3s ease;
             white-space: nowrap;
             font-size: 22px;
             padding-bottom: 30px;
+            margin-bottom: 5px;
+
             text-align: center;
             overflow: hidden;
             &:hover{
@@ -324,7 +368,7 @@ display: block;
     .main {
         margin: 18px;
         flex: 5;
-
+        height:800px;
         color: #333;
         text-align: center;
         line-height: 160px;

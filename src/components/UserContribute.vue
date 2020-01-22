@@ -28,7 +28,8 @@
                 <div class="minibox" v-if="this.videoCount!=0">
                    <div class="minibox_top">
                        <h3>投稿视频</h3>
-                       <i @click="changeLine">点我</i>
+                       <span>共有{{videoCount}}个视频</span>
+                       <i @click="changeLine":class="{'el-icon-s-grid':flag,'el-icon-menu':!flag}"></i>
                    </div>
 
                       <div class="video_lineUp"v-if="flag">
@@ -145,6 +146,7 @@
                         }
                     }).then(result=>{
                         this.TagData = result.data.data.tags;
+
                         this.videoData = result.data.data.videos;
                         this.getTagCategories();
                         this.videoCount =result.data.data.count;
@@ -172,6 +174,7 @@
                         "tags":Aarryname
                     }
                 }).then(result=>{
+
                     this.totallNum(result.data.data.categorie_map);
                     this.drawLine();
                 });
@@ -185,6 +188,7 @@
                 })[0].count
             },
             totallNum(arr){
+
                 //依次将接口获取的原数据按照echarts中的数据规范转换
             for(let i in arr){
 
@@ -213,12 +217,14 @@
                     this.LanguageObj.push({value:this.getcount(i),name:i})
                 }
             }
+            if( Object.keys(arr).length>10){
+                for(let i in this.CopyrightObj) { //东方占比太大导致图形过度密集，可去除
+                    if (this.CopyrightObj[i].name == "东方") {
+                        this.CopyrightObj.splice(this.CopyrightObj.indexOf(this.CopyrightObj[i]), 1);
+                    }
+                }
+            }
 
-               for(let i in this.CopyrightObj) { //东方占比太大导致图形过度密集，可去除
-                   if (this.CopyrightObj[i].name == "东方") {
-                       this.CopyrightObj.splice(this.CopyrightObj.indexOf(this.CopyrightObj[i]), 1);
-                   }
-               }
 
             },
             drawLine(){
@@ -320,14 +326,17 @@
            line-height: 50px;
        }
        i{
-           background-color: #73777a;
+          font-size: 30px;
            line-height: 50px;
            width: 50px;
            height: 100%;
            position: absolute;
            right: 0px;
            top: 0px;
-
+           transition: all 0.2s ease;
+            &:hover {
+                color: #1B9AF7;
+            }
        }
    }
 

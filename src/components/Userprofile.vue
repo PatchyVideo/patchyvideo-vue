@@ -27,19 +27,47 @@
                 <div class="desc">
                     <div class="desc_name">{{myData.username}}</div>
                     <div class="text-form">
-                        <textarea name="" id="" cols="30" rows="10">{{myData.desc}}</textarea>
+                        <textarea name="" v-model="myData.desc" cols="30" rows="10">{{myData.desc}}</textarea>
                     </div>
-                    <button>保存</button>
+                    <button @click="changeDesc()">保存</button>
                 </div>
                 <div class="psd">
                     <div class="desc_name">更改密码</div>
                     <div class="psd-form">
-                        <input type="password" placeholder="Old Password">
+                      <!--  <input type="password" placeholder="Old Password">
                         <input type="password" placeholder="New Password">
-                        <input type="password" placeholder="Repeat New Password">
-                    </div>
-                    <button>保存</button>
+                        <input type="password" placeholder="Repeat New Password">-->
+                        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                            <el-form-item label="旧密码" prop="old_pass">
+                                <el-input v-model.number="ruleForm.old_pass"></el-input>
+                            </el-form-item>
+                            <el-form-item label="新密码" prop="pass">
+                                <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="确认密码" prop="checkPass">
+                                <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item class="post">
+                                <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+                                <el-button @click="resetForm('ruleForm')">重置</el-button>
+                            </el-form-item>
 
+                        </el-form>
+
+                    </div>
+
+          <!--          <button>保存</button>-->
+
+                </div>
+                <div class="email">
+                    <div class="email-info">绑定邮箱</div>
+
+                    <el-input
+                            placeholder="请输入邮箱"
+                            prefix-icon="el-icon-message"
+                            v-model="myEmail">
+                    </el-input>
+                    <button @click="bindEmail()">绑定</button>
                 </div>
 
 
@@ -71,10 +99,69 @@
 <script>
     export default {
         data() {
+            var validateOldPass = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('请输入旧密码'));
+                }
+                if(JSON.stringify(value).length< 8){
+                    return callback(new Error('密码长度必须至少为8个字符'));
+                }
+                if(JSON.stringify(value).length> 64){
+                    return callback(new Error('密码长度必须至多为64个字符'));
+                }
+                callback();
+
+            };
+            var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入新密码'));
+                }
+
+                else {
+                    if(JSON.stringify(value).length< 10){
+                        return callback(new Error('密码长度必须至少为8个字符'));
+                    }
+                    if(JSON.stringify(value).length> 66){
+                        return callback(new Error('密码长度必须至多为64个字符'));
+                    }else if (this.ruleForm.checkPass !== '') {
+                        this.$refs.ruleForm.validateField('checkPass');
+                    }
+                    callback();
+                }
+            };
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入新密码'));
+                } else if (value !== this.ruleForm.pass) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
             return {
+
+                ruleForm: {
+                    pass: '',
+                    checkPass: '',
+                    old_pass: ''
+                },
+                rules: {
+                    pass: [
+                        { validator: validatePass, trigger: 'blur' }
+                    ],
+                    checkPass: [
+                        { validator: validatePass2, trigger: 'blur' }
+                    ],
+                    old_pass: [
+                        { validator: validateOldPass, trigger: 'blur' }
+                    ]
+                },
+
+
+                myEmail:"",
                 myData:{
-                    "username": "null",
-                    "desc":"null"
+                    username: "null",
+                    desc:"null"
                 },
                 userData:{
                     desc: "null",
@@ -87,6 +174,7 @@
             }
         },
         created(){
+
             console.log(this.myData);
             if(this.$route.params.id=='me'){
                 this.getMyData();
@@ -98,6 +186,66 @@
 
         },
         methods: {
+            bindEmail(){
+                this.axios({
+                    method:"post",
+                    url:"be/user/changeemail.do",
+                    data:{"new_email":this.myEmail+""}
+                }).then(res=>{
+                    if(res.data.status==="FAILED"){
+                        this.$message({
+                            message: '请检查所填写邮箱是否合法',
+                            type: 'warning'
+                        })
+                    }else {
+                        this.$message({
+                            message: '绑定成功',
+                            type: 'success'
+                        })
+                    }
+                    console.log(res);
+                })
+            },
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                       /* this.$message({
+                            message: '提交成功！',
+                            type: 'success'
+                        });*/
+                        this.changePass();
+                    } else {
+                        this.$message({
+                            message: '请检查所填写信息是否正确',
+                            type: 'warning'
+                        });
+                        return false;
+                    }
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            },
+            open1() {
+                this.$message('这是一条消息提示');
+            },
+            open2() {
+                this.$message({
+                    message: '修改成功！',
+                    type: 'success'
+                });
+            },
+
+            open3() {
+                this.$message({
+                    message: '请检查信息是否正确',
+                    type: 'warning'
+                });
+            },
+
+            open4() {
+                this.$message.error('错了哦，这是一条错误消息');
+            },
             getMyData(){
                 //现有的登录机制存在问题，
                 //可能本地判断已登录实际并没有登录而进入了user界面，这时没有数据渲染，需要让他跳回登录界面
@@ -133,6 +281,47 @@
                     this.loading =false;
                 });
 
+            },
+            changeDesc(){
+                console.log(this.myData.desc.length);
+                if(this.myData.desc.length>2000){
+                    this.$message({
+                        message: '字数不能超过2000哦！',
+                        type: 'warning'
+                    });
+                    return;
+                }
+                this.axios({
+                    method:"post",
+                    url:"be/user/changedesc.do",
+                    data:{
+                        "desc":this.myData.desc
+                    }
+                }).then(res=>{
+                    this.open2();
+                    console.log(res);
+                })
+
+            },
+            changePass(){
+
+                this.axios({
+                    method:"post",
+                    url:"be/user/changepass.do",
+                    data:{
+                        "old_pass": this.ruleForm.old_pass+"",
+                        "new_pass": this.ruleForm.pass+""
+                    }
+                }).then(res=>{
+                    console.log(res);
+                    if(res.data.status=="FAILED"){
+                        this.$message.error('请检查旧密码是否正确');
+                    }else {
+                        this.open2();
+                    }
+
+                })
+
             }
         },
         components: {}
@@ -141,6 +330,21 @@
 
 <style scoped>
 
+    .email-info{
+        margin-bottom: 20px;
+    }
+    .email >.el-input{
+        margin-bottom: 20px;
+    }
+
+.post :nth-child(2){
+  position: absolute;
+    right: 0px;
+}
+
+.el-form{
+    width: 450px;
+}
 
     .bigbox {
         height: 1000px;

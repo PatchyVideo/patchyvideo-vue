@@ -12,11 +12,13 @@
   <transition mode="out-in">
     <div v-if="visible" class="EditTags":class="{active:this.msg!=''}">
       <div id="tag">
+        
         <i class="fa fa-close fa-2x" id="close" @click="closeTagPanel"></i>
         <div class="minibox">
           <div class="m_bg"></div>
           <div class="m_a activeTag">
             <ul class="Taglist Copyright">
+
               <li
                 class="item"
                 v-for="(i,item) in TagCategoriesData"
@@ -25,6 +27,7 @@
                 :class="{selected:-1==tagsForRec.indexOf(item)}"
                 @click.stop="selected(i,item)"
               >
+
                 <p class="val_${str[i]}">{{item}}</p>
                 <i class="fa fa-close" @click.stop="deleteObj(i,item)"></i>
               </li>
