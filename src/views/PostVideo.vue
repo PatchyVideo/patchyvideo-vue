@@ -46,7 +46,6 @@ export default {
     this.$store.commit("changeBgc", "postVideo");
     // 修改网站标题
     document.title = "发布视频 - Patchyvideo";
-
   },
   mounted() {},
   methods: {

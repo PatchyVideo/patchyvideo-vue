@@ -20,6 +20,8 @@
       1.导航条注册链接完成
     1/9/2020：v1.0.6
       1.搜索框部分功能完成（搜索功能完成，还差正则表达式的匹配）
+    1/21/2020：v1.0.5
+      1.用户信息调取方式改为使用cookie储存
     ★待解决问题：
       1.搜索框相关功能未实现（需要加入引导说明机制）
       2.用户个人界面未完善
@@ -125,7 +127,6 @@ export default {
         {
           id: "tags",
           match(text) {
-            console.log("qwe");
             var i = text.length;
             while (i--) {
               if (
@@ -191,6 +192,7 @@ export default {
     ) {
       this.isLogin = true;
     }
+    this.getCookie();
   },
   mounted() {
     this.iptVal = this.$route.query.keyword;
@@ -206,7 +208,8 @@ export default {
       this.$store.commit("clearUserName");
       // 清除本地数据
       localStorage.setItem("username", "");
-      localStorage.setItem("isLogin", false);
+      // 清除cookie
+      this.clearCookie();
       // 回到主界面
       if (this.$store.state.bgcMark != "home") {
         this.$router.push("/home");
@@ -238,6 +241,38 @@ export default {
     // 清除搜索结果
     cleanIptV() {
       this.iptVal = "";
+    },
+    //清除cookie
+    clearCookie: function() {
+      this.setCookie("", -1);
+    },
+    // 设置cookie
+    // 储存变量为username
+    setCookie(username, days) {
+      var date = new Date(); //获取时间
+      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); //保存的天数
+      //字符串拼接cookie
+      window.document.cookie =
+        "username" + ":" + username + ";path=/;expires=" + date.toGMTString();
+    },
+    // 获取cookie
+    getCookie: function() {
+      if (document.cookie.length > 0) {
+        var arr = document.cookie.split("; ");
+        for (var i = 0; i < arr.length; i++) {
+          var arr2 = arr[i].split(":");
+          //判断查找相对应的值
+          if (arr2[0] == "username") {
+            if (arr2[1] != "") {
+              this.isLogin = true;
+              this.$store.commit("getUserName", arr2[1]);
+              return true;
+            }
+          }
+        }
+      }
+      this.$store.commit("getUserName", "");
+      return false;
     }
   },
   components: { TextComplete }

@@ -7,6 +7,8 @@ import listdetail from "../views/ListDetail.vue";
 import postvideo from "../views/PostVideo.vue";
 import login from "../views/Login.vue";
 import signup from "../views/SignUp.vue";
+import forgetPassword from "../views/ForgetPassword.vue";
+import resetpassword from "../views/ResetPassword.vue";
 import edittag from "../views/Edittag.vue";
 import store from "../store/index.js";
 import User from "../views/User";
@@ -86,13 +88,21 @@ const routes = [
     component: signup
   },
   {
+    path: "/forgetPassword",
+    component: forgetPassword
+  },
+  {
+    path: "/resetpassword",
+    component: resetpassword
+  },
+  {
     path: "/edittag",
 
     component: edittag
   },
   {
-    path:'/users/:id',
-    component:User
+    path: "/users/:id",
+    component: User
   }
 ];
 
@@ -110,17 +120,16 @@ router.beforeEach((to, from, next) => {
   // from从哪个路径跳转而来
   //next('/xxx')表示放行,或强制跳转到/xxx
 
-  // 从本地储存提取登录状态
-  var loginflag = localStorage.getItem("isLogin");
-  var username = localStorage.getItem("username");
-  store.commit("getUserName", username);
-
   if (to.path == "/login" || to.path == "/home") {
     // console.log("无权限页面放行");
     return next();
   }
-  if (to.path == "/postvideo" || to.path == "/edittag"||to.path=="/users/me") {
-    if (store.state.username != "") {
+  if (
+    to.path == "/postvideo" ||
+    to.path == "/edittag" ||
+    to.path == "/users/me"
+  ) {
+    if (getCookie()) {
       // console.log("已登录放行");
       return next();
     } else {
@@ -130,4 +139,21 @@ router.beforeEach((to, from, next) => {
   }
   next();
 });
+
+// 获取cookie
+function getCookie() {
+  if (document.cookie.length > 0) {
+    var arr = document.cookie.split("; ");
+    for (var i = 0; i < arr.length; i++) {
+      var arr2 = arr[i].split(":");
+      //判断查找相对应的值
+      if (arr2[0] == "username") {
+        if (arr2[1] != "") {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
 export default router;

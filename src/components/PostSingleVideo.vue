@@ -6,11 +6,12 @@
     必要传入参数：无
     包含组件：EditTags.vue
     更新日志：
-    1/18/2020：
+    1/18/2020：v1.0
       release
+    1/21/2020：v1.0.1
+      1.现在可以通过URL传入的参数来进一步更新上传视频的信息
     ★待解决问题：
-      1.视频URL的验证逻辑有待进一步改进
-      2.在播放列表里上传视频的时候的接口有待改进
+      暂无
 -->
 
 <template>
@@ -69,12 +70,6 @@ export default {
       loading: false,
       // 视频详情是否打开的判断
       show: false,
-      // 视频的等级，默认为-1
-      rank: -1,
-      // 视频所在收藏夹的pid
-      pid: "",
-      // 视频的副本
-      copy: "",
       // 标签页面是否打开
       showTagPanel: true,
       // 标签页面传入的参数
@@ -86,6 +81,32 @@ export default {
       // 匹配URL并请求视频数据
       PARSERS: {}
     };
+  },
+  computed: {
+    // 视频的等级，默认为-1
+    rank() {
+      if (this.$route.query.rank != undefined) {
+        return this.$route.query.rank;
+      } else {
+        return -1;
+      }
+    },
+    // 视频所在收藏夹的pid
+    pid() {
+      if (this.$route.query.pid != undefined) {
+        return this.$route.query.pid;
+      } else {
+        return "";
+      }
+    },
+    // 视频的副本
+    copy() {
+      if (this.$route.query.copy != undefined) {
+        return this.$route.query.copy;
+      } else {
+        return "";
+      }
+    }
   },
   created() {},
   mounted() {

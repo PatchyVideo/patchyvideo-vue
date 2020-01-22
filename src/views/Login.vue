@@ -17,8 +17,10 @@
       1.修改了当前页面下的网站标题
     1/10/2020：v1.0.4
       1.输入密码之后按下回车会自动登录
+    1/21/2020：v1.0.5
+      1.储存方式改为使用cookie进行储存
     ★待解决问题：
-      1.利用本地储存确保登录信息保留可能会导致信息不安全
+      暂无
 -->
 <template>
   <div class="loginPic">
@@ -57,6 +59,9 @@
             @keyup.enter.native="login"
           ></el-input>
         </el-form-item>
+        <p style="text-align: left;">
+          <router-link to="/forgetPassword" class="forgetPassword">忘了密码？</router-link>
+        </p>
         <p id="status" style="text-align: center;" v-bind:class="{alert:status!='就绪'}">{{ status }}</p>
       </el-form>
 
@@ -156,16 +161,15 @@ export default {
                   );
                   // 加载结束,加载动画消失
                   this.loading = false;
-                  // 利用本地储存储存登录状态
-                  localStorage.setItem("isLogin", true);
-                  localStorage.setItem(
-                    "username",
-                    this.loginFormRef.login_name
+                  // 利用cookie储存登录状态
+                  this.setCookie(
+                    this.loginFormRef.login_name,
+                    this.loginFormRef.login_password,
+                    7
                   );
-
                   // 回到上一个页面
                   this.$router.go(-1);
-        /*          this.$router.push({ path: '/home'});*/
+                  /*          this.$router.push({ path: '/home'});*/
                 } else {
                   this.open3();
                 }
@@ -181,6 +185,15 @@ export default {
           return false;
         }
       });
+    },
+    // 设置cookie
+    // 储存变量为username
+    setCookie(username, days) {
+      var date = new Date(); //获取时间
+      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); //保存的天数
+      //字符串拼接cookie
+      window.document.cookie =
+        "username" + ":" + username + ";path=/;expires=" + date.toGMTString();
     }
   },
   components: { signup }
@@ -297,6 +310,14 @@ a {
 .login:hover {
   cursor: pointer;
   background: #ff7792;
+}
+
+.forgetPassword {
+  color: #909399;
+  cursor: pointer;
+}
+.forgetPassword:hover {
+  color: #409eff;
 }
 
 p {
