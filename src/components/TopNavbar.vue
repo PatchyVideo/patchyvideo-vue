@@ -4,6 +4,7 @@
     大小：100% * 70px
     功能：网站主导航栏
     必要传入参数：无
+    文件依赖：jquery.textcomplete.js
     更新日志：
     12/1/2019: v1.0 
       release
@@ -19,6 +20,8 @@
       1.导航条注册链接完成
     1/9/2020：v1.0.6
       1.搜索框部分功能完成（搜索功能完成，还差正则表达式的匹配）
+    1/21/2020：v1.0.5
+      1.用户信息调取方式改为使用cookie储存
     ★待解决问题：
       1.搜索框相关功能未实现（需要加入引导说明机制）
       2.用户个人界面未完善
@@ -54,13 +57,14 @@
             <option value="0">标签</option>
           </select>
           <!-- 搜索框 -->
-          <input
-            id="search-bar-query"
-            name="query"
-            type="text"
-            placeholder="请输入搜索内容"
+          <text-complete
             v-model="iptVal"
-          />
+            areaClass="textcomplete"
+            :strategies="strategies"
+            id="search-bar-query"
+            resize="none"
+            placeholder="请输入要搜索的内容"
+          ></text-complete>
           <input id="search-bar-submit" type="submit" value="搜索" @click="gotoHome" />
         </li>
 
@@ -77,7 +81,11 @@
         <!-- 登录成功后的用户界面 -->
         <div class="userHome" v-show="isLogin">
           <li>
-            <router-link to="/users/me">{{ this.$store.state.username}}</router-link>
+            <router-link to="/users/me">
+              {{
+              this.$store.state.username
+              }}
+            </router-link>
           </li>
           <li>
             <a @click="dialogVisible = true" style="cursor:pointer">登出</a>
@@ -103,6 +111,8 @@
 </template>
 
 <script>
+// var { Textcomplete, Textarea } = require("textcomplete");
+import TextComplete from "v-textcomplete";
 export default {
   data() {
     return {
@@ -111,7 +121,67 @@ export default {
       // 判断是否登录
       isLogin: false,
       // 搜索框搜索的关键字
-      iptVal: ""
+      iptVal: "",
+      // 搜索框正则匹配规则
+      strategies: [
+        {
+          id: "tags",
+          match(text) {
+            var i = text.length;
+            while (i--) {
+              if (
+                text.charAt(i) == " " ||
+                text.charAt(i) == "\t" ||
+                text.charAt(i) == "\n" ||
+                text.charAt(i) == "\v" ||
+                text.charAt(i) == "\f" ||
+                text.charAt(i) == "\r" ||
+                // 把括号转化成ascII码判断,否则谜之报错
+                text.charAt(i).charCodeAt() == 41
+              ) {
+                return i + 1;
+              } else if (text.charAt(i).charCodeAt() == 40) {
+                if (i > 0 && text.charAt(i - 1) == "_") {
+                  continue;
+                } else {
+                  return i + 1;
+                }
+              }
+            }
+            return 0;
+          },
+          search(term, callback) {
+            console.log("开始查询");
+            $.getJSON(
+              `https://patchyvideo.com/autocomplete/?q=${term}`,
+              function(data) {
+                data = $.map(data, function(ele) {
+                  ele["term"] = term;
+                  ele["color"] = getCategoryIdColor(ele["cat"]);
+                  return ele;
+                });
+                var retdata = match_keywords(term).concat(data);
+                console.log(retdata);
+                callback(retdata);
+              }
+            );
+          },
+          template(value) {
+            var term_start_pos = value.tag.indexOf(value.term);
+            prefix = value.tag.substring(0, term_start_pos);
+            suffix = value.tag.substring(term_start_pos + value.term.length);
+            highlighted_term = `${prefix}<b><u>${value.term}</u></b>${suffix}`;
+            if (value.cnt == -1) {
+              return `<span style="color: ${value.color};"><span style="margin-right: 6em;">${highlighted_term}</span></span>`;
+            }
+            return `<span style="color: ${value.color};"><span style="margin-right: 6em;">${highlighted_term}</span></span><span style="float:right;">${value.cnt}</span>`;
+          },
+          replace(value) {
+            return value.tag + " ";
+          },
+          index: 1
+        }
+      ]
     };
   },
   created() {
@@ -122,6 +192,7 @@ export default {
     ) {
       this.isLogin = true;
     }
+    this.getCookie();
   },
   mounted() {
     this.iptVal = this.$route.query.keyword;
@@ -137,7 +208,8 @@ export default {
       this.$store.commit("clearUserName");
       // 清除本地数据
       localStorage.setItem("username", "");
-      localStorage.setItem("isLogin", false);
+      // 清除cookie
+      this.clearCookie();
       // 回到主界面
       if (this.$store.state.bgcMark != "home") {
         this.$router.push("/home");
@@ -169,9 +241,41 @@ export default {
     // 清除搜索结果
     cleanIptV() {
       this.iptVal = "";
+    },
+    //清除cookie
+    clearCookie: function() {
+      this.setCookie("", -1);
+    },
+    // 设置cookie
+    // 储存变量为username
+    setCookie(username, days) {
+      var date = new Date(); //获取时间
+      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); //保存的天数
+      //字符串拼接cookie
+      window.document.cookie =
+        "username" + ":" + username + ";path=/;expires=" + date.toGMTString();
+    },
+    // 获取cookie
+    getCookie: function() {
+      if (document.cookie.length > 0) {
+        var arr = document.cookie.split("; ");
+        for (var i = 0; i < arr.length; i++) {
+          var arr2 = arr[i].split(":");
+          //判断查找相对应的值
+          if (arr2[0] == "username") {
+            if (arr2[1] != "") {
+              this.isLogin = true;
+              this.$store.commit("getUserName", arr2[1]);
+              return true;
+            }
+          }
+        }
+      }
+      this.$store.commit("getUserName", "");
+      return false;
     }
   },
-  components: {}
+  components: { TextComplete }
 };
 </script>
 
@@ -261,12 +365,12 @@ export default {
 }
 #search-bar-query {
   width: 220px;
-  height: 40px;
-  outline: none;
-  border: none;
-  padding-left: 13px;
+  height: 50px;
+  /* outline: none; */
+  /* border: none; */
+  /* padding-left: 13px; */
   position: absolute;
-  border: 1px solid white;
+  /* border: 1px solid white; */
   right: 74px;
   top: 50%;
   transform: translateY(-50%);
@@ -282,10 +386,6 @@ export default {
   color: dodgerblue;
 }
 
-#search-bar-query:hover {
-  border: 1px solid #d1d1d1;
-}
-
 #search-bar-submit {
   display: block;
   background: #c5464a;
@@ -293,7 +393,7 @@ export default {
     0 0 70px #c5464a, 0 0 80px #c5464a, 0 0 100px #c5464a, 0 0 150px #c5464a;
   width: 74px;
   color: white;
-  height: 42px;
+  height: 50px;
   outline: none;
   border: none;
   cursor: pointer;

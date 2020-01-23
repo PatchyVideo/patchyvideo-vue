@@ -42,6 +42,7 @@
       2.User页面完成密码保存、绑定邮箱功能，新增投稿状态、部分字体图标样式优化。
       3.ListDetail页面新增功能模块。
                                    by wrzrmzx
+
 ---
 
 ### 这是一个基于 Vue 开发的东方 project 视频索引网站
@@ -65,9 +66,9 @@
 - Playlists √
 - Detail(Playlists) √
 - Create Playlists ×
-- Post Video X
+- Post Video √
 - Tags X
-- Login \ Sign Up √
+- Login \ Sign Up \ resetpassword √
 - Users √
 
 #### X:无进度
@@ -88,6 +89,9 @@
 - vue-infinite-scroll
 - Less
 - jquery
+- jquery-textcomplete（已经无用）
+- textcomplete（已经无用）
+- v-textcomplete
 - webpack
 - echarts
 - font-awesome
@@ -112,14 +116,14 @@
 
 1.数据的渲染  
 2.分页功能实现  
-3.element-ui 排序美化   
+3.element-ui 排序美化  
 4.导航栏处 Search 功能的完善
 
 二、Deatil(Video & Playlists)
 
 1.数据的渲染  
 2.各个链接间的通道
-3.Edit Tags 样式位置调整  
+3.Edit Tags 样式位置调整
 
 三、Playlists
 
@@ -144,14 +148,12 @@
 
 二、Deatil(Video)
 
-1.点击相应的 Tags 渲染筛选出的视频  
-2.Edit Tags 样式位置调整  
-3.Copies 和 Playlists 区的功能完善
+1.Edit Tags 样式位置调整  
+2.Copies 和 Playlists 区的功能完善
 
 三、Playlists
 
-1.指向列表作者的链接尚未完工  
-2.由于标题可能会超过一行导致视频列表高度变高，从而导致排版不太好看
+1.由于标题可能会超过一行导致视频列表高度变高，从而导致排版不太好看
 
 四、Detail(Playlists)
 
@@ -159,8 +161,7 @@
 
 五、Login \ sign Up
 
-1.利用本地储存确保登录信息保留可能会导致信息不安全  
-2.sign Up 界面的 Email 格式校验功能有待完善
+1.多处异地登录可能导致登录出现问题
 
 ---
 
@@ -188,17 +189,15 @@
 
 因为使用了 jQuery 对 dom 进行直接操作，所以可能会增加被入侵的风险
 
-二、本地储存功能
+二、cookie 储存功能
 
-为了保证登录状态在网站被刷新/出现打开的时候不被刷新，网站利用本地储存对用户名和登录状态进行了储存
-
-isLogin: true 表示登录状态，false 表示未登录状态
+为了保证登录状态在网站被刷新/出现打开的时候不被刷新，网站利用 cookie 对用户名和登录状态进行了储存
 
 username: 储存的用户名
 
-在页面渲染的时候会对这两个数值进行调用以确定用户的登录状态
+在页面渲染的时候 TopNavbar 组件会对 username 进行调用以确定用户的登录状态
 
-但是这样可能会增加被入侵的风险，所以以后维护代码的时候需要多多注意这个地方
+但是由于 TopNavbar 是确定登录状态的必须组件，所以当页面不包含 TopNavbar 组件的时候需要注意是否会影响路由的逻辑判断
 
 ---
 
@@ -230,7 +229,7 @@ written by suwadaimyojin
 用 vue 重构网站的过程并不是一帆风顺，很多时候会遇到各种各样奇怪的问题，但自己坚信，现在的努力，是不会没有意义的。  
 曾经 vocaloid 的粉丝们用自己的双手搭建出了 Mikufans，东方的粉丝们也一定可以做到同样的事情，甚至做的会更好。
 如果每一个东方众都为东方做出自己的贡献的话，东方就会永远向前。  
-前辈们教会了自己这个道理，希望大家也能一起向前，不仅仅是 patchyvideo，还有所有的，东方的回忆，    
+前辈们教会了自己这个道理，希望大家也能一起向前，不仅仅是 patchyvideo，还有所有的，东方的回忆，  
 都能被永远的铭记。
 
 written by wrzrmzx(freesia)
