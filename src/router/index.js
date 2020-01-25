@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import detail from "../views/Detail.vue";
 import lists from "../views/Lists.vue";
+import createVideoList from "../views/CreateVideoList.vue";
 import listdetail from "../views/ListDetail.vue";
 import postvideo from "../views/PostVideo.vue";
 import login from "../views/Login.vue";
@@ -61,6 +62,10 @@ const routes = [
     path: "/lists",
 
     component: lists
+  },
+  {
+    path: "/createVideoList",
+    component: createVideoList
   },
   {
     path: "/listdetail",
@@ -127,7 +132,8 @@ router.beforeEach((to, from, next) => {
   if (
     to.path == "/postvideo" ||
     to.path == "/edittag" ||
-    to.path == "/users/me"
+    to.path == "/users/me" ||
+    to.path == "/createVideoList"
   ) {
     if (getCookie()) {
       // console.log("已登录放行");

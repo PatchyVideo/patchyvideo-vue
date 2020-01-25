@@ -518,7 +518,6 @@ export default {
 .postBox {
   width: 100%;
   min-height: 800px;
-  background-color: #ffffffc9;
   overflow: hidden;
   display: flex;
   margin: auto;
@@ -528,6 +527,7 @@ export default {
   width: calc(60% - 10px);
   padding-right: 10px;
   display: block;
+  background-color: #ffffffc9;
 }
 
 .videoDetail {

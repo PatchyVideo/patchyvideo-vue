@@ -1,11 +1,11 @@
 <!--    vue页面：PostVideo.vue     -->
 <!--
-    页面：paychyvideo的视频上传页面
-    功能：用户可以上传视频
-    包含组件：TopNavbar.vue、Foot.vue、PostSingleVideo.vue、PostMultiVideos.vue
-    其他说明：1.用户必须登录才能进入此页面；2.本页面暂时只支持a站，b站，n站，推特和油管的视频上传
+    页面：paychyvideo的视频列表创建页面
+    功能：用户可以创建视频列表
+    包含组件：TopNavbar.vue、Foot.vue
+    其他说明：1.用户必须登录才能进入此页面
     更新日志：
-    1/18/2020：
+    1/22/2020：
       release
 -->
 
@@ -16,11 +16,11 @@
     <!-- PostVideo页面的正文 -->
     <div class="w main-page-background-img">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick" class="topTabs">
-        <el-tab-pane label="单个发布" name="first">
-          <PostSingleVideo></PostSingleVideo>
+        <el-tab-pane label="创建新列表" name="first">
+          <createNewList></createNewList>
         </el-tab-pane>
-        <el-tab-pane label="批量发布" name="second">
-          <PostMultiVideos></PostMultiVideos>
+        <el-tab-pane label="导入已有列表" name="second">
+          <leadInExistingList></leadInExistingList>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -32,8 +32,8 @@
 <script>
 import topnavbar from "../components/TopNavbar.vue";
 import Footer from "../components/Footer.vue";
-import PostSingleVideo from "../components/PostSingleVideo";
-import PostMultiVideos from "../components/PostMultiVideos";
+import createNewList from "../components/CreateNewList";
+import leadInExistingList from "../components/LeadInExistingList";
 export default {
   data() {
     return {
@@ -43,16 +43,16 @@ export default {
   },
   created() {
     // 初始化页面名为list
-    this.$store.commit("changeBgc", "postVideo");
+    this.$store.commit("changeBgc", "createVideoList");
     // 修改网站标题
-    document.title = "发布视频 - Patchyvideo";
+    document.title = "创建播放列表 - Patchyvideo";
   },
   mounted() {},
   methods: {
     // 切换标签页
     handleClick(tab, event) {}
   },
-  components: { topnavbar, Footer, PostSingleVideo, PostMultiVideos }
+  components: { topnavbar, Footer, createNewList, leadInExistingList }
 };
 </script>
 
@@ -61,7 +61,7 @@ export default {
   text-align: left;
 }
 .main-page-background-img {
-  background-image: url("./../static/img/imoto3.jpg");
+  /* background-image: url("./../static/img/imoto3.jpg"); */
   background-repeat: no-repeat;
   min-height: 800px;
   width: 100%;

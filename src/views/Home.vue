@@ -31,6 +31,8 @@
       2.现在播放列表进行重新排序/搜索标签时播放列表页数会跳转到第一页
     1/9/2020：v1.0.7
       1.修改了当前页面下的网站标题
+    1/25/2020：v1.0.8
+      1.去除了一些冗余的代码（pagechange()及其调用）
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
 -->
@@ -45,7 +47,7 @@
       <div class="content">
         <!-- 播放列表的抬头 -->
         <div class="video-list-header">
-          <p @click="pagechange">Showing {{ count }} out of {{ maxcount }} videos</p>
+          <p>Showing {{ count }} out of {{ maxcount }} videos</p>
           <el-select id="select-order" v-model="couponSelected">
             <el-option
               v-for="item in options"
@@ -258,9 +260,6 @@ export default {
         }
         this.loading = false;
       });
-    },
-    pagechange: function() {
-      this.page = 3;
     }
   },
 

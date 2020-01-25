@@ -10,9 +10,8 @@
       1.解决了图片连接的问题
       2.修改了当前页面下的网站标题
     ★待解决问题：
-    2.作者链接尚未完工
-    3.由于标题可能会超过一行导致视频列表高度变高，从而导致排版不太好看
-    4.制作播放列表的功能尚未完成
+      1.由于标题可能会超过一行导致视频列表高度变高，从而导致排版不太好看
+      2.列表排序功能（latest,oldest,last_modified）
 -->
 <template>
   <div>
@@ -31,7 +30,9 @@
               <br />Use playlist ONLY IF order is a must, otherwise using tags falls better in line with the site's design.
               <br />播放列表功能的核心是为视频提供顺序，如果顺序不是必须要求则使用tag是更好的选择。
             </p>
-            <el-button type="primary" plain class="createPlayListButton">创建播放列表</el-button>
+            <el-button type="primary" plain class="createPlayListButton">
+              <router-link to="/createVideoList">创建播放列表</router-link>
+            </el-button>
           </div>
         </div>
 
@@ -60,7 +61,9 @@
             </div>
             <p class="minbox_creater">
               作者：
-              <router-link :to="'/users/'+item.user_detail._id.$oid">{{ item.user_detail.profile.username }}</router-link>
+              <router-link
+                :to="'/users/'+item.user_detail._id.$oid"
+              >{{ item.user_detail.profile.username }}</router-link>
             </p>
           </div>
         </div>
@@ -130,7 +133,7 @@ export default {
       this.axios({
         method: "post",
         url: "be/lists/all.do",
-        data: { page: e, page_size: count }
+        data: { page: e, page_size: count, order: "latest" }
       }).then(result => {
         this.maxcount = result.data.data.count;
         this.maxpage = result.data.data.page_count;

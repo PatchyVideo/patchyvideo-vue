@@ -1,0 +1,1081 @@
+<!--    vue组件：tagDetail.vue     -->
+<!--
+    组件：标签编辑页面的详细信息
+    大小：100% * 600px(最小高度)
+    功能：网站的版权声明等
+    必要传入参数：tagCategorie：本组件需要请求标签种类的详细名称
+    更新日志：
+    ★待解决问题：
+      1.数据渲染速度谜之慢（数据已经请求到了，但还需要几秒钟才能显示出来，不确定是否为网速原因）
+      2.各种语言的支持希望可以用v-for实现（现在由于v-if和v-for无法兼容实现不了）
+      3.标签的重命名功能没有权限分级（所有人都可以进行更改）
+      4.标签重名?
+-->
+
+<template>
+  <div class="content2" v-loading="loading">
+    <!-- 播放列表的抬头 -->
+    <div class="video-list-header">
+      <p>显示 {{ count }} / {{ maxcount }} 个标签</p>
+      <el-select id="select-order" v-model="couponSelected" class="video-list-header-el-select">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select>
+    </div>
+    <!-- 添加标签列表 -->
+    <div class="addTag">
+      <el-input v-model="newTag" :placeholder="'向'+this.tagCategorie+'类别添加标签'" class="addTag-input"></el-input>
+      <el-select v-model="language" placeholder="请选择语言" size="small" class="addTag-select">
+        <el-option
+          v-for="item in languagesList"
+          :key="item.value"
+          :label="item.label"
+          :value="item"
+        ></el-option>
+      </el-select>
+      <el-button type="info" @click="addTag()">添加标签</el-button>
+    </div>
+    <!-- 表格正文 -->
+    <el-table :data="tagData" style="width: 100%">
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <!-- 为现有标签添加新的语言 -->
+          <div class="languageSuppot">
+            <el-row>
+              <el-col :span="3">
+                <el-select
+                  v-model="newTagLanguage"
+                  placeholder="请选择语言"
+                  size="mini"
+                  style="width:95%"
+                >
+                  <el-option
+                    v-for="item in languagesList2(props.row.languages)"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item"
+                  ></el-option>
+                </el-select>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="new_Tag"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="addTagLanguage(props.$index)"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="addTagLanguage(props.$index)"
+                >添加</el-button>
+              </el-col>
+            </el-row>
+          </div>
+          <!-- 各种语言支持 -->
+          <div class="languageSuppot">
+            <el-row v-if="props.row.languages.CHS">
+              <el-col :span="3">
+                <span class="languageSuppot_language">简体中文:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.CHS"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'CHS')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'CHS')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.languages.CHT">
+              <el-col :span="3">
+                <span class="languageSuppot_language">繁體中文:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.CHT"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'CHT')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'CHT')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.languages.JPN">
+              <el-col :span="3">
+                <span class="languageSuppot_language">日本語:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.JPN"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'JPN')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'JPN')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.languages.ENG">
+              <el-col :span="3">
+                <span class="languageSuppot_language">English:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.ENG"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'ENG')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'ENG')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.languages.KOR">
+              <el-col :span="3">
+                <span class="languageSuppot_language">한국어:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.KOR"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'KOR')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'KOR')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.languages.CSY">
+              <el-col :span="3">
+                <span class="languageSuppot_language">čeština:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.CSY"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'CSY')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'CSY')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.languages.NLD">
+              <el-col :span="3">
+                <span class="languageSuppot_language">Nederlands:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.NLD"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'NLD')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'NLD')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.languages.FRA">
+              <el-col :span="3">
+                <span class="languageSuppot_language">français:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.FRA"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'FRA')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'FRA')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.languages.DEU">
+              <el-col :span="3">
+                <span class="languageSuppot_language">Deutsch:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.DEU"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'DEU')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'DEU')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.languages.HUN">
+              <el-col :span="3">
+                <span class="languageSuppot_language">magyar nyelv:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.HUN"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'HUN')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'HUN')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.languages.ITA">
+              <el-col :span="3">
+                <span class="languageSuppot_language">italiano:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.ITA"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'ITA')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'ITA')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.languages.PLK">
+              <el-col :span="3">
+                <span class="languageSuppot_language">polski:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.PLK"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'PLK')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'PLK')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.languages.PTB">
+              <el-col :span="3">
+                <span class="languageSuppot_language">português:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.PTB"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'PTB')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'PTB')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.languages.ROM">
+              <el-col :span="3">
+                <span class="languageSuppot_language">limba română:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.ROM"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'ROM')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'ROM')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.languages.RUS">
+              <el-col :span="3">
+                <span class="languageSuppot_language">русский язык:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.RUS"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'RUS')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'RUS')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.languages.ESP">
+              <el-col :span="3">
+                <span class="languageSuppot_language">español:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.ESP"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'ESP')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'ESP')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.languages.TRK">
+              <el-col :span="3">
+                <span class="languageSuppot_language">Türk dili:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.TRK"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'TRK')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'TRK')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.languages.VIN">
+              <el-col :span="3">
+                <span class="languageSuppot_language">Tiếng Việt:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].languages.VIN"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmChange(props.$index, 'VIN')"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmChange(props.$index, 'VIN')"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+          </div>
+          <!-- 标签别名 -->
+          <div class="languageSuppot">
+            <el-row v-for="(item, i) in tagData[props.$index].alias" :key="item">
+              <el-col :span="3">
+                <span class="languageSuppot_language">----:</span>
+              </el-col>
+              <el-col :span="4">
+                <el-input
+                  v-model="tagEdit[props.$index].alias[i]"
+                  size="small"
+                  style="width:100%"
+                  @keyup.enter.native="confirmAliasChange(props.$index, i)"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  class="confirmChange"
+                  @click="confirmAliasChange(props.$index, i)"
+                >确认</el-button>
+              </el-col>
+            </el-row>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="count" label="数量" min-width="50"></el-table-column>
+      <el-table-column label="标签" min-width="800">
+        <!-- 各种语言支持 -->
+        <template slot-scope="scope">
+          <span class="tagLabel" v-if="scope.row.languages.CHS">
+            简体中文:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.CHS)"
+            >{{ scope.row.languages.CHS }}</span>
+          </span>
+          <span class="tagLabel" v-if="scope.row.languages.CHT">
+            繁體中文:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.CHT)"
+            >{{ scope.row.languages.CHT }}</span>
+          </span>
+          <span class="tagLabel" v-if="scope.row.languages.JPN">
+            日本語:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.JPN)"
+            >{{ scope.row.languages.JPN }}</span>
+          </span>
+          <span class="tagLabel" v-if="scope.row.languages.ENG">
+            English:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.ENG)"
+            >{{ scope.row.languages.ENG }}</span>
+          </span>
+          <span class="tagLabel" v-if="scope.row.languages.KOR">
+            한국어:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.KOR)"
+            >{{ scope.row.languages.KOR }}</span>
+          </span>
+          <span class="tagLabel" v-if="scope.row.languages.CSY">
+            čeština:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.CSY)"
+            >{{ scope.row.languages.CSY }}</span>
+          </span>
+          <span class="tagLabel" v-if="scope.row.languages.NLD">
+            Nederlands:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.NLD)"
+            >{{ scope.row.languages.NLD }}</span>
+          </span>
+          <span class="tagLabel" v-if="scope.row.languages.FRA">
+            français:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.FRA)"
+            >{{ scope.row.languages.FRA }}</span>
+          </span>
+          <span class="tagLabel" v-if="scope.row.languages.DEU">
+            Deutsch:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.DEU)"
+            >{{ scope.row.languages.DEU }}</span>
+          </span>
+          <span class="tagLabel" v-if="scope.row.languages.HUN">
+            magyar nyelv:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.HUN)"
+            >{{ scope.row.languages.HUN }}</span>
+          </span>
+          <span class="tagLabel" v-if="scope.row.languages.ITA">
+            italiano:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.ITA)"
+            >{{ scope.row.languages.ITA }}</span>
+          </span>
+          <span class="tagLabel" v-if="scope.row.languages.PLK">
+            polski:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.PLK)"
+            >{{ scope.row.languages.PLK }}</span>
+          </span>
+          <span class="tagLabel" v-if="scope.row.languages.PTB">
+            português:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.PTB)"
+            >{{ scope.row.languages.PTB }}</span>
+          </span>
+          <span class="tagLabel" v-if="scope.row.languages.ROM">
+            limba română:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.ROM)"
+            >{{ scope.row.languages.ROM }}</span>
+          </span>
+          <span class="tagLabel" v-if="scope.row.languages.RUS">
+            русский язык:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.RUS)"
+            >{{ scope.row.languages.RUS }}</span>
+          </span>
+          <span class="tagLabel" v-if="scope.row.languages.ESP">
+            español:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.ESP)"
+            >{{ scope.row.languages.ESP }}</span>
+          </span>
+          <span class="tagLabel" v-if="scope.row.languages.TRK">
+            Türk dili:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.TRK)"
+            >{{ scope.row.languages.TRK }}</span>
+          </span>
+          <span class="tagLabel" v-if="scope.row.languages.VIN">
+            Tiếng Việt:
+            <span
+              class="tagLink"
+              @click="gotoHome(scope.row.languages.VIN)"
+            >{{ scope.row.languages.VIN }}</span>
+          </span>
+          <!-- 标签别名 -->
+          <span class="tagLabel" v-for="item in scope.row.alias" :key="item">
+            -:
+            <span class="tagLink" @click="gotoHome(item)">{{ item }}</span>
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" min-width="230" fixed="right">
+        <template slot-scope="scope">
+          <el-button type="danger" round @click="deletTag(scope.$index)">删除标签</el-button>
+          <el-button type="primary" round>更改分类</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <!-- ElementUI自带的分页器 -->
+    <el-pagination
+      background
+      class="page-selector"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      layout="prev, pager, next, sizes"
+      :current-page="this.page"
+      :total="this.maxcount"
+      :page-size="20"
+      :page-sizes="[10, 20, 30, 40]"
+    ></el-pagination>
+  </div>
+</template>
+
+<script>
+export default {
+  props: ["tagCategorie"],
+  data() {
+    return {
+      // 添加新标签的内容
+      newTag: "",
+      // 为现有标签添加新的语言
+      newTagLanguage: "",
+      // 为现有标签添加新的语言的内容
+      new_Tag: "",
+      // 添加新标签的语言内容
+      language: "简体中文",
+      // 语言列表(新建标签用)
+      languagesList: [
+        { value: "CHS", label: "简体中文" },
+        { value: "CHT", label: "繁體中文" },
+        { value: "JPN", label: "日本語" },
+        { value: "ENG", label: "English" },
+        { value: "KOR", label: "한국어" },
+        { value: "CSY", label: "čeština" },
+        { value: "NLD", label: "Nederlands" },
+        { value: "FRA", label: "français" },
+        { value: "DEU", label: "Deutsch" },
+        { value: "HUN", label: "magyar nyelv" },
+        { value: "ITA", label: "italiano" },
+        { value: "PLK", label: "polski" },
+        { value: "PTB", label: "português" },
+        { value: "ROM", label: "limba română" },
+        { value: "RUS", label: "русский язык" },
+        { value: "ESP", label: "español" },
+        { value: "TRK", label: "Türk dili" },
+        { value: "VIN", label: "Tiếng Việt" }
+      ],
+      // 标签种类
+      tagCategories: [],
+      // 标签数据(展示用)
+      tagData: [],
+      // 标签数据（编辑用）：因为vue的双向绑定功能使得数据会实时变化
+      // 导致编辑标签时输入框被清空的时候整个标签对应语言的名字会直接消失
+      tagEdit: [],
+      // 标签列表的排序规则
+      options: [
+        { value: "latest", label: "按照时间正序" },
+        { value: "oldest", label: "按照时间倒序" },
+        { value: "count", label: "按照使用数量倒序" },
+        { value: "count_inv", label: "按照使用数量正序" }
+      ],
+      // 当前标签列表的排列顺序
+      couponSelected: "latest",
+      // 当前页数
+      page: 1,
+      // 全部分页数
+      maxpage: 1,
+      // 每一页的标签数量
+      count: 20,
+      // 标签的全部数量
+      maxcount: 0,
+      // 页面是否属于加载状态的判断
+      loading: true
+    };
+  },
+  computed: {
+    languagesList2() {
+      return function(list) {
+        return this.addLanguageList(list);
+        // return { value: "-", label: "-" };
+      };
+    }
+  },
+  created() {},
+  mounted() {
+    this.requestCategorieTags();
+    this.requestTagCategories();
+  },
+  methods: {
+    // 请求标签种类数据
+    requestTagCategories() {
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "be/tags/query_categories.do",
+        data: {}
+      }).then(result => {
+        var categories = result.data.data.categories;
+        for (var i = 0; i < categories.length; i++) {
+          this.tagCategories.push(categories[i].name);
+        }
+      });
+      this.loading = false;
+    },
+    // 请求标签数据
+    requestCategorieTags() {
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "be/tags/query_tags.do",
+        data: {
+          category: this.tagCategorie,
+          order: this.couponSelected,
+          page: this.page,
+          page_size: this.count
+        }
+      }).then(result => {
+        this.tagData = result.data.data.tags;
+        // 克隆对象，防止指针指向同一个对象之后形成双向绑定
+        this.tagEdit = JSON.parse(JSON.stringify(result.data.data.tags));
+        this.maxcount = result.data.data.count;
+      });
+      this.loading = false;
+    },
+    // 标签点击搜索功能
+    gotoHome(key) {
+      if (key != "") {
+        this.$router
+          .push({ path: "/home", query: { keyword: key } })
+          .catch(err => {
+            return err;
+          });
+      } else {
+        this.$router.push({ path: "/home" });
+      }
+    },
+    // 添加标签
+    addTag() {
+      this.loading = true;
+      var tag = this.newTag;
+      var category = this.tagCategorie;
+      var language = this.language;
+      // 对默认选项进行兼容性调整
+      if (language == "简体中文") {
+        language = "CHS";
+      } else {
+        language = language.value;
+      }
+      // 校验数据
+      if (tag == "") {
+        this.open2("请填写标签名！");
+        this.loading = false;
+        return false;
+      }
+      this.axios({
+        method: "post",
+        url: "be/tags/add_tag.do",
+        data: {
+          tag: tag,
+          category: category,
+          language: language
+        }
+      }).then(result => {
+        if (result.data.status == "SUCCEED") {
+          this.open("添加成功！");
+          this.requestCategorieTags();
+        } else {
+          this.open2("添加失败，请重试！");
+        }
+      });
+      this.loading = false;
+    },
+    // 为现有标签添加新的语言
+    addTagLanguage(index) {
+      this.loading = true;
+      var tag = this.tagData[index].id;
+      var new_tag = this.new_Tag;
+      var language = this.newTagLanguage.value;
+      // 校验数据
+      if (language == undefined) {
+        this.open2("请选择语言！");
+        this.loading = false;
+        return false;
+      }
+      if (new_tag == "") {
+        this.open2("请填写标签名称！");
+        this.loading = false;
+        return false;
+      }
+      if (language == "-") {
+        this.addTagAlias(tag, new_tag);
+        return false;
+      }
+      this.axios({
+        method: "post",
+        url: "be/tags/add_tag_language.do",
+        data: {
+          tag: tag,
+          new_tag: new_tag,
+          language: language
+        }
+      }).then(result => {
+        if (result.data.status == "SUCCEED") {
+          this.open("添加成功！");
+          this.requestCategorieTags();
+        } else {
+          if (result.data.data.reason == "TAG_ALREADY_EXIST") {
+            this.open2("此名称已经存在！");
+          } else {
+            this.open2("添加失败，请重试！");
+          }
+        }
+      });
+      this.loading = false;
+    },
+    // 计算该标签尚未添加的语言
+    addLanguageList(list) {
+      // 克隆对象，防止指针指向同一个对象之后形成双向绑定
+      var list2 = JSON.parse(JSON.stringify(this.languagesList));
+      var alias = { value: "-", label: "-" };
+      for (var key in list) {
+        for (var i = 0; i < list2.length; i++) {
+          if (list2[i].value == key) {
+            list2.splice(i, 1);
+            break;
+          }
+        }
+      }
+      list2.push(alias);
+      return list2;
+    },
+    // 添加标签别名
+    addTagAlias(tag, new_tag) {
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "be/tags/add_alias.do",
+        data: {
+          tag: tag,
+          new_tag: new_tag
+        }
+      }).then(result => {
+        if (result.data.status == "SUCCEED") {
+          this.open("添加成功！");
+          this.requestCategorieTags();
+        } else {
+          if (result.data.data.reason == "ALIAS_ALREADY_EXIST") {
+            this.open2("此名称已经存在！");
+          } else {
+            this.open2("添加失败，请重试！");
+          }
+        }
+      });
+      this.loading = false;
+    },
+    // 删除标签功能
+    deletTag(index) {
+      this.$confirm("此操作将永久删除该标签, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        // 点击确定之后
+        .then(() => {})
+        // 点击取消之后
+        .catch(() => {});
+    },
+    // 重命名标签功能
+    confirmChange(index, language) {
+      this.loading = true;
+      var tag = this.tagData[index].languages[language];
+      var new_tag = this.tagEdit[index].languages[language];
+      if (new_tag == "") {
+        this.open2("请填写标签名称！");
+        this.loading = false;
+        return false;
+      }
+      this.axios({
+        method: "post",
+        url: "be/tags/rename_tag.do",
+        data: {
+          tag: tag,
+          new_tag: new_tag,
+          language: language
+        }
+      }).then(result => {
+        if (result.data.status == "SUCCEED") {
+          this.open("修改成功！");
+          this.requestCategorieTags();
+        } else {
+          this.open2("修改失败，请重试！");
+        }
+      });
+      this.loading = false;
+    },
+    // 重命名标签别名功能
+    confirmAliasChange($index, i) {
+      this.loading = true;
+      var tag = this.tagData[$index].alias[i];
+      var new_tag = this.tagEdit[$index].alias[i];
+      if (new_tag == "") {
+        this.open2("请填写标签名称！");
+        this.loading = false;
+        return false;
+      }
+      this.axios({
+        method: "post",
+        url: "be/tags/rename_alias.do",
+        data: {
+          tag: tag,
+          new_tag: new_tag
+        }
+      }).then(result => {
+        if (result.data.status == "SUCCEED") {
+          this.open("修改成功！");
+          this.requestCategorieTags();
+        } else {
+          this.open2("修改失败，请重试！");
+        }
+      });
+      this.loading = false;
+    },
+    // 当前标签列表的页面切换的时候调用
+    handleCurrentChange(val) {
+      this.page = val;
+    },
+    // 当前页面显示标签条数切换的时候调用
+    handleSizeChange(val) {
+      this.count = val;
+    },
+    // 各种提示信息
+    open(message) {
+      this.$message({
+        message: message,
+        type: "success"
+      });
+    },
+    open2(message) {
+      this.$message({
+        message: message,
+        type: "error"
+      });
+    }
+  },
+  watch: {
+    page(v) {
+      this.requestCategorieTags();
+    },
+    count(v) {
+      this.requestCategorieTags();
+      this.page = 1;
+    },
+    couponSelected() {
+      this.handleCurrentChange(1);
+      this.requestCategorieTags();
+    }
+  },
+  components: {}
+};
+</script>
+
+<style scoped>
+.content2 {
+  width: 100%;
+  min-height: 600px;
+  text-align: left;
+}
+.video-list-header {
+  width: 100%;
+  height: 50px;
+}
+.video-list-header p {
+  display: inline-block;
+  height: 25px;
+  position: absolute;
+  transform: translate(10%, 50%);
+}
+.video-list-header-el-select {
+  width: 200px;
+  display: inline-block;
+  position: absolute;
+  right: 50px;
+}
+.addTag {
+}
+.addTag-input {
+  width: 200px;
+}
+.addTag-select {
+  width: 150px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.languageSuppot {
+  margin-left: 150px;
+  font-size: 17px;
+}
+.el-row {
+  margin-bottom: 5px;
+}
+.el-row:last-child {
+  margin-bottom: 0;
+}
+.languageSuppot_language {
+  display: inline-block;
+  margin-top: 5px;
+}
+.confirmChange {
+  margin-left: 10px;
+  margin-top: 2px;
+}
+.tagLabel {
+  display: inline-block;
+  margin-right: 20px;
+  font-size: 18px;
+}
+.tagLink {
+  color: #409eff;
+  cursor: pointer;
+}
+.page-selector {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+}
+</style>
