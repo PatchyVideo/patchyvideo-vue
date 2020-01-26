@@ -25,16 +25,12 @@
 <template>
   <div class="listDetail">
     <topnavbar />
-    <el-dialog
-            title="提示"
-            :visible.sync="dialogVisible"
-            width="30%"
-            :before-close="handleClose">
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
       <span>确认删除吗？</span>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false;deleteVideoList()">确 定</el-button>
-  </span>
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false;deleteVideoList()">确 定</el-button>
+      </span>
     </el-dialog>
 
     <!-- EditTags组件-->
@@ -55,19 +51,16 @@
             <p>{{ videolistDesc }}</p>
           </div>
           <!-- 打开Tag编辑页面 -->
-        <div class="edit_box">
-          <el-button type="success" >添加视频</el-button>
-          <el-button type="info" >编辑</el-button>
-          <el-button type="primary" @click="openEditTags" class="EditTagsButton">编辑标签</el-button>
-          <el-button type="danger"  @click="dialogVisible = true">删除</el-button>
-        </div>
-
-
+          <div class="edit_box">
+            <el-button type="success">添加视频</el-button>
+            <el-button type="info">编辑</el-button>
+            <el-button type="primary" @click="openEditTags" class="EditTagsButton">编辑标签</el-button>
+            <el-button type="danger" @click="dialogVisible = true">删除</el-button>
+          </div>
         </div>
 
         <!-- 视频列表 -->
         <div class="recommend">
-
           <!-- 视频详情 -->
           <div class="minbox shadow" v-for="(item, index) in videolistVideos" :key="item._id.$oid">
             <div class="re_video">
@@ -81,9 +74,11 @@
 
               <img class="re_video_img" :src="'/images/covers/'+item.item.cover_image" />
               <div class="re_video_desc">
-
                 <el-tooltip class="item" effect="dark" content="在此插入视频" placement="top">
-                  <router-link :to="{path:'./postvideo',query:getInsertData(item,index)}" class="insert-video">
+                  <router-link
+                    :to="{path:'./postvideo',query:getInsertData(item,index)}"
+                    class="insert-video"
+                  >
                     <i class="fa fa fa-plus" aria-hidden="true"></i>
                   </router-link>
                 </el-tooltip>
@@ -188,17 +183,17 @@ export default {
   },
   methods: {
     handleClose(done) {
-      this.$confirm('确认关闭？')
-              .then(_ => {
-                done();
-              })
-              .catch(_ => {});
+      this.$confirm("确认关闭？")
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
     },
-    getInsertData(e,i){
-      let obj= {
-        pid:this.videolistPid,
-        rank:e.rank
-      }
+    getInsertData(e, i) {
+      let obj = {
+        pid: this.videolistPid,
+        rank: e.rank
+      };
       return obj;
     },
     PlaylistItemOp(e, i) {
@@ -253,13 +248,13 @@ export default {
       copyToClipboard($("#link" + index));
     },
     //删除列表
-    deleteVideoList:function(){
+    deleteVideoList: function() {
       this.axios({
         method: "post",
-        url:`be/list/${this.videolistPid}/del`
-      }).then(res=>{
+        url: `be/list/${this.videolistPid}/del`
+      }).then(res => {
         console.log(res);
-      })
+      });
     },
     // 打开Tag编辑页面
     openEditTags: function() {
@@ -367,6 +362,7 @@ export default {
                   color: white;
                   text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228DFF, 0 0 40px #228DFF;
                 }
+          }
 
 
 
@@ -389,6 +385,8 @@ export default {
       }
     }
   }
+  }
+}
   .item_end {
     width: 10%;
     display: flex;
