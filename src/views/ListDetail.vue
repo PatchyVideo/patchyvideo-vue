@@ -11,6 +11,11 @@
     1/16/2020:v1.0.2
       1.增加EditTags对Postvideo的支持。
       2.增加Move、DeleteVideo、SetCover 操作页面的组件，样式微调。
+    1/19/2020：v1.0.2
+      1.新增字体图标以及对应的元素操作。
+      （由于是百分百布局，存在滚动条问题，Dialog对话框触发后滚动条消失，页面会突然向右移动铺满）
+    1/20/2020：v1.0.3
+      1.新增添加视频 编辑 删除模块，但是现阶段接口不支持。
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
       2.EditTags组件应仅对当前收藏列表持有者展示
@@ -20,6 +25,18 @@
 <template>
   <div class="listDetail">
     <topnavbar />
+    <el-dialog
+            title="提示"
+            :visible.sync="dialogVisible"
+            width="30%"
+            :before-close="handleClose">
+      <span>确认删除吗？</span>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false;deleteVideoList()">确 定</el-button>
+  </span>
+    </el-dialog>
+
     <!-- EditTags组件-->
     <EditTags :msg="videolistPid" :visible.sync="showTagPanel"></EditTags>
     <!--如果有Pid的情况下-->
@@ -38,11 +55,19 @@
             <p>{{ videolistDesc }}</p>
           </div>
           <!-- 打开Tag编辑页面 -->
+        <div class="edit_box">
+          <el-button type="success" >添加视频</el-button>
+          <el-button type="info" >编辑</el-button>
           <el-button type="primary" @click="openEditTags" class="EditTagsButton">编辑标签</el-button>
+          <el-button type="danger"  @click="dialogVisible = true">删除</el-button>
+        </div>
+
+
         </div>
 
         <!-- 视频列表 -->
         <div class="recommend">
+
           <!-- 视频详情 -->
           <div class="minbox shadow" v-for="(item, index) in videolistVideos" :key="item._id.$oid">
             <div class="re_video">
@@ -56,12 +81,13 @@
 
               <img class="re_video_img" :src="'/images/covers/'+item.item.cover_image" />
               <div class="re_video_desc">
-                <router-link
-                  :to="{path:'./postvideo',query:getInsertData(item,index)}"
-                  class="insert-video"
-                >
-                  <i class="fa fa fa-plus" aria-hidden="true"></i>
-                </router-link>
+
+                <el-tooltip class="item" effect="dark" content="在此插入视频" placement="top">
+                  <router-link :to="{path:'./postvideo',query:getInsertData(item,index)}" class="insert-video">
+                    <i class="fa fa fa-plus" aria-hidden="true"></i>
+                  </router-link>
+                </el-tooltip>
+
                 <h3>
                   <router-link
                     target="_blank"
@@ -119,6 +145,7 @@ import { copyToClipboard } from "../static/js/generic";
 export default {
   data() {
     return {
+      dialogVisible: false,
       // 视频列表的详细信息
       videolistDetail: {
         playlist: {
@@ -160,11 +187,18 @@ export default {
     this.getVideoList(this.page, this.count);
   },
   methods: {
-    getInsertData(e, i) {
-      let obj = {
-        pid: this.videolistPid,
-        rank: e.rank
-      };
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+              .then(_ => {
+                done();
+              })
+              .catch(_ => {});
+    },
+    getInsertData(e,i){
+      let obj= {
+        pid:this.videolistPid,
+        rank:e.rank
+      }
       return obj;
     },
     PlaylistItemOp(e, i) {
@@ -217,6 +251,15 @@ export default {
     // 复制视频连接
     copyVideoLink: function(index) {
       copyToClipboard($("#link" + index));
+    },
+    //删除列表
+    deleteVideoList:function(){
+      this.axios({
+        method: "post",
+        url:`be/list/${this.videolistPid}/del`
+      }).then(res=>{
+        console.log(res);
+      })
     },
     // 打开Tag编辑页面
     openEditTags: function() {
@@ -284,7 +327,11 @@ export default {
     #edit_second {
       //icon
 
-      margin-right: 20px;
+         /deep/  .move-down-box{
+           transform: translateX(-10px);
+          }
+
+          /deep/ .move-up{
 
       .move {
         flex: 1;
@@ -306,6 +353,23 @@ export default {
             text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff,
               0 0 40px #228dff;
           }
+          /deep/ .move-down{
+
+              font-size: 40px;
+              height: 40px;
+              color: #808080;
+              transition: all .4s ease;
+
+              /*          position: absolute;
+                        bottom: 0px;*/
+
+                &:hover{
+                  color: white;
+                  text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228DFF, 0 0 40px #228DFF;
+                }
+
+
+
         }
         /deep/ .move-down {
           font-size: 40px;
@@ -357,110 +421,111 @@ export default {
       }
     }
   }
-}
 
-.content {
-  top: 3px;
-  width: 80%;
-  position: relative;
-  flex: 1;
-}
-.main-page-background-img {
-  background-repeat: no-repeat;
-  min-height: 800px;
-  width: 85%;
-  margin-top: 20px;
-}
-.d_t {
-  width: 100%;
-  margin-bottom: 0px;
-  padding-bottom: 5px;
-}
-.d_t h2 {
-  padding-top: 20px;
-}
-.d_t p {
-  width: 60%;
-  text-align: center;
-  white-space: pre-line;
-  margin: 0px auto;
-}
-.d_t img {
-  height: 200px;
-  margin: 10px;
-  background-color: rgba(255, 255, 255, 0);
-}
+  .content {
+    top: 3px;
+    width: 80%;
+    position: relative;
+    flex: 1;
+  }
+  .main-page-background-img {
+    background-repeat: no-repeat;
+    min-height: 800px;
+    width: 85%;
+    margin-top: 20px;
+  }
+  .d_t {
+    width: 100%;
+    margin-bottom: 0px;
+    padding-bottom: 5px;
+  }
+  .d_t h2 {
+    padding-top: 20px;
+  }
+  .d_t p {
+    width: 60%;
+    text-align: center;
+    white-space: pre-line;
+    margin: 0px auto;
+  }
+  .d_t img {
+    height: 200px;
+    margin: 10px;
+    background-color: rgba(255, 255, 255, 0);
+  }
 
-.EditTagsButton {
-  width: 70%;
-  margin-bottom: 20px;
-}
+  .EditTagsButton {
+/*    width: 70%;*/
+    margin-bottom: 20px;
+  }
 
-.minbox {
-  width: 1200px;
-  margin-left: 12.5px;
-  margin-right: 12.5px;
-  margin-top: 30px;
-  padding: 20px 0px;
-}
+  .minbox {
+    width: 1200px;
+    margin-left: 12.5px;
+    margin-right: 12.5px;
+    margin-top: 30px;
+    padding:20px 0px;
+  }
 
-.re_top {
-  width: calc(100% - 20px);
-  margin: 0 auto;
-  margin-top: 20px;
-  padding-bottom: 20px;
-  border-bottom: 3px solid red;
-}
-.re_top h5 {
-  margin-right: 5px;
-}
-.re_video {
-  text-align: left;
-  /* height: 150px; */
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-top: 20px;
-}
-.re_video h1 {
-}
-.re_video_img {
-  display: inline-block;
-  width: 200px;
-  height: 125px;
-  margin-right: 20px;
-  min-width: 200px;
-  min-height: 125px;
-}
-.re_video_desc {
-  width: 850px;
-  display: inline-block;
-  vertical-align: top;
-  white-space: pre-wrap;
-  position: relative;
-}
-.re_video_desc p {
-  font-size: 1rem;
-  line-height: 1.1rem;
-  height: 4.3rem;
-  white-space: pre-wrap;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  /* 使文字变为最多显示4行，多余的使用省略号代替 */
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-}
+  .re_top {
+    width: calc(100% - 20px);
+    margin: 0 auto;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid red;
+  }
+  .re_top h5 {
+    margin-right: 5px;
+  }
+  .re_video {
+    text-align: left;
+    /* height: 150px; */
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
 
-.page-selector {
-  display: block;
-  text-align: center;
-  margin-top: 20px;
-}
+  }
+  .re_video h1 {
 
-.fa-copy:hover {
-  color: olive;
-  cursor: pointer;
-}
+  }
+  .re_video_img {
+    display: inline-block;
+    width: 200px;
+    height: 125px;
+    margin-right: 20px;
+    min-width: 200px;
+    min-height: 125px;
+  }
+  .re_video_desc {
+    width: 850px;
+    display: inline-block;
+    vertical-align: top;
+    white-space: pre-wrap;
+    position: relative;
+  }
+  .re_video_desc p {
+    font-size: 1rem;
+    line-height: 1.1rem;
+    height: 4.3rem;
+    white-space: pre-wrap;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    /* 使文字变为最多显示4行，多余的使用省略号代替 */
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+  }
+
+  .page-selector {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .fa-copy:hover {
+    color: olive;
+    cursor: pointer;
+  }
 </style>

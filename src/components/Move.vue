@@ -1,8 +1,18 @@
 <template>
 <div>
 
-    <i class="fa fa-arrow-up move-up" aria-hidden="true" @click="moveUp()"></i>
+  <!--  <i class="fa fa-arrow-up move-up" aria-hidden="true" @click="moveUp()"></i>
     <i class="fa fa-arrow-down move-down" aria-hidden="true"  @click="moveDown"></i>
+-->
+
+    <el-tooltip class="item move-up-box" effect="dark" content="上移" placement="top">
+        <el-button>    <i class="fa fa-arrow-up move-up" aria-hidden="true" @click="moveUp()"></i></el-button>
+    </el-tooltip>
+
+    <el-tooltip class="item move-down-box" effect="dark" content="下移" placement="bottom">
+        <el-button>    <i class="fa fa-arrow-down move-down" aria-hidden="true"  @click="moveDown"></i></el-button>
+    </el-tooltip>
+
 </div>
 </template>
 
@@ -59,7 +69,19 @@ div{
     display: flex;
     flex-direction: column;
 }
-    i{
-        height: 40px;
-    }
+.move-up-box{
+flex: 1;
+}
+.move-down-box{
+    width: 100%;
+    flex: 1;
+}
+
+/deep/ .el-button{
+    padding: 0px;
+    border: 0px;
+}
+i{
+    height: 40px;
+}
 </style>

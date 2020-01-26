@@ -20,6 +20,10 @@ Vue.prototype.$echarts = echarts;
     更新日志：
     1/1/2020: v1.0
     现在可以查看其他用户界面。
+    1/22/2020: v1.1
+    新增投稿状态页面。
+    修改密码功能以及邮箱功能完成。
+    更新了切换状态的字体图标。
 
     ★待解决问题：
     问题：1. 页面布局不是依照100%宽度做的，所以并不能适应，最终展示分辨率大小还有待商榷
@@ -61,7 +65,10 @@ Vue.prototype.$echarts = echarts;
                 <el-tab-pane :label="labelInfo[2]" name="third">
                     <userfavorites></userfavorites>
                 </el-tab-pane>
-              <!--  <el-tab-pane label="文件管理" name="four">
+                <el-tab-pane :label="labelInfo[3]" name="four">
+                    <userfolder></userfolder>
+                </el-tab-pane>
+        <!--       <el-tab-pane label="文件管理" name="five">
                     <userfolder></userfolder>
                 </el-tab-pane>-->
             </el-tabs>
@@ -79,7 +86,8 @@ Vue.prototype.$echarts = echarts;
     import userprofile from '../components/Userprofile.vue';
     import usercontribute from '../components/UserContribute.vue';
     import userfavorites from '../components/UserFavorites.vue';
-    import userfolder from '../components/UserFolder.vue'
+    import userfolder from '../components/UserFolder.vue';
+    import userpoststate from '../components/UserPostState.vue';
     import Footer from "../components/Footer.vue";
     export default {
         data() {
@@ -89,8 +97,8 @@ Vue.prototype.$echarts = echarts;
                 activeIndex: "1",
                 activeIndex2: "1",
                 activeName: "first",
-                info:[["我的信息","我的投稿","我的收藏"],["用户信息","他的投稿","他的收藏"]],
-                labelInfo:["我的信息","我的投稿","我的收藏"]
+                info:[["我的信息","我的投稿","我的收藏","投稿状态"],["用户信息","他的投稿","他的收藏"]],
+                labelInfo:["我的信息","我的投稿","我的收藏","投稿状态"]
             }
         },
        created(){
@@ -136,7 +144,7 @@ Vue.prototype.$echarts = echarts;
 
         },
 
-        components: {topnavbar,usercontribute,userprofile,userfavorites,userfolder,Footer}
+        components: {topnavbar,usercontribute,userprofile,userfavorites,userfolder,userpoststate,Footer}
     }
 </script>
 

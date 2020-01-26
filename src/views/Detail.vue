@@ -16,6 +16,8 @@
     12/29/2019：v1.1.1
       1.当视频为视频列表第一个或最后一个的时候对“【前一篇】”，“【后一篇】”按钮进行优化
       2.加入了副本链接前对应副本指向网站的小图标
+    1/20/2020：v1.1.2
+      新增添加副本 删除副本 由此创建播放列表功能，除了添加副本和删除副本能正常使用外，其余接口暂不支持
     ★待解决问题：
       1.侧导航条的标签列表的标签内容显示有问题
       3.视频介绍里的链接功能尚未实现 
@@ -264,7 +266,7 @@ export default {
         url:"be/lists/newfromsinglevideo.do",
         data:{"vid":this.pid}
       }).then(res=>{
-        console.log(res);
+
       }).catch(err=>{
         console.log(err);
       })
@@ -275,7 +277,7 @@ export default {
         url:"be/videos/breaklink.do",
         data:{"video_id":this.pid}
       }).then(res=>{
-        console.log(res);
+
         this.$router.go(0);
       })
 

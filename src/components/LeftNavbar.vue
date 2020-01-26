@@ -70,7 +70,9 @@ export default {
   data() {
     return {};
   },
-  created() {},
+  created() {
+    console.log(this.msg);
+  },
   methods: {
     // 点击标签显示标签的搜索结果
     gotoHome(key) {

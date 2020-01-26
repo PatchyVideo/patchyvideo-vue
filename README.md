@@ -37,6 +37,10 @@
       1.实现了Tag搜索功能
       2.用户界面进一步完善
       3.Tag编辑模块完成
+    1/22/2020: v1.1.0
+      1.Detail页面跳转到PostVideo的参数支持
+      2.User页面完成密码保存、绑定邮箱功能，新增投稿状态、部分字体图标样式优化。
+      3.ListDetail页面新增功能模块。
                                    by wrzrmzx
 
 ---
@@ -201,7 +205,7 @@ username: 储存的用户名
 
 一、
 
-非常感谢 zyddnys 允许我来参与网站建设。  
+非常荣幸 能够参与到patchyvideo的网站建设。  
 zyddnys 最初的设计理念是偏向 Danbooru、 Gelbooru 风格的。  
 我也是将他最开始的布局延展至今。
 
