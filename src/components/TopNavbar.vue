@@ -65,6 +65,7 @@
             id="search-bar-query"
             resize="none"
             placeholder="请输入要搜索的内容"
+            :rows="parseInt('1')"
           ></text-complete>
           <input id="search-bar-submit" type="submit" value="搜索" @click="gotoHome" />
         </li>
@@ -112,7 +113,6 @@
 </template>
 
 <script>
-// var { Textcomplete, Textarea } = require("textcomplete");
 import TextComplete from "v-textcomplete";
 export default {
   data() {
@@ -394,7 +394,7 @@ export default {
     0 0 70px #c5464a, 0 0 80px #c5464a, 0 0 100px #c5464a, 0 0 150px #c5464a;
   width: 74px;
   color: white;
-  height: 50px;
+  height: 33px;
   outline: none;
   border: none;
   cursor: pointer;

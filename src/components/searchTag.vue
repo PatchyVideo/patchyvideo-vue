@@ -1,13 +1,12 @@
 <!--    vue组件：tagDetail.vue     -->
 <!--
-    组件：标签编辑页面的详细信息
+    组件：标签编辑页面的标签搜索页面
     大小：100% * 600px(最小高度)
-    功能：编辑对应分类下的标签的界面
-    必要传入参数：tagCategorie：本组件需要请求标签种类的详细名称
+    功能：编辑搜索出的标签的界面
+    必要传入参数：暂无
     更新日志：
     ★待解决问题：
       1.各种语言的支持希望可以用v-for实现（现在由于v-if和v-for无法兼容实现不了）
-      2.不同标签对应不同的颜色分类
 -->
 
 <template>
@@ -26,16 +25,16 @@
     </div>
     <!-- 添加标签列表 -->
     <div class="addTag">
-      <el-input v-model="newTag" :placeholder="'向'+this.tagCategorie+'类别添加标签'" class="addTag-input"></el-input>
-      <el-select v-model="language" placeholder="请选择语言" size="small" class="addTag-select">
-        <el-option
-          v-for="item in languagesList"
-          :key="item.value"
-          :label="item.label"
-          :value="item"
-        ></el-option>
+      <el-input v-model="searchTag" placeholder="搜索标签（可不填）" class="addTag-input"></el-input>
+      <el-select
+        v-model="searchCategory"
+        placeholder="请选择类别（可不选）"
+        size="small"
+        class="addTag-select"
+      >
+        <el-option v-for="item in tagCategories3" :key="item" :label="item" :value="item"></el-option>
       </el-select>
-      <el-button type="info" @click="addTag()">添加标签</el-button>
+      <el-button type="info" @click="requestSearchedTags()">搜索标签</el-button>
     </div>
     <!-- 表格正文 -->
     <el-table :data="tagData" style="width: 100%">
@@ -513,12 +512,26 @@
         </template>
       </el-table-column>
       <el-table-column prop="count" label="数量" min-width="50"></el-table-column>
-      <el-table-column label="标签" min-width="800">
+      <el-table-column label="类别" min-width="120">
+        <template slot-scope="scope">
+          <div
+            class="category"
+            v-bind:class="{Copyright:scope.row.category=='Copyright',
+													Language:scope.row.category=='Language',
+													Character:scope.row.category=='Character',
+													Author:scope.row.category=='Author',
+													General:scope.row.category=='General',
+													Meta:scope.row.category=='Meta'}"
+          >{{ scope.row.category }}</div>
+        </template>
+      </el-table-column>
+      <el-table-column label="标签" min-width="680">
         <!-- 各种语言标签 -->
         <template slot-scope="scope">
           <span class="tagLabel" v-if="scope.row.languages.CHS">
             简体中文:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -531,6 +544,7 @@
           <span class="tagLabel" v-if="scope.row.languages.CHT">
             繁體中文:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -543,6 +557,7 @@
           <span class="tagLabel" v-if="scope.row.languages.JPN">
             日本語:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -555,6 +570,7 @@
           <span class="tagLabel" v-if="scope.row.languages.ENG">
             English:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -567,6 +583,7 @@
           <span class="tagLabel" v-if="scope.row.languages.KOR">
             한국어:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -579,6 +596,7 @@
           <span class="tagLabel" v-if="scope.row.languages.CSY">
             čeština:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -591,6 +609,7 @@
           <span class="tagLabel" v-if="scope.row.languages.NLD">
             Nederlands:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -603,6 +622,7 @@
           <span class="tagLabel" v-if="scope.row.languages.FRA">
             français:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -615,6 +635,7 @@
           <span class="tagLabel" v-if="scope.row.languages.DEU">
             Deutsch:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -627,6 +648,7 @@
           <span class="tagLabel" v-if="scope.row.languages.HUN">
             magyar nyelv:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -639,6 +661,7 @@
           <span class="tagLabel" v-if="scope.row.languages.ITA">
             italiano:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -651,6 +674,7 @@
           <span class="tagLabel" v-if="scope.row.languages.PLK">
             polski:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -663,6 +687,7 @@
           <span class="tagLabel" v-if="scope.row.languages.PTB">
             português:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -675,6 +700,7 @@
           <span class="tagLabel" v-if="scope.row.languages.ROM">
             limba română:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -687,6 +713,7 @@
           <span class="tagLabel" v-if="scope.row.languages.RUS">
             русский язык:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -699,6 +726,7 @@
           <span class="tagLabel" v-if="scope.row.languages.ESP">
             español:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -711,6 +739,7 @@
           <span class="tagLabel" v-if="scope.row.languages.TRK">
             Türk dili:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -723,6 +752,7 @@
           <span class="tagLabel" v-if="scope.row.languages.VIN">
             Tiếng Việt:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -747,7 +777,7 @@
           </span>
         </template>
       </el-table-column>
-      <!-- 操作,选项一般隐藏 -->
+      <!-- 操作,一般隐藏 -->
       <el-table-column label="操作" min-width="230" fixed="right">
         <template slot-scope="scope">
           <div v-if="advancedOptions">
@@ -777,6 +807,7 @@
       :total="this.maxcount"
       :page-size="20"
       :page-sizes="[10, 20, 30, 40]"
+      hide-on-single-page
     ></el-pagination>
 
     <!-- 更改分类的弹出框 -->
@@ -796,17 +827,16 @@
 
 <script>
 export default {
-  props: ["tagCategorie"],
   data() {
     return {
-      // 添加新标签的内容
-      newTag: "",
+      // 搜索标签的内容
+      searchTag: "",
+      // 搜索标签的类别
+      searchCategory: "",
       // 为现有标签添加新的语言
       newTagLanguage: "",
       // 为现有标签添加新的语言的内容
       new_Tag: "",
-      // 添加新标签的语言内容
-      language: "简体中文",
       // 语言列表(新建标签用)
       languagesList: [
         { value: "CHS", label: "简体中文" },
@@ -832,6 +862,8 @@ export default {
       tagCategories: [],
       // 改变标签种类的时候的标签ID
       tagIndex: "",
+      // 改变标签种类的时候的标签种类
+      tagCategorie: "",
       // 改变标签种类的时候的标签种类
       newTagCategorie: "",
       // 标签数据(展示用)
@@ -880,11 +912,17 @@ export default {
         }
       }
       return list;
+    },
+    // 搜索标签的时候的标签种类列表。其中“-”指的是所有种类
+    tagCategories3() {
+      var all = "-";
+      var tagCategories = JSON.parse(JSON.stringify(this.tagCategories));
+      tagCategories.push(all);
+      return tagCategories;
     }
   },
   created() {},
   mounted() {
-    this.requestCategorieTags();
     this.requestTagCategories();
   },
   methods: {
@@ -903,15 +941,22 @@ export default {
         this.loading = false;
       });
     },
-    // 请求标签数据
-    requestCategorieTags() {
+    // 请求搜索数据
+    requestSearchedTags() {
+      var query = this.searchTag + "*";
+      var category = this.searchCategory;
+      // 对全部数据种类进行兼容性调整
+      if (category == "-") {
+        category = "";
+      }
       this.loading = true;
       this.axios({
         method: "post",
-        url: "be/tags/query_tags.do",
+        url: "be/tags/query_tags_wildcard.do",
         data: {
-          category: this.tagCategorie,
+          query: query,
           order: this.couponSelected,
+          category: category,
           page: this.page,
           page_size: this.count
         }
@@ -940,50 +985,6 @@ export default {
       } else {
         this.$router.push({ path: "/home" });
       }
-    },
-    // 添加标签
-    addTag() {
-      this.loading = true;
-      var tag = this.newTag;
-      var category = this.tagCategorie;
-      var language = this.language;
-      // 对默认选项进行兼容性调整
-      if (language == "简体中文") {
-        language = "CHS";
-      } else {
-        language = language.value;
-      }
-      // 校验数据
-      if (tag == "") {
-        this.open2("请填写标签名！");
-        this.loading = false;
-        return false;
-      }
-      this.axios({
-        method: "post",
-        url: "be/tags/add_tag.do",
-        data: {
-          tag: tag,
-          category: category,
-          language: language
-        }
-      }).then(result => {
-        if (result.data.status == "SUCCEED") {
-          this.open("添加成功！");
-          this.newTag = "";
-          this.language = "简体中文";
-          this.loading = false;
-          this.requestCategorieTags();
-        } else {
-          if (result.data.data.reason == "TAG_ALREADY_EXIST") {
-            this.open2("该标签已存在！");
-            this.loading = false;
-          } else {
-            this.open2("添加失败，请重试！");
-            this.loading = false;
-          }
-        }
-      });
     },
     // 为现有标签添加新的语言
     addTagLanguage(index) {
@@ -1019,7 +1020,7 @@ export default {
           this.open("添加成功！");
           this.new_Tag = "";
           this.loading = false;
-          this.requestCategorieTags();
+          this.requestSearchedTags();
         } else {
           if (result.data.data.reason == "TAG_ALREADY_EXIST") {
             this.loading = false;
@@ -1062,7 +1063,7 @@ export default {
           this.loading = false;
           this.open("添加成功！");
           this.new_Tag = "";
-          this.requestCategorieTags();
+          this.requestSearchedTags();
         } else {
           if (result.data.data.reason == "ALIAS_ALREADY_EXIST") {
             this.loading = false;
@@ -1095,7 +1096,7 @@ export default {
             if (result.data.status == "SUCCEED") {
               this.loading = false;
               this.open("删除成功！");
-              this.requestCategorieTags();
+              this.requestSearchedTags();
             } else {
               if (result.data.data.reason == "UNAUTHORISED_OPERATION") {
                 this.open2("抱歉,只有管理员或者标签的创建者有权修改标签!");
@@ -1130,7 +1131,7 @@ export default {
             if (result.data.status == "SUCCEED") {
               this.loading = false;
               this.open("删除成功！");
-              this.requestCategorieTags();
+              this.requestSearchedTags();
             } else {
               if (result.data.data.reason == "UNAUTHORISED_OPERATION") {
                 this.open2("抱歉,只有管理员或者标签的创建者有权修改标签!");
@@ -1166,7 +1167,7 @@ export default {
         if (result.data.status == "SUCCEED") {
           this.loading = false;
           this.open("修改成功！");
-          this.requestCategorieTags();
+          this.requestSearchedTags();
         } else {
           this.loading = false;
           this.open2("修改失败，请重试！");
@@ -1194,7 +1195,7 @@ export default {
         if (result.data.status == "SUCCEED") {
           this.loading = false;
           this.open("修改成功！");
-          this.requestCategorieTags();
+          this.requestSearchedTags();
         } else {
           this.loading = false;
           this.open2("修改失败，请重试！");
@@ -1235,6 +1236,7 @@ export default {
       return false;
       this.dialogVisible = true;
       this.tagIndex = index;
+      this.tagCategorie = this.tagData[index].category;
     },
     // 当前标签列表的页面切换的时候调用
     handleCurrentChange(val) {
@@ -1260,15 +1262,15 @@ export default {
   },
   watch: {
     page(v) {
-      this.requestCategorieTags();
+      this.requestSearchedTags();
     },
     count(v) {
-      this.requestCategorieTags();
+      this.requestSearchedTags();
       this.page = 1;
     },
     couponSelected() {
       this.handleCurrentChange(1);
-      this.requestCategorieTags();
+      this.requestSearchedTags();
     }
   },
   components: {}
@@ -1303,7 +1305,7 @@ export default {
   width: 200px;
 }
 .addTag-select {
-  width: 150px;
+  width: 200px;
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -1325,10 +1327,16 @@ export default {
   margin-left: 10px;
   margin-top: 2px;
 }
+.category {
+  font-size: 18px;
+}
 .tagLabel {
   display: inline-block;
   margin-right: 20px;
   font-size: 18px;
+}
+.tagLink {
+  cursor: pointer;
 }
 .page-selector {
   display: block;
@@ -1338,26 +1346,20 @@ export default {
 /* 针对类别调整颜色 */
 .Copyright {
   color: #a0a;
-  cursor: pointer;
 }
 .Language {
   color: #585455;
-  cursor: pointer;
 }
 .Character {
   color: #0a0;
-  cursor: pointer;
 }
 .Author {
   color: #a00;
-  cursor: pointer;
 }
 .General {
   color: #0073ff;
-  cursor: pointer;
 }
 .Meta {
   color: #f80;
-  cursor: pointer;
 }
 </style>

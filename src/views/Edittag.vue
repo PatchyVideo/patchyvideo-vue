@@ -2,10 +2,10 @@
 <!--
     页面：paychyvideo的标签编辑界面
     功能：用户可以在这里编辑标签
-    包含组件：TopNavbar.vue、Foot.vue、tagDetail.vue
+    包含组件：TopNavbar.vue、Foot.vue、tagDetail.vue、searchTag.vue
     更新日志：
     ★待解决问题：
-      暂无
+      2.标签搜索功能的实现
 -->
 <template>
   <div>
@@ -13,9 +13,18 @@
 
     <div class="tagpage">
       <div class="content" v-loading="loading">
-        <el-tabs type="border-card">
-          <el-tab-pane v-for="(item) in tagCategories" :key="item" :label="item">
+        <!-- 每个标签种类的表单 -->
+        <el-tabs type="border-card" v-model="activeName">
+          <el-tab-pane
+            v-for="(item, i) in tagCategories"
+            :key="item"
+            :label="item"
+            :name="i.toString()"
+          >
             <tagDetail :tagCategorie="item"></tagDetail>
+          </el-tab-pane>
+          <el-tab-pane label="搜索标签" :name="(tagCategories.length+1).toString()">
+            <searchTag></searchTag>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -30,13 +39,16 @@
 <script>
 import topnavbar from "../components/TopNavbar.vue";
 import tagDetail from "../components/tagDetail.vue";
+import searchTag from "../components/searchTag.vue";
 export default {
   data() {
     return {
       // 页面是否属于加载状态的判断
       loading: true,
       // 标签种类
-      tagCategories: []
+      tagCategories: [],
+      // 打开标签的序号
+      activeName: "0"
     };
   },
   mounted() {
@@ -63,7 +75,7 @@ export default {
       this.loading = false;
     }
   },
-  components: { topnavbar, tagDetail }
+  components: { topnavbar, tagDetail, searchTag }
 };
 </script>
 
