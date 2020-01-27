@@ -99,7 +99,6 @@ export default {
               private: this.list.private
             }
           }).then(result => {
-            console.log(result);
             this.loading = false;
             if (result.data.status == "FAILED") {
               this.open();

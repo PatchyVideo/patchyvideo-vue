@@ -5,6 +5,11 @@
     功能：编辑搜索出的标签的界面
     必要传入参数：暂无
     更新日志：
+    1/26/2020：
+      release
+    1/27/2020：v1.0.1
+      1.显示搜索结果的标签数量进行了优化
+      2.修复了鼠标悬浮在标签别名的链接上面鼠标不变成小手的bug
     ★待解决问题：
       1.各种语言的支持希望可以用v-for实现（现在由于v-if和v-for无法兼容实现不了）
 -->
@@ -13,7 +18,8 @@
   <div class="content2" v-loading="loading">
     <!-- 播放列表的抬头 -->
     <div class="video-list-header">
-      <p>显示 {{ count }} / {{ maxcount }} 个标签</p>
+      <p v-if="maxcount">显示 {{ count2 }} / {{ maxcount }} 个标签</p>
+      <p v-else>没有搜索到视频</p>
       <el-select id="select-order" v-model="couponSelected" class="video-list-header-el-select">
         <el-option
           v-for="item in options"
@@ -766,6 +772,7 @@
           <span class="tagLabel" v-for="item in scope.row.alias" :key="item">
             -:
             <span
+              class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
@@ -886,6 +893,8 @@ export default {
       maxpage: 1,
       // 每一页的标签数量
       count: 20,
+      // 每一页标签的真实数量
+      count2: 0,
       // 标签的全部数量
       maxcount: 0,
       // 页面是否显示高级选项
@@ -965,6 +974,7 @@ export default {
         // 克隆对象，防止指针指向同一个对象之后形成双向绑定
         this.tagEdit = JSON.parse(JSON.stringify(result.data.data.tags));
         this.maxcount = result.data.data.count;
+        this.count2 = this.tagEdit.length;
         this.loading = false;
 
         // 回到顶部

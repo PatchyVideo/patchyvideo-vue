@@ -19,9 +19,8 @@
     1/20/2020：v1.1.2
       新增添加副本 删除副本 由此创建播放列表功能，除了添加副本和删除副本能正常使用外，其余接口暂不支持
     ★待解决问题：
-      1.侧导航条的标签列表的标签内容显示有问题
-      3.视频介绍里的链接功能尚未实现 
-      4.按下浏览器的后退按钮网站没有刷新数据
+      1.视频介绍里的链接功能尚未实现 
+      2.按下浏览器的后退按钮网站没有刷新数据
 -->
 <template>
   <div>
@@ -52,7 +51,7 @@
           <!-- 视频详细信息 -->
           <div class="re_video">
             <img
-             :src="'/images/covers/'+myVideoData.video.item.cover_image"
+              :src="'/images/covers/'+myVideoData.video.item.cover_image"
               width="320px"
               height="200px"
             />
@@ -68,18 +67,19 @@
             <h2>副本</h2>
             <p v-if="myVideoData.copies == ''">
               此视频不存在副本
-              <router-link :to="{path:'./postvideo',query:{copy:this.pid}}" tag="a"><el-button type="text">[添加副本]</el-button></router-link>
+              <router-link :to="{path:'./postvideo',query:{copy:this.pid}}" tag="a">
+                <el-button type="text">[添加副本]</el-button>
+              </router-link>
             </p>
             <p v-else>
               此视频有{{ myVideoData.copies.length }}个副本
-
-              <router-link :to="{path:'./postvideo',query:{copy:this.pid}}" tag="a"><el-button type="text">[添加副本]</el-button></router-link>
+              <router-link :to="{path:'./postvideo',query:{copy:this.pid}}" tag="a">
+                <el-button type="text">[添加副本]</el-button>
+              </router-link>
               <!--    <a @click="breaklink()">[删除此副本] </a>-->
-              <el-button type="text" @click="dialogVisible = true;">[删除此副本] </el-button>
-              <el-button type="text"@click="broadcastTags()">[同步副本标签]</el-button>
-
+              <el-button type="text" @click="dialogVisible = true;">[删除此副本]</el-button>
+              <el-button type="text" @click="broadcastTags()">[同步副本标签]</el-button>
             </p>
-
           </div>
           <ul v-for="item in myVideoData.copies" :key="item._id.$oid">
             <img
@@ -108,7 +108,6 @@
               此视频存在于{{ myVideoData.playlists.length }}个播放列表中
               <el-button type="text" @click="newFromSingleVideo()">[由此视频创建播放列表]</el-button>
             </p>
-
           </div>
           <ul v-for="item in myVideoData.playlists" :key="item._id.$oid">
             <!-- 将页面参数刷新并重载页面，其中@click.native应该是router-link为了阻止a标签的默认跳转事件 -->
@@ -135,16 +134,12 @@
           </ul>
         </div>
       </div>
-      <el-dialog
-              title="提示"
-              :visible.sync="dialogVisible"
-              width="30%"
-              :before-close="handleClose">
+      <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
         <span>确认删除？</span>
         <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false;breaklink();">确 定</el-button>
-  </span>
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogVisible = false;breaklink();">确 定</el-button>
+        </span>
       </el-dialog>
     </div>
 
@@ -179,15 +174,14 @@ export default {
               $date: ""
             },
             // 视频的链接
-            url: ""   ,
+            url: "",
             //视频封面
-            cover_image:""
+            cover_image: ""
           }
         }
-
       },
       dialogVisible: false, //删除提示框
-      pid:"", //视频的id值
+      pid: "", //视频的id值
       // 视频列表是否属于加载状态的判断
       loading: true
       // 获取到的所有视频，以页数为第一维组成二维数组(和localStorage存储一起使用，已被弃用）
@@ -228,70 +222,64 @@ export default {
     // window.localStorage.removeItem("loglevel:webpack-dev-server");
     this.searchVideo();
   },
-  mounted() {
-
-  },
+  mounted() {},
   methods: {
     handleClose(done) {
-      this.$confirm('确认关闭？')
-              .then(_ => {
-
-                done();
-              })
-              .catch(_ => {});
+      this.$confirm("确认关闭？")
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
     },
     open1() {
-      this.$message('这是一条消息提示');
+      this.$message("这是一条消息提示");
     },
     open2() {
       this.$message({
-        message: '同步成功！',
-        type: 'success'
+        message: "同步成功！",
+        type: "success"
       });
     },
 
     open3() {
       this.$message({
-        message: 'Tag已存在！',
-        type: 'warning'
+        message: "Tag已存在！",
+        type: "warning"
       });
     },
 
     open4() {
-      this.$message.error('请输入合法的Tag!');
+      this.$message.error("请输入合法的Tag!");
     },
-    newFromSingleVideo(){
-      this.axios({
-        method:"post",
-        url:"be/lists/newfromsinglevideo.do",
-        data:{"vid":this.pid}
-      }).then(res=>{
-
-      }).catch(err=>{
-        console.log(err);
-      })
-    },
-    breaklink(){
+    newFromSingleVideo() {
       this.axios({
         method: "post",
-        url:"be/videos/breaklink.do",
-        data:{"video_id":this.pid}
-      }).then(res=>{
-
-        this.$router.go(0);
+        url: "be/lists/newfromsinglevideo.do",
+        data: { vid: this.pid }
       })
-
+        .then(res => {})
+        .catch(err => {
+          console.log(err);
+        });
     },
-    broadcastTags(){
+    breaklink() {
       this.axios({
-        method:"post",
-        url:"be/videos/broadcasttags.do",
-        data:{"src":this.pid}
-      }).then(res=>{
+        method: "post",
+        url: "be/videos/breaklink.do",
+        data: { video_id: this.pid }
+      }).then(res => {
+        this.$router.go(0);
+      });
+    },
+    broadcastTags() {
+      this.axios({
+        method: "post",
+        url: "be/videos/broadcasttags.do",
+        data: { src: this.pid }
+      }).then(res => {
         this.open2();
         console.log(res);
-      })
-
+      });
     },
     // 复制视频连接
     copyVideoLink: function() {

@@ -22,6 +22,8 @@
       1.搜索框部分功能完成（搜索功能完成，还差正则表达式的匹配）
     1/21/2020：v1.0.5
       1.用户信息调取方式改为使用cookie储存
+    1/27/2020：v1.0.6
+      1.搜索框会自动填写搜索中的标签
     ★待解决问题：
       1.搜索框相关功能未实现（需要加入引导说明机制）
       2.用户个人界面未完善
@@ -57,8 +59,8 @@
           <select class="form_select">
             <option value="0">标签</option>
           </select>
-          <!-- 搜索框 -->
-          <text-complete
+          <!-- 搜索框,自动补全功能，因为功能无法实现而废置 -->
+          <!-- <text-complete
             v-model="iptVal"
             areaClass="textcomplete"
             :strategies="strategies"
@@ -66,7 +68,11 @@
             resize="none"
             placeholder="请输入要搜索的内容"
             :rows="parseInt('1')"
-          ></text-complete>
+          ></text-complete>-->
+          <!-- 现在使用的搜索框，自动补全功能尚待完善 -->
+          <div id="search-bar-query">
+            <el-input v-model="iptVal"></el-input>
+          </div>
           <input id="search-bar-submit" type="submit" value="搜索" @click="gotoHome" />
         </li>
 
@@ -99,7 +105,7 @@
               width="30%"
               :before-close="handleClose"
             >
-              <span>你确定要退出登录吗?</span>
+              <p>你确定要退出登录吗?</p>
               <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="cleanLocalStorage">确 定</el-button>
@@ -122,8 +128,8 @@ export default {
       // 判断是否登录
       isLogin: false,
       // 搜索框搜索的关键字
-      iptVal: "",
-      // 搜索框正则匹配规则
+      // iptVal: "",
+      // 搜索框正则匹配规则,现已废弃
       strategies: [
         {
           id: "tags",
@@ -152,7 +158,6 @@ export default {
             return 0;
           },
           search(term, callback) {
-            console.log("开始查询");
             $.getJSON(
               `https://patchyvideo.com/autocomplete/?q=${term}`,
               function(data) {
@@ -162,7 +167,6 @@ export default {
                   return ele;
                 });
                 var retdata = match_keywords(term).concat(data);
-                console.log(retdata);
                 callback(retdata);
               }
             );
@@ -185,6 +189,12 @@ export default {
       ]
     };
   },
+  computed: {
+    // 搜索框搜索的关键字
+    iptVal() {
+      return this.$store.state.TopNavbarSearching;
+    }
+  },
   created() {
     // 查看是否登录
     if (
@@ -195,9 +205,7 @@ export default {
     }
     this.getCookie();
   },
-  mounted() {
-    this.iptVal = this.$route.query.keyword;
-  },
+  mounted() {},
   updated() {},
   methods: {
     // 退出时清除所有数据
@@ -241,7 +249,7 @@ export default {
     },
     // 清除搜索结果
     cleanIptV() {
-      this.iptVal = "";
+      this.$store.commit("getTopNavbarSearching", "");
     },
     //清除cookie
     clearCookie: function() {
@@ -367,13 +375,11 @@ export default {
 #search-bar-query {
   width: 220px;
   height: 50px;
-  /* outline: none; */
-  /* border: none; */
-  /* padding-left: 13px; */
+  outline: none;
+  border: none;
   position: absolute;
-  /* border: 1px solid white; */
   right: 74px;
-  top: 50%;
+  top: 36%;
   transform: translateY(-50%);
   transition: all 0.6s ease;
 }
@@ -394,7 +400,7 @@ export default {
     0 0 70px #c5464a, 0 0 80px #c5464a, 0 0 100px #c5464a, 0 0 150px #c5464a;
   width: 74px;
   color: white;
-  height: 33px;
+  height: 38px;
   outline: none;
   border: none;
   cursor: pointer;

@@ -57,7 +57,6 @@ export default {
               URL: this.list.URL
             }
           }).then(result => {
-            console.log(result);
             this.loading = false;
             if (result.data.status == "FAILED") {
               this.open();

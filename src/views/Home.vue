@@ -33,6 +33,8 @@
       1.修改了当前页面下的网站标题
     1/25/2020：v1.0.8
       1.去除了一些冗余的代码（pagechange()及其调用）
+    1/27/2020：v1.0.9
+      1.显示搜索结果的标签数量进行了优化
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
 -->
@@ -47,7 +49,8 @@
       <div class="content">
         <!-- 播放列表的抬头 -->
         <div class="video-list-header">
-          <p>Showing {{ count }} out of {{ maxcount }} videos</p>
+          <p v-if="maxcount">Showing {{ count2 }} out of {{ maxcount }} videos</p>
+          <p v-else>没有搜索到视频</p>
           <el-select id="select-order" v-model="couponSelected">
             <el-option
               v-for="item in options"
@@ -129,6 +132,8 @@ export default {
       maxpage: 1,
       // 每一页的视频数量
       count: 20,
+      // 每一页视频的真实数量
+      count2: 0,
       // 视频的全部数量
       maxcount: 0,
       // 请求到的标签列表
@@ -166,6 +171,7 @@ export default {
       return;
     }
   },
+  computed: {},
   mounted() {},
   updated() {},
   methods: {
@@ -207,6 +213,7 @@ export default {
         this.$store.commit("getMaxPage", this.maxpage);
         this.listvideo = result.data.data.videos;
         this.tags = result.data.data.tags;
+        this.count2 = result.data.data.videos.length;
 
         // 加载结束,加载动画消失
         this.loading = false;
@@ -236,6 +243,8 @@ export default {
         this.maxpage = Math.ceil(result.data.data.count / count);
         this.listvideo = result.data.data.videos;
         this.tags = result.data.data.tags;
+        this.count2 = result.data.data.videos.length;
+        this.$store.commit("getTopNavbarSearching", this.searchKeyWord);
         //当前页数大于搜索Tag页数时需要重新请求正确的页数数据,现暂时无用注释掉待观察
         if (0) {
           // if (result.data.data.videos.length == 0) {
@@ -259,6 +268,12 @@ export default {
           // }
         }
         this.loading = false;
+
+        // 回到顶部
+        if ($("html").scrollTop()) {
+          //动画效果
+          $("html").animate({ scrollTop: 0 }, 100);
+        }
       });
     }
   },
