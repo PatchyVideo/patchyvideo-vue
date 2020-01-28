@@ -24,6 +24,7 @@
       1.用户信息调取方式改为使用cookie储存
     1/27/2020：v1.0.6
       1.搜索框会自动填写搜索中的标签
+      2.搜索框按下回车会直接搜索
     ★待解决问题：
       1.搜索框相关功能未实现（需要加入引导说明机制）
       2.用户个人界面未完善
@@ -71,7 +72,7 @@
           ></text-complete>-->
           <!-- 现在使用的搜索框，自动补全功能尚待完善 -->
           <div id="search-bar-query">
-            <el-input v-model="iptVal"></el-input>
+            <el-input v-model="iptVal" @keyup.enter.native="gotoHome"></el-input>
           </div>
           <input id="search-bar-submit" type="submit" value="搜索" @click="gotoHome" />
         </li>
