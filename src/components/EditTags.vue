@@ -4,10 +4,15 @@
     1/11/2020：v1.0
      新增保存功能 TAG校验功能，功能基本已完成
     1/27/2020：v1.0.1
-      1.新增标签补全功能（CSS待完善，具体为调整CSS里的.my-autocomplete）
+      1.新增标签补全功能
      使用方法：
      需要父组件绑定 1.msg属性 值为视频的Pid
                     2.visible.sync属性 值为布尔值，true打开，false关闭。默认false关闭.
+    ★更改内容：
+      1.HTML:新的输入框
+      2.CSS:#ipt和#add进行修改(原来的全部注释掉了),在最下方新增了css(从哪里开始已标记)
+      3.JavaScript:第269行新增一句:this.iptVal = ""(加入标签成功之后输入框清空);
+      新增方法handleSelect和querySearchAsync;新增变量taglist
 
 -->
 <template>
@@ -106,20 +111,39 @@
                 @focus="infoTipEvent(true)"
                 @blur="infoTipEvent(false)"
               />-->
-              <el-autocomplete
-                id="ipt"
-                v-model="iptVal"
-                :fetch-suggestions="querySearchAsync"
-                :trigger-on-focus="false"
-                popper-class="my-autocomplete"
-                placeholder="请输入标签"
-                @select="handleSelect"
-              >
-                <template slot-scope="{ item }">
-                  <div class="name">{{ item.tag }}</div>
-                  <span class="addr">{{ item.cnt }}</span>
-                </template>
-              </el-autocomplete>
+              <!-- 新输入框，带有自动补全功能 -->
+              <div id="ipt">
+                <el-autocomplete
+                  v-model="iptVal"
+                  :fetch-suggestions="querySearchAsync"
+                  :trigger-on-focus="false"
+                  popper-class="my-autocomplete"
+                  placeholder="请输入标签"
+                  @select="handleSelect"
+                  @focus="infoTipEvent(true)"
+                  @blur="infoTipEvent(false)"
+                  @keyup.enter.native="addTag"
+                >
+                  <template slot-scope="{ item }">
+                    <el-row>
+                      <el-col
+                        :span="18"
+                        v-bind:class="{Copyright:item.cat==2,
+                                    Language:item.cat==5,
+                                    Character:item.cat==1,
+                                    Author:item.cat==3,
+                                    General:item.cat==0,
+                                    Meta:item.cat==4}"
+                      >
+                        <div class="name">{{ item.tag }}</div>
+                      </el-col>
+                      <el-col :span="6">
+                        <div class="addr">{{ item.cnt }}</div>
+                      </el-col>
+                    </el-row>
+                  </template>
+                </el-autocomplete>
+              </div>
               <i class="fa fa-plus-square fa-2x" id="add" @click="addTag"></i>
             </div>
             <span class="tag_title infoTip_1" :class="{hidden:infoTip[0].isHidden}">编辑共有标签</span>
@@ -378,13 +402,11 @@ export default {
         method: "get",
         url: url
       }).then(result => {
-        console.log(result.data);
         this.taglist = result.data;
         cb(result.data);
       });
     },
     handleSelect(item) {
-      console.log(item);
       this.iptVal = item.tag;
     }
   },
@@ -585,25 +607,43 @@ div {
           /*              perspective: 500px; */
           box-sizing: border-box;
           #ipt {
-            //input
             width: 30%;
             height: 30%;
             outline: none;
-            background: white;
             border: none;
-            padding-left: 8px;
+            position: absolute;
+            left: 31%;
+            top: 30%;
+            transform: translateY(-50%);
+            transition: all 0.6s ease;
+
+            // width: 30%;
+            // height: 30%;
+            // outline: none;
+            // background: white;
+            // border: none;
+            // padding-left: 8px;
             /*box-shadow: 0 0 10px #fff !important;*/
-            box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.5);
-            transform: translateY(50%) rotateX(0deg) !important;
-            transform-origin: left top !important;
+            // box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.5);
+            // transform: translateY(50%) rotateX(0deg) !important;
+            // transform-origin: left top !important;
           }
           #add {
+            position: absolute;
+            left: 61%;
+            top: 20%;
             transition: all 0.3s ease;
-            transform: translateY(60%);
             margin: 0;
             padding: 0;
             vertical-align: center;
             color: white;
+
+            // transition: all 0.3s ease;
+            // transform: translateY(60%);
+            // margin: 0;
+            // padding: 0;
+            // vertical-align: center;
+            // color: white;
             &:hover {
               color: black;
             }
@@ -699,23 +739,44 @@ div {
   }
 }
 
+// 新增的css
 .my-autocomplete {
   li {
     line-height: normal;
-    padding: 7px;
-
-    .name {
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-    .addr {
-      font-size: 12px;
-      color: #b4b4b4;
-    }
-
-    .highlighted .addr {
-      color: #ddd;
-    }
+    padding: 0px;
   }
+
+  .highlighted .addr {
+    color: #ddd;
+  }
+}
+.name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: left;
+}
+.addr {
+  font-size: 12px;
+  color: #b4b4b4;
+  text-align: right;
+}
+/* 针对tag类别调整颜色 */
+.Copyright {
+  color: #a0a;
+}
+.Language {
+  color: #585455;
+}
+.Character {
+  color: #0a0;
+}
+.Author {
+  color: #a00;
+}
+.General {
+  color: #0073ff;
+}
+.Meta {
+  color: #f80;
 }
 </style>

@@ -250,7 +250,7 @@ export default {
   margin-top: 40px;
 }
 .minbox:first-child {
-  margin-top: 0px;
+  margin-top: 10px;
 }
 .minbox_creater {
   padding-bottom: 20px;

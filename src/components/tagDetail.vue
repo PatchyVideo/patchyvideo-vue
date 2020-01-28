@@ -1098,7 +1098,8 @@ export default {
             url: "be/tags/remove_tag.do",
             data: {
               tag: tag
-            }
+            },
+            withCredentials: true
           }).then(result => {
             if (result.data.status == "SUCCEED") {
               this.loading = false;
