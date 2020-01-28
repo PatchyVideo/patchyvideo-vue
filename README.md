@@ -65,15 +65,11 @@
 - Deatil(Video) √
 - Playlists √
 - Detail(Playlists) √
-- Create Playlists ×
+- Create Playlists √
 - Post Video √
-- Tags X
+- Tags √
 - Login \ Sign Up \ resetpassword √
 - Users √
-
-#### X:无进度
-
-#### √:待完成
 
 ---
 
@@ -91,7 +87,7 @@
 - jquery
 - jquery-textcomplete（已经无用）
 - textcomplete（已经无用）
-- v-textcomplete
+- v-textcomplete（已经无用）
 - webpack
 - echarts
 - font-awesome
@@ -148,8 +144,7 @@
 
 二、Deatil(Video)
 
-1.Edit Tags 样式位置调整  
-2.Copies 和 Playlists 区的功能完善
+1.Edit Tags 样式位置调整
 
 三、Playlists
 
@@ -170,6 +165,8 @@
 〇、多语言支持
 
 一、推荐视频页面（与东方推荐刊的联动）
+
+三、利用 IPFS 实现被消除的视频的保存
 
 二、网站 Wiki 搭建（各种功能及使用的详细说明）
 
@@ -205,7 +202,7 @@ username: 储存的用户名
 
 一、
 
-非常荣幸 能够参与到patchyvideo的网站建设。  
+非常荣幸 能够参与到 patchyvideo 的网站建设。  
 zyddnys 最初的设计理念是偏向 Danbooru、 Gelbooru 风格的。  
 我也是将他最开始的布局延展至今。
 
