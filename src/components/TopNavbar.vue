@@ -27,6 +27,9 @@
       2.搜索框按下回车会直接搜索
     1/28/2020：v1.0.7
       1.搜索框的自动补全功能完成
+    1/29/2020：v1.0.8
+      1.搜索框的搜索建议列表优化
+      2.新增对网站搜索的支持
     ★待解决问题：
       1.搜索框在自动补全的时候焦点总是在文本的最右边（改变selectionStart和selectionEnd属性不知道为什么不起作用）
       2.搜索框的css渲染待补全（搜索结果与关键字重合的地方加粗、加下划线等）
@@ -71,28 +74,23 @@
               v-model="iptVal"
               :fetch-suggestions="querySearchAsync"
               :trigger-on-focus="false"
-              popper-class="my-autocomplete"
               placeholder="请输入标签"
               @select="handleSelect"
               @keyup.enter.native="gotoHome"
             >
               <template slot-scope="{ item }">
-                <el-row>
-                  <el-col
-                    :span="18"
+                <div class="adviceList">
+                  <div
+                    class="name"
                     v-bind:class="{Copyright:item.cat==2,
                                     Language:item.cat==5,
                                     Character:item.cat==1,
                                     Author:item.cat==3,
                                     General:item.cat==0,
                                     Meta:item.cat==4}"
-                  >
-                    <div class="name">{{ item.tag }}</div>
-                  </el-col>
-                  <el-col :span="6">
-                    <div class="addr">{{ item.cnt }}</div>
-                  </el-col>
-                </el-row>
+                  >{{ item.tag }}</div>
+                  <div class="addr" v-if="item.cnt!=null">{{ item.cnt }}</div>
+                </div>
               </template>
             </el-autocomplete>
           </div>
@@ -102,7 +100,7 @@
         <!-- 登录和注册按钮 -->
         <div class="loginUser" v-show="!isLogin">
           <li>
-            <router-link to="/login">登录</router-link>
+            <router-link to="/login" @click.native="login">登录</router-link>
           </li>
           <li>
             <router-link to="/signup">注册</router-link>
@@ -122,12 +120,7 @@
             <a @click="dialogVisible = true" style="cursor:pointer">登出</a>
 
             <!-- 退出登录的弹出框 -->
-            <el-dialog
-              title="提示"
-              :visible.sync="dialogVisible"
-              width="30%"
-              :before-close="handleClose"
-            >
+            <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
               <p>你确定要退出登录吗?</p>
               <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -159,63 +152,14 @@ export default {
       startlocation: 0,
       // 进行搜索的时候光标的位置(终止位置)
       endlocation: 0,
-      // 搜索框正则匹配规则,现已废弃
-      strategies: [
-        {
-          id: "tags",
-          match(text) {
-            var i = text.length;
-            while (i--) {
-              if (
-                text.charAt(i) == " " ||
-                text.charAt(i) == "\t" ||
-                text.charAt(i) == "\n" ||
-                text.charAt(i) == "\v" ||
-                text.charAt(i) == "\f" ||
-                text.charAt(i) == "\r" ||
-                // 把括号转化成ascII码判断,否则谜之报错
-                text.charAt(i).charCodeAt() == 41
-              ) {
-                return i + 1;
-              } else if (text.charAt(i).charCodeAt() == 40) {
-                if (i > 0 && text.charAt(i - 1) == "_") {
-                  continue;
-                } else {
-                  return i + 1;
-                }
-              }
-            }
-            return 0;
-          },
-          search(term, callback) {
-            $.getJSON(
-              `https://patchyvideo.com/autocomplete/?q=${term}`,
-              function(data) {
-                data = $.map(data, function(ele) {
-                  ele["term"] = term;
-                  ele["color"] = getCategoryIdColor(ele["cat"]);
-                  return ele;
-                });
-                var retdata = match_keywords(term).concat(data);
-                callback(retdata);
-              }
-            );
-          },
-          template(value) {
-            var term_start_pos = value.tag.indexOf(value.term);
-            prefix = value.tag.substring(0, term_start_pos);
-            suffix = value.tag.substring(term_start_pos + value.term.length);
-            highlighted_term = `${prefix}<b><u>${value.term}</u></b>${suffix}`;
-            if (value.cnt == -1) {
-              return `<span style="color: ${value.color};"><span style="margin-right: 6em;">${highlighted_term}</span></span>`;
-            }
-            return `<span style="color: ${value.color};"><span style="margin-right: 6em;">${highlighted_term}</span></span><span style="float:right;">${value.cnt}</span>`;
-          },
-          replace(value) {
-            return value.tag + " ";
-          },
-          index: 1
-        }
+      // 网站推荐栏
+      sites: [
+        { tag: "site:acfun", cat: 6, cnt: null },
+        { tag: "site:bilibili", cat: 6, cnt: null },
+        { tag: "site:nicovideo", cat: 6, cnt: null },
+        { tag: "site:twitter", cat: 6, cnt: null },
+        { tag: "site:youtube", cat: 6, cnt: null },
+        { tag: "site:ipfs", cat: 6, cnt: null }
       ]
     };
   },
@@ -239,8 +183,12 @@ export default {
   mounted() {},
   updated() {},
   methods: {
+    // 登录跳转
+    login() {
+      this.$store.commit("changeifRouter", "0");
+    },
     // 退出时清除所有数据
-    cleanLocalStorage: function() {
+    cleanLocalStorage() {
       this.isLogin = false;
       // 清除所有session值(退出登录)
       sessionStorage.clear();
@@ -250,21 +198,9 @@ export default {
       localStorage.setItem("username", "");
       // 清除cookie
       this.clearCookie();
-      // 回到主界面
-      if (this.$store.state.bgcMark != "home") {
-        this.$router.push("/home");
-      } else {
-        location.reload();
-      }
+      // 刷新界面
+      location.reload();
       this.dialogVisible = false;
-    },
-    // 控制退出登录的弹出框自带函数
-    handleClose(done) {
-      this.$confirm("确认关闭？")
-        .then(_ => {
-          done();
-        })
-        .catch(_ => {});
     },
     // 点击搜索按钮使home页面显示搜索结果
     gotoHome() {
@@ -334,19 +270,30 @@ export default {
         return;
       }
 
+      // 备份参数防止出现玄学问题
+      var query2 = query;
+      // 搜索是否包含sites变量的关键字
+      var results = this.sites.filter(this.createFilter(query2));
+
       // 对输入框现在的数据进行备份
       this.iptVal3 = this.iptVal;
       this.startlocation = startlocation;
       this.endlocation = endlocation;
 
-      var url = "https://patchyvideo.com/autocomplete/?q=" + query;
+      var url = "/autocomplete/?q=" + query;
       this.axios({
         method: "get",
         url: url
       }).then(result => {
-        this.taglist = result.data;
-        cb(result.data);
+        var resultList = results.concat(result.data);
+        cb(resultList);
       });
+    },
+    // 搜索输入框内的搜索文字是否包含网站内容
+    createFilter(query) {
+      return sites => {
+        return sites.tag.toLowerCase().indexOf(query.toLowerCase()) === 0;
+      };
     },
     // 搜索输入框内的搜索文字，返回搜索关键字所在的起始位置
     match(text) {
@@ -527,22 +474,26 @@ export default {
     0 0 70px #228dff, 0 0 80px #228dff, 0 0 100px #228dff, 0 0 150px #228dff;
 }
 
-.my-autocomplete {
-  li {
-    line-height: normal;
-    padding: 0px;
-  }
-
-  .highlighted .addr {
-    color: #ddd;
-  }
+.adviceList {
+  /* 针对webkit内核（如Safari）进行的调整 */
+  display: -webkit-flex;
+  display: flex;
+}
+.highlighted .addr {
+  color: #ddd;
 }
 .name {
-  text-overflow: ellipsis;
+  flex: 0 0 80%;
+  font-size: 14px;
+  line-height: 150%;
+  white-space: normal;
+  word-break: break-all;
   overflow: hidden;
   text-align: left;
 }
 .addr {
+  flex: 0 0 20%;
+  line-height: 150%;
   font-size: 12px;
   color: #b4b4b4;
   text-align: right;

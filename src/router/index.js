@@ -140,6 +140,14 @@ router.beforeEach((to, from, next) => {
       return next();
     } else {
       // console.log("未登录不放行");
+      // 保存跳转状态
+      store.commit("changeifRouter", "1");
+      store.commit("changerouterPath", to.path);
+      if (to.path == "/postvideo") {
+        if (to.query !== undefined) {
+          store.commit("changerouterparams", to.query);
+        }
+      }
       return next("/login");
     }
   }

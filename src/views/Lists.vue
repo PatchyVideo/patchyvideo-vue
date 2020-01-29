@@ -38,9 +38,17 @@
 
         <div class="recommend">
           <!-- 排序选择框 -->
-          <div id="select-order">
-            排序方式：
-            <el-select id="select-order" v-model="couponSelected">
+          <div id="select-order" class="head">
+            <el-input
+              placeholder="搜索列表..."
+              v-model="listSearch"
+              clearable
+              class="inputbox"
+              @keyup.enter.native="searchList()"
+            >
+              <el-button slot="append" icon="el-icon-search" @click="searchList()">搜索</el-button>
+            </el-input>
+            <el-select v-model="couponSelected" class="select">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -50,7 +58,11 @@
             </el-select>
           </div>
           <!-- 视频列表列表 -->
-          <div class="videolist">
+          <div style="width:100%;text-align:left">
+            <p
+              v-if="videolist.length==0"
+              style="display:inline-block;margin:0 auto;margin-top:10px;"
+            >没有搜索到视频列表</p>
             <div class="minbox shadow" v-for="item in videolist" :key="item._id.$oid">
               <!-- 视频列表标题 -->
               <div class="re_top">
@@ -126,7 +138,9 @@ export default {
         { value: "last_modified", label: "最新修改" }
       ],
       // 当前视频列表的排列顺序
-      couponSelected: ""
+      couponSelected: "",
+      // 视频列表的搜索关键字
+      listSearch: ""
     };
   },
   created() {
@@ -172,6 +186,30 @@ export default {
           $("html").animate({ scrollTop: 0 }, 100);
         }
       });
+    },
+    // 搜索列表
+    searchList() {
+      // 先使页面出于加载状态
+      this.loading = true;
+
+      // 请求数据
+      this.axios({
+        method: "post",
+        url: "be/lists/search.do",
+        data: {
+          page: this.page,
+          page_size: this.count,
+          order: this.couponSelected,
+          query: this.listSearch
+        }
+      }).then(result => {
+        this.maxcount = result.data.data.count;
+        this.maxpage = result.data.data.page_count;
+        this.videolist = result.data.data.playlists;
+
+        // 加载结束,加载动画消失
+        this.loading = false;
+      });
     }
   },
   watch: {
@@ -201,9 +239,15 @@ export default {
   flex: 1;
   background-color: #ffffffc9;
 }
-#select-order {
+.head {
   width: 100%;
   text-align: left;
+}
+.inputbox {
+  width: 300px;
+}
+.select {
+  float: right;
 }
 .main-page-background-img {
   background-image: url("./../static/img/imoto3.jpg");

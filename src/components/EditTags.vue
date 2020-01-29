@@ -11,7 +11,7 @@
     ★更改内容：
       1.HTML:新的输入框
       2.CSS:#ipt和#add进行修改(原来的全部注释掉了),在最下方新增了css(从哪里开始已标记)
-      3.JavaScript:第269行新增一句:this.iptVal = ""(加入标签成功之后输入框清空);
+      3.JavaScript:第265行新增一句:this.iptVal = ""(加入标签成功之后输入框清空);
       新增方法handleSelect和querySearchAsync;新增变量taglist
 
 -->
@@ -125,22 +125,18 @@
                   @keyup.enter.native="addTag"
                 >
                   <template slot-scope="{ item }">
-                    <el-row>
-                      <el-col
-                        :span="18"
+                    <div class="adviceList">
+                      <div
+                        class="name"
                         v-bind:class="{Copyright:item.cat==2,
                                     Language:item.cat==5,
                                     Character:item.cat==1,
                                     Author:item.cat==3,
                                     General:item.cat==0,
                                     Meta:item.cat==4}"
-                      >
-                        <div class="name">{{ item.tag }}</div>
-                      </el-col>
-                      <el-col :span="6">
-                        <div class="addr">{{ item.cnt }}</div>
-                      </el-col>
-                    </el-row>
+                      >{{ item.tag }}</div>
+                      <div class="addr">{{ item.cnt }}</div>
+                    </div>
                   </template>
                 </el-autocomplete>
               </div>
@@ -397,7 +393,7 @@ export default {
     },
     // 下面是消息补全框的方法
     querySearchAsync(queryString, cb) {
-      var url = "https://patchyvideo.com/autocomplete/?q=" + queryString;
+      var url = "/autocomplete/?q=" + queryString;
       this.axios({
         method: "get",
         url: url
@@ -740,22 +736,26 @@ div {
 }
 
 // 新增的css
-.my-autocomplete {
-  li {
-    line-height: normal;
-    padding: 0px;
-  }
-
-  .highlighted .addr {
-    color: #ddd;
-  }
+.adviceList {
+  /* 针对webkit内核（如Safari）进行的调整 */
+  display: -webkit-flex;
+  display: flex;
+}
+.highlighted .addr {
+  color: #ddd;
 }
 .name {
-  text-overflow: ellipsis;
+  flex: 0 0 80%;
+  font-size: 14px;
+  line-height: 150%;
+  white-space: normal;
+  word-break: break-all;
   overflow: hidden;
   text-align: left;
 }
 .addr {
+  flex: 0 0 20%;
+  line-height: 150%;
   font-size: 12px;
   color: #b4b4b4;
   text-align: right;
