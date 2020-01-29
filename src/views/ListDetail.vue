@@ -8,6 +8,9 @@
       release
     1/9/2020：v1.0.1
       1.加入了Tag编辑功能
+    1/16/2020:v1.0.2
+      1.增加EditTags对Postvideo的支持。
+      2.增加Move、DeleteVideo、SetCover 操作页面的组件，样式微调。
     1/19/2020：v1.0.2
       1.新增字体图标以及对应的元素操作。
       （由于是百分百布局，存在滚动条问题，Dialog对话框触发后滚动条消失，页面会突然向右移动铺满）
@@ -16,30 +19,24 @@
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
       2.EditTags组件应仅对当前收藏列表持有者展示
-      1/16/2020:v1.0.2
-      增加EditTags对Postvideo的支持。
-      增加Move、DeleteVideo、SetCover 操作页面的组件，样式微调。
-
-
+      3.上下调整视频顺序等功能对非管理员可见但不可用，且鼠标放在上面的时候不显示说明
+      4.视频列表为空的时候无法添加视频
 -->
 <template>
   <div class="listDetail">
     <topnavbar />
-    <el-dialog
-            title="提示"
-            :visible.sync="dialogVisible"
-            width="30%"
-            :before-close="handleClose">
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
       <span>确认删除吗？</span>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false;deleteVideoList()">确 定</el-button>
-  </span>
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false;deleteVideoList()">确 定</el-button>
+      </span>
     </el-dialog>
 
     <!-- EditTags组件-->
-  <EditTags :msg="videolistPid" :visible.sync="showTagPanel"></EditTags>  <!--如果有Pid的情况下-->
-<!--    <EditTags :msg="test" :visible.sync="showTagPanel" @getEditTagsData="editTagsData"></EditTags> 如果没有Pid的情况下 test=""  -->
+    <EditTags :msg="videolistPid" :visible.sync="showTagPanel"></EditTags>
+    <!--如果有Pid的情况下-->
+    <!--    <EditTags :msg="test" :visible.sync="showTagPanel" @getEditTagsData="editTagsData"></EditTags> 如果没有Pid的情况下 test=""  -->
 
     <!-- listdetail页面的正文 -->
     <div class="w main-page-background-img" v-loading="loading">
@@ -54,37 +51,34 @@
             <p>{{ videolistDesc }}</p>
           </div>
           <!-- 打开Tag编辑页面 -->
-        <div class="edit_box">
-          <el-button type="success" >添加视频</el-button>
-          <el-button type="info" >编辑</el-button>
-          <el-button type="primary" @click="openEditTags" class="EditTagsButton">编辑标签</el-button>
-          <el-button type="danger"  @click="dialogVisible = true">删除</el-button>
-        </div>
-
-
+          <div class="edit_box">
+            <el-button type="success">添加视频</el-button>
+            <el-button type="info">编辑</el-button>
+            <el-button type="primary" @click="openEditTags" class="EditTagsButton">编辑标签</el-button>
+            <el-button type="danger" @click="dialogVisible = true">删除</el-button>
+          </div>
         </div>
 
         <!-- 视频列表 -->
         <div class="recommend">
-
           <!-- 视频详情 -->
           <div class="minbox shadow" v-for="(item, index) in videolistVideos" :key="item._id.$oid">
             <div class="re_video">
-
               <div class="edit">
                 <h1 id="edit_first">{{ index+1 }}</h1>
                 <div id="edit_second">
-                      <Move class="move" :msg="PlaylistItemOp(item,index)"></Move>  <!--上移-->
-                   </div>
+                  <Move class="move" :msg="PlaylistItemOp(item,index)"></Move>
+                  <!--上移-->
+                </div>
               </div>
-
-
 
               <img class="re_video_img" :src="'/images/covers/'+item.item.cover_image" />
               <div class="re_video_desc">
-
                 <el-tooltip class="item" effect="dark" content="在此插入视频" placement="top">
-                  <router-link :to="{path:'./postvideo',query:getInsertData(item,index)}" class="insert-video">
+                  <router-link
+                    :to="{path:'./postvideo',query:getInsertData(item,index)}"
+                    class="insert-video"
+                  >
                     <i class="fa fa fa-plus" aria-hidden="true"></i>
                   </router-link>
                 </el-tooltip>
@@ -108,8 +102,8 @@
                 </div>
               </div>
               <div class="item_end">
-                <SetCover class="set-cover":msg="PlaylistItemOp(item,index)"></SetCover>
-                <DeleteVideo class="delete-video":msg="PlaylistItemOp(item,index)"></DeleteVideo>
+                <SetCover class="set-cover" :msg="PlaylistItemOp(item,index)"></SetCover>
+                <DeleteVideo class="delete-video" :msg="PlaylistItemOp(item,index)"></DeleteVideo>
               </div>
             </div>
           </div>
@@ -138,7 +132,7 @@
 import topnavbar from "../components/TopNavbar.vue";
 import Footer from "../components/Footer.vue";
 import EditTags from "../components/EditTags.vue";
-import Move from "../components/Move.vue"
+import Move from "../components/Move.vue";
 import DeleteVideo from "../components/DeleteVideo.vue";
 import SetCover from "../components/SetCover.vue";
 import { copyToClipboard } from "../static/js/generic";
@@ -172,10 +166,10 @@ export default {
       loading: true,
       ifOpenTag: false,
       showTagPanel: false,
-      test:"",
-      testSonVal:"",
+      test: "",
+      testSonVal: ""
 
-    /*  PlaylistItemOp:{ //移动组件所需要的数据
+      /*  PlaylistItemOp:{ //移动组件所需要的数据
         "pid":"",
         "vid":"",
         "page":"",
@@ -189,25 +183,26 @@ export default {
   },
   methods: {
     handleClose(done) {
-      this.$confirm('确认关闭？')
-              .then(_ => {
-                done();
-              })
-              .catch(_ => {});
+      this.$confirm("确认关闭？")
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
     },
-    getInsertData(e,i){
-      let obj= {
-        pid:this.videolistPid,
-        rank:e.rank
-      }
+    getInsertData(e, i) {
+      let obj = {
+        pid: this.videolistPid,
+        rank: e.rank
+      };
       return obj;
     },
-    PlaylistItemOp(e,i){
-      let obj={ //移动组件所需要的数据
-                "pid":this.videolistPid,
-                "vid":e._id.$oid,
-                "page":this.page,
-                "page_size":this.maxcount
+    PlaylistItemOp(e, i) {
+      let obj = {
+        //移动组件所需要的数据
+        pid: this.videolistPid,
+        vid: e._id.$oid,
+        page: this.page,
+        page_size: this.maxcount
       };
 
       return obj;
@@ -253,26 +248,25 @@ export default {
       copyToClipboard($("#link" + index));
     },
     //删除列表
-    deleteVideoList:function(){
+    deleteVideoList: function() {
       this.axios({
         method: "post",
-        url:`be/list/${this.videolistPid}/del`
-      }).then(res=>{
+        url: `be/list/${this.videolistPid}/del`
+      }).then(res => {
         console.log(res);
-      })
+      });
     },
     // 打开Tag编辑页面
     openEditTags: function() {
       this.showTagPanel = true;
     },
-    editTagsData:function (data) {
+    editTagsData: function(data) {
       console.log(data);
     }
-
   },
-  computed:{
-    f1(){
-      return  this.$store.state.refreshCount;
+  computed: {
+    f1() {
+      return this.$store.state.refreshCount;
     }
   },
   watch: {
@@ -282,61 +276,51 @@ export default {
     count(v) {
       this.getVideoList(this.page, this.count);
     },
-    f1(){
+    f1() {
       this.getVideoList(this.page, this.count);
-       }
-
-
+    }
   },
-  components: { topnavbar, Footer, EditTags ,Move,DeleteVideo,SetCover}
+  components: { topnavbar, Footer, EditTags, Move, DeleteVideo, SetCover }
 };
 </script>
 
 <style scoped lang="less">
-  .insert-video{
-    position: absolute;
+.insert-video {
+  position: absolute;
   left: 35%;
   transform: translateY(-50px);
-     i{
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      color: white;
-      border: 3px solid #006D88;
-      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228DFF, 0 0 40px #228DFF;
-      text-align: center;
-      background-color: black;
+  i {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    color: white;
+    border: 3px solid #006d88;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff, 0 0 40px #228dff;
+    text-align: center;
+    background-color: black;
 
-      z-index: 1;
-      font-size: 25px;
-      transition: all .3s ease;
-    }
+    z-index: 1;
+    font-size: 25px;
+    transition: all 0.3s ease;
   }
-  .re_video{
+}
+.re_video {
+  display: flex;
+  .edit {
+    width: 15%;
     display: flex;
-    .edit{
-      width: 15%;
-      display: flex;
-      #edit_first{ //h1
-        font-size: 54px;
-        margin-right: 30px;
-        position: relative;
-        bottom: 35px;
-        color: rgb(98, 169, 231);
-       flex-grow: 1;
-        transform: translate(50%,50%);
-      }
-      #edit_second{  //icon
-
-        margin-right: 20px;
-
-        .move{
-          flex: 1;
-          height: 100%;
-          font: normal normal normal 14px/1 FontAwesome;
-          font-size: inherit;
-          text-rendering: auto;
-          -webkit-font-smoothing: antialiased;
+    #edit_first {
+      //h1
+      font-size: 54px;
+      margin-right: 30px;
+      position: relative;
+      bottom: 35px;
+      color: rgb(98, 169, 231);
+      flex-grow: 1;
+      transform: translate(50%, 50%);
+    }
+    #edit_second {
+      //icon
 
          /deep/  .move-down-box{
            transform: translateX(-10px);
@@ -344,16 +328,25 @@ export default {
 
           /deep/ .move-up{
 
-            font-size: 40px;
-            height: 40px;
-            color: #808080;
-            transition: all .4s ease;
-     /*       position: absolute;
+      .move {
+        flex: 1;
+        height: 100%;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+
+        /deep/ .move-up {
+          font-size: 40px;
+          height: 40px;
+          color: #808080;
+          transition: all 0.4s ease;
+          /*       position: absolute;
             top: -20px;*/
-            &:hover{
-              color: white;
-              text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228DFF, 0 0 40px #228DFF;
-            }
+          &:hover {
+            color: white;
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff,
+              0 0 40px #228dff;
           }
           /deep/ .move-down{
 
@@ -369,43 +362,60 @@ export default {
                   color: white;
                   text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228DFF, 0 0 40px #228DFF;
                 }
+          }
 
 
 
         }
+        /deep/ .move-down {
+          font-size: 40px;
+          height: 40px;
+          color: #808080;
+          transition: all 0.4s ease;
+          transform: translateY(120%);
+          /*          position: absolute;
+                        bottom: 0px;*/
 
-
-        }
-      }
-    }
-    .item_end{
-      width: 10%;
-      display: flex;
-      justify-content: center;
-
-      .delete-video{
-
-        flex: 1;
-        height: 30px;
-        font-size: 30px;
-        text-align: center;
-        /deep/ i{
-          &:hover{        transition: all .4s ease;
+          &:hover {
             color: white;
-            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228DFF, 0 0 40px #228DFF;
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff,
+              0 0 40px #228dff;
           }
         }
       }
-      .set-cover{
+    }
+  }
+  }
+}
+  .item_end {
+    width: 10%;
+    display: flex;
+    justify-content: center;
 
-        text-align: center;
-        font-size: 30px;
-        height: 30px;
-        flex: 1;
-        &:hover{    transition: all .4s ease;
+    .delete-video {
+      flex: 1;
+      height: 30px;
+      font-size: 30px;
+      text-align: center;
+      /deep/ i {
+        &:hover {
+          transition: all 0.4s ease;
           color: white;
-          text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228DFF, 0 0 40px #228DFF;
+          text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff,
+            0 0 40px #228dff;
         }
+      }
+    }
+    .set-cover {
+      text-align: center;
+      font-size: 30px;
+      height: 30px;
+      flex: 1;
+      &:hover {
+        transition: all 0.4s ease;
+        color: white;
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff,
+          0 0 40px #228dff;
       }
     }
   }

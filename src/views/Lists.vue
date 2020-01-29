@@ -10,9 +10,8 @@
       1.解决了图片连接的问题
       2.修改了当前页面下的网站标题
     ★待解决问题：
-    2.作者链接尚未完工
-    3.由于标题可能会超过一行导致视频列表高度变高，从而导致排版不太好看
-    4.制作播放列表的功能尚未完成
+      1.由于标题可能会超过一行导致视频列表高度变高，从而导致排版不太好看
+      2.列表排序功能（latest,oldest,last_modified）
 -->
 <template>
   <div>
@@ -31,37 +30,55 @@
               <br />Use playlist ONLY IF order is a must, otherwise using tags falls better in line with the site's design.
               <br />播放列表功能的核心是为视频提供顺序，如果顺序不是必须要求则使用tag是更好的选择。
             </p>
-            <el-button type="primary" plain class="createPlayListButton">创建播放列表</el-button>
+            <el-button type="primary" plain class="createPlayListButton">
+              <router-link to="/createVideoList">创建播放列表</router-link>
+            </el-button>
           </div>
         </div>
 
-        <!-- 视频列表列表 -->
         <div class="recommend">
-          <div class="minbox shadow" v-for="item in videolist" :key="item._id.$oid">
-            <!-- 视频列表标题 -->
-            <div class="re_top">
-              <h2>
-                <router-link
-                  target="_blank"
-                  :to="{ path: '/listdetail', query: { id: item._id.$oid } }"
-                  tag="a"
-                >{{ item.title.english }}</router-link>
-              </h2>
-              <h5 style="float: right;">共{{ item.videos }}个视频</h5>
-            </div>
-            <!-- 视频列表详情 -->
-            <div class="re_video">
-              <img :src="'/images/covers/'+item.cover" />
-              <div class="re_video_desc">
-                <p>
-                  <strong>{{ item.desc.english }}</strong>
-                </p>
+          <!-- 排序选择框 -->
+          <div id="select-order">
+            排序方式：
+            <el-select id="select-order" v-model="couponSelected">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </div>
+          <!-- 视频列表列表 -->
+          <div class="videolist">
+            <div class="minbox shadow" v-for="item in videolist" :key="item._id.$oid">
+              <!-- 视频列表标题 -->
+              <div class="re_top">
+                <h2>
+                  <router-link
+                    target="_blank"
+                    :to="{ path: '/listdetail', query: { id: item._id.$oid } }"
+                    tag="a"
+                  >{{ item.title.english }}</router-link>
+                </h2>
+                <h5 style="float: right;">共{{ item.videos }}个视频</h5>
               </div>
+              <!-- 视频列表详情 -->
+              <div class="re_video">
+                <img :src="'/images/covers/'+item.cover" />
+                <div class="re_video_desc">
+                  <p>
+                    <strong>{{ item.desc.english }}</strong>
+                  </p>
+                </div>
+              </div>
+              <p class="minbox_creater">
+                作者：
+                <router-link
+                  :to="'/users/'+item.user_detail._id.$oid"
+                >{{ item.user_detail.profile.username }}</router-link>
+              </p>
             </div>
-            <p class="minbox_creater">
-              作者：
-              <router-link :to="'/users/'+item.user_detail._id.$oid">{{ item.user_detail.profile.username }}</router-link>
-            </p>
           </div>
         </div>
 
@@ -101,12 +118,22 @@ export default {
       // 请求到的视频列表列表（本页的视频列表列表）
       videolist: [],
       // 视频列表是否属于加载状态的判断
-      loading: true
+      loading: true,
+      // 视频列表的排序规则
+      options: [
+        { value: "latest", label: "时间正序" },
+        { value: "oldest", label: "时间倒序" },
+        { value: "last_modified", label: "最新修改" }
+      ],
+      // 当前视频列表的排列顺序
+      couponSelected: ""
     };
   },
   created() {
     // 初始化页面名为list
     this.$store.commit("changeBgc", "list");
+    // 初始化排列顺序为最新上传排序
+    this.couponSelected = this.options[0].value;
     // 获取视频列表列表
     this.getVideoList(this.page, this.count);
     // 修改网站标题
@@ -130,7 +157,7 @@ export default {
       this.axios({
         method: "post",
         url: "be/lists/all.do",
-        data: { page: e, page_size: count }
+        data: { page: e, page_size: count, order: this.couponSelected }
       }).then(result => {
         this.maxcount = result.data.data.count;
         this.maxpage = result.data.data.page_count;
@@ -153,6 +180,9 @@ export default {
     },
     count(v) {
       this.getVideoList(this.page, this.count);
+    },
+    couponSelected(v) {
+      this.getVideoList(this.page, this.count);
     }
   },
   components: { topnavbar, Footer }
@@ -170,6 +200,10 @@ export default {
   position: relative;
   flex: 1;
   background-color: #ffffffc9;
+}
+#select-order {
+  width: 100%;
+  text-align: left;
 }
 .main-page-background-img {
   background-image: url("./../static/img/imoto3.jpg");
@@ -214,6 +248,9 @@ export default {
   margin-left: 12.5px;
   margin-right: 12.5px;
   margin-top: 40px;
+}
+.minbox:first-child {
+  margin-top: 10px;
 }
 .minbox_creater {
   padding-bottom: 20px;

@@ -8,17 +8,19 @@ export default new Vuex.Store({
     bgcMark: "home",
     // 用户名
     username: "",
+    // 视频的页数和当前页（功能已经弃用，但这两个变量的关联情况未知所以暂未删除）
     maxpage: 0,
     whichPage: 1,
     // 视频的数据列表(所有视频按照页数组成二维数组)
     videoObj: [],
     // 侧导航条(LeftNavBar.vue)的标题
     leftNavBarTitle: "标签",
-    refreshCount:0
-
+    // 顶部导航条(TopNavbar)的搜索内容
+    TopNavbarSearching: "",
+    refreshCount: 0
   },
   mutations: {
-    refreshPage(state,e){
+    refreshPage(state, e) {
       state.refreshCount++;
     },
     getUserName(state, e) {
@@ -53,6 +55,9 @@ export default new Vuex.Store({
     },
     getwhichPage(state, e) {
       state.whichPage = e;
+    },
+    getTopNavbarSearching(state, e) {
+      state.TopNavbarSearching = e;
     }
   },
   actions: {},
