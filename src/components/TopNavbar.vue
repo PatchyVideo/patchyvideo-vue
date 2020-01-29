@@ -221,6 +221,7 @@ export default {
     //清除cookie
     clearCookie: function() {
       this.setCookie("", -1);
+      this.setCookie("session", -1);
     },
     // 设置cookie
     // 储存变量为username
