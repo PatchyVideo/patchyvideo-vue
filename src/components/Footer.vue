@@ -30,6 +30,7 @@ export default {
 
 <style scoped>
 .footer {
+  margin-top: 3px;
   height: 100px;
   width: calc(100% - 20px);
   background-color: #fff;

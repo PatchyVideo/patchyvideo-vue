@@ -359,7 +359,7 @@ export default {
   overflow: hidden;
   position: relative;
   background-color: #fff;
-  box-shadow: 0 2px 20px #a78c97;
+  box-shadow: 0 1px 0px #a78c97;
 }
 
 .top-navbar li a {
