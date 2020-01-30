@@ -299,9 +299,12 @@ export default {
   text-align: center;
   margin-left: 12.5px;
   margin-right: 12.5px;
-  margin-top: 10px;
+  margin-top: 30px;
 }
 .minbox:first-child {
+  margin-top: 10px;
+}
+.minbox:nth-child(2) {
   margin-top: 10px;
 }
 .minbox_creater {

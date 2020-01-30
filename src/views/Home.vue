@@ -281,7 +281,7 @@ export default {
           // 包含非法字符的时候
           if (result.data.data.reason == "INCORRECT_QUERY") {
             this.$message({
-              message: "搜索内容含有非法字符!",
+              message: "查询语法错误！",
               type: "error"
             });
           }
