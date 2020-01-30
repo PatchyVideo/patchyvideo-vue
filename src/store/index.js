@@ -13,6 +13,8 @@ export default new Vuex.Store({
     whichPage: 1,
     // 视频的数据列表(所有视频按照页数组成二维数组)
     videoObj: [],
+    // 视频详情页面里视频的pid
+    videoPid: "",
     // 侧导航条(LeftNavBar.vue)的标题
     leftNavBarTitle: "标签",
     // 顶部导航条(TopNavbar)的搜索内容
@@ -55,6 +57,9 @@ export default new Vuex.Store({
 
       window.localStorage.setItem(`${state.whichPage - 1}`, JSON.stringify(e));
       window.localStorage.removeItem("loglevel:webpack-dev-server");
+    },
+    setVideoPid(state, e) {
+      state.videoPid = e;
     },
     getMaxPage(state, e) {
       state.maxpage = e;

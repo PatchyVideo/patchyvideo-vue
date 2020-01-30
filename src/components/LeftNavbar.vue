@@ -3,6 +3,7 @@
     组件：左侧的标签导航栏
     大小：15% * 100%
     功能：home页面下对标签进行导航
+    包含组件：EditTags.vue
     必要传入参数：
       1.标题的名称(从vuex的"leftNavBarTitle"参数里获取)
       2.（Home页面下）从https://www.patchyvideo.com/listvideo.do请求来的数据的data.data.tags
@@ -24,8 +25,14 @@
 
 <template>
   <div class="left-navbar">
+    <!-- EditTags组件-->
+    <EditTags :msg="pid" :visible.sync="showTagPanel" class="EditTags"></EditTags>
+
     <div class="left_list">
       <h1>{{ title }}</h1>
+      <div class="editTagButton">
+        <el-button v-if="title=='标签'&&isLogin==true" size="mini" @click="openEditTags">编辑</el-button>
+      </div>
       <!-- 在Home页面渲染的侧导航条内容 -->
       <ul ref="test" v-if="title=='热门标签'">
         <li class="tag belong-to-home" v-for="(val,key) in msg" :key="key">
@@ -66,11 +73,25 @@
 </template>
 
 <script>
+import EditTags from "../components/EditTags";
 export default {
   data() {
-    return {};
+    return {
+      // 判断是否登录的标志
+      isLogin: false,
+      // tag编辑页面是否打开
+      showTagPanel: false
+    };
   },
-  created() {},
+  created() {
+    // 查看是否登录
+    if (
+      JSON.stringify(this.$store.state.username) != "null" &&
+      this.$store.state.username != ""
+    ) {
+      this.isLogin = true;
+    }
+  },
   methods: {
     // 点击标签显示标签的搜索结果
     gotoHome(key) {
@@ -83,14 +104,29 @@ export default {
       } else {
         this.$router.push({ path: "/home" });
       }
+    },
+    // 打开Tag编辑页面
+    openEditTags: function() {
+      this.showTagPanel = true;
     }
   },
-  components: {},
-  watch: {},
+  components: { EditTags },
+  watch: {
+    // 如果标签编辑界面被关闭，则重新请求页面数据
+    showTagPanel() {
+      if (this.showTagPanel == false) {
+        this.$parent.searchVideo();
+      }
+    }
+  },
   computed: {
     // 导航条的标题
     title() {
       return this.$store.state.leftNavBarTitle;
+    },
+    // 视频的pid
+    pid() {
+      return this.$store.state.videoPid;
     }
   },
   props: ["msg"]
@@ -134,7 +170,9 @@ export default {
   line-height: 1.5em;
   padding-left: 20px;
   margin-top: 20px;
+  margin-right: 10px;
   color: #000;
+  display: inline-block;
 }
 .left_list h3 {
   font-family: Tahoma, Verdana, Helvetica, sans-serif;
@@ -154,6 +192,15 @@ export default {
   width: 15%;
   margin-right: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.editTagButton {
+  width: 50%;
+  text-align: left;
+  display: inline-block;
+}
+.EditTags {
+  position: relative;
+  left: 300%;
 }
 /* 针对列表调整颜色 */
 .Copyright {

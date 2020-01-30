@@ -287,6 +287,7 @@ export default {
     },
     // 查询视频详细信息
     searchVideo: function() {
+      this.loading = true;
       // vuex存储:(已被弃用)
       while (0) {
         // for (let j = 0; j < this.$store.state.videoObj.length; j++) {
@@ -335,6 +336,8 @@ export default {
         // 修改网站标题
         document.title = this.myVideoData.video.item.title;
         this.pid = this.myVideoData.video._id.$oid;
+        // 视频pid储存到vuex中
+        this.$store.commit("setVideoPid", this.myVideoData.video._id.$oid);
         // 加载结束,加载动画消失
         this.loading = false;
       });
