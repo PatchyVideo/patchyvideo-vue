@@ -19,6 +19,8 @@
     1/8/2020：v1.0.3
       1.实现了点击标签进行搜索的功能
       2.删掉了一些冗余的代码和变量
+    1/30/2020：v1.0.4
+      1.实现了在视频详情页面编辑标签，使用标签发布视频的功能
     ★待解决问题：
       暂无
 -->
@@ -29,9 +31,12 @@
     <EditTags :msg="pid" :visible.sync="showTagPanel" class="EditTags"></EditTags>
 
     <div class="left_list">
-      <h1>{{ title }}</h1>
-      <div class="editTagButton">
-        <el-button v-if="title=='标签'&&isLogin==true" size="mini" @click="openEditTags">编辑</el-button>
+      <div class="titleTag">
+        <h1>{{ title }}</h1>
+        <div class="editTagButton">
+          <el-button v-if="title=='标签'&&isLogin==true" size="mini" @click="openEditTags">编辑</el-button>
+        </div>
+        <p v-if="title=='标签'&&isLogin==true" @click="postVideo">【使用标签发布视频】</p>
       </div>
       <!-- 在Home页面渲染的侧导航条内容 -->
       <ul ref="test" v-if="title=='热门标签'">
@@ -106,8 +111,12 @@ export default {
       }
     },
     // 打开Tag编辑页面
-    openEditTags: function() {
+    openEditTags() {
       this.showTagPanel = true;
+    },
+    // 使用视频已有的标签发布视频
+    postVideo() {
+      this.$router.push({ path: "/postvideo", query: { use_tags: this.pid } });
     }
   },
   components: { EditTags },
@@ -192,6 +201,15 @@ export default {
   width: 15%;
   margin-right: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.titleTag p {
+  cursor: pointer;
+  margin-top: 10px;
+  margin-left: 15px;
+  color: #39c5bb;
+}
+.titleTag p:hover {
+  color: #c539c5;
 }
 .editTagButton {
   width: 50%;
