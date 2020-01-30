@@ -9,9 +9,11 @@
     1/9/2020: v1.0.1
       1.解决了图片连接的问题
       2.修改了当前页面下的网站标题
+    1/30/2020：v1.0.2
+      1.加入了列表搜索排序功能
+      2.视频列表效果更新，现在视频列表每行上对齐
     ★待解决问题：
-      1.由于标题可能会超过一行导致视频列表高度变高，从而导致排版不太好看
-      2.列表排序功能（latest,oldest,last_modified）
+      暂无
 -->
 <template>
   <div>
@@ -58,7 +60,7 @@
             </el-select>
           </div>
           <!-- 视频列表列表 -->
-          <div style="width:100%;text-align:left">
+          <div class="videolistlist">
             <p
               v-if="videolist.length==0"
               style="display:inline-block;margin:0 auto;margin-top:10px;"
@@ -285,13 +287,19 @@ export default {
 .createPlayListButton {
   width: 30%;
 }
-
+.videolistlist {
+  width: 100%;
+  text-align: left;
+  flex-wrap: wrap;
+  display: flex;
+  align-items: flex-start;
+}
 .minbox {
-  display: inline-block;
-  width: calc(50% - 50px);
+  flex: 0 0 calc(50% - 30px);
+  text-align: center;
   margin-left: 12.5px;
   margin-right: 12.5px;
-  margin-top: 40px;
+  margin-top: 10px;
 }
 .minbox:first-child {
   margin-top: 10px;
