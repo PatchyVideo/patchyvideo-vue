@@ -114,7 +114,6 @@
                         },
                         withCredentials:true,
                     }).then(res=>{
-
                         this.maxcount=res.data.data.count; //获取总的视频个数制作分页后开始第二次请求获取当前页面的数据
                         this.getVideoData(this.page,this.count);
                     });

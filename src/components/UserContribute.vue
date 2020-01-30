@@ -11,9 +11,9 @@
 -->
 
 <template>
-<div>
+<div >
 
-    <div class="bigbox standard"  v-loading="loading">
+    <div class="bigbox standard"  v-loading="loading" >
 
 
         <el-container>
@@ -23,7 +23,7 @@
                  <canvas id="myChart" width="800" height="800"></canvas>
 
             </el-aside>
-            <el-main >
+            <el-main>
                 <p v-if="this.videoCount==0" class="nulldata-right">您没有上传视频，目前还没有数据哦</p>
                 <div class="minibox" v-if="this.videoCount!=0">
                    <div class="minibox_top">
@@ -32,7 +32,7 @@
                        <i @click="changeLine":class="{'el-icon-s-grid':flag,'el-icon-menu':!flag}"></i>
                    </div>
 
-                      <div class="video_lineUp"v-if="flag">
+                      <div class="video_lineUp"v-if="flag" >
                           <router-link  class="list-item"
                                         target="_blank"
                                         :to="{ path: '/video', query: { id: i._id.$oid } }"
@@ -42,7 +42,7 @@
                               <h4><a href="">{{i.item.title}}</a></h4>
                           </router-link>
                       </div>
-                       <div class="video_straightColumn" v-if="!flag">
+                       <div class="video_straightColumn" v-if="!flag" >
                         <router-link class="list-item"
                                      target="_blank"
                                      :to="{ path: '/video', query: { id: i._id.$oid } }"
@@ -59,6 +59,18 @@
 
                     </div>
                 </div>
+
+                <el-pagination
+                        background
+                        class="page-selector"
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        layout="jumper, prev, pager, next, sizes"
+                        :current-page="this.page"
+                        :total="videoCount"
+                        :page-size="20"
+                        :page-sizes="[10, 20, 30, 40]"
+                ></el-pagination>
             </el-main>
 
 
@@ -82,6 +94,8 @@
                 flag:true,  //视频排列顺序,默认栅格
                 TagData:[], //所有视频的TAG数据
                 videoCount:0, //视频总数
+                page:1,
+                count: 20,
                 videoData:[], //视频数据
                 //绘制图表用，使用教程移至：https://www.echartsjs.com/zh/tutorial.html#
                 CopyrightObj:[],
@@ -104,7 +118,7 @@
         },
         created(){
 
-            this.getData();
+            this.getMaxCount();
         },
 
         mounted(){
@@ -112,7 +126,30 @@
         },
 
         methods: {
-            getData(){
+            handleCurrentChange(val) {
+                this.page = val;
+            },
+            handleSizeChange(val) {
+                this.count = val;
+            },
+            getMaxCount(){
+                this.axios({
+                    method:'post',
+                    url:"be/listmyvideo.do",
+                    withCredentials:true,        //携带cookie当配置了 withCredentials = true时，必须在后端增加 response 头信息Access-Control-Allow-Origin，且必须指定域名，而不能指定为*
+                    async:true,
+                    data:{
+                        "page":1,
+                        "page_size":9999999
+                    }
+                }).then(res=>{
+                    this.videoCount =res.data.data.count; //获取总的视频个数制作分页后开始第二次请求获取当前页面的数据
+                    this.getData(this.page,this.count);
+                })
+            },
+            getData(e, count){
+
+
                 if(this.$route.params.id=='me'){
                     this.axios({
                         method:'post',
@@ -120,10 +157,11 @@
                         withCredentials:true,        //携带cookie当配置了 withCredentials = true时，必须在后端增加 response 头信息Access-Control-Allow-Origin，且必须指定域名，而不能指定为*
                         async:true,
                         data:{
-                            "page":1,
-                            "page_size":9999999
+                            "page":e,
+                            "page_size":count,
                         }
                     }).then(result=>{
+
                         this.TagData = result.data.data.tags;
                         this.videoData = result.data.data.videos;
                         this.getTagCategories();
@@ -140,8 +178,8 @@
                         method:'post',
                         url:"be/listyourvideo.do",
                         data:{
-                            "page":1,
-                            "page_size":9999999,
+                            "page":e,
+                            "page_size":count,
                             "uid":this.$route.params.id
                         }
                     }).then(result=>{
@@ -149,7 +187,7 @@
 
                         this.videoData = result.data.data.videos;
                         this.getTagCategories();
-                        this.videoCount =result.data.data.count;
+                      this.videoCount =result.data.data.count;
                         this.loading =false;
 
                     }).catch(err=>{
@@ -188,6 +226,13 @@
                 })[0].count
             },
             totallNum(arr){
+                this.CopyrightObj=[];
+                this.GeneralObj=[];
+                this.CharacterObj=[];
+                this.AuthorObj=[];
+                this.MetaObj=[];
+                this.LanguageObj=[];
+
 
                 //依次将接口获取的原数据按照echarts中的数据规范转换
             for(let i in arr){
@@ -274,7 +319,14 @@
         watch:{
             $route(){
                 location.reload();
-            }
+            },
+            page(v) {
+                this.loading =true;
+                this.getData(this.page, this.count);
+            },
+            count(v) {
+                this.getData(this.page, this.count);
+            },
         }
     }
 
@@ -288,6 +340,9 @@
         display: flex;
         background-color: white;
         opacity: 0.9;
+    }
+    .el-pagination{
+        transform: translateY(50%);
     }
     .el-container{
 

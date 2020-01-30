@@ -215,18 +215,36 @@ export default {
       this.$message.error("请输入合法的Tag!");
     },
     getCommonTags() {
-      this.axios({
-        method: "post",
-        url: "be/list/getcommontags.do",
-        data: { pid: this.msg }
-      })
-        .then(res => {
-          this.tags = res.data.data; //原始数据
-          this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); //深拷贝，推荐Tag数据用
-          this.getTagCategories(this.tags); //范围转换后展示原始数据
-          this.getRecTags(this.tags); //获取推荐TAG
+
+      if(this.$route.path==="\/listdetail"){
+        this.axios({
+          method:'post',
+          url:"be/list/getcommontags.do",
+          data:{ "pid":this.msg}
+        }).then(res=>{
+          this.tags= res.data.data;                                //原始数据
+          this.tagsForRec =  JSON.parse(JSON.stringify(this.tags)); //深拷贝，推荐Tag数据用
+          this.getTagCategories(this.tags);                       //范围转换后展示原始数据
+          this.getRecTags(this.tags);                             //获取推荐TAG
+
+        }).catch(error=>{
         })
-        .catch(error => {});
+      }
+      if(this.$route.path=="\/video"||this.$route.path==="\/postvideo"){
+        this.axios({
+          method:'post',
+          url:"be/videos/gettags.do",
+          data:{ "video_id":this.msg}
+        }).then(res=>{
+          console.log(res);
+          this.tags= res.data.data;                                //原始数据
+          this.tagsForRec =  JSON.parse(JSON.stringify(this.tags)); //深拷贝，推荐Tag数据用
+          this.getTagCategories(this.tags);                       //范围转换后展示原始数据
+          this.getRecTags(this.tags);                             //获取推荐TAG
+
+        }).catch(error=>{
+        })
+      }
     },
     getTagCategories(str) {
       this.axios({
@@ -362,7 +380,7 @@ export default {
                       // 第一轮 Event Loop 结束 开始第二轮执行setTimeout*/
     },
     saveTag() {
-      if (this.msg === "") {
+      if(/*this.msg===""*/ this.$route.path==="\/postvideo"){
         //如果没有pid,则处在提交视频界面，返回给父组件tags
         this.$emit("getEditTagsData", this.tags);
         /*          this.closeTagPanel();*/
