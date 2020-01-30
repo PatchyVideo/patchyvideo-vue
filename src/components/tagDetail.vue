@@ -9,6 +9,10 @@
       release
     1/27/2020：v1.0.1
       1.显示搜索结果的标签数量进行了优化
+    1/29/2020：v1.0.2
+      1.表格的展开项中不同的标签名之间的间隔优化
+      2.标签名在修改之后才会显示提交按钮
+      3.添加标签的输入框输入回车便可添加
     ★待解决问题：
       1.各种语言的支持希望可以用v-for实现（现在由于v-if和v-for无法兼容实现不了）
       2.不同标签对应不同的颜色分类
@@ -16,7 +20,7 @@
 
 <template>
   <div class="content2" v-loading="loading">
-    <!-- 播放列表的抬头 -->
+    <!-- 标签列表的抬头 -->
     <div class="video-list-header">
       <p v-if="maxcount">显示 {{ count2 }} / {{ maxcount }} 个标签</p>
       <p v-else>没有搜索到视频</p>
@@ -31,7 +35,12 @@
     </div>
     <!-- 添加标签列表 -->
     <div class="addTag">
-      <el-input v-model="newTag" :placeholder="'向'+this.tagCategorie+'类别添加标签'" class="addTag-input"></el-input>
+      <el-input
+        v-model="newTag"
+        :placeholder="'向'+this.tagCategorie+'类别添加标签'"
+        class="addTag-input"
+        @keyup.enter.native="addTag()"
+      ></el-input>
       <el-select v-model="language" placeholder="请选择语言" size="small" class="addTag-select">
         <el-option
           v-for="item in languagesList"
@@ -105,6 +114,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'CHS')"
+                  v-if="tagEdit[props.$index].languages.CHS!=tagData[props.$index].languages.CHS"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -127,6 +137,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'CHT')"
+                  v-if="tagEdit[props.$index].languages.CHT!=tagData[props.$index].languages.CHT"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -149,6 +160,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'JPN')"
+                  v-if="tagEdit[props.$index].languages.JPN!=tagData[props.$index].languages.JPN"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -171,6 +183,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'ENG')"
+                  v-if="tagEdit[props.$index].languages.ENG!=tagData[props.$index].languages.ENG"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -193,6 +206,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'KOR')"
+                  v-if="tagEdit[props.$index].languages.KOR!=tagData[props.$index].languages.KOR"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -215,6 +229,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'CSY')"
+                  v-if="tagEdit[props.$index].languages.CSY!=tagData[props.$index].languages.CSY"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -237,6 +252,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'NLD')"
+                  v-if="tagEdit[props.$index].languages.NLD!=tagData[props.$index].languages.NLD"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -259,6 +275,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'FRA')"
+                  v-if="tagEdit[props.$index].languages.FRA!=tagData[props.$index].languages.FRA"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -281,6 +298,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'DEU')"
+                  v-if="tagEdit[props.$index].languages.DEU!=tagData[props.$index].languages.DEU"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -303,6 +321,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'HUN')"
+                  v-if="tagEdit[props.$index].languages.HUN!=tagData[props.$index].languages.HUN"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -325,6 +344,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'ITA')"
+                  v-if="tagEdit[props.$index].languages.ITA!=tagData[props.$index].languages.ITA"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -347,6 +367,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'PLK')"
+                  v-if="tagEdit[props.$index].languages.PLK!=tagData[props.$index].languages.PLK"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -369,6 +390,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'PTB')"
+                  v-if="tagEdit[props.$index].languages.PTB!=tagData[props.$index].languages.PTB"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -391,6 +413,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'ROM')"
+                  v-if="tagEdit[props.$index].languages.ROM!=tagData[props.$index].languages.ROM"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -413,6 +436,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'RUS')"
+                  v-if="tagEdit[props.$index].languages.RUS!=tagData[props.$index].languages.RUS"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -435,6 +459,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'ESP')"
+                  v-if="tagEdit[props.$index].languages.ESP!=tagData[props.$index].languages.ESP"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -457,6 +482,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'TRK')"
+                  v-if="tagEdit[props.$index].languages.TRK!=tagData[props.$index].languages.TRK"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -479,6 +505,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'VIN')"
+                  v-if="tagEdit[props.$index].languages.VIN!=tagData[props.$index].languages.VIN"
                 >确认</el-button>
               </el-col>
             </el-row>
@@ -504,6 +531,7 @@
                   round
                   class="confirmChange"
                   @click="confirmAliasChange(props.$index, i)"
+                  v-if="tagEdit[props.$index].alias[i]!=tagData[props.$index].alias[i]"
                 >确认</el-button>
                 <el-button
                   type="danger"
@@ -1318,6 +1346,7 @@ export default {
 }
 .languageSuppot {
   margin-left: 150px;
+  margin-top: 5px;
   font-size: 17px;
 }
 .el-row {
@@ -1346,6 +1375,13 @@ export default {
 }
 /* 针对类别调整颜色 */
 .Copyright {
+  /* font-size: 13px;
+  background-color: rgb(170, 0, 170);
+  color: #ffffff;
+  cursor: pointer;
+  border: 2px solid;
+  padding: 4px;
+  border-radius: 25px; */
   color: #a0a;
   cursor: pointer;
 }

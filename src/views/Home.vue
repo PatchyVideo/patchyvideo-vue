@@ -35,6 +35,8 @@
       1.去除了一些冗余的代码（pagechange()及其调用）
     1/27/2020：v1.0.9
       1.显示搜索结果的标签数量进行了优化
+    1/29/2020：v1.0.10
+      1.对搜索关键字出现非法字符的情况进行了兼容
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
 -->
@@ -145,7 +147,9 @@ export default {
       //搜索关键字
       searchKeyWord: "",
       //是否渲染的是搜索的数据，默认false为主页数据
-      ifSearch: false
+      ifSearch: false,
+      // 判断是否执行查询,有时候页面会进行多次查询浪费资源
+      ifQuest: true
     };
   },
   created() {
@@ -227,7 +231,13 @@ export default {
     },
     // 请求搜索结果列表
     getSearchData: function(e, count, str) {
+      // 如果不需要查询则不查询直接返回
+      if (!this.ifQuest) {
+        this.ifQuest = true;
+        return;
+      }
       this.loading = true;
+      this.$store.commit("getTopNavbarSearching", this.searchKeyWord);
       this.axios({
         method: "post",
         url: "be/queryvideo.do",
@@ -238,34 +248,43 @@ export default {
           query: str
         }
       }).then(result => {
-        this.maxcount = result.data.data.count;
-        //取得总页数制作分页
-        this.maxpage = Math.ceil(result.data.data.count / count);
-        this.listvideo = result.data.data.videos;
-        this.tags = result.data.data.tags;
-        this.count2 = result.data.data.videos.length;
-        this.$store.commit("getTopNavbarSearching", this.searchKeyWord);
-        //当前页数大于搜索Tag页数时需要重新请求正确的页数数据,现暂时无用注释掉待观察
-        if (0) {
-          // if (result.data.data.videos.length == 0) {
-          //   this.axios({
-          //     method: "post",
-          //     url: "be/queryvideo.do",
-          //     data: {
-          //       page: this.maxpage,
-          //       page_size: 20,
-          //       order: this.couponSelected,
-          //       query: str
-          //     }
-          //   }).then(res => {
-          //     this.maxcount = res.data.data.count;
-          //     //取得总页数制作分页
-          //     this.maxpage = Math.ceil(res.data.data.count / count);
-          //     this.listvideo = res.data.data.videos;
-          //     this.tags = res.data.data.tags;
-          //     this.loading = false;
-          //   });
-          // }
+        if (result.data.status == "SUCCEED") {
+          this.maxcount = result.data.data.count;
+          //取得总页数制作分页
+          this.maxpage = Math.ceil(result.data.data.count / count);
+          this.listvideo = result.data.data.videos;
+          this.tags = result.data.data.tags;
+          this.count2 = result.data.data.videos.length;
+          //当前页数大于搜索Tag页数时需要重新请求正确的页数数据,现暂时无用注释掉待观察
+          if (0) {
+            // if (result.data.data.videos.length == 0) {
+            //   this.axios({
+            //     method: "post",
+            //     url: "be/queryvideo.do",
+            //     data: {
+            //       page: this.maxpage,
+            //       page_size: 20,
+            //       order: this.couponSelected,
+            //       query: str
+            //     }
+            //   }).then(res => {
+            //     this.maxcount = res.data.data.count;
+            //     //取得总页数制作分页
+            //     this.maxpage = Math.ceil(res.data.data.count / count);
+            //     this.listvideo = res.data.data.videos;
+            //     this.tags = res.data.data.tags;
+            //     this.loading = false;
+            //   });
+            // }
+          }
+        } else {
+          // 包含非法字符的时候
+          if (result.data.data.reason == "INCORRECT_QUERY") {
+            this.$message({
+              message: "查询语法错误！",
+              type: "error"
+            });
+          }
         }
         this.loading = false;
 
@@ -312,6 +331,7 @@ export default {
       }
     },
     ifSearch(newV, oldV) {
+      this.ifQuest = false;
       this.handleCurrentChange(1);
       //是否渲染的是搜索的数据，默认false为主页数据，清空搜索关键词
       if (newV === false) {

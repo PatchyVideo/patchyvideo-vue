@@ -17,6 +17,12 @@ export default new Vuex.Store({
     leftNavBarTitle: "标签",
     // 顶部导航条(TopNavbar)的搜索内容
     TopNavbarSearching: "",
+    // 登录界面是否是因路由拦截而跳转的标志,0表示从登录按钮跳转，1表示路由守卫拦截，2表示从其他地方跳转
+    ifRouter: 2,
+    // 如果是路由守卫拦截，这里保存下一个页面的路径
+    routerPath: "",
+    // 如果是路由守卫拦截，这里保存下一个页面的参数
+    routerparams: {},
     refreshCount: 0
   },
   mutations: {
@@ -58,6 +64,15 @@ export default new Vuex.Store({
     },
     getTopNavbarSearching(state, e) {
       state.TopNavbarSearching = e;
+    },
+    changeifRouter(state, e) {
+      state.ifRouter = e;
+    },
+    changerouterPath(state, e) {
+      state.routerPath = e;
+    },
+    changerouterparams(state, e) {
+      state.routerparams = e;
     }
   },
   actions: {},

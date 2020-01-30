@@ -19,6 +19,16 @@
       1.输入密码之后按下回车会自动登录
     1/21/2020：v1.0.5
       1.储存方式改为使用cookie进行储存
+    1/29/2020：v1.0.6
+      1.登录页面跳转逻辑更新：
+        现跳转逻辑分为三种情况：
+          ①点击顶部导航栏的情况下登录成功之后退回到上一页面
+          ②路由守卫拦截的情况下登录成功之后前进到本来应该到达但被路由守卫拦截的页面
+            现在是"/postvideo"、"/edittag"、"/users/me"、"/createVideoList"四个路径指向的页面
+            其中"/postvideo"因为可能有传入的参数所以单独进行兼容
+          ③从其他各种神奇的地方（包括且不限于从注册页面的链接，重置密码页面的跳转，甚至直接输入URL）登录成功之后跳转到home页面
+        默认为第三种情况，前两种情况在进入登录页面之前会对判断条件进行更新，然后在登录界面跳转的时候进行判断,登录成功之后立刻转回默认情况
+      2.前端cookie保存时间更新为7天(以登录那一刻算起往后7天,然后转换为世界统一时间作为cookie失效的时间)
     ★待解决问题：
       暂无
 -->
@@ -162,14 +172,29 @@ export default {
                   // 加载结束,加载动画消失
                   this.loading = false;
                   // 利用cookie储存登录状态
-                  this.setCookie(
-                    this.loginFormRef.login_name,
-                    this.loginFormRef.login_password,
-                    7
-                  );
-                  // 回到上一个页面
-                  this.$router.go(-1);
-                  /*          this.$router.push({ path: '/home'});*/
+                  this.setCookie(this.loginFormRef.login_name, 7);
+                  // 如果是从登录按钮跳转到本界面，回到上一个页面
+                  if (this.$store.state.ifRouter == 0) {
+                    this.$store.commit("changeifRouter", "2");
+                    this.$router.go(-1);
+                  }
+                  // 如果是从路由守卫跳转到本界面，进入下一个页面
+                  else if (this.$store.state.ifRouter == 1) {
+                    this.$store.commit("changeifRouter", "2");
+                    var path = this.$store.state.routerPath;
+                    var query = this.$store.state.routerparams;
+                    // 因为发布视频有参数传入的可能,所以做特别的兼容性调整
+                    if (path == "/postvideo") {
+                      this.$router.push({ path: path, query: query });
+                    } else {
+                      this.$router.push({ path: path });
+                    }
+                  }
+                  // 如果是从其他地方跳转到本界面，回到home页面
+                  else {
+                    this.$store.commit("changeifRouter", "2");
+                    this.$router.push({ path: "/home" });
+                  }
                 } else {
                   this.open3();
                 }
@@ -193,7 +218,7 @@ export default {
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); //保存的天数
       //字符串拼接cookie
       window.document.cookie =
-        "username" + ":" + username + ";path=/;expires=" + date.toGMTString();
+        "username" + ":" + username + ";path=/;expires=" + date.toUTCString();
     }
   },
   components: { signup }

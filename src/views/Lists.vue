@@ -9,9 +9,11 @@
     1/9/2020: v1.0.1
       1.解决了图片连接的问题
       2.修改了当前页面下的网站标题
+    1/30/2020：v1.0.2
+      1.加入了列表搜索排序功能
+      2.视频列表效果更新，现在视频列表每行上对齐
     ★待解决问题：
-      1.由于标题可能会超过一行导致视频列表高度变高，从而导致排版不太好看
-      2.列表排序功能（latest,oldest,last_modified）
+      暂无
 -->
 <template>
   <div>
@@ -38,9 +40,17 @@
 
         <div class="recommend">
           <!-- 排序选择框 -->
-          <div id="select-order">
-            排序方式：
-            <el-select id="select-order" v-model="couponSelected">
+          <div id="select-order" class="head">
+            <el-input
+              placeholder="搜索列表..."
+              v-model="listSearch"
+              clearable
+              class="inputbox"
+              @keyup.enter.native="searchList()"
+            >
+              <el-button slot="append" icon="el-icon-search" @click="searchList()">搜索</el-button>
+            </el-input>
+            <el-select v-model="couponSelected" class="select">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -50,7 +60,11 @@
             </el-select>
           </div>
           <!-- 视频列表列表 -->
-          <div class="videolist">
+          <div class="videolistlist">
+            <p
+              v-if="videolist.length==0"
+              style="display:inline-block;margin:0 auto;margin-top:10px;"
+            >没有搜索到视频列表</p>
             <div class="minbox shadow" v-for="item in videolist" :key="item._id.$oid">
               <!-- 视频列表标题 -->
               <div class="re_top">
@@ -126,7 +140,9 @@ export default {
         { value: "last_modified", label: "最新修改" }
       ],
       // 当前视频列表的排列顺序
-      couponSelected: ""
+      couponSelected: "",
+      // 视频列表的搜索关键字
+      listSearch: ""
     };
   },
   created() {
@@ -172,6 +188,30 @@ export default {
           $("html").animate({ scrollTop: 0 }, 100);
         }
       });
+    },
+    // 搜索列表
+    searchList() {
+      // 先使页面出于加载状态
+      this.loading = true;
+
+      // 请求数据
+      this.axios({
+        method: "post",
+        url: "be/lists/search.do",
+        data: {
+          page: this.page,
+          page_size: this.count,
+          order: this.couponSelected,
+          query: this.listSearch
+        }
+      }).then(result => {
+        this.maxcount = result.data.data.count;
+        this.maxpage = result.data.data.page_count;
+        this.videolist = result.data.data.playlists;
+
+        // 加载结束,加载动画消失
+        this.loading = false;
+      });
     }
   },
   watch: {
@@ -201,9 +241,15 @@ export default {
   flex: 1;
   background-color: #ffffffc9;
 }
-#select-order {
+.head {
   width: 100%;
   text-align: left;
+}
+.inputbox {
+  width: 300px;
+}
+.select {
+  float: right;
 }
 .main-page-background-img {
   background-image: url("./../static/img/imoto3.jpg");
@@ -241,15 +287,24 @@ export default {
 .createPlayListButton {
   width: 30%;
 }
-
+.videolistlist {
+  width: 100%;
+  text-align: left;
+  flex-wrap: wrap;
+  display: flex;
+  align-items: flex-start;
+}
 .minbox {
-  display: inline-block;
-  width: calc(50% - 50px);
+  flex: 0 0 calc(50% - 30px);
+  text-align: center;
   margin-left: 12.5px;
   margin-right: 12.5px;
-  margin-top: 40px;
+  margin-top: 30px;
 }
 .minbox:first-child {
+  margin-top: 10px;
+}
+.minbox:nth-child(2) {
   margin-top: 10px;
 }
 .minbox_creater {
