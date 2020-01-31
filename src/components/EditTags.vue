@@ -356,7 +356,7 @@ export default {
       }
     },
     getiptVal(i, item) {
-   this.iptVal = Object.keys(i)[0];
+      this.iptVal = Object.keys(i)[0];
       this.getTagCategoriesForAdd(this.iptVal);
     },
     addTag() {
