@@ -127,7 +127,7 @@ export default {
       });
       this.axios({
         method: "post",
-        url: "https://www.patchyvideo.com/postvideo_batch.do",
+        url: "be/postvideo_batch.do",
         data: {
           rank: this.rank,
           pid: this.pid,

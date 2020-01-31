@@ -281,7 +281,7 @@ export default {
       this.startlocation = startlocation;
       this.endlocation = endlocation;
 
-      var url = "https://www.patchyvideo.com/autocomplete/?q=" + query;
+      var url = "/autocomplete/?q=" + query;
       this.axios({
         method: "get",
         url: url

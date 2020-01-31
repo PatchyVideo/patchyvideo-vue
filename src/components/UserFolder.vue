@@ -138,7 +138,7 @@
         created(){
             this.axios({
                 method:"post",
-                url:"https://www.patchyvideo.com/posts/list_pending.do",
+                url:"be/posts/list_pending.do",
                 data:{"page":1,"page_size":9999}
             }).then(res=>{
                 let obj =  res.data.data;
@@ -150,7 +150,7 @@
             });
             this.axios({
                 method:"post",
-                url:"https://www.patchyvideo.com/posts/list_failed.do",
+                url:"be/posts/list_failed.do",
                 data:{"page":1,"page_size":99999}
             }).then(res=>{
                 this.failedData =   res.data.data.posts;

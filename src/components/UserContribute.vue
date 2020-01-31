@@ -38,7 +38,7 @@
                                         :to="{ path: '/video', query: { id: i._id.$oid } }"
                                         tag="a"
                                         v-for="i in videoData":key="i._id.$oid">
-                              <img   :src="'https://patchyvideo.com/images/covers/'+i.item.cover_image" alt="">
+                              <img   :src="'/images/covers/'+i.item.cover_image" alt="">
                               <h4><a href="">{{i.item.title}}</a></h4>
                           </router-link>
                       </div>
@@ -48,7 +48,7 @@
                                      :to="{ path: '/video', query: { id: i._id.$oid } }"
                                      tag="a"
                                      v-for="i in videoData":key="i._id.$oid">
-                            <img :src="'https://patchyvideo.com/images/covers/'+i.item.cover_image"  alt="">
+                            <img :src="'/images/covers/'+i.item.cover_image"  alt="">
                             <div class="list-item_content">
                                 <h4><a href="">{{i.item.title}}</a></h4>
                                 <p>{{i.item.desc}}
@@ -135,7 +135,7 @@
             getMaxCount(){
                 this.axios({
                     method:'post',
-                    url:"https://www.patchyvideo.com/listmyvideo.do",
+                    url:"be/listmyvideo.do",
                     withCredentials:true,        //携带cookie当配置了 withCredentials = true时，必须在后端增加 response 头信息Access-Control-Allow-Origin，且必须指定域名，而不能指定为*
                     async:true,
                     data:{
@@ -153,7 +153,7 @@
                 if(this.$route.params.id=='me'){
                     this.axios({
                         method:'post',
-                        url:"https://www.patchyvideo.com/listmyvideo.do",
+                        url:"be/listmyvideo.do",
                         withCredentials:true,        //携带cookie当配置了 withCredentials = true时，必须在后端增加 response 头信息Access-Control-Allow-Origin，且必须指定域名，而不能指定为*
                         async:true,
                         data:{
@@ -176,7 +176,7 @@
                     console.log(this.$route.params.id);
                     this.axios({
                         method:'post',
-                        url:"https://www.patchyvideo.com/listyourvideo.do",
+                        url:"be/listyourvideo.do",
                         data:{
                             "page":e,
                             "page_size":count,
@@ -207,7 +207,7 @@
                 this.axios({
                     async:true,
                     method: 'post',
-                    url:'https://www.patchyvideo.com/tags/query_tag_categories.do',
+                    url:'be/tags/query_tag_categories.do',
                     data:{
                         "tags":Aarryname
                     }

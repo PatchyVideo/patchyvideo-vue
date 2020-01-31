@@ -16,7 +16,7 @@
            setCover(){
                 this.axios({
                     method:"post",
-                    url:"https://www.patchyvideo.com/list/setcover.do",
+                    url:"be/list/setcover.do",
                     data:this.msg
                 }).then(res=>{
                     if(res.data.status=="SUCCEED"){

@@ -53,7 +53,7 @@
           <!-- 视频详细信息 -->
           <div class="re_video">
             <img
-              :src="'https://patchyvideo.com/images/covers/'+myVideoData.video.item.cover_image"
+              :src="'/images/covers/'+myVideoData.video.item.cover_image"
               width="320px"
               height="200px"
             />
@@ -256,7 +256,7 @@ export default {
     newFromSingleVideo() {
       this.axios({
         method: "post",
-        url: "https://www.patchyvideo.com/lists/newfromsinglevideo.do",
+        url: "be/lists/newfromsinglevideo.do",
         data: { vid: this.pid }
       })
         .then(res => {})
@@ -267,7 +267,7 @@ export default {
     breaklink() {
       this.axios({
         method: "post",
-        url: "https://www.patchyvideo.com/videos/breaklink.do",
+        url: "be/videos/breaklink.do",
         data: { video_id: this.pid }
       }).then(res => {
         this.$router.go(0);
@@ -276,7 +276,7 @@ export default {
     broadcastTags() {
       this.axios({
         method: "post",
-        url: "https://www.patchyvideo.com/videos/broadcasttags.do",
+        url: "be/videos/broadcasttags.do",
         data: { src: this.pid }
       }).then(res => {
         this.open2();
@@ -330,7 +330,7 @@ export default {
       // 直接向后端请求视频数据
       this.axios({
         method: "post",
-        url: "https://www.patchyvideo.com/getvideo.do",
+        url: "be/getvideo.do",
         data: { vid: this.$route.query.id }
       }).then(result => {
         this.myVideoData = result.data.data;

@@ -27,7 +27,7 @@
                 console.log(this.msg);
                  this.axios({
                       method:"post",
-                      url:"https://www.patchyvideo.com/list/moveup.do",
+                      url:"be/list/moveup.do",
                       data:this.msg
                   }).then(res=>{
                      if(res.data.status=="SUCCEED"){
@@ -44,7 +44,7 @@
             moveDown(){
                 this.axios({
                     method:"post",
-                    url:"https://www.patchyvideo.com/list/movedown.do",
+                    url:"be/list/movedown.do",
                     data:this.msg
                 }).then(res=>{
                     if(res.data.status=="SUCCEED"){

@@ -127,7 +127,7 @@ Vue.prototype.$echarts = echarts;
             isUidNull(){
              this.axios({
                     method:'post',
-                    url:'https://www.patchyvideo.com/user/profile.do',
+                    url:'be/user/profile.do',
                     data:{"uid":this.$route.params.id}
                 }).then(res=>{
                     if(res.data.status=="FAILED"){

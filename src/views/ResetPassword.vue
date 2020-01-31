@@ -114,7 +114,7 @@ export default {
         if (valid) {
           this.axios({
             method: "post",
-            url: "https://www.patchyvideo.com/user/resetpass.do",
+            url: "be/user/resetpass.do",
             data: {
               reset_key: this.reset_key,
               new_pass: this.FormRef.password1

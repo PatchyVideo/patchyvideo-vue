@@ -101,7 +101,7 @@ export default {
     var checkUsername = (rule, value, callback) => {
       this.axios({
         method: "post",
-        url: "https://www.patchyvideo.com/user/exists.do",
+        url: "be/user/exists.do",
         data: {
           username: value
         }
@@ -196,7 +196,7 @@ export default {
           // 验证成功，先获取session
           this.axios({
             method: "post",
-            url: "https://www.patchyvideo.com/auth/get_session.do",
+            url: "be/auth/get_session.do",
             data: {
               type: "SIGNUP"
             }
@@ -206,7 +206,7 @@ export default {
             // 请求登录
             this.axios({
               method: "post",
-              url: "https://www.patchyvideo.com/signup.do",
+              url: "be/signup.do",
               data: {
                 username: this.signupFormRef.signup_username,
                 password: this.signupFormRef.signup_password1,

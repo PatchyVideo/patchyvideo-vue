@@ -18,7 +18,7 @@
             deleteVideo(){
                 this.axios({
                     method:"post",
-                    url:"https://www.patchyvideo.com/list/delete.do",
+                    url:"be/list/delete.do",
                     data:this.msg
                 }).then(res=>{
                     if(res.data.status=="SUCCEED"){
