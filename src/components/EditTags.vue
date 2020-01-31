@@ -25,7 +25,7 @@
   <transition mode="out-in">
     <div v-if="visible" class="EditTags" :class="{active:this.msg!=''}">
       <div id="tag">
-        <i class="fa fa-close fa-2x" id="close" @click="closeTagPanel" v-if="this.msg!=''"></i>
+        <i class="fa fa-close fa-2x" id="close" @click="closeTagPanel" v-if="this.$route.path != '/postvideo'"></i>
         <div class="minibox">
           <div class="m_bg"></div>
           <div class="m_a activeTag">
