@@ -339,7 +339,8 @@ export default {
       }
     },
     getiptVal(i, item) {
-      this.iptVal = Object.keys(i)[0];
+   this.iptVal = Object.keys(i)[0];
+      this.getTagCategoriesForAdd(this.iptVal);
     },
     addTag() {
       //方案二,所有操作都在函数的成功和失败回调中进行，代码冗余
