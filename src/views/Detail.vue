@@ -17,7 +17,9 @@
       1.当视频为视频列表第一个或最后一个的时候对“【前一篇】”，“【后一篇】”按钮进行优化
       2.加入了副本链接前对应副本指向网站的小图标
     1/20/2020：v1.1.2
-      新增添加副本 删除副本 由此创建播放列表功能，除了添加副本和删除副本能正常使用外，其余接口暂不支持
+      1.新增添加副本 删除副本 由此创建播放列表功能，除了添加副本和删除副本能正常使用外，其余接口暂不支持
+    1/30/2020：v1.1.3
+      1.新增对于视频标签编辑功能的兼容
     ★待解决问题：
       1.视频介绍里的链接功能尚未实现 
       2.按下浏览器的后退按钮网站没有刷新数据
@@ -287,6 +289,7 @@ export default {
     },
     // 查询视频详细信息
     searchVideo: function() {
+      this.loading = true;
       // vuex存储:(已被弃用)
       while (0) {
         // for (let j = 0; j < this.$store.state.videoObj.length; j++) {
@@ -335,6 +338,8 @@ export default {
         // 修改网站标题
         document.title = this.myVideoData.video.item.title;
         this.pid = this.myVideoData.video._id.$oid;
+        // 视频pid储存到vuex中
+        this.$store.commit("setVideoPid", this.myVideoData.video._id.$oid);
         // 加载结束,加载动画消失
         this.loading = false;
       });
