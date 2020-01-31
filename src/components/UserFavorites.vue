@@ -109,7 +109,7 @@
                         url:'be/lists/myplaylists',
                         data:{
                             "page":1,
-                            "page_size":9999999, //无法确认视频总个数,第一次请求仅为获取视频总个数
+                            "page_size":1, //无法确认视频总个数,第一次请求仅为获取视频总个数
                             "order":this.couponSelected
                         },
                         withCredentials:true,
@@ -177,6 +177,7 @@
                 this. getVideoMaxCount();
             },
             page(v) {
+                this.loading = true;
                 this.getVideoData(this.page, this.count);
             },
             count(v) {

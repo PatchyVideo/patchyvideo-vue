@@ -140,7 +140,7 @@
                     async:true,
                     data:{
                         "page":1,
-                        "page_size":9999999
+                        "page_size":1
                     }
                 }).then(res=>{
                     this.videoCount =res.data.data.count; //获取总的视频个数制作分页后开始第二次请求获取当前页面的数据
