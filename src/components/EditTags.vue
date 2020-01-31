@@ -236,7 +236,7 @@ export default {
       if (this.$route.path === "/listdetail") {
         this.axios({
           method: "post",
-          url: "be/list/getcommontags.do",
+          url: "https://www.patchyvideo.com/list/getcommontags.do",
           data: { pid: this.msg }
         })
           .then(res => {
@@ -250,7 +250,7 @@ export default {
       if (this.$route.path == "/video" || this.$route.path === "/postvideo") {
         this.axios({
           method: "post",
-          url: "be/videos/gettags.do",
+          url: "https://www.patchyvideo.com/videos/gettags.do",
           data: { video_id: this.msg }
         })
           .then(res => {
@@ -266,7 +266,7 @@ export default {
     getTagCategories(str) {
       this.axios({
         method: "post",
-        url: "be/tags/query_tag_categories.do ",
+        url: "https://www.patchyvideo.com/tags/query_tag_categories.do ",
         data: { tags: str }
       })
         .then(res => {
@@ -285,7 +285,7 @@ export default {
       let _that = this;
       this.axios({
         method: "post",
-        url: "be/tags/query_tag_categories.do ",
+        url: "https://www.patchyvideo.com/tags/query_tag_categories.do ",
         data: { tags: strToArray }
       })
         .then(res => {
@@ -315,7 +315,7 @@ export default {
     getRecTags(tags) {
       this.axios({
         method: "post",
-        url: "be/tags/get_related_tags.do",
+        url: "https://www.patchyvideo.com/tags/get_related_tags.do",
         data: { tags: tags }
       })
         .then(res => {
@@ -407,7 +407,7 @@ export default {
       else if (this.$route.path === "/video") {
         this.axios({
           method: "post",
-          url: "be/videos/edittags.do",
+          url: "https://www.patchyvideo.com/videos/edittags.do",
           data: { video_id: this.msg, tags: this.tags }
         }).then(res => {
           this.open5();
@@ -418,7 +418,7 @@ export default {
       else {
         this.axios({
           method: "post",
-          url: "be/list/setcommontags.do",
+          url: "https://www.patchyvideo.com/list/setcommontags.do",
           data: { pid: this.msg, tags: this.tags }
         }).then(res => {
           this.open5();
@@ -442,7 +442,7 @@ export default {
     },
     // 下面是消息补全框的方法
     querySearchAsync(queryString, cb) {
-      var url = "/autocomplete/?q=" + queryString;
+      var url = "https://www.patchyvideo.com/autocomplete/?q=" + queryString;
       this.axios({
         method: "get",
         url: url

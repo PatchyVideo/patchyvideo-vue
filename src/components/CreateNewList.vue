@@ -91,7 +91,7 @@ export default {
         if (valid) {
           this.axios({
             method: "post",
-            url: "be/lists/new.do",
+            url: "https://www.patchyvideo.com/lists/new.do",
             data: {
               title: this.list.title,
               desc: this.list.desc,

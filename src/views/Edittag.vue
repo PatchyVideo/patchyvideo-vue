@@ -64,7 +64,7 @@ export default {
       this.loading = true;
       this.axios({
         method: "post",
-        url: "be/tags/query_categories.do",
+        url: "https://www.patchyvideo.com/tags/query_categories.do",
         data: {}
       }).then(result => {
         var categories = result.data.data.categories;

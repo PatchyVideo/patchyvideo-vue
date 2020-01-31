@@ -79,7 +79,7 @@
               </div>
               <!-- 视频列表详情 -->
               <div class="re_video">
-                <img :src="'/images/covers/'+item.cover" />
+                <img :src="'https://patchyvideo.com/images/covers/'+item.cover" />
                 <div class="re_video_desc">
                   <p>
                     <strong>{{ item.desc.english }}</strong>
@@ -172,7 +172,7 @@ export default {
       // 请求数据
       this.axios({
         method: "post",
-        url: "be/lists/all.do",
+        url: "https://www.patchyvideo.com/lists/all.do",
         data: { page: e, page_size: count, order: this.couponSelected }
       }).then(result => {
         this.maxcount = result.data.data.count;
@@ -197,7 +197,7 @@ export default {
       // 请求数据
       this.axios({
         method: "post",
-        url: "be/lists/search.do",
+        url: "https://www.patchyvideo.com/lists/search.do",
         data: {
           page: this.page,
           page_size: this.count,

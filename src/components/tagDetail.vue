@@ -928,7 +928,7 @@ export default {
       this.loading = true;
       this.axios({
         method: "post",
-        url: "be/tags/query_categories.do",
+        url: "https://www.patchyvideo.com/tags/query_categories.do",
         data: {}
       }).then(result => {
         var categories = result.data.data.categories;
@@ -943,7 +943,7 @@ export default {
       this.loading = true;
       this.axios({
         method: "post",
-        url: "be/tags/query_tags.do",
+        url: "https://www.patchyvideo.com/tags/query_tags.do",
         data: {
           category: this.tagCategorie,
           order: this.couponSelected,
@@ -997,7 +997,7 @@ export default {
       }
       this.axios({
         method: "post",
-        url: "be/tags/add_tag.do",
+        url: "https://www.patchyvideo.com/tags/add_tag.do",
         data: {
           tag: tag,
           category: category,
@@ -1044,7 +1044,7 @@ export default {
       }
       this.axios({
         method: "post",
-        url: "be/tags/add_tag_language.do",
+        url: "https://www.patchyvideo.com/tags/add_tag_language.do",
         data: {
           tag: tag,
           new_tag: new_tag,
@@ -1088,7 +1088,7 @@ export default {
       this.loading = true;
       this.axios({
         method: "post",
-        url: "be/tags/add_alias.do",
+        url: "https://www.patchyvideo.com/tags/add_alias.do",
         data: {
           tag: tag,
           new_tag: new_tag
@@ -1123,7 +1123,7 @@ export default {
           this.loading = true;
           this.axios({
             method: "post",
-            url: "be/tags/remove_tag.do",
+            url: "https://www.patchyvideo.com/tags/remove_tag.do",
             data: {
               tag: tag
             },
@@ -1159,7 +1159,7 @@ export default {
           this.loading = true;
           this.axios({
             method: "post",
-            url: "be/tags/remove_alias.do",
+            url: "https://www.patchyvideo.com/tags/remove_alias.do",
             data: {
               alias: alias
             }
@@ -1193,7 +1193,7 @@ export default {
       }
       this.axios({
         method: "post",
-        url: "be/tags/rename_tag.do",
+        url: "https://www.patchyvideo.com/tags/rename_tag.do",
         data: {
           tag: tag,
           new_tag: new_tag,
@@ -1222,7 +1222,7 @@ export default {
       }
       this.axios({
         method: "post",
-        url: "be/tags/rename_alias.do",
+        url: "https://www.patchyvideo.com/tags/rename_alias.do",
         data: {
           tag: tag,
           new_tag: new_tag
@@ -1250,7 +1250,7 @@ export default {
       this.loading = true;
       this.axios({
         method: "post",
-        url: "be/tags/transfer_category.do",
+        url: "https://www.patchyvideo.com/tags/transfer_category.do",
         data: {
           tag: tag,
           category: category

@@ -422,7 +422,7 @@ export default {
         });
       else header = JSON.stringify({ "User-Agent": user_agent });
       header = encodeURI(header);
-      return `/be/proxy?url=${url}&header=${header}`;
+      return `https://www.patchyvideo.com/proxy?url=${url}&header=${header}`;
     },
     // 请求URL页面数据
     downloadPage(url, success, error = null, complete = null) {
@@ -470,7 +470,7 @@ export default {
       this.loading = true;
       this.axios({
         method: "post",
-        url: "be/postvideo.do",
+        url: "https://www.patchyvideo.com/postvideo.do",
         data: {
           rank: this.rank,
           pid: this.pid,

@@ -52,7 +52,7 @@ export default {
         if (valid) {
           this.axios({
             method: "post",
-            url: "be/lists/create_from_existing_playlists.do",
+            url: "https://www.patchyvideo.com/lists/create_from_existing_playlists.do",
             data: {
               URL: this.list.URL
             }

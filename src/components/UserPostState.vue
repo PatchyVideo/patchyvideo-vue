@@ -29,7 +29,7 @@
         created(){
           this.axios({
               method:"post",
-              url:"be/posts/list_pending.do",
+              url:"https://www.patchyvideo.com/posts/list_pending.do",
               data:{"page":1,"page_size":9999}
           }).then(res=>{
               console.log("待处理的投稿");
@@ -37,7 +37,7 @@
           });
             this.axios({
                 method:"post",
-                url:"be/posts/list_failed.do",
+                url:"https://www.patchyvideo.com/posts/list_failed.do",
                 data:{"page":1,"page_size":99999}
             }).then(res=>{
                 console.log("失败的投稿");

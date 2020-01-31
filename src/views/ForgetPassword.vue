@@ -80,7 +80,7 @@ export default {
         if (valid) {
           this.axios({
             method: "post",
-            url: "be/user/request_resetpass.do",
+            url: "https://www.patchyvideo.com/user/request_resetpass.do",
             data: {
               email: this.FormRef.email
             }

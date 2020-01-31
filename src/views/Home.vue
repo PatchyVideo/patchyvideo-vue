@@ -67,8 +67,12 @@
         <ul>
           <li class="list-item" v-for="(item, index) in listvideo" :key="item._id.$oid">
             <div class="video-thumbnail">
-              <!--              src="/images/covers/f5da2d4dd9eac171d47eb1100339cbad90e4648556a2f99a.png"-->
-              <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
+              <!--              src="https://patchyvideo.com/images/covers/f5da2d4dd9eac171d47eb1100339cbad90e4648556a2f99a.png"-->
+              <img
+                :src="'https://patchyvideo.com/images/covers/'+item.item.cover_image"
+                width="200px"
+                height="125px"
+              />
             </div>
             <div class="video-detail">
               <h4>
@@ -208,7 +212,7 @@ export default {
       // 请求数据
       this.axios({
         method: "post",
-        url: "/be/listvideo.do",
+        url: "https://www.patchyvideo.com/listvideo.do",
         data: { page: e, page_size: count, order: this.couponSelected }
       }).then(result => {
         this.maxcount = result.data.data.count;
@@ -240,7 +244,7 @@ export default {
       this.$store.commit("getTopNavbarSearching", this.searchKeyWord);
       this.axios({
         method: "post",
-        url: "be/queryvideo.do",
+        url: "https://www.patchyvideo.com/queryvideo.do",
         data: {
           page: e,
           page_size: count,
@@ -260,7 +264,7 @@ export default {
             // if (result.data.data.videos.length == 0) {
             //   this.axios({
             //     method: "post",
-            //     url: "be/queryvideo.do",
+            //     url: "https://www.patchyvideo.com/queryvideo.do",
             //     data: {
             //       page: this.maxpage,
             //       page_size: 20,

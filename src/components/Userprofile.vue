@@ -189,7 +189,7 @@
             bindEmail(){
                 this.axios({
                     method:"post",
-                    url:"be/user/changeemail.do",
+                    url:"https://www.patchyvideo.com/user/changeemail.do",
                     data:{"new_email":this.myEmail+""}
                 }).then(res=>{
                     if(res.data.status==="FAILED"){
@@ -251,7 +251,7 @@
                 //可能本地判断已登录实际并没有登录而进入了user界面，这时没有数据渲染，需要让他跳回登录界面
                 this.axios({
                     method:'post',
-                    url:"/be/user/myprofile.do",
+                    url:"https://www.patchyvideo.com/user/myprofile.do",
                     data:{
                     },
                     withCredentials:true,
@@ -273,7 +273,7 @@
             getUserData(){
                 this.axios({
                     method: "post",
-                    url:"be/user/profile.do",
+                    url:"https://www.patchyvideo.com/user/profile.do",
                     data:{"uid":this.$route.params.id}
                 }).then(res=>{
                     this.userData =res.data.data.profile;
@@ -293,7 +293,7 @@
                 }
                 this.axios({
                     method:"post",
-                    url:"be/user/changedesc.do",
+                    url:"https://www.patchyvideo.com/user/changedesc.do",
                     data:{
                         "desc":this.myData.desc
                     }
@@ -307,7 +307,7 @@
 
                 this.axios({
                     method:"post",
-                    url:"be/user/changepass.do",
+                    url:"https://www.patchyvideo.com/user/changepass.do",
                     data:{
                         "old_pass": this.ruleForm.old_pass+"",
                         "new_pass": this.ruleForm.pass+""

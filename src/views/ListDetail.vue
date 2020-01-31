@@ -47,7 +47,7 @@
             <img src="../static/img/5.png" style="float:left;margin-top:50px;" />
             <img src="../static/img/1.png" style="float:right;margin-top:50px;" />
             <h2>{{ videolistName }}</h2>
-            <img :src="'/images/covers/'+videolistDetail.playlist.cover" style="min-height:200px" />
+            <img :src="'https://patchyvideo.com/images/covers/'+videolistDetail.playlist.cover" style="min-height:200px" />
             <p>{{ videolistDesc }}</p>
           </div>
           <!-- 打开Tag编辑页面 -->
@@ -72,7 +72,7 @@
                 </div>
               </div>
 
-              <img class="re_video_img" :src="'/images/covers/'+item.item.cover_image" />
+              <img class="re_video_img" :src="'https://patchyvideo.com/images/covers/'+item.item.cover_image" />
               <div class="re_video_desc">
                 <el-tooltip class="item" effect="dark" content="在此插入视频" placement="top">
                   <router-link
@@ -222,7 +222,7 @@ export default {
 
       this.axios({
         method: "post",
-        url: "be/lists/get_playlist.do",
+        url: "https://www.patchyvideo.com/lists/get_playlist.do",
         data: { page: e, page_size: count, pid: this.$route.query.id }
       }).then(result => {
         this.videolistDetail = result.data.data;
@@ -251,7 +251,7 @@ export default {
     deleteVideoList: function() {
       this.axios({
         method: "post",
-        url: `be/list/${this.videolistPid}/del`
+        url: `https://www.patchyvideo.com/list/${this.videolistPid}/del`
       }).then(res => {
         console.log(res);
       });

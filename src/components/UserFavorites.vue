@@ -37,7 +37,7 @@
                     v-for="i in myListVideoData"
                     :key="i._id.$oid"
                     tag="a" >
-                <img :src="'/images/covers/'+i.cover"  alt="">
+                <img :src="'https://patchyvideo.com/images/covers/'+i.cover"  alt="">
                 <p>{{i.desc.english}}</p>
                 <h3>{{i.title.english}}</h3>
                 <div>
@@ -106,7 +106,7 @@
                 if(this.$route.params.id=='me'){
                     this.axios({
                         method:'post',
-                        url:'be/lists/myplaylists',
+                        url:'https://www.patchyvideo.com/lists/myplaylists',
                         data:{
                             "page":1,
                             "page_size":9999999, //无法确认视频总个数,第一次请求仅为获取视频总个数
@@ -124,7 +124,7 @@
 
                     this.axios({
                         method:'post',
-                        url:"be/lists/yourplaylists",
+                        url:"https://www.patchyvideo.com/lists/yourplaylists",
                         data:{
                             "page":1,
                             "page_size":9999999,
@@ -142,7 +142,7 @@
                if(this.$route.params.id=='me'){
                     this.axios({
                         method:'post',
-                        url:'be/lists/myplaylists',
+                        url:'https://www.patchyvideo.com/lists/myplaylists',
                         data:{
                             "page":e,
                             "page_size":count,
@@ -157,7 +157,7 @@
                 if(this.$route.params.id!='me'){
                     this.axios({
                         method:'post',
-                        url:"be/lists/yourplaylists",
+                        url:"https://www.patchyvideo.com/lists/yourplaylists",
                         data:{
                             "page":e,
                             "page_size":count,
