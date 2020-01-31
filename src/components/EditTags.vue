@@ -25,7 +25,7 @@
   <transition mode="out-in">
     <div v-if="visible" class="EditTags" :class="{active:this.msg!=''}">
       <div id="tag">
-        <i class="fa fa-close fa-2x" id="close" @click="closeTagPanel" v-if="this.msg!=''"></i>
+        <i class="fa fa-close fa-2x" id="close" @click="closeTagPanel" v-if="this.$route.path != '/postvideo'"></i>
         <div class="minibox">
           <div class="m_bg"></div>
           <div class="m_a activeTag">
@@ -357,6 +357,7 @@ export default {
     },
     getiptVal(i, item) {
       this.iptVal = Object.keys(i)[0];
+      this.getTagCategoriesForAdd(this.iptVal);
     },
     addTag() {
       //方案二,所有操作都在函数的成功和失败回调中进行，代码冗余
