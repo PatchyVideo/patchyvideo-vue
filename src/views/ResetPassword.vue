@@ -46,7 +46,7 @@
 
       <!-- 登录按钮 -->
       <div class="bottom in">
-        <div @click="resetpass()" class="login in">发送邮件</div>
+        <div @click="resetpass()" class="login in">重置密码</div>
       </div>
     </div>
   </div>
