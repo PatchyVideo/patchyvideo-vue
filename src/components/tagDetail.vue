@@ -1268,8 +1268,6 @@ export default {
     },
     // 打开对话框
     openDialog(index) {
-      this.open("功能暂停中，请谅解~");
-      return false;
       this.dialogVisible = true;
       this.tagIndex = index;
     },

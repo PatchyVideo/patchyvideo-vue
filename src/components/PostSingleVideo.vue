@@ -12,6 +12,8 @@
       1.现在可以通过URL传入的参数来进一步更新上传视频的信息
     1/29/2020：v1.0.2
       1.标签编辑框在页面的位置微调
+    1/30/2020：v1.0.3
+      1.实现了从视频页面“使用标签发布视频”链接跳转到本页面的时候对于视频原本标签的填写
     ★待解决问题：
       暂无
 -->
@@ -47,7 +49,7 @@
       </el-collapse-transition>
     </div>
     <EditTags
-      :msg="noData"
+      :msg="use_tags"
       :visible.sync="showTagPanel"
       @getEditTagsData="TagShow"
       class="EditTags"
@@ -74,8 +76,6 @@ export default {
       show: false,
       // 标签页面是否打开
       showTagPanel: true,
-      // 标签页面传入的参数
-      noData: "",
       // 视频的标签数组
       tags: [],
       // 匹配短地址，用以扩展成完整地址
@@ -105,6 +105,14 @@ export default {
     copy() {
       if (this.$route.query.copy != undefined) {
         return this.$route.query.copy;
+      } else {
+        return "";
+      }
+    },
+    // 从视频详情界面传过来的视频的标签信息
+    use_tags() {
+      if (this.$route.query.use_tags != undefined) {
+        return this.$route.query.use_tags;
       } else {
         return "";
       }

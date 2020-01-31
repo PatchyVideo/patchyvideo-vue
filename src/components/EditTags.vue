@@ -5,14 +5,20 @@
      新增保存功能 TAG校验功能，功能基本已完成
     1/27/2020：v1.0.1
       1.新增标签补全功能
+    1/30/2020：v1.0.2
+      1.新增在视频详情页面修改视频标签的功能
      使用方法：
      需要父组件绑定 1.msg属性 值为视频的Pid
                     2.visible.sync属性 值为布尔值，true打开，false关闭。默认false关闭.
     ★更改内容：
-      1.HTML:新的输入框
-      2.CSS:#ipt和#add进行修改(原来的全部注释掉了),在最下方新增了css(从哪里开始已标记)
-      3.JavaScript:第265行新增一句:this.iptVal = ""(加入标签成功之后输入框清空);
-      新增方法handleSelect和querySearchAsync;新增变量taglist
+      1/28/2020：
+        1.HTML:新的输入框
+        2.CSS:#ipt和#add进行修改(原来的全部注释掉了),在最下方新增了css(从哪里开始已标记)
+        3.JavaScript:第300行新增一句:this.iptVal = ""(加入标签成功之后输入框清空);
+        新增方法handleSelect和querySearchAsync;新增变量taglist
+      1/30/2020：
+        1.JavaScript：saveTag方法修改，实现对于视频标签编辑的兼容;、
+        新增方法：open5和open6
 
 -->
 <template>
@@ -214,36 +220,47 @@ export default {
     open4() {
       this.$message.error("请输入合法的Tag!");
     },
+    open5() {
+      this.$message({
+        message: "修改成功！",
+        type: "success"
+      });
+    },
+    open6() {
+      this.$message({
+        message: "未知错误",
+        type: "error"
+      });
+    },
     getCommonTags() {
-
-      if(this.$route.path==="\/listdetail"){
+      if (this.$route.path === "/listdetail") {
         this.axios({
-          method:'post',
-          url:"be/list/getcommontags.do",
-          data:{ "pid":this.msg}
-        }).then(res=>{
-          this.tags= res.data.data;                                //原始数据
-          this.tagsForRec =  JSON.parse(JSON.stringify(this.tags)); //深拷贝，推荐Tag数据用
-          this.getTagCategories(this.tags);                       //范围转换后展示原始数据
-          this.getRecTags(this.tags);                             //获取推荐TAG
-
-        }).catch(error=>{
+          method: "post",
+          url: "be/list/getcommontags.do",
+          data: { pid: this.msg }
         })
+          .then(res => {
+            this.tags = res.data.data; //原始数据
+            this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); //深拷贝，推荐Tag数据用
+            this.getTagCategories(this.tags); //范围转换后展示原始数据
+            this.getRecTags(this.tags); //获取推荐TAG
+          })
+          .catch(error => {});
       }
-      if(this.$route.path=="\/video"||this.$route.path==="\/postvideo"){
+      if (this.$route.path == "/video" || this.$route.path === "/postvideo") {
         this.axios({
-          method:'post',
-          url:"be/videos/gettags.do",
-          data:{ "video_id":this.msg}
-        }).then(res=>{
-          console.log(res);
-          this.tags= res.data.data;                                //原始数据
-          this.tagsForRec =  JSON.parse(JSON.stringify(this.tags)); //深拷贝，推荐Tag数据用
-          this.getTagCategories(this.tags);                       //范围转换后展示原始数据
-          this.getRecTags(this.tags);                             //获取推荐TAG
-
-        }).catch(error=>{
+          method: "post",
+          url: "be/videos/gettags.do",
+          data: { video_id: this.msg }
         })
+          .then(res => {
+            console.log(res);
+            this.tags = res.data.data; //原始数据
+            this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); //深拷贝，推荐Tag数据用
+            this.getTagCategories(this.tags); //范围转换后展示原始数据
+            this.getRecTags(this.tags); //获取推荐TAG
+          })
+          .catch(error => {});
       }
     },
     getTagCategories(str) {
@@ -380,17 +397,31 @@ export default {
                       // 第一轮 Event Loop 结束 开始第二轮执行setTimeout*/
     },
     saveTag() {
-      if(/*this.msg===""*/ this.$route.path==="\/postvideo"){
+      if (/*this.msg===""*/ this.$route.path === "/postvideo") {
         //如果没有pid,则处在提交视频界面，返回给父组件tags
         this.$emit("getEditTagsData", this.tags);
         /*          this.closeTagPanel();*/
-      } else {
-        //如果有pid按照正常路线走
+      }
+      //如果有pid按照正常路线走
+      // 提交视频的标签
+      else if (this.$route.path === "/video") {
+        this.axios({
+          method: "post",
+          url: "be/videos/edittags.do",
+          data: { video_id: this.msg, tags: this.tags }
+        }).then(res => {
+          this.open5();
+          this.closeTagPanel();
+        });
+      }
+      // 提交视频列表的标签
+      else {
         this.axios({
           method: "post",
           url: "be/list/setcommontags.do",
           data: { pid: this.msg, tags: this.tags }
         }).then(res => {
+          this.open5();
           this.closeTagPanel();
         });
       }
@@ -423,6 +454,7 @@ export default {
     handleSelect(item) {
       this.iptVal = item.tag;
     }
+    // 消息提示
   },
   watch: {
     tagsForRec(newVal, oldVal) {
