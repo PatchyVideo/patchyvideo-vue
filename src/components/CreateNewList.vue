@@ -99,11 +99,21 @@ export default {
               private: this.list.private
             }
           }).then(result => {
+            console.log(result);
             this.loading = false;
+            // 提交失败的情况
             if (result.data.status == "FAILED") {
-              this.open();
-            } else {
-              this.open2();
+              this.open("列表创建失败，请重试！");
+            }
+            // 出现错误的情况
+            else if (result.data.status == "ERROR") {
+              this.$store.commit("changeifRouter", "0");
+              this.open("登录验证失败，请先登录！");
+            }
+            // 提交成功
+            else {
+              this.open2("列表创建成功！");
+              this.$router.push({ path: "/lists" });
             }
           });
         } else {
@@ -112,15 +122,15 @@ export default {
         }
       });
     },
-    open() {
+    open(message) {
       this.$message({
-        message: "列表创建失败，请重试！",
+        message: message,
         type: "error"
       });
     },
-    open2() {
+    open2(message) {
       this.$message({
-        message: "列表创建成功！",
+        message: message,
         type: "success"
       });
     }

@@ -28,7 +28,7 @@
             clearable
             placeholder="请输入账户绑定的Email"
             prefix-icon="el-icon-message"
-            @submit.native.prevent
+            @keyup.enter.native="resetpass()"
           ></el-input>
         </el-form-item>
       </el-form>

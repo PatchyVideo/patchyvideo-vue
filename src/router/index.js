@@ -1,5 +1,6 @@
 ﻿import Vue from "vue";
 import VueRouter from "vue-router";
+import error from "../views/404.vue";
 import Home from "../views/Home.vue";
 import detail from "../views/Detail.vue";
 import lists from "../views/Lists.vue";
@@ -48,10 +49,19 @@ router.push('/location').catch(err => {err})
 
 const routes = [
   {
+    path: "*",
+    redirect: "/404"
+  },
+  {
     path: "/",
     redirect() {
       return "/home";
     }
+  },
+  {
+    path: "/404",
+
+    component: error
   },
   {
     path: "/home",
