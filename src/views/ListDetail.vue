@@ -25,18 +25,47 @@
 <template>
   <div class="listDetail">
     <topnavbar />
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+
+    <!-- EditTags组件-->
+    <EditTags :msg="videolistPid" :visible.sync="showTagPanel"></EditTags>
+
+    <!-- 编辑视频列表时的对话框 -->
+    <el-dialog title="编辑视频详情" :visible.sync="openListEdit" width="40%">
+      <el-form ref="list" :model="playlist_metadata" label-width="auto" :rules="rules">
+        <!-- 标题 -->
+        <el-form-item prop="title">
+          <el-input v-model="playlist_metadata.title" placeholder="这里是列表标题"></el-input>
+        </el-form-item>
+        <!-- 简介 -->
+        <el-form-item prop="desc">
+          <el-input
+            type="textarea"
+            :autosize="{ minRows: 6}"
+            placeholder="来介绍一下自己的列表吧~"
+            v-model="playlist_metadata.desc"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-checkbox v-model="playlist_metadata.private">设为私有列表</el-checkbox>
+        </el-form-item>
+        <el-form-item class="createList">
+          <el-button type="primary" @click="onSubmit" style="width:80%" :loading="loading">确认修改</el-button>
+          <el-button
+            @click="openListEdit=false"
+            style="width:80%;margin-top:10px;margin-left:0px"
+          >取 消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <!-- 删除列表时的确认框 -->
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
       <span>确认删除吗？</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="dialogVisible = false;deleteVideoList()">确 定</el-button>
       </span>
     </el-dialog>
-
-    <!-- EditTags组件-->
-    <EditTags :msg="videolistPid" :visible.sync="showTagPanel"></EditTags>
-    <!--如果有Pid的情况下-->
-    <!--    <EditTags :msg="test" :visible.sync="showTagPanel" @getEditTagsData="editTagsData"></EditTags> 如果没有Pid的情况下 test=""  -->
 
     <!-- listdetail页面的正文 -->
     <div class="w main-page-background-img" v-loading="loading">
@@ -52,8 +81,8 @@
           </div>
           <!-- 打开Tag编辑页面 -->
           <div v-if="editable" class="edit_box">
-            <el-button type="success">添加视频</el-button>
-            <el-button type="info">编辑列表信息</el-button>
+            <el-button type="success" @click="addVideo">添加视频</el-button>
+            <el-button type="info" @click="openListEdit=true">编辑列表信息</el-button>
             <el-button type="primary" @click="openEditTags" class="EditTagsButton">编辑共有标签</el-button>
             <el-button type="danger" @click="dialogVisible = true">删除</el-button>
           </div>
@@ -146,7 +175,13 @@ import { copyToClipboard } from "../static/js/generic";
 export default {
   data() {
     return {
-      dialogVisible: false,
+      // 视频列表的元信息
+      playlist_metadata: {
+        title: "",
+        desc: "",
+        cover: "",
+        private: false
+      },
       // 视频列表的详细信息
       videolistDetail: {
         playlist: {
@@ -174,17 +209,19 @@ export default {
       videolistPid: "",
       // 视频列表是否属于加载状态的判断
       loading: true,
-      ifOpenTag: false,
+      // 打开列表详情编辑页面
+      openListEdit: false,
+      // 打开列表标签编辑页面
       showTagPanel: false,
-      test: "",
-      testSonVal: ""
-
-      /*  PlaylistItemOp:{ //移动组件所需要的数据
-        "pid":"",
-        "vid":"",
-        "page":"",
-        "page_size":""
-      }*/
+      // 打开删除列表的确认界面
+      dialogVisible: false,
+      // 编辑列表详情的校验数据
+      rules: {
+        title: [{ required: true, message: "还没输入标题呢", trigger: "blur" }],
+        desc: [
+          { required: true, message: "不来介绍一下列表吗？", trigger: "blur" }
+        ]
+      }
     };
   },
   computed: {},
@@ -199,13 +236,7 @@ export default {
     this.getVideoList(this.page, this.count);
   },
   methods: {
-    handleClose(done) {
-      this.$confirm("确认关闭？")
-        .then(_ => {
-          done();
-        })
-        .catch(_ => {});
-    },
+    // 获取插入视频需要的数据
     getInsertData(e, i) {
       let obj = {
         pid: this.videolistPid,
@@ -213,6 +244,7 @@ export default {
       };
       return obj;
     },
+    //获取移动组件所需要的数据
     PlaylistItemOp(e, i) {
       let obj = {
         //移动组件所需要的数据
@@ -242,6 +274,15 @@ export default {
         url: "be/lists/get_playlist.do",
         data: { page: e, page_size: count, pid: this.$route.query.id }
       }).then(result => {
+        // 请求失败的情况
+        if (result.data.status == "FAILED") {
+          // 列表不存在的情况,跳转到404页面
+          if (result.data.data.reason == "PLAYLIST_NOT_EXIST") {
+            this.$router.push({ path: "*" });
+          }
+        }
+        // 页面不存在的情况下
+        console.log(result);
         this.videolistDetail = result.data.data;
         // 必须是登录且发来的数据是可编辑的才渲染编辑组件
         this.editable = this.videolistDetail.editable && this.isLogin;
@@ -251,6 +292,19 @@ export default {
         this.videolistPid = this.videolistDetail.playlist._id.$oid;
         this.maxcount = result.data.data.count;
         this.maxpage = result.data.data.page_count;
+
+        // 请求单个播放列表的元数据
+        this.axios({
+          method: "post",
+          url: "be/lists/get_playlist_metadata.do",
+          data: {
+            pid: this.videolistPid
+          }
+        }).then(result => {
+          this.playlist_metadata.title =
+            result.data.data.playlist.title.english;
+          this.playlist_metadata.desc = result.data.data.playlist.desc.english;
+        });
 
         // 加载结束,加载动画消失
         this.loading = false;
@@ -266,21 +320,56 @@ export default {
     copyVideoLink: function(index) {
       copyToClipboard($("#link" + index));
     },
+    // 添加视频
+    addVideo() {
+      this.$router.push({
+        path: "./postvideo",
+        query: {
+          pid: this.videolistPid,
+          rank: 0
+        }
+      });
+    },
+    // 提交视频详情修改数据
+    onSubmit() {
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "be/lists/update_playlist_metadata.do",
+        data: {
+          pid: this.videolistPid,
+          title: this.playlist_metadata.title,
+          desc: this.playlist_metadata.desc,
+          private: this.playlist_metadata.private
+        }
+      }).then(res => {
+        this.open("提交成功！");
+        this.openListEdit = false;
+        this.getVideoList();
+      });
+    },
     //删除列表
     deleteVideoList: function() {
       this.axios({
         method: "post",
-        url: `be/list/${this.videolistPid}/del`
+        url: "be/lists/del_playlist.do",
+        data: {
+          pid: this.videolistPid
+        }
       }).then(res => {
-        console.log(res);
+        this.open("删除成功！");
+        this.$router.push({ path: "/lists" });
       });
     },
     // 打开Tag编辑页面
     openEditTags: function() {
       this.showTagPanel = true;
     },
-    editTagsData: function(data) {
-      console.log(data);
+    open(message) {
+      this.$message({
+        message: message,
+        type: "success"
+      });
     }
   },
   computed: {
@@ -537,5 +626,9 @@ export default {
 .fa-copy:hover {
   color: olive;
   cursor: pointer;
+}
+
+.createList {
+  text-align: center;
 }
 </style>
