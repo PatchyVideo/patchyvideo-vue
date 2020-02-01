@@ -23,7 +23,7 @@
     <!-- 标签列表的抬头 -->
     <div class="video-list-header">
       <p v-if="maxcount">显示 {{ count2 }} / {{ maxcount }} 个标签</p>
-      <p v-else>没有搜索到视频</p>
+      <p v-else>没有搜索到标签</p>
       <el-select id="select-order" v-model="couponSelected" class="video-list-header-el-select">
         <el-option
           v-for="item in options"

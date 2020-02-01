@@ -28,6 +28,7 @@
             clearable
             placeholder="请输入账户绑定的Email"
             prefix-icon="el-icon-message"
+            @submit.native.prevent
           ></el-input>
         </el-form-item>
       </el-form>

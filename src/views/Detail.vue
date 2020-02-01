@@ -20,6 +20,8 @@
       1.新增添加副本 删除副本 由此创建播放列表功能，除了添加副本和删除副本能正常使用外，其余接口暂不支持
     1/30/2020：v1.1.3
       1.新增对于视频标签编辑功能的兼容
+    1/31/2020：v1.1.4
+      1.新增从单个视频创建播放列表的功能
     ★待解决问题：
       1.视频介绍里的链接功能尚未实现 
       2.按下浏览器的后退按钮网站没有刷新数据
@@ -69,18 +71,31 @@
             <h2>副本</h2>
             <p v-if="myVideoData.copies == ''">
               此视频不存在副本
-              <router-link :to="{path:'./postvideo',query:{copy:this.pid}}" tag="a">
+              <router-link
+                :to="{path:'./postvideo',query:{copy:this.pid}}"
+                tag="a"
+                v-if="isLogin==true"
+              >
                 <el-button type="text">[添加副本]</el-button>
               </router-link>
             </p>
             <p v-else>
               此视频有{{ myVideoData.copies.length }}个副本
-              <router-link :to="{path:'./postvideo',query:{copy:this.pid}}" tag="a">
+              <router-link
+                :to="{path:'./postvideo',query:{copy:this.pid}}"
+                tag="a"
+                v-if="isLogin==true"
+              >
                 <el-button type="text">[添加副本]</el-button>
               </router-link>
               <!--    <a @click="breaklink()">[删除此副本] </a>-->
-              <el-button type="text" @click="dialogVisible = true;">[删除此副本]</el-button>
-              <el-button type="text" @click="broadcastTags()">[同步副本标签]</el-button>
+              <el-button type="text" @click="dialogVisible = true;" v-if="isLogin==true">[删除此副本]</el-button>
+              <el-button
+                type="text"
+                @click="broadcastTags()"
+                v-if="isLogin==true"
+                style="margin-left:0px"
+              >[同步副本标签]</el-button>
             </p>
           </div>
           <ul v-for="item in myVideoData.copies" :key="item._id.$oid">
@@ -104,11 +119,11 @@
             <h2>播放列表</h2>
             <p v-if="myVideoData.playlists == ''">
               本视频不包含于任何播放列表中
-              <el-button type="text" @click="newFromSingleVideo()">[由此视频创建播放列表]</el-button>
+              <el-button type="text" @click="newFromSingleVideo()" v-if="isLogin==true">[由此视频创建播放列表]</el-button>
             </p>
             <p v-else>
               此视频存在于{{ myVideoData.playlists.length }}个播放列表中
-              <el-button type="text" @click="newFromSingleVideo()">[由此视频创建播放列表]</el-button>
+              <el-button type="text" @click="newFromSingleVideo()" v-if="isLogin==true">[由此视频创建播放列表]</el-button>
             </p>
           </div>
           <ul v-for="item in myVideoData.playlists" :key="item._id.$oid">
@@ -215,6 +230,17 @@ export default {
         s +
         " GMT+0800"
       );
+    },
+    // 判断是否登录的标志
+    isLogin() {
+      if (
+        JSON.stringify(this.$store.state.username) != "null" &&
+        this.$store.state.username != ""
+      ) {
+        return true;
+      } else {
+        return false;
+      }
     }
   },
   created() {
@@ -234,7 +260,7 @@ export default {
         .catch(_ => {});
     },
     open1() {
-      this.$message("这是一条消息提示");
+      this.$message("列表创建成功！");
     },
     open2() {
       this.$message({
@@ -253,16 +279,16 @@ export default {
     open4() {
       this.$message.error("请输入合法的Tag!");
     },
+    // 从单个视频创建播放列表
     newFromSingleVideo() {
       this.axios({
         method: "post",
-        url: "be/lists/newfromsinglevideo.do",
+        url: "be/lists/create_from_video.do",
         data: { vid: this.pid }
-      })
-        .then(res => {})
-        .catch(err => {
-          console.log(err);
-        });
+      }).then(res => {
+        var videoPid = res.data.data;
+        this.$router.push({ path: "/listdetail", query: { id: videoPid } });
+      });
     },
     breaklink() {
       this.axios({

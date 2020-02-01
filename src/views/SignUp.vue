@@ -216,18 +216,20 @@ export default {
             }).then(result => {
               if (result.status == 200) {
                 if (result.data.status == "SUCCEED") {
-                  // 直接实现登录功能
                   this.open2();
-                  this.$store.commit(
-                    "getUserName",
-                    this.signupFormRef.signup_username
-                  );
+                  // 直接实现登录功能，现在废弃
+                  if (0) {
+                    this.$store.commit(
+                      "getUserName",
+                      this.signupFormRef.signup_username
+                    );
+                    // 利用cookie储存登录状态
+                    this.setCookie(this.loginFormRef.login_name, 7);
+                  }
                   // 加载结束,加载动画消失
                   this.loading = false;
-                  // 利用cookie储存登录状态
-                  this.setCookie(this.loginFormRef.login_name, 7);
-
-                  this.$router.push("/home");
+                  // 退回到登录界面
+                  this.$router.push("/login");
                 }
                 // 用户名已存在的情况
                 else {
