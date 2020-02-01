@@ -25,7 +25,7 @@
   <transition mode="out-in">
     <div v-if="visible" class="EditTags" :class="{active:this.msg!=''}">
       <div id="tag">
-        <i class="fa fa-close fa-2x" id="close" @click="closeTagPanel" v-if="this.$route.path != '/postvideo'"></i>
+        <i class="el-icon-close" id="close" @click="closeTagPanel" v-if="this.$route.path != '/postvideo'"></i>
         <div class="minibox">
           <div class="m_bg"></div>
           <div class="m_a activeTag">
@@ -39,7 +39,7 @@
                 @click.stop="selected(i,item)"
               >
                 <p class="val_${str[i]}">{{item}}</p>
-                <i class="fa fa-close" @click.stop="deleteObj(i,item)"></i>
+                <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i>
               </li>
             </ul>
             <ul class="Taglist Language">
@@ -52,7 +52,7 @@
                 @click.stop="selected(i,item)"
               >
                 <p class="val_${str[i]}">{{item}}</p>
-                <i class="fa fa-close" @click.stop="deleteObj(i,item)"></i>
+                <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i>
               </li>
             </ul>
             <ul class="Taglist Character">
@@ -65,7 +65,7 @@
                 @click.stop="selected(i,item)"
               >
                 <p class="val_${str[i]}">{{item}}</p>
-                <i class="fa fa-close" @click.stop="deleteObj(i,item)"></i>
+                <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i>
               </li>
             </ul>
             <ul class="Taglist General">
@@ -78,7 +78,7 @@
                 @click.stop="selected(i,item)"
               >
                 <p class="val_${str[i]}">{{item}}</p>
-                <i class="fa fa-close" @click.stop="deleteObj(i,item)"></i>
+                <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i>
               </li>
             </ul>
             <ul class="Taglist Meta">
@@ -91,7 +91,7 @@
                 @click.stop="selected(i,item)"
               >
                 <p class="val_${str[i]}">{{item}}</p>
-                <i class="fa fa-close" @click.stop="deleteObj(i,item)"></i>
+                <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i>
               </li>
             </ul>
             <ul class="Taglist Author">
@@ -104,7 +104,7 @@
                 @click.stop="selected(i,item)"
               >
                 <p class="val_${str[i]}">{{item}}</p>
-                <i class="fa fa-close" @click.stop="deleteObj(i,item)"></i>
+                <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i>
               </li>
             </ul>
           </div>
@@ -145,8 +145,9 @@
                     </div>
                   </template>
                 </el-autocomplete>
+                <i class="el-icon-plus" id="add" @click="addTag"></i>
               </div>
-              <i class="fa fa-plus-square fa-2x" id="add" @click="addTag"></i>
+
             </div>
             <span class="tag_title infoTip_1" :class="{hidden:infoTip[0].isHidden}">编辑共有标签</span>
             <span class="tag_title infoTip_2" :class="{show:infoTip[1].isHidden}">标签已存在</span>
@@ -159,14 +160,14 @@
                 <ul class="recTag Taglist" v-show="recTagsWatch">
                   <li class="item" v-for="(i,item) in recTags" @click="getiptVal(i,item)">
                     <p class="val_${str[i]}">{{Object.keys(i)[0]}}</p>
-                    <i class="fa fa-close"></i>
+         <!--           <i class="el-icon-close"></i>-->
                   </li>
                 </ul>
               </transition>
             </div>
           </div>
         </div>
-        <i class="fa fa-circle-o fa-3x" id="save" @click="saveTag()"></i>
+        <i class="el-icon-refresh" id="save" @click="saveTag()"></i>
       </div>
     </div>
   </transition>
@@ -506,6 +507,12 @@ export default {
     "Hiragino Sans GB", "STHeiti", "WenQuanYi Micro Hei", "SimSun", sans-serif;
 }
 
+i{
+  font-size: 19px;
+  &:hover{
+    color: #1B9AF7;
+  }
+}
 div {
   transition: all 0.6s ease;
 }
@@ -552,11 +559,15 @@ div {
 
     #close {
       position: absolute;
+      font-size: 36px;
       right: 5px;
       transform: translateX(-50%);
       top: 5px;
       color: #265778;
       z-index: 999;
+      &:hover{
+        color: #1B9AF7;
+      }
     }
     .minibox {
       display: block;
@@ -654,14 +665,12 @@ div {
           /*              perspective: 500px; */
           box-sizing: border-box;
           #ipt {
-            width: 30%;
-            height: 30%;
             outline: none;
             border: none;
             position: absolute;
-            left: 31%;
+            left: 50%;
             top: 30%;
-            transform: translateY(-50%);
+            transform: translate(-50%,-50%);
             transition: all 0.6s ease;
 
             // width: 30%;
@@ -676,14 +685,17 @@ div {
             // transform-origin: left top !important;
           }
           #add {
-            position: absolute;
-            left: 61%;
-            top: 20%;
+
+            display: inline-block;
+            background: rgba(255,255,255,0.9);
+            border: 1px solid #DCDFE6;
+            border-left: none;
+            color: black;
+            font-size: 36px;
             transition: all 0.3s ease;
             margin: 0;
             padding: 0;
-            vertical-align: center;
-            color: white;
+            transform: translateY(24%);
 
             // transition: all 0.3s ease;
             // transform: translateY(60%);
@@ -692,7 +704,8 @@ div {
             // vertical-align: center;
             // color: white;
             &:hover {
-              color: black;
+              background: rgba(0,0,0,0.6);
+              color: white;
             }
           }
         }
@@ -773,8 +786,9 @@ div {
     }
     #save {
       position: absolute;
-      bottom: 20px;
+      bottom: 38px;
       left: 50%;
+      font-size: 40px;
       transform: translateX(-50%);
       transition: all 0.3s ease;
       color: #265778;

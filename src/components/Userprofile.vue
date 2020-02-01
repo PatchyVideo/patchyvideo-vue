@@ -20,9 +20,45 @@
 <template>
 
     <div>
+
         <div class="bigbox standard" v-if="this.$route.params.id=='me'"   v-loading="loading">
-            <div class="bigbox_left"></div>
-            <div class="bigbox_left" id="imoto2"></div>
+
+            <div class="bigbox_left">
+
+                <div class="left-content">
+
+                    <div class="wave ripple danger">
+                        <div class="circle"  :class="{animeActive1:mounseMark}"></div>
+                        <div class="circle"  :class="{animeActive2:mounseMark}"></div>
+                        <div class="circle"  :class="{animeActive3:mounseMark}"></div>
+                    </div>
+                    <div class="face" @mouseover="faceMouseOver(true)" @mouseleave="faceMouseOver(false)">
+                        <label for="file">
+
+                            <img :src="'be/images/userphotos/'+myData.image" alt="">
+                        </label>
+
+                    </div>
+
+                    <p>当前头像</p>
+                    <p>选择图片上传：大小256 * 256像素</p>
+                    <form   action="/be/helper/upload_image.do"
+                            method="post"
+                            accept-charset="utf-8"
+                            enctype="multipart/form-data"
+                            id="form1"
+                            @submit.prevent="sub"
+                    >
+                        <input id="type" name="type" type="text" value="userphoto" v-show="false">
+                        <input  id="file" name="file" type="file" tag="input">
+                        <el-input type="submit" value="上传"></el-input>
+                    </form>
+                </div>
+            </div>
+
+            <div class="bigbox_left" id="imoto2">
+
+            </div>
             <div class="bigbox_right">
                 <div class="desc">
                     <div class="desc_name">{{myData.username}}</div>
@@ -76,9 +112,15 @@
 
         </div>
         <div class="bigbox standard" v-if="this.$route.params.id!='me'"   v-loading="loading">
-            <div class="bigbox_left"></div>
-            <div class="bigbox_left" id="imoto2"></div>
+
+            <div class="bigbox_left" :class="{bg:this.$route.params.id!='me'}">
+
+            </div>
             <div class="bigbox_right">
+                <div class="face2">
+                    <div class="pulse"></div>
+                    <img :src="'be/images/userphotos/'+userData.image" alt="">
+                </div>
                 <div class="desc">
                     <div class="desc_name">{{userData.username}}</div>
                     <div class="text-form">
@@ -157,9 +199,10 @@
                     ]
                 },
 
-
+                file_key:"",
                 myEmail:"",
                 myData:{
+                    image: "null",
                     username: "null",
                     desc:"null"
                 },
@@ -170,6 +213,7 @@
                     pubkey: "null",
                     username: "null",
                 },
+                mounseMark:false,
                 loading:true
             }
         },
@@ -185,7 +229,54 @@
             console.log(this.$route);
 
         },
+        mounted(){
+
+        },
         methods: {
+            faceMouseOver(b){
+                this.mounseMark=b;
+                },
+            sub(){
+                this.loading=true;
+                var formObj = new FormData(document.getElementById("form1"));
+                console.log(formObj);
+                this.axios({
+                    method:'post',
+                    url:'be/helper/upload_image.do',
+                    data:formObj,
+                    processData:false,
+                    contentType:false
+                }).then(res=>{
+                    console.log(res);
+                    console.log(res.data.data.file_key);
+                    if (res.data.status=="SUCCEED"){
+                        this.file_key = res.data.data.file_key;
+                        this.axios({
+                            method:'post',
+                            url:"be/user/changephoto.do",
+                            data:{"file_key":this.file_key}
+                        }).then(res=>{
+                            this.getMyData();
+                            console.log(res);
+                            this.loading=false;
+                            this.$message({
+                                message: '上传成功！',
+                                type: 'success'
+                            })
+                        })
+
+                    }
+                    else {
+                        this.$message.error('请选择要上传的头像!');
+                        this.loading=false;
+                    }
+
+                }).catch(err=>{
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                    this.loading=false;
+                    console.log(err);
+                })
+            },
             bindEmail(){
                 this.axios({
                     method:"post",
@@ -328,13 +419,208 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+
+
+
+    .wave {
+        position: absolute;
+        transform: translate(-18%,-18%);
+        width: 400px ;
+        height: 400px;
+        text-align: center;
+        line-height: 100px;
+        font-size: 28px;
+    }
+    .wave .circle {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0;
+    }
+
+    /* 波纹效果 */
+    .wave.ripple .circle {
+        width: calc(100% - 6px); /* 减去边框的大小 */
+        height: calc(100% - 6px);/* 减去边框的大小 */
+        border: 3px solid #fff;
+    }
+
+    .animeActive1{
+        animation: circle-opacity 2s infinite;
+    }
+    .animeActive2{
+        animation: circle-opacity 2s infinite;
+        animation-delay: .3s;
+    }
+    .animeActive3{
+        animation: circle-opacity 2s infinite;
+        animation-delay: .6s;
+    }
+
+
+    .wave.ripple.danger {
+        color: red;
+    }
+
+    .wave.ripple.danger .circle {
+        border-color: red;
+    }
+
+    .wave.ripple.warning {
+        color: orange;
+    }
+
+    .wave.ripple.warning .circle {
+        border-color: orange;
+    }
+
+    /* 波动效果 */
+    .wave.solid .circle{
+        width: 100%;
+        height: 100%;
+        background: #fff;
+    }
+
+    .wave.solid .circle:first-child {
+     /*   animation: circle-opacity 2s;*/
+    }
+
+    .wave.solid.danger {
+        color: red;
+    }
+
+    .wave.solid.danger .circle{
+        background: red;
+    }
+
+    .wave.solid.warning {
+        color: orange;
+    }
+
+    .wave.solid.warning .circle{
+        background: orange;
+    }
+
+    @keyframes circle-opacity{
+        from {
+            opacity: 1;
+            transform: scale(0);
+        }
+        to {
+            opacity: 0;
+            transform: scale(1);
+        }
+    }
+
+    .face2{
+
+        position: relative;
+        left: 30%;
+        width: 256px;
+        height: 256px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+        box-shadow: 0px 0px 1px 1px #fbfcfd;
+        &:hover{
+            transform: scale(1.1);
+        }
+        img{
+            width: 256px;
+            height: 256px;
+            transform: scale(1.1);
+            /*     position: absolute;*/
+            /*       top: 50%;*/
+            /*    left: 50%;*/
+            transition: all 0.3s ease;
+            &:hover{
+                transform: scale(1.0);
+            }
+
+        }
+
+    }
+    .bg{
+
+        background: url("../static/img/imoto_left.jpg") no-repeat;
+        background-size: 100% 100%;
+    }
+
+
 
     .email-info{
         margin-bottom: 20px;
     }
     .email >.el-input{
         margin-bottom: 20px;
+    }
+
+
+
+    .left-content{
+        top: 18%;
+        left: 37%;
+        width: 73%;
+        position: relative;
+
+        p{
+            width: 255px;
+            height: 30px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        .face{
+            width: 256px;
+            height: 256px;
+            border-radius: 50%;
+            overflow: hidden;
+
+
+            transition: all 0.3s ease;
+            box-shadow: 0px 0px 1px 1px #fbfcfd;
+
+            /*transform: translate(-50%,-50%);*/
+            &:hover{
+
+                transform: scale(1.1);
+            }
+
+            img{
+                width: 256px;
+                height: 256px;
+                transform: scale(1.1);
+                /*     position: absolute;*/
+                /*       top: 50%;*/
+                /*    left: 50%;*/
+                transition: all 0.3s ease;
+                &:hover{
+                    transform: scale(1.0);
+                }
+
+            }
+        }
+        form{
+            transform: translateY(50%);
+            width: 100%;
+            text-align: left;
+            font-size: 50px;
+            display: flex;
+            flex-direction: column;
+            #file{
+                border: 1px solid #DCDFE6;
+
+                width: 256px;
+                text-align: center;
+            }
+            i{
+                display: block;
+            }
+            .el-input{
+                margin-top: 20px;
+                width: 256px;
+            }
+        }
     }
 
 .post :nth-child(2){
@@ -360,8 +646,8 @@
         width: 50%;
         max-width: 800px;
         height: 900px;
-        background: url("../static/img/imoto_left.jpg") no-repeat;
-        background-size: 100% 100%;
+  /*      background: url("../static/img/imoto_left.jpg") no-repeat;
+        background-size: 100% 100%;*/
         /*     background-color: #D5D5D5; */
     }
 

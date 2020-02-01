@@ -356,6 +356,9 @@
             }
 
         .el-main{
+
+            min-width: 800px;
+            max-width: 900px;
             border: 1px solid #e5e9ef;
             box-sizing: border-box;
             .nulldata-right{

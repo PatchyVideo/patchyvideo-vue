@@ -340,26 +340,32 @@ export default {
     }
     #edit_second {
       //icon
+         /deep/  .move-down-box{
+           transform: translateX(-10px);
+          }
 
-      /deep/ .move-down-box {
-        transform: translateX(-10px);
-      }
+          /deep/ .move {
+          button{
+            &:hover{
+              background: none;
+            }
+          }
+            display: flex;
+            height: 100%;
+            flex-direction: column;
 
-      /deep/ .move-up {
-        .move {
-          flex: 1;
-          height: 100%;
-          font: normal normal normal 14px/1 FontAwesome;
-          font-size: inherit;
-          text-rendering: auto;
-          -webkit-font-smoothing: antialiased;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
 
-          /deep/ .move-up {
-            font-size: 40px;
-            height: 40px;
-            color: #808080;
-            transition: all 0.4s ease;
-            /*       position: absolute;
+           /deep/ .move-up {
+          font-size: 40px;
+          height: 40px;
+            /* margin-bottom: 50px;*/
+          color: #808080;
+          transition: all 0.4s ease;
+          /*       position: absolute;
             top: -20px;*/
             &:hover {
               color: white;
@@ -375,31 +381,30 @@ export default {
               /*          position: absolute;
                         bottom: 0px;*/
 
-              &:hover {
-                color: white;
-                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff,
-                  0 0 40px #228dff;
-              }
-            }
           }
-          /deep/ .move-down {
-            font-size: 40px;
-            height: 40px;
-            color: #808080;
-            transition: all 0.4s ease;
-            transform: translateY(120%);
-            /*          position: absolute;
+
+
+
+        }
+        /deep/ .move-down {
+          font-size: 40px;
+          height: 40px;
+          color: #808080;
+          transition: all 0.4s ease;
+
+         &:hover {
+           color: white;
+           text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff,
+           0 0 40px #228dff;
+         }
+
+          /*          position: absolute;
                         bottom: 0px;*/
 
-            &:hover {
-              color: white;
-              text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff,
-                0 0 40px #228dff;
-            }
-          }
+
         }
       }
-    }
+
   }
 }
 .item_end {
