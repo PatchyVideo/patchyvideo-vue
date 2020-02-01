@@ -177,7 +177,10 @@ Vue.prototype.$echarts = echarts;
     }
 
     .content {
-        width: 1600px;
+       /* width: 1600px;*/
+        width: 80%;
+        max-width: 1600px;
+        min-width: 1600px;
         height: 100%;
 
         background:  url("../static/img/imoto.jpg") no-repeat top center;

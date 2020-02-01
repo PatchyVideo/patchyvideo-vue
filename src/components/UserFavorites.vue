@@ -174,6 +174,7 @@
         },
         watch:{
             couponSelected(val) {//排序更改时，重新请求数据
+                this.loading = true;
                 this. getVideoMaxCount();
             },
             page(v) {
@@ -192,6 +193,7 @@
         content: "";
         margin-left: auto;
     }*/
+
  .data_null{
      height: 1000px;
      display: flex;
@@ -202,6 +204,8 @@
   }
  }
     .bigbox {
+      min-width: 1600px;
+
 
         h2{
             box-sizing: border-box;
@@ -221,7 +225,7 @@
                 max-width:  25%;
                 padding-bottom: 2%;
                 transition: all 0.3s ease;
-                background-color: #fff;
+                background-color:#fbfcfd;
                 &:hover{
 
                     box-shadow: 0 15px 30px rgba(0,0,0,.1);
