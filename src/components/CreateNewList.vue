@@ -105,6 +105,7 @@ export default {
             } else {
               this.open2();
             }
+            this.$router.push({ path: "/lists" });
           });
         } else {
           // 加载结束,加载动画消失
