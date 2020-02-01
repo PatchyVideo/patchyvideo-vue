@@ -10,7 +10,7 @@
 -->
 <template>
   <div class="loginPic">
-    <!-- 登录框正文 -->
+    <!-- 重置密码框正文 -->
     <div class="w" v-loading="loading">
       <!-- 标题 -->
       <h1>
@@ -20,7 +20,7 @@
         <h3 style="color:#909399">重置密码</h3>
       </div>
 
-      <!-- 输入账号和密码的框 -->
+      <!-- 新密码的框 -->
       <el-form ref="FormRef" :model="FormRef" class="middle in" :rules="rules">
         <el-form-item prop="password1">
           <el-input
@@ -87,7 +87,7 @@ export default {
   computed: {
     reset_key() {
       if (this.$route.query.key != undefined) {
-        return this.$route.query.pid;
+        return this.$route.query.key;
       } else {
         return "";
       }
@@ -120,6 +120,7 @@ export default {
               new_pass: this.FormRef.password1
             }
           }).then(result => {
+            console.log(result);
             this.loading = false;
             if (result.data.status == "FAILED") {
               this.open();
