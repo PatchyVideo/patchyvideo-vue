@@ -88,7 +88,7 @@ export default {
       showTagPanel: false
     };
   },
-  created() {
+  mounted() {
     // 查看是否登录
     if (
       JSON.stringify(this.$store.state.username) != "null" &&
