@@ -32,9 +32,12 @@
               <br />Use playlist ONLY IF order is a must, otherwise using tags falls better in line with the site's design.
               <br />播放列表功能的核心是为视频提供顺序，如果顺序不是必须要求则使用tag是更好的选择。
             </p>
-            <el-button type="primary" plain class="createPlayListButton">
-              <router-link to="/createVideoList">创建播放列表</router-link>
-            </el-button>
+            <el-button
+              type="primary"
+              plain
+              class="createPlayListButton"
+              @click="createVideoList"
+            >创建播放列表</el-button>
           </div>
         </div>
 
@@ -212,6 +215,10 @@ export default {
         // 加载结束,加载动画消失
         this.loading = false;
       });
+    },
+    // 创建播放列表
+    createVideoList() {
+      this.$router.push({ path: "/createVideoList" });
     }
   },
   watch: {
