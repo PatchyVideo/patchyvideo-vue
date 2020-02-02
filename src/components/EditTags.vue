@@ -167,7 +167,7 @@
             </div>
           </div>
         </div>
-        <i class="el-icon-refresh" id="save" @click="saveTag()"></i>
+        <i class="el-icon-refresh" id="save" @click="saveTag()" v-if="this.$route.path != '/postvideo'"></i>
       </div>
     </div>
   </transition>
@@ -294,13 +294,6 @@ export default {
             this.open4();
             return;
           }
-          if (this.tags.indexOf(this.iptVal) === -1) {
-            //不存在则添加
-            this.tags.push(this.iptVal);
-            this.getTagCategories(this.tags);
-            this.iptVal = "";
-            return;
-          }
           if (this.tags.indexOf(this.iptVal) != -1) {
             //存在则不允许添加
             /*this.infoTip[1].isHidden=true;*/
@@ -310,6 +303,15 @@ export default {
                         },2000);*/
             return;
           }
+          if (this.tags.indexOf(this.iptVal) === -1 &&this.iptVal!="") {
+            //不存在则添加
+            this.tags.push(this.iptVal);
+            this.getTagCategories(this.tags);
+            this.iptVal = "";
+            this.$emit("getEditTagsData", this.tags);
+            return;
+          }
+
         })
         .catch(err => {});
     },
@@ -358,7 +360,9 @@ export default {
     },
     getiptVal(i, item) {
       this.iptVal = Object.keys(i)[0];
-      this.getTagCategoriesForAdd(this.iptVal);
+
+        this.getTagCategoriesForAdd(this.iptVal);
+
     },
     addTag() {
       //方案二,所有操作都在函数的成功和失败回调中进行，代码冗余
@@ -478,10 +482,16 @@ export default {
       if (this.msg != "") {
         this.getCommonTags();
       }
+    },
+    really(v){
+       if(v===true){
+         this.$emit("getEditTagsData", this.tags);
+       }
     }
   },
   props: {
     msg: {},
+    really:"",
     visible: {
       type: Boolean,
       defulet: false
