@@ -50,6 +50,7 @@
     </div>
     <EditTags
       :msg="use_tags"
+      :really="isReally"
       :visible.sync="showTagPanel"
       @getEditTagsData="TagShow"
       class="EditTags"
@@ -81,7 +82,9 @@ export default {
       // 匹配短地址，用以扩展成完整地址
       EXPANDERS: {},
       // 匹配URL并请求视频数据
-      PARSERS: {}
+      PARSERS: {},
+      //是否点击了上传视频按钮，如果点击了则置为真，使Tag组件返回Tag数据
+      isReally:false,
     };
   },
   computed: {
@@ -467,6 +470,22 @@ export default {
     },
     // 上传视频
     postSingleVideo() {
+
+    /*
+    实际开发采用方案二
+
+    方案一：
+        Tag编辑子组件内会监视这个值，当置为真时，会返回Tags数据，但是这个行动会需要消耗一定的时间，
+        导致还没有返回Tags就已经开始执行axios请求了。
+        鉴于这个消耗的时间较短，且其他解决方案不太优雅，这里选择了定时器，当点击发布视频时，等10ms后执行请求。
+
+    方案二： 为了配合左边区域tagBox的Tag标签添加成功时，能够及时显示数据，Tag编辑子组件现已修改成当用户添加或删除一个标签时，向
+         会向父组件传递对应的tags数据。
+
+    第一种方案相当于最终检验，现阶段看起来冗余、暂且注释保留
+
+    */
+      /*this.isReally = true;*/
       this.loading = true;
       this.axios({
         method: "post",
@@ -493,6 +512,33 @@ export default {
         }
         this.loading = false;
       });
+/*setTimeout(()=>{
+  this.axios({
+    method: "post",
+    url: "be/postvideo.do",
+    data: {
+      rank: this.rank,
+      pid: this.pid,
+      copy: this.copy,
+      url: this.VideoURL,
+      tags: this.tags
+    }
+  }).then(result => {
+    if (result.data.status == "SUCCEED") {
+      this.open4();
+    } else if (result.data.status == "FAILED") {
+      if (result.data.data.reason == "TAG_NOT_EXIST") {
+        var errorTag = result.data.data.aux;
+        this.open3(errorTag);
+      } else {
+        this.open2();
+      }
+    } else {
+      this.open5();
+    }
+    this.loading = false;
+  });
+},10)*/
     },
     // 各种各样的报错警告
     open2() {
@@ -520,6 +566,7 @@ export default {
       });
     }
   },
+
   components: { EditTags }
 };
 </script>
