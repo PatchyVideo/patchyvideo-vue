@@ -218,15 +218,12 @@
             }
         },
         created(){
-
-            console.log(this.myData);
             if(this.$route.params.id=='me'){
                 this.getMyData();
             }
             if(this.$route.params.id!='me'){
                 this.getUserData();
             }
-            console.log(this.$route);
 
         },
         mounted(){
@@ -239,7 +236,6 @@
             sub(){
                 this.loading=true;
                 var formObj = new FormData(document.getElementById("form1"));
-                console.log(formObj);
                 this.axios({
                     method:'post',
                     url:'be/helper/upload_image.do',
@@ -247,8 +243,6 @@
                     processData:false,
                     contentType:false
                 }).then(res=>{
-                    console.log(res);
-                    console.log(res.data.data.file_key);
                     if (res.data.status=="SUCCEED"){
                         this.file_key = res.data.data.file_key;
                         this.axios({
@@ -257,7 +251,6 @@
                             data:{"file_key":this.file_key}
                         }).then(res=>{
                             this.getMyData();
-                            console.log(res);
                             this.loading=false;
                             this.$message({
                                 message: '上传成功！',
@@ -274,7 +267,6 @@
                 }).catch(err=>{
                     this.$message.error('上传头像图片大小不能超过 2MB!');
                     this.loading=false;
-                    console.log(err);
                 })
             },
             bindEmail(){
@@ -294,7 +286,6 @@
                             type: 'success'
                         })
                     }
-                    console.log(res);
                 })
             },
             submitForm(formName) {
@@ -350,7 +341,6 @@
                     if(res.data.status=='ERROR'){
                         //火狐浏览器有BUG 暂时先这样跳，等cookie登陆做完后再在user页面判断。
                         this.$router.push("/login");
-                        console.log(res.data.data);
                     }
                     if(res.data.status=='SUCCEED')
                     {
@@ -358,7 +348,6 @@
                     }
                     this.loading =false;
                 }).catch(err=>{
-                    console.log(err);
                 })
             },
             getUserData(){
@@ -368,13 +357,11 @@
                     data:{"uid":this.$route.params.id}
                 }).then(res=>{
                     this.userData =res.data.data.profile;
-                    console.log(res);
                     this.loading =false;
                 });
 
             },
             changeDesc(){
-                console.log(this.myData.desc.length);
                 if(this.myData.desc.length>2000){
                     this.$message({
                         message: '字数不能超过2000哦！',
@@ -390,7 +377,6 @@
                     }
                 }).then(res=>{
                     this.open2();
-                    console.log(res);
                 })
 
             },
@@ -404,7 +390,6 @@
                         "new_pass": this.ruleForm.pass+""
                     }
                 }).then(res=>{
-                    console.log(res);
                     if(res.data.status=="FAILED"){
                         this.$message.error('请检查旧密码是否正确');
                     }else {

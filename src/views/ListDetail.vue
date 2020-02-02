@@ -287,7 +287,6 @@ export default {
           }
         }
         // 页面不存在的情况下
-        console.log(result);
         this.videolistDetail = result.data.data;
         // 必须是登录且发来的数据是可编辑的才渲染编辑组件
         this.editable = this.videolistDetail.editable && this.isLogin;

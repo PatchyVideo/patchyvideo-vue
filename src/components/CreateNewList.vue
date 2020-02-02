@@ -101,7 +101,6 @@ export default {
               private: this.list.private
             }
           }).then(result => {
-            console.log(result);
             this.loading = false;
             // 提交失败的情况
             if (result.data.status == "FAILED") {
