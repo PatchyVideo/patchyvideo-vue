@@ -14,6 +14,9 @@
       1.标签编辑框在页面的位置微调
     1/30/2020：v1.0.3
       1.实现了从视频页面“使用标签发布视频”链接跳转到本页面的时候对于视频原本标签的填写
+    2/2/2020：v1.0。4
+      1.标签编辑组件不需要再提交标签即可获取到标签数据
+      2.上传视频按钮在不进行视频验证的情况下可见
     ★待解决问题：
       暂无
 -->
@@ -33,20 +36,26 @@
           <h2>{{title}}</h2>
           <p>{{desc}}</p>
           <!-- 标签编辑 -->
-          <div class="tagsEdit">
+          <div class="tagsEdit" v-if="false">
             <h3>标签</h3>
             <div class="tagBox">
-              <p v-if="tags==''" style="margin-bottom:10px;">暂无标签！</p>
-              <el-tag effect="dark" v-else v-for="item in tags" :key="item">{{item}}</el-tag>
+              <p v-if="tags==''">暂无标签！</p>
+              <el-tag
+                effect="dark"
+                v-else
+                v-for="item in tags"
+                :key="item"
+                style="margin-left:5px;margin-right:5px;margin-top:5px"
+              >{{item}}</el-tag>
             </div>
           </div>
-          <!-- 视频上传 -->
-          <el-button class="postButton" type="primary" @click="postSingleVideo">
-            上传视频
-            <i class="el-icon-upload el-icon--right"></i>
-          </el-button>
         </div>
       </el-collapse-transition>
+      <!-- 视频上传 -->
+      <el-button class="postButton" type="primary" @click="postSingleVideo">
+        上传视频
+        <i class="el-icon-upload el-icon--right"></i>
+      </el-button>
     </div>
     <EditTags
       :msg="use_tags"
@@ -84,7 +93,7 @@ export default {
       // 匹配URL并请求视频数据
       PARSERS: {},
       //是否点击了上传视频按钮，如果点击了则置为真，使Tag组件返回Tag数据
-      isReally:false,
+      isReally: false
     };
   },
   computed: {
@@ -470,8 +479,13 @@ export default {
     },
     // 上传视频
     postSingleVideo() {
+      // 验证URL是否为空
+      if (this.VideoURL == "") {
+        this.InvalidURL();
+        return;
+      }
 
-    /*
+      /*
     实际开发采用方案二
 
     方案一：
@@ -512,7 +526,7 @@ export default {
         }
         this.loading = false;
       });
-/*setTimeout(()=>{
+      /*setTimeout(()=>{
   this.axios({
     method: "post",
     url: "be/postvideo.do",
@@ -587,6 +601,7 @@ export default {
   padding-right: 15px;
   display: block;
   background-color: #ffffffc9;
+  text-align: center;
 }
 
 .videoDetail {
@@ -615,7 +630,6 @@ export default {
 }
 .tagBox {
   width: 100%;
-  margin-bottom: 10px;
   text-align: left;
 }
 .postButton {
