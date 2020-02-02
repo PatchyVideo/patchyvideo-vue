@@ -124,7 +124,6 @@ export default {
               new_pass: this.FormRef.password1
             }
           }).then(result => {
-            console.log(result);
             this.loading = false;
             if (result.data.status == "FAILED") {
               this.open();

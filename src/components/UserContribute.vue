@@ -168,12 +168,12 @@
                         this.videoCount =result.data.data.count;
                         this.loading =false;
                     }).catch(err=>{
-                        console.log(err);
+
                     })
                     return
                 }
                 if(this.$route.params.id!='me'){
-                    console.log(this.$route.params.id);
+
                     this.axios({
                         method:'post',
                         url:"be/listyourvideo.do",
@@ -191,7 +191,7 @@
                         this.loading =false;
 
                     }).catch(err=>{
-                        console.log(err);
+
                     })
                     return;
                 }

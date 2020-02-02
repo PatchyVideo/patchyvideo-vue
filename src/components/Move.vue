@@ -23,7 +23,6 @@
         },
         methods: {
             moveUp(){
-                console.log("msg:");
                 console.log(this.msg);
                  this.axios({
                       method:"post",
@@ -52,7 +51,7 @@
                         //this.$router.go(0);
                         //方案二:VueX来监听子组件的值。
                         this.$store.commit("refreshPage");
-                        console.log(this.$store.state);
+
                     }
 
                 })

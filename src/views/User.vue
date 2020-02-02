@@ -118,11 +118,11 @@ Vue.prototype.$echarts = echarts;
         },
         methods: {
             handleSelect(key, keyPath) {
-                console.log(key, keyPath);
+           /*     console.log(key, keyPath);*/
                 this.gotomark = key;
             },
             handleClick(tab, event) {
-                console.log(tab, event);
+ /*               console.log(tab, event);*/
             },
             isUidNull(){
              this.axios({
@@ -131,9 +131,9 @@ Vue.prototype.$echarts = echarts;
                     data:{"uid":this.$route.params.id}
                 }).then(res=>{
                     if(res.data.status=="FAILED"){
-                        console.log("404");
-                        this.$router.push("/home");
-                        //跳到404 暂时没做所以先跳到主页了
+                        this.$router.push("/*");
+                   /*     this.$router.push("/home");*/
+                        //跳到404
                     }
                     if(res.data.status =="SUCCEED"){
                         //uid合法 渲染该uid的用户数据

@@ -100,7 +100,7 @@
                 this.count = val;
             },
             handleChange(val) {
-                console.log(val);
+         /*       console.log(val);*/
             },
             getVideoMaxCount(){
                 if(this.$route.params.id=='me'){

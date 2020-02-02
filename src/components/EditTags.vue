@@ -255,7 +255,6 @@ export default {
           data: { video_id: this.msg }
         })
           .then(res => {
-            console.log(res);
             this.tags = res.data.data; //原始数据
             this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); //深拷贝，推荐Tag数据用
             this.getTagCategories(this.tags); //范围转换后展示原始数据
@@ -278,7 +277,6 @@ export default {
           this.msgMark++;
         })
         .catch(err => {
-          console.log(err.response);
         });
     },
     getTagCategoriesForAdd(str) {
@@ -467,7 +465,6 @@ export default {
       if (this.msg === "") {
         this.animeMark = 1;
       }
-      console.log(this.animeMark);
       if (JSON.stringify(oldVal) != "[]" || this.animeMark != 0) {
         this.recTagsWatch = !this.recTagsWatch;
         this.getRecTags(newVal);

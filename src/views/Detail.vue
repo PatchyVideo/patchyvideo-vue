@@ -333,7 +333,6 @@ export default {
         data: { src: this.pid }
       }).then(res => {
         this.open2();
-        console.log(res);
       });
     },
     // 复制视频连接
