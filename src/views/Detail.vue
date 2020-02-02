@@ -22,6 +22,8 @@
       1.新增对于视频标签编辑功能的兼容
     1/31/2020：v1.1.4
       1.新增从单个视频创建播放列表的功能
+    2/2/2020：v1.1.5
+      1.新增管理员修改视频等级功能
     ★待解决问题：
       1.视频介绍里的链接功能尚未实现 
       2.按下浏览器的后退按钮网站没有刷新数据
@@ -29,6 +31,19 @@
 <template>
   <div>
     <topnavbar />
+
+    <!-- 更改视频级别的弹出框 -->
+    <el-dialog title="管理" :visible.sync="managementBox" width="20%">
+      <div style="width:80%;margin:0 auto">
+        <el-select v-model="theVideoRank" placeholder="请修改视频的等级" style="width:100%">
+          <el-option v-for="item in videoRanks" :key="item" :label="item" :value="item"></el-option>
+        </el-select>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="managementBox = false">取 消</el-button>
+        <el-button type="primary" @click="manageVideo()" :loading="loading">确 定</el-button>
+      </span>
+    </el-dialog>
 
     <!-- Detail页面的正文 -->
     <div class="w detail-page-background-img" v-loading="loading">
@@ -38,7 +53,10 @@
         <!-- 推荐视频栏开始  -->
         <div class="recommend">
           <div class="re_top">
-            <h2>{{ myVideoData.video.item.title }}</h2>
+            <h2>
+              {{ myVideoData.video.item.title }}
+              <el-button v-if="isAdmin" @click="managementBox=true">管理</el-button>
+            </h2>
           </div>
           <h4 class="video_link">
             <a id="video_link" :href="myVideoData.video.item.url">
@@ -197,6 +215,14 @@ export default {
           }
         }
       },
+      // 判断是否为管理员
+      isAdmin: false,
+      // 视频管理的对话框
+      managementBox: false,
+      // 本页面的视频的等级
+      theVideoRank: 3,
+      // 视频的等级（0~3，其中3为所有人可见）
+      videoRanks: [0, 1, 2, 3],
       dialogVisible: false, //删除提示框
       pid: "", //视频的id值
       // 视频列表是否属于加载状态的判断
@@ -259,8 +285,11 @@ export default {
         })
         .catch(_ => {});
     },
-    open1() {
-      this.$message("列表创建成功！");
+    open1(message) {
+      this.$message({
+        message: message,
+        type: "success"
+      });
     },
     open2() {
       this.$message({
@@ -268,16 +297,14 @@ export default {
         type: "success"
       });
     },
-
-    open3() {
+    open3(message) {
       this.$message({
-        message: "Tag已存在！",
+        message: message,
         type: "warning"
       });
     },
-
-    open4() {
-      this.$message.error("请输入合法的Tag!");
+    open4(message) {
+      this.$message.error(message);
     },
     // 从单个视频创建播放列表
     newFromSingleVideo() {
@@ -360,6 +387,7 @@ export default {
         data: { vid: this.$route.query.id }
       }).then(result => {
         this.myVideoData = result.data.data;
+        this.theVideoRank = result.data.data.video.clearence;
 
         // 修改网站标题
         document.title = this.myVideoData.video.item.title;
@@ -368,6 +396,45 @@ export default {
         this.$store.commit("setVideoPid", this.myVideoData.video._id.$oid);
         // 加载结束,加载动画消失
         this.loading = false;
+
+        this.whoami();
+      });
+    },
+    // 获取用户权限信息
+    whoami() {
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "be/user/whoami",
+        data: {}
+      }).then(result => {
+        if (result.data.data == "admin" && this.isLogin) {
+          this.isAdmin = true;
+        } else {
+          this.isAdmin = false;
+        }
+        this.loading = false;
+      });
+    },
+    // 管理视频（现在的功能是编辑视频权限）
+    manageVideo() {
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "be/videos/set_clearence.do",
+        data: {
+          vid: this.pid,
+          clearence: this.theVideoRank
+        }
+      }).then(result => {
+        if (result.data.status == "SUCCEED") {
+          this.open1("修改成功！");
+          this.loading = false;
+          this.managementBox = false;
+          this.searchVideo();
+        } else {
+          this.open4("修改失败，请重试！");
+        }
       });
     },
     // 刷新页面
