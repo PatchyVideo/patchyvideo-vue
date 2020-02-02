@@ -10,6 +10,8 @@
       release
     1/21/2020：v1.0.1
       1.现在可以通过URL传入的参数来进一步更新上传视频的信息
+    2/2/2020：v1.0.2
+      1.样式微调
     ★待解决问题：
       暂无
 -->
@@ -188,13 +190,16 @@ export default {
   min-height: 800px;
   overflow: hidden;
   display: flex;
+  /* 针对webkit内核（如Safari）进行的调整 */
+  display: -webkit-flex;
   margin: auto;
 }
 .content {
-  width: calc(60% - 10px);
-  padding-right: 10px;
+  flex: 0 0 calc(60% - 30px);
+  padding-right: 15px;
   display: block;
   background-color: #ffffffc9;
+  text-align: center;
 }
 .tagsEdit {
   width: 100%;
@@ -227,7 +232,7 @@ export default {
   margin-bottom: 20px;
 }
 .EditTags {
-  width: 40%;
+  flex: 0 0 40%;
   display: block;
 }
 .EditTags /deep/ #tag {

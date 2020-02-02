@@ -16,6 +16,11 @@
       （由于是百分百布局，存在滚动条问题，Dialog对话框触发后滚动条消失，页面会突然向右移动铺满）
     1/20/2020：v1.0.3
       1.新增添加视频 编辑 删除模块，但是现阶段接口不支持。
+    2/1/2020：v1.0.4
+      1.添加视频 编辑 删除模块完成
+      2.页面上的编辑标签在列表不可编辑或者未登录的时候隐藏
+    2/2/2020：v1.0.5
+      1.视频列表的索引值优化
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
       2.EditTags组件应仅对当前收藏列表持有者展示
@@ -94,7 +99,7 @@
           <div class="minbox shadow" v-for="(item, index) in videolistVideos" :key="item._id.$oid">
             <div class="re_video">
               <div class="edit">
-                <h1 id="edit_first">{{ index+1 }}</h1>
+                <h1 id="edit_first">{{ item.rank+1 }}</h1>
                 <div v-if="editable" id="edit_second">
                   <Move class="move" :msg="PlaylistItemOp(item,index)"></Move>
                   <!--上移-->
