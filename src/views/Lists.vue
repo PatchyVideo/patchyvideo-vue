@@ -84,7 +84,9 @@
               </div>
               <!-- 视频列表详情 -->
               <div class="re_video">
-                <img :src="'/images/covers/'+item.cover" />
+                <div class="re_video_img">
+                  <el-image :src="'/images/covers/'+item.cover" fit="contain"></el-image>
+                </div>
                 <div class="re_video_desc">
                   <p>
                     <strong>{{ item.desc.english }}</strong>
@@ -335,14 +337,21 @@ export default {
   margin-left: 10px;
   margin-right: 10px;
   margin-top: 20px;
+  margin-bottom: 5px;
   vertical-align: middle;
 }
-.re_video img {
+.re_video_img {
   display: inline-block;
   width: calc(50% - 20px);
+  height: 200px;
   margin-right: 20px;
   min-width: 240px;
   min-height: 150px;
+}
+.re_video_img .el-image {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
 }
 .re_video_desc {
   width: 45%;

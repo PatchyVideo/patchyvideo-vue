@@ -245,16 +245,17 @@ export default {
         "视频发布于 " +
         y +
         "-" +
-        M +
+        // 数字不足两位自动补零，下同
+        (Array(2).join(0) + M).slice(-2) +
         "-" +
-        d +
+        (Array(2).join(0) + d).slice(-2) +
         " " +
-        h +
+        (Array(2).join(0) + h).slice(-2) +
         ":" +
-        m +
+        (Array(2).join(0) + m).slice(-2) +
         ":" +
-        s +
-        " GMT+0800"
+        (Array(2).join(0) + s).slice(-2) +
+        " GMT+8"
       );
     },
     // 判断是否登录的标志

@@ -14,9 +14,12 @@
       1.标签编辑框在页面的位置微调
     1/30/2020：v1.0.3
       1.实现了从视频页面“使用标签发布视频”链接跳转到本页面的时候对于视频原本标签的填写
-    2/2/2020：v1.0。4
+    2/2/2020：v1.0.4
       1.标签编辑组件不需要再提交标签即可获取到标签数据
       2.上传视频按钮在不进行视频验证的情况下可见
+    2/3/2020：v1.0.5
+      1.修复了油管和推特的视频获取功能
+      2.加入了自动标签的功能
     ★待解决问题：
       暂无
 -->
@@ -36,7 +39,7 @@
           <h2>{{title}}</h2>
           <p>{{desc}}</p>
           <!-- 标签编辑 -->
-          <div class="tagsEdit" v-if="false">
+          <div class="tagsEdit" v-if="true">
             <h3>标签</h3>
             <div class="tagBox">
               <p v-if="tags==''">暂无标签！</p>
@@ -57,7 +60,10 @@
         <i class="el-icon-upload el-icon--right"></i>
       </el-button>
     </div>
+
+    <!-- 标签编辑组件 -->
     <EditTags
+      ref="EditTags"
       :msg="use_tags"
       :really="isReally"
       :visible.sync="showTagPanel"
@@ -154,15 +160,15 @@ export default {
           .attr("content");
         var title = responseDOM.find("h1.video-title").attr("title");
         var desc = responseDOM.find("div.info.open").text();
-        // var utags = responseDOM
-        //   .filter('meta[itemprop="keywords"]')
-        //   .attr("content")
-        //   .split(/,/)
-        //   .filter(function(i) {
-        //     return i;
-        //   })
-        //   .slice(1, -4);
-        // autotag(utags);
+        var utags = responseDOM
+          .filter('meta[itemprop="keywords"]')
+          .attr("content")
+          .split(/,/)
+          .filter(function(i) {
+            return i;
+          })
+          .slice(1, -4);
+        that.autotag(utags);
         that.setVideoMetadata(thumbnailURL, title, desc);
       };
       this.EXPANDERS["^av[\\d]+"] = function(short_link) {
@@ -187,15 +193,15 @@ export default {
           desc = responseDOM.find('div[class="J_description"]').text();
         }
         desc = desc.replace(/<br\s*?\/?>/g, "\n");
-        // var utags = responseDOM
-        //   .filter('meta[name="keywords"]')
-        //   .attr("content")
-        //   .split(/,/)
-        //   .filter(function(i) {
-        //     return i;
-        //   })
-        //   .slice(1, -4);
-        // autotag(utags);
+        var utags = responseDOM
+          .filter('meta[name="keywords"]')
+          .attr("content")
+          .split(/,/)
+          .filter(function(i) {
+            return i;
+          })
+          .slice(1, -4);
+        that.autotag(utags);
         that.setVideoMetadata(thumbnailURL, title, desc);
       };
       this.EXPANDERS["^ac[\\d]+"] = function(short_link) {
@@ -226,15 +232,15 @@ export default {
         if (desc == null) {
           desc = responseDOM.filter('meta[name="description"]').attr("content");
         }
-        // var utags = responseDOM.filter('meta[property="og:video:tag"]');
-        // if (utags == null || utags.length == 0) {
-        //   utags = responseDOM.filter('meta[itemprop="og:video:tag"]');
-        // }
-        // var utags_array = [];
-        // for (var i = 0; i < utags.length; ++i) {
-        //   utags_array.push($(utags[i]).attr("content"));
-        // }
-        // autotag(utags_array);
+        var utags = responseDOM.filter('meta[property="og:video:tag"]');
+        if (utags == null || utags.length == 0) {
+          utags = responseDOM.filter('meta[itemprop="og:video:tag"]');
+        }
+        var utags_array = [];
+        for (var i = 0; i < utags.length; ++i) {
+          utags_array.push($(utags[i]).attr("content"));
+        }
+        that.autotag(utags_array);
         that.setVideoMetadata(thumbnailURL, title, desc);
       };
       this.EXPANDERS["^(s|n)m[\\d]+"] = function(short_link) {
@@ -283,47 +289,93 @@ export default {
           //   }
           // });
         }
-        postJSON(
-          "/helper/get_ytb_info",
-          {
-            url: responseURL
-          },
-          function(data) {
+        that
+          .axios({
+            method: "post",
+            url: "/be/helper/get_ytb_info",
+            data: {
+              url: responseURL
+            }
+          })
+          .then(result => {
+            var data = result.data;
             that.setVideoMetadata(
-              data["data"]["thumbnailURL"],
-              data["data"]["title"],
-              data["data"]["desc"]
+              data.data.thumbnailURL,
+              data.data.title,
+              data.data.desc
             );
-            // autotag(data["data"]["utags"]);
-          },
-          function(data) {
+            that.autotag(data.data.utags);
+          })
+          .catch(error => {
             that.setVideoMetadata("", "", "");
             that.ErrorFetchingVideo();
-          }
-        );
+          });
       };
       // 推特的匹配规则
       this.PARSERS[
         "^(https:\\/\\/)?(www\\.|mobile\\.)?twitter\\.com\\/[\\w]+\\/status\\/[\\d]+"
       ] = function(responseDOM, responseURL) {
-        postJSON(
-          "/helper/get_twitter_info.do",
-          {
-            url: responseURL
-          },
-          function(data) {
+        that
+          .axios({
+            method: "post",
+            url: "/be/helper/get_twitter_info",
+            data: {
+              url: responseURL
+            }
+          })
+          .then(result => {
+            var data = result.data;
             that.setVideoMetadata(
-              data["data"]["thumbnailURL"],
-              data["data"]["title"],
-              data["data"]["desc"]
+              data.data.thumbnailURL,
+              data.data.title,
+              data.data.desc
             );
-          },
-          function(data) {
+          })
+          .catch(error => {
             that.setVideoMetadata("", "", "");
             that.ErrorFetchingVideo();
-          }
-        );
+          });
       };
+    },
+    // 自动标签功能
+    autotag(utags) {
+      this.axios({
+        method: "post",
+        url: "/be/tags/autotag.do",
+        data: {
+          utags: utags
+        }
+      })
+        .then(result => {
+          // 向编辑标签组件传送标签
+          if (result.data.status == "SUCCEED") {
+            // 获取到的标签与已有标签查重
+            var autoTags = result.data.data.tags;
+            var resultTags = this.$refs["EditTags"].tags;
+            // 已有标签是空的情况
+            if (resultTags.length == 0) {
+              this.$refs["EditTags"].tags = autoTags;
+            }
+            // 非空的情况
+            else {
+              for (var i = 0; i < autoTags.length; i++) {
+                for (var j = 0; j < resultTags.length; j++) {
+                  if (resultTags[j] == autoTags[i]) {
+                    break;
+                  }
+                  this.$refs["EditTags"].tags.push(autoTags[i]);
+                }
+              }
+            }
+            this.$refs["EditTags"].getTagCategories(
+              this.$refs["EditTags"].tags
+            ); //范围转换后展示原始数据
+            this.$refs["EditTags"].getRecTags(this.$refs["EditTags"].tags); //获取推荐TAG
+          }
+        })
+        .catch(error => {
+          // console.log(error);
+        });
     },
     // 获取视频详细信息
     onFetchVideo_Click() {
@@ -423,18 +475,18 @@ export default {
     proxyResource(
       url,
       referrer = "",
-      user_agent = "Mozilla/5.0 (X11; Ubuntu; Linu…) Gecko/20100101 Firefox/65.0"
+      user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3835.0 Safari/537.36"
     ) {
       // 把字符串作为 URI 进行编码
-      url = encodeURI(url);
+      url = escape(url);
       if (referrer)
         var header = JSON.stringify({
           Referer: referrer,
           "User-Agent": user_agent
         });
       else header = JSON.stringify({ "User-Agent": user_agent });
-      header = encodeURI(header);
-      return `/be/proxy?url=${url}&header=${header}`;
+      header = escape(header);
+      return `/be/helper/proxy?url=${url}&header=${header}`;
     },
     // 请求URL页面数据
     downloadPage(url, success, error = null, complete = null) {
@@ -484,21 +536,20 @@ export default {
         this.InvalidURL();
         return;
       }
-
       /*
-    实际开发采用方案二
+        实际开发采用方案二
 
-    方案一：
-        Tag编辑子组件内会监视这个值，当置为真时，会返回Tags数据，但是这个行动会需要消耗一定的时间，
-        导致还没有返回Tags就已经开始执行axios请求了。
-        鉴于这个消耗的时间较短，且其他解决方案不太优雅，这里选择了定时器，当点击发布视频时，等10ms后执行请求。
+        方案一：
+            Tag编辑子组件内会监视这个值，当置为真时，会返回Tags数据，但是这个行动会需要消耗一定的时间，
+            导致还没有返回Tags就已经开始执行axios请求了。
+            鉴于这个消耗的时间较短，且其他解决方案不太优雅，这里选择了定时器，当点击发布视频时，等10ms后执行请求。
 
-    方案二： 为了配合左边区域tagBox的Tag标签添加成功时，能够及时显示数据，Tag编辑子组件现已修改成当用户添加或删除一个标签时，向
-         会向父组件传递对应的tags数据。
+        方案二： 为了配合左边区域tagBox的Tag标签添加成功时，能够及时显示数据，Tag编辑子组件现已修改成当用户添加或删除一个标签时，向
+            会向父组件传递对应的tags数据。
 
-    第一种方案相当于最终检验，现阶段看起来冗余、暂且注释保留
+        第一种方案相当于最终检验，现阶段看起来冗余、暂且注释保留
 
-    */
+      */
       /*this.isReally = true;*/
       this.loading = true;
       this.axios({
@@ -527,32 +578,32 @@ export default {
         this.loading = false;
       });
       /*setTimeout(()=>{
-  this.axios({
-    method: "post",
-    url: "be/postvideo.do",
-    data: {
-      rank: this.rank,
-      pid: this.pid,
-      copy: this.copy,
-      url: this.VideoURL,
-      tags: this.tags
-    }
-  }).then(result => {
-    if (result.data.status == "SUCCEED") {
-      this.open4();
-    } else if (result.data.status == "FAILED") {
-      if (result.data.data.reason == "TAG_NOT_EXIST") {
-        var errorTag = result.data.data.aux;
-        this.open3(errorTag);
-      } else {
-        this.open2();
-      }
-    } else {
-      this.open5();
-    }
-    this.loading = false;
-  });
-},10)*/
+        this.axios({
+          method: "post",
+          url: "be/postvideo.do",
+          data: {
+            rank: this.rank,
+            pid: this.pid,
+            copy: this.copy,
+            url: this.VideoURL,
+            tags: this.tags
+          }
+        }).then(result => {
+          if (result.data.status == "SUCCEED") {
+            this.open4();
+          } else if (result.data.status == "FAILED") {
+            if (result.data.data.reason == "TAG_NOT_EXIST") {
+              var errorTag = result.data.data.aux;
+              this.open3(errorTag);
+            } else {
+              this.open2();
+            }
+          } else {
+            this.open5();
+          }
+          this.loading = false;
+        });
+      },10)*/
     },
     // 各种各样的报错警告
     open2() {
