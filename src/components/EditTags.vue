@@ -196,7 +196,12 @@ export default {
     };
   },
   created() {
+    console.log("状态初始化");
+    if(this.$route.path === "/postvideo"){
+      this.animeMark = -1;
+    }
     if (this.msg != "") {
+
       this.getCommonTags(); //防止组件更新时没有调用
     }
   },
@@ -321,7 +326,6 @@ export default {
       })
         .then(res => {
           this.recTags = res.data.data.tags;
-
           if (this.animeMark != 0) {
             this.recTagsWatch = !this.recTagsWatch;
           }
@@ -462,9 +466,11 @@ export default {
   },
   watch: {
     tagsForRec(newVal, oldVal) {
-      if (this.msg === "") {
+    /*  if (this.msg === "") {
         this.animeMark = 1;
-      }
+      }*/
+      console.log(this.animeMark);
+      console.log(this.recTagsWatch);
       if (JSON.stringify(oldVal) != "[]" || this.animeMark != 0) {
         this.recTagsWatch = !this.recTagsWatch;
         this.getRecTags(newVal);
@@ -482,7 +488,7 @@ export default {
     },
     really(v){
        if(v===true){
-         this.$emit("getEditTagsData", this.tags);
+    /*     this.$emit("getEditTagsData", this.tags);*/
        }
     }
   },

@@ -64,6 +64,7 @@
     <!-- 标签编辑组件 -->
     <EditTags
       ref="EditTags"
+      :key="refreshMark"
       :msg="use_tags"
       :really="isReally"
       :visible.sync="showTagPanel"
@@ -99,7 +100,9 @@ export default {
       // 匹配URL并请求视频数据
       PARSERS: {},
       //是否点击了上传视频按钮，如果点击了则置为真，使Tag组件返回Tag数据
-      isReally: false
+      isReally: false,
+      //重置子组件到初始状态
+      refreshMark: +new Date()
     };
   },
   computed: {
@@ -339,6 +342,9 @@ export default {
     },
     // 自动标签功能
     autotag(utags) {
+      this.refreshMark = +new Date();
+      console.log(this.id);
+      console.log("自动标签功能");
       this.axios({
         method: "post",
         url: "/be/tags/autotag.do",
@@ -355,6 +361,8 @@ export default {
             // 已有标签是空的情况
             if (resultTags.length == 0) {
               this.$refs["EditTags"].tags = autoTags;
+              this.$refs["EditTags"].tagsForRec =JSON.parse(JSON.stringify(this.$refs["EditTags"].tags));
+
             }
             // 非空的情况
             else {
@@ -364,6 +372,7 @@ export default {
                     break;
                   }
                   this.$refs["EditTags"].tags.push(autoTags[i]);
+                  this.$refs["EditTags"].tagsForRec.push(autoTags[i]);
                 }
               }
             }
