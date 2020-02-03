@@ -189,6 +189,7 @@ export default {
         { name: "infoTip_3", isHidden: false }
       ],
       recTagsWatch: true,
+      firstFlag:true,
       msgMark: 0,
       animeMark: 0,
       // 自动补全标签的内容
@@ -196,10 +197,7 @@ export default {
     };
   },
   created() {
-    console.log("状态初始化");
-    if(this.$route.path === "/postvideo"){
-      this.animeMark = -1;
-    }
+
     if (this.msg != "") {
 
       this.getCommonTags(); //防止组件更新时没有调用
@@ -276,6 +274,15 @@ export default {
       })
         .then(res => {
           this.TagCategoriesData = res.data.data.categorie_map;
+
+          /*if(this.$route.path === "/postvideo"){
+            this.animeMark =0;
+          }*/
+
+          if(this.firstFlag===true){
+            this.animeMark =0;
+            this.firstFlag=false;
+          }
           if (this.msgMark != 0) {
             this.open2();
           }
@@ -311,7 +318,7 @@ export default {
             this.tags.push(this.iptVal);
             this.getTagCategories(this.tags);
             this.iptVal = "";
-            this.$emit("getEditTagsData", this.tags);
+         /*   this.$emit("getEditTagsData", this.tags);*/
             return;
           }
 
@@ -326,9 +333,10 @@ export default {
       })
         .then(res => {
           this.recTags = res.data.data.tags;
-          if (this.animeMark != 0) {
+          this.recTagsWatch = true;
+         /* if (this.animeMark != 0) {
             this.recTagsWatch = !this.recTagsWatch;
-          }
+          }*/
           this.animeMark++;
         })
         .catch(err => {});
@@ -465,14 +473,19 @@ export default {
     // 消息提示
   },
   watch: {
+    tags(n){
+      this.$emit("getEditTagsData", n);
+    },
     tagsForRec(newVal, oldVal) {
-    /*  if (this.msg === "") {
+    /* if (this.msg === "") {
         this.animeMark = 1;
       }*/
-      console.log(this.animeMark);
-      console.log(this.recTagsWatch);
+      /*if(this.$route.path === "/postvideo"){
+        this.animeMark =1;
+      }*/
+
       if (JSON.stringify(oldVal) != "[]" || this.animeMark != 0) {
-        this.recTagsWatch = !this.recTagsWatch;
+        this.recTagsWatch = false;
         this.getRecTags(newVal);
         /*   let _that =this;
                      setTimeout(function () {

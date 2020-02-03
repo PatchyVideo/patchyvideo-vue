@@ -62,9 +62,10 @@
     </div>
 
     <!-- 标签编辑组件 -->
+<!--    :key="refreshMark"-->
     <EditTags
       ref="EditTags"
-      :key="refreshMark"
+
       :msg="use_tags"
       :really="isReally"
       :visible.sync="showTagPanel"
@@ -342,9 +343,7 @@ export default {
     },
     // 自动标签功能
     autotag(utags) {
-      this.refreshMark = +new Date();
-      console.log(this.id);
-      console.log("自动标签功能");
+/*      this.refreshMark = +new Date();*/
       this.axios({
         method: "post",
         url: "/be/tags/autotag.do",
@@ -358,6 +357,8 @@ export default {
             // 获取到的标签与已有标签查重
             var autoTags = result.data.data.tags;
             var resultTags = this.$refs["EditTags"].tags;
+         /*   this.$refs["EditTags"].firstFlag = true;*/
+            this.$refs["EditTags"].msgMark = 1;
             // 已有标签是空的情况
             if (resultTags.length == 0) {
               this.$refs["EditTags"].tags = autoTags;
@@ -366,15 +367,30 @@ export default {
             }
             // 非空的情况
             else {
-              for (var i = 0; i < autoTags.length; i++) {
-                for (var j = 0; j < resultTags.length; j++) {
-                  if (resultTags[j] == autoTags[i]) {
+              for(let i=0;i<autoTags.length;++i){
+                for(let j=0;j<resultTags.length;++j){
+                  if(this.$refs["EditTags"].tags.indexOf(autoTags[i]) != -1){
                     break;
                   }
                   this.$refs["EditTags"].tags.push(autoTags[i]);
                   this.$refs["EditTags"].tagsForRec.push(autoTags[i]);
                 }
               }
+
+
+      /*        let setArray = new Set(this.$refs["EditTags"].tags);
+              this.tags=Array.from(setArray);
+              console.log(Array.from(setArray));*/
+
+              /*    for (var i = 0; i < autoTags.length; i++) {
+                    for (var j = 0; j < resultTags.length; j++) {
+                      if (resultTags[j] == autoTags[i]) {
+                        break;
+                      }
+                      this.$refs["EditTags"].tags.push(autoTags[i]);
+                      this.$refs["EditTags"].tagsForRec.push(autoTags[i]);
+                    }
+                  }*/
             }
             this.$refs["EditTags"].getTagCategories(
               this.$refs["EditTags"].tags
