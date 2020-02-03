@@ -283,46 +283,51 @@ export default {
           //   }
           // });
         }
-        postJSON(
-          "/helper/get_ytb_info",
-          {
-            url: responseURL
-          },
-          function(data) {
+        that
+          .axios({
+            method: "post",
+            url: "/be/helper/get_ytb_info",
+            data: {
+              url: responseURL
+            }
+          })
+          .then(result => {
+            var data = result.data;
             that.setVideoMetadata(
-              data["data"]["thumbnailURL"],
-              data["data"]["title"],
-              data["data"]["desc"]
+              data.data.thumbnailURL,
+              data.data.title,
+              data.data.desc
             );
-            // autotag(data["data"]["utags"]);
-          },
-          function(data) {
+          })
+          .catch(error => {
             that.setVideoMetadata("", "", "");
             that.ErrorFetchingVideo();
-          }
-        );
+          });
       };
       // 推特的匹配规则
       this.PARSERS[
         "^(https:\\/\\/)?(www\\.|mobile\\.)?twitter\\.com\\/[\\w]+\\/status\\/[\\d]+"
       ] = function(responseDOM, responseURL) {
-        postJSON(
-          "/helper/get_twitter_info.do",
-          {
-            url: responseURL
-          },
-          function(data) {
+        that
+          .axios({
+            method: "post",
+            url: "/be/helper/get_twitter_info",
+            data: {
+              url: responseURL
+            }
+          })
+          .then(result => {
+            var data = result.data;
             that.setVideoMetadata(
-              data["data"]["thumbnailURL"],
-              data["data"]["title"],
-              data["data"]["desc"]
+              data.data.thumbnailURL,
+              data.data.title,
+              data.data.desc
             );
-          },
-          function(data) {
+          })
+          .catch(error => {
             that.setVideoMetadata("", "", "");
             that.ErrorFetchingVideo();
-          }
-        );
+          });
       };
     },
     // 获取视频详细信息
@@ -423,18 +428,18 @@ export default {
     proxyResource(
       url,
       referrer = "",
-      user_agent = "Mozilla/5.0 (X11; Ubuntu; Linu…) Gecko/20100101 Firefox/65.0"
+      user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3835.0 Safari/537.36"
     ) {
       // 把字符串作为 URI 进行编码
-      url = encodeURI(url);
+      url = escape(url);
       if (referrer)
         var header = JSON.stringify({
           Referer: referrer,
           "User-Agent": user_agent
         });
       else header = JSON.stringify({ "User-Agent": user_agent });
-      header = encodeURI(header);
-      return `/be/proxy?url=${url}&header=${header}`;
+      header = escape(header);
+      return `/be/helper/proxy?url=${url}&header=${header}`;
     },
     // 请求URL页面数据
     downloadPage(url, success, error = null, complete = null) {
