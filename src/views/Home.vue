@@ -51,7 +51,7 @@
       <div class="content">
         <!-- 播放列表的抬头 -->
         <div class="video-list-header">
-          <p v-if="maxcount">Showing {{ count2 }} out of {{ maxcount }} videos</p>
+          <p v-if="maxcount">显示 {{ count2 }} / {{ maxcount }} 个视频</p>
           <p v-else>没有搜索到视频</p>
           <el-select id="select-order" v-model="couponSelected">
             <el-option
