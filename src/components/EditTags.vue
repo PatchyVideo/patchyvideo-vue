@@ -1,4 +1,4 @@
-
+﻿
 <!--
     更新日志：
     1/11/2020：v1.0
@@ -316,6 +316,13 @@ export default {
           if (this.tags.indexOf(this.iptVal) === -1 &&this.iptVal!="") {
             //不存在则添加
             this.tags.push(this.iptVal);
+            /* 如果所有的标签都没有被选中，那下次一添加的标签被选中*/
+            if(this.tagsForRec.length==0){
+              this.tagsForRec.push(this.iptVal);
+            }
+            /*默认添加的所有标签都被选中*/
+           /* this.tagsForRec.push(this.iptVal);*/
+            /*默认添加的所有标签不被选中*/
             this.getTagCategories(this.tags);
             this.iptVal = "";
          /*   this.$emit("getEditTagsData", this.tags);*/

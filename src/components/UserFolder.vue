@@ -87,13 +87,11 @@
                       <el-table-column
                               prop="url"
                               label="URL"
-
                               align="center">
                       </el-table-column>
                       <el-table-column
                               prop="status"
                               label="STATUS"
-
                               align="center">
                       </el-table-column>
                       <el-table-column
@@ -127,7 +125,9 @@
 
                 }],
                 tableData: [{
-
+                    url:"null",
+                    status:"null",
+                    exception:"null"
                 }],
                 centerDialogVisible: false,
                 value: true,

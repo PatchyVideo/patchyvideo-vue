@@ -78,9 +78,9 @@
                 ],
                 couponSelected:"",
                 options: [
-                    { value: "latest", label: "Latest Post  " },
-                    { value: "oldest", label: "Oldest Post  " },
-                    { value: "last_modified", label: "last_modified Post" },
+                    { value: "latest", label: "时间正序  " },
+                    { value: "oldest", label: "时间倒序  " },
+                    { value: "last_modified", label: "最新修改" },
                 ],
                 loading:true
             };

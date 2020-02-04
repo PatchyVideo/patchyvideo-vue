@@ -344,6 +344,8 @@ export default {
     // 自动标签功能
     autotag(utags) {
 /*      this.refreshMark = +new Date();*/
+
+
       this.axios({
         method: "post",
         url: "/be/tags/autotag.do",
