@@ -41,7 +41,7 @@
         <p v-if="title=='标签'&&isLogin==true" @click="postVideo">【使用标签发布视频】</p>
       </div>
       <!-- 在Home页面渲染的侧导航条内容 -->
-      <ul ref="test" v-if="title=='热门标签'">
+      <ul ref="test" v-if="title=='热门标签' || title=='相关标签'">
         <li class="tag belong-to-home" v-for="(val,key) in msg" :key="key">
           <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
           <!-- 根据tag名称自动渲染tag颜色 -->
@@ -133,7 +133,11 @@ export default {
   computed: {
     // 导航条的标题
     title() {
-      return this.$store.state.leftNavBarTitle;
+      if (this.$parent.ifSearch == true && this.$route.path == "/home") {
+        return "相关标签";
+      } else {
+        return this.$store.state.leftNavBarTitle;
+      }
     },
     // 视频的pid
     pid() {

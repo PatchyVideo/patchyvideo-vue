@@ -24,8 +24,11 @@
       1.新增从单个视频创建播放列表的功能
     2/2/2020：v1.1.5
       1.新增管理员修改视频等级功能
+    2/4/2020：v1.1.6
+      1.视频介绍里的链接功能以及链接的副本功能完成
+      2.副本列表新增同步某一副本视频的功能
     ★待解决问题：
-      1.视频介绍里的链接功能尚未实现 
+      1.视频介绍里的链接功能弹出的按钮尚待优化
       2.按下浏览器的后退按钮网站没有刷新数据
 -->
 <template>
@@ -77,9 +80,7 @@
               width="320px"
               height="200px"
             />
-            <!-- :alt="myVideoData.item.title" -->
-            <!-- :title="myVideoData.item.title" -->
-            <p>{{ myVideoData.video.item.desc }}</p>
+            <p class="videoDesc" @click="postAsCopy($event)" v-html="myVideoData.video.item.desc"></p>
           </div>
         </div>
 
@@ -106,7 +107,6 @@
               >
                 <el-button type="text">[添加副本]</el-button>
               </router-link>
-              <!--    <a @click="breaklink()">[删除此副本] </a>-->
               <el-button type="text" @click="dialogVisible = true;" v-if="isLogin==true">[删除此副本]</el-button>
               <el-button
                 type="text"
@@ -116,7 +116,7 @@
               >[同步副本标签]</el-button>
             </p>
           </div>
-          <ul v-for="item in myVideoData.copies" :key="item._id.$oid">
+          <ul v-for="item in myVideoData.copies" :key="item._id.$oid" class="copies">
             <img
               :src="require('../static/img/' + item.item.site + '.png')"
               width="16px"
@@ -128,6 +128,12 @@
               tag="a"
               @click.native="reload"
             >{{ item.item.title }}</router-link>
+            <el-button
+              type="text"
+              @click="synctags(item._id.$oid)"
+              v-if="isLogin==true"
+              style="margin-left:10px"
+            >[从此副本同步标签]</el-button>
           </ul>
         </div>
 
@@ -169,7 +175,7 @@
           </ul>
         </div>
       </div>
-      <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
         <span>确认删除？</span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
@@ -226,7 +232,11 @@ export default {
       dialogVisible: false, //删除提示框
       pid: "", //视频的id值
       // 视频列表是否属于加载状态的判断
-      loading: true
+      loading: true,
+      // 匹配视频简介中的短地址，用以扩展成完整地址
+      URL_MATCHERS: {},
+      // 扩展成的完整地址
+      URL_EXPANDERS: {}
       // 获取到的所有视频，以页数为第一维组成二维数组(和localStorage存储一起使用，已被弃用）
       // localStorageNum: []
     };
@@ -277,15 +287,10 @@ export default {
     // window.localStorage.removeItem("loglevel:webpack-dev-server");
     this.searchVideo();
   },
-  mounted() {},
+  mounted() {
+    this.buildUrlMatchers();
+  },
   methods: {
-    handleClose(done) {
-      this.$confirm("确认关闭？")
-        .then(_ => {
-          done();
-        })
-        .catch(_ => {});
-    },
     open1(message) {
       this.$message({
         message: message,
@@ -306,6 +311,13 @@ export default {
     },
     open4(message) {
       this.$message.error(message);
+    },
+    openHTML(URL) {
+      var message = this.$message({
+        dangerouslyUseHTMLString: true,
+        message: "<p>创建成功！<i>点我查看</i></p>"
+      });
+      console.log(message);
     },
     // 从单个视频创建播放列表
     newFromSingleVideo() {
@@ -394,6 +406,8 @@ export default {
         this.pid = this.myVideoData.video._id.$oid;
         // 视频pid储存到vuex中
         this.$store.commit("setVideoPid", this.myVideoData.video._id.$oid);
+        // 标记视频简介中的链接
+        this.urlifyDesc();
         // 加载结束,加载动画消失
         this.loading = false;
 
@@ -440,6 +454,153 @@ export default {
     // 刷新页面
     reload: function() {
       this.$router.go(0);
+    },
+    // 匹配视频简介中的URL的规则
+    buildUrlMatchers() {
+      var that = this;
+      this.URL_MATCHERS[
+        "(https:\\/\\/|http:\\/\\/)?(www\\.)?bilibili\\.com\\/video\\/av[\\d]+"
+      ] = function(match) {
+        return [match, "video"];
+      };
+      this.URL_MATCHERS[
+        "(https:\\/\\/|http:\\/\\/)?(www\\.)?acfun\\.cn\\/v\\/ac[\\d]+"
+      ] = function(match) {
+        return [match, "video"];
+      };
+      this.URL_MATCHERS[
+        "(https:\\/\\/|http:\\/\\/)?(www\\.)?nicovideo\\.jp\\/watch\\/(s|n)m[\\d]+"
+      ] = function(match) {
+        return [match, "video"];
+      };
+      this.URL_MATCHERS[
+        "((https:\\/\\/)?(www\\.|m\\.)?youtube\\.com\\/watch\\?v=[-\\w]+|https:\\/\\/youtu\\.be\\/(watch\\?v=[-\\w]+|[-\\w]+))"
+      ] = function(match) {
+        return [match, "video"];
+      };
+      this.URL_MATCHERS[
+        "(https:\\/\\/)?(www\\.|mobile\\.)?twitter\\.com\\/[\\w]+\\/status\\/[\\d]+"
+      ] = function(match) {
+        return [match, "video"];
+      };
+      this.URL_MATCHERS["ac[\\d]+"] = function(short_link) {
+        return ["https://www.acfun.cn/v/" + short_link, "video"];
+      };
+      this.URL_MATCHERS["av[\\d]+"] = function(short_link) {
+        return ["https://www.bilibili.com/video/" + short_link, "video"];
+      };
+      this.URL_MATCHERS["(s|n)m[\\d]+"] = function(short_link) {
+        return ["https://www.nicovideo.jp/watch/" + short_link, "video"];
+      };
+      this.URL_MATCHERS["youtube-[-\\w]+"] = function(short_link) {
+        return [
+          "https://www.youtube.com/watch?v=" + short_link.substring(8),
+          "video"
+        ];
+      };
+      this.URL_MATCHERS["mylist\\/[\\d]+"] = function(short_link) {
+        return ["https://www.nicovideo.jp/" + short_link, "playlist"];
+      };
+    },
+    // 将视频简介里的连接变成链接
+    urlifyDesc() {
+      var that = this;
+      var desc_text = this.myVideoData.video.item.desc;
+      var combined_matcher = "(";
+      var i = 1;
+      for (var regex in this.URL_MATCHERS) {
+        if (i == Object.keys(this.URL_MATCHERS).length) {
+          combined_matcher += regex;
+        } else {
+          combined_matcher += regex + "|";
+        }
+        i += 1;
+      }
+      combined_matcher += ")";
+      var combined_matcher_regex = new RegExp(combined_matcher, "ig");
+      var is_logged_in = this.isLogin;
+      var desc_urlified = desc_text.replace(combined_matcher_regex, function(
+        url
+      ) {
+        for (var key in that.URL_MATCHERS) {
+          if (new RegExp(key, "i").test(url)) {
+            const [expanded_url, link_type] = that.URL_MATCHERS[key](url);
+            return `<div class="video-link-div"><a href="${expanded_url}">${url}</a>${that.buildUrlTools(
+              is_logged_in,
+              expanded_url,
+              link_type
+            )}</div>`;
+          }
+        }
+      });
+      this.myVideoData.video.item.desc = desc_urlified;
+    },
+    // 动态创建添加副本的组件
+    buildUrlTools(logged_in, url, link_type) {
+      if (!logged_in) {
+        return "";
+      }
+
+      if (link_type == "video") {
+        var ret = `<div class="url-tools">`;
+        // 利用name属性保存绑定的URL
+        ret += `<button name="${url}">添加副本</button>`;
+        ret += `</div>`;
+        return ret;
+      }
+
+      return "";
+    },
+    // 将简介中的视频连接存为副本
+    postAsCopy(event) {
+      var url = event.target.name;
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "be/postvideo.do",
+        data: {
+          copy: this.myVideoData.video._id.$oid,
+          url: url,
+          tags: this.myVideoData.tags
+        }
+      }).then(result => {
+        if (result.data.status == "SUCCEED") {
+          this.open1("副本添加成功！");
+          // this.searchVideo();
+          // 不知道为什么只能通过刷新才能显示副本
+          this.$router.go(0);
+          // this.openHTML("/video", url);
+        } else if (result.data.status == "FAILED") {
+          this.open4("副本添加失败！");
+        } else {
+          this.open4("未知错误");
+        }
+        this.loading = false;
+      });
+    },
+    // 同步某一副本的标签
+    synctags(URL) {
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "/be/videos/synctags.do",
+        data: {
+          dst: this.myVideoData.video._id.$oid,
+          src: URL
+        }
+      }).then(result => {
+        if (result.data.status == "SUCCEED") {
+          this.open1("同步成功！");
+          // this.searchVideo();
+          // 不知道为什么只能通过刷新才能显示副本
+          this.$router.go(0);
+        } else if (result.data.status == "FAILED") {
+          this.open4("同步失败！");
+        } else {
+          this.open4("未知错误");
+        }
+        this.loading = false;
+      });
     }
   },
   components: { left_navbar, topnavbar, Footer }
@@ -476,7 +637,6 @@ export default {
 .re_video,
 .new_video-detail {
   width: 100%;
-
   position: relative;
   top: 0px;
   left: 0px;
@@ -525,5 +685,40 @@ export default {
   background-color: rgb(255, 255, 255);
   width: 85%;
   margin-top: 20px;
+}
+.videoDesc /deep/ .video-link-div {
+  position: relative;
+  display: inline-block;
+}
+.videoDesc /deep/ a {
+  color: rgb(6, 95, 212);
+}
+.videoDesc /deep/ .url-tools {
+  visibility: hidden;
+  position: absolute;
+  width: 100px;
+  background-color: rgba(197, 197, 197, 0.219);
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s;
+  top: -5px;
+  bottom: auto;
+  right: 100%;
+}
+.videoDesc /deep/ .video-link-div:hover .url-tools {
+  visibility: visible;
+  opacity: 1;
+}
+.copies .el-button {
+  visibility: hidden;
+  opacity: 0;
+}
+.copies:hover .el-button {
+  visibility: visible;
+  opacity: 1;
 }
 </style>

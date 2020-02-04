@@ -330,7 +330,7 @@ export default {
         path: "./postvideo",
         query: {
           pid: this.videolistPid,
-          rank: 0
+          rank: -1
         }
       });
     },
