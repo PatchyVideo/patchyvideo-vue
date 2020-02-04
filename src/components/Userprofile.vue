@@ -21,6 +21,7 @@
 
     <div>
 
+<!--<el-button @click="testIpfs">dwa</el-button>-->
         <div class="bigbox standard" v-if="this.$route.params.id=='me'"   v-loading="loading">
 
             <div class="bigbox_left">
@@ -230,6 +231,25 @@
 
         },
         methods: {
+            testIpfs(){
+              this.axios({
+                  method:"post",
+                  url:"/be/postvideo_ipfs.do",
+                  data:{
+                      "url": "ipfs:QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh",
+                      "tags": ["MMD"],
+                      "title": "test_title",
+                      "desc": "test_desc",
+                      "file_key": "upload-image-4e52bcb34d7438660e07062e61a442ed",
+                      "copy": "",
+                      "pid": "",
+                      "rank": "-1"
+                  }
+
+              }).then(res=>{
+                  console.log(res);
+              })
+            },
             faceMouseOver(b){
                 this.mounseMark=b;
                 },

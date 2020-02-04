@@ -39,7 +39,7 @@
                                         tag="a"
                                         v-for="i in videoData":key="i._id.$oid">
                               <img   :src="'/images/covers/'+i.item.cover_image" alt="">
-                              <h4><a href="">{{i.item.title}}</a></h4>
+                              <h4><router-link   :to="{ path: '/video', query: { id: i._id.$oid } }">{{i.item.title}}</router-link></h4>
                           </router-link>
                       </div>
                        <div class="video_straightColumn" v-if="!flag" >
@@ -50,10 +50,10 @@
                                      v-for="i in videoData":key="i._id.$oid">
                             <img :src="'/images/covers/'+i.item.cover_image"  alt="">
                             <div class="list-item_content">
-                                <h4><a href="">{{i.item.title}}</a></h4>
+                                <h4><router-link   :to="{ path: '/video', query: { id: i._id.$oid } }">{{i.item.title}}</router-link></h4>
                                 <p>{{i.item.desc}}
                                 </p>
-                                <a href="">{{i.item.url}}</a>
+                                <a :href="i.item.url">{{i.item.url}}</a>
                             </div>
                         </router-link>
 

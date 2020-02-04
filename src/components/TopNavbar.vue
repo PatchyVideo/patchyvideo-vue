@@ -54,6 +54,9 @@
         <li>
           <router-link to="/edittag">标签</router-link>
         </li>
+        <li>
+          <a href="https://patchyvideo.com/ipfs/">幻想之物</a>
+        </li>
       </ul>
     </div>
 
