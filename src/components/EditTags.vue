@@ -192,6 +192,7 @@ export default {
       firstFlag:true,
       msgMark: 0,
       animeMark: 0,
+      infoTipMark:false,
       // 自动补全标签的内容
       taglist: []
     };
@@ -382,6 +383,11 @@ export default {
 
     },
     addTag() {
+      if(this.infoTipMark === true){
+        this.infoTipMark = false;
+        return;
+      }
+      console.log("触发了添加事件");
       //方案二,所有操作都在函数的成功和失败回调中进行，代码冗余
       this.infoTip[0].isHidden = true;
       this.getTagCategoriesForAdd(this.iptVal);
@@ -420,6 +426,7 @@ export default {
                       // 第一轮 Event Loop 结束 开始第二轮执行setTimeout*/
     },
     saveTag() {
+
       if (/*this.msg===""*/ this.$route.path === "/postvideo") {
         //如果没有pid,则处在提交视频界面，返回给父组件tags
         this.$emit("getEditTagsData", this.tags);
@@ -454,6 +461,7 @@ export default {
     },
     infoTipEvent(event) {
       //添加TAG行为消息提示
+      console.log("提示框触发了关闭");
       if (event == true) {
         this.infoTip[0].isHidden = true;
         return;
@@ -465,6 +473,7 @@ export default {
     },
     // 下面是消息补全框的方法
     querySearchAsync(queryString, cb) {
+      this.infoTipMark = true;
       var url = "/autocomplete/?q=" + queryString;
       this.axios({
         method: "get",
@@ -476,6 +485,7 @@ export default {
     },
     handleSelect(item) {
       this.iptVal = item.tag;
+      console.log("选中");
     }
     // 消息提示
   },

@@ -163,7 +163,8 @@ export default {
         { tag: "site:twitter", cat: 6, cnt: null },
         { tag: "site:youtube", cat: 6, cnt: null },
         { tag: "site:ipfs", cat: 6, cnt: null }
-      ]
+      ],
+      infoTipMark:false
     };
   },
   computed: {
@@ -207,6 +208,10 @@ export default {
     },
     // 点击搜索按钮使home页面显示搜索结果
     gotoHome() {
+      if(this.infoTipMark ===true){
+        this.infoTipMark = false;
+        return;
+      }
       if (this.iptVal != "") {
         this.$router
           .push({ path: "/home", query: { keyword: this.iptVal } })
@@ -259,6 +264,7 @@ export default {
     // --------------------------------------------------危险提示--------------------------------------------------
     // 消息补全框的方法
     querySearchAsync(queryString, cb) {
+      this.infoTipMark = true;
       // 这里的get(0)是将jq对象转换为原生js对象
       // selectionStart是获取光标当前位置
       var endlocation = $("#ipt").get(0).selectionStart;
