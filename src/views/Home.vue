@@ -123,10 +123,10 @@ export default {
     return {
       // 视频列表的排序规则
       options: [
-        { value: "latest", label: "Latest Post  " },
-        { value: "oldest", label: "Oldest Post  " },
-        { value: "video_latest", label: "Latest Upload" },
-        { value: "video_oldest", label: "Oldest Upload" }
+        { value: "latest", label: "发布时间正序" },
+        { value: "oldest", label: "发布时间倒序" },
+        { value: "video_latest", label: "原视频上传时间正序" },
+        { value: "video_oldest", label: "原视频上传时间倒序" }
       ],
       // 当前视频列表的排列顺序
       couponSelected: "",
