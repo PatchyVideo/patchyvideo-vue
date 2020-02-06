@@ -54,7 +54,7 @@ export default {
             method: "post",
             url: "be/lists/create_from_existing_playlists.do",
             data: {
-              URL: this.list.URL
+              url: this.list.URL
             }
           }).then(result => {
             this.loading = false;
