@@ -2,7 +2,7 @@
 <!--
     页面：paychyvideo的视频上传页面
     功能：用户可以上传视频
-    包含组件：TopNavbar.vue、Foot.vue、PostSingleVideo.vue、PostMultiVideos.vue
+    包含组件：TopNavbar.vue、Foot.vue、PostSingleVideo.vue、PostMultiVideos.vue、PostIPFSVideo.vue 
     其他说明：1.用户必须登录才能进入此页面；2.本页面暂时只支持a站，b站，n站，推特和油管的视频上传
     更新日志：
     1/18/2020：
@@ -22,6 +22,9 @@
         <el-tab-pane label="批量发布" name="second">
           <PostMultiVideos></PostMultiVideos>
         </el-tab-pane>
+        <el-tab-pane label="IPFS视频发布" name="third">
+          <PostIPFSVideo></PostIPFSVideo>
+        </el-tab-pane>
       </el-tabs>
     </div>
 
@@ -34,6 +37,7 @@ import topnavbar from "../components/TopNavbar.vue";
 import Footer from "../components/Footer.vue";
 import PostSingleVideo from "../components/PostSingleVideo";
 import PostMultiVideos from "../components/PostMultiVideos";
+import PostIPFSVideo from "../components/PostIPFSVideo";
 export default {
   data() {
     return {
@@ -52,7 +56,13 @@ export default {
     // 切换标签页
     handleClick(tab, event) {}
   },
-  components: { topnavbar, Footer, PostSingleVideo, PostMultiVideos }
+  components: {
+    topnavbar,
+    Footer,
+    PostSingleVideo,
+    PostMultiVideos,
+    PostIPFSVideo
+  }
 };
 </script>
 
@@ -61,7 +71,7 @@ export default {
   text-align: left;
 }
 .main-page-background-img {
-  background-image: url("./../static/img/imoto3.jpg");
+  /* background-image: url("./../static/img/imoto3.jpg"); */
   background-repeat: no-repeat;
   min-height: 800px;
   width: 100%;
