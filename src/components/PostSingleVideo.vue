@@ -39,7 +39,7 @@
           <h2>{{title}}</h2>
           <p>{{desc}}</p>
           <!-- 标签编辑 -->
-          <div class="tagsEdit" v-if="true">
+          <div class="tagsEdit" v-if="false">
             <h3>标签</h3>
             <div class="tagBox">
               <p v-if="tags==''">暂无标签！</p>
