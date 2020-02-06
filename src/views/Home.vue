@@ -37,6 +37,8 @@
       1.显示搜索结果的标签数量进行了优化
     1/29/2020：v1.0.10
       1.对搜索关键字出现非法字符的情况进行了兼容
+    2/5/2020：v1.0.11
+      1.页面中文优化
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
 -->
@@ -121,10 +123,10 @@ export default {
     return {
       // 视频列表的排序规则
       options: [
-        { value: "latest", label: "Latest Post  " },
-        { value: "oldest", label: "Oldest Post  " },
-        { value: "video_latest", label: "Latest Upload" },
-        { value: "video_oldest", label: "Oldest Upload" }
+        { value: "latest", label: "发布时间正序" },
+        { value: "oldest", label: "发布时间倒序" },
+        { value: "video_latest", label: "原视频上传时间正序" },
+        { value: "video_oldest", label: "原视频上传时间倒序" }
       ],
       // 当前视频列表的排列顺序
       couponSelected: "",

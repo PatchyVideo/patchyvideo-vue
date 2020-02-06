@@ -27,7 +27,7 @@
         v-model="URLs"
       ></el-input>
       <!-- 标签编辑 -->
-      <div class="tagsEdit">
+      <div class="tagsEdit" v-if="false">
         <h3>标签</h3>
         <div class="tagBox">
           <p v-if="tags==''" style="margin-bottom:10px;">暂无标签！</p>
@@ -219,12 +219,14 @@ export default {
 .advancedOptions {
   margin-top: 20px;
   cursor: pointer;
+  text-align: left;
 }
 .advancedOptions:hover {
   color: #409eff;
 }
 .options {
   margin-top: 5px;
+  text-align: left;
 }
 .postButton {
   width: 80%;
