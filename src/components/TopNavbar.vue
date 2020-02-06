@@ -123,7 +123,7 @@
             <a @click="dialogVisible = true" style="cursor:pointer">登出</a>
 
             <!-- 退出登录的弹出框 -->
-            <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+            <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" v-loading="loading">
               <p>你确定要退出登录吗?</p>
               <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -155,6 +155,8 @@ export default {
       startlocation: 0,
       // 进行搜索的时候光标的位置(终止位置)
       endlocation: 0,
+      // 退出登录时退出框处于加载状态的判断
+      loading: false,
       // 网站推荐栏
       sites: [
         { tag: "site:acfun", cat: 6, cnt: null },
@@ -164,7 +166,7 @@ export default {
         { tag: "site:youtube", cat: 6, cnt: null },
         { tag: "site:ipfs", cat: 6, cnt: null }
       ],
-      infoTipMark:false
+      infoTipMark: false
     };
   },
   computed: {
@@ -193,22 +195,30 @@ export default {
     },
     // 退出时清除所有数据
     cleanLocalStorage() {
-      this.isLogin = false;
-      // 清除所有session值(退出登录)
-      sessionStorage.clear();
-      // 清除用户名
-      this.$store.commit("clearUserName");
-      // 清除本地数据
-      localStorage.setItem("username", "");
-      // 清除cookie
-      this.clearCookie();
-      // 刷新界面
-      location.reload();
-      this.dialogVisible = false;
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "/be/logout.do",
+        data: {}
+      }).then(result => {
+        this.isLogin = false;
+        // 清除所有session值(退出登录)
+        sessionStorage.clear();
+        // 清除用户名
+        this.$store.commit("clearUserName");
+        // 清除本地数据
+        localStorage.setItem("username", "");
+        // 清除cookie
+        this.clearCookie();
+        // 刷新界面
+        location.reload();
+        this.loading = false;
+        this.dialogVisible = false;
+      });
     },
     // 点击搜索按钮使home页面显示搜索结果
     gotoHome() {
-      if(this.infoTipMark ===true){
+      if (this.infoTipMark === true) {
         this.infoTipMark = false;
         return;
       }
