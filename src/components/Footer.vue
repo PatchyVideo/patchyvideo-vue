@@ -10,7 +10,7 @@
     12/10/2019：v1.0.1
       1.修改了注释内容  
     2/7/2020：v1.0.2
-      1.显示内容更改为网站的代码提交地址
+      1.显示内容更改为网站的代码提交地址的前八位
 -->
 
 <template>
@@ -20,11 +20,11 @@
       Running patchyvideo(Client:
       <a
         :href="'https://github.com/suwadaimyojin/patchyvideo-vue/commit/'+commitOfClient"
-      >{{commitOfClient}}</a>
+      >{{commitOfClient2}}</a>
       ;Server:
       <a
         :href="'https://github.com/zyddnys/PatchyVideo/commit/'+commitOfServer"
-      >{{commitOfServer}}</a>
+      >{{commitOfServer2}}</a>
       )
     </p>
   </div>
@@ -39,6 +39,14 @@ export default {
       // github上的后台commit地址
       commitOfServer: ""
     };
+  },
+  computed: {
+    commitOfClient2() {
+      return this.commitOfClient.slice(0, 8);
+    },
+    commitOfServer2() {
+      return this.commitOfServer.slice(0, 8);
+    }
   },
   created() {
     this.getCommit();
