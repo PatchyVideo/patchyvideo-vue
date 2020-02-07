@@ -190,7 +190,7 @@ export default {
       ],
       recTagsWatch: true,
       firstFlag:true,
-      msgMark: 0,
+      msgMark: false,
       animeMark: 0,
       infoTipMark:[],
       // 自动补全标签的内容
@@ -200,7 +200,6 @@ export default {
   created() {
 
     if (this.msg != "") {
-
       this.getCommonTags(); //防止组件更新时没有调用
     }
   },
@@ -284,19 +283,17 @@ export default {
       })
         .then(res => {
           this.TagCategoriesData = res.data.data.categorie_map;
-
           /*if(this.$route.path === "/postvideo"){
             this.animeMark =0;
           }*/
-
           if(this.firstFlag===true){
             this.animeMark =0;
             this.firstFlag=false;
           }
-          if (this.msgMark != 0) {
-            this.open2();
-          }
-          this.msgMark++;
+          if (this.msgMark===true) { //msgMark为True证明是添加TAG
+                  this.open2();
+            }
+          this.msgMark=false;
         })
         .catch(err => {
         });
@@ -324,6 +321,7 @@ export default {
             return;
           }
           if (this.tags.indexOf(this.iptVal) === -1 &&this.iptVal!="") {
+
             //不存在则添加
             this.tags.push(this.iptVal);
             /* 如果所有的标签都没有被选中，那下次一添加的标签被选中*/
@@ -333,6 +331,7 @@ export default {
             /*默认添加的所有标签都被选中*/
            /* this.tagsForRec.push(this.iptVal);*/
             /*默认添加的所有标签不被选中*/
+            this.msgMark = true;
             this.getTagCategories(this.tags);
             this.iptVal = "";
          /*   this.$emit("getEditTagsData", this.tags);*/
@@ -531,6 +530,7 @@ export default {
     msg() {
       if (this.msg != "") {
         this.getCommonTags();
+
       }
     },
     really(v){
