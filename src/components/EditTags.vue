@@ -192,7 +192,7 @@ export default {
       firstFlag:true,
       msgMark: 0,
       animeMark: 0,
-      infoTipMark:false,
+      infoTipMark:[],
       // 自动补全标签的内容
       taglist: []
     };
@@ -205,6 +205,15 @@ export default {
     }
   },
   methods: {
+    watchAutoComplete(){
+      let m  =  Array.from(document.getElementsByClassName("el-autocomplete-suggestion el-popper my-autocomplete"));
+      let  m_Mark =[];
+      for(let i =0;i<m.length;++i){
+        m_Mark[i] = m[i].style.display;
+      }
+      this.infoTipMark =m_Mark;
+      /*  console.log(m_Mark);*/
+    },
     open1() {
       this.$message("这是一条消息提示");
     },
@@ -383,11 +392,19 @@ export default {
 
     },
     addTag() {
-      if(this.infoTipMark === true){
-        this.infoTipMark = false;
-        return;
+      this.watchAutoComplete();
+      {
+        let count = 0;
+        for(let i=0;i<this.infoTipMark.length;++i){
+          if( this.infoTipMark[i].toString()=="none"){
+            count++
+          }
+        }
+        if(count!=this.infoTipMark.length){
+          return;
+        }
+
       }
-      console.log("触发了添加事件");
       //方案二,所有操作都在函数的成功和失败回调中进行，代码冗余
       this.infoTip[0].isHidden = true;
       this.getTagCategoriesForAdd(this.iptVal);
