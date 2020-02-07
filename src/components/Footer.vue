@@ -5,25 +5,63 @@
     功能：网站的版权声明等
     必要传入参数：无
     更新日志：
-    12/3/2019: v1.0 
+    12/3/2019：v1.0 
       release
-    12/10/2019: v1.0.1
+    12/10/2019：v1.0.1
       1.修改了注释内容  
+    2/7/2020：v1.0.2
+      1.显示内容更改为网站的代码提交地址
 -->
 
 <template>
   <div class="footer">
-    <p>© 2019 www.patchyvideo.com Touhou Project</p>
+    <p>
+      <!-- © 2019 www.patchyvideo.com  -->
+      Running patchyvideo(Client:
+      <a
+        :href="'https://github.com/suwadaimyojin/patchyvideo-vue/commit/'+commitOfClient"
+      >{{commitOfClient}}</a>
+      ;Server:
+      <a
+        :href="'https://github.com/zyddnys/PatchyVideo/commit/'+commitOfServer"
+      >{{commitOfServer}}</a>
+      )
+    </p>
   </div>
 </template>
 
 <script>
 export default {
   data() {
-    return {};
+    return {
+      // github上的前台commit地址
+      commitOfClient: "",
+      // github上的后台commit地址
+      commitOfServer: ""
+    };
   },
-  created() {},
-  methods: {},
+  created() {
+    this.getCommit();
+  },
+  methods: {
+    // 获取github上的commit地址
+    getCommit() {
+      // 获取前端地址
+      this.axios({
+        method: "get",
+        url: "https://patchyvideo.com/v/fe/"
+      }).then(result => {
+        this.commitOfClient = result.data;
+      });
+      // 获取后端地址
+      this.axios({
+        method: "get",
+        url: "https://patchyvideo.com/v/be/"
+      }).then(result => {
+        this.commitOfServer = result.data;
+      });
+    }
+  },
   components: {}
 };
 </script>
