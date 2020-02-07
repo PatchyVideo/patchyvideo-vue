@@ -27,6 +27,8 @@
     2/4/2020：v1.1.6
       1.视频介绍里的链接功能以及链接的副本功能完成
       2.副本列表新增同步某一副本视频的功能
+    2/7/2020：v1.1.7
+      1.视频详情点击会出现副本添加失败的bug修复
     ★待解决问题：
       1.视频介绍里的链接功能弹出的按钮尚待优化
       2.按下浏览器的后退按钮网站没有刷新数据
@@ -553,6 +555,7 @@ export default {
     },
     // 将简介中的视频连接存为副本
     postAsCopy(event) {
+      if (event.target.nodeName.toString() != "BUTTON") return;
       var url = event.target.name;
       this.loading = true;
       this.axios({
@@ -572,6 +575,10 @@ export default {
           // this.openHTML("/video", url);
         } else if (result.data.status == "FAILED") {
           this.open4("副本添加失败！");
+        } else if (result.data.status == "ERROR") {
+          if (result.data.data == "UNAUTHORISED_OPERATION") {
+            this.open4("登录信息错误，请重新登录！");
+          }
         } else {
           this.open4("未知错误");
         }
