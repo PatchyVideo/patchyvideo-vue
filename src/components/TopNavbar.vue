@@ -166,10 +166,11 @@ export default {
         { tag: "site:youtube", cat: 6, cnt: null },
         { tag: "site:ipfs", cat: 6, cnt: null }
       ],
-      infoTipMark: false
+      infoTipMark:[]
     };
   },
   computed: {
+
     // 搜索的关键字
     iptVal2() {
       return this.$store.state.TopNavbarSearching;
@@ -187,8 +188,19 @@ export default {
     this.iptVal = this.iptVal2;
   },
   mounted() {},
-  updated() {},
+  updated() {
+
+  },
   methods: {
+    watchAutoComplete(){
+      let m  =  Array.from(document.getElementsByClassName("el-autocomplete-suggestion el-popper"));
+      let  m_Mark =[];
+      for(let i =0;i<m.length;++i){
+        m_Mark[i] = m[i].style.display;
+      }
+      this.infoTipMark =m_Mark;
+      console.log(m_Mark);
+    },
     // 登录跳转
     login() {
       this.$store.commit("changeifRouter", "0");
@@ -218,9 +230,18 @@ export default {
     },
     // 点击搜索按钮使home页面显示搜索结果
     gotoHome() {
-      if (this.infoTipMark === true) {
-        this.infoTipMark = false;
-        return;
+      this.watchAutoComplete();
+      {
+        let count = 0;
+        for(let i=0;i<this.infoTipMark.length;++i){
+          if( this.infoTipMark[i].toString()=="none"){
+            count++
+          }
+        }
+        if(count!=this.infoTipMark.length){
+          return;
+        }
+
       }
       if (this.iptVal != "") {
         this.$router
@@ -274,7 +295,6 @@ export default {
     // --------------------------------------------------危险提示--------------------------------------------------
     // 消息补全框的方法
     querySearchAsync(queryString, cb) {
-      this.infoTipMark = true;
       // 这里的get(0)是将jq对象转换为原生js对象
       // selectionStart是获取光标当前位置
       var endlocation = $("#ipt").get(0).selectionStart;

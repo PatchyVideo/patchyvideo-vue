@@ -190,9 +190,9 @@ export default {
       ],
       recTagsWatch: true,
       firstFlag:true,
-      msgMark: 0,
+      msgMark: false,
       animeMark: 0,
-      infoTipMark:false,
+      infoTipMark:[],
       // 自动补全标签的内容
       taglist: []
     };
@@ -200,11 +200,19 @@ export default {
   created() {
 
     if (this.msg != "") {
-
       this.getCommonTags(); //防止组件更新时没有调用
     }
   },
   methods: {
+    watchAutoComplete(){
+      let m  =  Array.from(document.getElementsByClassName("el-autocomplete-suggestion el-popper my-autocomplete"));
+      let  m_Mark =[];
+      for(let i =0;i<m.length;++i){
+        m_Mark[i] = m[i].style.display;
+      }
+      this.infoTipMark =m_Mark;
+      /*  console.log(m_Mark);*/
+    },
     open1() {
       this.$message("这是一条消息提示");
     },
@@ -275,19 +283,17 @@ export default {
       })
         .then(res => {
           this.TagCategoriesData = res.data.data.categorie_map;
-
           /*if(this.$route.path === "/postvideo"){
             this.animeMark =0;
           }*/
-
           if(this.firstFlag===true){
             this.animeMark =0;
             this.firstFlag=false;
           }
-          if (this.msgMark != 0) {
-            this.open2();
-          }
-          this.msgMark++;
+          if (this.msgMark===true) { //msgMark为True证明是添加TAG
+                  this.open2();
+            }
+          this.msgMark=false;
         })
         .catch(err => {
         });
@@ -315,6 +321,7 @@ export default {
             return;
           }
           if (this.tags.indexOf(this.iptVal) === -1 &&this.iptVal!="") {
+
             //不存在则添加
             this.tags.push(this.iptVal);
             /* 如果所有的标签都没有被选中，那下次一添加的标签被选中*/
@@ -324,6 +331,7 @@ export default {
             /*默认添加的所有标签都被选中*/
            /* this.tagsForRec.push(this.iptVal);*/
             /*默认添加的所有标签不被选中*/
+            this.msgMark = true;
             this.getTagCategories(this.tags);
             this.iptVal = "";
          /*   this.$emit("getEditTagsData", this.tags);*/
@@ -383,11 +391,19 @@ export default {
 
     },
     addTag() {
-      if(this.infoTipMark === true){
-        this.infoTipMark = false;
-        return;
+      this.watchAutoComplete();
+      {
+        let count = 0;
+        for(let i=0;i<this.infoTipMark.length;++i){
+          if( this.infoTipMark[i].toString()=="none"){
+            count++
+          }
+        }
+        if(count!=this.infoTipMark.length){
+          return;
+        }
+
       }
-      console.log("触发了添加事件");
       //方案二,所有操作都在函数的成功和失败回调中进行，代码冗余
       this.infoTip[0].isHidden = true;
       this.getTagCategoriesForAdd(this.iptVal);
@@ -514,6 +530,7 @@ export default {
     msg() {
       if (this.msg != "") {
         this.getCommonTags();
+
       }
     },
     really(v){
