@@ -166,7 +166,7 @@ export default {
         { tag: "site:youtube", cat: 6, cnt: null },
         { tag: "site:ipfs", cat: 6, cnt: null }
       ],
-      infoTipMark:[]
+      infoTipMark:false
     };
   },
   computed: {
@@ -192,7 +192,7 @@ export default {
 
   },
   methods: {
-    watchAutoComplete(){
+  /*  watchAutoComplete(){
       let m  =  Array.from(document.getElementsByClassName("el-autocomplete-suggestion el-popper"));
       let  m_Mark =[];
       for(let i =0;i<m.length;++i){
@@ -200,7 +200,7 @@ export default {
       }
       this.infoTipMark =m_Mark;
       console.log(m_Mark);
-    },
+    },*/
     // 登录跳转
     login() {
       this.$store.commit("changeifRouter", "0");
@@ -230,8 +230,15 @@ export default {
     },
     // 点击搜索按钮使home页面显示搜索结果
     gotoHome() {
-      this.watchAutoComplete();
-      {
+/*      console.log(this.infoTipMark);*/
+      /*   this.watchAutoComplete();*/
+      //如果回车搜索之前有选中建议框的数据，则取消这次搜索
+      if(this.infoTipMark ===true){
+        this.infoTipMark =false;
+        return;
+      }
+
+     /* {
         let count = 0;
         for(let i=0;i<this.infoTipMark.length;++i){
           if( this.infoTipMark[i].toString()=="none"){
@@ -242,7 +249,7 @@ export default {
           return;
         }
 
-      }
+      }*/
       if (this.iptVal != "") {
         this.$router
           .push({ path: "/home", query: { keyword: this.iptVal } })
@@ -375,6 +382,7 @@ export default {
       this.iptVal = iptVal;
       // 光标设置焦点事件
       var endlocation = $("#ipt").focus();
+      this.infoTipMark =true;
     }
   },
   watch: {
