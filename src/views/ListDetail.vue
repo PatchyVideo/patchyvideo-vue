@@ -23,18 +23,18 @@
       1.视频列表的索引值优化
     2/4/2020：v1.0.6
       1.添加视频的时候视频添加到播放列表的末尾而不是开头
+    2/7/2020：v1.0.7
+      1.tag编辑标签之前会请求标签数据
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
-      2.EditTags组件应仅对当前收藏列表持有者展示
-      3.上下调整视频顺序等功能对非管理员可见但不可用，且鼠标放在上面的时候不显示说明
-      4.视频列表为空的时候无法添加视频
+      2.编辑共有标签的时候有时候会弹出“添加成功”的提示
 -->
 <template>
   <div class="listDetail">
     <topnavbar />
 
     <!-- EditTags组件-->
-    <EditTags :msg="videolistPid" :visible.sync="showTagPanel"></EditTags>
+    <EditTags ref="editTag" :msg="videolistPid" :visible.sync="showTagPanel"></EditTags>
 
     <!-- 编辑视频列表时的对话框 -->
     <el-dialog title="编辑视频详情" :visible.sync="openListEdit" width="40%">
@@ -370,6 +370,7 @@ export default {
     // 打开Tag编辑页面
     openEditTags: function() {
       this.showTagPanel = true;
+      this.$refs.editTag.getCommonTags();
     },
     open(message) {
       this.$message({
