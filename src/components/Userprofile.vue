@@ -324,7 +324,8 @@ export default {
         .then(res => {
           if (res.data.status == "ERROR") {
             //火狐浏览器有BUG 暂时先这样跳，等cookie登陆做完后再在user页面判断。
-            this.$router.push("/login");
+           /* this.$router.push("/login");*/
+            console.log(res);
           }
           if (res.data.status == "SUCCEED") {
             this.myData = res.data.data.profile;
