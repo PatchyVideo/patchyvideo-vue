@@ -34,7 +34,7 @@
     <topnavbar />
 
     <!-- EditTags组件-->
-    <EditTags ref="editTag" :msg="videolistPid" :visible.sync="showTagPanel"></EditTags>
+    <EditTags ref="editTag" :msg="temporaryValForVLP":visible.sync="showTagPanel" v-if="editable"></EditTags>
 
     <!-- 编辑视频列表时的对话框 -->
     <el-dialog title="编辑视频详情" :visible.sync="openListEdit" width="40%">
@@ -213,7 +213,10 @@ export default {
       count: 20,
       // 视频的全部数量
       maxcount: 0,
+      // 传入Tags组件视频页的ID
       videolistPid: "",
+      //传入Tags组件视频页的ID临时变量
+      temporaryValForVLP:"",
       // 视频列表是否属于加载状态的判断
       loading: true,
       // 打开列表详情编辑页面
@@ -370,6 +373,7 @@ export default {
     },
     // 打开Tag编辑页面
     openEditTags: function() {
+      this.temporaryValForVLP = this.videolistPid;
       this.showTagPanel = true;
       this.$refs.editTag.getCommonTags();
     },

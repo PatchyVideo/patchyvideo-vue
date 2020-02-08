@@ -246,6 +246,9 @@ export default {
       });
     },
     getCommonTags() {
+      if(this.msg==""){
+        return ;
+      }
       if (this.$route.path === "/listdetail") {
         this.axios({
           method: "post",
