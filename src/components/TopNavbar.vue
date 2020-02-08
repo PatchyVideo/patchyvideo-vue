@@ -255,26 +255,23 @@ export default {
         }
 
       }*/
+      // console.log(this.iptVal);
       if (this.iptVal != "") {
-        if (this.$route.path == "/home") {
-          this.$router.go(0);
-        }
         this.$router
           .push({ path: "/home", query: { keyword: this.iptVal } })
           .catch(err => {
             return err;
           });
       } else {
-        if (this.$route.path == "/home") {
-          this.$router.go(0);
-        } else {
-          this.$router.push({ path: "/home" });
-        }
+        // 对于在home页面时无参数搜索的兼容
+        if (JSON.stringify(this.$route.query) == "{}") return;
+        this.$router.push({ path: "/home" });
       }
     },
     // 清除搜索结果
     cleanIptV() {
       this.$store.commit("getTopNavbarSearching", "");
+      this.$router.go(0);
     },
     //清除cookie
     clearCookie: function() {
