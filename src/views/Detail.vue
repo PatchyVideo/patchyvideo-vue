@@ -319,7 +319,6 @@ export default {
         dangerouslyUseHTMLString: true,
         message: "<p>创建成功！<i>点我查看</i></p>"
       });
-      console.log(message);
     },
     // 从单个视频创建播放列表
     newFromSingleVideo() {
