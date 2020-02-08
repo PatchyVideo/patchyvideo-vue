@@ -30,6 +30,10 @@
     1/29/2020：v1.0.8
       1.搜索框的搜索建议列表优化
       2.新增对网站搜索的支持
+    2/8/2020：v1.0.9
+      1.搜索框的自动补全优化
+      2.自动补全加入新的搜索关键字
+      3.在home页面搜索的时候会触发页面刷新
     ★待解决问题：
       1.搜索框在自动补全的时候焦点总是在文本的最右边（改变selectionStart和selectionEnd属性不知道为什么不起作用）
       2.搜索框的css渲染待补全（搜索结果与关键字重合的地方加粗、加下划线等）
@@ -157,20 +161,23 @@ export default {
       endlocation: 0,
       // 退出登录时退出框处于加载状态的判断
       loading: false,
-      // 网站推荐栏
+      // 网站推荐栏以及关键字推荐栏
       sites: [
         { tag: "site:acfun", cat: 6, cnt: null },
         { tag: "site:bilibili", cat: 6, cnt: null },
         { tag: "site:nicovideo", cat: 6, cnt: null },
         { tag: "site:twitter", cat: 6, cnt: null },
         { tag: "site:youtube", cat: 6, cnt: null },
-        { tag: "site:ipfs", cat: 6, cnt: null }
+        { tag: "site:ipfs", cat: 6, cnt: null },
+        { tag: "AND", cat: 6, cnt: null },
+        { tag: "OR", cat: 6, cnt: null },
+        { tag: "NOT", cat: 6, cnt: null },
+        { tag: "date:", cat: 6, cnt: null }
       ],
-      infoTipMark:false
+      infoTipMark: false
     };
   },
   computed: {
-
     // 搜索的关键字
     iptVal2() {
       return this.$store.state.TopNavbarSearching;
@@ -188,11 +195,9 @@ export default {
     this.iptVal = this.iptVal2;
   },
   mounted() {},
-  updated() {
-
-  },
+  updated() {},
   methods: {
-  /*  watchAutoComplete(){
+    /*  watchAutoComplete(){
       let m  =  Array.from(document.getElementsByClassName("el-autocomplete-suggestion el-popper"));
       let  m_Mark =[];
       for(let i =0;i<m.length;++i){
@@ -230,15 +235,15 @@ export default {
     },
     // 点击搜索按钮使home页面显示搜索结果
     gotoHome() {
-/*      console.log(this.infoTipMark);*/
+      /*      console.log(this.infoTipMark);*/
       /*   this.watchAutoComplete();*/
       //如果回车搜索之前有选中建议框的数据，则取消这次搜索
-      if(this.infoTipMark ===true){
-        this.infoTipMark =false;
+      if (this.infoTipMark === true) {
+        this.infoTipMark = false;
         return;
       }
 
-     /* {
+      /* {
         let count = 0;
         for(let i=0;i<this.infoTipMark.length;++i){
           if( this.infoTipMark[i].toString()=="none"){
@@ -251,13 +256,20 @@ export default {
 
       }*/
       if (this.iptVal != "") {
+        if (this.$route.path == "/home") {
+          this.$router.go(0);
+        }
         this.$router
           .push({ path: "/home", query: { keyword: this.iptVal } })
           .catch(err => {
             return err;
           });
       } else {
-        this.$router.push({ path: "/home" });
+        if (this.$route.path == "/home") {
+          this.$router.go(0);
+        } else {
+          this.$router.push({ path: "/home" });
+        }
       }
     },
     // 清除搜索结果
@@ -332,6 +344,10 @@ export default {
         method: "get",
         url: url
       }).then(result => {
+        if (result.status == "FALIED") {
+          cb([]);
+          return;
+        }
         var resultList = results.concat(result.data);
         cb(resultList);
       });
@@ -382,7 +398,13 @@ export default {
       this.iptVal = iptVal;
       // 光标设置焦点事件
       var endlocation = $("#ipt").focus();
-      this.infoTipMark =true;
+      this.infoTipMark = true;
+    },
+    open(message) {
+      this.$message({
+        message: message,
+        type: "error"
+      });
     }
   },
   watch: {

@@ -39,6 +39,8 @@
       1.对搜索关键字出现非法字符的情况进行了兼容
     2/5/2020：v1.0.11
       1.页面中文优化
+    2/7/2020：v1.0.12
+      1.新增“输入的查询不能与NOT连用”的错误情况
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
 -->
@@ -284,6 +286,13 @@ export default {
           if (result.data.data.reason == "INCORRECT_QUERY") {
             this.$message({
               message: "查询语法错误！",
+              type: "error"
+            });
+          }
+          // NOT使用错误的时候
+          else if (result.data.data.reason == "FAILED_NOT_OP") {
+            this.$message({
+              message: "所输入的查询不能与NOT连用！",
               type: "error"
             });
           }
