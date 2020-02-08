@@ -310,6 +310,7 @@ export default {
           this.playlist_metadata.title =
             result.data.data.playlist.title.english;
           this.playlist_metadata.desc = result.data.data.playlist.desc.english;
+          this.playlist_metadata.private = result.data.data.playlist.private;
         });
 
         // 加载结束,加载动画消失
