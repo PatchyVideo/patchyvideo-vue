@@ -145,7 +145,7 @@ router.beforeEach((to, from, next) => {
     to.path == "/users/me" ||
     to.path == "/createVideoList"
   ) {
-    if (getCookie()) {
+    if (getCookie() && store.state.ifTruelyLogin != 2) {
       // console.log("已登录放行");
       return next();
     } else {

@@ -25,6 +25,9 @@ export default new Vuex.Store({
     routerPath: "",
     // 如果是路由守卫拦截，这里保存下一个页面的参数
     routerparams: {},
+    // 验证用户是否真的登录（有时候用户在其他设备上登录之后再在本设备上登录，登录信息会失效）
+    // 0为未验证，1为验证登录，2为验证未登录
+    ifTruelyLogin: 0,
     refreshCount: 0
   },
   mutations: {
@@ -78,6 +81,9 @@ export default new Vuex.Store({
     },
     changerouterparams(state, e) {
       state.routerparams = e;
+    },
+    changeifTruelyLogin(state, e) {
+      state.ifTruelyLogin = e;
     }
   },
   actions: {},
