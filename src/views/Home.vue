@@ -171,12 +171,11 @@ export default {
     // 检验传入的数据判断是否应该为搜索页
     if (JSON.stringify(this.$route.query) == "{}") {
       this.ifSearch = false;
-      return;
-    }
-    if (JSON.stringify(this.$route.query) != "{}") {
+    } else if (JSON.stringify(this.$route.query) != "{}") {
       this.searchKeyWord = this.$route.query.keyword;
       this.ifSearch = true;
-      return;
+      // 修改网站标题
+      document.title = "搜索结果- " + this.searchKeyWord;
     }
   },
   computed: {},
@@ -364,6 +363,8 @@ export default {
       }
       //监听路由query的值，当用户连续输入的搜索值不一样时，更新搜索关键词，调用 this.getSearchData获取搜索数据并渲染。
       if (newV.query.keyword != oldV.query.keyword) {
+        // 修改网站标题
+        document.title = " 搜索结果- " + newV.query.keyword;
         this.ifSearch = true;
         this.searchKeyWord = newV.query.keyword;
         this.getSearchData(this.page, this.count, newV.query.keyword);
