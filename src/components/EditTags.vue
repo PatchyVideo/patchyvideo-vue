@@ -19,13 +19,21 @@
       1/30/2020：
         1.JavaScript：saveTag方法修改，实现对于视频标签编辑的兼容;、
         新增方法：open5和open6
+      2/8/2020：
+        1.created添加代码（216~221行）
+        2.新增方法：getCommonTags2
 
 -->
 <template>
   <transition mode="out-in">
     <div v-if="visible" class="EditTags" :class="{active:this.msg!=''}">
       <div id="tag">
-        <i class="el-icon-close" id="close" @click="closeTagPanel" v-if="this.$route.path != '/postvideo'"></i>
+        <i
+          class="el-icon-close"
+          id="close"
+          @click="closeTagPanel"
+          v-if="this.$route.path != '/postvideo'"
+        ></i>
         <div class="minibox">
           <div class="m_bg"></div>
           <div class="m_a activeTag">
@@ -147,7 +155,6 @@
                 </el-autocomplete>
                 <i class="el-icon-plus" id="add" @click="addTag"></i>
               </div>
-
             </div>
             <span class="tag_title infoTip_1" :class="{hidden:infoTip[0].isHidden}">编辑共有标签</span>
             <span class="tag_title infoTip_2" :class="{show:infoTip[1].isHidden}">标签已存在</span>
@@ -160,14 +167,19 @@
                 <ul class="recTag Taglist" v-show="recTagsWatch">
                   <li class="item" v-for="(i,item) in recTags" @click="getiptVal(i,item)">
                     <p class="val_${str[i]}">{{Object.keys(i)[0]}}</p>
-         <!--           <i class="el-icon-close"></i>-->
+                    <!--           <i class="el-icon-close"></i>-->
                   </li>
                 </ul>
               </transition>
             </div>
           </div>
         </div>
-        <i class="el-icon-refresh" id="save" @click="saveTag()" v-if="this.$route.path != '/postvideo'"></i>
+        <i
+          class="el-icon-refresh"
+          id="save"
+          @click="saveTag()"
+          v-if="this.$route.path != '/postvideo'"
+        ></i>
       </div>
     </div>
   </transition>
@@ -189,22 +201,27 @@ export default {
         { name: "infoTip_3", isHidden: false }
       ],
       recTagsWatch: true,
-      firstFlag:true,
+      firstFlag: true,
       msgMark: false,
       animeMark: 0,
-      infoTipMark:false,
+      infoTipMark: false,
       // 自动补全标签的内容
       taglist: []
     };
   },
   created() {
-
     if (this.msg != "") {
       this.getCommonTags(); //防止组件更新时没有调用
     }
+    // 判断是否为从播放列表添加的视频，如果是则获取标签
+    if (this.$route.path === "/postvideo") {
+      if (this.$route.query.pid) {
+        this.getCommonTags2();
+      }
+    }
   },
   methods: {
- /*   watchAutoComplete(){
+    /*   watchAutoComplete(){
       let m  =  Array.from(document.getElementsByClassName("el-autocomplete-suggestion el-popper my-autocomplete"));
       let  m_Mark =[];
       for(let i =0;i<m.length;++i){
@@ -246,8 +263,8 @@ export default {
       });
     },
     getCommonTags() {
-      if(this.msg==""){
-        return ;
+      if (this.msg == "") {
+        return;
       }
       if (this.$route.path === "/listdetail") {
         this.axios({
@@ -278,6 +295,21 @@ export default {
           .catch(error => {});
       }
     },
+    // 从视频列表里添加视频的时候添加视频列表的共有标签
+    getCommonTags2() {
+      this.axios({
+        method: "post",
+        url: "be/list/getcommontags.do",
+        data: { pid: this.$route.query.pid }
+      })
+        .then(res => {
+          this.tags = res.data.data; //原始数据
+          this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); //深拷贝，推荐Tag数据用
+          this.getTagCategories(this.tags); //范围转换后展示原始数据
+          this.getRecTags(this.tags); //获取推荐TAG
+        })
+        .catch(error => {});
+    },
     getTagCategories(str) {
       this.axios({
         method: "post",
@@ -289,17 +321,17 @@ export default {
           /*if(this.$route.path === "/postvideo"){
             this.animeMark =0;
           }*/
-          if(this.firstFlag===true){
-            this.animeMark =0;
-            this.firstFlag=false;
+          if (this.firstFlag === true) {
+            this.animeMark = 0;
+            this.firstFlag = false;
           }
-          if (this.msgMark===true) { //msgMark为True证明是添加TAG
-                  this.open2();
-            }
-          this.msgMark=false;
+          if (this.msgMark === true) {
+            //msgMark为True证明是添加TAG
+            this.open2();
+          }
+          this.msgMark = false;
         })
-        .catch(err => {
-        });
+        .catch(err => {});
     },
     getTagCategoriesForAdd(str) {
       let strToArray = str.split();
@@ -323,24 +355,22 @@ export default {
                         },2000);*/
             return;
           }
-          if (this.tags.indexOf(this.iptVal) === -1 &&this.iptVal!="") {
-
+          if (this.tags.indexOf(this.iptVal) === -1 && this.iptVal != "") {
             //不存在则添加
             this.tags.push(this.iptVal);
             /* 如果所有的标签都没有被选中，那下次一添加的标签被选中*/
-            if(this.tagsForRec.length==0){
+            if (this.tagsForRec.length == 0) {
               this.tagsForRec.push(this.iptVal);
             }
             /*默认添加的所有标签都被选中*/
-           /* this.tagsForRec.push(this.iptVal);*/
+            /* this.tagsForRec.push(this.iptVal);*/
             /*默认添加的所有标签不被选中*/
             this.msgMark = true;
             this.getTagCategories(this.tags);
             this.iptVal = "";
-         /*   this.$emit("getEditTagsData", this.tags);*/
+            /*   this.$emit("getEditTagsData", this.tags);*/
             return;
           }
-
         })
         .catch(err => {});
     },
@@ -353,7 +383,7 @@ export default {
         .then(res => {
           this.recTags = res.data.data.tags;
           this.recTagsWatch = true;
-         /* if (this.animeMark != 0) {
+          /* if (this.animeMark != 0) {
             this.recTagsWatch = !this.recTagsWatch;
           }*/
           this.animeMark++;
@@ -390,15 +420,14 @@ export default {
     getiptVal(i, item) {
       this.iptVal = Object.keys(i)[0];
 
-        this.getTagCategoriesForAdd(this.iptVal);
-
+      this.getTagCategoriesForAdd(this.iptVal);
     },
     addTag() {
-      if(this.infoTipMark ===true){
-        this.infoTipMark =false;
+      if (this.infoTipMark === true) {
+        this.infoTipMark = false;
         return;
       }
-    /*  this.watchAutoComplete();
+      /*  this.watchAutoComplete();
       {
         let count = 0;
         for(let i=0;i<this.infoTipMark.length;++i){
@@ -449,7 +478,6 @@ export default {
                       // 第一轮 Event Loop 结束 开始第二轮执行setTimeout*/
     },
     saveTag() {
-
       if (/*this.msg===""*/ this.$route.path === "/postvideo") {
         //如果没有pid,则处在提交视频界面，返回给父组件tags
         this.$emit("getEditTagsData", this.tags);
@@ -496,7 +524,7 @@ export default {
     },
     // 下面是消息补全框的方法
     querySearchAsync(queryString, cb) {
-   /*   this.infoTipMark = true;*/
+      /*   this.infoTipMark = true;*/
       var url = "/autocomplete/?q=" + queryString;
       this.axios({
         method: "get",
@@ -508,17 +536,17 @@ export default {
     },
     handleSelect(item) {
       this.iptVal = item.tag;
-      this.infoTipMark =true;
-/*      console.log("选中");*/
+      this.infoTipMark = true;
+      /*      console.log("选中");*/
     }
     // 消息提示
   },
   watch: {
-    tags(n){
+    tags(n) {
       this.$emit("getEditTagsData", n);
     },
     tagsForRec(newVal, oldVal) {
-    /* if (this.msg === "") {
+      /* if (this.msg === "") {
         this.animeMark = 1;
       }*/
       /*if(this.$route.path === "/postvideo"){
@@ -538,18 +566,17 @@ export default {
     msg() {
       if (this.msg != "") {
         this.getCommonTags();
-
       }
     },
-    really(v){
-       if(v===true){
-    /*     this.$emit("getEditTagsData", this.tags);*/
-       }
+    really(v) {
+      if (v === true) {
+        /*     this.$emit("getEditTagsData", this.tags);*/
+      }
     }
   },
   props: {
     msg: {},
-    really:"",
+    really: "",
     visible: {
       type: Boolean,
       defulet: false
@@ -575,10 +602,10 @@ export default {
     "Hiragino Sans GB", "STHeiti", "WenQuanYi Micro Hei", "SimSun", sans-serif;
 }
 
-i{
+i {
   font-size: 19px;
-  &:hover{
-    color: #1B9AF7;
+  &:hover {
+    color: #1b9af7;
   }
 }
 div {
@@ -633,8 +660,8 @@ div {
       top: 5px;
       color: #265778;
       z-index: 999;
-      &:hover{
-        color: #1B9AF7;
+      &:hover {
+        color: #1b9af7;
       }
     }
     .minibox {
@@ -738,7 +765,7 @@ div {
             position: absolute;
             left: 50%;
             top: 30%;
-            transform: translate(-50%,-50%);
+            transform: translate(-50%, -50%);
             transition: all 0.6s ease;
 
             // width: 30%;
@@ -753,10 +780,9 @@ div {
             // transform-origin: left top !important;
           }
           #add {
-
             display: inline-block;
-            background: rgba(255,255,255,0.9);
-            border: 1px solid #DCDFE6;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #dcdfe6;
             border-left: none;
             color: black;
             font-size: 36px;
@@ -772,7 +798,7 @@ div {
             // vertical-align: center;
             // color: white;
             &:hover {
-              background: rgba(0,0,0,0.6);
+              background: rgba(0, 0, 0, 0.6);
               color: white;
             }
           }
