@@ -14,7 +14,7 @@
 <template>
   <div class="listForm" v-loading="loading">
     <el-form ref="list" :model="list" label-width="auto" :rules="rules">
-      <h3 class="desc">这里可以直接导入播放列表，但是请注意，本功能仅限于b站收藏夹或者YouTube播放列表哦</h3>
+      <h3 class="desc">这里可以直接导入播放列表，但是请注意，本功能仅限于b站收藏夹、YouTube播放列表和nicovideo的mylist哦</h3>
       <el-form-item prop="URL">
         <el-input v-model="list.URL" placeholder="在这里输入列表的网址"></el-input>
       </el-form-item>

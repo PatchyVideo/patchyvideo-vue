@@ -19,12 +19,12 @@
         <el-container>
             <el-aside width="800px">
 
-                <p v-if="this.videoCount==0" class="nulldata-left">您没有上传视频，目前还没有数据哦</p>
+                <p v-if="this.videoCount==0" class="nulldata-left">您没有发布视频，目前还没有数据哦</p>
                  <canvas id="myChart" width="800" height="800"></canvas>
 
             </el-aside>
             <el-main>
-                <p v-if="this.videoCount==0" class="nulldata-right">您没有上传视频，目前还没有数据哦</p>
+                <p v-if="this.videoCount==0" class="nulldata-right">您没有发布频，目前还没有数据哦</p>
                 <div class="minibox" v-if="this.videoCount!=0">
                    <div class="minibox_top">
                        <h3>投稿视频</h3>

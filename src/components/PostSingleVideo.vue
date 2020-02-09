@@ -56,7 +56,7 @@
       </el-collapse-transition>
       <!-- 视频上传 -->
       <el-button class="postButton" type="primary" @click="postSingleVideo">
-        上传视频
+        发布视频
         <i class="el-icon-upload el-icon--right"></i>
       </el-button>
     </div>
