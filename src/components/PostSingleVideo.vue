@@ -150,7 +150,7 @@ export default {
       var that = this;
       // B站的匹配规则
       this.PARSERS[
-        "^(https:\\/\\/|http:\\/\\/)?(www\\.)?bilibili\\.com\\/video\\/av[\\d]+"
+        "^(https:\\/\\/|http:\\/\\/)?(www\\.)?(bilibili\\.com\\/video\\/av[\\d]+|b23\\.tv\\/[aA][vV][\\d]+)"
       ] = function(responseDOM, responseURL) {
         var err = responseDOM.find("div.error-body");
         if (err.length > 0) {
@@ -212,7 +212,7 @@ export default {
       };
       // N站的匹配规则
       this.PARSERS[
-        "^(https:\\/\\/|http:\\/\\/)?(www\\.)?nicovideo\\.jp\\/watch\\/(s|n)m[\\d]+"
+        "^(https:\\/\\/|http:\\/\\/)?(www\\.)?(nicovideo\\.jp\\/watch\\/(s|n)m[\\d]+|nico\\.ms\\/(s|n)m[\\d]+)"
       ] = function(responseDOM, responseURL) {
         // TODO: handle error
         var thumbnailURL = responseDOM
