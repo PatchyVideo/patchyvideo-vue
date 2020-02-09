@@ -144,6 +144,7 @@
 <script>
 import TextComplete from "v-textcomplete";
 export default {
+  inject: ["reload"],
   data() {
     return {
       // 控制退出登录的弹出框
@@ -271,7 +272,7 @@ export default {
     // 清除搜索结果
     cleanIptV() {
       this.$store.commit("getTopNavbarSearching", "");
-      this.$router.go(0);
+      this.reload();
     },
     //清除cookie
     clearCookie: function() {
