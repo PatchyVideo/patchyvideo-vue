@@ -272,7 +272,7 @@ export default {
     // 清除搜索结果
     cleanIptV() {
       this.$store.commit("getTopNavbarSearching", "");
-      this.reload();
+  /*    this.reload();*/
     },
     //清除cookie
     clearCookie: function() {
