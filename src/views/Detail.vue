@@ -50,6 +50,35 @@
       </span>
     </el-dialog>
 
+    <!--添加到我的播放列表的弹出框 -->
+    <el-dialog title="添加到列表" :visible.sync="addToList" width="30%">
+      <div v-loading="loadingList">
+        <div v-if="myVideoList.length" class="myVideoList">
+          <div
+            v-for="(item,index) in myVideoList"
+            :key="index"
+            class="myVideoListItem"
+            @click="addToThisList(item._id.$oid)"
+          >
+            <h2>{{item.title.english}}</h2>
+            <h3 v-if="item.private">[私密]</h3>
+            <p>共{{item.videos}}个视频</p>
+          </div>
+        </div>
+        <p v-else>您还没有视频列表！</p>
+        <!-- ElementUI自带的分页器 -->
+        <el-pagination
+          background
+          class="page-selector"
+          @current-change="handleCurrentChange"
+          layout=" prev, pager, next"
+          :current-page="page"
+          :total="maxcount"
+          :page-size="10"
+        ></el-pagination>
+      </div>
+    </el-dialog>
+
     <!-- Detail页面的正文 -->
     <div class="w detail-page-background-img" v-loading="loading">
       <left_navbar :msg="myVideoData.tag_by_category"></left_navbar>
@@ -60,6 +89,7 @@
           <div class="re_top">
             <h2>
               {{ myVideoData.video.item.title }}
+              <el-button v-if="isLogin" type="primary" round @click="openMyList">添加到我的列表</el-button>
               <el-button v-if="isAdmin" @click="managementBox=true">管理</el-button>
             </h2>
           </div>
@@ -162,7 +192,7 @@
             >【前一篇】</router-link>
             <span v-else>【没有前一篇了哦】</span>
             <router-link
-              :to="{ path: '/listDetail', query: { id: item._id.$oid } }"
+              :to="{ path: '/listdetail', query: { id: item._id.$oid } }"
               tag="a"
               @click.native="reload"
             >{{ item.title.english }}</router-link>
@@ -206,6 +236,8 @@ export default {
         playlists: [],
         // 视频的标签列表(已分类)
         tag_by_category: {},
+        // 视频的标签列表(未分类)
+        tags: [],
         video: {
           item: {
             // 视频的标题
@@ -223,10 +255,24 @@ export default {
           }
         }
       },
+      // 我的视频列表
+      myVideoList: [],
+      // 我的视频列表的当前页数
+      page: 1,
+      // 我的视频列表的全部分页数
+      maxpage: 1,
+      // 我的视频列表的每一页的视频数量
+      count: 10,
+      // 视频的全部数量
+      maxcount: 0,
       // 判断是否为管理员
       isAdmin: false,
       // 视频管理的对话框
       managementBox: false,
+      // 添加到我的播放列表的弹出框
+      addToList: false,
+      // 获取我的播放列表的时候的加载状态
+      loadingList: false,
       // 本页面的视频的等级
       theVideoRank: 3,
       // 视频的等级（0~3，其中3为所有人可见）
@@ -607,6 +653,57 @@ export default {
         }
         this.loading = false;
       });
+    },
+    // 将视频添加到我的播放列表
+    openMyList() {
+      this.addToList = true;
+      this.getMyList();
+    },
+    // 获取我的播放列表
+    getMyList() {
+      this.loadingList = true;
+      this.axios({
+        method: "post",
+        url: "be/lists/myplaylists",
+        data: {
+          page: this.page,
+          page_size: this.count,
+          order: "latest"
+        },
+        withCredentials: true
+      }).then(result => {
+        this.myVideoList = result.data.data.playlists;
+        this.maxcount = result.data.data.count;
+        this.loadingList = false;
+      });
+    },
+    // 我的播放列表的页面切换的时候调用
+    handleCurrentChange(val) {
+      this.page = val;
+      this.getMyList();
+    },
+    addToThisList(pid) {
+      this.loadingList = true;
+      this.axios({
+        method: "post",
+        url: "be/postvideo.do",
+        data: {
+          rank: -1,
+          pid: pid,
+          copy: "",
+          url: this.myVideoData.video.item.url,
+          tags: this.myVideoData.tags
+        }
+      }).then(result => {
+        if (result.data.status == "SUCCEED") {
+          this.open1("添加成功！");
+          this.addToList = false;
+        } else {
+          this.open4("添加失败！");
+          this.addToList = false;
+        }
+        this.loadingList = false;
+      });
     }
   },
   components: { left_navbar, topnavbar, Footer }
@@ -726,5 +823,26 @@ export default {
 .copies:hover .el-button {
   visibility: visible;
   opacity: 1;
+}
+.myVideoListItem {
+  display: -webkit-flex; /* Safari */
+  display: flex;
+  cursor: pointer;
+  justify-content: flex-start;
+  align-items: flex-end;
+  margin-bottom: 3px;
+  padding: 3px 10px 3px 5px;
+}
+.myVideoListItem:hover {
+  color: #409eff;
+  background-color: rgba(0, 0, 0, 0.055);
+}
+.myVideoListItem h3 {
+  color: rgba(0, 0, 0, 0.24);
+}
+.myVideoListItem p {
+  color: rgba(0, 0, 0, 0.568);
+  flex: 1;
+  text-align: right;
 }
 </style>
