@@ -97,20 +97,13 @@
                       General: item.cat == 0,
                       Meta: item.cat == 4
                     }"
-                  >
-                    {{ item.tag }}
-                  </div>
+                  >{{ item.tag }}</div>
                   <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
                 </div>
               </template>
             </el-autocomplete>
           </div>
-          <input
-            id="search-bar-submit"
-            type="submit"
-            value="搜索"
-            @click="gotoHome"
-          />
+          <input id="search-bar-submit" type="submit" value="搜索" @click="gotoHome" />
         </li>
 
         <!-- 登录和注册按钮 -->
@@ -126,26 +119,17 @@
         <!-- 登录成功后的用户界面 -->
         <div class="userHome" v-show="isLogin">
           <li>
-            <router-link to="/users/me">
-              {{ this.$store.state.username }}
-            </router-link>
+            <router-link to="/users/me">{{ this.$store.state.username }}</router-link>
           </li>
           <li>
             <a @click="dialogVisible = true" style="cursor:pointer">登出</a>
 
             <!-- 退出登录的弹出框 -->
-            <el-dialog
-              title="提示"
-              :visible.sync="dialogVisible"
-              width="30%"
-              v-loading="loading"
-            >
+            <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" v-loading="loading">
               <p>你确定要退出登录吗?</p>
               <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="cleanLocalStorage"
-                  >确 定</el-button
-                >
+                <el-button type="primary" @click="cleanLocalStorage">确 定</el-button>
               </span>
             </el-dialog>
           </li>
@@ -232,7 +216,7 @@ export default {
         url: "be/user/whoami",
         data: {}
       }).then(result => {
-        if (result.data.data == "UNAUTHORISED_OPERATION") {
+        if (result.data.data == "UNAUTHORISED_OPERATION" && this.getCookie()) {
           this.open("登录已过期，请新登录！");
           this.isLogin = false;
           // 清除所有session值(退出登录)
