@@ -212,6 +212,7 @@ export default {
     };
   },
   created() {
+
     if (this.msg != "") {
       this.getCommonTags(); //防止组件更新时没有调用
     }
@@ -567,6 +568,7 @@ export default {
       }
     },
     msg() {
+
       if (this.msg != "") {
         this.getCommonTags();
       }

@@ -107,21 +107,21 @@
         </li>
 
         <!-- 登录和注册按钮 -->
-        <div class="loginUser" v-show="!isLogin">
-          <li>
+        <div class="loginUser" v-if="!isLogin">
+          <li class="loginUser-login">
             <router-link to="/login" @click.native="login">登录</router-link>
           </li>
-          <li>
+          <li class="loginUser-signup">
             <router-link to="/signup">注册</router-link>
           </li>
         </div>
 
         <!-- 登录成功后的用户界面 -->
-        <div class="userHome" v-show="isLogin">
-          <li>
+        <div class="userHome" v-if="isLogin">
+          <li class="loginUser-login">
             <router-link to="/users/me">{{ this.$store.state.username }}</router-link>
           </li>
-          <li>
+          <li class="loginUser-signup">
             <a @click="dialogVisible = true" style="cursor:pointer">登出</a>
 
             <!-- 退出登录的弹出框 -->
@@ -441,9 +441,125 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="less">
 @import "../static/css/common.css";
+.nav_left{
+  width: 70%!important;
+}
+.nav_right{
+  width: 50%;
+  ul{
+    display: inline-block;
+    width: 100%;
+    height: 78px;
+    display: flex;
+    li{
 
+      width: 60%;
+      display: flex;
+      margin-right:8%;
+      .form_select{
+        width: 120px;
+        height: 20px;
+        padding-left: 5px;
+        text-rendering: auto;
+        color: black;
+        letter-spacing: normal;
+        word-spacing: normal;
+        display: inline-block;
+        box-sizing: border-box;
+        align-items: center;
+        white-space: pre;
+        background-color: white;
+        cursor: pointer;
+        outline: none;
+        border-style: solid;
+        border-color: white;
+        position: relative;
+        top: 50%;
+        margin-right: 2%;
+        transform: translateY(-50%);
+/*        right: 74px;*/
+        transition: all 0.6s ease;
+        &:hover{
+          outline: none;
+          border-style: solid;
+          border-color: #d1d1d1;
+          box-shadow: 0px 0px 10px 5px white, 0px 0px 10px dodgerblue,
+          0px 0px 20px dodgerblue;
+          color: dodgerblue;
+
+        }
+      }
+      #search-bar-query{
+        width: 200px;
+        height: 38px;
+        outline: none;
+        border: none;
+        position: relative;
+/*        right: 74px;*/
+        top: 50%;
+        transform: translateY(-50%);
+        transition: all 0.6s ease;
+
+      }
+      #search-bar-submit{
+        display: block;
+        background: #c5464a;
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #c5464a,
+        0 0 70px #c5464a, 0 0 80px #c5464a, 0 0 100px #c5464a, 0 0 150px #c5464a;
+        width: 74px;
+        color: white;
+        height: 38px;
+        outline: none;
+        border: none;
+        cursor: pointer;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: all 0.6s ease;
+ &:hover{
+   background-color: royalblue;
+   text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #228dff,
+   0 0 70px #228dff, 0 0 80px #228dff, 0 0 100px #228dff, 0 0 150px #228dff;
+ }
+
+      }
+    }
+    .loginUser{
+      width: 50%;
+      display: flex;
+    }
+    .userHome{
+      width: 50%;
+      display: flex;
+    }
+    .loginUser-login{
+      height: 38px;
+      line-height: 38px;
+      position: relative;
+      top: 50%;
+      margin-right: 20px;
+      transform: translateY(-50%);
+      flex: 4;
+      a{
+        width: 100%;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+    }
+    .loginUser-signup{
+      height: 38px;
+      line-height: 38px;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}
 .top-navbar {
   margin: 0 auto;
   height: 70px;
@@ -466,14 +582,14 @@ export default {
   color: #ff88a0;
 }
 
-.nav_right li#s1 {
+/*.nav_right li#s1 {
   width: 600px;
   height: 70px;
   line-height: 70px;
   position: relative;
   top: 0px;
   right: 50px;
-}
+}*/
 
 .nav_left {
   width: 50%;
@@ -481,9 +597,11 @@ export default {
   padding-left: 20px;
 }
 
+/*
 .nav_right {
   width: 60%;
 }
+*/
 
 .nav_left li {
   height: 70px;
@@ -494,15 +612,16 @@ export default {
   font-size: 19px;
 }
 
-.nav_right li {
+/*.nav_right li {
   height: 70px;
   line-height: 70px;
   float: left;
   margin-left: 2%;
-  /* display: inline-block; */
+  !* display: inline-block; *!
   text-align: center;
   font-size: 19px;
-}
+}*/
+/*
 
 .form_select {
   width: 120px;
@@ -568,6 +687,7 @@ export default {
   text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #228dff,
     0 0 70px #228dff, 0 0 80px #228dff, 0 0 100px #228dff, 0 0 150px #228dff;
 }
+*/
 
 .adviceList {
   /* 针对webkit内核（如Safari）进行的调整 */

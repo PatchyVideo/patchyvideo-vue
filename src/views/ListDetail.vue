@@ -380,6 +380,7 @@ export default {
     openEditTags: function() {
       this.temporaryValForVLP = this.videolistPid;
       this.showTagPanel = true;
+         console.log("who?");
       this.$refs.editTag.getCommonTags();
     },
     open(message) {
