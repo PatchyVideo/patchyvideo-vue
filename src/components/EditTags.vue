@@ -349,6 +349,7 @@ export default {
           if (this.tags.indexOf(this.iptVal) != -1) {
             //存在则不允许添加
             /*this.infoTip[1].isHidden=true;*/
+            this.iptVal = "";
             this.open3();
             /*     setTimeout(function () {
                             _that.infoTip[1].isHidden=false;
