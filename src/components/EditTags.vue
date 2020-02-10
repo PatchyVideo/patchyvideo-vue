@@ -1,5 +1,4 @@
-﻿
-<!--
+﻿<!--
     更新日志：
     1/11/2020：v1.0
      新增保存功能 TAG校验功能，功能基本已完成
@@ -26,93 +25,106 @@
 -->
 <template>
   <transition mode="out-in">
-    <div v-if="visible" class="EditTags" :class="{active:this.msg!=''}">
+    <div v-if="visible" class="EditTags" :class="{ active: this.msg != '' }">
       <div id="tag">
-        <a href="javascript:;">  <i
-          class="el-icon-close"
-          id="close"
-          @click="closeTagPanel"
-          v-if="this.$route.path != '/postvideo'"
-        ></i></a>
+        <a href="javascript:;" @click="closeTagPanel">
+          <i
+            class="el-icon-close"
+            id="close"
+            v-if="this.$route.path != '/postvideo'"
+          ></i
+        ></a>
         <div class="minibox">
           <div class="m_bg"></div>
           <div class="m_a activeTag">
             <ul class="Taglist Copyright">
               <li
                 class="item"
-                v-for="(i,item) in TagCategoriesData"
+                v-for="(i, item) in TagCategoriesData"
                 :key="item"
-                v-if="i=='Copyright'"
-                :class="{selected:-1==tagsForRec.indexOf(item)}"
-                @click.stop="selected(i,item)"
+                v-if="i == 'Copyright'"
+                :class="{ selected: -1 == tagsForRec.indexOf(item) }"
+                @click.stop="selected(i, item)"
               >
-                <p class="val_${str[i]}">{{item}}</p>
-                <a href="javascript:;">  <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i></a>
+                <p class="val_${str[i]}">{{ item }}</p>
+                <a href="javascript:;" @click.stop="deleteObj(i, item)">
+                  <i class="el-icon-close"></i
+                ></a>
               </li>
             </ul>
             <ul class="Taglist Language">
               <li
                 class="item"
-                v-for="(i,item) in TagCategoriesData"
+                v-for="(i, item) in TagCategoriesData"
                 :key="item"
-                v-if="i=='Language'"
-                :class="{selected:-1==tagsForRec.indexOf(item)}"
-                @click.stop="selected(i,item)"
+                v-if="i == 'Language'"
+                :class="{ selected: -1 == tagsForRec.indexOf(item) }"
+                @click.stop="selected(i, item)"
               >
-                <p class="val_${str[i]}">{{item}}</p>
-                <a href="javascript:;">   <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i></a>
+                <p class="val_${str[i]}">{{ item }}</p>
+                <a href="javascript:;" @click.stop="deleteObj(i, item)">
+                  <i class="el-icon-close"></i
+                ></a>
               </li>
             </ul>
             <ul class="Taglist Character">
               <li
                 class="item"
-                v-for="(i,item) in TagCategoriesData"
+                v-for="(i, item) in TagCategoriesData"
                 :key="item"
-                v-if="i=='Character'"
-                :class="{selected:-1==tagsForRec.indexOf(item)}"
-                @click.stop="selected(i,item)"
+                v-if="i == 'Character'"
+                :class="{ selected: -1 == tagsForRec.indexOf(item) }"
+                @click.stop="selected(i, item)"
               >
-                <p class="val_${str[i]}">{{item}}</p>
-                <a href="javascript:;">     <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i></a>
+                <p class="val_${str[i]}">{{ item }}</p>
+                <a href="javascript:;" @click.stop="deleteObj(i, item)">
+                  <i class="el-icon-close"></i
+                ></a>
               </li>
             </ul>
             <ul class="Taglist General">
               <li
                 class="item"
-                v-for="(i,item) in TagCategoriesData"
+                v-for="(i, item) in TagCategoriesData"
                 :key="item"
-                v-if="i=='General'"
-                :class="{selected:-1==tagsForRec.indexOf(item)}"
-                @click.stop="selected(i,item)"
+                v-if="i == 'General'"
+                :class="{ selected: -1 == tagsForRec.indexOf(item) }"
+                @click.stop="selected(i, item)"
               >
-                <p class="val_${str[i]}">{{item}}</p>
-                <a href="javascript:;">  <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i></a>
+                <p class="val_${str[i]}">{{ item }}</p>
+                <a href="javascript:;" @click.stop="deleteObj(i, item)">
+                  <i class="el-icon-close"></i
+                ></a>
               </li>
             </ul>
             <ul class="Taglist Meta">
               <li
                 class="item"
-                v-for="(i,item) in TagCategoriesData"
+                v-for="(i, item) in TagCategoriesData"
                 :key="item"
-                v-if="i=='Meta'"
-                :class="{selected:-1==tagsForRec.indexOf(item)}"
-                @click.stop="selected(i,item)"
+                v-if="i == 'Meta'"
+                :class="{ selected: -1 == tagsForRec.indexOf(item) }"
+                @click.stop="selected(i, item)"
               >
-                <p class="val_${str[i]}">{{item}}</p>
-                <a href="javascript:;">       <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i></a>
+                <p class="val_${str[i]}">{{ item }}</p>
+                <a href="javascript:;" @click.stop="deleteObj(i, item)">
+                  <i class="el-icon-close"></i
+                ></a>
               </li>
             </ul>
             <ul class="Taglist Author">
               <li
                 class="item"
-                v-for="(i,item) in TagCategoriesData"
+                v-for="(i, item) in TagCategoriesData"
                 :key="item"
-                v-if="i=='Author'"
-                :class="{selected:-1==tagsForRec.indexOf(item)}"
-                @click.stop="selected(i,item)"
+                v-if="i == 'Author'"
+                :class="{ selected: -1 == tagsForRec.indexOf(item) }"
+                @click.stop="selected(i, item)"
               >
-                <p class="val_${str[i]}">{{item}}</p>
-                <a href="javascript:;">     <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i></a>
+                <p class="val_${str[i]}">{{ item }}</p>
+                <a href="javascript:;" @click.stop="deleteObj(i, item)">
+                  <i class="el-icon-close"></i
+                ></a>
               </li>
             </ul>
           </div>
@@ -142,31 +154,53 @@
                     <div class="adviceList">
                       <div
                         class="name"
-                        v-bind:class="{Copyright:item.cat==2,
-                                    Language:item.cat==5,
-                                    Character:item.cat==1,
-                                    Author:item.cat==3,
-                                    General:item.cat==0,
-                                    Meta:item.cat==4}"
-                      >{{ item.tag }}</div>
+                        v-bind:class="{
+                          Copyright: item.cat == 2,
+                          Language: item.cat == 5,
+                          Character: item.cat == 1,
+                          Author: item.cat == 3,
+                          General: item.cat == 0,
+                          Meta: item.cat == 4
+                        }"
+                      >
+                        {{ item.tag }}
+                      </div>
                       <div class="addr">{{ item.cnt }}</div>
                     </div>
                   </template>
                 </el-autocomplete>
-                <a href="javascript:;">  <i class="el-icon-plus" id="add" @click="addTag"></i></a>
+                <a href="javascript:;" @click="addTag">
+                  <i class="el-icon-plus" id="add"></i
+                ></a>
               </div>
             </div>
-            <span class="tag_title infoTip_1" :class="{hidden:infoTip[0].isHidden}">编辑共有标签</span>
-            <span class="tag_title infoTip_2" :class="{show:infoTip[1].isHidden}">标签已存在</span>
-            <span class="tag_title infoTip_3" :class="{show:infoTip[2].isHidden}">标签不存在</span>
+            <span
+              class="tag_title infoTip_1"
+              :class="{ hidden: infoTip[0].isHidden }"
+              >编辑共有标签</span
+            >
+            <span
+              class="tag_title infoTip_2"
+              :class="{ show: infoTip[1].isHidden }"
+              >标签已存在</span
+            >
+            <span
+              class="tag_title infoTip_3"
+              :class="{ show: infoTip[2].isHidden }"
+              >标签不存在</span
+            >
           </div>
           <div class="m_c">
             <div>
               <span>推荐标签：</span>
               <transition mode="out-in">
                 <ul class="recTag Taglist" v-show="recTagsWatch">
-                  <li class="item" v-for="(i,item) in recTags" @click="getiptVal(i,item)">
-                    <p class="val_${str[i]}">{{Object.keys(i)[0]}}</p>
+                  <li
+                    class="item"
+                    v-for="(i, item) in recTags"
+                    @click="getiptVal(i, item)"
+                  >
+                    <p class="val_${str[i]}">{{ Object.keys(i)[0] }}</p>
                     <!--           <i class="el-icon-close"></i>-->
                   </li>
                 </ul>
@@ -174,12 +208,11 @@
             </div>
           </div>
         </div>
-        <a href="javascript:;">
+        <a href="javascript:;" @click="saveTag()">
           <i
-                  class="el-icon-refresh"
-                  id="save"
-                  @click="saveTag()"
-                  v-if="this.$route.path != '/postvideo'"
+            class="el-icon-refresh"
+            id="save"
+            v-if="this.$route.path != '/postvideo'"
           ></i>
         </a>
       </div>
@@ -212,7 +245,23 @@ export default {
     };
   },
   created() {
-
+    var that = this;
+    //当前页面监视键盘输入
+    document.onkeydown = function(e) {
+      //事件对象兼容
+      let e1 =
+        e || event || window.event || arguments.callee.caller.arguments[0];
+      //键盘按键判断:左箭头-37;上箭头-38；右箭头-39;下箭头-40
+      //左
+      if (e1 && e1.keyCode == 27) {
+        if (
+          that.$route.path == "/video" ||
+          that.$route.path === "/listdetail"
+        ) {
+          that.closeTagPanel();
+        }
+      }
+    };
     if (this.msg != "") {
       this.getCommonTags(); //防止组件更新时没有调用
     }
@@ -568,7 +617,6 @@ export default {
       }
     },
     msg() {
-
       if (this.msg != "") {
         this.getCommonTags();
       }
