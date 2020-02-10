@@ -28,12 +28,12 @@
   <transition mode="out-in">
     <div v-if="visible" class="EditTags" :class="{active:this.msg!=''}">
       <div id="tag">
-        <i
+        <a href="javascript:;">  <i
           class="el-icon-close"
           id="close"
           @click="closeTagPanel"
           v-if="this.$route.path != '/postvideo'"
-        ></i>
+        ></i></a>
         <div class="minibox">
           <div class="m_bg"></div>
           <div class="m_a activeTag">
@@ -47,7 +47,7 @@
                 @click.stop="selected(i,item)"
               >
                 <p class="val_${str[i]}">{{item}}</p>
-                <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i>
+                <a href="javascript:;">  <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i></a>
               </li>
             </ul>
             <ul class="Taglist Language">
@@ -60,7 +60,7 @@
                 @click.stop="selected(i,item)"
               >
                 <p class="val_${str[i]}">{{item}}</p>
-                <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i>
+                <a href="javascript:;">   <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i></a>
               </li>
             </ul>
             <ul class="Taglist Character">
@@ -73,7 +73,7 @@
                 @click.stop="selected(i,item)"
               >
                 <p class="val_${str[i]}">{{item}}</p>
-                <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i>
+                <a href="javascript:;">     <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i></a>
               </li>
             </ul>
             <ul class="Taglist General">
@@ -86,7 +86,7 @@
                 @click.stop="selected(i,item)"
               >
                 <p class="val_${str[i]}">{{item}}</p>
-                <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i>
+                <a href="javascript:;">  <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i></a>
               </li>
             </ul>
             <ul class="Taglist Meta">
@@ -99,7 +99,7 @@
                 @click.stop="selected(i,item)"
               >
                 <p class="val_${str[i]}">{{item}}</p>
-                <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i>
+                <a href="javascript:;">       <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i></a>
               </li>
             </ul>
             <ul class="Taglist Author">
@@ -112,7 +112,7 @@
                 @click.stop="selected(i,item)"
               >
                 <p class="val_${str[i]}">{{item}}</p>
-                <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i>
+                <a href="javascript:;">     <i class="el-icon-close" @click.stop="deleteObj(i,item)"></i></a>
               </li>
             </ul>
           </div>
@@ -153,7 +153,7 @@
                     </div>
                   </template>
                 </el-autocomplete>
-                <i class="el-icon-plus" id="add" @click="addTag"></i>
+                <a href="javascript:;">  <i class="el-icon-plus" id="add" @click="addTag"></i></a>
               </div>
             </div>
             <span class="tag_title infoTip_1" :class="{hidden:infoTip[0].isHidden}">编辑共有标签</span>
@@ -174,12 +174,14 @@
             </div>
           </div>
         </div>
-        <i
-          class="el-icon-refresh"
-          id="save"
-          @click="saveTag()"
-          v-if="this.$route.path != '/postvideo'"
-        ></i>
+        <a href="javascript:;">
+          <i
+                  class="el-icon-refresh"
+                  id="save"
+                  @click="saveTag()"
+                  v-if="this.$route.path != '/postvideo'"
+          ></i>
+        </a>
       </div>
     </div>
   </transition>
@@ -210,6 +212,7 @@ export default {
     };
   },
   created() {
+
     if (this.msg != "") {
       this.getCommonTags(); //防止组件更新时没有调用
     }
@@ -349,6 +352,7 @@ export default {
           if (this.tags.indexOf(this.iptVal) != -1) {
             //存在则不允许添加
             /*this.infoTip[1].isHidden=true;*/
+            this.iptVal = "";
             this.open3();
             /*     setTimeout(function () {
                             _that.infoTip[1].isHidden=false;
@@ -564,6 +568,7 @@ export default {
       }
     },
     msg() {
+
       if (this.msg != "") {
         this.getCommonTags();
       }

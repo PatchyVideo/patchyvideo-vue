@@ -48,7 +48,7 @@
       <!-- 上传视频的按钮 -->
       <div style="text-align: center;">
         <el-button class="postButton" type="primary" @click="postMultiVideos">
-          上传视频
+          发布视频
           <i class="el-icon-upload el-icon--right"></i>
         </el-button>
       </div>

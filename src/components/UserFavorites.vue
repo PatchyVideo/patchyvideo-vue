@@ -14,22 +14,37 @@
 
 <template>
 <div v-loading="loading">
-    <div class="data_null standard"v-if="maxcount==0">
+    <div class="data_null standard"v-if="firstmaxcount==0">
         <p>你目前没有任何视频数据哦</p>
     </div>
-    <div class="bigbox standard" v-if="maxcount!=0">
+    <div class="bigbox standard"  v-if="firstmaxcount!=0">
+     <div class="ky-wrap">
+         <el-select id="select-order" v-model="couponSelected">
+             <el-option
+                     v-for="item in options"
+                     :key="item.value"
+                     :label="item.label"
+                     :value="item.value"
+             ></el-option>
+         </el-select>
+         <el-input
+                 placeholder="搜索列表..."
+                 v-model="listSearch"
+                 clearable
+                 class="inputbox"
+                 @keyup.enter.native="searchList()"
+         >
+             <el-button slot="append" icon="el-icon-search" @click="searchList()">搜索</el-button>
+         </el-input>
 
-        <el-select id="select-order" v-model="couponSelected">
-            <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-            ></el-option>
-        </el-select>
+
+     </div>
 
         <div class="fav">
 
+            <p class="nodata" v-if="myListVideoData.length===0">
+                没有找到相关的数据！
+            </p>
             <router-link
                     target="_blank"
                     :to="{ path: '/listdetail', query: { id: i._id.$oid} }"
@@ -70,6 +85,7 @@
         data() {
             return {
                 page:1,
+                firstmaxcount:0,
                 maxcount:0,
                 count: 20,
                 activeName: '1',
@@ -82,6 +98,7 @@
                     { value: "oldest", label: "时间倒序  " },
                     { value: "last_modified", label: "最新修改" },
                 ],
+                listSearch:"",
                 loading:true
             };
         },
@@ -102,6 +119,7 @@
             handleChange(val) {
          /*       console.log(val);*/
             },
+
             getVideoMaxCount(){
                 if(this.$route.params.id=='me'){
                     this.axios({
@@ -114,6 +132,7 @@
                         },
                         withCredentials:true,
                     }).then(res=>{
+                        this.firstmaxcount=res.data.data.count;
                         this.maxcount=res.data.data.count; //获取总的视频个数制作分页后开始第二次请求获取当前页面的数据
                         this.getVideoData(this.page,this.count);
                     });
@@ -132,13 +151,18 @@
                             "order":this.couponSelected
                         }
                     }).then(res=>{
+                        this.firstmaxcount=res.data.data.count;
                         this.maxcount=res.data.data.count; //获取总的视频个数制作分页后开始第二次请求获取当前页面的数据
                         this.getVideoData(this.page,this.count);
                     })
                 }
 
             },
+            searchList(){
+                this.getVideoData(this.page,this.count);
+            },
             getVideoData(e, count){
+                this.loading = true;
                if(this.$route.params.id=='me'){
                     this.axios({
                         method:'post',
@@ -146,10 +170,12 @@
                         data:{
                             "page":e,
                             "page_size":count,
+                            "query":this.listSearch,
                             "order":this.couponSelected
                         },
                         withCredentials:true,
                     }).then(result=>{
+                        this.maxcount=result.data.data.count;
                         this.myListVideoData =result.data.data.playlists;
                         this.loading =false;
                     })
@@ -162,9 +188,11 @@
                             "page":e,
                             "page_size":count,
                             "uid":this.$route.params.id,
-                            "order":this.couponSelected
+                            "order":this.couponSelected,
+                            "query":this.listSearch
                         }
                     }).then(result=>{
+                        this.maxcount=result.data.data.count;
                         this.myListVideoData =result.data.data.playlists;
                         this.loading =false;
                     })
@@ -193,7 +221,24 @@
         content: "";
         margin-left: auto;
     }*/
+.nodata{
+    font-size: 35px;
+    width: 1600px;
+    height: 800px;
+    text-align: center;
+    line-height: 800px;
 
+}
+ .ky-wrap{
+     display: flex;
+     .el-input{
+
+         flex: 1;
+     }
+     .el-select{
+         flex: 1;
+     }
+ }
  .data_null{
      height: 1000px;
      display: flex;
