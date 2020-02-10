@@ -70,6 +70,7 @@
                         :total="videoCount"
                         :page-size="20"
                         :page-sizes="[10, 20, 30, 40]"
+                        v-if="this.videoCount!=0"
                 ></el-pagination>
             </el-main>
 
