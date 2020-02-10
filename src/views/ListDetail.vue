@@ -34,10 +34,15 @@
     <topnavbar />
 
     <!-- EditTags组件-->
-    <EditTags ref="editTag" :msg="temporaryValForVLP":visible.sync="showTagPanel" v-if="editable"></EditTags>
+    <EditTags ref="editTag" :msg="temporaryValForVLP" :visible.sync="showTagPanel" v-if="editable"></EditTags>
 
     <!-- 编辑视频列表时的对话框 -->
-    <el-dialog title="编辑视频详情" :visible.sync="openListEdit" width="40%">
+    <el-dialog
+      title="编辑视频详情"
+      :visible.sync="openListEdit"
+      width="40%"
+      :close-on-click-modal="false"
+    >
       <el-form ref="list" :model="playlist_metadata" label-width="auto" :rules="rules">
         <!-- 标题 -->
         <el-form-item prop="title">
@@ -216,7 +221,7 @@ export default {
       // 传入Tags组件视频页的ID
       videolistPid: "",
       //传入Tags组件视频页的ID临时变量
-      temporaryValForVLP:"",
+      temporaryValForVLP: "",
       // 视频列表是否属于加载状态的判断
       loading: true,
       // 打开列表详情编辑页面
