@@ -32,49 +32,69 @@
 <template>
   <div class="left-navbar">
     <!-- EditTags组件-->
-    <EditTags :msg="pid" :visible.sync="showTagPanel" class="EditTags"></EditTags>
+    <EditTags
+      :msg="pid"
+      :visible.sync="showTagPanel"
+      class="EditTags"
+    ></EditTags>
 
     <div class="left_list">
       <div class="titleTag">
         <h1>{{ title }}</h1>
         <div class="editTagButton">
-          <el-button v-if="title=='标签'&&isLogin==true" size="mini" @click="openEditTags">编辑</el-button>
+          <el-button
+            v-if="title == '标签' && isLogin == true"
+            size="mini"
+            @click="openEditTags"
+            :disabled="showTagPanel"
+            >编辑</el-button
+          >
         </div>
-        <p v-if="title=='标签'&&isLogin==true" @click="postVideo">【使用标签发布视频】</p>
+        <p v-if="title == '标签' && isLogin == true" @click="postVideo">
+          【使用标签发布视频】
+        </p>
       </div>
       <!-- 在Home页面渲染的侧导航条内容 -->
-      <ul ref="test" v-if="title=='热门标签' || title=='相关标签'">
-        <li class="tag belong-to-home" v-for="(val,key) in msg" :key="key">
+      <ul ref="test" v-if="title == '热门标签' || title == '相关标签'">
+        <li class="tag belong-to-home" v-for="(val, key) in msg" :key="key">
           <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
           <!-- 根据tag名称自动渲染tag颜色 -->
           <p
-            v-bind:class="{Copyright:val=='Copyright',
-            Language:val=='Language',
-            Character:val=='Character',
-            Author:val=='Author',
-            General:val=='General',
-            Meta:val=='Meta'}"
+            v-bind:class="{
+              Copyright: val == 'Copyright',
+              Language: val == 'Language',
+              Character: val == 'Character',
+              Author: val == 'Author',
+              General: val == 'General',
+              Meta: val == 'Meta'
+            }"
             @click="gotoHome(key)"
-          >{{key}}</p>
+          >
+            {{ key }}
+          </p>
         </li>
       </ul>
 
       <!-- 在Detail页面渲染的侧导航条内容 -->
-      <ul ref="test" v-if="title=='标签'">
+      <ul ref="test" v-if="title == '标签'">
         <li class="tag belong-to-detail" v-for="(key, val) in msg" :key="val">
           <h3>{{ val }}</h3>
           <!-- 根据tag名称自动渲染tag颜色 -->
           <p
             v-for="item in key"
             :key="item"
-            v-bind:class="{Copyright:val=='Copyright',
-            Language:val=='Language',
-            Character:val=='Character',
-            Author:val=='Author',
-            General:val=='General',
-            Meta:val=='Meta'}"
+            v-bind:class="{
+              Copyright: val == 'Copyright',
+              Language: val == 'Language',
+              Character: val == 'Character',
+              Author: val == 'Author',
+              General: val == 'General',
+              Meta: val == 'Meta'
+            }"
             @click="gotoHome(item)"
-          >{{ item }}</p>
+          >
+            {{ item }}
+          </p>
         </li>
       </ul>
     </div>

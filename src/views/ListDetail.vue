@@ -139,6 +139,7 @@
               type="primary"
               @click="openEditTags"
               class="EditTagsButton"
+              :disabled="showTagPanel"
               >编辑共有标签</el-button
             >
             <el-button type="warning" @click="inverse()"
@@ -467,7 +468,6 @@ export default {
     openEditTags: function() {
       this.temporaryValForVLP = this.videolistPid;
       this.showTagPanel = true;
-         console.log("who?");
       this.$refs.editTag.getCommonTags();
     },
     open(message) {
