@@ -232,7 +232,6 @@ export default {
         url: "be/user/whoami",
         data: {}
       }).then(result => {
-        console.log(result);
         if (result.data.data == "UNAUTHORISED_OPERATION") {
           this.open("登录已过期，请新登录！");
           this.isLogin = false;
