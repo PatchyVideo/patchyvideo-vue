@@ -91,6 +91,8 @@
 - webpack
 - echarts
 - font-awesome
+- ipfs
+- videostream
 
 项目依赖：
 

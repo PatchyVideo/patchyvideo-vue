@@ -89,14 +89,16 @@
                 <div class="adviceList">
                   <div
                     class="name"
-                    v-bind:class="{Copyright:item.cat==2,
-                                    Language:item.cat==5,
-                                    Character:item.cat==1,
-                                    Author:item.cat==3,
-                                    General:item.cat==0,
-                                    Meta:item.cat==4}"
+                    v-bind:class="{
+                      Copyright: item.cat == 2,
+                      Language: item.cat == 5,
+                      Character: item.cat == 1,
+                      Author: item.cat == 3,
+                      General: item.cat == 0,
+                      Meta: item.cat == 4
+                    }"
                   >{{ item.tag }}</div>
-                  <div class="addr" v-if="item.cnt!=null">{{ item.cnt }}</div>
+                  <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
                 </div>
               </template>
             </el-autocomplete>
@@ -117,11 +119,7 @@
         <!-- 登录成功后的用户界面 -->
         <div class="userHome" v-show="isLogin">
           <li>
-            <router-link to="/users/me">
-              {{
-              this.$store.state.username
-              }}
-            </router-link>
+            <router-link to="/users/me">{{ this.$store.state.username }}</router-link>
           </li>
           <li>
             <a @click="dialogVisible = true" style="cursor:pointer">登出</a>
@@ -185,6 +183,10 @@ export default {
     }
   },
   created() {
+    // 查看是否在别的设备上登录过
+    if (this.$store.state.ifTruelyLogin == 0) {
+      this.checkUser();
+    }
     // 查看是否登录
     if (
       JSON.stringify(this.$store.state.username) != "null" &&
@@ -207,6 +209,31 @@ export default {
       this.infoTipMark =m_Mark;
       console.log(m_Mark);
     },*/
+    // 测试用户的登录状态
+    checkUser() {
+      this.axios({
+        method: "post",
+        url: "be/user/whoami",
+        data: {}
+      }).then(result => {
+        if (result.data.data == "UNAUTHORISED_OPERATION" && this.getCookie()) {
+          this.open("登录已过期，请新登录！");
+          this.isLogin = false;
+          // 清除所有session值(退出登录)
+          sessionStorage.clear();
+          // 清除用户名
+          this.$store.commit("clearUserName");
+          // 清除本地数据
+          localStorage.setItem("username", "");
+          // 清除cookie
+          this.clearCookie();
+          // 改变用户登录状态
+          this.$store.commit("changeifTruelyLogin", "2");
+        } else {
+          this.$store.commit("changeifTruelyLogin", "1");
+        }
+      });
+    },
     // 登录跳转
     login() {
       this.$store.commit("changeifRouter", "0");
@@ -272,7 +299,7 @@ export default {
     // 清除搜索结果
     cleanIptV() {
       this.$store.commit("getTopNavbarSearching", "");
-  /*    this.reload();*/
+      /*    this.reload();*/
     },
     //清除cookie
     clearCookie: function() {
