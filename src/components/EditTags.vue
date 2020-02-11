@@ -28,12 +28,8 @@
     <div v-if="visible" class="EditTags" :class="{ active: this.msg != '' }">
       <div id="tag">
         <a href="javascript:;" @click="closeTagPanel">
-          <i
-            class="el-icon-close"
-            id="close"
-            v-if="this.$route.path != '/postvideo'"
-          ></i
-        ></a>
+          <i class="el-icon-close" id="close" v-if="this.$route.path != '/postvideo'"></i>
+        </a>
         <div class="minibox">
           <div class="m_bg"></div>
           <div class="m_a activeTag">
@@ -48,8 +44,8 @@
               >
                 <p class="val_${str[i]}">{{ item }}</p>
                 <a href="javascript:;" @click.stop="deleteObj(i, item)">
-                  <i class="el-icon-close"></i
-                ></a>
+                  <i class="el-icon-close"></i>
+                </a>
               </li>
             </ul>
             <ul class="Taglist Language">
@@ -63,8 +59,8 @@
               >
                 <p class="val_${str[i]}">{{ item }}</p>
                 <a href="javascript:;" @click.stop="deleteObj(i, item)">
-                  <i class="el-icon-close"></i
-                ></a>
+                  <i class="el-icon-close"></i>
+                </a>
               </li>
             </ul>
             <ul class="Taglist Character">
@@ -78,8 +74,8 @@
               >
                 <p class="val_${str[i]}">{{ item }}</p>
                 <a href="javascript:;" @click.stop="deleteObj(i, item)">
-                  <i class="el-icon-close"></i
-                ></a>
+                  <i class="el-icon-close"></i>
+                </a>
               </li>
             </ul>
             <ul class="Taglist General">
@@ -93,8 +89,8 @@
               >
                 <p class="val_${str[i]}">{{ item }}</p>
                 <a href="javascript:;" @click.stop="deleteObj(i, item)">
-                  <i class="el-icon-close"></i
-                ></a>
+                  <i class="el-icon-close"></i>
+                </a>
               </li>
             </ul>
             <ul class="Taglist Meta">
@@ -108,8 +104,8 @@
               >
                 <p class="val_${str[i]}">{{ item }}</p>
                 <a href="javascript:;" @click.stop="deleteObj(i, item)">
-                  <i class="el-icon-close"></i
-                ></a>
+                  <i class="el-icon-close"></i>
+                </a>
               </li>
             </ul>
             <ul class="Taglist Author">
@@ -123,8 +119,8 @@
               >
                 <p class="val_${str[i]}">{{ item }}</p>
                 <a href="javascript:;" @click.stop="deleteObj(i, item)">
-                  <i class="el-icon-close"></i
-                ></a>
+                  <i class="el-icon-close"></i>
+                </a>
               </li>
             </ul>
           </div>
@@ -162,46 +158,30 @@
                           General: item.cat == 0,
                           Meta: item.cat == 4
                         }"
-                      >
-                        {{ item.tag }}
-                      </div>
+                      >{{ item.tag }}</div>
                       <div class="addr">{{ item.cnt }}</div>
                     </div>
                   </template>
                 </el-autocomplete>
                 <a href="javascript:;" @click="addTag">
-                  <i class="el-icon-plus" id="add"></i
-                ></a>
+                  <i class="el-icon-plus" id="add"></i>
+                </a>
               </div>
             </div>
-            <span
-              class="tag_title infoTip_1"
-              :class="{ hidden: infoTip[0].isHidden }"
-              >编辑共有标签</span
-            >
-            <span
-              class="tag_title infoTip_2"
-              :class="{ show: infoTip[1].isHidden }"
-              >标签已存在</span
-            >
-            <span
-              class="tag_title infoTip_3"
-              :class="{ show: infoTip[2].isHidden }"
-              >标签不存在</span
-            >
+            <span class="tag_title infoTip_1" :class="{ hidden: infoTip[0].isHidden }">编辑共有标签</span>
+            <span class="tag_title infoTip_2" :class="{ show: infoTip[1].isHidden }">标签已存在</span>
+            <span class="tag_title infoTip_3" :class="{ show: infoTip[2].isHidden }">标签不存在</span>
           </div>
           <div class="m_c">
             <div>
               <span>推荐标签：</span>
               <transition mode="out-in">
                 <ul class="recTag Taglist" v-show="recTagsWatch">
-                  <li
-                    class="item"
-                    v-for="(i, item) in recTags"
-                    @click="getiptVal(i, item)"
-                  >
-                    <p class="val_${str[i]}">{{ Object.keys(i)[0] }}</p>
-                    <!--           <i class="el-icon-close"></i>-->
+                  <li class="item" v-for="(i, item) in recTags">
+                    <a href="javascript:;" @click="getiptVal(i, item)">
+                      <p class="val_${str[i]}">{{ Object.keys(i)[0] }}</p>
+                      <!--           <i class="el-icon-close"></i>-->
+                    </a>
                   </li>
                 </ul>
               </transition>
@@ -209,11 +189,7 @@
           </div>
         </div>
         <a href="javascript:;" @click="saveTag()">
-          <i
-            class="el-icon-refresh"
-            id="save"
-            v-if="this.$route.path != '/postvideo'"
-          ></i>
+          <i class="el-icon-refresh" id="save" v-if="this.$route.path != '/postvideo'"></i>
         </a>
       </div>
     </div>
