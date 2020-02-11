@@ -14,6 +14,9 @@
        1.登录机制需要做成cookie保存验证判断,现有的登录有点问题暂时没有解决，
        2.由于User组件被改动，与原先的单独渲染相反，现在的所有子组件渲染几乎同时完成，意味着只要用户进入user界面，其他三个页面就已经加载完成。
        3.该组件应当采用大驼峰命名，下次更新时修改。
+       2/11/2020：v1.0.0
+       1.新增图片裁剪组件
+       需要安装依赖：npm install vue-cropper -s
 
 
 -->
@@ -29,14 +32,21 @@
             <div class="circle" :class="{animeActive3:mounseMark}"></div>
           </div>
           <div class="face" @mouseover="faceMouseOver(true)" @mouseleave="faceMouseOver(false)">
-            <label for="file">
-              <img :src="'be/images/userphotos/'+myData.image" alt />
-            </label>
+              <img :src="this.url" alt  v-if="this.url!=''" />
+              <img :src="'be/images/userphotos/'+myData.image" alt  v-if="this.url===''" />
           </div>
 
           <p>当前头像</p>
           <p>选择图片上传：大小256 * 256像素</p>
-          <form
+          <div>
+            <App-cropper
+                    :width="300"
+                    :height="300"
+                    :fixed-number="[1,1]"
+                    @subUploadSucceed="getShopImages"
+            />
+          </div>
+ <!--         <form
             action="/be/helper/upload_image.do"
             method="post"
             accept-charset="utf-8"
@@ -47,7 +57,7 @@
             <input id="type" name="type" type="text" value="userphoto" v-show="false" />
             <input id="file" name="file" type="file" tag="input" />
             <el-input type="submit" value="上传"></el-input>
-          </form>
+          </form>-->
         </div>
       </div>
 
@@ -119,6 +129,7 @@
 </template>
 
 <script>
+  import AppCropper from '@/components/Cropper'
 export default {
   data() {
     var validateOldPass = (rule, value, callback) => {
@@ -183,6 +194,8 @@ export default {
         pubkey: "null",
         username: "null"
       },
+      url: '',
+      ifupdate:false,
       mounseMark: false,
       loading: true
     };
@@ -197,23 +210,11 @@ export default {
   },
   mounted() {},
   methods: {
-    testIpfs() {
-      this.axios({
-        method: "post",
-        url: "/be/postvideo_ipfs.do",
-        data: {
-          url: "ipfs:QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh",
-          tags: ["MMD"],
-          title: "test_title",
-          desc: "test_desc",
-          file_key: "upload-image-4e52bcb34d7438660e07062e61a442ed",
-          copy: "",
-          pid: "",
-          rank: "-1"
-        }
-      }).then(res => {
-        //   console.log(res);
-      });
+    getShopImages(url,status){
+      this.url = url;
+      this.ifupdate = status;
+      console.log(url);
+      console.log(status);
     },
     faceMouseOver(b) {
       this.mounseMark = b;
@@ -379,7 +380,14 @@ export default {
       });
     }
   },
-  components: {}
+  watch:{
+    ifupdate(n){
+      if(n===true){
+        this.getMyData();
+      }
+    }
+  },
+  components: {AppCropper}
 };
 </script>
 
@@ -549,27 +557,7 @@ export default {
       }
     }
   }
-  form {
-    transform: translateY(50%);
-    width: 100%;
-    text-align: left;
-    font-size: 50px;
-    display: flex;
-    flex-direction: column;
-    #file {
-      border: 1px solid #dcdfe6;
 
-      width: 256px;
-      text-align: center;
-    }
-    i {
-      display: block;
-    }
-    .el-input {
-      margin-top: 20px;
-      width: 256px;
-    }
-  }
 }
 
 .post :nth-child(2) {

@@ -83,7 +83,7 @@ Vue.prototype.$echarts = echarts;
 
 <script>
     import topnavbar from '../components/TopNavbar.vue';
-    import userprofile from '../components/Userprofile.vue';
+    import userprofile from '../components/UserProfile.vue';
     import usercontribute from '../components/UserContribute.vue';
     import userfavorites from '../components/UserFavorites.vue';
     import userfolder from '../components/UserFolder.vue';
