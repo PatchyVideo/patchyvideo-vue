@@ -34,7 +34,12 @@
     <topnavbar />
 
     <!-- EditTags组件-->
-    <EditTags ref="editTag" :msg="temporaryValForVLP" :visible.sync="showTagPanel" v-if="editable"></EditTags>
+    <EditTags
+      ref="editTag"
+      :msg="temporaryValForVLP"
+      :visible.sync="showTagPanel"
+      v-if="editable"
+    ></EditTags>
 
     <!-- 编辑视频列表时的对话框 -->
     <el-dialog
@@ -43,29 +48,46 @@
       width="40%"
       :close-on-click-modal="false"
     >
-      <el-form ref="list" :model="playlist_metadata" label-width="auto" :rules="rules">
+      <el-form
+        ref="list"
+        :model="playlist_metadata"
+        label-width="auto"
+        :rules="rules"
+      >
         <!-- 标题 -->
         <el-form-item prop="title">
-          <el-input v-model="playlist_metadata.title" placeholder="这里是列表标题"></el-input>
+          <el-input
+            v-model="playlist_metadata.title"
+            placeholder="这里是列表标题"
+          ></el-input>
         </el-form-item>
         <!-- 简介 -->
         <el-form-item prop="desc">
           <el-input
             type="textarea"
-            :autosize="{ minRows: 6}"
+            :autosize="{ minRows: 6 }"
             placeholder="来介绍一下自己的列表吧~"
             v-model="playlist_metadata.desc"
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-checkbox v-model="playlist_metadata.private">设为私有列表</el-checkbox>
+          <el-checkbox v-model="playlist_metadata.private"
+            >设为私有列表</el-checkbox
+          >
         </el-form-item>
         <el-form-item class="createList">
-          <el-button type="primary" @click="onSubmit" style="width:80%" :loading="loading">确认修改</el-button>
           <el-button
-            @click="openListEdit=false"
+            type="primary"
+            @click="onSubmit"
+            style="width:80%"
+            :loading="loading"
+            >确认修改</el-button
+          >
+          <el-button
+            @click="openListEdit = false"
             style="width:80%;margin-top:10px;margin-left:0px"
-          >取 消</el-button>
+            >取 消</el-button
+          >
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -75,7 +97,14 @@
       <span>确认删除吗？</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false;deleteVideoList()">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="
+            dialogVisible = false;
+            deleteVideoList();
+          "
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
 
@@ -85,35 +114,64 @@
         <!-- 视频列表介绍 -->
         <div class="deemo shadow">
           <div class="d_t">
-            <img src="../static/img/5.png" style="float:left;margin-top:50px;" />
-            <img src="../static/img/1.png" style="float:right;margin-top:50px;" />
+            <img
+              src="../static/img/5.png"
+              style="float:left;margin-top:50px;"
+            />
+            <img
+              src="../static/img/1.png"
+              style="float:right;margin-top:50px;"
+            />
             <h2>{{ videolistName }}</h2>
-            <img :src="'/images/covers/'+videolistDetail.playlist.cover" style="min-height:200px" />
+            <img
+              :src="'/images/covers/' + videolistDetail.playlist.cover"
+              style="min-height:200px"
+            />
             <p>{{ videolistDesc }}</p>
           </div>
           <!-- 打开Tag编辑页面 -->
           <div v-if="editable" class="edit_box">
             <el-button type="success" @click="addVideo">添加视频</el-button>
-            <el-button type="info" @click="openListEdit=true">编辑列表信息</el-button>
-            <el-button type="primary" @click="openEditTags" class="EditTagsButton">编辑共有标签</el-button>
-            <el-button type="danger" @click="dialogVisible = true">删除</el-button>
+            <el-button type="info" @click="openListEdit = true"
+              >编辑列表信息</el-button
+            >
+            <el-button
+              type="primary"
+              @click="openEditTags"
+              class="EditTagsButton"
+              :disabled="showTagPanel"
+              >编辑共有标签</el-button
+            >
+            <el-button type="warning" @click="inverse()"
+              >列表视频倒序</el-button
+            >
+            <el-button type="danger" @click="dialogVisible = true"
+              >删除</el-button
+            >
           </div>
         </div>
 
         <!-- 视频列表 -->
         <div class="recommend">
           <!-- 视频详情 -->
-          <div class="minbox shadow" v-for="(item, index) in videolistVideos" :key="item._id.$oid">
+          <div
+            class="minbox shadow"
+            v-for="(item, index) in videolistVideos"
+            :key="item._id.$oid"
+          >
             <div class="re_video">
               <div class="edit">
-                <h1 id="edit_first">{{ item.rank+1 }}</h1>
+                <h1 id="edit_first">{{ item.rank + 1 }}</h1>
                 <div v-if="editable" id="edit_second">
-                  <Move class="move" :msg="PlaylistItemOp(item,index)"></Move>
+                  <Move class="move" :msg="PlaylistItemOp(item, index)"></Move>
                   <!--上移-->
                 </div>
               </div>
 
-              <img class="re_video_img" :src="'/images/covers/'+item.item.cover_image" />
+              <img
+                class="re_video_img"
+                :src="'/images/covers/' + item.item.cover_image"
+              />
               <div class="re_video_desc">
                 <el-tooltip
                   v-if="editable"
@@ -123,7 +181,10 @@
                   placement="top"
                 >
                   <router-link
-                    :to="{path:'./postvideo',query:getInsertData(item,index)}"
+                    :to="{
+                      path: './postvideo',
+                      query: getInsertData(item, index)
+                    }"
                     class="insert-video"
                   >
                     <i class="fa fa fa-plus" aria-hidden="true"></i>
@@ -135,7 +196,8 @@
                     target="_blank"
                     :to="{ path: '/video', query: { id: item._id.$oid } }"
                     tag="a"
-                  >{{ item.item.title }}</router-link>
+                    >{{ item.item.title }}</router-link
+                  >
                 </h3>
                 <p>{{ item.item.desc }}</p>
                 <div>
@@ -144,13 +206,25 @@
                     width="16px"
                     style="margin-right:2px"
                   />
-                  <a :href="item.item.url" :id="'link' + (index)">{{ item.item.url }}</a>
-                  <i @click="copyVideoLink(index)" class="fa fa-copy fa-lg" style="margin-left:2px"></i>
+                  <a :href="item.item.url" :id="'link' + index">{{
+                    item.item.url
+                  }}</a>
+                  <i
+                    @click="copyVideoLink(index)"
+                    class="fa fa-copy fa-lg"
+                    style="margin-left:2px"
+                  ></i>
                 </div>
               </div>
               <div v-if="editable" class="item_end">
-                <SetCover class="set-cover" :msg="PlaylistItemOp(item,index)"></SetCover>
-                <DeleteVideo class="delete-video" :msg="PlaylistItemOp(item,index)"></DeleteVideo>
+                <SetCover
+                  class="set-cover"
+                  :msg="PlaylistItemOp(item, index)"
+                ></SetCover>
+                <DeleteVideo
+                  class="delete-video"
+                  :msg="PlaylistItemOp(item, index)"
+                ></DeleteVideo>
               </div>
             </div>
           </div>
@@ -363,6 +437,20 @@ export default {
         this.getVideoList();
       });
     },
+    // 列表视频倒序显示
+    inverse() {
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "/be/list/inverse.do",
+        data: {
+          pid: this.videolistPid
+        }
+      }).then(res => {
+        this.open("操作成功！");
+        this.getVideoList();
+      });
+    },
     //删除列表
     deleteVideoList: function() {
       this.axios({
@@ -380,7 +468,6 @@ export default {
     openEditTags: function() {
       this.temporaryValForVLP = this.videolistPid;
       this.showTagPanel = true;
-         console.log("who?");
       this.$refs.editTag.getCommonTags();
     },
     open(message) {
