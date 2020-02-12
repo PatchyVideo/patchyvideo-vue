@@ -1,6 +1,6 @@
 <!--
-    页面：paychyvideo的个人投稿视频页面
-    功能：展示用户投稿所有的视频信息以及TAG数据统计
+    页面：paychyvideo的个人索引视频贡献页面
+    功能：展示用户贡献的所有视频索引信息以及TAG数据统计
     更新日志：
     12/31/2019: v1.0
 
@@ -27,7 +27,7 @@
                 <p v-if="this.videoCount==0" class="nulldata-right">您没有发布频，目前还没有数据哦</p>
                 <div class="minibox" v-if="this.videoCount!=0">
                    <div class="minibox_top">
-                       <h3>投稿视频</h3>
+                       <h3>视频索引列表</h3>
                        <span>共有{{videoCount}}个视频</span>
                        <i @click="changeLine":class="{'el-icon-s-grid':flag,'el-icon-menu':!flag}"></i>
                    </div>

@@ -2,11 +2,11 @@
 
     <div class="bigbox">
         <div class="doing">
-            <h3>待处理的投稿</h3>
-            <p>暂无待处理的投稿</p>
+            <h3>待处理的索引</h3>
+            <p>暂无待处理的索引</p>
         </div>
         <div class="failed">
-            <h3>失败的投稿</h3>
+            <h3>失败的索引</h3>
             <p>共计{{failedData.count}}个</p>
          <p v-for="(item,i) in failedData.posts":key="item._id.$oid">
              <a :href="item.post_param.url">{{item.post_param.url}}</a>
