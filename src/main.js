@@ -10,11 +10,11 @@ import "font-awesome/css/font-awesome.min.css";
 import echarts from "echarts";
 import login from "./views/Login.vue";
 import $ from "jquery";
-
+import { VueCropper } from 'vue-cropper'
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
 Vue.use(ElementUI);
-
+Vue.use(VueCropper);
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;
 
