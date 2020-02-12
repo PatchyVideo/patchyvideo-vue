@@ -16,8 +16,8 @@
     <div class="bigbox standard">
 
             <div class="aside">
-         <div class="new-create"  @click=changeDoingSatate() :class="{active:doingState}" ><i class="el-icon-goblet-square" ></i><a>待处理投稿</a> </div>
-         <div class="new-create"  @click=changeFailedSatate() :class="{active:failedState}"><i class="el-icon-goblet-full"></i><a>已失败投稿</a> </div>
+         <div class="new-create"  @click=changeDoingSatate() :class="{active:doingState}" ><i class="el-icon-goblet-square" ></i><a>待处理索引</a> </div>
+         <div class="new-create"  @click=changeFailedSatate() :class="{active:failedState}"><i class="el-icon-goblet-full"></i><a>已失败索引</a> </div>
 
 
             </div>

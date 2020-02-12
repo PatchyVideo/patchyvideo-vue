@@ -21,7 +21,7 @@ Vue.prototype.$echarts = echarts;
     1/1/2020: v1.0
     现在可以查看其他用户界面。
     1/22/2020: v1.1
-    新增投稿状态页面。
+    新增贡献索引状态状态页面。
     修改密码功能以及邮箱功能完成。
     更新了切换状态的字体图标。
 
@@ -46,7 +46,7 @@ Vue.prototype.$echarts = echarts;
               @select="handleSelect"
             >
               <el-menu-item index="1">个人中心</el-menu-item>
-              <el-menu-item index="2">我的投稿</el-menu-item>
+              <el-menu-item index="2">我贡献的索引</el-menu-item>
               <el-menu-item index="3">收藏夹</el-menu-item>
             </el-menu>
             <userprofile v-if="1==gotomark"></userprofile>
@@ -97,8 +97,8 @@ Vue.prototype.$echarts = echarts;
                 activeIndex: "1",
                 activeIndex2: "1",
                 activeName: "first",
-                info:[["我的信息","我的投稿","我的收藏","投稿状态"],["用户信息","他的投稿","他的收藏"]],
-                labelInfo:["我的信息","我的投稿","我的收藏","投稿状态"]
+                info:[["我的信息","我贡献的索引","我的收藏","索引状态"],["用户信息","他贡献的索引","他的收藏"]],
+                labelInfo:["我的信息","我贡献的索引","我的收藏","索引状态"]
             }
         },
        created(){

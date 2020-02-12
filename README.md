@@ -39,7 +39,7 @@
       3.Tag编辑模块完成
     1/22/2020: v1.1.0
       1.Detail页面跳转到PostVideo的参数支持
-      2.User页面完成密码保存、绑定邮箱功能，新增投稿状态、部分字体图标样式优化。
+      2.User页面完成密码保存、绑定邮箱功能，新增贡献索引状态、部分字体图标样式优化。
       3.ListDetail页面新增功能模块。
                                    by wrzrmzx
 
@@ -61,15 +61,15 @@
 
 网页大致分为九个区域
 
-- Home √
-- Deatil(Video) √
-- Playlists √
-- Detail(Playlists) √
-- Create Playlists √
-- Post Video √
-- Tags √
-- Login \ Sign Up \ resetpassword √
-- Users √
+- Home 
+- Deatil(Video) 
+- Playlists 
+- Detail(Playlists) 
+- Create Playlists 
+- Post Video 
+- Tags 
+- Login \ Sign Up \ resetpassword 
+- Users 
 
 ---
 
@@ -93,6 +93,7 @@
 - font-awesome
 - ipfs
 - videostream
+- vue-cropper
 
 项目依赖：
 
