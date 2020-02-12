@@ -108,6 +108,7 @@
                 loading: false,
                 showCropper: false,
                 url:"",
+                compress:0.8, //压缩率
                 imgFile:{},
                 img64:{},
                 cropper: {
@@ -140,6 +141,7 @@
                 $("#file")[0].files = data.files;
                 this.loading = true;
                 var formObj = new FormData(document.getElementById("form1"));
+                console.log($("#file")[0].files);
                 this.axios({
                     method: "post",
                     url: "be/helper/upload_image.do",
@@ -192,7 +194,8 @@
             // 裁剪input 监听
             async onChange(e) {
 
-                const file = e.target.files[0]
+                const file = e.target.files[0];
+                console.log(file);
                 if (!file) {
                     return this.$message.error('选择图片失败')
                 }
@@ -209,23 +212,55 @@
                     console.log(error)
                 }
             },
+            dataURLtoFile (dataurl, filename) {
+                var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+                    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+                while (n--) {
+                    u8arr[n] = bstr.charCodeAt(n);
+                }
+                return new File([u8arr], filename, { type: mime });
+            },
+            onImgCompression (img) {
+                let canvas = document.createElement("canvas")
+                let ctx = canvas.getContext("2d")
+                let initSize = img.src.length
+                let width = img.width
+                let height = img.height
+                canvas.width = width
+                canvas.height = height
+                // 铺底色
+                ctx.fillStyle = "#fff"
+                ctx.fillRect(0, 0, canvas.width, canvas.height)
+                ctx.drawImage(img, 0, 0, width, height)
+                //进行压缩
+                let compress = this.compress || 0.8  //压缩率
+                return canvas.toDataURL("image/jpeg", compress)
+            },
             // 封面上传功能
             uploadCover() {
-                console.log(this.$refs.cropper);
                 this.$refs.cropper.getCropBlob(async imgRes => {
                     try {
                         // 文件大小限制
-                        if (!isMaxFileSize(imgRes, this.maxFileSize)) {
+                      /*  if (!isMaxFileSize(imgRes, this.maxFileSize)) {
                             return
-                        }
+                        }*/
+                       //是否压缩
+                            let img = new Image();
+                            img.src = window.URL.createObjectURL(imgRes);
+                            img.onload = () => {
+                                console.log("正在压缩");
+                                let _data = this.onImgCompression(img)
+                                let  file = this.dataURLtoFile(_data, "压缩后的图片");
+                                console.log('图片大小-压缩过:', (file.size / 1024).toFixed(2), 'kb，', '压缩率：', this.compress)
+                                this.imgFile = file;
+                            }
                         this.loading = true
-                        this.imgFile =new File([imgRes],"裁剪后的图片");
+               /*         this.imgFile =new File([imgRes],"裁剪后的图片");*/
                         this.url = await window.URL.createObjectURL(imgRes);
                         this.$emit('subUploadSucceed', this.url,false)
                         this.loading = false
                         this.showCropper = false
                     } catch (error) {
-                        console.log(error);
                         this.loading = false
                         this.showCropper = false
                         this.$message.error(error)
