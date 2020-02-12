@@ -219,7 +219,7 @@ export default {
     faceMouseOver(b) {
       this.mounseMark = b;
     },
-    sub() {
+/*    sub() {
       this.loading = true;
       var formObj = new FormData(document.getElementById("form1"));
       this.axios({
@@ -253,7 +253,7 @@ export default {
           this.$message.error("上传头像图片大小不能超过 2MB!");
           this.loading = false;
         });
-    },
+    },*/
     bindEmail() {
       this.axios({
         method: "post",
