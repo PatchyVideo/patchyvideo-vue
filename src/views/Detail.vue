@@ -64,7 +64,8 @@
             @click="addToThisList(item._id.$oid)"
           >
             <h2>{{ item.title.english }}</h2>
-            <h3 v-if="item.private">[私密]</h3>
+            <h3 style="display:inline-block;color:#909399" v-if="item.private">[私密]</h3>
+            <h3 style="display:inline-block;color:#E6A23C" v-if="item.exist">[已有此视频]</h3>
             <p>共{{ item.videos }}个视频</p>
           </div>
         </div>
@@ -270,6 +271,8 @@ export default {
       },
       // 我的视频列表
       myVideoList: [],
+      // 我的全部视频列表（处理视频是否存在于该列表）
+      allVideoList: [],
       // 视频列表的关键词
       myListQuery: "",
       // 我的视频列表的当前页数
@@ -681,12 +684,13 @@ export default {
       this.loadingList = true;
       this.axios({
         method: "post",
-        url: "be/lists/myplaylists",
+        url: "be/lists/myplaylists_vid",
         data: {
           query: this.myListQuery,
           page: this.page,
           page_size: this.count,
-          order: "last_modified"
+          order: "last_modified",
+          vid: this.$route.query.id
         },
         withCredentials: true
       }).then(result => {
@@ -844,10 +848,6 @@ export default {
   opacity: 1;
 }
 .myVideoListItem {
-  /* display: -webkit-flex;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-end; */
   cursor: pointer;
   margin-top: 5px;
   padding: 3px 10px 3px 5px;
