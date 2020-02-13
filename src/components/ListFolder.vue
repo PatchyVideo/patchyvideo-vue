@@ -24,7 +24,7 @@
                         v-for="i in toNavigablePath()"
                         :key="i.dst"
                     >
-                    <a v-on:click="navigateTo(i.dst)">{{i.name}}</a>
+                    <a @click="navigateTo(i.dst)">{{i.name}}</a>
                     </el-breadcrumb-item>
                 </el-breadcrumb>
                 <el-container>
@@ -61,9 +61,9 @@
                                         tag="a" >
                                         <h3>{{scope.row.playlist_object.title.english}}</h3>
                                     </router-link>
-                                    <h3 v-else>
-                                        <a v-on:click="navigateTo(scope.row.path)">{{scope.row.name}}</a>
-                                    </h3>
+                                    <a v-else @click="navigateTo(scope.row.path)">
+                                        <h3>{{scope.row.name}}</h3>
+                                    </a>
                                 </template>
                             </el-table-column>
                             <el-table-column label="视频数">
