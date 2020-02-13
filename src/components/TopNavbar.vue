@@ -555,8 +555,8 @@ export default {
       height: 38px;
       line-height: 38px;
       position: relative;
-      top: 50%;
-      transform: translateY(-50%);
+      top: 24%;
+
     }
   }
 }
