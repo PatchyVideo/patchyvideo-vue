@@ -63,9 +63,12 @@ Vue.prototype.$echarts = echarts;
                     <usercontribute></usercontribute>
                 </el-tab-pane>
                 <el-tab-pane :label="labelInfo[2]" name="third">
-                    <userfavorites></userfavorites>
+                    <listfolder></listfolder>
                 </el-tab-pane>
                 <el-tab-pane :label="labelInfo[3]" name="four">
+                    <userfavorites></userfavorites>
+                </el-tab-pane>
+                <el-tab-pane :label="labelInfo[4]" name="fifth">
                     <userfolder></userfolder>
                 </el-tab-pane>
         <!--       <el-tab-pane label="文件管理" name="five">
@@ -85,9 +88,11 @@ Vue.prototype.$echarts = echarts;
     import topnavbar from '../components/TopNavbar.vue';
     import userprofile from '../components/UserProfile.vue';
     import usercontribute from '../components/UserContribute.vue';
+    import listfolder from '../components/ListFolder.vue';
     import userfavorites from '../components/UserFavorites.vue';
     import userfolder from '../components/UserFolder.vue';
     import userpoststate from '../components/UserPostState.vue';
+
     import Footer from "../components/Footer.vue";
     export default {
         data() {
@@ -98,7 +103,7 @@ Vue.prototype.$echarts = echarts;
                 activeIndex2: "1",
                 activeName: "first",
                 info:[["我的信息","我贡献的索引","我的收藏","索引状态"],["用户信息","他贡献的索引","他的收藏"]],
-                labelInfo:["我的信息","我贡献的索引","我的收藏","索引状态"]
+                labelInfo:["我的信息","我贡献的索引","文件夹","我的收藏","索引状态"]
             }
         },
        created(){
@@ -144,7 +149,7 @@ Vue.prototype.$echarts = echarts;
 
         },
 
-        components: {topnavbar,usercontribute,userprofile,userfavorites,userfolder,userpoststate,Footer}
+        components: {topnavbar,usercontribute,userprofile,listfolder,userfavorites,userfolder,userpoststate,Footer}
     }
 </script>
 
