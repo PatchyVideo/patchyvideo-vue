@@ -40,40 +40,21 @@
     <!-- 更改视频级别的弹出框 -->
     <el-dialog title="管理" :visible.sync="managementBox" width="20%">
       <div style="width:80%;margin:0 auto">
-        <el-select
-          v-model="theVideoRank"
-          placeholder="请修改视频的等级"
-          style="width:100%"
-        >
-          <el-option
-            v-for="item in videoRanks"
-            :key="item"
-            :label="item"
-            :value="item"
-          ></el-option>
+        <el-select v-model="theVideoRank" placeholder="请修改视频的等级" style="width:100%">
+          <el-option v-for="item in videoRanks" :key="item" :label="item" :value="item"></el-option>
         </el-select>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="managementBox = false">取 消</el-button>
-        <el-button type="primary" @click="manageVideo()" :loading="loading"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="manageVideo()" :loading="loading">确 定</el-button>
       </span>
     </el-dialog>
 
     <!--添加到我的播放列表的弹出框 -->
     <el-dialog title="添加到列表" :visible.sync="addToList" width="30%">
       <div v-loading="loadingList">
-        <el-input
-          placeholder="搜索我的列表..."
-          v-model="myListQuery"
-          @keyup.enter.native="getMyList()"
-        >
-          <el-button
-            slot="append"
-            icon="el-icon-search"
-            @click="getMyList()"
-          ></el-button>
+        <el-input placeholder="搜索我的列表..." v-model="myListQuery" @keyup.enter.native="getMyList()">
+          <el-button slot="append" icon="el-icon-search" @click="getMyList()"></el-button>
         </el-input>
         <div v-if="myVideoList.length" class="myVideoList">
           <div
@@ -83,7 +64,8 @@
             @click="addToThisList(item._id.$oid)"
           >
             <h2>{{ item.title.english }}</h2>
-            <h3 v-if="item.private">[私密]</h3>
+            <h3 style="display:inline-block;color:#909399" v-if="item.private">[私密]</h3>
+            <h3 style="display:inline-block;color:#E6A23C" v-if="item.exist">[已有此视频]</h3>
             <p>共{{ item.videos }}个视频</p>
           </div>
         </div>
@@ -111,18 +93,12 @@
           <div class="re_top">
             <h2>
               {{ myVideoData.video.item.title }}
-              <el-button v-if="isLogin" type="primary" round @click="openMyList"
-                >添加到我的列表</el-button
-              >
-              <el-button v-if="isAdmin" @click="managementBox = true"
-                >管理</el-button
-              >
+              <el-button v-if="isLogin" type="primary" round @click="openMyList">添加到我的列表</el-button>
+              <el-button v-if="isAdmin" @click="managementBox = true">管理</el-button>
             </h2>
           </div>
           <h4 class="video_link">
-            <a id="video_link" :href="myVideoData.video.item.url">
-              {{ myVideoData.video.item.url }}
-            </a>
+            <a id="video_link" :href="myVideoData.video.item.url">{{ myVideoData.video.item.url }}</a>
             <!-- 一键复制的小图标 -->
             <i @click="copyVideoLink" class="fa fa-copy fa-1x"></i>
           </h4>
@@ -136,11 +112,7 @@
               width="320px"
               height="200px"
             />
-            <p
-              class="videoDesc"
-              @click="postAsCopy($event)"
-              v-html="myVideoData.video.item.desc"
-            ></p>
+            <p class="videoDesc" @click="postAsCopy($event)" v-html="myVideoData.video.item.desc"></p>
           </div>
         </div>
 
@@ -167,26 +139,16 @@
               >
                 <el-button type="text">[添加副本]</el-button>
               </router-link>
-              <el-button
-                type="text"
-                @click="dialogVisible = true"
-                v-if="isLogin == true"
-                >[删除此副本]</el-button
-              >
+              <el-button type="text" @click="dialogVisible = true" v-if="isLogin == true">[删除此副本]</el-button>
               <el-button
                 type="text"
                 @click="broadcastTags()"
                 v-if="isLogin == true"
                 style="margin-left:0px"
-                >[同步副本标签]</el-button
-              >
+              >[同步副本标签]</el-button>
             </p>
           </div>
-          <ul
-            v-for="item in myVideoData.copies"
-            :key="item._id.$oid"
-            class="copies"
-          >
+          <ul v-for="item in myVideoData.copies" :key="item._id.$oid" class="copies">
             <img
               :src="require('../static/img/' + item.item.site + '.png')"
               width="16px"
@@ -197,15 +159,13 @@
               :to="{ path: '/video', query: { id: item._id.$oid } }"
               tag="a"
               @click.native="reload"
-              >{{ item.item.title }}</router-link
-            >
+            >{{ item.item.title }}</router-link>
             <el-button
               type="text"
               @click="synctags(item._id.$oid)"
               v-if="isLogin == true"
               style="margin-left:10px"
-              >[从此副本同步标签]</el-button
-            >
+            >[从此副本同步标签]</el-button>
           </ul>
         </div>
 
@@ -219,8 +179,7 @@
                 type="text"
                 @click="newFromSingleVideo()"
                 v-if="isLogin == true"
-                >[由此视频创建播放列表]</el-button
-              >
+              >[由此视频创建播放列表]</el-button>
             </p>
             <p v-else>
               此视频存在于{{ myVideoData.playlists.length }}个播放列表中
@@ -228,8 +187,7 @@
                 type="text"
                 @click="newFromSingleVideo()"
                 v-if="isLogin == true"
-                >[由此视频创建播放列表]</el-button
-              >
+              >[由此视频创建播放列表]</el-button>
             </p>
           </div>
           <ul v-for="item in myVideoData.playlists" :key="item._id.$oid">
@@ -239,23 +197,20 @@
               :to="{ path: '/video', query: { id: item.prev } }"
               tag="a"
               @click.native="reload"
-              >【前一篇】</router-link
-            >
+            >【前一篇】</router-link>
             <span v-else>【没有前一篇了哦】</span>
             <router-link
               :to="{ path: '/listdetail', query: { id: item._id.$oid } }"
               tag="a"
               @click.native="reload"
-              >{{ item.title.english }}</router-link
-            >
+            >{{ item.title.english }}</router-link>
             <router-link
               v-if="item.next != ''"
               :to="{ path: '/video', query: { id: item.next } }"
               tag="a"
               @click.native="reload"
               style="float:right"
-              >【后一篇】</router-link
-            >
+            >【后一篇】</router-link>
             <span v-else style="float:right">【没有后一篇了哦】</span>
           </ul>
         </div>
@@ -270,8 +225,7 @@
               dialogVisible = false;
               breaklink();
             "
-            >确 定</el-button
-          >
+          >确 定</el-button>
         </span>
       </el-dialog>
     </div>
@@ -317,6 +271,8 @@ export default {
       },
       // 我的视频列表
       myVideoList: [],
+      // 我的全部视频列表（处理视频是否存在于该列表）
+      allVideoList: [],
       // 视频列表的关键词
       myListQuery: "",
       // 我的视频列表的当前页数
@@ -355,6 +311,8 @@ export default {
     // 视频的上传日期
     videodate() {
       var upload_time = new Date(this.myVideoData.video.item.upload_time.$date);
+      // 设置为东八区的时间
+      upload_time.setTime(upload_time.getTime() + 1000 * 3600 * 8);
       var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
       var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
       var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
@@ -726,12 +684,13 @@ export default {
       this.loadingList = true;
       this.axios({
         method: "post",
-        url: "be/lists/myplaylists",
+        url: "be/lists/myplaylists_vid",
         data: {
           query: this.myListQuery,
           page: this.page,
           page_size: this.count,
-          order: "last_modified"
+          order: "last_modified",
+          vid: this.$route.query.id
         },
         withCredentials: true
       }).then(result => {
@@ -889,10 +848,6 @@ export default {
   opacity: 1;
 }
 .myVideoListItem {
-  /* display: -webkit-flex;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-end; */
   cursor: pointer;
   margin-top: 5px;
   padding: 3px 10px 3px 5px;
