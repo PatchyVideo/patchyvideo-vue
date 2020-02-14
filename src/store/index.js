@@ -8,6 +8,8 @@ export default new Vuex.Store({
     bgcMark: "home",
     // 用户名
     username: "",
+    // 用户头像
+    userAvatar: "default",
     // 视频的页数和当前页（功能已经弃用，但这两个变量的关联情况未知所以暂未删除）
     maxpage: 0,
     whichPage: 1,
@@ -36,6 +38,9 @@ export default new Vuex.Store({
     },
     getUserName(state, e) {
       state.username = e;
+    },
+    getUserAvatar(state, e) {
+      state.userAvatar = e;
     },
     clearUserName(state) {
       state.username = "";

@@ -32,11 +32,7 @@
 <template>
   <div class="left-navbar">
     <!-- EditTags组件-->
-    <EditTags
-      :msg="pid"
-      :visible.sync="showTagPanel"
-      class="EditTags"
-    ></EditTags>
+    <EditTags ref="editTag" :msg="pid" :visible.sync="showTagPanel" class="EditTags"></EditTags>
 
     <div class="left_list">
       <div class="titleTag">
@@ -47,12 +43,9 @@
             size="mini"
             @click="openEditTags"
             :disabled="showTagPanel"
-            >编辑</el-button
-          >
+          >编辑</el-button>
         </div>
-        <p v-if="title == '标签' && isLogin == true" @click="postVideo">
-          【使用标签发布视频】
-        </p>
+        <p v-if="title == '标签' && isLogin == true" @click="postVideo">【使用标签发布视频】</p>
       </div>
       <!-- 在Home页面渲染的侧导航条内容 -->
       <ul ref="test" v-if="title == '热门标签' || title == '相关标签'">
@@ -69,9 +62,7 @@
               Meta: val == 'Meta'
             }"
             @click="gotoHome(key)"
-          >
-            {{ key }}
-          </p>
+          >{{ key }}</p>
         </li>
       </ul>
 
@@ -92,9 +83,7 @@
               Meta: val == 'Meta'
             }"
             @click="gotoHome(item)"
-          >
-            {{ item }}
-          </p>
+          >{{ item }}</p>
         </li>
       </ul>
     </div>
@@ -136,6 +125,7 @@ export default {
     },
     // 打开Tag编辑页面
     openEditTags() {
+      this.$refs.editTag.getCommonTags();
       this.showTagPanel = true;
     },
     // 使用视频已有的标签发布视频

@@ -118,6 +118,9 @@
 
         <!-- 登录成功后的用户界面 -->
         <div class="userHome" v-if="isLogin">
+          <el-avatar class="loginUser-userAvatar" :size="40" :src="userAvatar">
+            <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
+          </el-avatar>
           <li class="loginUser-login">
             <router-link to="/users/me">{{ this.$store.state.username }}</router-link>
           </li>
@@ -180,6 +183,14 @@ export default {
     // 搜索的关键字
     iptVal2() {
       return this.$store.state.TopNavbarSearching;
+    },
+    // 搜索的关键字
+    userAvatar() {
+      if (this.$store.state.userAvatar == "default") {
+        return "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png";
+      } else {
+        return "be/images/userphotos/" + this.$store.state.userAvatar;
+      }
     }
   },
   created() {
@@ -305,6 +316,7 @@ export default {
     clearCookie: function() {
       this.setCookie("", -1);
       this.setCookie("session", -1);
+      this.setCookie("userAvatar", -1);
     },
     // 设置cookie
     // 储存变量为username
@@ -314,12 +326,19 @@ export default {
       //字符串拼接cookie
       window.document.cookie =
         "username" + ":" + username + ";path=/;expires=" + date.toGMTString();
+      window.document.cookie =
+        "userAvatar" + "=" + username + ";path=/;expires=" + date.toGMTString();
     },
     // 获取cookie
     getCookie: function() {
       if (document.cookie.length > 0) {
         var arr = document.cookie.split("; ");
         for (var i = 0; i < arr.length; i++) {
+          var arr3 = arr[i].split("=");
+          //判断查找相对应的值
+          if (arr3[0] == "userAvatar") {
+            this.$store.commit("getUserAvatar", arr3[1]);
+          }
           var arr2 = arr[i].split(":");
           //判断查找相对应的值
           if (arr2[0] == "username") {
@@ -334,7 +353,7 @@ export default {
       this.$store.commit("getUserName", "");
       return false;
     },
-    // --------------------------------------------------危险提  T示--------------------------------------------------
+    // --------------------------------------------------危险提示--------------------------------------------------
     //                                   此函数因为直接操纵dom可能导致网站受到攻击!
     // --------------------------------------------------危险提示--------------------------------------------------
     // 消息补全框的方法
@@ -359,7 +378,7 @@ export default {
       // 搜索是否包含sites变量的关键字
       var results = this.sites.filter(this.createFilter(query2));
 
-      // 对输入框现在的数据进行备份 
+      // 对输入框现在的数据进行备份
       this.iptVal3 = this.iptVal;
       this.startlocation = startlocation;
       this.endlocation = endlocation;
@@ -443,22 +462,21 @@ export default {
 
 <style scoped lang="less">
 @import "../static/css/common.css";
-.nav_left{
-  width: 70%!important;
+.nav_left {
+  width: 70% !important;
 }
-.nav_right{
+.nav_right {
   width: 50%;
-  ul{
+  ul {
     display: inline-block;
     width: 100%;
     height: 78px;
     display: flex;
-    li{
-
+    li {
       width: 60%;
       display: flex;
-      margin-right:8%;
-      .form_select{
+      margin-right: 8%;
+      .form_select {
         width: 120px;
         height: 20px;
         padding-left: 5px;
@@ -479,35 +497,34 @@ export default {
         top: 50%;
         margin-right: 2%;
         transform: translateY(-50%);
-/*        right: 74px;*/
+        /*        right: 74px;*/
         transition: all 0.6s ease;
-        &:hover{
+        &:hover {
           outline: none;
           border-style: solid;
           border-color: #d1d1d1;
           box-shadow: 0px 0px 10px 5px white, 0px 0px 10px dodgerblue,
-          0px 0px 20px dodgerblue;
+            0px 0px 20px dodgerblue;
           color: dodgerblue;
-
         }
       }
-      #search-bar-query{
+      #search-bar-query {
         width: 200px;
         height: 38px;
         outline: none;
         border: none;
         position: relative;
-/*        right: 74px;*/
+        /*        right: 74px;*/
         top: 50%;
         transform: translateY(-50%);
         transition: all 0.6s ease;
-
       }
-      #search-bar-submit{
+      #search-bar-submit {
         display: block;
         background: #c5464a;
-        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #c5464a,
-        0 0 70px #c5464a, 0 0 80px #c5464a, 0 0 100px #c5464a, 0 0 150px #c5464a;
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff,
+          0 0 40px #c5464a, 0 0 70px #c5464a, 0 0 80px #c5464a,
+          0 0 100px #c5464a, 0 0 150px #c5464a;
         width: 74px;
         color: white;
         height: 38px;
@@ -518,45 +535,43 @@ export default {
         top: 50%;
         transform: translateY(-50%);
         transition: all 0.6s ease;
- &:hover{
-   background-color: royalblue;
-   text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #228dff,
-   0 0 70px #228dff, 0 0 80px #228dff, 0 0 100px #228dff, 0 0 150px #228dff;
- }
-
+        &:hover {
+          background-color: royalblue;
+          text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff,
+            0 0 40px #228dff, 0 0 70px #228dff, 0 0 80px #228dff,
+            0 0 100px #228dff, 0 0 150px #228dff;
+        }
       }
     }
-    .loginUser{
+    .loginUser {
       width: 50%;
       display: flex;
+      align-items: center;
     }
-    .userHome{
+    .userHome {
       width: 50%;
       display: flex;
+      align-items: center;
     }
-    .loginUser-login{
+    .loginUser-userAvatar {
+      margin-right: 10px;
+    }
+    .loginUser-login {
       height: 38px;
       line-height: 38px;
-      position: relative;
-      top: 50%;
       margin-right: 20px;
-      transform: translateY(-50%);
       flex: 4;
-      a{
+      a {
         width: 100%;
 
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
-
     }
-    .loginUser-signup{
+    .loginUser-signup {
       height: 38px;
       line-height: 38px;
-      position: relative;
-      top: 24%;
-
     }
   }
 }
