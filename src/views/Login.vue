@@ -171,10 +171,18 @@ export default {
                         "getUserName",
                         this.loginFormRef.login_name
                       );
+                      this.$store.commit(
+                        "getUserAvatar",
+                        result.data.data.image
+                      );
                       // 加载结束,加载动画消失
                       this.loading = false;
                       // 利用cookie储存登录状态
-                      this.setCookie(this.loginFormRef.login_name, 7);
+                      this.setCookie(
+                        this.loginFormRef.login_name,
+                        result.data.data.image,
+                        7
+                      );
                       // 如果是从登录按钮跳转到本界面，回到上一个页面
                       if (this.$store.state.ifRouter == 0) {
                         this.$store.commit("changeifRouter", "2");
@@ -224,13 +232,19 @@ export default {
       });
     },
     // 设置cookie
-    // 储存变量为username
-    setCookie(username, days) {
+    // 储存变量为username,userAvatar
+    setCookie(username, userAvatar, days) {
       var date = new Date(); //获取时间
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); //保存的天数
       //字符串拼接cookie
       window.document.cookie =
         "username" + ":" + username + ";path=/;expires=" + date.toUTCString();
+      window.document.cookie =
+        "userAvatar" +
+        "=" +
+        userAvatar +
+        ";path=/;expires=" +
+        date.toUTCString();
     }
   },
   components: { signup }
