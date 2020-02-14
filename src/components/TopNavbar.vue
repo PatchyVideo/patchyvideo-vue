@@ -345,10 +345,10 @@ export default {
             if (arr2[1] != "") {
               this.isLogin = true;
               this.$store.commit("getUserName", arr2[1]);
-              return true;
             }
           }
         }
+        return true;
       }
       this.$store.commit("getUserName", "");
       return false;
