@@ -1,4 +1,4 @@
-<!--    vue组件：TopNavbar.vue     -->
+﻿<!--    vue组件：TopNavbar.vue     -->
 <!--
     组件：左侧的热门标签导航栏
     大小：100% * 70px
@@ -334,7 +334,7 @@ export default {
       this.$store.commit("getUserName", "");
       return false;
     },
-    // --------------------------------------------------危险提示--------------------------------------------------
+    // --------------------------------------------------危险提  T示--------------------------------------------------
     //                                   此函数因为直接操纵dom可能导致网站受到攻击!
     // --------------------------------------------------危险提示--------------------------------------------------
     // 消息补全框的方法
@@ -359,7 +359,7 @@ export default {
       // 搜索是否包含sites变量的关键字
       var results = this.sites.filter(this.createFilter(query2));
 
-      // 对输入框现在的数据进行备份
+      // 对输入框现在的数据进行备份 
       this.iptVal3 = this.iptVal;
       this.startlocation = startlocation;
       this.endlocation = endlocation;
@@ -555,8 +555,8 @@ export default {
       height: 38px;
       line-height: 38px;
       position: relative;
-      top: 50%;
-      transform: translateY(-50%);
+      top: 24%;
+
     }
   }
 }
