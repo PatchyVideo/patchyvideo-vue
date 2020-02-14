@@ -13,6 +13,48 @@
 
 <template>
 <div v-loading="loading">
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+        <span>确认删除吗？此操作不可逆</span>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button
+            type="primary"
+            @click="
+                dialogVisible = false;
+                deleteSelectedItems();
+            ">确 定</el-button>
+        </span>
+    </el-dialog>
+    <el-dialog
+        title="新建文件夹"
+        :visible.sync="showNewFolderDialog"
+        width="40%"
+        :close-on-click-modal="false"
+        >
+        <el-form
+            ref="createNewFolderForm"
+            label-width="auto"
+            :rules="rules"
+            :model="new_folder"
+        >
+            <el-form-item prop="name">
+                <el-input placeholder="名称" v-model="new_folder.title"></el-input>
+            </el-form-item>
+            <el-form-item class="createList">
+                <el-button
+                    type="primary"
+                    @click="createFolder"
+                    style="width:80%"
+                    :loading="loading"
+                    >添加</el-button
+                >
+                <el-button
+                    @click="showNewFolderDialog = false"
+                    style="width:80%;margin-top:10px;margin-left:0px"
+                    >取 消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
     <div class="operations">
         <el-button type="primary" round @click="addToCurrectFolder">添加至当前目录</el-button>
     </div>
@@ -30,16 +72,27 @@
                 <el-container>
                     <el-aside>
                         <el-tree
+                            ref="folderTree"
+                            node-key="path"
                             :props="props"
                             :load="loadNode"
-                            lazy
-                            show-checkbox>
+                            :expand-on-click-node="false"
+                            @node-click="handleTreeNodeClick"
+                            lazy>
                         </el-tree>
                     </el-aside>
                     <el-main>
+                        <el-button @click="handleCreateFolder">新建文件夹</el-button>
+                        <el-button @click="dialogVisible = true" type="danger" :disabled="this.currentSelectedItems == 0">删除选中项</el-button>
                         <el-table
+                            ref="currentFolderTable"
                             :data="currentPathObjects"
-                            style="width: 100%">
+                            style="width: 100%"
+                            @selection-change="handleCurrentFolderTableSelectionChange">
+                            <el-table-column
+                                type="selection"
+                                width="55">
+                            </el-table-column>
                             <el-table-column
                                 label="封面"
                                 width="180"
@@ -51,7 +104,8 @@
                                 </el-table-column>
                             <el-table-column
                                 label="标题"
-                                width="600">
+                                width="600"
+                                sortable>
                                 <template slot-scope="scope">
                                     <router-link
                                         v-if="typeof scope.row.playlist_object != 'undefined'"
@@ -61,9 +115,9 @@
                                         tag="a" >
                                         <h3>{{scope.row.playlist_object.title.english}}</h3>
                                     </router-link>
-                                    <a v-else @click="navigateTo(scope.row.path)">
+                                    <el-button v-else type="text" @click="navigateTo(scope.row.path)">
                                         <h3>{{scope.row.name}}</h3>
-                                    </a>
+                                    </el-button>
                                 </template>
                             </el-table-column>
                             <el-table-column label="视频数">
@@ -84,12 +138,6 @@
     
         <el-col>
             <div class="raw-playlist">
-                <el-tree
-                    :props="props"
-                    :load="loadNode"
-                    lazy
-                    show-checkbox>
-                </el-tree>
             </div>
         </el-col>
     </el-row>
@@ -99,33 +147,22 @@
 <script>
     export default {
     data() {
-      return {
-          loading: true,
-        props: {
-          label: 'name',
-          children: 'zones',
-          isLeaf: 'leaf'
-        },
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
-        currentPathObjects: [],
-        currentPath: '/'
-      };
+        return {
+            loading: true,
+            props: {
+                label: 'name',
+                isLeaf: 'leaf'
+            },
+            currentPathObjects: [],
+            currentPath: '/',
+            currentSelectedItems: [],
+            dialogVisible: false,
+            showNewFolderDialog: false,
+            new_folder: {name: ''},
+            rules: {
+                name: [{ required: true, message: "请输入名称", trigger: "blur" }],
+            }
+        };
     },
     created(){
         this.getFolder();
@@ -133,20 +170,38 @@
     methods: {
         loadNode(node, resolve) {
             if (node.level === 0) {
-            return resolve([{ name: 'region' }]);
+                return resolve([{ name: 'root', leaf: false, path: '/' }]);
             }
-            if (node.level > 1) return resolve([]);
 
-            setTimeout(() => {
-            const data = [{
-                name: 'leaf',
-                leaf: true
-            }, {
-                name: 'zone'
-            }];
+            this.axios({
+                method:'post',
+                url:'be/folder/view',
+                data:{
+                    path: node.data.path
+                },
+                withCredentials:true,
+            }).then(result => {
+                var currentPathObjects = result.data.data;
+                var data = [];
+                for (var i = 0; i < currentPathObjects.length; ++i) {
+                    if (typeof currentPathObjects[i].playlist_object == 'undefined') {
+                        data.push({
+                            name: currentPathObjects[i].name,
+                            leaf: false,
+                            path: currentPathObjects[i].path
+                        });
+                    }
+                }
+                resolve(data);
+            });
+        },
 
-            resolve(data);
-            }, 500);
+        addToCurrectFolder() {
+            ;
+        },
+
+        handleTreeNodeClick(data) {
+            this.navigateTo(data.path);
         },
 
         getFolder()
@@ -194,6 +249,28 @@
                     result.push(curObj);
                 }
                 return result;
+            }
+        },
+        handleCurrentFolderTableSelectionChange(val) {
+            this.currentSelectedItems = val;
+        },
+
+        handleCreateFolder() {
+            this.showNewFolderDialog = true;
+        },
+
+        createFolder() {
+            ;
+        },
+
+        deleteSelectedItems() {
+            if (this.currentSelectedItems) {
+                var pathsToDelete = this.currentSelectedItems.map(obj => {
+                    return obj.path;
+                });
+                console.log(pathsToDelete);
+                var node = this.$refs.folderTree.getNode(pathsToDelete[0]);
+                console.log(node);
             }
         }
     }
