@@ -62,6 +62,10 @@ export default {
               this.open();
             } else {
               this.open2();
+              this.$router.push({
+                path: "/listdetail",
+                query: { id: result.data.data.pid }
+              });
             }
           });
         } else {
