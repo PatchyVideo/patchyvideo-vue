@@ -127,14 +127,17 @@
                         url:'be/lists/myplaylists',
                         data:{
                             "page":1,
-                            "page_size":1, //无法确认视频总个数,第一次请求仅为获取视频总个数
+                            "page_size":20, //无法确认视频总个数,第一次请求仅为获取视频总个数
                             "order":this.couponSelected
                         },
                         withCredentials:true,
                     }).then(res=>{
                         this.firstmaxcount=res.data.data.count;
-                        this.maxcount=res.data.data.count; //获取总的视频个数制作分页后开始第二次请求获取当前页面的数据
-                        this.getVideoData(this.page,this.count);
+                        this.maxcount=res.data.data.count;
+                        this.myListVideoData =res.data.data.playlists;
+                        this.loading =false;
+                        //获取总的视频个数制作分页后开始第二次请求获取当前页面的数据
+                  /*      this.getVideoData(this.page,this.count);*/
                     });
                 }
                 if(this.$route.params.id!='me'){
@@ -146,14 +149,16 @@
                         url:"be/lists/yourplaylists",
                         data:{
                             "page":1,
-                            "page_size":9999999,
+                            "page_size":20,
                             "uid":this.$route.params.id,
                             "order":this.couponSelected
                         }
                     }).then(res=>{
                         this.firstmaxcount=res.data.data.count;
                         this.maxcount=res.data.data.count; //获取总的视频个数制作分页后开始第二次请求获取当前页面的数据
-                        this.getVideoData(this.page,this.count);
+                      /*  this.getVideoData(this.page,this.count);*/
+                        this.myListVideoData =res.data.data.playlists;
+                        this.loading =false;
                     })
                 }
 

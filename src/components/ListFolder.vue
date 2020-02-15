@@ -13,7 +13,7 @@
 
 <template>
 <div v-loading="loading">
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+    <el-dialog title="提示" :visible.sync="dialogVisible" :modal-append-to-body='false' width="30%">
         <span>确认删除吗？此操作不可逆</span>
         <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
@@ -31,6 +31,7 @@
         :visible.sync="showNewFolderDialog"
         width="40%"
         :close-on-click-modal="true"
+        :modal-append-to-body='false'
         >
         <el-form
             ref="createNewFolderForm"
@@ -62,6 +63,7 @@
         :visible.sync="showRenameFolderDialog"
         width="40%"
         :close-on-click-modal="true"
+        :modal-append-to-body='false'
         >
         <el-form
             ref="refRenameFolderForm"
@@ -90,36 +92,30 @@
     <div v-if="loggedIn && editable" class="operations">
         <el-button type="primary" round @click="addToCurrectFolder" :disabled="this.currentSelectedPlaylists.length == 0">添加至当前目录</el-button>
     </div>
-    <el-row>
-        <el-col>
-            <div class="folder-view">
-                <el-breadcrumb separator="/">
-                    <el-breadcrumb-item
-                        v-for="i in toNavigablePath()"
-                        :key="i.dst"
-                    >
-                    <a @click="navigateTo(i.dst)">{{i.name}}</a>
-                    </el-breadcrumb-item>
-                </el-breadcrumb>
+    <el-row v-if="this.$route.params.id!='me'">
+        <el-col style="width: 100%">
+            <div class="folder-view" >
                 <el-container>
-                    <el-aside>
+                    <el-aside style="width: 200px">
+                        <el-breadcrumb separator="/">
+                            <el-breadcrumb-item
+                                    v-for="i in toNavigablePath()"
+                                    :key="i.dst"
+                            >
+                                <a @click="navigateTo(i.dst)" style="font-size: 21px">{{i.name}}</a>
+                            </el-breadcrumb-item>
+                        </el-breadcrumb>
                         <el-tree
-                            ref="folderTree"
-                            node-key="path"
-                            :props="props"
-                            :load="loadNode"
-                            :expand-on-click-node="false"
-                            @node-click="handleTreeNodeClick"
-                            style="width: 100%"
-                            lazy>
+                                ref="folderTree"
+                                node-key="path"
+                                :props="props"
+                                :load="loadNode"
+                                :expand-on-click-node="false"
+                                @node-click="handleTreeNodeClick"
+                                style="width: 100%"
+                                lazy>
                         </el-tree>
-                        <el-switch
-                            v-if="loggedIn && editable"
-                            v-model="currentFolderObject.privateView"
-                            active-text="私有"
-                            inactive-text="公开"
-                            @change="handleCurrentFolderPrivateViewChanged">
-                        </el-switch>
+
                         <!--<el-switch
                             v-model="priavteEdit"
                             active-text="允许他人编辑"
@@ -127,38 +123,37 @@
                         </el-switch>-->
                     </el-aside>
                     <el-main>
-                        <el-button v-if="loggedIn && editable" @click="showNewFolderDialog = true">新建文件夹</el-button>
-                        <el-button v-if="loggedIn && editable" @click="dialogVisible = true" type="danger" :disabled="this.currentSelectedItems == 0">删除选中项</el-button>
                         <el-table
-                            ref="currentFolderTable"
-                            :data="currentFolderChildrens"
-                            style="width: 100%"
-                            @selection-change="handleCurrentFolderTableSelectionChange">
+                                ref="currentFolderTable"
+                                :data="currentFolderChildrens"
+                                style="width: 100%"
+                                @selection-change="handleCurrentFolderTableSelectionChange">
                             <el-table-column
-                                type="selection"
-                                width="55">
+                                    type="selection"
+                                    width="55">
                             </el-table-column>
                             <el-table-column
-                                label="封面"
-                                width="180"
-                                height="100">
+                                    label="封面"
+                                    width="180"
+                                    height="100">
                                 <template slot-scope="scope">
                                     <img v-if="typeof scope.row.playlist_object != 'undefined'" :src="'/images/covers/' + scope.row.playlist_object.cover" width="160px" height="100px" />
                                     <img v-else src="/images/folder.png" width="160px" height="100px" />
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                label="标题"
-                                width="600"
-                                sortable
-                                prop="name">
+                                    label="标题"
+                                    width="500"
+                                    align="center"
+                                    sortable
+                                    prop="name">
                                 <template slot-scope="scope">
                                     <router-link
-                                        v-if="typeof scope.row.playlist_object != 'undefined'"
-                                        target="_blank"
-                                        :to="{ path: '/listdetail', query: { id: scope.row.playlist_object._id.$oid} }"
-                                        :key="scope.row.playlist_object._id.$oid"
-                                        tag="a" >
+                                            v-if="typeof scope.row.playlist_object != 'undefined'"
+                                            target="_blank"
+                                            :to="{ path: '/listdetail', query: { id: scope.row.playlist_object._id.$oid} }"
+                                            :key="scope.row.playlist_object._id.$oid"
+                                            tag="a" >
                                         <h3>{{scope.row.playlist_object.title.english}}</h3>
                                         <p style="overflow:hidden">{{scope.row.playlist_object.desc.english}}</p>
                                     </router-link>
@@ -170,12 +165,12 @@
                                     </div>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="视频数" prop="playlist_object.videos">
+                            <el-table-column label="视频数"  width="200" align="center" prop="playlist_object.videos">
                                 <template slot-scope="scope">
                                     <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{scope.row.playlist_object.videos}}</h3>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="修改日期" prop="playlist_object.meta.modified_at">
+                            <el-table-column label="修改日期" align="center"  prop="playlist_object.meta.modified_at">
                                 <template slot-scope="scope">
                                     <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{scope.row.playlist_object.meta.modified_at}}</h3>
                                 </template>
@@ -185,85 +180,188 @@
                 </el-container>
             </div>
         </el-col>
-    
-        <el-col>
+    </el-row>
+    <el-row  v-if="this.$route.params.id=='me'" >
+        <el-col  style="width: 50%">
+            <div class="folder-view" >
+                <el-container>
+                    <el-aside   style="width: 80px" >
+                        <el-breadcrumb separator="/">
+                            <el-breadcrumb-item
+                                    v-for="i in toNavigablePath()"
+                                    :key="i.dst"
+                            >
+                                <a @click="navigateTo(i.dst)" style="font-size: 21px">{{i.name}}</a>
+                            </el-breadcrumb-item>
+                        </el-breadcrumb>
+                        <el-tree
+                                ref="folderTree"
+                                node-key="path"
+                                :props="props"
+                                :load="loadNode"
+                                :expand-on-click-node="false"
+                                @node-click="handleTreeNodeClick"
+                                style="width: 100%"
+                                lazy>
+                        </el-tree>
+                        <el-switch
+                                v-if="loggedIn && editable"
+                                v-model="currentFolderObject.privateView"
+                                active-text="私有"
+                                inactive-text="公开"
+                                style="width: 100%"
+                                @change="handleCurrentFolderPrivateViewChanged">
+                        </el-switch>
+                        <!--<el-switch
+                            v-model="priavteEdit"
+                            active-text="允许他人编辑"
+                            inactive-text="私人编辑">
+                        </el-switch>-->
+                    </el-aside>
+                    <el-main>
+                        <el-button v-if="loggedIn && editable" @click="showNewFolderDialog = true">新建文件夹</el-button>
+                        <el-button v-if="loggedIn && editable" @click="dialogVisible = true" type="danger" :disabled="this.currentSelectedItems == 0">删除选中项</el-button>
+                        <el-table
+                                ref="currentFolderTable"
+                                :data="currentFolderChildrens"
+                                style="width: 100%"
+                                @selection-change="handleCurrentFolderTableSelectionChange">
+                            <el-table-column
+                                    type="selection"
+                                    width="55">
+                            </el-table-column>
+                            <el-table-column
+                                    label="封面"
+                                    width="180"
+                                    height="100"
+                                    align="center"
+                            >
+                                <template slot-scope="scope">
+                                    <img v-if="typeof scope.row.playlist_object != 'undefined'" :src="'/images/covers/' + scope.row.playlist_object.cover" width="160px" height="100px" />
+                                    <img v-else src="/images/folder.png" width="160px" height="100px" />
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                    label="标题"
+                                    width="200"
+                                    align="center"
+                                    sortable
+                                    prop="name">
+                                <template slot-scope="scope">
+                                    <router-link
+                                            v-if="typeof scope.row.playlist_object != 'undefined'"
+                                            target="_blank"
+                                            :to="{ path: '/listdetail', query: { id: scope.row.playlist_object._id.$oid} }"
+                                            :key="scope.row.playlist_object._id.$oid"
+                                            tag="a" >
+                                        <h3>{{scope.row.playlist_object.title.english}}</h3>
+                                        <p style="overflow:hidden">{{scope.row.playlist_object.desc.english}}</p>
+                                    </router-link>
+                                    <div v-else>
+                                        <el-button type="text" @click="navigateTo(scope.row.path)">
+                                            <h3>{{scope.row.name}}</h3>
+                                        </el-button>
+                                        <el-button v-if="loggedIn && editable" type="primary" round @click="showRenameFolderDialogFunc(scope.row)">重命名</el-button>
+                                    </div>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="视频数"      align="center"  width="80" prop="playlist_object.videos">
+                                <template slot-scope="scope">
+                                    <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{scope.row.playlist_object.videos}}</h3>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="修改日期"      align="center" prop="playlist_object.meta.modified_at">
+                                <template slot-scope="scope">
+                                    <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{scope.row.playlist_object.meta.modified_at}}</h3>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </el-main>
+                </el-container>
+            </div>
+        </el-col>
+
+        <el-col style="width: 50%">
             <div v-if="loggedIn && editable" class="raw-playlist">
                 <div id="select-order" class="head">
                     <el-input
-                    placeholder="搜索列表..."
-                    v-model="currentPlaylistSearchTerm"
-                    clearable
-                    class="inputbox"
-                    @keyup.enter.native="loadCurrentPlaylists()"
+                            placeholder="搜索列表..."
+                            v-model="currentPlaylistSearchTerm"
+                            clearable
+                            class="inputbox"
+                            @keyup.enter.native="loadCurrentPlaylists()"
                     >
-                    <el-button slot="append" icon="el-icon-search" @click="loadCurrentPlaylists()">搜索</el-button>
+                        <el-button slot="append" icon="el-icon-search" @click="loadCurrentPlaylists()">搜索</el-button>
                     </el-input>
                     <el-select v-model="currentPlaylistOrder" class="select">
-                    <el-option
-                        v-for="item in playlistOrderOptions"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                    ></el-option>
+                        <el-option
+                                v-for="item in playlistOrderOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
                     </el-select>
                 </div>
                 <el-switch
-                    v-model="showMyPlaylistsOnly"
-                    active-text="我的播放列表"
-                    inactive-text="全部"
-                    >
+                        v-model="showMyPlaylistsOnly"
+                        active-text="我的播放列表"
+                        inactive-text="全部"
+                >
                 </el-switch>
                 <el-table
-                    ref="rawPlaylists"
-                    :data="currentPlaylists"
-                    style="width: 100%"
-                    @selection-change="handlePlaylistTableSelectionChange">
+                        ref="rawPlaylists"
+                        :data="currentPlaylists"
+                        style="width: 100%"
+                        @selection-change="handlePlaylistTableSelectionChange">
                     <el-table-column
-                        type="selection"
-                        width="55">
+                            type="selection"
+                            width="55">
                     </el-table-column>
                     <el-table-column
-                        label="封面"
-                        width="180"
-                        height="100">
+                            label="封面"
+                            width="180"
+                            height="100"
+                            align="center"
+                    >
                         <template slot-scope="scope">
                             <img :src="'/images/covers/' + scope.row.cover" width="160px" height="100px" />
                         </template>
                     </el-table-column>
                     <el-table-column
-                        label="标题"
-                        width="600"
-                        sortable
-                        prop="name">
+                            label="标题"
+                            width="200"
+                            align="center"
+                            sortable
+                            prop="name">
                         <template slot-scope="scope">
                             <router-link
-                                target="_blank"
-                                :to="{ path: '/listdetail', query: { id: scope.row._id.$oid} }"
-                                :key="scope.row._id.$oid"
-                                tag="a" >
+                                    target="_blank"
+                                    :to="{ path: '/listdetail', query: { id: scope.row._id.$oid} }"
+                                    :key="scope.row._id.$oid"
+                                    tag="a" >
                                 <h3>{{scope.row.title.english}}</h3>
                             </router-link>
                         </template>
                     </el-table-column>
-                    <el-table-column label="视频数" prop="playlist_object.videos">
+                    <el-table-column label="视频数" width="80" align="center" prop="playlist_object.videos">
                         <template slot-scope="scope">
                             <h3>{{scope.row.videos}}</h3>
                         </template>
                     </el-table-column>
-                    <el-table-column label="修改日期" prop="playlist_object.meta.modified_at">
+                    <el-table-column label="修改日期" align="center"  prop="playlist_object.meta.modified_at">
                         <template slot-scope="scope">
                             <h3>{{scope.row.meta.modified_at}}</h3>
                         </template>
                     </el-table-column>
                 </el-table>
                 <el-pagination
-                    background
-                    class="page-selector"
-                    layout="jumper, prev, pager, next, sizes"
-                    :current-page.sync="currentPlaylistPage"
-                    :page-size.sync="currentPlaylistPageSize"
-                    :page-sizes="[10, 20, 30, 40]"
-                    :total="allPlaylistsCount"
+                        background
+                        class="page-selector"
+                        layout="jumper, prev, pager, next, sizes"
+                        :current-page.sync="currentPlaylistPage"
+                        :page-size.sync="currentPlaylistPageSize"
+                        :page-sizes="[10, 20, 30, 40]"
+                        :total="allPlaylistsCount"
                 ></el-pagination>
             </div>
         </el-col>
@@ -342,6 +440,7 @@
             return data;
         },
         loadNode(node, resolve) {
+            console.log(node);
             if (node.level === 0) {
                 return resolve([{ name: '/', leaf: false, path: '/', children: [] }]);
             }
@@ -370,6 +469,7 @@
 
         getFolder(f = null)
         {
+            this.loading = true;
             this.axios({
                 method: 'post',
                 url: 'be/folder/view',
@@ -444,9 +544,11 @@
                 },
                 withCredentials: true,
             });
+
         },
 
         createFolder() {
+            this.loading = true;
             var folderName = this.newFolderForm.name;
             this.axios({
                 method: 'post',
@@ -479,10 +581,12 @@
                         this.$message.error('名称不能含有/或*');
                     }
                 }
+                this.loading = false;
             })
         },
 
         deleteSelectedItems() {
+            this.loading = true;
             if (this.currentSelectedItems) {
                 var pathsToDelete = []
                 this.currentSelectedItems.forEach(obj => {
@@ -517,11 +621,13 @@
                             },
                             withCredentials: true,
                         }).then(result => {
+                            this.$message.success('删除成功');
                             this.getFolder();
                         });
                     } else if (result.data.reason == 'UNAUTHORISED_OPERATION') {
                         this.$message.error('您没有权限执行此操作');
                     }
+                    this.loading = false;
                 });
             }
         },
@@ -533,8 +639,11 @@
         },
         loadCurrentPlaylists() {
             console.log('loadCurrentPlaylists');
+
+
             if (this.showMyPlaylistsOnly) {
                 // only show my playlists
+                this.loading = true;
                 this.axios({
                     method: 'post',
                     url: 'be/lists/myplaylists',
@@ -553,9 +662,11 @@
                     } else if (result.data.reason == 'UNAUTHORISED_OPERATION') {
                         this.$message.error('请登录');
                     }
+                    this.loading = false;
                 });
             } else {
                 // show all playlists
+                this.loading = true;
                 this.axios({
                     method: 'post',
                     url: 'be/lists/search.do',
@@ -572,11 +683,13 @@
                         this.allPlaylistsCount = result.data.count;
                         this.currentPlaylists = result.data.playlists;
                     }
+                    this.loading = false;
                 });
             }
         },
 
         addToCurrectFolder() {
+            this.loading = true;
             console.log(this.currentSelectedPlaylists);
             var pidsToAdd = [];
             this.currentSelectedPlaylists.forEach(obj => {
@@ -593,14 +706,17 @@
             }).then(result => {
                 result = result.data;
                 if (result.status == 'SUCCEED') {
+                    this.$message.success('添加成功');
                     this.getFolder();
                 } else if (result.data.reason == 'UNAUTHORISED_OPERATION') {
                     this.$message.error('请登录');
                 }
+                this.loading = false;
             });
         },
         renameFolder() {
             const row = this.renameFolderForm.row;
+            this.loading = true;
             this.axios({
                 method: 'post',
                 url: 'be/folder/rename',
@@ -632,7 +748,7 @@
                     this.$message.error('无效路径或名称');
                 } else if (result.data.reason == 'FOLDER_ALREADY_EXIST') {
                     this.$message.error('文件夹已存在');
-                }
+                }this.loading = false;
             });
         },
         showRenameFolderDialogFunc(row) {
@@ -658,3 +774,52 @@
 };
 </script>
 
+<style lang="less" scoped>
+
+    .operations{
+        margin-bottom: 12px;
+    }
+    .el-row{
+        display: flex;
+
+       .el-col{
+        /*   width: 50%;*/
+           .folder-view{
+               .el-container{
+
+                   .el-aside{
+                       .el-tree{
+                           font-size: 30px;
+                       }
+                       .el-switch{
+                           margin: 30px 0px;
+                       }
+                 /*      width: 80px!important;*/
+                  /*     width: 100%;*/
+                   }
+                   .el-main{
+                       background-color: #fff;
+                       border: 3px solid #f5f5f5;
+                       border-right: none;
+                   }
+               }
+
+           }
+        }
+        .el-col{
+           /* width: 50%;*/
+            max-height:1000px;
+            overflow: auto;
+            .raw-playlist{
+                border: 3px solid #f5f5f5;
+                   #select-order{
+                       display: flex;
+
+                   }
+                .el-switch{
+                    margin: 20px 0px;
+               }
+            }
+        }
+    }
+</style>

@@ -59,6 +59,7 @@
         <div class="video-list-header">
           <p v-if="maxcount">显示 {{ count2 }} / {{ maxcount }} 个视频</p>
           <p v-else>没有搜索到视频</p>
+          <el-checkbox v-model="checked"">显示已失效视频</el-checkbox>
           <el-select id="select-order" v-model="couponSelected">
             <el-option
               v-for="item in options"
@@ -159,6 +160,8 @@ export default {
       //判断当前页数是不是被搜索事件改变的,即：当我跳转到其他页数，此时再搜索新的关键词，新的页数会被置为1。
       //这时会触发page监听的事件，重新请求搜索的数据，因为根据关键词的改变也会重新请求的数据，会造成资源浪费。
       pageMark:false,
+      //是否显示隐藏视频
+      checked: false
     };
   },
   created() {
@@ -211,14 +214,20 @@ export default {
     // 请求播放列表数据
     getListVideo: function(e, count, order) {
       // 先使页面出于加载状态
+
       this.loading = true;
 
       // 请求数据
       this.axios({
         method: "post",
         url: "/be/listvideo.do",
-        data: { page: e, page_size: count, order: this.couponSelected }
+        data: {
+          page: e,
+          page_size: count,
+          order: this.couponSelected,
+          hide_placeholder:this.checked}
       }).then(result => {
+        console.log(result);
         this.maxcount = result.data.data.count;
         //取得总页数制作分页
         this.maxpage = Math.ceil(result.data.data.count / count);
@@ -253,6 +262,7 @@ export default {
           page: e,
           page_size: count,
           order: this.couponSelected,
+          hide_placeholder:this.checked,
           query: str
         }
       }).then(result => {
@@ -373,6 +383,17 @@ export default {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
       }*/
     },
+   checked(){
+
+     if (this.ifSearch === false) {
+       this.getListVideo(this.page, this.count);
+       return;
+     }
+     if (this.ifSearch === true) {
+       this.getSearchData(this.page, this.count, this.searchKeyWord);
+       return;
+     }
+    },
     $route(newV, oldV) {
       this.handleCurrentChange(1);
       //监听路由query的值，当query的值为空时，说明默认是首页，调用this.getListVideo获取首页数据并渲染。
@@ -454,10 +475,16 @@ export default {
 }
 
 .video-list-header p {
-  display: inline-block;
-  height: 25px;
-  position: absolute;
-  transform: translate(10%, 50%);
+
+  height: 50px;
+  position: relative;
+
+}
+.el-checkbox{
+  width: 100px;
+margin-left: 100px;
+  text-align: center;
+  line-height: 50px;
 }
 .video-list-header select {
   height: 25px;
