@@ -107,13 +107,9 @@
         </li>
 
         <!-- 登录和注册按钮 -->
-        <div class="loginUser" v-if="!isLogin">
-          <li class="loginUser-login">
-            <router-link to="/login" @click.native="login">登录</router-link>
-          </li>
-          <li class="loginUser-signup">
-            <router-link to="/signup">注册</router-link>
-          </li>
+        <div class="loginUser" style="margin-left:20px" v-if="!isLogin">
+          <router-link to="/login" class="loginUser-login" @click.native="login">登录</router-link>
+          <router-link to="/signup" class="loginUser-signup">注册</router-link>
         </div>
 
         <!-- 登录成功后的用户界面 -->
@@ -542,30 +538,28 @@ export default {
       align-items: center;
     }
     .userHome {
+      max-width: 40%;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
     }
     .loginUser-userAvatar {
       margin-right: 10px;
+      flex-shrink: 0;
     }
     .loginUser-login {
-      height: 38px;
-      line-height: 38px;
-      margin-right: 20px;
-      a {
-        width: 100%;
-
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
+      margin-right: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 1;
     }
     .loginUser-signup {
       height: 38px;
       line-height: 38px;
       margin-right: 0px;
-      display: inline-block;
+      white-space: nowrap;
+      flex-shrink: 1;
     }
   }
 }
