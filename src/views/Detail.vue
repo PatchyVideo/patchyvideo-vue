@@ -541,7 +541,7 @@ export default {
         return [match, "video"];
       };
       this.URL_MATCHERS[
-        "((https:\\/\\/)?(www\\.|m\\.)?youtube\\.com\\/watch\\?v=[-\\w]+|https:\\/\\/youtu\\.be\\/(watch\\?v=[-\\w]+|[-\\w]+))"
+        "((https:\\/\\/)?(www\\.|m\\.)?youtube\\.com\\/watch\\?v=[-\\w]+|https:\\/\\/youtu\\.be\\/(watch\\?v=[-\\w]+|[-\\w]+)|youtu\\.be\\/[-\\w]+|[-\\w]+)"
       ] = function(match) {
         return [match, "video"];
       };
