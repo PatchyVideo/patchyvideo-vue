@@ -29,15 +29,15 @@
                    <div class="minibox_top">
                        <h3>视频索引列表</h3>
                        <span>共有{{videoCount}}个视频</span>
-                       <i @click="changeLine":class="{'el-icon-s-grid':flag,'el-icon-menu':!flag}"></i>
+                       <i @click="changeLine" :class="{'el-icon-s-grid':flag,'el-icon-menu':!flag}"></i>
                    </div>
 
-                      <div class="video_lineUp"v-if="flag" >
+                      <div class="video_lineUp" v-if="flag" >
                           <router-link  class="list-item"
                                         target="_blank"
                                         :to="{ path: '/video', query: { id: i._id.$oid } }"
                                         tag="a"
-                                        v-for="i in videoData":key="i._id.$oid">
+                                        v-for="i in videoData" :key="i._id.$oid">
                               <img   :src="'/images/covers/'+i.item.cover_image" alt="">
                               <h4><router-link   :to="{ path: '/video', query: { id: i._id.$oid } }">{{i.item.title}}</router-link></h4>
                           </router-link>
@@ -47,7 +47,7 @@
                                      target="_blank"
                                      :to="{ path: '/video', query: { id: i._id.$oid } }"
                                      tag="a"
-                                     v-for="i in videoData":key="i._id.$oid">
+                                     v-for="i in videoData" :key="i._id.$oid">
                             <img :src="'/images/covers/'+i.item.cover_image"  alt="">
                             <div class="list-item_content">
                                 <h4><router-link   :to="{ path: '/video', query: { id: i._id.$oid } }">{{i.item.title}}</router-link></h4>
