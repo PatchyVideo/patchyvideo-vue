@@ -14,7 +14,7 @@
 
 <template>
 <div v-loading="loading">
-    <div class="data_null standard"v-if="firstmaxcount==0">
+    <div class="data_null standard" v-if="firstmaxcount==0">
         <p>你目前没有任何视频数据哦</p>
     </div>
     <div class="bigbox standard"  v-if="firstmaxcount!=0">
