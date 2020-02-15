@@ -219,15 +219,6 @@ export default {
               if (result.status == 200) {
                 if (result.data.status == "SUCCEED") {
                   this.open2();
-                  // 直接实现登录功能，现在废弃
-                  if (0) {
-                    this.$store.commit(
-                      "getUserName",
-                      this.signupFormRef.signup_username
-                    );
-                    // 利用cookie储存登录状态
-                    this.setCookie(this.loginFormRef.login_name, 7);
-                  }
                   // 加载结束,加载动画消失
                   this.loading = false;
                   // 退回到登录界面
@@ -255,15 +246,6 @@ export default {
           return false;
         }
       });
-    },
-    // 设置cookie
-    // 储存变量为username
-    setCookie(username, days) {
-      var date = new Date(); //获取时间
-      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); //保存的天数
-      //字符串拼接cookie
-      window.document.cookie =
-        "username" + ":" + username + ";path=/;expires=" + date.toGMTString();
     }
   },
   components: { login }

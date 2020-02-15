@@ -464,22 +464,26 @@ export default {
         method: "post",
         url: "be/getvideo.do",
         data: { vid: this.$route.query.id }
-      }).then(result => {
-        this.myVideoData = result.data.data;
-        this.theVideoRank = result.data.data.video.clearence;
+      })
+        .then(result => {
+          this.myVideoData = result.data.data;
+          this.theVideoRank = result.data.data.video.clearence;
 
-        // 修改网站标题
-        document.title = this.myVideoData.video.item.title;
-        this.pid = this.myVideoData.video._id.$oid;
-        // 视频pid储存到vuex中
-        this.$store.commit("setVideoPid", this.myVideoData.video._id.$oid);
-        // 标记视频简介中的链接
-        this.urlifyDesc();
-        // 加载结束,加载动画消失
-        this.loading = false;
+          // 修改网站标题
+          document.title = this.myVideoData.video.item.title;
+          this.pid = this.myVideoData.video._id.$oid;
+          // 视频pid储存到vuex中
+          this.$store.commit("setVideoPid", this.myVideoData.video._id.$oid);
+          // 标记视频简介中的链接
+          this.urlifyDesc();
+          // 加载结束,加载动画消失
+          this.loading = false;
 
-        this.whoami();
-      });
+          this.whoami();
+        })
+        .catch(error => {
+          this.$router.push({ path: "/404" });
+        });
     },
     // 获取用户权限信息
     whoami() {

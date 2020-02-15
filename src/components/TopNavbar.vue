@@ -1,4 +1,4 @@
-<!--    vue组件：TopNavbar.vue     -->
+﻿<!--    vue组件：TopNavbar.vue     -->
 <!--
     组件：左侧的热门标签导航栏
     大小：100% * 70px
@@ -107,35 +107,27 @@
         </li>
 
         <!-- 登录和注册按钮 -->
-        <div class="loginUser" v-if="!isLogin">
-          <li class="loginUser-login">
-            <router-link to="/login" @click.native="login">登录</router-link>
-          </li>
-          <li class="loginUser-signup">
-            <router-link to="/signup">注册</router-link>
-          </li>
+        <div class="loginUser" style="margin-left:20px" v-if="!isLogin">
+          <router-link to="/login" class="loginUser-login" @click.native="login">登录</router-link>
+          <router-link to="/signup" class="loginUser-signup">注册</router-link>
         </div>
 
         <!-- 登录成功后的用户界面 -->
         <div class="userHome" v-if="isLogin">
-          <li class="loginUser-login">
-            <router-link to="/users/me">{{ this.$store.state.username }}</router-link>
-          </li>
-          <li class="loginUser-signup">
-            <a @click="dialogVisible = true" style="cursor:pointer">登出</a>
-
-            <!-- 退出登录的弹出框 -->
-            <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" v-loading="loading">
-              <p>你确定要退出登录吗?</p>
-              <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="cleanLocalStorage">确 定</el-button>
-              </span>
-            </el-dialog>
-          </li>
+          <el-avatar fit="cover" class="loginUser-userAvatar" :size="40" :src="userAvatar"></el-avatar>
+          <router-link class="loginUser-login" to="/users/me">{{ this.$store.state.username }}</router-link>
+          <a class="loginUser-signup" @click="dialogVisible = true" style="cursor:pointer">登出</a>
         </div>
       </ul>
     </div>
+    <!-- 退出登录的弹出框 -->
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" v-loading="loading">
+      <p>你确定要退出登录吗?</p>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="cleanLocalStorage">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -180,6 +172,14 @@ export default {
     // 搜索的关键字
     iptVal2() {
       return this.$store.state.TopNavbarSearching;
+    },
+    // 搜索的关键字
+    userAvatar() {
+      if (this.$store.state.userAvatar == "default") {
+        return require("../static/img/defaultAvatar.jpg");
+      } else {
+        return "be/images/userphotos/" + this.$store.state.userAvatar;
+      }
     }
   },
   created() {
@@ -305,6 +305,7 @@ export default {
     clearCookie: function() {
       this.setCookie("", -1);
       this.setCookie("session", -1);
+      this.setCookie("userAvatar", -1);
     },
     // 设置cookie
     // 储存变量为username
@@ -314,22 +315,29 @@ export default {
       //字符串拼接cookie
       window.document.cookie =
         "username" + ":" + username + ";path=/;expires=" + date.toGMTString();
+      window.document.cookie =
+        "userAvatar" + "=" + username + ";path=/;expires=" + date.toGMTString();
     },
     // 获取cookie
     getCookie: function() {
       if (document.cookie.length > 0) {
         var arr = document.cookie.split("; ");
         for (var i = 0; i < arr.length; i++) {
+          var arr3 = arr[i].split("=");
+          //判断查找相对应的值
+          if (arr3[0] == "userAvatar") {
+            this.$store.commit("getUserAvatar", arr3[1]);
+          }
           var arr2 = arr[i].split(":");
           //判断查找相对应的值
           if (arr2[0] == "username") {
             if (arr2[1] != "") {
               this.isLogin = true;
               this.$store.commit("getUserName", arr2[1]);
-              return true;
             }
           }
         }
+        return true;
       }
       this.$store.commit("getUserName", "");
       return false;
@@ -443,22 +451,21 @@ export default {
 
 <style scoped lang="less">
 @import "../static/css/common.css";
-.nav_left{
-  width: 70%!important;
+.nav_left {
+  width: 70% !important;
 }
-.nav_right{
+.nav_right {
   width: 50%;
-  ul{
+  ul {
     display: inline-block;
     width: 100%;
     height: 78px;
     display: flex;
-    li{
-
+    li {
       width: 60%;
       display: flex;
-      margin-right:8%;
-      .form_select{
+      margin-right: 10px;
+      .form_select {
         width: 120px;
         height: 20px;
         padding-left: 5px;
@@ -479,35 +486,34 @@ export default {
         top: 50%;
         margin-right: 2%;
         transform: translateY(-50%);
-/*        right: 74px;*/
+        /*        right: 74px;*/
         transition: all 0.6s ease;
-        &:hover{
+        &:hover {
           outline: none;
           border-style: solid;
           border-color: #d1d1d1;
           box-shadow: 0px 0px 10px 5px white, 0px 0px 10px dodgerblue,
-          0px 0px 20px dodgerblue;
+            0px 0px 20px dodgerblue;
           color: dodgerblue;
-
         }
       }
-      #search-bar-query{
+      #search-bar-query {
         width: 200px;
         height: 38px;
         outline: none;
         border: none;
         position: relative;
-/*        right: 74px;*/
+        /*        right: 74px;*/
         top: 50%;
         transform: translateY(-50%);
         transition: all 0.6s ease;
-
       }
-      #search-bar-submit{
+      #search-bar-submit {
         display: block;
         background: #c5464a;
-        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #c5464a,
-        0 0 70px #c5464a, 0 0 80px #c5464a, 0 0 100px #c5464a, 0 0 150px #c5464a;
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff,
+          0 0 40px #c5464a, 0 0 70px #c5464a, 0 0 80px #c5464a,
+          0 0 100px #c5464a, 0 0 150px #c5464a;
         width: 74px;
         color: white;
         height: 38px;
@@ -518,45 +524,42 @@ export default {
         top: 50%;
         transform: translateY(-50%);
         transition: all 0.6s ease;
- &:hover{
-   background-color: royalblue;
-   text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #228dff,
-   0 0 70px #228dff, 0 0 80px #228dff, 0 0 100px #228dff, 0 0 150px #228dff;
- }
-
+        &:hover {
+          background-color: royalblue;
+          text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff,
+            0 0 40px #228dff, 0 0 70px #228dff, 0 0 80px #228dff,
+            0 0 100px #228dff, 0 0 150px #228dff;
+        }
       }
     }
-    .loginUser{
+    .loginUser {
       width: 50%;
       display: flex;
+      align-items: center;
     }
-    .userHome{
-      width: 50%;
+    .userHome {
+      max-width: 40%;
       display: flex;
+      align-items: center;
+      justify-content: flex-start;
     }
-    .loginUser-login{
+    .loginUser-userAvatar {
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+    .loginUser-login {
+      margin-right: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 1;
+    }
+    .loginUser-signup {
       height: 38px;
       line-height: 38px;
-      position: relative;
-      top: 50%;
-      margin-right: 20px;
-      transform: translateY(-50%);
-      flex: 4;
-      a{
-        width: 100%;
-
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-    }
-    .loginUser-signup{
-      height: 38px;
-      line-height: 38px;
-      position: relative;
-      top: 50%;
-      transform: translateY(-50%);
+      margin-right: 0px;
+      white-space: nowrap;
+      flex-shrink: 1;
     }
   }
 }
