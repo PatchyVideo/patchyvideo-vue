@@ -59,7 +59,7 @@ Vue.prototype.$echarts = echarts;
                 <el-tab-pane :label="labelInfo[0]" name="first">
                     <userprofile></userprofile>
                 </el-tab-pane>
-                <el-tab-pane :label="labelInfo[1]"name="second">
+                <el-tab-pane :label="labelInfo[1]" name="second">
                     <usercontribute></usercontribute>
                 </el-tab-pane>
                 <el-tab-pane :label="labelInfo[2]" name="third">
@@ -102,7 +102,7 @@ Vue.prototype.$echarts = echarts;
                 activeIndex: "1",
                 activeIndex2: "1",
                 activeName: "first",
-                info:[["我的信息","我贡献的索引","我的收藏","索引状态"],["用户信息","他贡献的索引","他的收藏"]],
+                info:[["我的信息","我贡献的索引","我的文件夹","我的收藏","索引状态"],["用户信息","他贡献的索引","他的文件夹","他的收藏"]],
                 labelInfo:["我的信息","我贡献的索引","文件夹","我的收藏","索引状态"]
             }
         },
