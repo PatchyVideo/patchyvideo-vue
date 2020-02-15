@@ -107,38 +107,27 @@
         </li>
 
         <!-- 登录和注册按钮 -->
-        <div class="loginUser" v-if="!isLogin">
-          <li class="loginUser-login">
-            <router-link to="/login" @click.native="login">登录</router-link>
-          </li>
-          <li class="loginUser-signup">
-            <router-link to="/signup">注册</router-link>
-          </li>
+        <div class="loginUser" style="margin-left:20px" v-if="!isLogin">
+          <router-link to="/login" class="loginUser-login" @click.native="login">登录</router-link>
+          <router-link to="/signup" class="loginUser-signup">注册</router-link>
         </div>
 
         <!-- 登录成功后的用户界面 -->
         <div class="userHome" v-if="isLogin">
-          <el-avatar class="loginUser-userAvatar" :size="40" :src="userAvatar">
-            <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
-          </el-avatar>
-          <li class="loginUser-login">
-            <router-link to="/users/me">{{ this.$store.state.username }}</router-link>
-          </li>
-          <li class="loginUser-signup">
-            <a @click="dialogVisible = true" style="cursor:pointer">登出</a>
-
-            <!-- 退出登录的弹出框 -->
-            <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" v-loading="loading">
-              <p>你确定要退出登录吗?</p>
-              <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="cleanLocalStorage">确 定</el-button>
-              </span>
-            </el-dialog>
-          </li>
+          <el-avatar fit="cover" class="loginUser-userAvatar" :size="40" :src="userAvatar"></el-avatar>
+          <router-link class="loginUser-login" to="/users/me">{{ this.$store.state.username }}</router-link>
+          <a class="loginUser-signup" @click="dialogVisible = true" style="cursor:pointer">登出</a>
         </div>
       </ul>
     </div>
+    <!-- 退出登录的弹出框 -->
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" v-loading="loading">
+      <p>你确定要退出登录吗?</p>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="cleanLocalStorage">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -187,7 +176,7 @@ export default {
     // 搜索的关键字
     userAvatar() {
       if (this.$store.state.userAvatar == "default") {
-        return "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png";
+        return require("../static/img/defaultAvatar.jpg");
       } else {
         return "be/images/userphotos/" + this.$store.state.userAvatar;
       }
@@ -345,10 +334,10 @@ export default {
             if (arr2[1] != "") {
               this.isLogin = true;
               this.$store.commit("getUserName", arr2[1]);
-              return true;
             }
           }
         }
+        return true;
       }
       this.$store.commit("getUserName", "");
       return false;
@@ -475,7 +464,7 @@ export default {
     li {
       width: 60%;
       display: flex;
-      margin-right: 8%;
+      margin-right: 10px;
       .form_select {
         width: 120px;
         height: 20px;
@@ -549,29 +538,28 @@ export default {
       align-items: center;
     }
     .userHome {
-      width: 50%;
+      max-width: 40%;
       display: flex;
       align-items: center;
+      justify-content: flex-start;
     }
     .loginUser-userAvatar {
       margin-right: 10px;
+      flex-shrink: 0;
     }
     .loginUser-login {
-      height: 38px;
-      line-height: 38px;
-      margin-right: 20px;
-      flex: 4;
-      a {
-        width: 100%;
-
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
+      margin-right: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 1;
     }
     .loginUser-signup {
       height: 38px;
       line-height: 38px;
+      margin-right: 0px;
+      white-space: nowrap;
+      flex-shrink: 1;
     }
   }
 }
