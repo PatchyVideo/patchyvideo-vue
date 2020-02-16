@@ -161,7 +161,7 @@ export default {
       //这时会触发page监听的事件，重新请求搜索的数据，因为根据关键词的改变也会重新请求的数据，会造成资源浪费。
       pageMark:false,
       //是否显示隐藏视频
-      checked: false
+      checked: true
     };
   },
   created() {
