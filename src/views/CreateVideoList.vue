@@ -48,6 +48,10 @@ export default {
     this.$store.commit("changeBgc", "createVideoList");
     // 修改网站标题
     document.title = "创建播放列表 - Patchyvideo";
+    // 判断是否是从已有列表导入
+    if (JSON.stringify(this.$route.query.exist) == "1") {
+      this.activeName = "second";
+    }
   },
   mounted() {},
   methods: {

@@ -553,13 +553,12 @@ export default {
       overflow: hidden;
       text-overflow: ellipsis;
       flex-shrink: 1;
+      font-size: 20px;
     }
     .loginUser-signup {
-      height: 38px;
-      line-height: 38px;
-      margin-right: 0px;
       white-space: nowrap;
       flex-shrink: 1;
+      font-size: 20px;
     }
   }
 }
