@@ -182,16 +182,16 @@
         </el-col>
     </el-row>
     <el-row  v-if="this.$route.params.id=='me'" >
-        <el-col  style="width: 50%">
+        <el-col  style="width: 60%">
             <div class="folder-view" >
                 <el-container>
-                    <el-aside   style="width: 80px" >
+                    <el-aside   style="width: 200px" >
                         <el-breadcrumb separator="/">
                             <el-breadcrumb-item
                                     v-for="i in toNavigablePath()"
                                     :key="i.dst"
                             >
-                                <a @click="navigateTo(i.dst)" style="font-size: 21px">{{i.name}}</a>
+                                <a @click="navigateTo(i.dst)" style="font-size: 19px">{{i.name}}</a>
                             </el-breadcrumb-item>
                         </el-breadcrumb>
                         <el-tree
@@ -201,7 +201,7 @@
                                 :load="loadNode"
                                 :expand-on-click-node="false"
                                 @node-click="handleTreeNodeClick"
-                                style="width: 100%"
+                                style="width: 190px"
                                 lazy>
                         </el-tree>
                         <el-switch
@@ -281,7 +281,7 @@
             </div>
         </el-col>
 
-        <el-col style="width: 50%">
+        <el-col style="width: 40%">
             <div v-if="loggedIn && editable" class="raw-playlist">
                 <div id="select-order" class="head">
                     <el-input
@@ -329,7 +329,7 @@
                     </el-table-column>
                     <el-table-column
                             label="标题"
-                            width="200"
+                            width="150"
                             align="center"
                             sortable
                             prop="name">
@@ -343,7 +343,7 @@
                             </router-link>
                         </template>
                     </el-table-column>
-                    <el-table-column label="视频数" width="80" align="center" prop="playlist_object.videos">
+                    <el-table-column label="视频数" width="40" align="center" prop="playlist_object.videos">
                         <template slot-scope="scope">
                             <h3>{{scope.row.videos}}</h3>
                         </template>
