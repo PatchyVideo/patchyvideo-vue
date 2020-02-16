@@ -1,5 +1,4 @@
 ### 更新日志：
-
 具体更新日志请查看commit
 ---
 
@@ -7,11 +6,10 @@
 
 域名： **[www.patchyvideo.com](www.patchyvideo.com)**
 
-目前上线的版本基于 flask 框架开发，网站正常运作。
 
-用户可登陆注册上传修改视频，以及对 Tag 的增删改除
-
-> 完整项目详情可移至 [https://github.com/zyddnys/PatchyVideo](https://github.com/zyddnys/PatchyVideo)项目仓库查看
+第一版基于 flask 框架开发，第二版基于 vue 框架开发。网站正常运作。基于用户可登陆注册上传修改视频，以及对 Tag 的增删改除。
+目前vue版重构正式完成并已上线。
+> 完整项目详情（第一版）可移至 [https://github.com/zyddnys/PatchyVideo](https://github.com/zyddnys/PatchyVideo)项目仓库查看
 >
 > >
 
