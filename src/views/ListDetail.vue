@@ -100,6 +100,7 @@
           <!-- 打开Tag编辑页面 -->
           <div v-if="editable" class="edit_box">
             <el-button type="success" @click="addVideo">添加视频</el-button>
+            <el-button type="success" @click="addFromList">从其他网站的收藏夹导入</el-button>
             <el-button type="info" @click="openListEdit = true">编辑列表信息</el-button>
             <el-button
               type="primary"
@@ -118,7 +119,9 @@
           <div class="minbox shadow" v-for="(item, index) in videolistVideos" :key="item._id.$oid">
             <div class="re_video">
               <div class="edit">
-                <h1 id="edit_first">{{ item.rank + 1 }}</h1>
+                <div id="edit_first">
+                  <h1>{{ item.rank + 1 }}</h1>
+                </div>
                 <div v-if="editable" id="edit_second">
                   <Move class="move" :msg="PlaylistItemOp(item, index)"></Move>
                   <!--上移-->
@@ -369,6 +372,16 @@ export default {
         }
       });
     },
+    // 从其他网站的收藏夹导入视频
+    addFromList() {
+      this.$router.push({
+        path: "./createVideoList",
+        query: {
+          pid: this.videolistPid,
+          exist: 1
+        }
+      });
+    },
     // 提交视频详情修改数据
     onSubmit() {
       this.loading = true;
@@ -469,18 +482,22 @@ export default {
 }
 .re_video {
   display: flex;
+  justify-content: center;
+  align-items: center;
   .edit {
-    width: 15%;
     display: flex;
     #edit_first {
       //h1
-      font-size: 54px;
-      margin-right: 30px;
-      position: relative;
-      bottom: 35px;
+      font-size: 40px;
+      min-width: 90px;
       color: rgb(98, 169, 231);
       flex-grow: 1;
-      transform: translate(50%, 50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #edit_first h1 {
+      flex-shrink: 0;
     }
     #edit_second {
       //icon
@@ -636,9 +653,6 @@ export default {
 .re_video {
   text-align: left;
   /* height: 150px; */
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-top: 20px;
 }
 .re_video h1 {
 }

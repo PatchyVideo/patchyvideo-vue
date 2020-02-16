@@ -16,7 +16,7 @@
     <el-form ref="list" :model="list" label-width="auto" :rules="rules">
       <h3 class="desc">这里可以直接导入播放列表，但是请注意，本功能仅限于b站收藏夹、YouTube播放列表和nicovideo的mylist哦</h3>
       <el-form-item prop="URL">
-        <el-input v-model="list.URL" placeholder="在这里输入列表的网址"></el-input>
+        <el-input v-model="list.URL" placeholder="在这里输入列表的网址" @keyup.enter.native="onSubmit"></el-input>
       </el-form-item>
       <el-form-item class="leadInList">
         <el-button type="primary" @click="onSubmit" style="width:80%">立即导入</el-button>
@@ -41,7 +41,15 @@ export default {
       loading: false
     };
   },
-  created() {},
+  computed: {
+    // 要导入的视频列表是否已经存在的标志
+    exist() {
+      return (
+        typeof this.$route.query.pid != "undefined" &&
+        this.$route.query.exist == "1"
+      );
+    }
+  },
   methods: {
     // 提交视频列表
     onSubmit() {
@@ -50,24 +58,49 @@ export default {
       // 表单验证
       this.$refs.list.validate(valid => {
         if (valid) {
-          this.axios({
-            method: "post",
-            url: "be/lists/create_from_existing_playlists.do",
-            data: {
-              url: this.list.URL
-            }
-          }).then(result => {
-            this.loading = false;
-            if (result.data.status == "FAILED") {
-              this.open();
-            } else {
-              this.open2();
-              this.$router.push({
-                path: "/listdetail",
-                query: { id: result.data.data.pid }
-              });
-            }
-          });
+          //如果导入的视频列表已经存在
+          if (this.exist) {
+            this.axios({
+              method: "post",
+              url: "/be/lists/extend_from_existing_playlists.do",
+              data: {
+                pid: this.$route.query.pid,
+                url: this.list.URL
+              }
+            }).then(result => {
+              this.loading = false;
+              if (result.data.status == "FAILED") {
+                this.open();
+              } else {
+                this.open2();
+                this.$router.push({
+                  path: "/listdetail",
+                  query: { id: result.data.data.pid }
+                });
+              }
+            });
+          }
+          // 不存在的情况下
+          else {
+            this.axios({
+              method: "post",
+              url: "be/lists/create_from_existing_playlists.do",
+              data: {
+                url: this.list.URL
+              }
+            }).then(result => {
+              this.loading = false;
+              if (result.data.status == "FAILED") {
+                this.open();
+              } else {
+                this.open2();
+                this.$router.push({
+                  path: "/listdetail",
+                  query: { id: result.data.data.pid }
+                });
+              }
+            });
+          }
         } else {
           // 加载结束,加载动画消失
           this.loading = false;
