@@ -555,8 +555,6 @@ export default {
       flex-shrink: 1;
     }
     .loginUser-signup {
-      height: 38px;
-      line-height: 38px;
       margin-right: 0px;
       white-space: nowrap;
       flex-shrink: 1;
