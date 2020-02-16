@@ -133,23 +133,53 @@
             handleSizeChange(val) {
                 this.count = val;
             },
-            getMaxCount(){
-                this.axios({
-                    method:'post',
-                    url:"be/listmyvideo.do",
-                    withCredentials:true,        //携带cookie当配置了 withCredentials = true时，必须在后端增加 response 头信息Access-Control-Allow-Origin，且必须指定域名，而不能指定为*
-                    async:true,
-                    data:{
-                        "page":1,
-                        "page_size":1
-                    }
-                }).then(res=>{
-                    this.videoCount =res.data.data.count; //获取总的视频个数制作分页后开始第二次请求获取当前页面的数据
-                    this.getData(this.page,this.count);
-                })
+            getMaxCount(){       //2020/2/16修改后 第一次请求请求第一页数据总数20个视频。
+                if(this.$route.params.id=='me'){
+                    this.axios({
+                        method:'post',
+                        url:"be/listmyvideo.do",
+                        withCredentials:true,        //携带cookie当配置了 withCredentials = true时，必须在后端增加 response 头信息Access-Control-Allow-Origin，且必须指定域名，而不能指定为*
+                        async:true,
+                        data:{
+                            "page":1,
+                            "page_size":20,
+                        }
+                    }).then(result=>{
+                        this.TagData = result.data.data.tags;
+                        this.videoData = result.data.data.videos;
+                        this.getTagCategories();
+                        this.videoCount =result.data.data.count;
+                        this.loading =false;
+                    }).catch(err=>{
+
+                    })
+                    return
+                }
+                if(this.$route.params.id!='me'){
+
+                    this.axios({
+                        method:'post',
+                        url:"be/listyourvideo.do",
+                        data:{
+                            "page":1,
+                            "page_size":20,
+                            "uid":this.$route.params.id
+                        }
+                    }).then(result=>{
+                        this.TagData = result.data.data.tags;
+
+                        this.videoData = result.data.data.videos;
+                        this.getTagCategories();
+                        this.videoCount =result.data.data.count;
+                        this.loading =false;
+
+                    }).catch(err=>{
+
+                    })
+                    return;
+                }
             },
             getData(e, count){
-
 
                 if(this.$route.params.id=='me'){
                     this.axios({
@@ -162,7 +192,6 @@
                             "page_size":count,
                         }
                     }).then(result=>{
-
                         this.TagData = result.data.data.tags;
                         this.videoData = result.data.data.videos;
                         this.getTagCategories();

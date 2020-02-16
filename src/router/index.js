@@ -14,6 +14,7 @@ import resetpassword from "../views/ResetPassword.vue";
 import edittag from "../views/Edittag.vue";
 import store from "../store/index.js";
 import User from "../views/User";
+import superadmin  from  "../views/SuperAdmin.vue"
 Vue.use(VueRouter);
 
 /*
@@ -118,6 +119,10 @@ const routes = [
   {
     path: "/users/:id",
     component: User
+  },
+  {
+    path:"/superadmin",
+    component:superadmin
   }
 ];
 
