@@ -59,7 +59,7 @@
         <div class="video-list-header">
           <p v-if="maxcount">显示 {{ count2 }} / {{ maxcount }} 个视频</p>
           <p v-else>没有搜索到视频</p>
-          <el-checkbox v-model="checked"">显示已失效视频</el-checkbox>
+          <el-checkbox v-model="checked">显示已失效视频</el-checkbox>
           <el-select id="select-order" v-model="couponSelected">
             <el-option
               v-for="item in options"

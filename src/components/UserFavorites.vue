@@ -120,7 +120,7 @@
          /*       console.log(val);*/
             },
 
-            getVideoMaxCount(){
+            getVideoMaxCount(){    //2020/2/16修改后 第一次请求请求第一页数据总数20个视频。
                 if(this.$route.params.id=='me'){
                     this.axios({
                         method:'post',

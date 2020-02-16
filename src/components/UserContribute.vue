@@ -133,7 +133,7 @@
             handleSizeChange(val) {
                 this.count = val;
             },
-            getMaxCount(){
+            getMaxCount(){       //2020/2/16修改后 第一次请求请求第一页数据总数20个视频。
                 this.axios({
                     method:'post',
                     url:"be/listmyvideo.do",
@@ -141,15 +141,19 @@
                     async:true,
                     data:{
                         "page":1,
-                        "page_size":1
+                        "page_size":20
                     }
                 }).then(res=>{
                     this.videoCount =res.data.data.count; //获取总的视频个数制作分页后开始第二次请求获取当前页面的数据
-                    this.getData(this.page,this.count);
+                    this.TagData = res.data.data.tags;
+                    this.videoData = res.data.data.videos;
+                    this.getTagCategories();
+                    this.videoCount =res.data.data.count;
+                    this.loading =false;
+                /*    this.getData(this.page,this.count);*/
                 })
             },
             getData(e, count){
-
 
                 if(this.$route.params.id=='me'){
                     this.axios({
@@ -162,7 +166,6 @@
                             "page_size":count,
                         }
                     }).then(result=>{
-
                         this.TagData = result.data.data.tags;
                         this.videoData = result.data.data.videos;
                         this.getTagCategories();
