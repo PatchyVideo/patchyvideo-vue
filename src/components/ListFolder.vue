@@ -776,6 +776,7 @@
 
 <style lang="less" scoped>
 
+
     .operations{
         margin-bottom: 12px;
     }
@@ -790,6 +791,11 @@
                    .el-aside{
                        .el-tree{
                            font-size: 30px;
+                           /deep/ span{
+                               max-width: 150px !important;
+                               overflow: hidden;
+                               text-overflow: ellipsis;
+                           }
                        }
                        .el-switch{
                            margin: 30px 0px;
