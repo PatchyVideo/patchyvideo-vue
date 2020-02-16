@@ -161,7 +161,7 @@ export default {
       //这时会触发page监听的事件，重新请求搜索的数据，因为根据关键词的改变也会重新请求的数据，会造成资源浪费。
       pageMark:false,
       //是否显示隐藏视频
-      checked: true
+      checked: false
     };
   },
   created() {
@@ -225,7 +225,7 @@ export default {
           page: e,
           page_size: count,
           order: this.couponSelected,
-          hide_placeholder:this.checked}
+          hide_placeholder:!this.checked}
       }).then(result => {
         console.log(result);
         this.maxcount = result.data.data.count;
@@ -262,7 +262,7 @@ export default {
           page: e,
           page_size: count,
           order: this.couponSelected,
-          hide_placeholder:this.checked,
+          hide_placeholder:!this.checked,
           query: str
         }
       }).then(result => {
