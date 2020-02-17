@@ -10,7 +10,7 @@
 -->
 
 <template>
-<div v-loading="loading">
+<div v-loading="loading" ref="aside">
     <el-dialog title="提示" :visible.sync="dialogVisible" :modal-append-to-body='false' width="30%">
         <span>确认删除吗？此操作不可逆</span>
         <span slot="footer" class="dialog-footer">
@@ -103,8 +103,8 @@
             <div class="folder-view" >
                 
                 <el-container>
-                    <el-aside style="width: 200px">
-                        
+                    <el-aside    :style="{width:this.asideWidth+'px', position:'relative',cursor: 'e-resize'}">
+                        <div class="asaide-shelter" style="position: absolute;width: 99%;height: 100%;cursor: default" ></div>
                         <el-tree
                                 ref="folderTree"
                                 node-key="path"
@@ -185,7 +185,8 @@
         <el-col  style="width: 60%">
             <div class="folder-view" >
                 <el-container>
-                    <el-aside   style="width: 200px" >
+                    <el-aside  :style="{width:this.asideWidth+'px', position:'relative',cursor: 'e-resize'}">
+                        <div class="asaide-shelter" style="position: absolute;width: 97%;height: 100%;cursor: default" ></div>
                         <el-tree
                                 ref="folderTree"
                                 node-key="path"
@@ -197,11 +198,12 @@
                                 lazy>
                         </el-tree>
                         <el-switch
+
                                 v-if="loggedIn && editable"
                                 v-model="currentFolderObject.privateView"
                                 active-text="私有"
                                 inactive-text="公开"
-                                style="width: 100%"
+                                style="width: 97%;cursor: default;"
                                 @change="handleCurrentFolderPrivateViewChanged">
                         </el-switch>
                         <!--<el-switch
@@ -368,6 +370,7 @@
     export default {
     data() {
         return {
+            asideWidth:200,
             loading: true,
             editable: false,
             loggedIn: false,
@@ -419,6 +422,33 @@
         this.getFolder();
         this.loadCurrentPlaylists();
     },
+        mounted(){
+
+            let asideObj = this.$refs.aside.getElementsByClassName("el-aside")[0];
+            let _that = this;
+
+            asideObj.onmousedown = (e)=>{
+                const disX = e.clientX;
+                const asideWidth = parseInt(asideObj.style.width);
+                let   asideBorder =parseInt(asideObj.style.width)*0.99;
+                if(Math.abs((e.offsetX - asideBorder))<5){ //判断是否满足鼠标到达边界点 允许误差5像素
+                    document.onmousemove = function (e) { //按住鼠标移动时
+                        e.preventDefault(); // 移动时禁用默认事件
+                        // 计算移动的距离
+                        const l = e.clientX - disX;
+                        _that.asideWidth =asideWidth+l;
+                     /*   asideObj.style.width = `${asideWidth+l}px`;*/
+                    };
+                    document.onmouseup = function (e) {
+                        document.onmousemove = null;
+                        document.onmouseup = null;
+                    };
+                }
+
+
+            }
+
+        },
     methods: {
         folderObjectToTreeNode(obj) {
             var data = [];
@@ -435,7 +465,6 @@
             return data;
         },
         loadNode(node, resolve) {
-            console.log(node);
             if (node.level === 0) {
                 return resolve([{ name: '/', leaf: false, path: '/', children: [] }]);
             }
@@ -706,6 +735,9 @@
                 } else if (result.data.reason == 'UNAUTHORISED_OPERATION') {
                     this.$message.error('请登录');
                 }
+                this.loading = false;
+            }).catch(err=>{
+                console.log(err);
                 this.loading = false;
             });
         },
