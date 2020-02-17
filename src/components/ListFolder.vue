@@ -9,8 +9,6 @@
     
 -->
 
-
-
 <template>
 <div v-loading="loading">
     <el-dialog title="提示" :visible.sync="dialogVisible" :modal-append-to-body='false' width="30%">
@@ -92,19 +90,21 @@
     <div v-if="loggedIn && editable" class="operations">
         <el-button type="primary" round @click="addToCurrectFolder" :disabled="this.currentSelectedPlaylists.length == 0">添加至当前目录</el-button>
     </div>
+    <el-breadcrumb separator="/">
+        <el-breadcrumb-item
+            v-for="i in toNavigablePath()"
+            :key="i.dst"
+        >
+            <a @click="navigateTo(i.dst)" style="font-size: 21px">{{i.name}}</a>
+        </el-breadcrumb-item>
+    </el-breadcrumb>
     <el-row v-if="this.$route.params.id!='me'">
         <el-col style="width: 100%">
             <div class="folder-view" >
+                
                 <el-container>
                     <el-aside style="width: 200px">
-                        <el-breadcrumb separator="/">
-                            <el-breadcrumb-item
-                                    v-for="i in toNavigablePath()"
-                                    :key="i.dst"
-                            >
-                                <a @click="navigateTo(i.dst)" style="font-size: 21px">{{i.name}}</a>
-                            </el-breadcrumb-item>
-                        </el-breadcrumb>
+                        
                         <el-tree
                                 ref="folderTree"
                                 node-key="path"
@@ -172,7 +172,7 @@
                             </el-table-column>
                             <el-table-column label="修改日期" align="center"  prop="playlist_object.meta.modified_at">
                                 <template slot-scope="scope">
-                                    <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{scope.row.playlist_object.meta.modified_at}}</h3>
+                                    <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{scope.row.playlist_object.meta.modified_at | formatDate}}</h3>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -186,14 +186,6 @@
             <div class="folder-view" >
                 <el-container>
                     <el-aside   style="width: 200px" >
-                        <el-breadcrumb separator="/">
-                            <el-breadcrumb-item
-                                    v-for="i in toNavigablePath()"
-                                    :key="i.dst"
-                            >
-                                <a @click="navigateTo(i.dst)" style="font-size: 19px">{{i.name}}</a>
-                            </el-breadcrumb-item>
-                        </el-breadcrumb>
                         <el-tree
                                 ref="folderTree"
                                 node-key="path"
@@ -272,7 +264,7 @@
                             </el-table-column>
                             <el-table-column label="修改日期"      align="center" prop="playlist_object.meta.modified_at">
                                 <template slot-scope="scope">
-                                    <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{scope.row.playlist_object.meta.modified_at}}</h3>
+                                    <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{scope.row.playlist_object.meta.modified_at | formatDate}}</h3>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -281,8 +273,8 @@
             </div>
         </el-col>
 
-        <el-col style="width: 40%">
-            <div v-if="loggedIn && editable" class="raw-playlist">
+        <el-col v-if="loggedIn && editable" style="width: 40%">
+            <div class="raw-playlist">
                 <div id="select-order" class="head">
                     <el-input
                             placeholder="搜索列表..."
@@ -340,36 +332,39 @@
                                     :key="scope.row._id.$oid"
                                     tag="a" >
                                 <h3>{{scope.row.title.english}}</h3>
+                                <p style="width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{scope.row.desc.english}}</p>
                             </router-link>
                         </template>
                     </el-table-column>
-                    <el-table-column label="视频数" width="40" align="center" prop="playlist_object.videos">
+                    <el-table-column label="视频数" width="100" align="center" prop="playlist_object.videos">
                         <template slot-scope="scope">
                             <h3>{{scope.row.videos}}</h3>
                         </template>
                     </el-table-column>
-                    <el-table-column label="修改日期" align="center"  prop="playlist_object.meta.modified_at">
+                    <el-table-column label="修改日期" width="110" align="center"  prop="playlist_object.meta.modified_at">
                         <template slot-scope="scope">
-                            <h3>{{scope.row.meta.modified_at}}</h3>
+                            <h3>{{scope.row.meta.modified_at | formatDate}}</h3>
                         </template>
                     </el-table-column>
                 </el-table>
-                <el-pagination
-                        background
-                        class="page-selector"
-                        layout="jumper, prev, pager, next, sizes"
-                        :current-page.sync="currentPlaylistPage"
-                        :page-size.sync="currentPlaylistPageSize"
-                        :page-sizes="[10, 20, 30, 40]"
-                        :total="allPlaylistsCount"
-                ></el-pagination>
+                
             </div>
+            <el-pagination
+                background
+                class="page-selector"
+                layout="jumper, prev, pager, next, sizes"
+                :current-page.sync="currentPlaylistPage"
+                :page-size.sync="currentPlaylistPageSize"
+                :page-sizes="[10, 20, 30, 40]"
+                :total="allPlaylistsCount"
+            ></el-pagination>
         </el-col>
     </el-row>
 </div>
 </template>
 
 <script>
+    import moment from 'moment'
     export default {
     data() {
         return {
@@ -769,6 +764,34 @@
         },
         showMyPlaylistsOnly() {
             this.loadCurrentPlaylists();
+        }
+    },
+
+    filters: {
+        formatDate(value) {
+            if (value) {
+                var upload_time = new Date(value.$date);
+                var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
+                var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+                var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+                var h = upload_time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
+                var m = upload_time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
+                var s = upload_time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+                return (
+                    y +
+                    "-" +
+                    // 数字不足两位自动补零，下同
+                    (Array(2).join(0) + M).slice(-2) +
+                    "-" +
+                    (Array(2).join(0) + d).slice(-2) +
+                    " " +
+                    (Array(2).join(0) + h).slice(-2) +
+                    ":" +
+                    (Array(2).join(0) + m).slice(-2) +
+                    ":" +
+                    (Array(2).join(0) + s).slice(-2)
+                );
+            }
         }
     }
 };
