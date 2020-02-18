@@ -99,9 +99,9 @@
         </el-breadcrumb-item>
     </el-breadcrumb>
     <el-row v-if="this.$route.params.id!='me'">
+                
         <el-col style="width: 100%">
             <div class="folder-view" >
-                
                 <el-container>
                     <el-aside    :style="{width:this.asideWidth+'px', position:'relative',cursor: 'e-resize'}">
                         <div class="asaide-shelter" style="position: absolute;width: 99%;height: 100%;cursor: default" ></div>
@@ -165,12 +165,12 @@
                                     </div>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="视频数"  width="200" align="center" prop="playlist_object.videos">
+                            <el-table-column label="视频数"  width="200" align="center" prop="playlist_object.videos" sortable>
                                 <template slot-scope="scope">
                                     <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{scope.row.playlist_object.videos}}</h3>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="修改日期" align="center"  prop="playlist_object.meta.modified_at">
+                            <el-table-column label="修改日期" align="center"  prop="playlist_object.meta.modified_at" sortable>
                                 <template slot-scope="scope">
                                     <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{scope.row.playlist_object.meta.modified_at | formatDate}}</h3>
                                 </template>
@@ -259,12 +259,12 @@
                                     </div>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="视频数"      align="center"  width="80" prop="playlist_object.videos">
+                            <el-table-column label="视频数"      align="center"  width="100" prop="playlist_object.videos" sortable>
                                 <template slot-scope="scope">
                                     <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{scope.row.playlist_object.videos}}</h3>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="修改日期"      align="center" prop="playlist_object.meta.modified_at">
+                            <el-table-column label="修改日期"      align="center" prop="playlist_object.meta.modified_at" sortable>
                                 <template slot-scope="scope">
                                     <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{scope.row.playlist_object.meta.modified_at | formatDate}}</h3>
                                 </template>
@@ -338,12 +338,12 @@
                             </router-link>
                         </template>
                     </el-table-column>
-                    <el-table-column label="视频数" width="100" align="center" prop="playlist_object.videos">
+                    <el-table-column label="视频数" width="100" align="center" prop="playlist_object.videos" sortable>
                         <template slot-scope="scope">
                             <h3>{{scope.row.videos}}</h3>
                         </template>
                     </el-table-column>
-                    <el-table-column label="修改日期" width="110" align="center"  prop="playlist_object.meta.modified_at">
+                    <el-table-column label="修改日期" width="110" align="center"  prop="playlist_object.meta.modified_at" sortable>
                         <template slot-scope="scope">
                             <h3>{{scope.row.meta.modified_at | formatDate}}</h3>
                         </template>
