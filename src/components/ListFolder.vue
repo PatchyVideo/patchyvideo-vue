@@ -87,9 +87,7 @@
             </el-form-item>
         </el-form>
     </el-dialog>
-    <div v-if="loggedIn && editable" class="operations">
-        <el-button type="primary" round @click="addToCurrectFolder" :disabled="this.currentSelectedPlaylists.length == 0">添加至当前目录</el-button>
-    </div>
+
     <el-breadcrumb separator="/">
         <el-breadcrumb-item
             v-for="i in toNavigablePath()"
@@ -123,6 +121,7 @@
                         </el-switch>-->
                     </el-aside>
                     <el-main>
+
                         <el-table
                                 ref="currentFolderTable"
                                 :data="currentFolderChildrens"
@@ -215,6 +214,11 @@
                     <el-main>
                         <el-button v-if="loggedIn && editable" @click="showNewFolderDialog = true">新建文件夹</el-button>
                         <el-button v-if="loggedIn && editable" @click="dialogVisible = true" type="danger" :disabled="this.currentSelectedItems == 0">删除选中项</el-button>
+                        <el-button round @click="addToCurrectFolder" :disabled="this.currentSelectedPlaylists.length == 0">添加至当前目录</el-button>
+
+                      <!--  <div v-if="loggedIn && editable" class="operations">
+                            <el-button type="primary" round @click="addToCurrectFolder" :disabled="this.currentSelectedPlaylists.length == 0">添加至当前目录</el-button>
+                        </div>-->
                         <el-table
                                 ref="currentFolderTable"
                                 :data="currentFolderChildrens"

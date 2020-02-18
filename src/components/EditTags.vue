@@ -410,6 +410,7 @@ export default {
         data: { tags: tags }
       })
         .then(res => {
+          console.log(res);
           this.recTags = res.data.data.tags;
           this.recTagsWatch = true;
           /* if (this.animeMark != 0) {

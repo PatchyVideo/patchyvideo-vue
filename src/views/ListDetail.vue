@@ -35,7 +35,7 @@
 
     <!-- EditTags组件-->
     <EditTags ref="editTag" :msg="temporaryValForVLP" :visible.sync="showTagPanel" v-if="editable"></EditTags>
-    <ListFolderView ref="listFolder" :msg="temporaryValForVLP" :visible.sync="showListFolder" v-if="isLogin"></ListFolderView>
+
 
     <!-- 编辑视频列表时的对话框 -->
     <el-dialog
@@ -102,18 +102,33 @@
           <div v-if="editable" class="edit_box">
             <el-button type="success" @click="addVideo">添加视频</el-button>
             <el-button type="success" @click="addFromList">从其他网站的收藏夹导入</el-button>
+
+          <!--注意！此处的样式修改在App.vue的全局样式中-->
+            <el-popover
+                    style="margin: 0px 10px;"
+                    width="100%"
+                    trigger="click">
+              <ListFolderView ref="listFolder" :msg="temporaryValForVLP" :visible.sync="showListFolder" v-if="isLogin"></ListFolderView>
+              <el-button
+                      type="primary"
+                      @click="openListFolder"
+                      class="EditTagsButton"
+                      slot="reference"
+              >加入收藏</el-button>
+
+            </el-popover>
+
             <el-button type="info" @click="openListEdit = true">编辑列表信息</el-button>
+
             <el-button
               type="primary"
               @click="openEditTags"
               class="EditTagsButton"
               :disabled="showTagPanel"
             >编辑共有标签</el-button>
-            <el-button
-              type="primary"
-              @click="openListFolder"
-              class="EditTagsButton"
-            >加入收藏</el-button>
+
+
+
             <el-button type="warning" @click="inverse()">列表视频倒序</el-button>
             <el-button type="danger" @click="dialogVisible = true">删除</el-button>
           </div>
@@ -474,6 +489,7 @@ export default {
 </script>
 
 <style scoped lang="less">
+
 .insert-video {
   position: absolute;
   left: 35%;

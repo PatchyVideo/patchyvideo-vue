@@ -87,8 +87,8 @@
             </el-form-item>
         </el-form>
     </el-dialog>
-    <el-button type="primary" round @click="addToCurrectFolder">添加至当前目录</el-button>
-    <el-button type="primary" round @click="closeSelf">关闭</el-button>
+    <!--<el-button type="primary" round @click="addToCurrectFolder">添加至当前目录</el-button>
+    <el-button type="primary" round @click="closeSelf">关闭</el-button>-->
     <el-breadcrumb separator="/">
         <el-breadcrumb-item
             v-for="i in toNavigablePath()"
@@ -129,6 +129,7 @@
         <el-main>
             <el-button v-if="loggedIn" @click="showNewFolderDialog = true">新建文件夹</el-button>
             <el-button v-if="loggedIn" @click="dialogVisible = true" type="danger" :disabled="this.currentSelectedItems == 0">删除选中项</el-button>
+            <el-button type="primary" round @click="addToCurrectFolder">添加至当前目录</el-button>
             <el-table
                     ref="currentFolderTable"
                     :data="currentFolderChildrens"
