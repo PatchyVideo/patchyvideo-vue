@@ -88,7 +88,7 @@
         </el-form>
     </el-dialog>
     <el-button type="primary" round @click="addToCurrectFolder">添加至当前目录</el-button>
-    <el-button type="primary" round @click="visible = false">关闭</el-button>
+    <el-button type="primary" round @click="closeSelf">关闭</el-button>
     <el-breadcrumb separator="/">
         <el-breadcrumb-item
             v-for="i in toNavigablePath()"
@@ -270,6 +270,10 @@
                 }
             }
             return data;
+        },
+        closeSelf() {
+            this.visible = false;
+            this.$emit("update:visible", false);
         },
         loadNode(node, resolve) {
             if (node.level === 0) {
