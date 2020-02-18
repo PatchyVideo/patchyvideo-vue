@@ -319,11 +319,13 @@ export default {
               this.$router.push({ path: "*" });
             }
           }
-          // 页面不存在的情况下
+          // 页面存在的情况下
           this.videolistDetail = result.data.data;
           // 必须是登录且发来的数据是可编辑的才渲染编辑组件
           this.editable = this.videolistDetail.editable && this.isLogin;
           this.videolistName = this.videolistDetail.playlist.title.english;
+          // 修改网站标题
+          document.title = this.videolistName;
           this.videolistDesc = this.videolistDetail.playlist.desc.english;
           this.videolistVideos = this.videolistDetail.videos;
           this.videolistPid = this.videolistDetail.playlist._id.$oid;
