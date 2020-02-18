@@ -10,7 +10,7 @@ import "font-awesome/css/font-awesome.min.css";
 import echarts from "echarts";
 import login from "./views/Login.vue";
 import $ from "jquery";
-import { VueCropper } from 'vue-cropper'
+import { VueCropper } from "vue-cropper";
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
 Vue.use(ElementUI);
@@ -23,9 +23,3 @@ var vm = new Vue({
   store,
   render: h => h(App)
 }).$mount("#app");
-
-// 服务器部署测试：
-// 服务器名称：patchyvideo-vue
-// 服务器IP：159.65.66.110
-// 用户名：root
-// 密码：patchyvideo-vue2020

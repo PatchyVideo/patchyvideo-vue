@@ -75,7 +75,6 @@
               <div class="re_top">
                 <h2>
                   <router-link
-                    target="_blank"
                     :to="{ path: '/listdetail', query: { id: item._id.$oid } }"
                     tag="a"
                   >{{ item.title.english }}</router-link>

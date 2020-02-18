@@ -114,7 +114,9 @@
 
         <!-- 登录成功后的用户界面 -->
         <div class="userHome" v-if="isLogin">
-          <el-avatar fit="cover" class="loginUser-userAvatar" :size="40" :src="userAvatar"></el-avatar>
+          <div @click="gotoUserPage">
+            <el-avatar fit="cover" class="loginUser-userAvatar" :size="40" :src="userAvatar"></el-avatar>
+          </div>
           <router-link class="loginUser-login" to="/users/me">{{ this.$store.state.username }}</router-link>
           <a class="loginUser-signup" @click="dialogVisible = true" style="cursor:pointer">登出</a>
         </div>
@@ -260,6 +262,10 @@ export default {
         this.loading = false;
         this.dialogVisible = false;
       });
+    },
+    // 跳转至个人界面
+    gotoUserPage() {
+      this.$router.push({ path: "/users/me" });
     },
     // 点击搜索按钮使home页面显示搜索结果
     gotoHome() {
