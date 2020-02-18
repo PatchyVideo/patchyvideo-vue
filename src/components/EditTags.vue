@@ -407,7 +407,10 @@ export default {
       this.axios({
         method: "post",
         url: "be/tags/get_related_tags.do",
-        data: { tags: tags }
+        data: {
+          tags: tags,
+          exclude: this.tags
+          }
       })
         .then(res => {
           console.log(res);
