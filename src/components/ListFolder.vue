@@ -664,7 +664,7 @@
             }
         },
         copyPathLink() {
-            var uid = '';
+            var uid = this.user_id;
             if (this.user_id == 'me') {
                 this.axios({
                     method: "post",
