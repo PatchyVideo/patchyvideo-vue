@@ -5,7 +5,6 @@
 需要安装依赖：npm install vue-cropper -s
 -->
 
-
 <template>
   <div class="custom-upload" v-loading="loading">
     <el-dialog
@@ -22,12 +21,23 @@
         v-if="showCropper"
         id="corpper"
         ref="cropper"
-        :class="{'corpper-warp':showCropper}"
+        :class="{ 'corpper-warp': showCropper }"
         v-bind="cropper"
       />
       <div v-if="showCropper" class="cropper-button">
-        <el-button class="cancel-btn" size="small" @click.native="showCropper=false">取消</el-button>
-        <el-button size="small" type="primary" :loading="loading" @click="uploadCover">完成</el-button>
+        <el-button
+          class="cancel-btn"
+          size="small"
+          @click.native="showCropper = false"
+          >取消</el-button
+        >
+        <el-button
+          size="small"
+          type="primary"
+          :loading="loading"
+          @click="uploadCover"
+          >完成</el-button
+        >
       </div>
     </el-dialog>
     <form
@@ -38,7 +48,13 @@
       id="form1"
       @submit.prevent="sub"
     >
-      <input id="type" name="type" type="text" value="userphoto" v-show="false" />
+      <input
+        id="type"
+        name="type"
+        type="text"
+        value="userphoto"
+        v-show="false"
+      />
       <input
         id="file"
         name="file"
@@ -49,7 +65,12 @@
         :class="id"
         v-show="false"
       />
-      <el-button size="small" type="primary" :loading="loading" @click="handleOpenFile()">
+      <el-button
+        size="small"
+        type="primary"
+        :loading="loading"
+        @click="handleOpenFile()"
+      >
         <i class="fa fa-upload" />
         {{ buttonName }}
       </el-button>
@@ -169,7 +190,7 @@ export default {
             }).then(res => {
               /*       this.getMyData();*/
               this.$emit("subUploadSucceed", this.url, true);
-              var img = this.file_key.slice(15) + ".png";
+              var img = res.data.data;
               this.$store.commit("getUserAvatar", img);
               this.setCookie(img, 7);
               this.loading = false;
