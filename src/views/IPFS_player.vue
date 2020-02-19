@@ -56,7 +56,7 @@ export default {
 
     const Interval = 5 * 1000;
     ipfs.once("ready", () => {
-      console.log("ipfs node ready.");
+      // console.log("ipfs node ready.");
       this.nodeShow.innerHTML = "IPFS 服务已启动，正在连接...";
       setInterval(() => {
         ipfs.swarm.peers((err, peerInfos) => {
