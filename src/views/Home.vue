@@ -227,7 +227,6 @@ export default {
           order: this.couponSelected,
           hide_placeholder:!this.checked}
       }).then(result => {
-        console.log(result);
         this.maxcount = result.data.data.count;
         //取得总页数制作分页
         this.maxpage = Math.ceil(result.data.data.count / count);

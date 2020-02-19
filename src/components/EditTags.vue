@@ -413,7 +413,6 @@ export default {
           }
       })
         .then(res => {
-          console.log(res);
           this.recTags = res.data.data.tags;
           this.recTagsWatch = true;
           /* if (this.animeMark != 0) {
@@ -545,7 +544,6 @@ export default {
     },
     infoTipEvent(event) {
       //添加TAG行为消息提示
-      console.log("提示框触发了关闭");
       if (event == true) {
         this.infoTip[0].isHidden = true;
         return;
