@@ -14,7 +14,9 @@ import resetpassword from "../views/ResetPassword.vue";
 import edittag from "../views/Edittag.vue";
 import store from "../store/index.js";
 import User from "../views/User";
-import superadmin  from  "../views/SuperAdmin.vue"
+import superadmin from "../views/SuperAdmin.vue";
+import ipfs from "../views/IPFS.vue";
+import ipfs_player from "../views/IPFS_player.vue";
 Vue.use(VueRouter);
 
 /*
@@ -121,8 +123,16 @@ const routes = [
     component: User
   },
   {
-    path:"/superadmin",
-    component:superadmin
+    path: "/superadmin",
+    component: superadmin
+  },
+  {
+    path: "/ipfs",
+    component: ipfs
+  },
+  {
+    path: "/ipfs/player",
+    component: ipfs_player
   }
 ];
 
