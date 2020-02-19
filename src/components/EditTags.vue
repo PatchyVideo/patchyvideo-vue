@@ -372,9 +372,7 @@ export default {
         .then(res => {
           if (JSON.stringify(res.data.data.categorie_map) == "{}") {
             this.open4();
-            return;
-          }
-          if (this.tags.indexOf(this.iptVal) != -1) {
+          } else if (this.tags.indexOf(this.iptVal) != -1) {
             //存在则不允许添加
             /*this.infoTip[1].isHidden=true;*/
             this.iptVal = "";
@@ -382,9 +380,7 @@ export default {
             /*     setTimeout(function () {
                             _that.infoTip[1].isHidden=false;
                         },2000);*/
-            return;
-          }
-          if (this.tags.indexOf(this.iptVal) === -1 && this.iptVal != "") {
+          } else if (this.tags.indexOf(this.iptVal) === -1 && this.iptVal != "") {
             //不存在则添加
             this.tags.push(this.iptVal);
             /* 如果所有的标签都没有被选中，那下次一添加的标签被选中*/
@@ -398,8 +394,8 @@ export default {
             this.getTagCategories(this.tags);
             this.iptVal = "";
             /*   this.$emit("getEditTagsData", this.tags);*/
-            return;
           }
+          this.getRecTags(this.tagsForRec);
         })
         .catch(err => {});
     },

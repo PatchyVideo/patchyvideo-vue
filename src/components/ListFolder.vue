@@ -88,6 +88,7 @@
         </el-form>
     </el-dialog>
 
+    <i @click="copyPathLink" class="fa fa-copy fa-1x"></i>
     <el-breadcrumb separator="/">
         <el-breadcrumb-item
             v-for="i in toNavigablePath()"
@@ -370,7 +371,7 @@
 </template>
 
 <script>
-    import moment from 'moment'
+    import { copyToClipboardText } from "../static/js/generic";
     export default {
     data() {
         return {
@@ -423,6 +424,9 @@
         this.loggedIn = JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "";
         this.user_id = this.$route.params.id;
         this.editable = this.user_id == 'me';
+        console.log(this.$route);
+        if ('path' in this.$route.query)
+            this.currentPath = this.$route.query.path;
         this.getFolder();
         this.loadCurrentPlaylists();
     },
@@ -659,7 +663,23 @@
                 });
             }
         },
-
+        copyPathLink() {
+            var uid = '';
+            if (this.user_id == 'me') {
+                this.axios({
+                    method: "post",
+                    url: "be/user/profile.do",
+                    data: { uid: this.user_id }
+                }).then(res => {
+                    uid = res.data.data._id.$oid;
+                    const url = `https://patchyvideo.com/#/users/${uid}?path=${this.currentPath}`;
+                    copyToClipboardText(url);
+                });
+            } else {
+                const url = `https://patchyvideo.com/#/users/${uid}?path=${this.currentPath}`;
+                copyToClipboardText(url);
+            }
+        },
 
 
         handlePlaylistTableSelectionChange(val) {
