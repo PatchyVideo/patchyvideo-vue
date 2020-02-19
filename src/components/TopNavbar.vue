@@ -59,7 +59,7 @@
           <router-link to="/edittag">标签</router-link>
         </li>
         <li>
-          <a href="https://patchyvideo.com/ipfs/">幻想之物</a>
+          <router-link to="/ipfs">幻想之物</router-link>
         </li>
       </ul>
     </div>
@@ -97,33 +97,59 @@
                       General: item.cat == 0,
                       Meta: item.cat == 4
                     }"
-                  >{{ item.tag }}</div>
+                  >
+                    {{ item.tag }}
+                  </div>
                   <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
                 </div>
               </template>
             </el-autocomplete>
           </div>
-          <input id="search-bar-submit" type="submit" value="搜索" @click="gotoHome" />
+          <input
+            id="search-bar-submit"
+            type="submit"
+            value="搜索"
+            @click="gotoHome"
+          />
         </li>
 
         <!-- 登录和注册按钮 -->
         <div class="loginUser" style="margin-left:20px" v-if="!isLogin">
-          <router-link to="/login" class="loginUser-login" @click.native="login">登录</router-link>
+          <router-link to="/login" class="loginUser-login" @click.native="login"
+            >登录</router-link
+          >
           <router-link to="/signup" class="loginUser-signup">注册</router-link>
         </div>
 
         <!-- 登录成功后的用户界面 -->
         <div class="userHome" v-if="isLogin">
           <div @click="gotoUserPage">
-            <el-avatar fit="cover" class="loginUser-userAvatar" :size="40" :src="userAvatar"></el-avatar>
+            <el-avatar
+              fit="cover"
+              class="loginUser-userAvatar"
+              :size="40"
+              :src="userAvatar"
+            ></el-avatar>
           </div>
-          <router-link class="loginUser-login" to="/users/me">{{ this.$store.state.username }}</router-link>
-          <a class="loginUser-signup" @click="dialogVisible = true" style="cursor:pointer">登出</a>
+          <router-link class="loginUser-login" to="/users/me">{{
+            this.$store.state.username
+          }}</router-link>
+          <a
+            class="loginUser-signup"
+            @click="dialogVisible = true"
+            style="cursor:pointer"
+            >登出</a
+          >
         </div>
       </ul>
     </div>
     <!-- 退出登录的弹出框 -->
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" v-loading="loading">
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%"
+      v-loading="loading"
+    >
       <p>你确定要退出登录吗?</p>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
