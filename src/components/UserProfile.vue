@@ -213,8 +213,6 @@ export default {
     getShopImages(url,status){
       this.url = url;
       this.ifupdate = status;
-      console.log(url);
-      console.log(status);
     },
     faceMouseOver(b) {
       this.mounseMark = b;
@@ -326,7 +324,6 @@ export default {
           if (res.data.status == "ERROR") {
             //火狐浏览器有BUG 暂时先这样跳，等cookie登陆做完后再在user页面判断。
            /* this.$router.push("/login");*/
-            console.log(res);
           }
           if (res.data.status == "SUCCEED") {
             this.myData = res.data.data.profile;

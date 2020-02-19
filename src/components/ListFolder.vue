@@ -565,7 +565,7 @@
         },
 
         handleCurrentFolderPrivateViewChanged(new_val) {
-            console.log(this.currentFolderObject.privateView);
+
             this.axios({
                 method: 'post',
                 url: 'be/folder/change_access',
@@ -686,8 +686,6 @@
             this.currentSelectedPlaylists = val;
         },
         loadCurrentPlaylists() {
-            console.log('loadCurrentPlaylists');
-
 
             if (this.showMyPlaylistsOnly) {
                 // only show my playlists
@@ -738,7 +736,6 @@
 
         addToCurrectFolder() {
             this.loading = true;
-            console.log(this.currentSelectedPlaylists);
             var pidsToAdd = [];
             this.currentSelectedPlaylists.forEach(obj => {
                 pidsToAdd.push(obj._id.$oid);
@@ -761,7 +758,6 @@
                 }
                 this.loading = false;
             }).catch(err=>{
-                console.log(err);
                 this.loading = false;
             });
         },
