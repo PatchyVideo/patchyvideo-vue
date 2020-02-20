@@ -36,6 +36,7 @@
     <!-- EditTags组件-->
     <EditTags ref="editTag" :msg="temporaryValForVLP" :visible.sync="showTagPanel" v-if="editable"></EditTags>
 
+
     <!-- 编辑视频列表时的对话框 -->
     <el-dialog
       title="编辑视频详情"
@@ -101,13 +102,33 @@
           <div v-if="editable" class="edit_box">
             <el-button type="success" @click="addVideo">添加视频</el-button>
             <el-button type="success" @click="addFromList">从其他网站的收藏夹导入</el-button>
+
+          <!--注意！此处的样式修改在App.vue的全局样式中-->
+            <el-popover
+                    style="margin: 0px 10px;"
+                    width="100%"
+                    trigger="click">
+              <ListFolderView ref="listFolder" :msg="temporaryValForVLP" :visible.sync="showListFolder" v-if="isLogin"></ListFolderView>
+              <el-button
+                      type="primary"
+                      @click="openListFolder"
+                      class="EditTagsButton"
+                      slot="reference"
+              >加入收藏</el-button>
+
+            </el-popover>
+
             <el-button type="info" @click="openListEdit = true">编辑列表信息</el-button>
+
             <el-button
               type="primary"
               @click="openEditTags"
               class="EditTagsButton"
               :disabled="showTagPanel"
             >编辑共有标签</el-button>
+
+
+
             <el-button type="warning" @click="inverse()">列表视频倒序</el-button>
             <el-button type="danger" @click="dialogVisible = true">删除</el-button>
           </div>
@@ -204,6 +225,7 @@ import EditTags from "../components/EditTags.vue";
 import Move from "../components/Move.vue";
 import DeleteVideo from "../components/DeleteVideo.vue";
 import SetCover from "../components/SetCover.vue";
+import ListFolderView from "../components/ListFolderView.vue";
 import { copyToClipboard } from "../static/js/generic";
 
 export default {
@@ -258,7 +280,9 @@ export default {
         desc: [
           { required: true, message: "不来介绍一下列表吗？", trigger: "blur" }
         ]
-      }
+      },
+      // 播放列表目录页面是否显示
+      showListFolder: false,
     };
   },
   computed: {},
@@ -435,6 +459,10 @@ export default {
       this.showTagPanel = true;
       this.$refs.editTag.getCommonTags();
     },
+    openListFolder() {
+      this.showListFolder = true;
+      this.$refs.listFolder.pid = this.videolistPid;
+    },
     open(message) {
       this.$message({
         message: message,
@@ -458,11 +486,12 @@ export default {
       this.getVideoList(this.page, this.count);
     }
   },
-  components: { topnavbar, Footer, EditTags, Move, DeleteVideo, SetCover }
+  components: { topnavbar, Footer, EditTags, Move, DeleteVideo, ListFolderView, SetCover }
 };
 </script>
 
 <style scoped lang="less">
+
 .insert-video {
   position: absolute;
   left: 35%;

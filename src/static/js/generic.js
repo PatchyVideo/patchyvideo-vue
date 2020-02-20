@@ -105,4 +105,14 @@ function copyToClipboard(obj) {
   document.execCommand("copy");
   document.body.removeChild(el);
 }
-export { copyToClipboard };
+
+function copyToClipboardText(txt) {
+  const el = document.createElement("textarea");
+  el.value = txt;
+  document.body.appendChild(el);
+  el.select();
+  el.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  document.body.removeChild(el);
+}
+export { copyToClipboard, copyToClipboardText };

@@ -171,7 +171,6 @@ export default {
       $("#file")[0].files = data.files;
       this.loading = true;
       var formObj = new FormData(document.getElementById("form1"));
-      console.log($("#file")[0].files);
       this.axios({
         method: "post",
         url: "be/helper/upload_image.do",
@@ -180,7 +179,6 @@ export default {
         contentType: false
       })
         .then(res => {
-          console.log(res);
           if (res.data.status == "SUCCEED") {
             this.file_key = res.data.data.file_key;
             this.axios({
@@ -227,7 +225,6 @@ export default {
     // 裁剪input 监听
     async onChange(e) {
       const file = e.target.files[0];
-      console.log(file);
       if (!file) {
         return this.$message.error("选择图片失败");
       }
@@ -283,7 +280,6 @@ export default {
           let img = new Image();
           img.src = window.URL.createObjectURL(imgRes);
           img.onload = () => {
-            console.log("正在压缩");
             let _data = this.onImgCompression(img);
             let file = this.dataURLtoFile(_data, "压缩后的图片");
             console.log(

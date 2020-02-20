@@ -215,6 +215,7 @@ export default {
       firstFlag: true,
       msgMark: false,
       animeMark: 0,
+      isInfoTipClick:false,
       infoTipMark: false,
       // 自动补全标签的内容
       taglist: []
@@ -245,6 +246,15 @@ export default {
     if (this.$route.path === "/postvideo") {
       if (this.$route.query.pid) {
         this.getCommonTags2();
+      }
+    }
+  },
+  updated(){
+    let _that = this;
+    var infoTipObj = document.getElementsByClassName("el-autocomplete-suggestion");
+    for(let i =0 ; i<infoTipObj.length;++i){
+      infoTipObj[i].onclick = function () {
+        _that.isInfoTipClick = true;
       }
     }
   },
@@ -372,9 +382,7 @@ export default {
         .then(res => {
           if (JSON.stringify(res.data.data.categorie_map) == "{}") {
             this.open4();
-            return;
-          }
-          if (this.tags.indexOf(this.iptVal) != -1) {
+          } else if (this.tags.indexOf(this.iptVal) != -1) {
             //存在则不允许添加
             /*this.infoTip[1].isHidden=true;*/
             this.iptVal = "";
@@ -382,9 +390,7 @@ export default {
             /*     setTimeout(function () {
                             _that.infoTip[1].isHidden=false;
                         },2000);*/
-            return;
-          }
-          if (this.tags.indexOf(this.iptVal) === -1 && this.iptVal != "") {
+          } else if (this.tags.indexOf(this.iptVal) === -1 && this.iptVal != "") {
             //不存在则添加
             this.tags.push(this.iptVal);
             /* 如果所有的标签都没有被选中，那下次一添加的标签被选中*/
@@ -398,8 +404,8 @@ export default {
             this.getTagCategories(this.tags);
             this.iptVal = "";
             /*   this.$emit("getEditTagsData", this.tags);*/
-            return;
           }
+          this.getRecTags(this.tagsForRec);
         })
         .catch(err => {});
     },
@@ -407,7 +413,10 @@ export default {
       this.axios({
         method: "post",
         url: "be/tags/get_related_tags.do",
-        data: { tags: tags }
+        data: {
+          tags: tags,
+          exclude: this.tags
+          }
       })
         .then(res => {
           this.recTags = res.data.data.tags;
@@ -452,10 +461,30 @@ export default {
       this.getTagCategoriesForAdd(this.iptVal);
     },
     addTag() {
-      if (this.infoTipMark === true) {
-        this.infoTipMark = false;
-        return;
-      }
+/*
+      console.log("添加Tag之前的值——————是否鼠标点中:"+this.isInfoTipClick+"---是否键盘选中:"+this.infoTipMark);
+*/
+  /*    if(this.isInfoTipClick ===true){ //是否鼠标点中了
+        if (this.infoTipMark === true) { //是否属于键盘回车添加的Tag
+          this.infoTipMark = false;
+          this.isInfoTipClick = false;
+          return;
+        }
+      }*/
+  if(this.isInfoTipClick ===true){ //是否属于鼠标点击选中的Tag
+
+  }else {
+    if (this.infoTipMark === true) { //是否属于键盘回车选中的Tag
+      this.infoTipMark = false;
+      this.isInfoTipClick = false;
+      return;
+    }
+  }
+      this.infoTip[0].isHidden = true;
+      this.getTagCategoriesForAdd(this.iptVal);
+
+
+
       /*  this.watchAutoComplete();
       {
         let count = 0;
@@ -470,8 +499,8 @@ export default {
 
       }*/
       //方案二,所有操作都在函数的成功和失败回调中进行，代码冗余
-      this.infoTip[0].isHidden = true;
-      this.getTagCategoriesForAdd(this.iptVal);
+     /* this.infoTip[0].isHidden = true;
+      this.getTagCategoriesForAdd(this.iptVal);*/
       /*    方案一已废弃，
                     console.time("start");
                     console.log("开始计算时间");
@@ -540,8 +569,8 @@ export default {
       this.$emit("update:visible", false);
     },
     infoTipEvent(event) {
+/*      this.isInfoTipClick = true;*/
       //添加TAG行为消息提示
-      console.log("提示框触发了关闭");
       if (event == true) {
         this.infoTip[0].isHidden = true;
         return;
@@ -566,22 +595,18 @@ export default {
     handleSelect(item) {
       this.iptVal = item.tag;
       this.infoTipMark = true;
+/*
+      console.log("选中时的值为"+this.infoTipMark);*/
       /*      console.log("选中");*/
     }
     // 消息提示
   },
   watch: {
+
     tags(n) {
       this.$emit("getEditTagsData", n);
     },
     tagsForRec(newVal, oldVal) {
-      /* if (this.msg === "") {
-        this.animeMark = 1;
-      }*/
-      /*if(this.$route.path === "/postvideo"){
-        this.animeMark =1;
-      }*/
-
       if (JSON.stringify(oldVal) != "[]" || this.animeMark != 0) {
         this.recTagsWatch = false;
         this.getRecTags(newVal);

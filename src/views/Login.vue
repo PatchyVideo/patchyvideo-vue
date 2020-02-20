@@ -206,6 +206,7 @@ export default {
                         this.$router.push({ path: "/home" });
                       }
                     } else {
+                      this.loading = false;
                       this.open3();
                     }
                   } else {

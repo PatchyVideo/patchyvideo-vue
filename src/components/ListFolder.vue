@@ -87,9 +87,8 @@
             </el-form-item>
         </el-form>
     </el-dialog>
-    <div v-if="loggedIn && editable" class="operations">
-        <el-button type="primary" round @click="addToCurrectFolder" :disabled="this.currentSelectedPlaylists.length == 0">添加至当前目录</el-button>
-    </div>
+
+    <i @click="copyPathLink" class="fa fa-copy fa-1x"></i>
     <el-breadcrumb separator="/">
         <el-breadcrumb-item
             v-for="i in toNavigablePath()"
@@ -99,9 +98,9 @@
         </el-breadcrumb-item>
     </el-breadcrumb>
     <el-row v-if="this.$route.params.id!='me'">
+                
         <el-col style="width: 100%">
             <div class="folder-view" >
-                
                 <el-container>
                     <el-aside    :style="{width:this.asideWidth+'px', position:'relative',cursor: 'e-resize'}">
                         <div class="asaide-shelter" style="position: absolute;width: 99%;height: 100%;cursor: default" ></div>
@@ -123,6 +122,7 @@
                         </el-switch>-->
                     </el-aside>
                     <el-main>
+
                         <el-table
                                 ref="currentFolderTable"
                                 :data="currentFolderChildrens"
@@ -165,12 +165,12 @@
                                     </div>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="视频数"  width="200" align="center" prop="playlist_object.videos">
+                            <el-table-column label="视频数"  width="200" align="center" prop="playlist_object.videos" sortable>
                                 <template slot-scope="scope">
                                     <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{scope.row.playlist_object.videos}}</h3>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="修改日期" align="center"  prop="playlist_object.meta.modified_at">
+                            <el-table-column label="修改日期" align="center"  prop="playlist_object.meta.modified_at" sortable>
                                 <template slot-scope="scope">
                                     <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{scope.row.playlist_object.meta.modified_at | formatDate}}</h3>
                                 </template>
@@ -215,6 +215,11 @@
                     <el-main>
                         <el-button v-if="loggedIn && editable" @click="showNewFolderDialog = true">新建文件夹</el-button>
                         <el-button v-if="loggedIn && editable" @click="dialogVisible = true" type="danger" :disabled="this.currentSelectedItems == 0">删除选中项</el-button>
+                        <el-button round @click="addToCurrectFolder" :disabled="this.currentSelectedPlaylists.length == 0">添加至当前目录</el-button>
+
+                      <!--  <div v-if="loggedIn && editable" class="operations">
+                            <el-button type="primary" round @click="addToCurrectFolder" :disabled="this.currentSelectedPlaylists.length == 0">添加至当前目录</el-button>
+                        </div>-->
                         <el-table
                                 ref="currentFolderTable"
                                 :data="currentFolderChildrens"
@@ -259,12 +264,12 @@
                                     </div>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="视频数"      align="center"  width="80" prop="playlist_object.videos">
+                            <el-table-column label="视频数"      align="center"  width="100" prop="playlist_object.videos" sortable>
                                 <template slot-scope="scope">
                                     <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{scope.row.playlist_object.videos}}</h3>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="修改日期"      align="center" prop="playlist_object.meta.modified_at">
+                            <el-table-column label="修改日期"      align="center" prop="playlist_object.meta.modified_at" sortable>
                                 <template slot-scope="scope">
                                     <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{scope.row.playlist_object.meta.modified_at | formatDate}}</h3>
                                 </template>
@@ -338,12 +343,12 @@
                             </router-link>
                         </template>
                     </el-table-column>
-                    <el-table-column label="视频数" width="100" align="center" prop="playlist_object.videos">
+                    <el-table-column label="视频数" width="100" align="center" prop="playlist_object.videos" sortable>
                         <template slot-scope="scope">
                             <h3>{{scope.row.videos}}</h3>
                         </template>
                     </el-table-column>
-                    <el-table-column label="修改日期" width="110" align="center"  prop="playlist_object.meta.modified_at">
+                    <el-table-column label="修改日期" width="110" align="center"  prop="playlist_object.meta.modified_at" sortable>
                         <template slot-scope="scope">
                             <h3>{{scope.row.meta.modified_at | formatDate}}</h3>
                         </template>
@@ -366,7 +371,7 @@
 </template>
 
 <script>
-    import moment from 'moment'
+    import { copyToClipboardText } from "../static/js/generic";
     export default {
     data() {
         return {
@@ -419,6 +424,9 @@
         this.loggedIn = JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "";
         this.user_id = this.$route.params.id;
         this.editable = this.user_id == 'me';
+        console.log(this.$route);
+        if ('path' in this.$route.query)
+            this.currentPath = this.$route.query.path;
         this.getFolder();
         this.loadCurrentPlaylists();
     },
@@ -557,7 +565,7 @@
         },
 
         handleCurrentFolderPrivateViewChanged(new_val) {
-            console.log(this.currentFolderObject.privateView);
+
             this.axios({
                 method: 'post',
                 url: 'be/folder/change_access',
@@ -655,15 +663,29 @@
                 });
             }
         },
-
+        copyPathLink() {
+            var uid = this.user_id;
+            if (this.user_id == 'me') {
+                this.axios({
+                    method: "post",
+                    url: "be/user/profile.do",
+                    data: { uid: this.user_id }
+                }).then(res => {
+                    uid = res.data.data._id.$oid;
+                    const url = `https://patchyvideo.com/#/users/${uid}?path=${this.currentPath}`;
+                    copyToClipboardText(url);
+                });
+            } else {
+                const url = `https://patchyvideo.com/#/users/${uid}?path=${this.currentPath}`;
+                copyToClipboardText(url);
+            }
+        },
 
 
         handlePlaylistTableSelectionChange(val) {
             this.currentSelectedPlaylists = val;
         },
         loadCurrentPlaylists() {
-            console.log('loadCurrentPlaylists');
-
 
             if (this.showMyPlaylistsOnly) {
                 // only show my playlists
@@ -714,7 +736,6 @@
 
         addToCurrectFolder() {
             this.loading = true;
-            console.log(this.currentSelectedPlaylists);
             var pidsToAdd = [];
             this.currentSelectedPlaylists.forEach(obj => {
                 pidsToAdd.push(obj._id.$oid);
@@ -737,7 +758,6 @@
                 }
                 this.loading = false;
             }).catch(err=>{
-                console.log(err);
                 this.loading = false;
             });
         },
