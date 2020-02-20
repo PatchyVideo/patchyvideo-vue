@@ -375,6 +375,7 @@
     export default {
     data() {
         return {
+            isFirst:true,
             asideWidth:200,
             loading: true,
             editable: false,
@@ -515,12 +516,22 @@
                 if (result.status == 'SUCCEED') {
                     this.currentFolderChildrens = result.data.children;
                     this.currentFolderObject = result.data.cur;
+
+                    if(this.isFirst ===false){
+                        if(this.$route.params.id!='me'){
+                            this.$router.push({path:`/users/${this.user_id}/`,query: {path:this.currentPath}})
+                            /*     this.$router.push(`/users/${this.user_id}/${path}`);*/
+                        }
+
+                    }
                     if (f) {
                         f();
                     }
+
                 } else if (result.data.reason == 'UNAUTHORISED_OPERATION') {
                     this.$message.error('您没有权限查看此文件夹');
                 }
+                this.isFirst = false;
                 this.loading = false;
             })
         },
