@@ -425,7 +425,6 @@
         this.loggedIn = JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "";
         this.user_id = this.$route.params.id;
         this.editable = this.user_id == 'me';
-        console.log(this.$route);
         if ('path' in this.$route.query)
             this.currentPath = this.$route.query.path;
         this.getFolder();
