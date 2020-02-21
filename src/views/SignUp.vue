@@ -149,7 +149,7 @@ export default {
           { min: 6, max: 64, message: "长度在 6 到 64 个字符", trigger: "blur" }
         ],
         signup_email: [
-          { required: true, message: "请输入邮箱", trigger: "blur" },
+          { required: false, message: "请输入邮箱", trigger: "blur" },
           { type: "email", message: "请输入正确的邮箱地址", trigger: ["blur"] }
         ]
       },
