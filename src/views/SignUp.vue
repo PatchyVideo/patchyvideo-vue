@@ -256,7 +256,7 @@ export default {
 .signupPic {
   height: 100%;
   width: 100%;
-  background: url("../static/img/sign_up.jpg") no-repeat top center;
+/*  background: url("../static/img/sign_up.jpg") no-repeat top center;*/
   /* background-position: 200px 0; */
   background-size: cover;
   background-attachment: fixed;
@@ -290,7 +290,9 @@ a {
   text-decoration: none;
   color: #ff7792;
 }
-
+.el-form-item {
+  margin-bottom: 22px !important;
+}
 .w {
   position: relative;
   top: 100px;

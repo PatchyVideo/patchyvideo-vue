@@ -504,7 +504,7 @@ export default {
   }
 }
 .bg {
-  background: url("../static/img/imoto_left.jpg") no-repeat;
+/*  background: url("../static/img/imoto_left.jpg") no-repeat;*/
   background-size: 100% 100%;
 }
 

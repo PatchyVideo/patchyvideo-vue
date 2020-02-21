@@ -92,8 +92,8 @@
         <!-- 视频列表介绍 -->
         <div class="deemo shadow">
           <div class="d_t">
-            <img src="../static/img/5.png" style="float:left;margin-top:50px;" />
-            <img src="../static/img/1.png" style="float:right;margin-top:50px;" />
+ <!--           <img src="../static/img/5.png" style="float:left;margin-top:50px;" />
+            <img src="../static/img/1.png" style="float:right;margin-top:50px;" />-->
             <h2>{{ videolistName }}</h2>
             <img :src="'/images/covers/' + videolistDetail.playlist.cover" style="min-height:200px" />
             <p>{{ videolistDesc }}</p>

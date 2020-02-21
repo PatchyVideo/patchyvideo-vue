@@ -87,8 +87,8 @@
             </el-form-item>
         </el-form>
     </el-dialog>
-
-    <i @click="copyPathLink" class="fa fa-copy fa-1x"></i>
+ <!--   <i @click="copyPathLink" class="fa fa-copy fa-1x" style="margin-right: 6px; cursor: pointer;"></i>-->
+    <el-button @click="copyPathLink">点击复制文件夹地址</el-button>
     <el-breadcrumb separator="/">
         <el-breadcrumb-item
             v-for="i in toNavigablePath()"
@@ -375,6 +375,7 @@
     export default {
     data() {
         return {
+            isFirst:true,
             asideWidth:200,
             loading: true,
             editable: false,
@@ -424,7 +425,6 @@
         this.loggedIn = JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "";
         this.user_id = this.$route.params.id;
         this.editable = this.user_id == 'me';
-        console.log(this.$route);
         if ('path' in this.$route.query)
             this.currentPath = this.$route.query.path;
         this.getFolder();
@@ -515,12 +515,22 @@
                 if (result.status == 'SUCCEED') {
                     this.currentFolderChildrens = result.data.children;
                     this.currentFolderObject = result.data.cur;
+
+                    if(this.isFirst ===false){
+                        if(this.$route.params.id!='me'){
+                            this.$router.push({path:`/users/${this.user_id}/`,query: {path:this.currentPath}})
+                            /*     this.$router.push(`/users/${this.user_id}/${path}`);*/
+                        }
+
+                    }
                     if (f) {
                         f();
                     }
+
                 } else if (result.data.reason == 'UNAUTHORISED_OPERATION') {
                     this.$message.error('您没有权限查看此文件夹');
                 }
+                this.isFirst = false;
                 this.loading = false;
             })
         },
@@ -851,6 +861,11 @@
 
 <style lang="less" scoped>
 
+    .fa-copy{
+        &:hover{
+           color: cornflowerblue;
+        }
+    }
 
     .operations{
         margin-bottom: 12px;

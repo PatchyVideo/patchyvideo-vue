@@ -31,6 +31,8 @@ export default {
 
 <style>
   .el-popover{
+    max-height: 90%;
+    overflow: auto;
     position: absolute;
     top: 50% !important;
     left: 50%;

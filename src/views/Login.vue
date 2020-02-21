@@ -256,11 +256,12 @@ export default {
 .loginPic {
   height: 100%;
   width: 100%;
-  background: url("../static/img/login.jpg") no-repeat top center;
+  background-color: #fff;
+/*  background: url("../static/img/login.jpg") no-repeat top center;*/
   /* background-position: 200px 0; */
   background-size: cover;
   background-attachment: fixed;
-  background-color: #646257;
+/*  background-color: #646257;*/
 }
 .alert {
   color: red;

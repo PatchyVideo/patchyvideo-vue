@@ -60,16 +60,16 @@ Vue.prototype.$echarts = echarts;
                     <userprofile></userprofile>
                 </el-tab-pane>
                 <el-tab-pane :label="labelInfo[1]" name="second">
-                    <usercontribute></usercontribute>
+                    <usercontribute v-if="this.activeName==='second'"></usercontribute>
                 </el-tab-pane>
                 <el-tab-pane :label="labelInfo[2]" name="third">
-                    <listfolder></listfolder>
+                    <listfolder v-if="this.activeName==='third'"></listfolder>
                 </el-tab-pane>
                 <el-tab-pane :label="labelInfo[3]" name="four">
-                    <userfavorites></userfavorites>
+                    <userfavorites v-if="this.activeName==='four'"></userfavorites>
                 </el-tab-pane>
                 <el-tab-pane :label="labelInfo[4]" name="fifth">
-                    <userfolder></userfolder>
+                    <userfolder v-if="this.activeName==='fifth'"></userfolder>
                 </el-tab-pane>
         <!--       <el-tab-pane label="文件管理" name="five">
                     <userfolder></userfolder>
@@ -98,7 +98,7 @@ Vue.prototype.$echarts = echarts;
         data() {
             return {
                 usersid: "www",
-                gotomark: 1,
+                gotomark: 0,
                 activeIndex: "1",
                 activeIndex2: "1",
                 activeName: "first",
@@ -120,14 +120,21 @@ Vue.prototype.$echarts = echarts;
            }
         },
         mounted(){
+            //暂时这么处理，会多请求一次。
+            if(Object.keys(this.$route.query).toString()==="path"){
+                this.activeName="third";
+                /*  let path = this.$route.query.path;*/
+                /*                let str = this.$route.query.path.replace(/\//g,"");*/
+                this.$refs.folder.navigateTo(this.$route.query.path);
+            }
         },
         methods: {
             handleSelect(key, keyPath) {
            /*     console.log(key, keyPath);*/
-                this.gotomark = key;
+       /*         this.gotomark = key;*/
             },
-            handleClick(tab, event) {
- /*               console.log(tab, event);*/
+            handleClick(key) {
+                /*               console.log(tab, event);*/
             },
             isUidNull(){
              this.axios({
@@ -188,7 +195,7 @@ Vue.prototype.$echarts = echarts;
         min-width: 1600px;
         height: 100%;
 
-        background:  url("../static/img/imoto.jpg") no-repeat top center;
+   /*     background:  url("../static/img/imoto.jpg") no-repeat top center;*/
 
         opacity: 0.9;
         background-size: cover;
