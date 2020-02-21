@@ -97,59 +97,37 @@
                       General: item.cat == 0,
                       Meta: item.cat == 4
                     }"
-                  >
-                    {{ item.tag }}
-                  </div>
+                  >{{ item.tag }}</div>
                   <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
                 </div>
               </template>
             </el-autocomplete>
           </div>
-          <input
-            id="search-bar-submit"
-            type="submit"
-            value="搜索"
-            @click="gotoHome"
-          />
+          <input id="search-bar-submit" type="submit" value="搜索" @click="gotoHome" />
         </li>
 
         <!-- 登录和注册按钮 -->
         <div class="loginUser" style="margin-left:20px" v-if="!isLogin">
-          <router-link to="/login" class="loginUser-login" @click.native="login"
-            >登录</router-link
-          >
+          <router-link to="/login" class="loginUser-login" @click.native="login">登录</router-link>
           <router-link to="/signup" class="loginUser-signup">注册</router-link>
         </div>
 
         <!-- 登录成功后的用户界面 -->
         <div class="userHome" v-if="isLogin">
           <div @click="gotoUserPage">
-            <el-avatar
-              fit="cover"
-              class="loginUser-userAvatar"
-              :size="40"
-              :src="userAvatar"
-            ></el-avatar>
+            <el-avatar fit="cover" class="loginUser-userAvatar" :size="40" :src="userAvatar"></el-avatar>
           </div>
-          <router-link class="loginUser-login" to="/users/me">{{
+          <router-link class="loginUser-login" to="/users/me">
+            {{
             this.$store.state.username
-          }}</router-link>
-          <a
-            class="loginUser-signup"
-            @click="dialogVisible = true"
-            style="cursor:pointer"
-            >登出</a
-          >
+            }}
+          </router-link>
+          <a class="loginUser-signup" @click="dialogVisible = true" style="cursor:pointer">登出</a>
         </div>
       </ul>
     </div>
     <!-- 退出登录的弹出框 -->
-    <el-dialog
-      title="提示"
-      :visible.sync="dialogVisible"
-      width="30%"
-      v-loading="loading"
-    >
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" v-loading="loading">
       <p>你确定要退出登录吗?</p>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -245,18 +223,24 @@ export default {
         data: {}
       }).then(result => {
         if (result.data.data == "UNAUTHORISED_OPERATION" && this.getCookie()) {
-          this.open("登录已过期，请新登录！");
-          this.isLogin = false;
-          // 清除所有session值(退出登录)
-          sessionStorage.clear();
-          // 清除用户名
-          this.$store.commit("clearUserName");
-          // 清除本地数据
-          localStorage.setItem("username", "");
-          // 清除cookie
-          this.clearCookie();
-          // 改变用户登录状态
-          this.$store.commit("changeifTruelyLogin", "2");
+          this.axios({
+            method: "post",
+            url: "/be/logout.do",
+            data: {}
+          }).then(result => {
+            this.open("登录已过期，请新登录！");
+            this.isLogin = false;
+            // 清除所有session值(退出登录)
+            sessionStorage.clear();
+            // 清除用户名
+            this.$store.commit("clearUserName");
+            // 清除本地数据
+            localStorage.setItem("username", "");
+            // 清除cookie
+            this.clearCookie();
+            // 改变用户登录状态
+            this.$store.commit("changeifTruelyLogin", "2");
+          });
         } else {
           this.$store.commit("changeifTruelyLogin", "1");
         }
