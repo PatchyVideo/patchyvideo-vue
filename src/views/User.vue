@@ -195,7 +195,7 @@ Vue.prototype.$echarts = echarts;
         min-width: 1600px;
         height: 100%;
 
-        background:  url("../static/img/imoto.jpg") no-repeat top center;
+   /*     background:  url("../static/img/imoto.jpg") no-repeat top center;*/
 
         opacity: 0.9;
         background-size: cover;
