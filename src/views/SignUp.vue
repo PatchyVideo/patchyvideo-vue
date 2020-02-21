@@ -290,7 +290,9 @@ a {
   text-decoration: none;
   color: #ff7792;
 }
-
+.el-form-item {
+  margin-bottom: 22px !important;
+}
 .w {
   position: relative;
   top: 100px;

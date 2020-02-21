@@ -87,8 +87,8 @@
             </el-form-item>
         </el-form>
     </el-dialog>
-
-    <i @click="copyPathLink" class="fa fa-copy fa-1x"></i>
+ <!--   <i @click="copyPathLink" class="fa fa-copy fa-1x" style="margin-right: 6px; cursor: pointer;"></i>-->
+    <el-button @click="copyPathLink">点击复制文件夹地址</el-button>
     <el-breadcrumb separator="/">
         <el-breadcrumb-item
             v-for="i in toNavigablePath()"
@@ -861,6 +861,11 @@
 
 <style lang="less" scoped>
 
+    .fa-copy{
+        &:hover{
+           color: cornflowerblue;
+        }
+    }
 
     .operations{
         margin-bottom: 12px;
