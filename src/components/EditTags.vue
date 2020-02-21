@@ -690,7 +690,7 @@ div {
   #tag {
     width: 1200px;
     height: 923px;
-    background: url("../static/img/test3.png") no-repeat center;
+   /* background: url("../static/img/test3.png") no-repeat center;*/
     background-color: #fff;
     background-size: 70% 105%;
     text-align: center;

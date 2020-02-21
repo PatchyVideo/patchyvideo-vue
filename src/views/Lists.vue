@@ -262,7 +262,7 @@ export default {
   float: right;
 }
 .main-page-background-img {
-  background-image: url("./../static/img/imoto3.jpg");
+/*  background-image: url("./../static/img/imoto3.jpg");*/
   background-repeat: no-repeat;
   min-height: 800px;
   width: 85%;
