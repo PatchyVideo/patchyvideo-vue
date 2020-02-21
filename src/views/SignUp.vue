@@ -137,7 +137,7 @@ export default {
         signup_username: [
           { required: true, message: "请输入账号", trigger: "blur" },
           { validator: checkUsername, trigger: "blur" },
-          { min: 4, max: 32, message: "长度在 4 到 32 个字符", trigger: "blur" }
+          { min: 2, max: 32, message: "长度在 2 到 32 个字符", trigger: "blur" }
         ],
         signup_password1: [
           { required: true, message: "请输入密码", trigger: "blur" },
@@ -149,7 +149,7 @@ export default {
           { min: 6, max: 64, message: "长度在 6 到 64 个字符", trigger: "blur" }
         ],
         signup_email: [
-          { required: true, message: "请输入邮箱", trigger: "blur" },
+          { required: false, message: "请输入邮箱", trigger: "blur" },
           { type: "email", message: "请输入正确的邮箱地址", trigger: ["blur"] }
         ]
       },
