@@ -75,11 +75,16 @@
         <ul>
           <li class="list-item" v-for="(item, index) in listvideo" :key="item._id.$oid">
 
-            <div class="video-thumbnail"  slot="reference" @click.once="refreshVideo(item)">
+            <router-link
+                    target="_blank"
+                    :to="{ path: '/video', query: { id: item._id.$oid } }"
+                    tag="a"
+            ><div class="video-thumbnail">
               <!--              src="/images/covers/f5da2d4dd9eac171d47eb1100339cbad90e4648556a2f99a.png"-->
               <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
               <div class="Imgcover"></div>
             </div>
+            </router-link>
 
 
             <div class="video-detail">
@@ -325,26 +330,7 @@ export default {
         }
       });
     },
-    refreshVideo:function (item) {
-      console.log(item._id.$oid);
-      this.$axios({
-        method:"post",
-        url:"be/videos/refresh.do",
-        data:{
-          "video_id":
-          item._id.$oid
-        }
-      }).then(res=>{
-        if(res.data.status ==="SUCCEED"){
-          if (this.ifSearch === false) {
-            this.getListVideo(this.page, this.count);
-          }
-          if (this.ifSearch === true) {
-            this.getSearchData(this.page, this.count, this.searchKeyWord);
-          }
-        }
-      })
-    }
+
   },
 
   watch: {

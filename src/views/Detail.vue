@@ -94,6 +94,7 @@
             <h2>
               {{ myVideoData.video.item.title }}
               <el-button v-if="isLogin" type="primary" round @click="openMyList">添加到我的列表</el-button>
+              <el-button v-if="isLogin" type="primary" round @click="refreshVideo(myVideoData)">信息不正确？点击更新</el-button>
               <el-button v-if="isAdmin" @click="managementBox = true">管理</el-button>
             </h2>
           </div>
@@ -484,6 +485,33 @@ export default {
         .catch(error => {
           this.$router.push({ path: "/404" });
         });
+
+    },
+    refreshVideo(item){
+/*      console.log(item._id.$oid);*/
+      this.$axios({
+        method:"post",
+        url:"be/videos/refresh.do",
+        data:{
+          "video_id":
+          item.video._id.$oid
+        }
+      }).then(res=>{
+        if(res.data.status ==="SUCCEED"){
+          this.searchVideo();
+         setTimeout(()=>{
+           this.$message({
+             message: "更新成功！",
+             type: "success"
+           });
+         },500);
+        }else {
+          this.$message({
+            message: "更新失败",
+            type: "warning"
+          });
+        }
+      })
     },
     // 获取用户权限信息
     whoami() {
