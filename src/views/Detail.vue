@@ -108,11 +108,24 @@
 
           <!-- 视频详细信息 -->
           <div class="re_video">
+
             <img
               :src="'/images/covers/' + myVideoData.video.item.cover_image"
               width="320px"
               height="200px"
             />
+            <video
+                    :src="myVideoData.video.item.url"
+                    id="player"
+                    controls
+                    loop
+                    width="50%"
+                    v-if="isIpfs"
+                    style="position: relative;
+    left: 50%;
+    transform: translateX(-50%);"
+            >
+            </video>
             <p class="videoDesc" @click="postAsCopy($event)" v-html="myVideoData.video.item.desc"></p>
           </div>
         </div>
@@ -150,6 +163,7 @@
             </p>
           </div>
           <ul v-for="item in myVideoData.copies" :key="item._id.$oid" class="copies">
+
             <img
               :src="require('../static/img/' + item.item.site + '.png')"
               width="16px"
@@ -298,6 +312,7 @@ export default {
       videoRanks: [0, 1, 2, 3],
       dialogVisible: false, //删除提示框
       pid: "", //视频的id值
+      isIpfs:false,
       // 视频列表是否属于加载状态的判断
       loading: true,
       // 匹配视频简介中的短地址，用以扩展成完整地址
@@ -358,6 +373,7 @@ export default {
   },
   mounted() {
     this.buildUrlMatchers();
+
   },
   methods: {
     open1(message) {
@@ -478,7 +494,16 @@ export default {
           // 标记视频简介中的链接
           this.urlifyDesc();
           // 加载结束,加载动画消失
+
+
+          var ipfsURL = /(https:\/\/|http:\/\/)?(www\.)?ipfs\.globalupload\.io\/[a-zA-Z0-9]+/;
+          if (!ipfsURL.test(this.myVideoData.video.item.url)) {
+            this.isIpfs =false;
+          } else {
+            this.isIpfs =true;
+          }
           this.loading = false;
+
 
           this.whoami();
         })
