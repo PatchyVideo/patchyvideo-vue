@@ -36,7 +36,6 @@
     <!-- EditTags组件-->
     <EditTags ref="editTag" :msg="temporaryValForVLP" :visible.sync="showTagPanel" v-if="editable"></EditTags>
 
-
     <!-- 编辑视频列表时的对话框 -->
     <el-dialog
       title="编辑视频详情"
@@ -92,7 +91,7 @@
         <!-- 视频列表介绍 -->
         <div class="deemo shadow">
           <div class="d_t">
- <!--           <img src="../static/img/5.png" style="float:left;margin-top:50px;" />
+            <!--           <img src="../static/img/5.png" style="float:left;margin-top:50px;" />
             <img src="../static/img/1.png" style="float:right;margin-top:50px;" />-->
             <h2>{{ videolistName }}</h2>
             <img :src="'/images/covers/' + videolistDetail.playlist.cover" style="min-height:200px" />
@@ -103,19 +102,20 @@
             <el-button type="success" @click="addVideo">添加视频</el-button>
             <el-button type="success" @click="addFromList">从其他网站的收藏夹导入</el-button>
 
-          <!--注意！此处的样式修改在App.vue的全局样式中-->
-            <el-popover
-                    style="margin: 0px 10px;"
-                    width="100%"
-                    trigger="click">
-              <ListFolderView ref="listFolder" :msg="temporaryValForVLP" :visible.sync="showListFolder" v-if="isLogin"></ListFolderView>
+            <!--注意！此处的样式修改在App.vue的全局样式中-->
+            <el-popover style="margin: 0px 10px;" width="100%" trigger="click">
+              <ListFolderView
+                ref="listFolder"
+                :msg="temporaryValForVLP"
+                :visible.sync="showListFolder"
+                v-if="isLogin"
+              ></ListFolderView>
               <el-button
-                      type="primary"
-                      @click="openListFolder"
-                      class="EditTagsButton"
-                      slot="reference"
+                type="primary"
+                @click="openListFolder"
+                class="EditTagsButton"
+                slot="reference"
               >加入收藏</el-button>
-
             </el-popover>
 
             <el-button type="info" @click="openListEdit = true">编辑列表信息</el-button>
@@ -126,8 +126,6 @@
               class="EditTagsButton"
               :disabled="showTagPanel"
             >编辑共有标签</el-button>
-
-
 
             <el-button type="warning" @click="inverse()">列表视频倒序</el-button>
             <el-button type="danger" @click="dialogVisible = true">删除</el-button>
@@ -282,7 +280,7 @@ export default {
         ]
       },
       // 播放列表目录页面是否显示
-      showListFolder: false,
+      showListFolder: false
     };
   },
   computed: {},
@@ -486,12 +484,19 @@ export default {
       this.getVideoList(this.page, this.count);
     }
   },
-  components: { topnavbar, Footer, EditTags, Move, DeleteVideo, ListFolderView, SetCover }
+  components: {
+    topnavbar,
+    Footer,
+    EditTags,
+    Move,
+    DeleteVideo,
+    ListFolderView,
+    SetCover
+  }
 };
 </script>
 
 <style scoped lang="less">
-
 .insert-video {
   position: absolute;
   left: 35%;
@@ -519,7 +524,7 @@ export default {
     display: flex;
     #edit_first {
       //h1
-      font-size: 40px;
+      font-size: 30px;
       min-width: 90px;
       color: rgb(98, 169, 231);
       flex-grow: 1;

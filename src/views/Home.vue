@@ -102,8 +102,7 @@
                   width="16px"
                   style="margin-right:2px"
                 />
-
-                <a :href="item.item.url" :id="'link' + (index)">{{item.item.url}}</a>
+                <a target="_blank" :href="item.item.url" :id="'link' + (index)">{{item.item.url}}</a>
                 <i @click="copyVideoLink(index)" class="fa fa-copy fa-lg" style="margin-left:2px"></i>
               </div>
             </div>
@@ -167,10 +166,10 @@ export default {
       //是否渲染的是搜索的数据，默认false为主页数据
       ifSearch: false,
       // 判断是否执行查询,有时候页面会进行多次查询浪费资源
-/*      ifQuest: true,*/
+      /*      ifQuest: true,*/
       //判断当前页数是不是被搜索事件改变的,即：当我跳转到其他页数，此时再搜索新的关键词，新的页数会被置为1。
       //这时会触发page监听的事件，重新请求搜索的数据，因为根据关键词的改变也会重新请求的数据，会造成资源浪费。
-      pageMark:false,
+      pageMark: false,
       //是否显示隐藏视频
       checked: false
     };
@@ -236,7 +235,8 @@ export default {
           page: e,
           page_size: count,
           order: this.couponSelected,
-          hide_placeholder:!this.checked}
+          hide_placeholder: !this.checked
+        }
       }).then(result => {
         this.maxcount = result.data.data.count;
         //取得总页数制作分页
@@ -259,7 +259,7 @@ export default {
     // 请求搜索结果列表
     getSearchData: function(e, count, str) {
       // 如果不需要查询则不查询直接返回
-    /*  if (!this.ifQuest) {
+      /*  if (!this.ifQuest) {
         this.ifQuest = true;
         return;
       }*/
@@ -272,7 +272,7 @@ export default {
           page: e,
           page_size: count,
           order: this.couponSelected,
-          hide_placeholder:!this.checked,
+          hide_placeholder: !this.checked,
           query: str
         }
       }).then(result => {
@@ -336,8 +336,8 @@ export default {
   watch: {
     page(v) {
       //如果为True说明是搜索数据导致的页数改变，并且如果当前页数是1的话，取消这一次数据请求
-      if(this.pageMark===true&&this.page===1){
-        this.pageMark= false;
+      if (this.pageMark === true && this.page === 1) {
+        this.pageMark = false;
         return;
       }
       if (this.ifSearch === false) {
@@ -351,8 +351,8 @@ export default {
     },
     count(v) {
       //如果为True说明是搜索数据导致的页数改变，并且如果当前页数是1的话，取消这一次数据请求
-      if(this.pageMark===true&&this.page===1){
-        this.pageMark= false;
+      if (this.pageMark === true && this.page === 1) {
+        this.pageMark = false;
         return;
       }
       if (this.ifSearch === false) {
@@ -370,8 +370,8 @@ export default {
     couponSelected() {
       this.handleCurrentChange(1);
       //如果为True说明是搜索数据导致的页数改变，并且如果当前页数是1的话，取消这一次数据请求
-      if(this.pageMark===true&&this.page===1){
-        this.pageMark= false;
+      if (this.pageMark === true && this.page === 1) {
+        this.pageMark = false;
         return;
       }
       if (this.ifSearch === false) {
@@ -382,10 +382,10 @@ export default {
       }
     },
     ifSearch(newV, oldV) {
-/*      this.ifQuest = false;*/
+      /*      this.ifQuest = false;*/
       this.handleCurrentChange(1);
       //是否渲染的是搜索的数据，默认false为主页数据，清空搜索关键词
-/*      if (newV === false) {
+      /*      if (newV === false) {
         this.searchKeyWord = "";
         this.getListVideo(this.page, this.count);
       }
@@ -394,16 +394,15 @@ export default {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
       }*/
     },
-   checked(){
-
-     if (this.ifSearch === false) {
-       this.getListVideo(this.page, this.count);
-       return;
-     }
-     if (this.ifSearch === true) {
-       this.getSearchData(this.page, this.count, this.searchKeyWord);
-       return;
-     }
+    checked() {
+      if (this.ifSearch === false) {
+        this.getListVideo(this.page, this.count);
+        return;
+      }
+      if (this.ifSearch === true) {
+        this.getSearchData(this.page, this.count, this.searchKeyWord);
+        return;
+      }
     },
     $route(newV, oldV) {
       this.handleCurrentChange(1);
@@ -422,7 +421,7 @@ export default {
         //在我请求新的搜索数据之后，因为搜索是路由跳转所以会重置当前页面为1，页数会改变，也会触发监控页数里的函数
         //这里做一个标记，如果是因搜索关键词而改变的页数，那么取消这一次Page页数改变而触发的请求数据事件。
         //pageMark作为监控page中是否重新请求数据的标志。
-        if(this.page=1){
+        if ((this.page = 1)) {
           this.pageMark = true;
         }
         this.getSearchData(this.page, this.count, newV.query.keyword);
@@ -517,14 +516,12 @@ export default {
 }
 
 .video-list-header p {
-
   height: 50px;
   position: relative;
-
 }
-.el-checkbox{
+.el-checkbox {
   width: 100px;
-margin-left: 100px;
+  margin-left: 100px;
   text-align: center;
   line-height: 50px;
 }
@@ -560,7 +557,7 @@ margin-left: 100px;
   text-align: left;
 }
 .main-page-background-img {
-/*  background-image: url("./../static/img/imoto3.jpg");*/
+  /*  background-image: url("./../static/img/imoto3.jpg");*/
   background-repeat: no-repeat;
   min-height: 800px;
   width: 85%;
