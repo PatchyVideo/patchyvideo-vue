@@ -60,7 +60,7 @@
           <p v-if="maxcount">显示 {{ count2 }} / {{ maxcount }} 个视频</p>
           <p v-else>没有搜索到视频</p>
           <el-checkbox v-model="checked">显示已失效视频</el-checkbox>
-          <span style="margin-left: 100px;font-size: 14px;color:#606266;">视频信息不正确，可点击其封面更新。</span>
+      <!--    <span style="margin-left: 100px;font-size: 14px;color:#606266;">视频信息不正确，可点击其封面更新。</span>-->
           <el-select id="select-order" v-model="couponSelected">
             <el-option
               v-for="item in options"

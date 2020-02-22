@@ -305,6 +305,7 @@ export default {
   align-items: flex-start;
 }
 .minbox {
+  max-width: 48%;
   flex: 0 0 calc(50% - 30px);
   text-align: center;
   margin-left: 12.5px;
@@ -327,6 +328,7 @@ export default {
   margin-top: 20px;
   padding-bottom: 20px;
   border-bottom: 3px solid red;
+
 }
 .re_top h5 {
   margin-right: 5px;
