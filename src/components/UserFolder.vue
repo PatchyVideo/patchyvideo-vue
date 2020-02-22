@@ -117,7 +117,9 @@
 <script>
     export default {
         data() {
+
             return {
+                exception:[],
                 failedData:[],
                 doingData:[],
                 currentRow: null,
@@ -153,13 +155,42 @@
                 url:"be/posts/list_failed.do",
                 data:{"page":1,"page_size":99999}
             }).then(res=>{
-                this.failedData =   res.data.data.posts;
+                this.failedData =   JSON.parse(JSON.stringify(res.data.data.posts));
                 let _that=this;
                 let array=[];
-                (function () {
-                  let m =  _that.failedData.map((item)=>{
-                     return  [{"url":item.post_param.url},{"status":item.ret.result_obj.status},{"exception":item.ret.result_obj.data.exception}]
-                    });
+                console.log(_that);
+                let m =[];
+
+
+                for(let index in _that.failedData){
+
+                    if(_that.failedData[index].ret.result_obj.data!==undefined){
+                        let array = [{"url":_that.failedData[index].post_param.url},{"status":_that.failedData[index].ret.result_obj.status},{"exception":_that.failedData[index].ret.result_obj.data.exception}];
+                        m[index] = array;
+                    }
+
+                }
+                console.log(m);
+                for(let i in  m){
+                    let obj={};
+                    for(let s=0;s<m[i].length;++s){
+                        Object.assign(obj,m[i][s]);
+                    }
+                    array[i]=obj;
+                }
+                /*    (function () {
+                      let m =  _that.failedData.map((item,index)=>{
+                          if(item.ret.result_obj.data===null){
+                              console.log(index);
+                          }
+                    /!*      console.log(item.ret.result_obj.data.exception);*!/
+                          if(JSON.stringify(item) ==="undefined"){
+                              console.log(index);
+                              /!* _that.exception.push( item.ret.result_obj.data.exception);*!/
+                          }
+                          return  [{"url":item.post_param.url},{"status":item.ret.result_obj.status},{"exception":1}]
+                        });*/
+            /*
                     for(let i in  m){
                         let obj={};
                       for(let s=0;s<m[i].length;++s){
@@ -167,7 +198,7 @@
                       }
                         array[i]=obj;
                     }
-                })();
+                })();*/
                  this.tableData =array;
             })
         },

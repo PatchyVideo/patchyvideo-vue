@@ -795,7 +795,7 @@ div {
         .Meta {
           li {
             p {
-              color: #a0a;
+              color: #f80;
             }
           }
         }
