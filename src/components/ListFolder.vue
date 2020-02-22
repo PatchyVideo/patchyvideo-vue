@@ -154,8 +154,8 @@
                                             :to="{ path: '/listdetail', query: { id: scope.row.playlist_object._id.$oid} }"
                                             :key="scope.row.playlist_object._id.$oid"
                                             tag="a" >
-                                        <h3>{{scope.row.playlist_object.title.english}}</h3>
-                                        <p style="overflow:hidden">{{scope.row.playlist_object.desc.english}}</p>
+                                        <h4>{{scope.row.playlist_object.title.english}}</h4>
+                                        <p style="width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 50px;">{{scope.row.playlist_object.desc.english}}</p>
                                     </router-link>
                                     <div v-else>
                                         <el-button type="text" @click="navigateTo(scope.row.path)">
@@ -253,8 +253,8 @@
                                             :to="{ path: '/listdetail', query: { id: scope.row.playlist_object._id.$oid} }"
                                             :key="scope.row.playlist_object._id.$oid"
                                             tag="a" >
-                                        <h3>{{scope.row.playlist_object.title.english}}</h3>
-                                        <p style="overflow:hidden">{{scope.row.playlist_object.desc.english}}</p>
+                                        <h4>{{scope.row.playlist_object.title.english}}</h4>
+                                        <p style="width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 50px;">{{scope.row.playlist_object.desc.english}}</p>
                                     </router-link>
                                     <div v-else>
                                         <el-button type="text" @click="navigateTo(scope.row.path)">
@@ -338,8 +338,8 @@
                                     :to="{ path: '/listdetail', query: { id: scope.row._id.$oid} }"
                                     :key="scope.row._id.$oid"
                                     tag="a" >
-                                <h3>{{scope.row.title.english}}</h3>
-                                <p style="width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{scope.row.desc.english}}</p>
+                                <h4>{{scope.row.title.english}}</h4>
+                                <p style="width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 50px;">{{scope.row.desc.english}}</p>
                             </router-link>
                         </template>
                     </el-table-column>

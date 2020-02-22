@@ -31,12 +31,14 @@ export default {
 
 <style>
   .el-popover{
+    width: 70%;
+    max-width: 70%;
     max-height: 90%;
     overflow: auto;
     position: absolute;
     top: 50% !important;
-    left: 50%;
-    transform: translate(20%,-50%);
+
+    transform: translate(10%,-50%);
     margin: 0px 20px !important;
   }
 #app {
