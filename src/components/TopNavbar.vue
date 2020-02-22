@@ -53,7 +53,7 @@
           <router-link to="/lists">播放列表</router-link>
         </li>
         <li>
-          <router-link to="/postvideo">发布视频</router-link>
+          <router-link to="/postvideo">发布索引</router-link>
         </li>
         <li>
           <router-link to="/edittag">标签</router-link>
