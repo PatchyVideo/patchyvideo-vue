@@ -91,8 +91,9 @@
         <!-- 推荐视频栏开始  -->
         <div class="recommend">
           <div class="re_top">
-            <h2>
-              {{ myVideoData.video.item.title }}
+            <div>
+              <h2>{{ myVideoData.video.item.title }}</h2>
+              <br />
               <el-button v-if="isLogin" type="primary" round @click="openMyList">添加到我的列表</el-button>
               <el-button
                 v-if="isLogin"
@@ -101,7 +102,7 @@
                 @click="refreshVideo(myVideoData)"
               >信息不正确？点击更新</el-button>
               <el-button v-if="isAdmin" @click="managementBox = true">管理</el-button>
-            </h2>
+            </div>
           </div>
           <h4 class="video_link">
             <a id="video_link" :href="myVideoData.video.item.url">{{ myVideoData.video.item.url }}</a>
