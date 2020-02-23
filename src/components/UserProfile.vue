@@ -32,21 +32,21 @@
             <div class="circle" :class="{animeActive3:mounseMark}"></div>
           </div>
           <div class="face" @mouseover="faceMouseOver(true)" @mouseleave="faceMouseOver(false)">
-              <img :src="this.url" alt  v-if="this.url!=''" />
-              <img :src="'be/images/userphotos/'+myData.image" alt  v-if="this.url===''" />
+            <img :src="this.url" alt v-if="this.url!=''" />
+            <img :src="'be/images/userphotos/'+myData.image" alt v-if="this.url===''" />
           </div>
 
           <p>当前头像</p>
           <p>选择图片上传：大小256 * 256像素</p>
           <div>
             <App-cropper
-                    :width="300"
-                    :height="300"
-                    :fixed-number="[1,1]"
-                    @subUploadSucceed="getShopImages"
+              :width="300"
+              :height="300"
+              :fixed-number="[1,1]"
+              @subUploadSucceed="getShopImages"
             />
           </div>
- <!--         <form
+          <!--         <form
             action="/be/helper/upload_image.do"
             method="post"
             accept-charset="utf-8"
@@ -64,15 +64,27 @@
       <div class="bigbox_left" id="imoto2"></div>
       <div class="bigbox_right">
         <div class="desc">
-
           <div class="desc_name" style="display: flex;height:30px; ">
-
-                  <p v-if="isNameEdit===false" style="margin-right: 10px">{{myData.username}}</p>
-                  <i v-if="isNameEdit===false" class="el-icon-edit" @click="islSetUserName(true)"></i>
-              <el-input   v-if="isNameEdit===true" placeholder="更改用户名" prefix-icon="el-icon-user" v-model="myName"></el-input>
-              <el-button  v-if="isNameEdit===true" type="primary" icon="el-icon-edit":disabled="myName===''"@click="setUserName">更改</el-button>
-              <el-button  v-if="isNameEdit===true" type="primary" @click.native="islSetUserName(false)">取消</el-button>
-
+            <p v-if="isNameEdit===false" style="margin-right: 10px">{{myData.username}}</p>
+            <i v-if="isNameEdit===false" class="el-icon-edit" @click="islSetUserName(true)"></i>
+            <el-input
+              v-if="isNameEdit===true"
+              placeholder="更改用户名"
+              prefix-icon="el-icon-user"
+              v-model="myName"
+            ></el-input>
+            <el-button
+              v-if="isNameEdit===true"
+              type="primary"
+              icon="el-icon-edit"
+              :disabled="myName===''"
+              @click="setUserName"
+            >更改</el-button>
+            <el-button
+              v-if="isNameEdit===true"
+              type="primary"
+              @click.native="islSetUserName(false)"
+            >取消</el-button>
           </div>
 
           <div class="text-form">
@@ -139,7 +151,7 @@
 </template>
 
 <script>
-  import AppCropper from '@/components/Cropper'
+import AppCropper from "@/components/Cropper";
 export default {
   data() {
     var validateOldPass = (rule, value, callback) => {
@@ -203,10 +215,10 @@ export default {
         pubkey: "null",
         username: "null"
       },
-      url: '',
-      myName:"",
-      isNameEdit:false,
-      ifupdate:false,
+      url: "",
+      myName: "",
+      isNameEdit: false,
+      ifupdate: false,
       mounseMark: false,
       loading: true
     };
@@ -221,14 +233,14 @@ export default {
   },
   mounted() {},
   methods: {
-    getShopImages(url,status){
+    getShopImages(url, status) {
       this.url = url;
       this.ifupdate = status;
     },
     faceMouseOver(b) {
       this.mounseMark = b;
     },
-/*    sub() {
+    /*    sub() {
       this.loading = true;
       var formObj = new FormData(document.getElementById("form1"));
       this.axios({
@@ -335,7 +347,7 @@ export default {
         .then(res => {
           if (res.data.status == "ERROR") {
             //火狐浏览器有BUG 暂时先这样跳，等cookie登陆做完后再在user页面判断。
-           /* this.$router.push("/login");*/
+            /* this.$router.push("/login");*/
           }
           if (res.data.status == "SUCCEED") {
             this.myData = res.data.data.profile;
@@ -372,41 +384,43 @@ export default {
         this.open2();
       });
     },
-    setUserName(){
+
+    setUserName() {
       this.axios({
-        method:"post",
-        url:"be/user/changename.do",
-        data:{
-          "name":this.myName
+        method: "post",
+        url: "be/user/changename.do",
+        data: {
+          name: this.myName
         }
-      }).then(res=>{
-        if(res.data.status ==="FAILED"){
-          if(res.data.data.reason==="USER_ALREADY_EXIST"){
+      }).then(res => {
+        if (res.data.status === "FAILED") {
+          if (res.data.data.reason === "USER_ALREADY_EXIST") {
             this.$message({
               message: "用户名已存在！",
               type: "warning"
-            })
-          }else if(res.data.data.reason==="NAME_LENGTH"){
+            });
+          } else if (res.data.data.reason === "NAME_LENGTH") {
             this.$message({
               message: "用户名已长度长度应在 2 到 32 个字符！",
               type: "warning"
-            })
-          }else {
+            });
+          } else {
             this.$message.error("更改失败！");
           }
         }
-        if(res.data.status==="SUCCEED"){
+        if (res.data.status === "SUCCEED") {
           this.open2();
           this.getMyData();
 
-          this.$store.commit("getUserName",this.myName);
+          this.$store.commit("getUserName", this.myName);
         }
-      })
+      });
     },
-    islSetUserName(b){
+
+    islSetUserName(b) {
       this.isNameEdit = b;
       this.$forceUpdate();
-   /*   this.isNameEdit ===b;*/
+      /*   this.isNameEdit ===b;*/
     },
     changePass() {
       this.axios({
@@ -425,9 +439,9 @@ export default {
       });
     }
   },
-  watch:{
-    ifupdate(n){
-      if(n===true){
+  watch: {
+    ifupdate(n) {
+      if (n === true) {
         this.getMyData();
       }
     },
@@ -437,7 +451,7 @@ export default {
       }
     }
   },
-  components: {AppCropper}
+  components: { AppCropper }
 };
 </script>
 
@@ -529,15 +543,13 @@ export default {
     transform: scale(1);
   }
 }
-.el-icon-edit{
+.el-icon-edit {
   font-size: 19px;
   cursor: pointer;
 }
-.el-icon-edit:hover{
+.el-icon-edit:hover {
   transition: all 0.3s ease;
-  color: #1B9AF7;
-
-
+  color: #1b9af7;
 }
 .face2 {
   position: relative;
@@ -566,7 +578,7 @@ export default {
   }
 }
 .bg {
-/*  background: url("../static/img/imoto_left.jpg") no-repeat;*/
+  /*  background: url("../static/img/imoto_left.jpg") no-repeat;*/
   background-size: 100% 100%;
 }
 
@@ -616,7 +628,6 @@ export default {
       }
     }
   }
-
 }
 
 .post :nth-child(2) {

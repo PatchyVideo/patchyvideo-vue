@@ -175,6 +175,7 @@ export default {
                         "getUserAvatar",
                         result.data.data.image
                       );
+                      this.$store.commit("changeifTruelyLogin", 1);
                       // 加载结束,加载动画消失
                       this.loading = false;
                       // 利用cookie储存登录状态
@@ -257,11 +258,11 @@ export default {
   height: 100%;
   width: 100%;
   background-color: #fff;
-/*  background: url("../static/img/login.jpg") no-repeat top center;*/
+  /*  background: url("../static/img/login.jpg") no-repeat top center;*/
   /* background-position: 200px 0; */
   background-size: cover;
   background-attachment: fixed;
-/*  background-color: #646257;*/
+  /*  background-color: #646257;*/
 }
 .alert {
   color: red;
