@@ -44,11 +44,20 @@
             :title="tagLogDate(item.time.$date)"
           >
             <div>
-              <span v-if="item.add.length" style="margin-right:10px">添加:</span>
-              <span v-for="tag in item.add" style="margin-right:5px" :key="tag">{{tag}}</span>
+              <span v-if="item.add.length" style="margin-right:10px;margin-top:3px">添加:</span>
+              <el-tag
+                v-for="tag in item.add"
+                style="margin-right:5px;margin-top:3px"
+                :key="tag"
+              >{{tag}}</el-tag>
               <br />
-              <span v-if="item.del.length" style="margin-right:10px">删除:</span>
-              <span v-for="tag in item.del" style="margin-right:5px" :key="tag">{{tag}}</span>
+              <span v-if="item.del.length" style="margin-right:10px;margin-top:3px">删除:</span>
+              <el-tag
+                v-for="tag in item.del"
+                style="margin-right:5px;margin-top:3px"
+                :key="tag"
+              >{{tag}}</el-tag>
+              <span v-if="item.del.length==0 && item.add.length==0">暂无记录!</span>
             </div>
           </el-collapse-item>
         </el-collapse>
