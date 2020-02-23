@@ -189,7 +189,7 @@
           </div>
         </div>
         <a href="javascript:;" @click="saveTag()">
-          <i class="el-icon-refresh" id="save" v-if="this.$route.path != '/postvideo'"></i>
+          <a id="save" v-if="this.$route.path != '/postvideo'">保存修改</a>
         </a>
       </div>
     </div>
