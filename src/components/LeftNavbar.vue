@@ -44,19 +44,33 @@
             :title="tagLogDate(item.time.$date)"
           >
             <div>
-              <span v-if="item.add.length" style="margin-right:10px;margin-top:3px">添加:</span>
-              <el-tag
-                v-for="tag in item.add"
-                style="margin-right:5px;margin-top:3px"
-                :key="tag"
-              >{{tag}}</el-tag>
-              <br />
-              <span v-if="item.del.length" style="margin-right:10px;margin-top:3px">删除:</span>
-              <el-tag
-                v-for="tag in item.del"
-                style="margin-right:5px;margin-top:3px"
-                :key="tag"
-              >{{tag}}</el-tag>
+              <div v-if="item.add.length">
+                <span style="margin-right:10px;margin-top:3px">添加:</span>
+                <el-tag
+                  v-for="tag in item.add"
+                  style="margin-right:5px;margin-top:3px"
+                  :key="tag"
+                >{{tag}}</el-tag>
+                <br />
+              </div>
+
+              <div v-if="item.del.length">
+                <span v-if="item.del.length" style="margin-right:10px;margin-top:3px">删除:</span>
+                <el-tag
+                  v-for="tag in item.del"
+                  style="margin-right:5px;margin-top:3px"
+                  :key="tag"
+                >{{tag}}</el-tag>
+                <br />
+              </div>
+              <div v-if="item.user_obj.length">
+                <span style="margin-right:10px;margin-top:3px">修改者:</span>
+                <span
+                  v-for="user in item.user_obj"
+                  :key="user.profile.username"
+                  style="margin-right:5px;margin-top:3px"
+                >{{ user.profile.username }}</span>
+              </div>
               <span v-if="item.del.length==0 && item.add.length==0">暂无记录!</span>
             </div>
           </el-collapse-item>
@@ -192,7 +206,7 @@ export default {
     tagLogDate(date) {
       var upload_time = new Date(date);
       // 设置为东八区的时间
-      upload_time.setTime(upload_time.getTime() + 1000 * 3600 * 8);
+      upload_time.setTime(upload_time.getTime());
       var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
       var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
       var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
