@@ -286,7 +286,7 @@ export default {
     },
 
     open4() {
-      this.$message.error("请输入合法的Tag!");
+      this.$message.error("输入Tag必须存在于Tag库中!");
     },
     open5() {
       this.$message({
