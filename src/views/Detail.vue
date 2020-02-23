@@ -369,10 +369,10 @@ export default {
     // 删除本地储存(和localStorage存储一起使用，已被弃用）
     // window.localStorage.removeItem("loglevel:webpack-dev-server");
     this.searchVideo();
+
   },
   mounted() {
     this.buildUrlMatchers();
-
   },
   methods: {
     open1(message) {
@@ -502,8 +502,6 @@ export default {
             this.isIpfs =true;
           }
           this.loading = false;
-
-
           this.whoami();
         })
         .catch(error => {

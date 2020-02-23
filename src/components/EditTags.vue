@@ -473,6 +473,7 @@ export default {
       }*/
   if(this.isInfoTipClick ===true){ //是否属于鼠标点击选中的Tag
 
+
   }else {
     if (this.infoTipMark === true) { //是否属于键盘回车选中的Tag
       this.infoTipMark = false;
@@ -482,8 +483,7 @@ export default {
   }
       this.infoTip[0].isHidden = true;
       this.getTagCategoriesForAdd(this.iptVal);
-
-
+      this.isInfoTipClick = false;
 
       /*  this.watchAutoComplete();
       {
