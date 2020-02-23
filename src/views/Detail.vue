@@ -94,7 +94,12 @@
             <h2>
               {{ myVideoData.video.item.title }}
               <el-button v-if="isLogin" type="primary" round @click="openMyList">添加到我的列表</el-button>
-              <el-button v-if="isLogin" type="primary" round @click="refreshVideo(myVideoData)">信息不正确？点击更新</el-button>
+              <el-button
+                v-if="isLogin"
+                type="primary"
+                round
+                @click="refreshVideo(myVideoData)"
+              >信息不正确？点击更新</el-button>
               <el-button v-if="isAdmin" @click="managementBox = true">管理</el-button>
             </h2>
           </div>
@@ -108,24 +113,20 @@
 
           <!-- 视频详细信息 -->
           <div class="re_video">
-
             <img
               :src="'/images/covers/' + myVideoData.video.item.cover_image"
               width="320px"
               height="200px"
             />
             <video
-                    :src="myVideoData.video.item.url"
-                    id="player"
-                    controls
-                    loop
-                    width="50%"
-                    v-if="isIpfs"
-                    style="position: relative;
-    left: 50%;
-    transform: translateX(-50%);"
-            >
-            </video>
+              :src="myVideoData.video.item.url"
+              id="player"
+              controls
+              loop
+              width="50%"
+              v-if="isIpfs"
+              style="position: relative;left: 50%;transform: translateX(-50%);"
+            ></video>
             <p class="videoDesc" @click="postAsCopy($event)" v-html="myVideoData.video.item.desc"></p>
           </div>
         </div>
@@ -163,7 +164,6 @@
             </p>
           </div>
           <ul v-for="item in myVideoData.copies" :key="item._id.$oid" class="copies">
-
             <img
               :src="require('../static/img/' + item.item.site + '.png')"
               width="16px"
@@ -190,19 +190,25 @@
             <h2>播放列表</h2>
             <p v-if="myVideoData.playlists == ''">
               本视频不包含于任何播放列表中
-              <el-button
-                type="text"
-                @click="newFromSingleVideo()"
-                v-if="isLogin == true"
-              >[由此视频创建播放列表]</el-button>
+              <el-dropdown v-if="isLogin == true" @command="handleCommand">
+                <span class="el-dropdown-link">
+                  <i class="el-icon-more"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="a" @click="newFromSingleVideo()">【由此视频创建播放列表】</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </p>
             <p v-else>
               此视频存在于{{ myVideoData.playlists.length }}个播放列表中
-              <el-button
-                type="text"
-                @click="newFromSingleVideo()"
-                v-if="isLogin == true"
-              >[由此视频创建播放列表]</el-button>
+              <el-dropdown v-if="isLogin == true" @command="handleCommand">
+                <span class="el-dropdown-link">
+                  <i class="el-icon-more"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="a" @click="newFromSingleVideo()">【由此视频创建播放列表】</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </p>
           </div>
           <ul v-for="item in myVideoData.playlists" :key="item._id.$oid">
@@ -311,7 +317,7 @@ export default {
       videoRanks: [0, 1, 2, 3],
       dialogVisible: false, //删除提示框
       pid: "", //视频的id值
-      isIpfs:false,
+      isIpfs: false,
       // 视频列表是否属于加载状态的判断
       loading: true,
       // 匹配视频简介中的短地址，用以扩展成完整地址
@@ -372,7 +378,6 @@ export default {
   },
   mounted() {
     this.buildUrlMatchers();
-
   },
   methods: {
     open1(message) {
@@ -401,6 +406,10 @@ export default {
         dangerouslyUseHTMLString: true,
         message: "<p>创建成功！<i>点我查看</i></p>"
       });
+    },
+    // 视频存在的播放列表的下拉菜单的钩子
+    handleCommand(command) {
+      this.newFromSingleVideo();
     },
     // 从单个视频创建播放列表
     newFromSingleVideo() {
@@ -494,48 +503,44 @@ export default {
           this.urlifyDesc();
           // 加载结束,加载动画消失
 
-
           var ipfsURL = /(https:\/\/|http:\/\/)?(www\.)?ipfs\.globalupload\.io\/[a-zA-Z0-9]+/;
           if (!ipfsURL.test(this.myVideoData.video.item.url)) {
-            this.isIpfs =false;
+            this.isIpfs = false;
           } else {
-            this.isIpfs =true;
+            this.isIpfs = true;
           }
           this.loading = false;
-
 
           this.whoami();
         })
         .catch(error => {
           this.$router.push({ path: "/404" });
         });
-
     },
-    refreshVideo(item){
-/*      console.log(item._id.$oid);*/
+    refreshVideo(item) {
+      /*      console.log(item._id.$oid);*/
       this.$axios({
-        method:"post",
-        url:"be/videos/refresh.do",
-        data:{
-          "video_id":
-          item.video._id.$oid
+        method: "post",
+        url: "be/videos/refresh.do",
+        data: {
+          video_id: item.video._id.$oid
         }
-      }).then(res=>{
-        if(res.data.status ==="SUCCEED"){
+      }).then(res => {
+        if (res.data.status === "SUCCEED") {
           this.searchVideo();
-         setTimeout(()=>{
-           this.$message({
-             message: "更新成功！",
-             type: "success"
-           });
-         },500);
-        }else {
+          setTimeout(() => {
+            this.$message({
+              message: "更新成功！",
+              type: "success"
+            });
+          }, 500);
+        } else {
           this.$message({
             message: "更新失败",
             type: "warning"
           });
         }
-      })
+      });
     },
     // 获取用户权限信息
     whoami() {
@@ -920,5 +925,13 @@ export default {
   color: rgba(0, 0, 0, 0.568);
   flex: 1;
   text-align: right;
+}
+
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409eff;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
 }
 </style>
