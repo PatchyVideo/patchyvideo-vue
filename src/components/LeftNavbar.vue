@@ -172,7 +172,6 @@ export default {
         data: { vid: this.pid }
       })
         .then(res => {
-          console.log(res);
           this.tagLog = res.data.data;
           this.loading2 = false;
         })
