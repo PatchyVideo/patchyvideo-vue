@@ -60,7 +60,7 @@
           <p v-if="maxcount">显示 {{ count2 }} / {{ maxcount }} 个视频</p>
           <p v-else>没有搜索到视频</p>
           <el-checkbox v-model="checked">显示已失效视频</el-checkbox>
-      <!--    <span style="margin-left: 100px;font-size: 14px;color:#606266;">视频信息不正确，可点击其封面更新。</span>-->
+          <!--    <span style="margin-left: 100px;font-size: 14px;color:#606266;">视频信息不正确，可点击其封面更新。</span>-->
           <el-select id="select-order" v-model="couponSelected">
             <el-option
               v-for="item in options"
@@ -74,18 +74,17 @@
         <!-- 播放列表正文 -->
         <ul>
           <li class="list-item" v-for="(item, index) in listvideo" :key="item._id.$oid">
-
             <router-link
-                    target="_blank"
-                    :to="{ path: '/video', query: { id: item._id.$oid } }"
-                    tag="a"
-            ><div class="video-thumbnail">
-              <!--              src="/images/covers/f5da2d4dd9eac171d47eb1100339cbad90e4648556a2f99a.png"-->
-              <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
-              <div class="Imgcover"></div>
-            </div>
+              target="_blank"
+              :to="{ path: '/video', query: { id: item._id.$oid } }"
+              tag="a"
+            >
+              <div class="video-thumbnail">
+                <!--              src="/images/covers/f5da2d4dd9eac171d47eb1100339cbad90e4648556a2f99a.png"-->
+                <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
+                <div class="Imgcover"></div>
+              </div>
             </router-link>
-
 
             <div class="video-detail">
               <h4>
@@ -329,8 +328,7 @@ export default {
           $("html").animate({ scrollTop: 0 }, 100);
         }
       });
-    },
-
+    }
   },
 
   watch: {
@@ -408,6 +406,8 @@ export default {
       this.handleCurrentChange(1);
       //监听路由query的值，当query的值为空时，说明默认是首页，调用this.getListVideo获取首页数据并渲染。
       if (JSON.stringify(this.$route.query) == "{}") {
+        // 修改网站标题
+        document.title = "Patchyvideo";
         this.ifSearch = false;
         this.getListVideo(this.page, this.count);
         return;
@@ -434,21 +434,17 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
-  .Imgcover{
-
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 20;
-    top: 0%;
-    transition: all .3s ease;
-    &:hover{
-
-      background-color: rgba(255,255,255,.3);
-    }
-
+.Imgcover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  top: 0%;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.3);
   }
+}
 .content {
   background-color: #ffffffc9;
 }
@@ -484,7 +480,7 @@ export default {
   height: 125px;
   position: relative;
   transition: all 0.3s ease;
-  &:hover{
+  &:hover {
     /*background-color: rgba(255,255,255,0.3);*/
     background-color: rgb(244, 244, 245);
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
@@ -496,14 +492,12 @@ export default {
   float: left;
   position: relative;
   z-index: 1;
-  img{
-
+  img {
   }
-/*  &:hover img{
+  /*  &:hover img{
       background-color:black;
   }*/
-    /*  background-color:rgba(255,255,255,.5);*/
-
+  /*  background-color:rgba(255,255,255,.5);*/
 }
 
 .list-item {

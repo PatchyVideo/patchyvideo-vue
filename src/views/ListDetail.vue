@@ -130,6 +130,23 @@
             <el-button type="warning" @click="inverse()">列表视频倒序</el-button>
             <el-button type="danger" @click="dialogVisible = true">删除</el-button>
           </div>
+          <!-- 没有编辑权限的时候只提供加入收藏功能 -->
+          <div v-else>
+            <el-popover v-if="isLogin" style="margin: 0px 10px;" width="100%" trigger="click">
+              <ListFolderView
+                ref="listFolder"
+                :msg="temporaryValForVLP"
+                :visible.sync="showListFolder"
+                v-if="isLogin"
+              ></ListFolderView>
+              <el-button
+                type="primary"
+                @click="openListFolder"
+                class="EditTagsButton"
+                slot="reference"
+              >加入收藏</el-button>
+            </el-popover>
+          </div>
         </div>
 
         <!-- 视频列表 -->
