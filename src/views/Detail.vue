@@ -92,15 +92,17 @@
         <div class="recommend">
           <div class="re_top">
             <div>
-              <h2>{{ myVideoData.video.item.title }}</h2>
+              <h2>
+                {{ myVideoData.video.item.title }}
+                <el-button
+                  v-if="isLogin"
+                  type="text"
+                  @click="refreshVideo(myVideoData)"
+                  style="padding-top:3px"
+                >信息不正确？点击更新</el-button>
+              </h2>
               <br />
               <el-button v-if="isLogin" type="primary" round @click="openMyList">添加到我的列表</el-button>
-              <el-button
-                v-if="isLogin"
-                type="primary"
-                round
-                @click="refreshVideo(myVideoData)"
-              >信息不正确？点击更新</el-button>
               <el-button v-if="isAdmin" @click="managementBox = true">管理</el-button>
             </div>
           </div>
@@ -836,6 +838,11 @@ export default {
 }
 .re_top {
   text-align: center;
+}
+.re_top h2 {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 .new_top {
   border-bottom: 3px solid #21c6ef;
