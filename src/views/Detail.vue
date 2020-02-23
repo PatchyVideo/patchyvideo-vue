@@ -95,7 +95,7 @@
               <h2>
                 {{ myVideoData.video.item.title }}
                 <el-button
-                  v-if="isLogin"
+                  v-if="isAdmin"
                   type="text"
                   @click="refreshVideo(myVideoData)"
                   style="padding-top:3px"
