@@ -64,7 +64,17 @@
       <div class="bigbox_left" id="imoto2"></div>
       <div class="bigbox_right">
         <div class="desc">
-          <div class="desc_name">{{myData.username}}</div>
+
+          <div class="desc_name" style="display: flex;height:30px; ">
+
+                  <p v-if="isNameEdit===false" style="margin-right: 10px">{{myData.username}}</p>
+                  <i v-if="isNameEdit===false" class="el-icon-edit" @click="islSetUserName(true)"></i>
+              <el-input   v-if="isNameEdit===true" placeholder="更改用户名" prefix-icon="el-icon-user" v-model="myName"></el-input>
+              <el-button  v-if="isNameEdit===true" type="primary" icon="el-icon-edit":disabled="myName===''"@click="setUserName">更改</el-button>
+              <el-button  v-if="isNameEdit===true" type="primary" @click.native="islSetUserName(false)">取消</el-button>
+
+          </div>
+
           <div class="text-form">
             <textarea name v-model="myData.desc" cols="30" rows="10">{{myData.desc}}</textarea>
           </div>
@@ -179,7 +189,6 @@ export default {
         checkPass: [{ validator: validatePass2, trigger: "blur" }],
         old_pass: [{ validator: validateOldPass, trigger: "blur" }]
       },
-
       file_key: "",
       myEmail: "",
       myData: {
@@ -195,6 +204,8 @@ export default {
         username: "null"
       },
       url: '',
+      myName:"",
+      isNameEdit:false,
       ifupdate:false,
       mounseMark: false,
       loading: true
@@ -312,6 +323,7 @@ export default {
       this.$message.error("错了哦，这是一条错误消息");
     },
     getMyData() {
+      this.loading = true;
       //现有的登录机制存在问题，
       //可能本地判断已登录实际并没有登录而进入了user界面，这时没有数据渲染，需要让他跳回登录界面
       this.axios({
@@ -359,6 +371,44 @@ export default {
       }).then(res => {
         this.open2();
       });
+    },
+    setUserName(){
+      console.log("click");
+      this.axios({
+        method:"post",
+        url:"be/user/changename.do",
+        data:{
+          "name":this.myName
+        }
+      }).then(res=>{
+        if(res.data.status ==="FAILED"){
+          if(res.data.data.reason==="USER_ALREADY_EXIST"){
+            this.$message({
+              message: "用户名已存在！",
+              type: "warning"
+            })
+          }else if(res.data.data.reason==="NAME_LENGTH"){
+            this.$message({
+              message: "用户名已长度长度应在 2 到 32 个字符！",
+              type: "warning"
+            })
+          }else {
+            this.$message.error("更改失败！");
+          }
+        }
+        if(res.data.status==="SUCCEED"){
+          this.open2();
+          this.getMyData();
+
+          this.$store.commit("getUserName",this.myName);
+        }
+      })
+    },
+    islSetUserName(b){
+      console.log(b);
+      this.isNameEdit = b;
+      this.$forceUpdate();
+   /*   this.isNameEdit ===b;*/
     },
     changePass() {
       this.axios({
@@ -476,7 +526,16 @@ export default {
     transform: scale(1);
   }
 }
+.el-icon-edit{
+  font-size: 19px;
+  cursor: pointer;
+}
+.el-icon-edit:hover{
+  transition: all 0.3s ease;
+  color: #1B9AF7;
 
+
+}
 .face2 {
   position: relative;
   left: 30%;

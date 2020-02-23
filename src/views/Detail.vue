@@ -217,7 +217,6 @@
             <router-link
               :to="{ path: '/listdetail', query: { id: item._id.$oid } }"
               tag="a"
-              @click.native="reload"
             >{{ item.title.english }}</router-link>
             <router-link
               v-if="item.next != ''"

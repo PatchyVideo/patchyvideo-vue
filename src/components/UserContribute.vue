@@ -18,13 +18,11 @@
 
         <el-container>
             <el-aside width="800px">
-
-                <p v-if="this.videoCount==0" class="nulldata-left">您没有发布视频，目前还没有数据哦</p>
+                <p v-if="this.videoCount==0" class="nulldata-left">暂无数据</p>
                  <canvas id="myChart" width="800" height="800"></canvas>
-
             </el-aside>
             <el-main>
-                <p v-if="this.videoCount==0" class="nulldata-right">您没有发布频，目前还没有数据哦</p>
+                <p v-if="this.videoCount==0" class="nulldata-right">暂无数据</p>
                 <div class="minibox" v-if="this.videoCount!=0">
                    <div class="minibox_top">
                        <h3>视频索引列表</h3>
@@ -87,6 +85,7 @@
 </template>
 
 <script>
+
 
     export default {
         data() {
@@ -305,6 +304,7 @@
             drawLine(){
                 // 基于准备好的dom，初始化echarts实例
                 // 绘制图表
+                console.log(this.$echarts);
                 let myChart = this.$echarts.init(document.getElementById('myChart'));
                     myChart.setOption({
                     series: {
@@ -364,6 +364,16 @@
 </script>
 
 <style  lang="less" scoped>
+    .v-enter,
+    .v-leave-to {
+        opacity: 0;
+    }
+
+    .v-enter-active,
+    .v-leave-active {
+        transition: all 0.8s ease;
+    }
+
     .bigbox {
 
       height: 900px;
