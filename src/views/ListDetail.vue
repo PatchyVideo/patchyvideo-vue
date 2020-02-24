@@ -34,7 +34,7 @@
     <topnavbar />
 
     <!-- EditTags组件-->
-    <EditTags ref="editTag" :msg="temporaryValForVLP" :visible.sync="showTagPanel" v-if="editable"></EditTags>
+    <EditTags ref="editTag" :msg="temporaryValForVLP" :visible.sync="showTagPanel" v-if="showTagPanel"></EditTags>
 
     <!-- 编辑视频列表时的对话框 -->
     <el-dialog
@@ -472,7 +472,7 @@ export default {
     openEditTags: function() {
       this.temporaryValForVLP = this.videolistPid;
       this.showTagPanel = true;
-      this.$refs.editTag.getCommonTags();
+  /*    this.$refs.editTag.getCommonTags();*/
     },
     openListFolder() {
       this.showListFolder = true;
