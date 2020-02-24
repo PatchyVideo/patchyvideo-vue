@@ -278,14 +278,14 @@ export default {
   font-size: 100%;
   color: #999;
   text-decoration: none;
-
+  box-sizing: border-box;
   margin-block-end: 1em;
   margin-inline-start: 0px;
   margin-inline-end: 0px;
   padding-inline-start: 20px;
   font-size: 100%;
   line-height: 1.25em;
-  width: 200px;
+  width: 100%;
   word-break: break-all;
 }
 .left_list h1 {

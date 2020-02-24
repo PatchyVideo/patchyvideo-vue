@@ -183,12 +183,16 @@ Vue.prototype.$echarts = echarts;
         position: absolute;
         display: block;
     }
+    .el-tabs{
+        margin-left: 6%;
+        margin-right: 6%;
+    }
 
     .content {
        /* width: 1600px;*/
-        width: 80%;
-        max-width: 1600px;
-        min-width: 1600px;
+        width: 100%;
+   /*     max-width: 3000px;*/
+        min-width: 1200px;
         height: 100%;
 
    /*     background:  url("../static/img/imoto.jpg") no-repeat top center;*/
