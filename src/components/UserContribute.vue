@@ -97,10 +97,11 @@ export default {
       CopyrightObj: [],
       GeneralObj: [],
       CharacterObj: [],
-      CopyrightObj: [],
+/*      CopyrightObj: [],*/
       AuthorObj: [],
       MetaObj: [],
       LanguageObj: [],
+      SoundtrackObj: [],
       //绘制图表用，统计TAG占比
       General_count: 0,
       Character_count: 0,
@@ -108,6 +109,7 @@ export default {
       Author_count: 0,
       Meta_count: 0,
       Language_count: 0,
+      SoundtrackObj_count: 0,
 
       loading: true //读取状态
     };
@@ -139,6 +141,7 @@ export default {
           }
         })
           .then(result => {
+
             this.TagData = result.data.data.tags;
             this.videoData = result.data.data.videos;
             this.getTagCategories();
@@ -159,6 +162,7 @@ export default {
           }
         })
           .then(result => {
+
             this.TagData = result.data.data.tags;
 
             this.videoData = result.data.data.videos;
@@ -181,8 +185,7 @@ export default {
             page: e,
             page_size: count
           }
-        })
-          .then(result => {
+        }).then(result => {
             this.TagData = result.data.data.tags;
             this.videoData = result.data.data.videos;
             this.getTagCategories();
@@ -203,6 +206,7 @@ export default {
           }
         })
           .then(result => {
+
             this.TagData = result.data.data.tags;
 
             this.videoData = result.data.data.videos;
@@ -225,6 +229,7 @@ export default {
         });
         Aarryname.push(this.TagData[i].tag);
       }
+
       this.axios({
         async: true,
         method: "post",
@@ -233,6 +238,7 @@ export default {
           tags: Aarryname
         }
       }).then(result => {
+
         this.totallNum(result.data.data.categorie_map);
         this.drawLine();
       });
@@ -252,6 +258,7 @@ export default {
       this.AuthorObj = [];
       this.MetaObj = [];
       this.LanguageObj = [];
+      this.SoundtrackObj = [];
 
       //依次将接口获取的原数据按照echarts中的数据规范转换
       for (let i in arr) {
@@ -278,6 +285,10 @@ export default {
         if (arr[i] == "Language") {
           this.Language_count++;
           this.LanguageObj.push({ value: this.getcount(i), name: i });
+        }
+        if (arr[i] == "Soundtrack ") {
+          this.SoundtrackObj_count++;
+          this.SoundtrackObj.push({ value: this.getcount(i), name: i });
         }
       }
       if (Object.keys(arr).length > 10) {
@@ -328,6 +339,14 @@ export default {
             {
               name: "Meta" /*        value: this.Meta_count,*/,
               /*        value: this.Meta_count,*/ children: this.MetaObj
+            },
+            {
+              name: "Language" /*        value: this.Meta_count,*/,
+              /*        value: this.Meta_count,*/ children: this.LanguageObj
+            },
+            {
+              name: "Soundtrack" /*        value: this.Meta_count,*/,
+              /*        value: this.Meta_count,*/ children: this.SoundtrackObj
             }
           ]
         }
