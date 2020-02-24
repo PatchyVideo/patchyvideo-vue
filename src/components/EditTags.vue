@@ -189,7 +189,7 @@
           </div>
         </div>
         <a href="javascript:;" @click="saveTag()">
-          <i class="el-icon-refresh" id="save" v-if="this.$route.path != '/postvideo'"></i>
+          <a id="save" v-if="this.$route.path != '/postvideo'">保存修改</a>
         </a>
       </div>
     </div>
@@ -286,7 +286,7 @@ export default {
     },
 
     open4() {
-      this.$message.error("请输入合法的Tag!");
+      this.$message.error("输入Tag必须存在于Tag库中!");
     },
     open5() {
       this.$message({
@@ -473,6 +473,7 @@ export default {
       }*/
   if(this.isInfoTipClick ===true){ //是否属于鼠标点击选中的Tag
 
+
   }else {
     if (this.infoTipMark === true) { //是否属于键盘回车选中的Tag
       this.infoTipMark = false;
@@ -482,8 +483,7 @@ export default {
   }
       this.infoTip[0].isHidden = true;
       this.getTagCategoriesForAdd(this.iptVal);
-
-
+      this.isInfoTipClick = false;
 
       /*  this.watchAutoComplete();
       {

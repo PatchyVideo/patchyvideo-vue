@@ -384,8 +384,8 @@ export default {
         this.open2();
       });
     },
+
     setUserName() {
-      // console.log("click");
       this.axios({
         method: "post",
         url: "be/user/changename.do",
@@ -416,8 +416,8 @@ export default {
         }
       });
     },
+
     islSetUserName(b) {
-      // console.log(b);
       this.isNameEdit = b;
       this.$forceUpdate();
       /*   this.isNameEdit ===b;*/
@@ -442,6 +442,11 @@ export default {
   watch: {
     ifupdate(n) {
       if (n === true) {
+        this.getMyData();
+      }
+    },
+    $route(n){
+      if(n.fullPath==="/users/me"){
         this.getMyData();
       }
     }

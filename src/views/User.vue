@@ -118,9 +118,9 @@ Vue.prototype.$echarts = echarts;
                //当路径不为me，判断输入uid是否合法，     SUCCEED FAILED
                this.isUidNull();
            }
-        },
+       },
         mounted(){
-            //暂时这么处理，会多请求一次。
+
             if(Object.keys(this.$route.query).toString()==="path"){
                 this.activeName="third";
                 /*  let path = this.$route.query.path;*/
@@ -130,11 +130,8 @@ Vue.prototype.$echarts = echarts;
         },
         methods: {
             handleSelect(key, keyPath) {
-           /*     console.log(key, keyPath);*/
-       /*         this.gotomark = key;*/
             },
             handleClick(key) {
-                /*               console.log(tab, event);*/
             },
             isUidNull(){
              this.axios({
@@ -155,7 +152,6 @@ Vue.prototype.$echarts = echarts;
             }
 
         },
-
         components: {topnavbar,usercontribute,userprofile,listfolder,userfavorites,userfolder,userpoststate,Footer}
     }
 </script>
