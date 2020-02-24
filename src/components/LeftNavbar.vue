@@ -45,8 +45,9 @@
           >
             <div>
               <div v-if="item.add.length">
-                <span style="margin-right:10px;margin-top:3px">添加:</span>
+                <span style="margin-right:10px;margin-top:3px;color:#67C23A">添加:</span>
                 <el-tag
+                  type="success"
                   v-for="tag in item.add"
                   style="margin-right:5px;margin-top:3px"
                   :key="tag"
@@ -55,8 +56,9 @@
               </div>
 
               <div v-if="item.del.length">
-                <span v-if="item.del.length" style="margin-right:10px;margin-top:3px">删除:</span>
+                <span style="margin-right:10px;margin-top:3px;color:#F56C6C">删除:</span>
                 <el-tag
+                  type="danger"
                   v-for="tag in item.del"
                   style="margin-right:5px;margin-top:3px"
                   :key="tag"
@@ -105,7 +107,8 @@
               Character: val == 'Character',
               Author: val == 'Author',
               General: val == 'General',
-              Meta: val == 'Meta'
+              Meta: val == 'Meta',
+              Soundtrack:val == 'Soundtrack'
             }"
             @click="gotoHome(key)"
           >{{ key }}</p>
@@ -126,7 +129,8 @@
               Character: val == 'Character',
               Author: val == 'Author',
               General: val == 'General',
-              Meta: val == 'Meta'
+              Meta: val == 'Meta',
+              Soundtrack:val == 'Soundtrack'
             }"
             @click="gotoHome(item)"
           >{{ item }}</p>
@@ -352,5 +356,8 @@ export default {
 }
 .Meta {
   color: #f80;
+}
+.Soundtrack {
+  color: #ff7792;
 }
 </style>
