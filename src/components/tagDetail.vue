@@ -553,6 +553,7 @@
             简体中文:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -565,6 +566,7 @@
             繁體中文:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -577,6 +579,7 @@
             日本語:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -589,6 +592,7 @@
             English:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -601,6 +605,7 @@
             한국어:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -613,6 +618,7 @@
             čeština:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -625,6 +631,7 @@
             Nederlands:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -637,6 +644,7 @@
             français:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -649,6 +657,7 @@
             Deutsch:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -661,6 +670,7 @@
             magyar nyelv:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -673,6 +683,7 @@
             italiano:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -685,6 +696,7 @@
             polski:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -697,6 +709,7 @@
             português:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -709,6 +722,7 @@
             limba română:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -721,6 +735,7 @@
             русский язык:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -733,6 +748,7 @@
             español:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -745,6 +761,7 @@
             Türk dili:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -757,6 +774,7 @@
             Tiếng Việt:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -770,6 +788,7 @@
             -:
             <span
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -1401,6 +1420,10 @@ export default {
 }
 .Meta {
   color: #f80;
+  cursor: pointer;
+}
+.Soundtrack {
+  color: #ff7792;
   cursor: pointer;
 }
 </style>

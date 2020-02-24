@@ -551,6 +551,7 @@
           <div
             class="category"
             v-bind:class="{Copyright:scope.row.category=='Copyright',
+                          Soundtrack:scope.row.category=='Soundtrack',
 													Language:scope.row.category=='Language',
 													Character:scope.row.category=='Character',
 													Author:scope.row.category=='Author',
@@ -567,6 +568,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -580,6 +582,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -593,6 +596,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -606,6 +610,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -619,6 +624,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -632,6 +638,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -645,6 +652,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -658,6 +666,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -671,6 +680,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -684,6 +694,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -697,6 +708,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -710,6 +722,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -723,6 +736,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -736,6 +750,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -749,6 +764,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -762,6 +778,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -775,6 +792,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -788,6 +806,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -802,6 +821,7 @@
             <span
               class="tagLink"
               v-bind:class="{Copyright:scope.row.category=='Copyright',
+                              Soundtrack:scope.row.category=='Soundtrack',
                               Language:scope.row.category=='Language',
                               Character:scope.row.category=='Character',
                               Author:scope.row.category=='Author',
@@ -1384,20 +1404,30 @@ export default {
 /* 针对类别调整颜色 */
 .Copyright {
   color: #a0a;
+  cursor: pointer;
 }
 .Language {
   color: #585455;
+  cursor: pointer;
 }
 .Character {
   color: #0a0;
+  cursor: pointer;
 }
 .Author {
   color: #a00;
+  cursor: pointer;
 }
 .General {
   color: #0073ff;
+  cursor: pointer;
 }
 .Meta {
   color: #f80;
+  cursor: pointer;
+}
+.Soundtrack {
+  color: #ff7792;
+  cursor: pointer;
 }
 </style>
