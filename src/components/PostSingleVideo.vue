@@ -339,6 +339,27 @@ export default {
             that.ErrorFetchingVideo();
           });
       };
+      // 站酷的匹配规则
+      this.PARSERS[
+        "https://www.zcool.com.cn/work/[0-9a-zA-Z=]*.html"
+      ] = function(responseDOM, responseURL) {
+        var err = responseDOM.find("div.error-body");
+        if (err.length > 0) {
+          that.setVideoMetadata("", "", "");
+          that.ErrorFetchingVideo();
+          return;
+        }
+        var title = responseDOM.find("div.details-contitle-box")[0];
+        title = title.getElementsByTagName("h2")[0].innerHTML;
+        title = title.replace(/\s+/g, "");
+        var num = title.search("<");
+        title = title.slice(0, num);
+        var desc = responseDOM.find("div.atricle-text")[0];
+        desc = desc.getElementsByTagName("p")[0].innerHTML;
+        desc = desc.replace(/\s+/g, "");
+        desc = desc.replace(/<br\s*?\/?>/g, "\n");
+        that.setVideoMetadata("", title, desc);
+      };
     },
     // 自动标签功能
     autotag(utags) {
@@ -541,7 +562,7 @@ export default {
       this.title = title;
       this.desc = desc;
       this.loading = false;
-      if (thumbnail != "" && title != "" && desc != "") {
+      if (this.thumbnail != "" && title != "" && desc != "") {
         this.show = true;
       }
     },
