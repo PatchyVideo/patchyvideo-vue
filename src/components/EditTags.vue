@@ -63,6 +63,21 @@
                 </a>
               </li>
             </ul>
+            <ul class="Taglist Soundtrack">
+              <li
+                class="item"
+                v-for="(i, item) in TagCategoriesData"
+                :key="item"
+                v-if="i == 'Soundtrack'"
+                :class="{ selected: -1 == tagsForRec.indexOf(item) }"
+                @click.stop="selected(i, item)"
+              >
+                <p class="val_${str[i]}">{{ item }}</p>
+                <a href="javascript:;" @click.stop="deleteObj(i, item)">
+                  <i class="el-icon-close"></i>
+                </a>
+              </li>
+            </ul>
             <ul class="Taglist Character">
               <li
                 class="item"
@@ -796,6 +811,13 @@ div {
           li {
             p {
               color: #f80;
+            }
+          }
+        }
+        .Soundtrack {
+          li {
+            p {
+              color: #ff7792;
             }
           }
         }
