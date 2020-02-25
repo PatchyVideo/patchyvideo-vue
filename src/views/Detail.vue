@@ -166,25 +166,34 @@
               >[同步副本标签]</el-button>
             </p>
           </div>
-          <ul v-for="item in myVideoData.copies" :key="item._id.$oid" class="copies">
-            <img
-              :src="require('../static/img/' + item.item.site + '.png')"
-              width="16px"
-              style="margin-right:2px"
-            />
-            <!-- 将页面参数刷新并重载页面，其中@click.native应该是router-link为了阻止a标签的默认跳转事件 -->
-            <router-link
-              :to="{ path: '/video', query: { id: item._id.$oid } }"
-              tag="a"
-              @click.native="reload"
-            >{{ item.item.title }}</router-link>
-            <el-button
-              type="text"
-              @click="synctags(item._id.$oid)"
-              v-if="isLogin == true"
-              style="margin-left:10px"
-            >[从此副本同步标签]</el-button>
-          </ul>
+          <div v-for="(value, key, index) in myVideoData.copies_by_repost_type" :key="index">
+            <h3 v-if="key =='official'">原始发布</h3>
+            <h3 v-if="key =='official_repost'">官方再发布</h3>
+            <h3 v-if="key =='authorized_translation'">授权翻译</h3>
+            <h3 v-if="key =='authorized_repost'">授权转载</h3>
+            <h3 v-if="key =='translation'">自发翻译</h3>
+            <h3 v-if="key =='repost'">自发搬运</h3>
+            <h3 v-if="key =='unknown'">其他</h3>
+            <ul v-for="item in value" :key="item._id.$oid" class="copies">
+              <img
+                :src="require('../static/img/' + item.item.site + '.png')"
+                width="16px"
+                style="margin-right:2px"
+              />
+              <!-- 将页面参数刷新并重载页面，其中@click.native应该是router-link为了阻止a标签的默认跳转事件 -->
+              <router-link
+                :to="{ path: '/video', query: { id: item._id.$oid } }"
+                tag="a"
+                @click.native="reload"
+              >{{ item.item.title }}</router-link>
+              <el-button
+                type="text"
+                @click="synctags(item._id.$oid)"
+                v-if="isLogin == true"
+                style="margin-left:10px"
+              >[从此副本同步标签]</el-button>
+            </ul>
+          </div>
         </div>
 
         <!-- 播放列表 -->
@@ -269,6 +278,8 @@ export default {
       myVideoData: {
         // 视频的副本列表
         copies: [],
+        // 整理分类后的副本列表
+        copiesByRepostType: {},
         // 视频的播放列表
         playlists: [],
         // 视频的标签列表(已分类)
@@ -378,7 +389,6 @@ export default {
     // 删除本地储存(和localStorage存储一起使用，已被弃用）
     // window.localStorage.removeItem("loglevel:webpack-dev-server");
     this.searchVideo();
-
   },
   mounted() {
     this.buildUrlMatchers();
