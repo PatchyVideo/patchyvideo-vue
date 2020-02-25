@@ -14,7 +14,7 @@
   <div>
     <div class="bigbox standard" v-loading="loading">
       <el-container>
-        <el-aside width="800px">
+        <el-aside>
           <p v-if="this.videoCount==0" class="nulldata-left">暂无数据</p>
           <canvas id="myChart" width="800" height="800"></canvas>
         </el-aside>
@@ -29,12 +29,12 @@
 
             <div class="video_lineUp" v-if="flag">
               <router-link
-                class="list-item"
-                target="_blank"
-                :to="{ path: '/video', query: { id: i._id.$oid } }"
-                tag="a"
-                v-for="i in videoData"
-                :key="i._id.$oid"
+                      class="list-item"
+                      target="_blank"
+                      :to="{ path: '/video', query: { id: i._id.$oid } }"
+                      tag="a"
+                      v-for="i in videoData"
+                      :key="i._id.$oid"
               >
                 <img :src="'/images/covers/'+i.item.cover_image" alt />
                 <h4>
@@ -44,18 +44,18 @@
             </div>
             <div class="video_straightColumn" v-if="!flag">
               <router-link
-                class="list-item"
-                target="_blank"
-                :to="{ path: '/video', query: { id: i._id.$oid } }"
-                tag="a"
-                v-for="i in videoData"
-                :key="i._id.$oid"
+                      class="list-item"
+                      target="_blank"
+                      :to="{ path: '/video', query: { id: i._id.$oid } }"
+                      tag="a"
+                      v-for="i in videoData"
+                      :key="i._id.$oid"
               >
                 <img :src="'/images/covers/'+i.item.cover_image" alt />
                 <div class="list-item_content">
                   <h4>
                     <router-link
-                      :to="{ path: '/video', query: { id: i._id.$oid } }"
+                            :to="{ path: '/video', query: { id: i._id.$oid } }"
                     >{{i.item.title}}</router-link>
                   </h4>
                   <p>{{i.item.desc}}</p>
@@ -66,16 +66,16 @@
           </div>
 
           <el-pagination
-            background
-            class="page-selector"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            layout="jumper, prev, pager, next, sizes"
-            :current-page="this.page"
-            :total="videoCount"
-            :page-size="20"
-            :page-sizes="[10, 20, 30, 40]"
-            v-if="this.videoCount!=0"
+                  background
+                  class="page-selector"
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  layout="jumper, prev, pager, next, sizes"
+                  :current-page="this.page"
+                  :total="videoCount"
+                  :page-size="20"
+                  :page-sizes="[10, 20, 30, 40]"
+                  v-if="this.videoCount!=0"
           ></el-pagination>
         </el-main>
       </el-container>
@@ -97,10 +97,11 @@ export default {
       CopyrightObj: [],
       GeneralObj: [],
       CharacterObj: [],
-      CopyrightObj: [],
+/*      CopyrightObj: [],*/
       AuthorObj: [],
       MetaObj: [],
       LanguageObj: [],
+      SoundtrackObj: [],
       //绘制图表用，统计TAG占比
       General_count: 0,
       Character_count: 0,
@@ -108,6 +109,7 @@ export default {
       Author_count: 0,
       Meta_count: 0,
       Language_count: 0,
+      SoundtrackObj_count: 0,
 
       loading: true //读取状态
     };
@@ -139,6 +141,7 @@ export default {
           }
         })
           .then(result => {
+
             this.TagData = result.data.data.tags;
             this.videoData = result.data.data.videos;
             this.getTagCategories();
@@ -159,6 +162,7 @@ export default {
           }
         })
           .then(result => {
+
             this.TagData = result.data.data.tags;
 
             this.videoData = result.data.data.videos;
@@ -181,8 +185,7 @@ export default {
             page: e,
             page_size: count
           }
-        })
-          .then(result => {
+        }).then(result => {
             this.TagData = result.data.data.tags;
             this.videoData = result.data.data.videos;
             this.getTagCategories();
@@ -203,6 +206,7 @@ export default {
           }
         })
           .then(result => {
+
             this.TagData = result.data.data.tags;
 
             this.videoData = result.data.data.videos;
@@ -225,6 +229,7 @@ export default {
         });
         Aarryname.push(this.TagData[i].tag);
       }
+
       this.axios({
         async: true,
         method: "post",
@@ -233,6 +238,7 @@ export default {
           tags: Aarryname
         }
       }).then(result => {
+
         this.totallNum(result.data.data.categorie_map);
         this.drawLine();
       });
@@ -252,6 +258,7 @@ export default {
       this.AuthorObj = [];
       this.MetaObj = [];
       this.LanguageObj = [];
+      this.SoundtrackObj = [];
 
       //依次将接口获取的原数据按照echarts中的数据规范转换
       for (let i in arr) {
@@ -278,6 +285,10 @@ export default {
         if (arr[i] == "Language") {
           this.Language_count++;
           this.LanguageObj.push({ value: this.getcount(i), name: i });
+        }
+        if (arr[i] == "Soundtrack ") {
+          this.SoundtrackObj_count++;
+          this.SoundtrackObj.push({ value: this.getcount(i), name: i });
         }
       }
       if (Object.keys(arr).length > 10) {
@@ -328,6 +339,14 @@ export default {
             {
               name: "Meta" /*        value: this.Meta_count,*/,
               /*        value: this.Meta_count,*/ children: this.MetaObj
+            },
+            {
+              name: "Language" /*        value: this.Meta_count,*/,
+              /*        value: this.Meta_count,*/ children: this.LanguageObj
+            },
+            {
+              name: "Soundtrack" /*        value: this.Meta_count,*/,
+              /*        value: this.Meta_count,*/ children: this.SoundtrackObj
             }
           ]
         }
@@ -366,7 +385,7 @@ export default {
 }
 
 .bigbox {
-  height: 900px;
+  height: 100%;
   display: flex;
   background-color: white;
   opacity: 0.9;
@@ -376,6 +395,8 @@ export default {
 }
 .el-container {
   .el-aside {
+    width: 50% !important;
+    min-width: 800px;
     .nulldata-left {
       position: absolute;
       top: 50%;
@@ -385,8 +406,9 @@ export default {
   }
 
   .el-main {
-    min-width: 800px;
-    max-width: 900px;
+    width: 50%;
+    min-width: 600px;
+
     border: 1px solid #e5e9ef;
     box-sizing: border-box;
     .nulldata-right {
@@ -398,8 +420,6 @@ export default {
   }
 }
 #myChart {
-  width: 800px;
-  height: 800px;
 }
 .minibox {
   .minibox_top {
@@ -431,6 +451,7 @@ export default {
     flex-wrap: wrap;
     overflow: auto;
     max-height: 700px;
+    box-sizing: border-box;
     .list-item {
       box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
       flex: 0 0 31%;
@@ -438,15 +459,26 @@ export default {
       margin: 10px 5px 5px;
       transition: all 0.3s ease;
       img {
-        width: 233px;
-        height: 145px;
+       width: 80%;
+       height: 60%;
+        min-width: 233px;
+        /*min-width: 233px;
+        min-height: 145px;*/
       }
       h4 {
+        margin: auto;
         width: 233px;
+        height: 40px;
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+        a{
+        }
       }
       &:hover {
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        transform: translate3d(0, -2px, 0);
+        background-color: #f4f4f5;
       }
     }
   }

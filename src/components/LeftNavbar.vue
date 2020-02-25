@@ -32,7 +32,7 @@
 <template>
   <div class="left-navbar">
     <!-- EditTags组件-->
-    <EditTags ref="editTag" :msg="pid" :visible.sync="showTagPanel" class="EditTags"></EditTags>
+    <EditTags ref="editTag" :msg="pid" :visible.sync="showTagPanel" v-if="showTagPanel" class="EditTags"></EditTags>
 
     <!-- 显示标签组件的对话框 -->
     <el-dialog title="标签编辑历史" :visible.sync="dialogVisible" width="70%">
@@ -182,7 +182,7 @@ export default {
     },
     // 打开Tag编辑页面
     openEditTags() {
-      this.$refs.editTag.getCommonTags();
+    /*  this.$refs.editTag.getCommonTags();*/
       this.showTagPanel = true;
     },
     // 使用视频已有的标签发布视频
@@ -282,14 +282,14 @@ export default {
   font-size: 100%;
   color: #999;
   text-decoration: none;
-
+  box-sizing: border-box;
   margin-block-end: 1em;
   margin-inline-start: 0px;
   margin-inline-end: 0px;
   padding-inline-start: 20px;
   font-size: 100%;
   line-height: 1.25em;
-  width: 200px;
+  width: 100%;
   word-break: break-all;
 }
 .left_list h1 {
