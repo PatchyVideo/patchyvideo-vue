@@ -166,6 +166,7 @@ export default {
         { tag: "site:nicovideo", cat: 6, cnt: null },
         { tag: "site:twitter", cat: 6, cnt: null },
         { tag: "site:youtube", cat: 6, cnt: null },
+        { tag: "site:zcool", cat: 6, cnt: null },
         { tag: "site:ipfs", cat: 6, cnt: null },
         { tag: "AND", cat: 6, cnt: null },
         { tag: "OR", cat: 6, cnt: null },
