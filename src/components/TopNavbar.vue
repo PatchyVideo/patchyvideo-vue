@@ -470,7 +470,7 @@ export default {
 <style scoped lang="less">
 @import "../static/css/common.css";
 .nav_left {
-  width: 70% !important;
+  width: 50% !important;
 }
 .nav_right {
   width: 50%;

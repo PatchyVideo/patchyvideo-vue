@@ -33,7 +33,39 @@
         <div class="minibox">
           <div class="m_bg"></div>
           <div class="m_a activeTag">
-            <ul class="Taglist Copyright">
+
+             <ul class="Taglist":class="v" v-for="v in this.tagCategoriesAll">
+               <li
+                       class="item"
+                       v-for="(i, item) in TagCategoriesData"
+                       :key="item"
+                       v-if="i === v"
+                       :class="{ selected: -1 === tagsForRec.indexOf(item) }"
+                       @click.stop="selected(i, item)"
+               >
+                 <p :class="`val_`+item">{{ item }}</p>
+                 <a href="javascript:;" @click.stop="deleteObj(i, item)">
+                   <i class="el-icon-close"></i>
+                 </a>
+               </li>
+             </ul>
+
+     <!--         <li
+                      class="item"
+                      v-for="(i, item) in TagCategoriesData"
+                      :key="item"
+                      v-if="i == 'Copyright'"
+                      :class="{ selected: -1 == tagsForRec.indexOf(item) }"
+                      @click.stop="selected(i, item)"
+              >
+                <p class="val_${str[i]}">{{ item }}</p>
+                <a href="javascript:;" @click.stop="deleteObj(i, item)">
+                  <i class="el-icon-close"></i>
+                </a>
+              </li>-->
+
+
+      <!--      <ul class="Taglist Copyright">
               <li
                 class="item"
                 v-for="(i, item) in TagCategoriesData"
@@ -54,6 +86,21 @@
                 v-for="(i, item) in TagCategoriesData"
                 :key="item"
                 v-if="i == 'Language'"
+                :class="{ selected: -1 == tagsForRec.indexOf(item) }"
+                @click.stop="selected(i, item)"
+              >
+                <p class="val_${str[i]}">{{ item }}</p>
+                <a href="javascript:;" @click.stop="deleteObj(i, item)">
+                  <i class="el-icon-close"></i>
+                </a>
+              </li>
+            </ul>
+            <ul class="Taglist Soundtrack">
+              <li
+                class="item"
+                v-for="(i, item) in TagCategoriesData"
+                :key="item"
+                v-if="i == 'Soundtrack'"
                 :class="{ selected: -1 == tagsForRec.indexOf(item) }"
                 @click.stop="selected(i, item)"
               >
@@ -122,7 +169,7 @@
                   <i class="el-icon-close"></i>
                 </a>
               </li>
-            </ul>
+            </ul>-->
           </div>
 
           <div class="m_b">
@@ -202,6 +249,7 @@ export default {
     return {
       tags: [],
       tagsForRec: [],
+      tagCategoriesAll:[],
       TagCategoriesData: {},
       recTags: [],
       iptVal: "",
@@ -222,6 +270,7 @@ export default {
     };
   },
   created() {
+    console.log("be called");
     var that = this;
     //当前页面监视键盘输入
     document.onkeydown = function(e) {
@@ -248,6 +297,23 @@ export default {
         this.getCommonTags2();
       }
     }
+    this.axios({
+      method: "post",
+      url: "be/tags/query_categories.do",
+      data: {}
+    }).then(result => {
+      let categories = result.data.data.categories;
+      for (let i = 0; i < categories.length; i++) {
+        this.tagCategoriesAll.push(categories[i].name);
+      }
+      console.log(this.tagCategoriesAll);
+    });
+
+  },
+  mounted(){
+
+
+
   },
   updated(){
     let _that = this;
@@ -796,6 +862,13 @@ div {
           li {
             p {
               color: #f80;
+            }
+          }
+        }
+        .Soundtrack {
+          li {
+            p {
+              color: #ff7792;
             }
           }
         }
