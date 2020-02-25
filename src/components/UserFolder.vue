@@ -13,12 +13,12 @@
     <div class="bigbox standard">
       <div class="aside">
         <div class="new-create" @click="changeDoingSatate()" :class="{active:doingState}">
-          <i class="el-icon-goblet-square"></i>
-          <a>待处理索引</a>
+
+          <a>    <i class="el-icon-goblet-square"></i>待处理索引</a>
         </div>
         <div class="new-create" @click="changeFailedSatate()" :class="{active:failedState}">
-          <i class="el-icon-goblet-full"></i>
-          <a>已失败索引</a>
+
+          <a>   <i class="el-icon-goblet-full"></i> 已失败索引</a>
         </div>
       </div>
       <div class="main">
@@ -259,7 +259,7 @@ export default {
 
   div {
     width: 100%;
-    height: 60px;
+    height: 30px;
 
     position: relative;
     padding-left: 20px;
@@ -274,30 +274,31 @@ export default {
     &:hover {
       background-color: #f4f5f7;
     }
-    i {
-      /*           display:inline-block;
-                width: 70px;*/
-      display: block;
-      position: absolute;
-      width: 50px;
-      top: 50%;
-      transform: translate(40%, -50%);
-      color: #2c3e50;
-    }
+
     a {
       cursor: pointer;
       color: #2c3e50;
       display: block;
-      position: absolute;
-      transform: translate(-50%, -50%);
+      position: relative;
       right: 0;
       top: 50%;
-      width: 130px;
+      left: 50%;
+      transform: translate(-50%,0%);
+      width: 200px;
       height: 30px;
-      font-size: 18px;
-      line-height: 30px;
       text-overflow: ellipsis;
       overflow: hidden;
+      i {
+        /*           display:inline-block;
+                  width: 70px;*/
+        display: block;
+        position: absolute;
+        width: 50px;
+        top: 50%;
+
+        transform: translate(0, -50%);
+        color: #2c3e50;
+      }
     }
   }
   ul {
@@ -344,12 +345,7 @@ export default {
 }
 
 .main {
-  margin: 18px;
-  flex: 5;
-  height: 800px;
-  color: #333;
-  text-align: center;
-  line-height: 160px;
+  width: 85%;
   .info-box {
     padding-bottom: 18px;
     height: 200px;
