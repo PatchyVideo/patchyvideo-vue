@@ -20,6 +20,11 @@
 
 <template>
   <div class="content2" v-loading="loading">
+    <!-- Author页面特有的，作者详情的组件 -->
+    <el-dialog :close-on-click-modal="false" :visible.sync="showAuthorData" width="70%">
+      <ShowAuthorData ref="AuthorData" :AuthorID="AuthorID"></ShowAuthorData>
+    </el-dialog>
+
     <!-- 标签列表的抬头 -->
     <div class="video-list-header">
       <p v-if="maxcount">显示 {{ count2 }} / {{ maxcount }} 个标签</p>
@@ -56,6 +61,12 @@
       <!-- 表格的展开项 -->
       <el-table-column type="expand">
         <template slot-scope="props">
+          <!-- 显示作者信息的按钮 -->
+          <el-button
+            class="showAuthorData"
+            v-if="tagCategorie=='Author'"
+            @click="openAuthorData(props.row.id)"
+          >作者详情</el-button>
           <!-- 为现有标签添加新的语言 -->
           <div class="languageSuppot">
             <el-row>
@@ -847,6 +858,7 @@
 </template>
 
 <script>
+import ShowAuthorData from "../components/ShowAuthorData.vue";
 export default {
   props: ["tagCategorie"],
   data() {
@@ -910,6 +922,10 @@ export default {
       count2: 0,
       // 标签的全部数量
       maxcount: 0,
+      // 打开的作者详情的作者的ID
+      AuthorID: "ID",
+      // 是否打开作者详情页面
+      showAuthorData: false,
       // 页面是否显示高级选项
       advancedOptions: false,
       // 弹出框是否显示
@@ -1290,6 +1306,11 @@ export default {
       this.dialogVisible = true;
       this.tagIndex = index;
     },
+    // 打开作者详情对话框
+    openAuthorData(ID) {
+      this.AuthorID = ID;
+      this.showAuthorData = true;
+    },
     // 当前标签列表的页面切换的时候调用
     handleCurrentChange(val) {
       this.page = val;
@@ -1325,7 +1346,7 @@ export default {
       this.requestCategorieTags();
     }
   },
-  components: {}
+  components: { ShowAuthorData }
 };
 </script>
 
@@ -1365,6 +1386,10 @@ export default {
   margin-left: 150px;
   margin-top: 5px;
   font-size: 17px;
+}
+.showAuthorData {
+  width: 100px;
+  float: left;
 }
 .el-row {
   margin-bottom: 5px;
