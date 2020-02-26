@@ -26,6 +26,12 @@ Vue.directive('linkified', linkify);
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;
 
+Vue.config.keyCodes.Left_Arrow = 37;
+Vue.config.keyCodes.Right_Arrow = 39;
+Vue.config.keyCodes.Up_Arrow = 38;
+Vue.config.keyCodes.Dw_Arrow = 40;
+
+
 var vm = new Vue({
   router,
   store,

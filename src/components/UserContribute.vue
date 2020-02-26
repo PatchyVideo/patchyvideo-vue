@@ -396,7 +396,7 @@ export default {
 .el-container {
   .el-aside {
     width: 50% !important;
-    min-width: 800px;
+
     .nulldata-left {
       position: absolute;
       top: 50%;
@@ -407,7 +407,6 @@ export default {
 
   .el-main {
     width: 50%;
-    min-width: 600px;
 
     border: 1px solid #e5e9ef;
     box-sizing: border-box;

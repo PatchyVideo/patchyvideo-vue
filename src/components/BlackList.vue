@@ -6,7 +6,7 @@
 <template>
 
     <div class="black-list" v-loading="loading">
-        <el-radio-group v-model="radio">
+        <el-radio-group v-model="radio" >
             <el-card class="box-card" :class="{select:radio!==3}" @click.native="selectDiv(3)">
                 <div slot="header" class="clearfix">
                     <el-radio :label="3">
@@ -32,34 +32,6 @@
                     <span :class="{white:radio!==6}">自定义屏蔽</span>
                     </el-radio>
                 </div>
-                <!--            <el-autocomplete
-                                    id="ipt"
-                                    ref="ipt"
-                                    v-model="iptVal"
-                                    :fetch-suggestions="querySearchAsync"
-                                    :trigger-on-focus="false"
-                                    placeholder="请输入标签"
-                                    @select="handleSelect"
-                                    @keyup.enter.native="gotoHome"
-                            >
-                                <template slot-scope="{ item }">
-                                    <div class="adviceList">
-                                        <div
-                                                class="name"
-                                                v-bind:class="{
-                                      Copyright: item.cat === 2,
-                                      Language: item.cat === 5,
-                                      Character: item.cat === 1,
-                                      Author: item.cat === 3,
-                                      General: item.cat === 0,
-                                      Meta: item.cat === 4,
-                                      Soundtrack: item.cat === 6
-                                    }"
-                                        >{{ item.tag }}</div>
-                                        <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
-                                    </div>
-                                </template>
-                            </el-autocomplete>-->
                 <div class="text item" :class="{white:radio!==6}" v-if="!textareaVisble&&!inputVisible&&dynamicTags.length===0">
                     <h4>若自定义屏蔽列表为空，则认为没有开启屏蔽</h4>
                 </div>
@@ -71,8 +43,40 @@
                           {{tag}}
                       </el-tag>
                     </div>
-
-                    <el-input
+             <!--           <el-autocomplete
+                                                   id="ipt"
+                                                   v-model="inputValue"
+                                                   :fetch-suggestions="querySearchAsync"
+                                                   :trigger-on-focus="false"
+                                                   placeholder="请输入标签"
+                                                   @select="handleSelect"
+                                                   class="input-new-tag"
+                                                   v-if="inputVisible"
+                                                   ref="saveTagInput"
+                                                   size="small"
+                                                   @keyup.enter.native="handleInputConfirm"
+                                                   @blur="handleInputConfirm"
+                                                   style="margin: 20px 0px;"
+                                           >
+                                               <template slot-scope="{ item }">
+                                                   <div class="adviceList">
+                                                       <div
+                                                               class="name"
+                                                               v-bind:class="{
+                                                     Copyright: item.cat === 2,
+                                                     Language: item.cat === 5,
+                                                     Character: item.cat === 1,
+                                                     Author: item.cat === 3,
+                                                     General: item.cat === 0,
+                                                     Meta: item.cat === 4,
+                                                     Soundtrack: item.cat === 6
+                                                   }"
+                                                       >{{ item.tag }}</div>
+                                                       <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
+                                                   </div>
+                                               </template>
+                                           </el-autocomplete>-->
+                  <el-input
                             class="input-new-tag"
                             v-if="inputVisible"
                             v-model="inputValue"
@@ -80,7 +84,7 @@
                             size="small"
                             @keyup.enter.native="handleInputConfirm"
                             @blur="handleInputConfirm"
-                            style="margin: 20px 0px;"
+                            style="margin: 20px 0px; width: 70%;"
                     >
                     </el-input>
                     <el-input
@@ -96,34 +100,18 @@
 
                  <div style="display: flex;">
 
-
-                     <el-button    v-if="!inputVisible&&!textareaVisble" class="button-new-tag" size="small" @click="showInput" >添加屏蔽词</el-button>
-                     <el-button    v-if="!textareaVisble&&!inputVisible" class="button-new-tag" size="small" @click="showTextarea" >导入多个屏蔽词</el-button>
-                     <el-button    v-if="this.dynamicTags.length!==0"    class="button-new-tag" size="small" @click="removeBlackDataAll" >移除全部屏蔽词</el-button>
+                     <el-button    v-if="!inputVisible&&!textareaVisble" class="button-new-tag"  type="primary" size="small" @click="showInput" >添加屏蔽词</el-button>
+                     <el-button    v-if="this.dynamicTags.length!==0"    class="button-new-tag" type="danger" size="small" @click="removeBlackDataAll" >移除全部屏蔽词</el-button>
+                     <el-button    v-if="!textareaVisble&&!inputVisible" class="button-new-tag"  type="primary" size="small" @click="showTextarea" >导入多个屏蔽词</el-button>
 
                  </div>
 
                     <el-button style=" padding: 3px 0;color: #f64c59;" type="text"
                                @click.native="changeBlackList(dynamicTags)"
                     >使用此方案</el-button>-->
-                <!--    <el-button style="float: right; padding: 3px 0" type="text"
-                               @click.native="changeBlackList()"
-                    >添加屏蔽词</el-button>-->
-
                 </el-card>
 
         </el-radio-group>
-
-
-
-
-
-<!--        <el-tabs type="border-card">
-            <el-tab-pane label="用户管理">用户管理</el-tab-pane>
-            <el-tab-pane label="配置管理">配置管理</el-tab-pane>
-            <el-tab-pane label="角色管理">角色管理</el-tab-pane>
-            <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
-        </el-tabs>-->
     </div>
 </template>
 
@@ -144,6 +132,8 @@
         },
         created(){
              this.getDefaultBlackList();
+        },
+        mounted(){
 
         },
         methods: {
@@ -162,6 +152,8 @@
                 this.$nextTick(_ => {
                     this.$refs.saveTagTextArea.$refs.textarea.focus();
                 });
+            },
+            radioDownEvent(){
             },
 
             handleInputConfirm() {
@@ -236,42 +228,13 @@
                 this.textareaValue = '';
             },
             querySearchAsync(queryString, cb) {
-                // 这里的get(0)是将jq对象转换为原生js对象
-                // selectionStart是获取光标当前位置
-                var endlocation = $("#ipt").get(0).selectionStart;
-                // 切割输入框内的字符串，切割下光标左面的字符串
-                var query = queryString.slice(0, endlocation);
-                // 获取所需要搜索的字符串的开头在搜索框内字符串的位置
-                var startlocation = this.match(query);
-                // 切割下所需要查询的字符串
-                query = query.slice(startlocation, endlocation);
-                // 字符串为空格的话不搜索
-                if (this.isNull(query)) {
-                    cb([]);
-                    return;
-                }
-
-                // 备份参数防止出现玄学问题
-                var query2 = query;
-                // 搜索是否包含sites变量的关键字
-                var results = this.sites.filter(this.createFilter(query2));
-
-                // 对输入框现在的数据进行备份
-                this.iptVal3 = this.iptVal;
-                this.startlocation = startlocation;
-                this.endlocation = endlocation;
-
-                var url = "/autocomplete/?q=" + query;
+                var url = "/autocomplete/?q=" + queryString;
                 this.axios({
                     method: "get",
                     url: url
                 }).then(result => {
-                    if (result.status == "FALIED") {
-                        cb([]);
-                        return;
-                    }
-                    var resultList = results.concat(result.data);
-                    cb(resultList);
+                    this.taglist = result.data;
+                    cb(result.data);
                 });
             },
             // 搜索输入框内的搜索文字是否包含网站内容
@@ -280,46 +243,8 @@
                     return sites.tag.toLowerCase().indexOf(query.toLowerCase()) === 0;
                 };
             },
-            // 搜索输入框内的搜索文字，返回搜索关键字所在的起始位置
-            match(text) {
-                var i = text.length;
-                while (i--) {
-                    if (
-                        text.charAt(i) == " " ||
-                        text.charAt(i) == "\t" ||
-                        text.charAt(i) == "\n" ||
-                        text.charAt(i) == "\v" ||
-                        text.charAt(i) == "\f" ||
-                        text.charAt(i) == "\r" ||
-                        // 把括号转化成ascII码判断,否则谜之报错
-                        text.charAt(i).charCodeAt() == 41
-                    ) {
-                        return i + 1;
-                    } else if (text.charAt(i).charCodeAt() == 40) {
-                        if (i > 0 && text.charAt(i - 1) == "_") {
-                            continue;
-                        } else {
-                            return i + 1;
-                        }
-                    }
-                }
-                return 0;
-            },
-            isNull(str) {
-                if (str === "") return true;
-                var regu = "^[ ]+$";
-                var re = new RegExp(regu);
-                return re.test(str);
-            },
             handleSelect(item) {
-                // 切割字符串，并在中间加入搜索到的标签拼接成新的输入框的内容
-                var iptVal1 = this.iptVal3.slice(0, this.startlocation);
-                var iptVal2 = this.iptVal3.slice(this.endlocation);
-                var iptVal = iptVal1 + item.tag + " " + iptVal2;
-                this.iptVal = iptVal;
-                // 光标设置焦点事件
-                var endlocation = $("#ipt").focus();
-                this.infoTipMark = true;
+                this.inputValue = item.tag;
             },
             getDefaultBlackList(){
                 this.axios({
@@ -354,7 +279,6 @@
                     if(JSON.stringify(this.defaultBlackData)!==JSON.stringify(this.blackData)){
                         this.radio =6;
                     }
-
                     this.dynamicTags = this.blackData;
                     this.loading = false;
 
