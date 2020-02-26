@@ -14,117 +14,111 @@
     <div class="AuthorName">
       <span class="tagLabel" v-if="authorLanguages.CHS">
         简体中文:
-        <span class="tagName" @click="gotoHome(authorLanguages.CHS)">{{ authorLanguages.CHS }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.CHS)">{{
+          authorLanguages.CHS
+        }}</span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.CHT">
         繁體中文:
-        <span class="tagName" @click="gotoHome(authorLanguages.CHT)">{{ authorLanguages.CHT }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.CHT)">{{
+          authorLanguages.CHT
+        }}</span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.JPN">
         日本語:
-        <span class="tagName" @click="gotoHome(authorLanguages.JPN)">{{ authorLanguages.JPN }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.JPN)">{{
+          authorLanguages.JPN
+        }}</span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.ENG">
         English:
-        <span
-          class="tagName"
-          @click="gotoHome(authorLanguages.ENG)"
-        >{{ authorLanguages.ENG }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.ENG)">{{
+          authorLanguages.ENG
+        }}</span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.KOR">
         한국어:
-        <span class="tagName" @click="gotoHome(authorLanguages.KOR)">{{ authorLanguages.KOR }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.KOR)">{{
+          authorLanguages.KOR
+        }}</span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.CSY">
         čeština:
-        <span
-          class="tagName"
-          @click="gotoHome(authorLanguages.CSY)"
-        >{{ authorLanguages.CSY }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.CSY)">{{
+          authorLanguages.CSY
+        }}</span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.NLD">
         Nederlands:
-        <span
-          class="tagName"
-          @click="gotoHome(authorLanguages.NLD)"
-        >{{ authorLanguages.NLD }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.NLD)">{{
+          authorLanguages.NLD
+        }}</span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.FRA">
         français:
-        <span
-          class="tagName"
-          @click="gotoHome(authorLanguages.FRA)"
-        >{{ authorLanguages.FRA }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.FRA)">{{
+          authorLanguages.FRA
+        }}</span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.DEU">
         Deutsch:
-        <span
-          class="tagName"
-          @click="gotoHome(authorLanguages.DEU)"
-        >{{ authorLanguages.DEU }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.DEU)">{{
+          authorLanguages.DEU
+        }}</span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.HUN">
         magyar nyelv:
-        <span
-          class="tagName"
-          @click="gotoHome(authorLanguages.HUN)"
-        >{{ authorLanguages.HUN }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.HUN)">{{
+          authorLanguages.HUN
+        }}</span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.ITA">
         italiano:
-        <span
-          class="tagName"
-          @click="gotoHome(authorLanguages.ITA)"
-        >{{ authorLanguages.ITA }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.ITA)">{{
+          authorLanguages.ITA
+        }}</span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.PLK">
         polski:
-        <span
-          class="tagName"
-          @click="gotoHome(authorLanguages.PLK)"
-        >{{ authorLanguages.PLK }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.PLK)">{{
+          authorLanguages.PLK
+        }}</span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.PTB">
         português:
-        <span
-          class="tagName"
-          @click="gotoHome(authorLanguages.PTB)"
-        >{{ authorLanguages.PTB }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.PTB)">{{
+          authorLanguages.PTB
+        }}</span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.ROM">
         limba română:
-        <span
-          class="tagName"
-          @click="gotoHome(authorLanguages.ROM)"
-        >{{ authorLanguages.ROM }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.ROM)">{{
+          authorLanguages.ROM
+        }}</span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.RUS">
         русский язык:
-        <span
-          class="tagName"
-          @click="gotoHome(authorLanguages.RUS)"
-        >{{ authorLanguages.RUS }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.RUS)">{{
+          authorLanguages.RUS
+        }}</span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.ESP">
         español:
-        <span
-          class="tagName"
-          @click="gotoHome(authorLanguages.ESP)"
-        >{{ authorLanguages.ESP }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.ESP)">{{
+          authorLanguages.ESP
+        }}</span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.TRK">
         Türk dili:
-        <span
-          class="tagName"
-          @click="gotoHome(authorLanguages.TRK)"
-        >{{ authorLanguages.TRK }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.TRK)">{{
+          authorLanguages.TRK
+        }}</span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.VIN">
         Tiếng Việt:
-        <span
-          class="tagName"
-          @click="gotoHome(authorLanguages.VIN)"
-        >{{ authorLanguages.VIN }}</span>
+        <span class="tagName" @click="gotoHome(authorLanguages.VIN)">{{
+          authorLanguages.VIN
+        }}</span>
       </span>
       <!-- 标签别名 -->
       <span class="tagLabel" v-for="item in authorAlias" :key="item">
@@ -135,7 +129,12 @@
     <!-- 编辑信息页面 -->
     <div v-if="edit" class="content">
       <div class="main">
-        <el-form ref="authorForm" :model="author" label-width="auto" :rules="rules">
+        <el-form
+          ref="authorForm"
+          :model="author"
+          label-width="auto"
+          :rules="rules"
+        >
           <el-form-item label="作者类型" prop="authorType">
             <el-select v-model="author.authorType">
               <el-option
@@ -147,9 +146,14 @@
             </el-select>
           </el-form-item>
           <el-form-item label="官网/空间" prop="userSpaces">
-            <p v-for="(URL,index) in author.userSpaces" :key="URL">
+            <p v-for="(URL, index) in author.userSpaces" :key="URL">
               <a target="_blank" :href="URL" :key="URL">{{ URL }}</a>
-              <el-button type="text" style="margin-left:5px" @click="deluserSpace(index)">删除</el-button>
+              <el-button
+                type="text"
+                style="margin-left:5px"
+                @click="deluserSpace(index)"
+                >删除</el-button
+              >
             </p>
             <p v-if="!author.userSpaces.length">暂无官网/空间地址</p>
           </el-form-item>
@@ -172,7 +176,8 @@
               style="margin:10px;"
               closable
               @close="handleClose(tag)"
-            >{{tag}}</el-tag>
+              >{{ tag }}</el-tag
+            >
             <p v-if="!author.commonTags.length">暂无标签</p>
           </el-form-item>
           <el-form-item>
@@ -192,24 +197,28 @@
                   <div
                     class="name"
                     v-bind:class="{
-                          Copyright: item.cat == 2,
-                          Language: item.cat == 5,
-                          Character: item.cat == 1,
-                          Author: item.cat == 3,
-                          General: item.cat == 0,
-                          Meta: item.cat == 4
-                        }"
-                  >{{ item.tag }}</div>
+                      Copyright: item.cat == 2,
+                      Language: item.cat == 5,
+                      Character: item.cat == 1,
+                      Author: item.cat == 3,
+                      General: item.cat == 0,
+                      Meta: item.cat == 4
+                    }"
+                  >
+                    {{ item.tag }}
+                  </div>
                   <div class="addr">{{ item.cnt }}</div>
                 </div>
               </template>
-              <el-button @click="addTag" slot="append" :loading="loading2">添加</el-button>
+              <el-button @click="addTag" slot="append" :loading="loading2"
+                >添加</el-button
+              >
             </el-autocomplete>
           </el-form-item>
-          <el-form-item label="简介">
+          <el-form-item label="简介" style="margin-top:5px">
             <el-input
               type="textarea"
-              :autosize="{ minRows: 4}"
+              :autosize="{ minRows: 4 }"
               placeholder="写点儿什么吧~"
               clearable
               v-model="author.desc"
@@ -221,7 +230,9 @@
       <div style="width:100%;height:60px;"></div>
       <div class="foot">
         <el-button class="Edit" @click="edit = false">返回</el-button>
-        <el-button type="primary" class="Edit" @click="submitData()">提交修改</el-button>
+        <el-button type="primary" class="Edit" @click="submitData()"
+          >提交修改</el-button
+        >
       </div>
     </div>
 
@@ -229,9 +240,14 @@
     <div v-else class="content">
       <span v-if="!haveData">暂无该作者数据</span>
       <div v-else class="main">
-        <el-form ref="authorForm" :model="author" label-width="auto" :rules="rules">
+        <el-form
+          ref="authorForm"
+          :model="author"
+          label-width="auto"
+          :rules="rules"
+        >
           <el-form-item label="作者类型">
-            <p v-if="author.authorType=='individual'">个人</p>
+            <p v-if="author.authorType == 'individual'">个人</p>
             <p v-else>社团</p>
           </el-form-item>
           <el-form-item label="官网/空间" prop="userSpaces">
@@ -246,12 +262,17 @@
               v-for="tag in author.commonTags"
               :key="tag"
               style="margin:10px;"
-            ><span style="cursor: pointer;" @click="gotoHome(tag)">{{ tag }}</span></el-tag>
+              ><span style="cursor: pointer;" @click="gotoHome(tag)">{{
+                tag
+              }}</span></el-tag
+            >
             <p v-if="!author.commonTags.length">暂无标签</p>
           </el-form-item>
           <el-form-item label="简介">
-            <p v-if="author.desc==''">暂无简介</p>
-            <p v-else v-linkified style="white-space: pre-line;">{{author.desc}}</p>
+            <p v-if="author.desc == ''">暂无简介</p>
+            <p v-else v-linkified style="white-space: pre-line;">
+              {{ author.desc }}
+            </p>
           </el-form-item>
         </el-form>
       </div>
@@ -259,7 +280,9 @@
       <div style="width:100%;height:60px;"></div>
       <div class="foot">
         <el-button class="Edit" @click="getAuthorData()">刷新</el-button>
-        <el-button type="primary" class="Edit" @click="edit = true">修改内容</el-button>
+        <el-button type="primary" class="Edit" @click="edit = true"
+          >修改内容</el-button
+        >
       </div>
     </div>
   </div>
@@ -328,7 +351,7 @@ export default {
   },
   methods: {
     // copied from LeftNavbar.vue
-     gotoHome(key) {
+    gotoHome(key) {
       if (key != "") {
         this.$router
           .push({ path: "/home", query: { keyword: key } })
@@ -376,6 +399,10 @@ export default {
             .then(result => {
               if (result.data.status == "FAILED") {
                 if (result.data.data.reason == "RECORD_NOT_FOUND") {
+                  this.author.authorType = "individual";
+                  this.author.commonTags = [];
+                  this.author.userSpaces = [];
+                  this.author.desc = "";
                   this.haveData = false;
                   this.loading = false;
                 }
@@ -431,7 +458,8 @@ export default {
           })
             .then(result => {
               this.open2("修改成功!");
-              this.loading = false;
+              this.getAuthorData();
+              this.edit = false;
             })
             .catch(err => {
               this.open6();
@@ -546,6 +574,7 @@ export default {
   },
   watch: {
     AuthorID() {
+      this.edit = false;
       this.getAuthorData();
     }
   },
@@ -634,6 +663,6 @@ export default {
   color: #f80;
 }
 .el-form-item {
-    margin-bottom: 0px;
+  margin-bottom: 0px;
 }
 </style>
