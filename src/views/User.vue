@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 新增user模块 需要安装依赖
 npm install --save-dev less-loader less
 npm install echarts --save
@@ -207,7 +207,7 @@ Vue.prototype.$echarts = echarts;
 
     .content {
        /* width: 1600px;*/
-        width: 100%;
+        width: 98%;
    /*     max-width: 3000px;*/
 
         height: 100%;
