@@ -238,7 +238,6 @@ export default {
         this.showCropper = true;
         this.cropper.img = src;
       } catch (error) {
-        console.log(error);
       }
     },
     dataURLtoFile(dataurl, filename) {

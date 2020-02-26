@@ -13,12 +13,12 @@
     <div class="bigbox standard">
       <div class="aside">
         <div class="new-create" @click="changeDoingSatate()" :class="{active:doingState}">
-          <i class="el-icon-goblet-square"></i>
-          <a>待处理索引</a>
+
+          <a>    <i class="el-icon-goblet-square"></i>待处理索引</a>
         </div>
         <div class="new-create" @click="changeFailedSatate()" :class="{active:failedState}">
-          <i class="el-icon-goblet-full"></i>
-          <a>已失败索引</a>
+
+          <a>   <i class="el-icon-goblet-full"></i> 已失败索引</a>
         </div>
       </div>
       <div class="main">
@@ -43,8 +43,8 @@
               v-model="value"
               active-color="#13ce66"
               inactive-color="#ff4949"
-              active-text="仅显示url"
-              inactive-text="显示错误信息"
+              active-text="显示url和时间"
+              inactive-text="显示全部"
             ></el-switch>
             <transition mode="out-in">
               <el-table
@@ -54,12 +54,13 @@
                 v-show="value"
               >
                 <el-table-column prop="url" label="URL" align="center"></el-table-column>
+                <el-table-column prop="time" label="TIME" align="center"></el-table-column>
               </el-table>
             </transition>
             <transition mode="out-in">
               <el-table :data="tableData" stripe style="width: 100%" v-show="!value">
                 <el-table-column prop="url" label="URL" align="center"></el-table-column>
-                <el-table-column prop="status" label="STATUS" align="center"></el-table-column>
+                <el-table-column prop="time" label="TIME" align="center"></el-table-column>
                 <el-table-column prop="exception" label="EXCEPTION" align="center"></el-table-column>
               </el-table>
             </transition>
@@ -82,7 +83,7 @@ export default {
       tableData: [
         {
           url: "null",
-          status: "null",
+          time: "null",
           exception: "null"
         }
       ],
@@ -122,11 +123,11 @@ export default {
       let m = [];
 
       for (let index in _that.failedData) {
-        if (_that.failedData[index].ret.result_obj.data !== undefined) {
+        if (_that.failedData[index].ret !== undefined) {
           let array = [
-            { url: _that.failedData[index].post_param.url },
-            { status: _that.failedData[index].ret.result_obj.status },
-            { exception: _that.failedData[index].ret.result_obj.data.exception }
+            { url: _that.failedData[index].post_param.url},
+            { time: this.formatDate(_that.failedData[index].time)},
+            { exception: JSON.stringify(_that.failedData[index].ret)}
           ];
           m[index] = array;
         }
@@ -182,6 +183,31 @@ export default {
         return "success-row";
       }
       return "";
+    },
+    formatDate(value) {
+      if (value) {
+        var upload_time = new Date(value.$date);
+        var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
+        var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        var h = upload_time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
+        var m = upload_time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
+        var s = upload_time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+        return (
+                y +
+                "-" +
+                // 数字不足两位自动补零，下同
+                (Array(2).join(0) + M).slice(-2) +
+                "-" +
+                (Array(2).join(0) + d).slice(-2) +
+                " " +
+                (Array(2).join(0) + h).slice(-2) +
+                ":" +
+                (Array(2).join(0) + m).slice(-2) +
+                ":" +
+                (Array(2).join(0) + s).slice(-2)
+        );
+      }
     }
   },
   components: {},
@@ -215,8 +241,8 @@ export default {
   position: absolute;
   z-index: 9999;
 }
-.null {
-  height: 700px;
+.null,.notnull{
+  min-height: 700px !important;
 }
 .fav {
   height: 100%;
@@ -259,13 +285,13 @@ export default {
 
   div {
     width: 100%;
-    height: 60px;
+    height: 30px;
 
     position: relative;
     padding-left: 20px;
     transition: background-color 0.3s ease;
     white-space: nowrap;
-    font-size: 22px;
+    font-size: 20px;
     padding-bottom: 30px;
     margin-bottom: 5px;
 
@@ -274,30 +300,31 @@ export default {
     &:hover {
       background-color: #f4f5f7;
     }
-    i {
-      /*           display:inline-block;
-                width: 70px;*/
-      display: block;
-      position: absolute;
-      width: 50px;
-      top: 50%;
-      transform: translate(40%, -50%);
-      color: #2c3e50;
-    }
+
     a {
       cursor: pointer;
       color: #2c3e50;
       display: block;
-      position: absolute;
-      transform: translate(-50%, -50%);
+      position: relative;
       right: 0;
       top: 50%;
-      width: 130px;
+      left: 50%;
+      transform: translate(-50%,0%);
+      width: 200px;
       height: 30px;
-      font-size: 18px;
-      line-height: 30px;
       text-overflow: ellipsis;
       overflow: hidden;
+      i {
+        /*           display:inline-block;
+                  width: 70px;*/
+        display: block;
+        position: absolute;
+        width: 50px;
+        top: 50%;
+
+        transform: translate(0, -50%);
+        color: #2c3e50;
+      }
     }
   }
   ul {
@@ -344,12 +371,7 @@ export default {
 }
 
 .main {
-  margin: 18px;
-  flex: 5;
-  height: 800px;
-  color: #333;
-  text-align: center;
-  line-height: 160px;
+  width: 85%;
   .info-box {
     padding-bottom: 18px;
     height: 200px;

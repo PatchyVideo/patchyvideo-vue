@@ -10,6 +10,8 @@ import "font-awesome/css/font-awesome.min.css";
 /*import echarts from "echarts";*/
 import login from "./views/Login.vue";
 import $ from "jquery";
+import linkify from 'vue-linkify';
+ 
 let echarts = require('echarts/lib/echarts')
 require('echarts/lib/chart/sunburst')
 require('echarts/lib/component/legend')
@@ -20,8 +22,15 @@ Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
 Vue.use(ElementUI);
 Vue.use(VueCropper);
+Vue.directive('linkified', linkify);
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;
+
+Vue.config.keyCodes.Left_Arrow = 37;
+Vue.config.keyCodes.Right_Arrow = 39;
+Vue.config.keyCodes.Up_Arrow = 38;
+Vue.config.keyCodes.Dw_Arrow = 40;
+
 
 var vm = new Vue({
   router,

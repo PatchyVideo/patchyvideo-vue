@@ -205,7 +205,8 @@ export default {
     this.getCookie();
     this.iptVal = this.iptVal2;
   },
-  mounted() {},
+  mounted() {
+  },
   updated() {},
   methods: {
     /*  watchAutoComplete(){

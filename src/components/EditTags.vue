@@ -270,7 +270,6 @@ export default {
     };
   },
   created() {
-    console.log("be called");
     var that = this;
     //当前页面监视键盘输入
     document.onkeydown = function(e) {
@@ -306,7 +305,6 @@ export default {
       for (let i = 0; i < categories.length; i++) {
         this.tagCategoriesAll.push(categories[i].name);
       }
-      console.log(this.tagCategoriesAll);
     });
 
   },
