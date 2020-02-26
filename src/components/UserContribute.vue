@@ -374,6 +374,47 @@ export default {
 </script>
 
 <style  lang="less" scoped>
+  @media screen and(max-width: 1720px){
+    .video_lineUp {
+      display: flex;
+      /*    justify-content: space-around;*/
+      justify-content: flex-start;
+      flex-direction: row;
+      flex-wrap: wrap;
+      overflow: auto;
+      max-height: 700px;
+      box-sizing: border-box;
+      .list-item {
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+        flex: 0 0 48% !important;
+        box-sizing: border-box;
+        margin: 10px 5px 5px;
+        transition: all 0.3s ease;
+        img {
+          width: 80%;
+          height: 60%;
+          min-width: 233px;
+          min-height: 145px;
+
+          /*min-width: 233px;
+          min-height: 145px;*/
+        }
+        h4 {
+          margin: auto;
+          width: 233px;
+          height: 46px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          a{
+          }
+        }
+        &:hover {
+          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+          background-color: #f4f4f5;
+        }
+      }
+    }
+  }
 .v-enter,
 .v-leave-to {
   opacity: 0;
@@ -407,7 +448,8 @@ export default {
 
   .el-main {
     width: 50%;
-
+/*    min-width: 800px;*/
+    overflow: auto;
     border: 1px solid #e5e9ef;
     box-sizing: border-box;
     .nulldata-right {
@@ -461,16 +503,16 @@ export default {
        width: 80%;
        height: 60%;
         min-width: 233px;
+        min-height: 145px;
+
         /*min-width: 233px;
         min-height: 145px;*/
       }
       h4 {
         margin: auto;
         width: 233px;
-        height: 40px;
-
+        height: 46px;
         overflow: hidden;
-
         text-overflow: ellipsis;
         a{
         }
