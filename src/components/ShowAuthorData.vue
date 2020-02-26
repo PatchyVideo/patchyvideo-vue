@@ -148,7 +148,7 @@
           </el-form-item>
           <el-form-item label="官网/空间" prop="userSpaces">
             <p v-for="(URL,index) in author.userSpaces" :key="URL">
-              <a target="_blank" :href="'http://'+URL" :key="URL">{{ URL }}</a>
+              <a target="_blank" :href="URL" :key="URL">{{ URL }}</a>
               <el-button type="text" style="margin-left:5px" @click="deluserSpace(index)">删除</el-button>
             </p>
             <p v-if="!author.userSpaces.length">暂无官网/空间地址</p>
@@ -160,7 +160,7 @@
               v-model="URLval"
               @keyup.enter.native="adduserSpace()"
             >
-              <template slot="prepend">http://</template>
+              <template slot="prepend"></template>
               <el-button slot="append" @click="adduserSpace()">添加</el-button>
             </el-input>
           </el-form-item>
@@ -236,7 +236,7 @@
           </el-form-item>
           <el-form-item label="官网/空间" prop="userSpaces">
             <p v-for="URL in author.userSpaces" :key="URL">
-              <a target="_blank" :href="'http://'+URL" :key="URL">{{ URL }}</a>
+              <a target="_blank" :href="URL" :key="URL">{{ URL }}</a>
             </p>
             <p v-if="!author.userSpaces.length">暂无官网/空间地址</p>
           </el-form-item>
@@ -246,11 +246,12 @@
               v-for="tag in author.commonTags"
               :key="tag"
               style="margin:10px;"
-            >{{tag}}</el-tag>
+            ><span style="cursor: pointer;" @click="gotoHome(tag)">{{ tag }}</span></el-tag>
             <p v-if="!author.commonTags.length">暂无标签</p>
           </el-form-item>
           <el-form-item label="简介">
             <p v-if="author.desc==''">暂无简介</p>
+            <p v-else v-linkified style="white-space: pre-line;">{{author.desc}}</p>
           </el-form-item>
         </el-form>
       </div>
@@ -326,6 +327,18 @@ export default {
     this.getAuthorData();
   },
   methods: {
+    // copied from LeftNavbar.vue
+     gotoHome(key) {
+      if (key != "") {
+        this.$router
+          .push({ path: "/home", query: { keyword: key } })
+          .catch(err => {
+            return err;
+          });
+      } else {
+        this.$router.push({ path: "/home" });
+      }
+    },
     // 标签点击搜索功能
     gotoHome(key) {
       if (key != "") {
