@@ -374,7 +374,7 @@ export default {
 </script>
 
 <style  lang="less" scoped>
-  @media screen and(max-width: 1720px){
+  @media screen and(max-width: 1810px){
     .video_lineUp {
       display: flex;
       /*    justify-content: space-around;*/
