@@ -258,7 +258,7 @@
       <!-- 填补foot的空间的容器 -->
       <div style="width:100%;height:60px;"></div>
       <div class="foot">
-        <el-button class="Edit" @click="getAuthorData()">重新获取</el-button>
+        <el-button class="Edit" @click="getAuthorData()">刷新</el-button>
         <el-button type="primary" class="Edit" @click="edit = true">修改内容</el-button>
       </div>
     </div>
@@ -632,5 +632,8 @@ export default {
 }
 .Meta {
   color: #f80;
+}
+.el-form-item {
+    margin-bottom: 0px;
 }
 </style>
