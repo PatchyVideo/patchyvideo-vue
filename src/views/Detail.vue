@@ -38,7 +38,7 @@
     <topnavbar />
 
     <!-- 更改视频级别的弹出框 -->
-    <el-dialog title="管理" :visible.sync="managementBox" width="20%">
+    <el-dialog title="管理" :visible.sync="managementBox" width="30%">
       <div style="width:80%;margin:0 auto">
         <el-select v-model="theVideoRank" placeholder="请修改视频的等级" style="width:100%">
           <el-option v-for="item in videoRanks" :key="item" :label="item" :value="item"></el-option>
@@ -47,6 +47,24 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="managementBox = false">取 消</el-button>
         <el-button type="primary" @click="manageVideo()" :loading="loading">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 更改视频级别的弹出框 -->
+    <el-dialog title="修改视频发布类型" :visible.sync="changeRepostType" width="30%">
+      <div style="width:80%;margin:0 auto">
+        <el-select v-model="RepostType" placeholder="请修改视频的发布类型" style="width:100%">
+          <el-option
+            v-for="item in RepostTypes"
+            :key="item.label"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="changeRepostType = false">取 消</el-button>
+        <el-button type="primary" @click="repostType()" :loading="loading">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -103,6 +121,7 @@
               </h2>
               <br />
               <el-button v-if="isLogin" type="primary" round @click="openMyList">添加到我的列表</el-button>
+              <el-button v-if="isLogin" type="primary" round @click="changeRepostType = true">修改发布类型</el-button>
               <el-button v-if="isAdmin" @click="managementBox = true">管理</el-button>
             </div>
           </div>
@@ -321,6 +340,8 @@ export default {
       isAdmin: false,
       // 视频管理的对话框
       managementBox: false,
+      // 修改视频发布类型的对话框
+      changeRepostType: false,
       // 添加到我的播放列表的弹出框
       addToList: false,
       // 获取我的播放列表的时候的加载状态
@@ -329,6 +350,18 @@ export default {
       theVideoRank: 3,
       // 视频的等级（0~3，其中3为所有人可见）
       videoRanks: [0, 1, 2, 3],
+      // 本页面的视频的发布类型
+      RepostType: "",
+      // 视频的发布类型
+      RepostTypes: [
+        { value: "official", label: "原始发布" },
+        { value: "official_repost", label: "官方再发布" },
+        { value: "authorized_translation", label: "授权翻译" },
+        { value: "authorized_repost", label: "授权转载" },
+        { value: "translation", label: "自发翻译" },
+        { value: "repost", label: "自发搬运" },
+        { value: "unknown", label: "其他" }
+      ],
       dialogVisible: false, //删除提示框
       pid: "", //视频的id值
       isIpfs: false,
@@ -586,6 +619,31 @@ export default {
           this.open1("修改成功！");
           this.loading = false;
           this.managementBox = false;
+          this.searchVideo();
+        } else {
+          this.open4("修改失败，请重试！");
+        }
+      });
+    },
+    // 修改发布类型
+    repostType() {
+      if (this.RepostType == "") {
+        this.open4("请选择发布类型！");
+        return;
+      }
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "/be/videos/set_repost_type.do",
+        data: {
+          vid: this.pid,
+          repost_type: this.RepostType
+        }
+      }).then(result => {
+        if (result.data.status == "SUCCEED") {
+          this.open1("修改成功！");
+          this.loading = false;
+          this.changeRepostType = false;
           this.searchVideo();
         } else {
           this.open4("修改失败，请重试！");
