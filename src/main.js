@@ -10,9 +10,9 @@ import "font-awesome/css/font-awesome.min.css";
 /*import echarts from "echarts";*/
 import login from "./views/Login.vue";
 import $ from "jquery";
-let echarts = require('echarts/lib/echarts')
-require('echarts/lib/chart/sunburst')
-require('echarts/lib/component/legend')
+let echarts = require('echarts/lib/echarts');
+require('echarts/lib/chart/sunburst');
+require('echarts/lib/component/legend');
 /*以上三个包为按需导入的图表必须项*/
 
 import { VueCropper } from "vue-cropper";
@@ -22,6 +22,12 @@ Vue.use(ElementUI);
 Vue.use(VueCropper);
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;
+
+Vue.config.keyCodes.Left_Arrow = 37;
+Vue.config.keyCodes.Right_Arrow = 39;
+Vue.config.keyCodes.Up_Arrow = 38;
+Vue.config.keyCodes.Dw_Arrow = 40;
+
 
 var vm = new Vue({
   router,

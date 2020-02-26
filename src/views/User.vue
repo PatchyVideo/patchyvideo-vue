@@ -201,15 +201,15 @@ Vue.prototype.$echarts = echarts;
         display: block;
     }
     .el-tabs{
-        margin-left: 6%;
-        margin-right: 6%;
+       width: 90%;
+        margin: auto;
     }
 
     .content {
        /* width: 1600px;*/
         width: 100%;
    /*     max-width: 3000px;*/
-        min-width: 1200px;
+
         height: 100%;
 
    /*     background:  url("../static/img/imoto.jpg") no-repeat top center;*/
