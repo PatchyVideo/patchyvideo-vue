@@ -71,8 +71,8 @@ export default {
         for (var i = 0; i < categories.length; i++) {
           this.tagCategories.push(categories[i].name);
         }
+        this.loading = false;
       });
-      this.loading = false;
     }
   },
   components: { topnavbar, tagDetail, searchTag }

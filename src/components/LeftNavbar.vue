@@ -32,7 +32,18 @@
 <template>
   <div class="left-navbar">
     <!-- EditTags组件-->
-    <EditTags ref="editTag" :msg="pid" :visible.sync="showTagPanel" v-if="showTagPanel" class="EditTags"></EditTags>
+    <EditTags
+      ref="editTag"
+      :msg="pid"
+      :visible.sync="showTagPanel"
+      v-if="showTagPanel"
+      class="EditTags"
+    ></EditTags>
+
+    <!-- 作者详情组件 -->
+    <el-dialog :close-on-click-modal="false" :visible.sync="showAuthorData" width="70%">
+      <ShowAuthorData ref="AuthorData" :AuthorID="AuthorID"></ShowAuthorData>
+    </el-dialog>
 
     <!-- 显示标签组件的对话框 -->
     <el-dialog title="标签编辑历史" :visible.sync="dialogVisible" width="70%">
@@ -132,8 +143,15 @@
               Meta: val == 'Meta',
               Soundtrack:val == 'Soundtrack'
             }"
-            @click="gotoHome(item)"
-          >{{ item }}</p>
+          >
+            <span @click="gotoHome(item)">{{ item }}</span>
+            <el-button
+              v-if="val == 'Author'"
+              size="mini"
+              style="margin-left:5px;"
+              @click="openAuthorData(item)"
+            >详情</el-button>
+          </p>
         </li>
       </ul>
     </div>
@@ -141,6 +159,7 @@
 </template>
 
 <script>
+import ShowAuthorData from "../components/ShowAuthorData.vue";
 import EditTags from "../components/EditTags";
 export default {
   data() {
@@ -154,7 +173,13 @@ export default {
       // 历史标签信息页面打开的标志
       dialogVisible: false,
       // 加载标签历史信息的标志
-      loading2: false
+      loading2: false,
+      // 作者名
+      Author: "",
+      // 打开的作者详情的作者的ID
+      AuthorID: "ID",
+      // 是否打开作者详情页面
+      showAuthorData: false
     };
   },
   computed: {},
@@ -182,8 +207,14 @@ export default {
     },
     // 打开Tag编辑页面
     openEditTags() {
-    /*  this.$refs.editTag.getCommonTags();*/
+      /*  this.$refs.editTag.getCommonTags();*/
       this.showTagPanel = true;
+    },
+    // 打开作者详情对话框
+    openAuthorData(ID) {
+      this.AuthorID = ID;
+      this.Author = ID;
+      this.showAuthorData = true;
     },
     // 使用视频已有的标签发布视频
     postVideo() {
@@ -233,7 +264,7 @@ export default {
       );
     }
   },
-  components: { EditTags },
+  components: { EditTags, ShowAuthorData },
   watch: {
     // 如果标签编辑界面被关闭，则重新请求页面数据
     showTagPanel() {
