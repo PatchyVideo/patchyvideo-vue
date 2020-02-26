@@ -203,7 +203,8 @@
                           Character: item.cat == 1,
                           Author: item.cat == 3,
                           General: item.cat == 0,
-                          Meta: item.cat == 4
+                          Meta: item.cat == 4,
+                          Soundtrack: item.cat == 6
                         }"
                       >{{ item.tag }}</div>
                       <div class="addr">{{ item.cnt }}</div>
@@ -1062,5 +1063,8 @@ div {
 }
 .Meta {
   color: #f80;
+}
+.Soundtrack {
+  color: #ff7792;
 }
 </style>
