@@ -54,6 +54,17 @@
           </div>
         </div>
       </el-collapse-transition>
+      <!-- 视频副本 -->
+      <div class="RepostType" v-if="copy!=''">
+        <el-select v-model="RepostType" placeholder="请修改视频的发布类型" style="width:100%">
+          <el-option
+            v-for="item in RepostTypes"
+            :key="item.label"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </div>
       <!-- 视频上传 -->
       <el-button class="postButton" type="primary" @click="postSingleVideo">
         发布视频
@@ -95,6 +106,18 @@ export default {
       showTagPanel: true,
       // 视频的标签数组
       tags: [],
+      // 本页面的视频的发布类型
+      RepostType: "unknown",
+      // 视频的发布类型
+      RepostTypes: [
+        { value: "official", label: "原始发布" },
+        { value: "official_repost", label: "官方再发布" },
+        { value: "authorized_translation", label: "授权翻译" },
+        { value: "authorized_repost", label: "授权转载" },
+        { value: "translation", label: "自发翻译" },
+        { value: "repost", label: "自发搬运" },
+        { value: "unknown", label: "其他" }
+      ],
       // 匹配短地址，用以扩展成完整地址
       EXPANDERS: {},
       // 匹配URL并请求视频数据
@@ -605,23 +628,28 @@ export default {
           pid: this.pid,
           copy: this.copy,
           url: this.VideoURL,
-          tags: this.tags
+          tags: this.tags,
+          repost_type: this.RepostType
         }
-      }).then(result => {
-        if (result.data.status == "SUCCEED") {
-          this.open4();
-        } else if (result.data.status == "FAILED") {
-          if (result.data.data.reason == "TAG_NOT_EXIST") {
-            var errorTag = result.data.data.aux;
-            this.open3(errorTag);
+      })
+        .then(result => {
+          if (result.data.status == "SUCCEED") {
+            this.open4();
+          } else if (result.data.status == "FAILED") {
+            if (result.data.data.reason == "TAG_NOT_EXIST") {
+              var errorTag = result.data.data.aux;
+              this.open3(errorTag);
+            } else {
+              this.open2();
+            }
           } else {
-            this.open2();
+            this.open5();
           }
-        } else {
-          this.open5();
-        }
-        this.loading = false;
-      });
+          this.loading = false;
+        })
+        .catch(err => {
+          this.loading = false;
+        });
       /*setTimeout(()=>{
         this.axios({
           method: "post",
@@ -727,6 +755,10 @@ export default {
 .tagBox {
   width: 100%;
   text-align: left;
+}
+.RepostType {
+  width: 30%;
+  margin-top: 10px;
 }
 .postButton {
   width: 60%;
