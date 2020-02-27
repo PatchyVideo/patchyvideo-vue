@@ -69,9 +69,10 @@
       <ul>
         <!-- 下拉框和搜索框 -->
         <li id="s1">
-          <!-- 谜之作用的下拉框（？） -->
-          <select class="form_select">
-            <option value="0">标签</option>
+          <!-- 搜索条件 -->
+          <select ref="form_select" class="form_select">
+            <option value="tag">标签/文本</option>
+            <option value="text">仅文本</option>
           </select>
           <!-- 搜索框 -->
           <div id="search-bar-query">
@@ -205,8 +206,7 @@ export default {
     this.getCookie();
     this.iptVal = this.iptVal2;
   },
-  mounted() {
-  },
+  mounted() {},
   updated() {},
   methods: {
     /*  watchAutoComplete(){
@@ -305,7 +305,10 @@ export default {
       // console.log(this.iptVal);
       if (this.iptVal != "") {
         this.$router
-          .push({ path: "/home", query: { keyword: this.iptVal } })
+          .push({
+            path: "/home",
+            query: { keyword: this.iptVal, qtype: this.$refs.form_select.value }
+          })
           .catch(err => {
             return err;
           });
