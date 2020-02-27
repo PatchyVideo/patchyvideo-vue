@@ -155,7 +155,12 @@
               v-if="isIpfs"
               style="position: relative;left: 50%;transform: translateX(-50%);"
             ></video>
-            <p class="videoDesc" @click="postAsCopy($event)" v-html="myVideoData.video.item.desc" v-linkified></p>
+            <p
+              class="videoDesc"
+              @click="postAsCopy($event)"
+              v-html="myVideoData.video.item.desc"
+              v-linkified
+            ></p>
           </div>
         </div>
 
@@ -365,8 +370,7 @@ export default {
         { value: "authorized_translation", label: "授权翻译" },
         { value: "authorized_repost", label: "授权转载" },
         { value: "translation", label: "自发翻译" },
-        { value: "repost", label: "自发搬运" },
-        { value: "unknown", label: "其他" }
+        { value: "repost", label: "自发搬运" }
       ],
       dialogVisible: false, //删除提示框
       pid: "", //视频的id值
