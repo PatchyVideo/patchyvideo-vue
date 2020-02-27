@@ -1,7 +1,7 @@
 <!--    vue组件：LeftNavbar.vue     -->
 <!--
     组件：左侧的标签导航栏
-    大小：15% * 100%
+    大小：15%（最小150px） * 100%
     功能：home页面下对标签进行导航
     包含组件：EditTags.vue
     必要传入参数：
@@ -76,13 +76,17 @@
                 >{{tag}}</el-tag>
                 <br />
               </div>
-              <div v-if="item.user_obj.length">
-                <span style="margin-right:10px;margin-top:3px">修改者:</span>
-                <span
-                  v-for="user in item.user_obj"
-                  :key="user.profile.username"
-                  style="margin-right:5px;margin-top:3px"
-                >{{ user.profile.username }}</span>
+              <div v-if="item.user_obj.length" style="margin-top:5px">
+                <span style="margin-right:10px;">修改者:</span>
+                <span v-for="user in item.user_obj" :key="user.profile.username" class="editer">
+                  <el-avatar
+                    fit="cover"
+                    class="loginUser-userAvatar"
+                    :size="20"
+                    :src="'be/images/userphotos/'+user.profile.image"
+                  ></el-avatar>
+                  <router-link :to="'/users/'+user._id.$oid">{{ user.profile.username }}</router-link>
+                </span>
               </div>
               <span v-if="item.del.length==0 && item.add.length==0">暂无记录!</span>
             </div>
@@ -348,6 +352,7 @@ export default {
 .left-navbar {
   position: relative;
   width: 15%;
+  min-width: 150px;
   margin-right: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -368,6 +373,12 @@ export default {
 .EditTags {
   position: relative;
   left: 300%;
+}
+.editer {
+  margin-right: 5px;
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
 }
 /* 针对列表调整颜色 */
 .Copyright {

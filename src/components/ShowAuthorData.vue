@@ -10,8 +10,10 @@
 -->
 <template>
   <div v-loading="loading">
-    <!-- 各种语言标签 -->
+    <!-- 头像&各种语言标签 -->
     <div class="AuthorName">
+      <!-- 头像 -->
+      <el-avatar fit="cover" style="margin-right:5px" :size="30" :src="author.avatar"></el-avatar>
       <span class="tagLabel" v-if="authorLanguages.CHS">
         简体中文:
         <span class="tagName" @click="gotoHome(authorLanguages.CHS)">
@@ -196,7 +198,7 @@
           </el-form-item>
           <el-form-item label="相关标签">
             <el-tag
-              :disable-transitions="false"
+              :disable-transitions="true"
               v-for="tag in author.commonTags"
               :key="tag"
               style="margin:10px;"
@@ -246,6 +248,39 @@
               v-model="author.desc"
             ></el-input>
           </el-form-item>
+          <el-form-item label="头像" style="margin-top:5px">
+            <el-button @click="useFile = !useFile" style="float:right">切换上传方式</el-button>
+            <el-upload
+              v-if="useFile"
+              action="be/helper/upload_image.do"
+              :before-remove="beforeRemove"
+              :on-success="uploadVideoCover"
+              :limit="1"
+              :on-exceed="handleExceed"
+              :file-list="avatarKey"
+              :data="avatarData"
+            >
+              <el-button size type="primary" style="margin-right:10px;">从这里上传头像</el-button>
+              <div>没反应？文件太大了哦</div>
+            </el-upload>
+            <div v-else>
+              <p v-if="avatarURL!=''">
+                上传成功！
+                <el-button type="text" style="margin-left:5px" @click="avatarURL=''">删除</el-button>
+              </p>
+              <p v-else>暂无URL</p>
+              <el-input
+                style="width:60%"
+                placeholder="在这里输入头像的URL~"
+                clearable
+                v-model="avatarIpt"
+                @keyup.enter.native="uploadImageUrl"
+              >
+                <template slot="prepend"></template>
+                <el-button slot="append" @click="uploadImageUrl" :loading="loading3">添加</el-button>
+              </el-input>
+            </div>
+          </el-form-item>
         </el-form>
       </div>
       <!-- 填补foot的空间的容器 -->
@@ -273,7 +308,7 @@
           </el-form-item>
           <el-form-item label="相关标签">
             <el-tag
-              :disable-transitions="false"
+              :disable-transitions="true"
               v-for="tag in author.commonTags"
               :key="tag"
               style="margin:10px;"
@@ -311,6 +346,16 @@ export default {
       authorLanguages: "",
       // 作者的别名
       authorAlias: "",
+      // 上传的头像（文件上传）
+      avatarKey: [],
+      // 上传的头像（输入框内）
+      avatarIpt: "",
+      // 上传的头像（URL）
+      avatarURL: "",
+      // 上传头像的方式
+      useFile: true,
+      // 头像上传绑定的信息
+      avatarData: { type: "userphoto" },
       // 作者的信息
       author: {
         // 作者的性质
@@ -322,7 +367,7 @@ export default {
         // 作者简介
         desc: "",
         // 作者头像
-        avatar: ""
+        avatar: require("../static/img/defaultAvatar.jpg")
       },
       // 输入框中作者空间的URL
       URLval: "",
@@ -341,6 +386,8 @@ export default {
       edit: false,
       // 添加tag功能加载中的标志
       loading2: false,
+      // 添加URL时加载的标志
+      loading3: false,
       // 对话框加载的标志
       loading: false,
       // 表单校验规则
@@ -417,6 +464,10 @@ export default {
                   this.author.commonTags = [];
                   this.author.userSpaces = [];
                   this.author.desc = "";
+                  this.author.avatar = require("../static/img/defaultAvatar.jpg");
+                  this.avatarKey = [];
+                  this.avatarIpt = "";
+                  this.avatarURL = "";
                   this.haveData = false;
                   this.loading = false;
                 }
@@ -426,6 +477,15 @@ export default {
                 this.author.authorType = result.data.data.record.type;
                 this.author.userSpaces = result.data.data.record.urls;
                 this.author.commonTags = result.data.data.record.common_tags[0];
+                if (result.data.data.record.avatar != "") {
+                  this.author.avatar =
+                    "be/images/userphotos/" + result.data.data.record.avatar;
+                } else {
+                  this.author.avatar = require("../static/img/defaultAvatar.jpg");
+                }
+                this.avatarKey = [];
+                this.avatarIpt = "";
+                this.avatarURL = "";
               }
               this.loading = false;
             })
@@ -454,20 +514,69 @@ export default {
     handleClose(tag) {
       this.author.commonTags.splice(this.author.commonTags.indexOf(tag), 1);
     },
+    // 超出限制大小时调用的函数
+    handleExceed() {
+      this.$message.warning("只能上传一个头像！");
+    },
+    // 删除文件调用的函数
+    beforeRemove(file, fileList) {
+      // return this.$confirm(`确定移除 ${file.name}？`);
+      this.avatarKey = [];
+    },
+    // 上传文件成功之后处理数据取消上传文件的校验规则
+    uploadVideoCover(response, file, fileList) {
+      var cover = {};
+      cover.file_key = response.data.file_key;
+      cover.name = file.name;
+      this.avatarKey.push(cover);
+    },
+    // 上传头像URL
+    uploadImageUrl() {
+      this.loading3 = true;
+      this.axios({
+        method: "post",
+        url: "/be/helper/upload_image_url.do",
+        data: {
+          url: this.avatarIpt,
+          type: "userphoto"
+        }
+      })
+        .then(result => {
+          this.avatarURL = result.data.data.file_key;
+          this.avatarIpt = "";
+          this.loading3 = false;
+        })
+        .catch(err => {
+          this.loading3 = false;
+        });
+    },
     // 提交修改
     submitData() {
+      var avatar_file_key = "";
+      if (this.useFile && this.avatarKey.length) {
+        avatar_file_key = this.avatarKey[0].file_key;
+      } else {
+        avatar_file_key = this.avatarURL;
+      }
+      if (
+        this.author.avatar != require("../static/img/defaultAvatar.jpg") &&
+        avatar_file_key == ""
+      ) {
+        avatar_file_key = undefined;
+      }
       this.loading = true;
       this.$refs.authorForm.validate(valid => {
         if (valid) {
           this.axios({
             method: "post",
-            url: " /be/authors/create_or_modify.do",
+            url: "/be/authors/create_or_modify.do",
             data: {
               author_type: this.author.authorType,
               tagid: this.AuthorID,
               common_tags: this.author.commonTags,
               user_spaces: this.author.userSpaces,
-              desc: this.author.desc
+              desc: this.author.desc,
+              avatar_file_key: avatar_file_key
             }
           })
             .then(result => {

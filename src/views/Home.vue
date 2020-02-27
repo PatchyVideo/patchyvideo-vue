@@ -60,7 +60,7 @@
           <p v-if="maxcount">显示 {{ count2 }} / {{ maxcount }} 个视频</p>
           <p v-else>没有搜索到视频</p>
           <el-checkbox v-model="checked">显示已失效视频</el-checkbox>
-             <span style="margin-left: 100px;font-size: 14px;color:#606266;">已屏蔽含有敏感标签的视频，可在个人界面设置</span>
+          <span style="margin-left: 100px;font-size: 14px;color:#606266;">已屏蔽含有敏感标签的视频，可在个人界面设置</span>
           <el-select id="select-order" v-model="couponSelected">
             <el-option
               v-for="item in options"
@@ -272,7 +272,8 @@ export default {
           page_size: count,
           order: this.couponSelected,
           hide_placeholder: !this.checked,
-          query: str
+          query: str,
+          qtype: this.$route.query.qtype
         }
       }).then(result => {
         if (result.data.status == "SUCCEED") {
@@ -413,7 +414,10 @@ export default {
         return;
       }
       //监听路由query的值，当用户连续输入的搜索值不一样时，更新搜索关键词，调用 this.getSearchData获取搜索数据并渲染。
-      if (newV.query.keyword != oldV.query.keyword) {
+      if (
+        newV.query.keyword != oldV.query.keyword ||
+        newV.query.qtype != oldV.query.qtype
+      ) {
         // 修改网站标题
         document.title = " 搜索结果- " + newV.query.keyword;
         this.ifSearch = true;
