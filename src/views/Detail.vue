@@ -108,7 +108,7 @@
       <div class="content">
         <!-- 推荐视频栏开始  -->
         <div class="recommend">
-          <h2>
+          <h4 style="color:#606266">
             {{videoType}}:
             <el-button v-if="isLogin" type="text" @click="changeRepostType = true">修改</el-button>
             <i
@@ -117,7 +117,7 @@
               @click="refreshVideo(myVideoData)"
               style="float:right"
             ></i>
-          </h2>
+          </h4>
           <div class="re_top">
             <h2>{{ myVideoData.video.item.title }}</h2>
             <div style="margin-left:5px;">
