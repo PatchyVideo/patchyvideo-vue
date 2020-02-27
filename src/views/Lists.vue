@@ -240,6 +240,111 @@ export default {
 </script>
 
 <style scoped>
+/*  @keyframes anim-shadow {
+    0%  {
+      transform: rotate3d(0, 1, 0.01, 0);
+      background-color: #fff;
+    }
+    3%{
+      filter: blur(1px);
+
+      background:linear-gradient(to right bottom,transparent,#fff,#EFF8FE);
+
+    }
+    5%{
+      filter: blur(0px);
+
+ !*     background:linear-gradient(to right bottom,transparent,#fff,#DEF1FE);*!
+    }
+    8%{
+      filter: saturate(10%);
+  !*    background:linear-gradient(to right bottom,transparent,#fff,#CEEAFD)*!
+    }
+    10%{
+      filter: saturate(0%);
+    !*  background:linear-gradient(to right bottom,transparent,#fff,#BDE3FD);*!
+    }
+    15%{
+      filter: hue-rotate(1deg);
+      !*background:linear-gradient(to right bottom,transparent,#fff,#ADDCFC)*!
+
+    }
+    17%{
+      filter: hue-rotate(30deg);
+    }
+    20%{
+      filter: hue-rotate(60deg);
+   !*   filter: brightness(0.4);*!
+!*      background:linear-gradient(to right bottom,transparent,#fff,#9DD5FC);*!
+    }
+    23%{
+      filter: hue-rotate(90deg);
+    }
+    25%{
+      filter: hue-rotate(120deg);
+      !*filter: saturate(30%);*!
+      transform: rotate3d(0, 1, 0.01, 10deg);
+
+    }
+    28%{
+      filter: hue-rotate(150deg);
+    }
+    31%{
+      filter: hue-rotate(180deg);
+    }
+    50%{
+
+
+      transform: rotate3d(0, 1, 0.01, 10deg);
+    }
+
+    75%{
+
+      transform: rotate3d(0, 1, 0.01, -10deg);
+    }
+    80%{
+      filter: hue-rotate(180deg);
+!*      background:linear-gradient(to right bottom,transparent,#fff,#9DD5FC);*!
+    }
+    85%{
+
+
+    !*  background:linear-gradient(to right bottom,transparent,#fff,#ADDCFC)*!
+
+    }
+    90%{
+
+!*      background:linear-gradient(to right bottom,transparent,#fff,#BDE3FD);*!
+    }
+    92%{
+!*      background:linear-gradient(to right bottom,transparent,#fff,#CEEAFD)*!
+    }
+    95%{
+
+!*      background:linear-gradient(to right bottom,transparent,#fff,#DEF1FE);*!
+    }
+    97%{ filter: saturate(0);
+      background:linear-gradient(to right bottom,transparent,#fff,#EFF8FE);
+
+    }
+    100% {
+      transform: rotate3d(0, 1, 0.1, 0deg);
+      background-color: #fff;
+     !* background: repeating-linear-gradient(to bottom, #fff 0%, #fff 10%, #000 10%);*!
+    }
+  }*/
+  .shadow{
+    box-shadow: 0 0 15px 0 rgba(0,0,0,.1);
+    border-radius: 20px;
+  }
+
+  .shadow:hover{
+  /*  animation-name:anim-shadow;
+    animation-iteration-count:infinite;
+    animation-direction:alternate;
+    animation-fill-mode:forwards;
+    animation-duration:5000ms;*/
+  }
 .recommend {
   display: flex;
   flex-wrap: wrap;

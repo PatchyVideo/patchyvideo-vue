@@ -34,6 +34,7 @@ export default {
     width: 70%;
     max-width: 70%;
     max-height: 90%;
+    min-height: 50%;
     overflow: auto;
     position: absolute;
     top: 50% !important;

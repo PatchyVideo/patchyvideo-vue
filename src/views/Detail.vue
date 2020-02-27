@@ -155,7 +155,7 @@
               v-if="isIpfs"
               style="position: relative;left: 50%;transform: translateX(-50%);"
             ></video>
-            <p class="videoDesc" @click="postAsCopy($event)" v-html="myVideoData.video.item.desc"></p>
+            <p class="videoDesc" @click="postAsCopy($event)" v-html="myVideoData.video.item.desc" v-linkified></p>
           </div>
         </div>
 
