@@ -323,7 +323,7 @@
           </el-form-item>
           <el-form-item label="简介">
             <p v-if="author.desc == ''">暂无简介</p>
-            <p v-else v-linkified style="white-space: pre-line;">{{ author.desc }}</p>
+            <p v-else style="white-space: pre-line;">{{ author.desc }}</p>
           </el-form-item>
         </el-form>
       </div>
@@ -390,13 +390,15 @@ export default {
       loading3: false,
       // 对话框加载的标志
       loading: false,
+      // 是否出于提交的时刻
+      nowSubmit: false,
       // 表单校验规则
       rules: {
         authorType: [
           { required: true, message: "请选择作者类型!", trigger: "change" }
         ],
         userSpaces: [
-          { required: true, message: "请输入至少一个地址!", trigger: "change" }
+          { required: false, message: "请输入至少一个地址!", trigger: "change" }
         ]
       },
       infoTip: [
@@ -500,7 +502,9 @@ export default {
     // 添加作者空间
     adduserSpace() {
       if (this.URLval == "") {
-        this.open4("请输入地址!");
+        if (!this.nowSubmit) {
+          this.open4("请输入地址!");
+        }
         return;
       }
       this.author.userSpaces.push(this.URLval);
@@ -552,6 +556,8 @@ export default {
     },
     // 提交修改
     submitData() {
+      this.nowSubmit = true;
+      this.adduserSpace();
       var avatar_file_key = "";
       if (this.useFile && this.avatarKey.length) {
         avatar_file_key = this.avatarKey[0].file_key;

@@ -108,7 +108,7 @@
       <div class="content">
         <!-- 推荐视频栏开始  -->
         <div class="recommend">
-          <h2>
+          <h4 style="color:#606266">
             {{videoType}}:
             <el-button v-if="isLogin" type="text" @click="changeRepostType = true">修改</el-button>
             <i
@@ -117,7 +117,7 @@
               @click="refreshVideo(myVideoData)"
               style="float:right"
             ></i>
-          </h2>
+          </h4>
           <div class="re_top">
             <h2>{{ myVideoData.video.item.title }}</h2>
             <div style="margin-left:5px;">
@@ -155,7 +155,12 @@
               v-if="isIpfs"
               style="position: relative;left: 50%;transform: translateX(-50%);"
             ></video>
-            <p class="videoDesc" @click="postAsCopy($event)" v-html="myVideoData.video.item.desc" v-linkified></p>
+            <p
+              class="videoDesc"
+              @click="postAsCopy($event)"
+              v-html="myVideoData.video.item.desc"
+              v-linkified
+            ></p>
           </div>
         </div>
 
@@ -365,8 +370,7 @@ export default {
         { value: "authorized_translation", label: "授权翻译" },
         { value: "authorized_repost", label: "授权转载" },
         { value: "translation", label: "自发翻译" },
-        { value: "repost", label: "自发搬运" },
-        { value: "unknown", label: "其他" }
+        { value: "repost", label: "自发搬运" }
       ],
       dialogVisible: false, //删除提示框
       pid: "", //视频的id值
