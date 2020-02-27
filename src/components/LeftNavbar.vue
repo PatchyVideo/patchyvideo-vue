@@ -115,7 +115,7 @@
       <!-- 在Detail页面渲染的侧导航条内容 -->
       <ul ref="test" v-if="title == '标签'">
         <li class="tag belong-to-detail" v-for="(key, val) in msg" :key="val">
-          <h3>{{ val }}</h3>
+          <h3>{{ tranTagCategories(val) }}</h3>
           <!-- 根据tag名称自动渲染tag颜色 -->
           <p
             v-for="item in key"
@@ -250,6 +250,21 @@ export default {
     // 视频的pid
     pid() {
       return this.$store.state.videoPid;
+    },
+    // 翻译标签名
+    tranTagCategories(){
+        return function(name) {
+            var map = {
+                "General":"综合",
+                "Character":"角色",
+                "Copyright":"作品",
+                "Author":"up主",
+                "Meta":"元数据",
+                "Language":"语言",
+                "Soundtrack":"原曲",
+            };
+            return map[name];
+        }
     }
   },
   props: ["msg"]
