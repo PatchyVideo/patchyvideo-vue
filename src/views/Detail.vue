@@ -108,20 +108,26 @@
       <div class="content">
         <!-- 推荐视频栏开始  -->
         <div class="recommend">
+          <h2>
+            {{videoType}}:
+            <el-button v-if="isLogin" type="text" @click="changeRepostType = true">修改</el-button>
+            <i
+              v-if="isAdmin"
+              class="el-icon-refresh"
+              @click="refreshVideo(myVideoData)"
+              style="float:right"
+            ></i>
+          </h2>
           <div class="re_top">
-            <div>
-              <h2>
-                {{ myVideoData.video.item.title }}
-                <el-button
-                  v-if="isAdmin"
-                  type="text"
-                  @click="refreshVideo(myVideoData)"
-                  style="padding-top:3px"
-                >信息不正确？点击更新</el-button>
-              </h2>
-              <br />
-              <el-button v-if="isLogin" type="primary" round @click="openMyList">添加到我的列表</el-button>
-              <el-button v-if="isLogin" type="primary" round @click="changeRepostType = true">修改发布类型</el-button>
+            <h2>{{ myVideoData.video.item.title }}</h2>
+            <div style="margin-left:5px;">
+              <el-button
+                v-if="isLogin"
+                icon="el-icon-star-off"
+                type="primary"
+                round
+                @click="openMyList"
+              >收藏</el-button>
               <el-button v-if="isAdmin" @click="managementBox = true">管理</el-button>
             </div>
           </div>
@@ -376,6 +382,39 @@ export default {
     };
   },
   computed: {
+    // 视频的发布类型
+    videoType() {
+      switch (this.myVideoData.video.item.repost_type) {
+        case "official":
+          return "原始发布";
+          break;
+        case "official_repost":
+          return "官方再发布";
+          break;
+        case "authorized_translation":
+          return "授权翻译";
+          break;
+        case "authorized_repost":
+          return "授权转载";
+          break;
+        case "translation":
+          return "自发翻译";
+          break;
+        case "repost":
+          return "自发搬运";
+          break;
+        case "unknown":
+          return "其他";
+          break;
+      }
+      // <h3 v-if="key =='official'">原始发布</h3>
+      // <h3 v-if="key =='official_repost'">官方再发布</h3>
+      // <h3 v-if="key =='authorized_translation'">授权翻译</h3>
+      // <h3 v-if="key =='authorized_repost'">授权转载</h3>
+      // <h3 v-if="key =='translation'">自发翻译</h3>
+      // <h3 v-if="key =='repost'">自发搬运</h3>
+      // <h3 v-if="key =='unknown'">其他</h3>
+    },
     // 视频的上传日期
     videodate() {
       var upload_time = new Date(this.myVideoData.video.item.upload_time.$date);
@@ -906,11 +945,10 @@ export default {
 }
 .re_top {
   text-align: center;
-}
-.re_top h2 {
   display: flex;
-  align-items: flex-start;
+  display: -webkit-flex;
   justify-content: center;
+  flex-wrap: wrap;
 }
 .new_top {
   border-bottom: 3px solid #21c6ef;
@@ -975,6 +1013,9 @@ export default {
 .videoDesc /deep/ .video-link-div:hover .url-tools {
   visibility: visible;
   opacity: 1;
+}
+.copies {
+  height: 25px;
 }
 .copies .el-button {
   visibility: hidden;
