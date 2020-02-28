@@ -22,7 +22,7 @@
     "upload_succeed": "列表导入成功！"
   },
   "ENG": {
-    "prompt": "You can create playlist from existing ones, currently Youtube playlist, Nicovideo mylist and Bilibili favlist are supported",
+    "prompt": "You can create playlist from existing ones, currently Youtube playlist, Nicovideo mylist and Bilibili favlist is supported",
     "url_placeholder": "Enter playlist URL",
     "upload_now": "Upload",
     "no_url_prompt": "Please enter URL",
