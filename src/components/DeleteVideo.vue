@@ -3,6 +3,9 @@
 {
     "CHS": {
         "remove": "从播放列表中移除"
+    },
+    "ENG": {
+        "remove": "Remove from playlist"
     }
 }
 </i18n>

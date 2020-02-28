@@ -16,7 +16,6 @@
     "from_file": "本地上传",
     "from_url": "网络上传",
     "upload": "上传",
-    "add_image": "添加图片",
     "no_file_prompt": "请选择要上传的头像!",
     "file_size_prompt": "上传头像图片大小不能超过 2MB!",
     "upload_succeed": "上传成功！",
@@ -24,6 +23,23 @@
     "INCORRECT_UPLOAD_TYPE": "上传文件不支持该图片格式!",
     "upload_failed": "上传失败！",
     "open_failed": "选择图片失败"
+  },
+  "ENG": {
+    "title": "Crop image",
+    "cancel": "Cancel",
+    "ok": "OK",
+    "upload_userphoto": "Upload photo",
+    "enter_url_prompt": "Please enter image URL",
+    "from_file": "Local files",
+    "from_url": "From URL",
+    "upload": "Upload",
+    "no_file_prompt": "Please choose your photo",
+    "file_size_prompt": "File size cannot exceed 2MB",
+    "upload_succeed": "Upload succeed",
+    "no_url_prompt": "Please enter image URL",
+    "INCORRECT_UPLOAD_TYPE": "File format not supported",
+    "upload_failed": "Upload failed",
+    "open_failed": "Open file failed"
   }
 }
 </i18n>
@@ -65,17 +81,17 @@
     </el-dialog>
     <el-dialog
             :modal =false
-            :title="$('upload_userphoto')"
+            :title="$t('upload_userphoto')"
             :visible.sync="dialogVisible"
             width="40%"
             top="30vh"
             :before-close="handleClose">
       <el-input v-model="imgNetUpUrl" :placeholder="$t('enter_url_prompt')" v-if="isShowNetUp" style="margin: 20px 0px 30px;"></el-input>
       <span  class="dialog-footer" style="text-align: center;margin: 20px 0px 30px;">
-     <el-button type="primary"  @click="handleOpenFile()"  v-if="!isShowNetUp">{{$('from_file')}}</el-button>
-     <el-button type="primary"  v-if="!isShowNetUp" @click="showNetUp(true)">{{$('from_url')}}</el-button>
-        <el-button v-if="isShowNetUp" @click="imgNetUrlup()">{{$('ok')}}</el-button>
-        <el-button   v-if="isShowNetUp" @click="showNetUp(false)">{{$('cancel')}}</el-button>
+     <el-button type="primary"  @click="handleOpenFile()"  v-if="!isShowNetUp">{{$t('from_file')}}</el-button>
+     <el-button type="primary"  v-if="!isShowNetUp" @click="showNetUp(true)">{{$t('from_url')}}</el-button>
+        <el-button v-if="isShowNetUp" @click="imgNetUrlup()">{{$t('ok')}}</el-button>
+        <el-button   v-if="isShowNetUp" @click="showNetUp(false)">{{$t('cancel')}}</el-button>
 
   </span>
     </el-dialog>
@@ -113,7 +129,7 @@
         <i class="fa fa-upload" />
         {{ buttonName }}
       </el-button>
-      <el-input type="submit" :value="$('upload')" @click="sub"></el-input>
+      <el-input type="submit" :value="$t('upload')" @click="sub"></el-input>
     </form>
     <div v-if="tips" class="tips clear-margin-top">{{ tips }}</div>
   </div>
@@ -147,7 +163,7 @@ export default {
     // 按钮文字
     buttonName: {
       type: String,
-      default: this.$t('add_image')
+      default: 'Add Image'
     },
     // 提示内容
     tips: {
@@ -224,7 +240,7 @@ export default {
     },
     sub() {
       if(this.imgFile.lastModified===undefined){
-        this.$message.error(this.$('no_file_prompt'));
+        this.$message.error(this.$t('no_file_prompt'));
         return;
       }
       //这个司马东西还是只读不准赋值？百度半天不知道这是哪国的妖术竟然可以赋值了
@@ -246,7 +262,7 @@ export default {
             this.changePhtoto(this.file_key);
 
           } else {
-            this.$message.error(this.$('no_file_prompt'));
+            this.$message.error(this.$t('no_file_prompt'));
             this.loading = false;
           }
         })

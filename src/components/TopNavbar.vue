@@ -49,7 +49,8 @@
       "playlist": "播放列表",
       "postvideo": "发布视频",
       "edittag": "标签",
-      "ipfs": "幻想之物"
+      "ipfs": "幻想之物",
+      "bug_report": "反馈BUG"
     },
 
     "search": {
@@ -77,7 +78,8 @@
       "playlist": "Playlists",
       "postvideo": "Post Video",
       "edittag": "Tags",
-      "ipfs": "幻想之物"
+      "ipfs": "幻想之物",
+      "bug_report": "Report Bugs"
     },
 
     "search": {
@@ -129,6 +131,9 @@
         </li>
         <li>
           <router-link to="/ipfs">{{$t('navbar.ipfs')}}</router-link>
+        </li>
+        <li>
+          <a href="https://github.com/zyddnys/PatchyVideo/issues">{{$t('navbar.bug_report')}}</a>
         </li>
       </ul>
     </div>

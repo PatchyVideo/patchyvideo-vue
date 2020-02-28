@@ -36,9 +36,16 @@
       "prompt": "标签编辑历史",
       "add": "添加:",
       "del": "删除:",
-      "modified_by": "修改者:",
       "empty": "暂无记录!"
-    },
+    }
+  },
+  "ENG": {
+    "tag_history": {
+      "prompt": "Tag History",
+      "add": "Added:",
+      "del": "Removed:",
+      "empty": "No record found"
+    }
   }
 }
 </i18n>
@@ -91,7 +98,6 @@
                 <br />
               </div>
               <div v-if="item.user_obj.length" style="margin-top:5px">
-                <span style="margin-right:10px;">{{$t('tag_history.modified_by')}}</span>
                 <span v-for="user in item.user_obj" :key="user.profile.username" class="editer">
                   <el-avatar
                     fit="cover"

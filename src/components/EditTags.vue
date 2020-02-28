@@ -36,6 +36,17 @@
     "tag_add_succeed": "Tag添加成功！",
     "tag_modify_succeed": "修改成功！",
     "unknown_error": "未知错误"
+  },
+  "ENG": {
+    "enter_tag": "Enter tag",
+    "edit_common_tags": "Edit common tag",
+    "tag_already_exist": "Tag already exist",
+    "tag_not_exist": "Tag not exist",
+    "recommnad_tags": "Related tags:",
+    "save": "Save",
+    "tag_add_succeed": "Tag added",
+    "tag_modify_succeed": "Tags saved",
+    "unknown_error": "An unknown error has occurred, please report bug"
   }
 }
 </i18n>

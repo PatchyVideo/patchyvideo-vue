@@ -19,7 +19,17 @@
     "update_successed": "修改成功！"
   },
   "ENG": {
-
+    "default_blacklist": "Default blacklist",
+    "use": "Save changes",
+    "custom_blacklist": "Custom blacklist",
+    "blacklist_empty_prompt": "Blacklist is disabled if not tags is present",
+    "blacklist_enter_prompt": "Enter multiple tags, separated by space, comma or linebreak",
+    "add_blacklist": "Add tag",
+    "remove_all_blacklist": "Remove all tags",
+    "load_blacklist": "Enter multiple tags",
+    "tag_notexist_prompt": "Tags not exist",
+    "tag_already_exist_prompt": "Tag already exist",
+    "update_successed": "Update succeed"
   }
 }
 </i18n>

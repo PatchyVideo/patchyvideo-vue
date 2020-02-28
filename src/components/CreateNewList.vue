@@ -27,6 +27,19 @@
     "create_failed": "列表创建失败，请重试！",
     "not_login": "登录验证失败，请先登录！",
     "create_succeed": "列表创建成功！"
+  },
+  "ENG": {
+    "this_is_playlist_title": "Title",
+    "describe_your_playlist": "Describe this playlist",
+    "set_as_private_playlist": "Private Playlist",
+    "create_now": "Create",
+    "no_title_prompt": "Please enter title",
+    "no_desc_prompt": "Please enter description",
+    "one_cover_prompt": "You can upload only one cover",
+    "delete_confirm_prompt": "Are you sure you want to remove {name}?",
+    "create_failed": "Operation failed, please try again",
+    "not_login": "Authentication failed, please relogin",
+    "create_succeed": "Playlist successfully created"
   }
 }
 </i18n>

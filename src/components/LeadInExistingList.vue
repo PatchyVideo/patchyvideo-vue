@@ -20,6 +20,14 @@
     "no_url_prompt": "还没输入地址呢",
     "upload_failed": "列表导入失败，请检查地址是否正确！",
     "upload_succeed": "列表导入成功！"
+  },
+  "ENG": {
+    "prompt": "You can create playlist from existing ones, currently Youtube playlist, Nicovideo mylist and Bilibili favlist are supported",
+    "url_placeholder": "Enter playlist URL",
+    "upload_now": "Upload",
+    "no_url_prompt": "Please enter URL",
+    "upload_failed": "Upload failed, please check if playlist is ",
+    "upload_succeed": "Upload succeed!"
   }
 }
 </i18n>
@@ -100,7 +108,8 @@ export default {
               method: "post",
               url: "be/lists/create_from_existing_playlists.do",
               data: {
-                url: this.list.URL
+                url: this.list.URL,
+                lang: localStorage.getItem('lang')
               }
             }).then(result => {
               this.loading = false;
