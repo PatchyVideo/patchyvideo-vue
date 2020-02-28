@@ -8,75 +8,90 @@
 <template>
   <div class="custom-upload" v-loading="loading">
     <el-dialog
-      title="图片裁剪"
-      :visible.sync="showCropper"
-      top="6vh"
-      width="50%"
-      height="600"
-      class="cropper-dialog"
-      center
-      append-to-body
+            title="图片裁剪"
+            :visible.sync="showCropper"
+            top="6vh"
+            width="50%"
+            height="600"
+            class="cropper-dialog"
+            center
+            append-to-body
     >
       <vue-cropper
-        v-if="showCropper"
-        id="corpper"
-        ref="cropper"
-        :class="{ 'corpper-warp': showCropper }"
-        v-bind="cropper"
+              v-if="showCropper"
+              id="corpper"
+              ref="cropper"
+              :class="{ 'corpper-warp': showCropper }"
+              v-bind="cropper"
       />
       <div v-if="showCropper" class="cropper-button">
         <el-button
-          class="cancel-btn"
-          size="small"
-          @click.native="showCropper = false"
-          >取消</el-button
+                class="cancel-btn"
+                size="small"
+                @click.native="showCropper = false"
+        >取消</el-button
         >
         <el-button
-          size="small"
-          type="primary"
-          :loading="loading"
-          @click="uploadCover"
-          >完成</el-button
+                size="small"
+                type="primary"
+                :loading="loading"
+                @click="uploadCover"
+        >完成</el-button
         >
       </div>
     </el-dialog>
+    <el-dialog
+            :modal =false
+            title="上传头像"
+            :visible.sync="dialogVisible"
+            width="40%"
+            top="30vh"
+            :before-close="handleClose">
+      <el-input v-model="imgNetUpUrl" placeholder="请输入图片URL" v-if="isShowNetUp" style="margin: 20px 0px 30px;"></el-input>
+      <span  class="dialog-footer" style="text-align: center;margin: 20px 0px 30px;">
+     <el-button type="primary"  @click="handleOpenFile()"  v-if="!isShowNetUp">本地上传</el-button>
+     <el-button type="primary"  v-if="!isShowNetUp" @click="showNetUp(true)">网络上传</el-button>
+        <el-button v-if="isShowNetUp" @click="imgNetUrlup()">确认</el-button>
+        <el-button   v-if="isShowNetUp" @click="showNetUp(false)">取消</el-button>
+
+  </span>
+    </el-dialog>
     <form
-      action="/be/helper/upload_image.do"
-      method="post"
-      accept-charset="utf-8"
-      enctype="multipart/form-data"
-      id="form1"
-      @submit.prevent="sub"
+            action="/be/helper/upload_image.do"
+            method="post"
+            accept-charset="utf-8"
+            enctype="multipart/form-data"
+            id="form1"
+            @submit.prevent="sub"
     >
       <input
-        id="type"
-        name="type"
-        type="text"
-        value="userphoto"
-        v-show="false"
+              id="type"
+              name="type"
+              type="text"
+              value="userphoto"
+              v-show="false"
       />
       <input
-        id="file"
-        name="file"
-        type="file"
-        tag="input"
-        accept="image/*"
-        @change="onChange($event)"
-        :class="id"
-        v-show="false"
+              id="file"
+              name="file"
+              type="file"
+              tag="input"
+              accept="image/*"
+              @change="onChange($event)"
+              :class="id"
+              v-show="false"
       />
       <el-button
-        size="small"
-        type="primary"
-        :loading="loading"
-        @click="handleOpenFile()"
+              size="small"
+              type="primary"
+              :loading="loading"
+              @click="dialogVisible = true"
       >
         <i class="fa fa-upload" />
         {{ buttonName }}
       </el-button>
       <el-input type="submit" value="上传" @click="sub"></el-input>
     </form>
-
     <div v-if="tips" class="tips clear-margin-top">{{ tips }}</div>
   </div>
 </template>
@@ -136,9 +151,12 @@ export default {
   data() {
     this.$i18n.locale = localStorage.getItem('lang');
     return {
+      imgNetUpUrl:"",
       id: "cropper-input-" + +new Date(),
       loading: false,
       showCropper: false,
+      isShowNetUp:false,
+      dialogVisible: false,
       url: "",
       compress: 0.8, //压缩率
       imgFile: {},
@@ -165,7 +183,27 @@ export default {
     };
   },
   methods: {
+    handleClose(done) {
+      done();
+      /*      this.$confirm('确认关闭？')
+                    .then(_ => {
+                      done();
+                    })
+                    .catch(_ => {});*/
+    },
+    showNetUp(b){
+
+      this.isShowNetUp =b;
+      if(b ===false){
+        this.imgNetUpUrl = "";
+      }
+
+    },
     sub() {
+      if(this.imgFile.lastModified===undefined){
+        this.$message.error("请选择要上传的头像!");
+        return;
+      }
       //这个司马东西还是只读不准赋值？百度半天不知道这是哪国的妖术竟然可以赋值了
       const data = new DataTransfer();
       data.items.add(this.imgFile);
@@ -182,22 +220,8 @@ export default {
         .then(res => {
           if (res.data.status == "SUCCEED") {
             this.file_key = res.data.data.file_key;
-            this.axios({
-              method: "post",
-              url: "be/user/changephoto.do",
-              data: { file_key: this.file_key }
-            }).then(res => {
-              /*       this.getMyData();*/
-              this.$emit("subUploadSucceed", this.url, true);
-              var img = res.data.data;
-              this.$store.commit("getUserAvatar", img);
-              this.setCookie(img, 7);
-              this.loading = false;
-              this.$message({
-                message: "上传成功！",
-                type: "success"
-              });
-            });
+            this.changePhtoto(this.file_key);
+
           } else {
             this.$message.error("请选择要上传的头像!");
             this.loading = false;
@@ -207,6 +231,56 @@ export default {
           this.$message.error("上传头像图片大小不能超过 2MB!");
           this.loading = false;
         });
+    },
+    changePhtoto(key){
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "be/user/changephoto.do",
+        data: { file_key: key }
+      }).then(res => {
+        /*       this.getMyData();*/
+        this.$emit("subUploadSucceed", this.url, true);
+        var img = res.data.data;
+        this.$store.commit("getUserAvatar", img);
+        this.setCookie(img, 7);
+        this.loading = false;
+        this.$message({
+          message: "上传成功！",
+          type: "success"
+        });
+            this.dialogVisible = false;
+
+      });
+    },
+    imgNetUrlup(){
+
+      if(this.imgNetUpUrl.toString()===""){
+      this.$message.error('请输入链接!');
+       return false;
+ }
+      this.axios({
+        method:"post",
+        url:"/be/helper/upload_image_url.do",
+        data:{"url":this.imgNetUpUrl, "type":"userphoto"}
+      }).then(res=>{
+        if (res.data.status === "SUCCEED") {
+                this.file_key = res.data.data.file_key;
+                    this.changePhtoto(this.file_key);
+        }else {
+          if(res.data.data ==="INCORRECT_UPLOAD_TYPE"){
+            this.$message.error('上传文件不支持该图片格式!')
+          }
+          else {
+            this.$message.error('上传失败!')
+          }
+
+        }
+
+      }).catch(err=>{
+        this.$message.error('上传失败!')
+      })
+
     },
     // 打开文件
     handleOpenFile() {
@@ -222,6 +296,7 @@ export default {
       // 点击input
       input.click();
     },
+
 
     // 裁剪input 监听
     async onChange(e) {
@@ -297,6 +372,7 @@ export default {
           this.$emit("subUploadSucceed", this.url, false);
           this.loading = false;
           this.showCropper = false;
+          this.dialogVisible = false;
         } catch (error) {
           this.loading = false;
           this.showCropper = false;
@@ -317,6 +393,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  .dialog-footer{
+   height: 50% !important;
+  }
 form {
   transform: translateY(50%);
   width: 100%;
