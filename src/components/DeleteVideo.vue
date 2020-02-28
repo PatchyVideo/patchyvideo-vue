@@ -1,8 +1,17 @@
+
+<i18n>
+{
+    "CHS": {
+        "remove": "从播放列表中移除"
+    }
+}
+</i18n>
+
 <template>
 
     <div>
 
-        <el-tooltip class="item" effect="dark" content="从播放列表中移除" placement="top-start">
+        <el-tooltip class="item" effect="dark" :content="$t('remove')" placement="top-start">
             <i class="fa fa-times" aria-hidden="true" @click="deleteVideo()"></i>
         </el-tooltip>
 

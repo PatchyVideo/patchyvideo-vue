@@ -579,7 +579,7 @@ export default {
       this.axios({
         method: "post",
         url: "be/getvideo.do",
-        data: { vid: this.$route.query.id }
+        data: { vid: this.$route.query.id, lang: localStorage.getItem('lang') }
       })
         .then(result => {
           this.myVideoData = result.data.data;

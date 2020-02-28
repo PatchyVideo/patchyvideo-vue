@@ -457,7 +457,8 @@ export default {
             method: "post",
             url: "/be/authors/get_record.do",
             data: {
-              tag: this.AuthorID
+              tag: this.AuthorID,
+              lang: localStorage.getItem('lang')
             }
           })
             .then(result => {

@@ -5,10 +5,33 @@
 需要安装依赖：npm install vue-cropper -s
 -->
 
+<i18n>
+{
+  "CHS": {
+    "title": "图片裁剪",
+    "cancel": "取消",
+    "ok": "确定",
+    "upload_userphoto": "上传头像",
+    "enter_url_prompt": "请输入图片URL",
+    "from_file": "本地上传",
+    "from_url": "网络上传",
+    "upload": "上传",
+    "add_image": "添加图片",
+    "no_file_prompt": "请选择要上传的头像!",
+    "file_size_prompt": "上传头像图片大小不能超过 2MB!",
+    "upload_succeed": "上传成功！",
+    "no_url_prompt": "请输入链接!",
+    "INCORRECT_UPLOAD_TYPE": "上传文件不支持该图片格式!",
+    "upload_failed": "上传失败！",
+    "open_failed": "选择图片失败"
+  }
+}
+</i18n>
+
 <template>
   <div class="custom-upload" v-loading="loading">
     <el-dialog
-            title="图片裁剪"
+            :title="$t('title')"
             :visible.sync="showCropper"
             top="6vh"
             width="50%"
@@ -29,30 +52,30 @@
                 class="cancel-btn"
                 size="small"
                 @click.native="showCropper = false"
-        >取消</el-button
+        >{{$t('cancel')}}</el-button
         >
         <el-button
                 size="small"
                 type="primary"
                 :loading="loading"
                 @click="uploadCover"
-        >完成</el-button
+        >{{$t('ok')}}</el-button
         >
       </div>
     </el-dialog>
     <el-dialog
             :modal =false
-            title="上传头像"
+            :title="$('upload_userphoto')"
             :visible.sync="dialogVisible"
             width="40%"
             top="30vh"
             :before-close="handleClose">
-      <el-input v-model="imgNetUpUrl" placeholder="请输入图片URL" v-if="isShowNetUp" style="margin: 20px 0px 30px;"></el-input>
+      <el-input v-model="imgNetUpUrl" :placeholder="$t('enter_url_prompt')" v-if="isShowNetUp" style="margin: 20px 0px 30px;"></el-input>
       <span  class="dialog-footer" style="text-align: center;margin: 20px 0px 30px;">
-     <el-button type="primary"  @click="handleOpenFile()"  v-if="!isShowNetUp">本地上传</el-button>
-     <el-button type="primary"  v-if="!isShowNetUp" @click="showNetUp(true)">网络上传</el-button>
-        <el-button v-if="isShowNetUp" @click="imgNetUrlup()">确认</el-button>
-        <el-button   v-if="isShowNetUp" @click="showNetUp(false)">取消</el-button>
+     <el-button type="primary"  @click="handleOpenFile()"  v-if="!isShowNetUp">{{$('from_file')}}</el-button>
+     <el-button type="primary"  v-if="!isShowNetUp" @click="showNetUp(true)">{{$('from_url')}}</el-button>
+        <el-button v-if="isShowNetUp" @click="imgNetUrlup()">{{$('ok')}}</el-button>
+        <el-button   v-if="isShowNetUp" @click="showNetUp(false)">{{$('cancel')}}</el-button>
 
   </span>
     </el-dialog>
@@ -90,7 +113,7 @@
         <i class="fa fa-upload" />
         {{ buttonName }}
       </el-button>
-      <el-input type="submit" value="上传" @click="sub"></el-input>
+      <el-input type="submit" :value="$('upload')" @click="sub"></el-input>
     </form>
     <div v-if="tips" class="tips clear-margin-top">{{ tips }}</div>
   </div>
@@ -124,7 +147,7 @@ export default {
     // 按钮文字
     buttonName: {
       type: String,
-      default: "添加图片"
+      default: this.$t('add_image')
     },
     // 提示内容
     tips: {
@@ -201,7 +224,7 @@ export default {
     },
     sub() {
       if(this.imgFile.lastModified===undefined){
-        this.$message.error("请选择要上传的头像!");
+        this.$message.error(this.$('no_file_prompt'));
         return;
       }
       //这个司马东西还是只读不准赋值？百度半天不知道这是哪国的妖术竟然可以赋值了
@@ -223,12 +246,12 @@ export default {
             this.changePhtoto(this.file_key);
 
           } else {
-            this.$message.error("请选择要上传的头像!");
+            this.$message.error(this.$('no_file_prompt'));
             this.loading = false;
           }
         })
         .catch(err => {
-          this.$message.error("上传头像图片大小不能超过 2MB!");
+          this.$message.error(this.$t('file_size_prompt'));
           this.loading = false;
         });
     },
@@ -246,7 +269,7 @@ export default {
         this.setCookie(img, 7);
         this.loading = false;
         this.$message({
-          message: "上传成功！",
+          message: this.$t('upload_succeed'),
           type: "success"
         });
             this.dialogVisible = false;
@@ -256,7 +279,7 @@ export default {
     imgNetUrlup(){
 
       if(this.imgNetUpUrl.toString()===""){
-      this.$message.error('请输入链接!');
+      this.$message.error(this.$t('no_url_prompt'));
        return false;
  }
       this.axios({
@@ -269,16 +292,16 @@ export default {
                     this.changePhtoto(this.file_key);
         }else {
           if(res.data.data ==="INCORRECT_UPLOAD_TYPE"){
-            this.$message.error('上传文件不支持该图片格式!')
+            this.$message.error(this.$t('INCORRECT_UPLOAD_TYPE'))
           }
           else {
-            this.$message.error('上传失败!')
+            this.$message.error(this.$t('upload_failed'))
           }
 
         }
 
       }).catch(err=>{
-        this.$message.error('上传失败!')
+        this.$message.error(this.$t('upload_failed'))
       })
 
     },
@@ -302,7 +325,7 @@ export default {
     async onChange(e) {
       const file = e.target.files[0];
       if (!file) {
-        return this.$message.error("选择图片失败");
+        return this.$message.error(this.$t('open_failed'));
       }
       // 验证文件类型
       if (!isImageFile(file)) {

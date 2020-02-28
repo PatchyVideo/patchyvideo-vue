@@ -13,24 +13,42 @@
     
 -->
 
+<i18n>
+{
+  "CHS": {
+    "this_is_playlist_title": "这里是列表标题",
+    "describe_your_playlist": "来介绍一下自己的列表吧~",
+    "set_as_private_playlist": "设为私有列表",
+    "create_now": "立即创建",
+    "no_title_prompt": "还没输入标题呢",
+    "no_desc_prompt": "不来介绍一下列表吗？",
+    "one_cover_prompt": "只能上传一个封面！",
+    "delete_confirm_prompt": "确定移除 {name}？",
+    "create_failed": "列表创建失败，请重试！",
+    "not_login": "登录验证失败，请先登录！",
+    "create_succeed": "列表创建成功！"
+  }
+}
+</i18n>
+
 <template>
   <div class="listForm" v-loading="loading">
     <el-form ref="list" :model="list" label-width="auto" :rules="rules">
       <!-- 标题 -->
       <el-form-item prop="title">
-        <el-input v-model="list.title" placeholder="这里是列表标题"></el-input>
+        <el-input v-model="list.title" :placeholder="$t('this_is_playlist_title')"></el-input>
       </el-form-item>
       <!-- 简介 -->
       <el-form-item prop="desc">
         <el-input
           type="textarea"
           :autosize="{ minRows: 6}"
-          placeholder="来介绍一下自己的列表吧~"
+          :placeholder="$t('describe_your_playlist')"
           v-model="list.desc"
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-checkbox v-model="list.private">设为私有列表</el-checkbox>
+        <el-checkbox v-model="list.private">{{t('set_as_private_playlist')}}</el-checkbox>
       </el-form-item>
       <!-- 封面上传,暂时用不上 -->
       <el-form-item>
@@ -46,7 +64,7 @@
         </el-upload>-->
       </el-form-item>
       <el-form-item class="createList">
-        <el-button type="primary" @click="onSubmit" style="width:80%">立即创建</el-button>
+        <el-button type="primary" @click="onSubmit" style="width:80%">{{$t('create_now')}}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -66,9 +84,9 @@ export default {
       },
       // 校验数据
       rules: {
-        title: [{ required: true, message: "还没输入标题呢", trigger: "blur" }],
+        title: [{ required: true, message: this.$t('no_title_prompt'), trigger: "blur" }],
         desc: [
-          { required: true, message: "不来介绍一下列表吗？", trigger: "blur" }
+          { required: true, message: this.$t('no_desc_prompt'), trigger: "blur" }
         ]
       },
       // 页面是否出于加载状态的标志
@@ -79,11 +97,11 @@ export default {
   methods: {
     // 超出限制大小时调用的函数
     handleExceed() {
-      this.$message.warning("只能上传一个封面！");
+      this.$message.warning(this.$t('one_cover_prompt'));
     },
     // 删除文件之前调用的函数
     beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`);
+      return this.$confirm(this.$t('delete_confirm_prompt', {name: file.name}));
     },
     // 提交视频列表
     onSubmit() {
@@ -105,16 +123,16 @@ export default {
             this.loading = false;
             // 提交失败的情况
             if (result.data.status == "FAILED") {
-              this.open("列表创建失败，请重试！");
+              this.open(this.$t('create_failed'));
             }
             // 出现错误的情况
             else if (result.data.status == "ERROR") {
               this.$store.commit("changeifRouter", "0");
-              this.open("登录验证失败，请先登录！");
+              this.open(this.$t('not_login'));
             }
             // 提交成功
             else {
-              this.open2("列表创建成功！");
+              this.open2(this.$t('create_succeed'));
               this.$router.push({ path: "/lists" });
             }
           });

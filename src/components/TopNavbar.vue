@@ -73,7 +73,7 @@
   },
   "ENG": {
     "navbar": {
-      "index": "Index",
+      "index": "Home",
       "playlist": "Playlists",
       "postvideo": "Post Video",
       "edittag": "Tags",
@@ -552,8 +552,9 @@ export default {
       this.iptVal = this.iptVal2;
     },
     locale(val) {
-      this.$root.$i18n.locale = val;
+      //this.$root.$i18n.locale = val;
       localStorage.setItem('lang', val);
+      location.reload();
     }
   },
   components: { TextComplete }

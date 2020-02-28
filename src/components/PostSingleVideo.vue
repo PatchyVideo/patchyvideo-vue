@@ -392,7 +392,8 @@ export default {
         method: "post",
         url: "/be/tags/autotag.do",
         data: {
-          utags: utags
+          utags: utags,
+          lang: localStorage.getItem('lang')
         }
       })
         .then(result => {

@@ -38,7 +38,8 @@ function autotag(utags) {
   postJSON(
     "/tags/autotag.do",
     {
-      utags: utags
+      utags: utags,
+      lang: localStorage.getItem('lang')
     },
     function(result) {
       cur_tags = $("#tags").val();

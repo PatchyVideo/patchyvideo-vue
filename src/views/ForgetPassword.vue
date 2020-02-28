@@ -87,7 +87,8 @@ export default {
             method: "post",
             url: "be/user/request_resetpass.do",
             data: {
-              email: this.FormRef.email
+              email: this.FormRef.email,
+              lang: localStorage.getItem('lang')
             }
           }).then(result => {
             this.loading = false;
