@@ -37,6 +37,15 @@
       "add": "添加:",
       "del": "删除:",
       "empty": "暂无记录!"
+    },
+    "categories": {
+      "General":"综合",
+      "Character":"角色",
+      "Copyright":"作品",
+      "Author":"up主",
+      "Meta":"元数据",
+      "Language":"语言",
+      "Soundtrack":"原曲"
     }
   },
   "ENG": {
@@ -45,6 +54,15 @@
       "add": "Added:",
       "del": "Removed:",
       "empty": "No record found"
+    },
+    "categories": {
+      "General":"General",
+      "Character":"Character",
+      "Copyright":"Copyright",
+      "Author":"Author",
+      "Meta":"Meta",
+      "Language":"Language",
+      "Soundtrack":"Soundtrack"
     }
   }
 }
@@ -315,13 +333,13 @@ export default {
     tranTagCategories(){
         return function(name) {
             var map = {
-                "General":"综合",
-                "Character":"角色",
-                "Copyright":"作品",
-                "Author":"up主",
-                "Meta":"元数据",
-                "Language":"语言",
-                "Soundtrack":"原曲",
+                "General":this.$t('General'),
+                "Character":this.$t('Character'),
+                "Copyright":this.$t('Copyright'),
+                "Author":this.$t('Author'),
+                "Meta":this.$t('Meta'),
+                "Language":this.$t('Language'),
+                "Soundtrack":this.$t('Soundtrack')
             };
             return map[name];
         }

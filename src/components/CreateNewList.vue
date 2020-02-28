@@ -61,7 +61,7 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-checkbox v-model="list.private">{{t('set_as_private_playlist')}}</el-checkbox>
+        <el-checkbox v-model="list.private">{{$t('set_as_private_playlist')}}</el-checkbox>
       </el-form-item>
       <!-- 封面上传,暂时用不上 -->
       <el-form-item>
