@@ -55,6 +55,7 @@
 <script>
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 播放列表数据
       list: {

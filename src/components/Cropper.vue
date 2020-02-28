@@ -134,6 +134,7 @@ export default {
     }
   },
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       id: "cropper-input-" + +new Date(),
       loading: false,

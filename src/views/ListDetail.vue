@@ -245,6 +245,7 @@ import { copyToClipboard } from "../static/js/generic";
 
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 视频列表的元信息
       playlist_metadata: {

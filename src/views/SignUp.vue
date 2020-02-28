@@ -99,6 +99,7 @@
 import login from "../views/Login.vue";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     // 校验用户名是否已经存在
     var checkUsername = (rule, value, callback) => {
       this.axios({

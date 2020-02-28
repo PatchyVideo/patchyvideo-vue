@@ -86,6 +86,7 @@
 <script>
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       flag: true, //视频排列顺序,默认栅格
       TagData: [], //所有视频的TAG数据

@@ -46,6 +46,18 @@
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
 -->
+
+<i18n>
+{
+  "CHS": {
+    "page_count": "显示 {count} / {maxcount} 个视频"
+  },
+  "ENG": {
+    "page_count": "Showing {count} / {maxcount} videos"
+  }
+}
+</i18n>
+
 <template>
   <div>
     <topnavbar />
@@ -57,7 +69,7 @@
       <div class="content">
         <!-- 播放列表的抬头 -->
         <div class="video-list-header">
-          <p v-if="maxcount">显示 {{ count2 }} / {{ maxcount }} 个视频</p>
+          <p v-if="maxcount">{{$t('page_count', {count: count2, maxcount: maxcount})}}</p>
           <p v-else>没有搜索到视频</p>
           <el-checkbox v-model="checked">显示已失效视频</el-checkbox>
           <span style="margin-left: 100px;font-size: 14px;color:#606266;">已屏蔽含有敏感标签的视频，可在个人界面设置</span>
@@ -134,6 +146,7 @@ import Footer from "../components/Footer.vue";
 import { copyToClipboard } from "../static/js/generic";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 视频列表的排序规则
       options: [

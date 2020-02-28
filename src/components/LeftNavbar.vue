@@ -167,6 +167,7 @@ import ShowAuthorData from "../components/ShowAuthorData.vue";
 import EditTags from "../components/EditTags";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 判断是否登录的标志
       isLogin: false,

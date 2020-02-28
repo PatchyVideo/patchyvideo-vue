@@ -374,6 +374,7 @@
     import { copyToClipboardText } from "../static/js/generic";
     export default {
     data() {
+        this.$i18n.locale = localStorage.getItem('lang');
         return {
             isFirst:true,
             asideWidth:200,

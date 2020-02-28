@@ -1033,6 +1033,7 @@ import ShowAuthorData from "../components/ShowAuthorData.vue";
 export default {
   props: ["tagCategorie"],
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 添加新标签的内容
       newTag: "",

@@ -89,6 +89,7 @@
 import EditTags from "../components/EditTags";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 视频的URL(与输入框绑定)
       VideoURL: "",

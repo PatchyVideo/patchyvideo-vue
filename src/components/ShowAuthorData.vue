@@ -341,6 +341,7 @@
 export default {
   props: ["AuthorID"],
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 作者的标签名
       authorLanguages: "",

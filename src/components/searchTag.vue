@@ -1069,6 +1069,7 @@
 import ShowAuthorData from "../components/ShowAuthorData.vue";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 搜索标签的内容
       searchTag: "",

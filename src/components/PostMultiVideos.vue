@@ -66,6 +66,7 @@
 import EditTags from "../components/EditTags";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 标签页面是否打开
       showTagPanel: true,

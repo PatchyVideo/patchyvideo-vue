@@ -47,6 +47,7 @@
 <script>
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 邮件地址
       FormRef: {
