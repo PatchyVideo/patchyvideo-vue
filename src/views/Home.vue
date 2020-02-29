@@ -93,17 +93,17 @@
         <div class="video-list-header">
           <p v-if="maxcount">{{$t('page_count', {count: count2, maxcount: maxcount})}}</p>
           <p v-else>{{$t('no_result')}}</p>
-          <el-checkbox v-model="checked">{{$t('show_deleted')}}</el-checkbox>
-          <span style="margin-left: 100px;font-size: 14px;color:#606266;">{{$t('blacklist_prompt')}}</span>
-          <el-select id="select-order" v-model="couponSelected">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
+          <el-checkbox class="show_deleted" v-model="checked">{{$t('show_deleted')}}</el-checkbox>
+          <p class="blacklist_prompt">{{$t('blacklist_prompt')}}</p>
         </div>
+        <el-select id="select-order" v-model="couponSelected">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
 
         <!-- 播放列表正文 -->
         <ul>
@@ -114,7 +114,6 @@
               tag="a"
             >
               <div class="video-thumbnail">
-                <!--              src="/images/covers/f5da2d4dd9eac171d47eb1100339cbad90e4648556a2f99a.png"-->
                 <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
                 <div class="Imgcover"></div>
               </div>
@@ -497,10 +496,6 @@ export default {
   text-align: center;
 }
 
-.video-list-header p {
-  display: inline;
-}
-
 .video-detail > p {
   font-size: 1rem;
   line-height: 1.1rem;
@@ -535,12 +530,6 @@ export default {
   float: left;
   position: relative;
   z-index: 1;
-  img {
-  }
-  /*  &:hover img{
-      background-color:black;
-  }*/
-  /*  background-color:rgba(255,255,255,.5);*/
 }
 
 .list-item {
@@ -553,12 +542,9 @@ export default {
 }
 
 .video-list-header p {
-  height: 50px;
-  position: relative;
+  display: block;
 }
-.el-checkbox {
-  width: 100px;
-  margin-left: 100px;
+.show_deleted {
   text-align: center;
   line-height: 50px;
 }
@@ -571,15 +557,19 @@ export default {
   float: right;
 }
 .video-list-header {
-  width: 100%;
-  height: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(100% - 230px);
+  margin-bottom: 10px;
 }
 
 .el-select {
   width: 200px;
-  display: inline-block;
-  position: absolute;
+  float: right;
   right: 0px;
+  transform: translate(0, -50px);
 }
 .left-navbar {
   position: relative;
@@ -594,10 +584,14 @@ export default {
   text-align: left;
 }
 .main-page-background-img {
-  /*  background-image: url("./../static/img/imoto3.jpg");*/
   background-repeat: no-repeat;
   min-height: 800px;
   width: 85%;
   margin-top: 20px;
+}
+
+.blacklist_prompt {
+  font-size: 14px;
+  color: #606266;
 }
 </style>
