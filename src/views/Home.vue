@@ -270,7 +270,7 @@ export default {
           page_size: count,
           order: this.couponSelected,
           hide_placeholder: !this.checked,
-          lang: this.$i18n.locale
+          lang: localStorage.getItem('lang')
         }
       }).then(result => {
         this.maxcount = result.data.data.count;
@@ -310,7 +310,7 @@ export default {
           hide_placeholder: !this.checked,
           query: str,
           qtype: this.$route.query.qtype,
-          lang: this.$i18n.locale
+          lang: localStorage.getItem('lang')
         }
       }).then(result => {
         if (result.data.status == "SUCCEED") {
