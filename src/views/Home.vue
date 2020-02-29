@@ -53,7 +53,7 @@
     "page_count": "显示 {count} / {maxcount} 个视频",
     "no_result": "没有搜索到视频",
     "show_deleted": "显示已失效视频",
-    "blacklist_prompt": "已屏蔽含有敏感标签的视频，可在个人界面设置",
+    "blacklist_prompt": "*已屏蔽含有敏感标签的视频，可在个人界面设置",
     "latest": "发布时间正序",
     "oldest": "发布时间倒序",
     "latest_video": "原视频上传时间正序",
@@ -67,7 +67,7 @@
     "page_count": "Showing {count} / {maxcount} videos",
     "no_result": "No video found",
     "show_deleted": "Show deleted videos",
-    "blacklist_prompt": "Some videos are blacklisted, you can change your blacklist setting in your settings panel.",
+    "blacklist_prompt": "*Some videos are blacklisted, you can change your blacklist setting in your settings panel.",
     "latest": "Latest",
     "oldest": "Oldest",
     "latest_video": "Latest Video",
@@ -168,14 +168,14 @@ import Footer from "../components/Footer.vue";
 import { copyToClipboard } from "../static/js/generic";
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 视频列表的排序规则
       options: [
-        { value: "latest", label: this.$t('latest') },
-        { value: "oldest", label: this.$t('oldest') },
-        { value: "video_latest", label: this.$t('latest_video') },
-        { value: "video_oldest", label: this.$t('oldest_video') }
+        { value: "latest", label: this.$t("latest") },
+        { value: "oldest", label: this.$t("oldest") },
+        { value: "video_latest", label: this.$t("latest_video") },
+        { value: "video_oldest", label: this.$t("oldest_video") }
       ],
       // 当前视频列表的排列顺序
       couponSelected: "",
@@ -216,7 +216,7 @@ export default {
     // 获取视频列表
     /* this.getListVideo(this.page, this.count);*/
     // 改变侧导航条的标题
-    this.$store.commit("changeLeftNavBarTitle", this.$t('popular_tags'));
+    this.$store.commit("changeLeftNavBarTitle", this.$t("popular_tags"));
     // 修改网站标题
     document.title = "Patchyvideo";
 
@@ -227,7 +227,7 @@ export default {
       this.searchKeyWord = this.$route.query.keyword;
       this.ifSearch = true;
       // 修改网站标题
-      document.title = this.$t('search_result', {result: this.searchKeyWord});
+      document.title = this.$t("search_result", { result: this.searchKeyWord });
     }
   },
   computed: {},
@@ -346,14 +346,14 @@ export default {
           // 包含非法字符的时候
           if (result.data.data.reason == "INCORRECT_QUERY") {
             this.$message({
-              message: this.$t('syntax_error'),
+              message: this.$t("syntax_error"),
               type: "error"
             });
           }
           // NOT使用错误的时候
           else if (result.data.data.reason == "FAILED_NOT_OP") {
             this.$message({
-              message: this.$t('syntax_error_not'),
+              message: this.$t("syntax_error_not"),
               type: "error"
             });
           }
@@ -456,7 +456,9 @@ export default {
         newV.query.qtype != oldV.query.qtype
       ) {
         // 修改网站标题
-        document.title = this.$t('search_result', {result: newV.query.keyword});
+        document.title = this.$t("search_result", {
+          result: newV.query.keyword
+        });
         this.ifSearch = true;
         this.searchKeyWord = newV.query.keyword;
         //在我请求新的搜索数据之后，因为搜索是路由跳转所以会重置当前页面为1，页数会改变，也会触发监控页数里的函数

@@ -95,7 +95,9 @@
           >
             <div>
               <div v-if="item.add.length">
-                <span style="margin-right:10px;margin-top:3px;color:#67C23A">{{$t('tag_history.add')}}</span>
+                <span
+                  style="margin-right:10px;margin-top:3px;color:#67C23A"
+                >{{$t('tag_history.add')}}</span>
                 <el-tag
                   type="success"
                   v-for="tag in item.add"
@@ -106,7 +108,9 @@
               </div>
 
               <div v-if="item.del.length">
-                <span style="margin-right:10px;margin-top:3px;color:#F56C6C">{{$t('tag_history.del')}}</span>
+                <span
+                  style="margin-right:10px;margin-top:3px;color:#F56C6C"
+                >{{$t('tag_history.del')}}</span>
                 <el-tag
                   type="danger"
                   v-for="tag in item.del"
@@ -149,7 +153,7 @@
         <p v-if="title == '标签' && isLogin == true" @click="show_tag_log">【查看标签编辑历史】</p>
       </div>
       <!-- 在Home页面渲染的侧导航条内容 -->
-      <ul ref="test" v-if="title == '热门标签' || title == '相关标签'">
+      <ul ref="test" v-if="title == '热门标签' || title == '相关标签' || title == 'Popular Tags'">
         <li class="tag belong-to-home" v-for="(val, key) in msg" :key="key">
           <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
           <!-- 根据tag名称自动渲染tag颜色 -->
@@ -205,7 +209,7 @@ import ShowAuthorData from "../components/ShowAuthorData.vue";
 import EditTags from "../components/EditTags";
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 判断是否登录的标志
       isLogin: false,
@@ -270,7 +274,7 @@ export default {
       this.axios({
         method: "post",
         url: "/be/video/tag_log.do",
-        data: { vid: this.pid, lang: localStorage.getItem('lang') }
+        data: { vid: this.pid, lang: localStorage.getItem("lang") }
       })
         .then(res => {
           this.tagLog = res.data.data;
@@ -330,19 +334,19 @@ export default {
       return this.$store.state.videoPid;
     },
     // 翻译标签名
-    tranTagCategories(){
-        return function(name) {
-            var map = {
-                "General":this.$t('General'),
-                "Character":this.$t('Character'),
-                "Copyright":this.$t('Copyright'),
-                "Author":this.$t('Author'),
-                "Meta":this.$t('Meta'),
-                "Language":this.$t('Language'),
-                "Soundtrack":this.$t('Soundtrack')
-            };
-            return map[name];
-        }
+    tranTagCategories() {
+      return function(name) {
+        var map = {
+          General: this.$t("General"),
+          Character: this.$t("Character"),
+          Copyright: this.$t("Copyright"),
+          Author: this.$t("Author"),
+          Meta: this.$t("Meta"),
+          Language: this.$t("Language"),
+          Soundtrack: this.$t("Soundtrack")
+        };
+        return map[name];
+      };
     }
   },
   props: ["msg"]
