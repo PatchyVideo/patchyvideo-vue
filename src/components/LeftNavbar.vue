@@ -163,8 +163,8 @@
             :disabled="showTagPanel"
           >{{$t('tag.edit')}}</el-button>
         </div>
-        <p v-if="title == '标签' && isLogin == true" @click="postVideo">【{{$t('tag.video_action')}}】</p>
-        <p v-if="title == '标签' && isLogin == true" @click="show_tag_log">【{{$t('tag.prompt_action')}}】</p>
+        <p v-if="title == '标签' && isLogin == true" @click="postVideo">{{$t('tag.video_action')}}</p>
+        <p v-if="title == '标签' && isLogin == true" @click="show_tag_log">{{$t('tag.prompt_action')}}</p>
       </div>
       <!-- 在Home页面渲染的侧导航条内容 -->
       <ul ref="test" v-if="title == '热门标签' || title == '相关标签' || title == 'Popular Tags'">
