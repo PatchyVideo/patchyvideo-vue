@@ -58,9 +58,9 @@
   "ENG": {
     "tag": {
       "title":"Tag",
-      "video_action":"[Publish videos with tags]",
-      "prompt_action":"[ View edit tag history]",
-      "edit":"Edited"
+      "video_action":"[Post video with tags]",
+      "prompt_action":"[View tag history]",
+      "edit":"Edit"
 
       },
     "tag_history": {
