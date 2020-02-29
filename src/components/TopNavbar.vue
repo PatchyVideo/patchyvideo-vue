@@ -107,13 +107,13 @@
 <template>
   <div class="top-navbar w" id="top-navbar">
     <el-select v-model="locale" placeholder="Language">
-    <el-option
-      v-for="item in langOptions"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
-    </el-option>
-  </el-select>
+      <el-option
+        v-for="item in langOptions"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      ></el-option>
+    </el-select>
     <!-- 左面的四个页面链接 -->
     <div class="nav_left">
       <ul>
@@ -179,12 +179,21 @@
               </template>
             </el-autocomplete>
           </div>
-          <input id="search-bar-submit" type="submit" :value="$t('search.button')" @click="gotoHome" />
+          <input
+            id="search-bar-submit"
+            type="submit"
+            :value="$t('search.button')"
+            @click="gotoHome"
+          />
         </li>
 
         <!-- 登录和注册按钮 -->
         <div class="loginUser" style="margin-left:20px" v-if="!isLogin">
-          <router-link to="/login" class="loginUser-login" @click.native="login">{{$t('user.login')}}</router-link>
+          <router-link
+            to="/login"
+            class="loginUser-login"
+            @click.native="login"
+          >{{$t('user.login')}}</router-link>
           <router-link to="/signup" class="loginUser-signup">{{$t('user.signup')}}</router-link>
         </div>
 
@@ -198,12 +207,21 @@
             this.$store.state.username
             }}
           </router-link>
-          <a class="loginUser-signup" @click="dialogVisible = true" style="cursor:pointer">{{$t('user.logout')}}</a>
+          <a
+            class="loginUser-signup"
+            @click="dialogVisible = true"
+            style="cursor:pointer"
+          >{{$t('user.logout')}}</a>
         </div>
       </ul>
     </div>
     <!-- 退出登录的弹出框 -->
-    <el-dialog :title="$t('prompt.msg')" :visible.sync="dialogVisible" width="30%" v-loading="loading">
+    <el-dialog
+      :title="$t('prompt.msg')"
+      :visible.sync="dialogVisible"
+      width="30%"
+      v-loading="loading"
+    >
       <p>{{$t('user.logout_prompt')}}</p>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">{{$t('prompt.cancel')}}</el-button>
@@ -218,7 +236,7 @@ import TextComplete from "v-textcomplete";
 export default {
   inject: ["reload"],
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 控制退出登录的弹出框
       dialogVisible: false,
@@ -251,20 +269,25 @@ export default {
         { tag: "tags:", cat: 6, cnt: null }
       ],
       infoTipMark: false,
-      langOptions: [{
-          value: 'CHS',
-          label: '简体中文'
-        }, {
-          value: 'CHT',
-          label: '繁體中文'
-        }, {
-          value: 'JPN',
-          label: '日本語'
-        }, {
-          value: 'ENG',
-          label: 'English'
-        }],
-        locale: localStorage.getItem('lang')
+      langOptions: [
+        {
+          value: "CHS",
+          label: "简体中文"
+        },
+        {
+          value: "CHT",
+          label: "繁體中文"
+        },
+        {
+          value: "JPN",
+          label: "日本語"
+        },
+        {
+          value: "ENG",
+          label: "English"
+        }
+      ],
+      locale: localStorage.getItem("lang")
     };
   },
   computed: {
@@ -321,7 +344,7 @@ export default {
             url: "/be/logout.do",
             data: {}
           }).then(result => {
-            this.open(this.$t('user.login_expire_prompt'));
+            this.open(this.$t("user.login_expire_prompt"));
             this.isLogin = false;
             // 清除所有session值(退出登录)
             sessionStorage.clear();
@@ -558,7 +581,7 @@ export default {
     },
     locale(val) {
       //this.$root.$i18n.locale = val;
-      localStorage.setItem('lang', val);
+      localStorage.setItem("lang", val);
       location.reload();
     }
   },
@@ -701,112 +724,24 @@ export default {
   color: #ff88a0;
 }
 
-/*.nav_right li#s1 {
-  width: 600px;
-  height: 70px;
-  line-height: 70px;
-  position: relative;
-  top: 0px;
-  right: 50px;
-}*/
-
 .nav_left {
   width: 50%;
   text-align: left;
   padding-left: 20px;
 }
-
-/*
-.nav_right {
-  width: 60%;
+.nav_left ul {
+  display: flex;
+  flex-wrap: nowrap;
 }
-*/
 
 .nav_left li {
   height: 70px;
   line-height: 70px;
   display: inline-block;
-  margin-left: 6%;
+  margin-left: 3%;
   text-align: center;
   font-size: 19px;
 }
-
-/*.nav_right li {
-  height: 70px;
-  line-height: 70px;
-  float: left;
-  margin-left: 2%;
-  !* display: inline-block; *!
-  text-align: center;
-  font-size: 19px;
-}*/
-/*
-
-.form_select {
-  width: 120px;
-  height: 20px;
-  padding-left: 5px;
-  text-rendering: auto;
-  color: black;
-  letter-spacing: normal;
-  word-spacing: normal;
-  display: inline-block;
-  box-sizing: border-box;
-  align-items: center;
-  white-space: pre;
-  background-color: white;
-  cursor: pointer;
-  outline: none;
-  border-style: solid;
-  border-color: white;
-  position: relative;
-  right: 74px;
-  transition: all 0.6s ease;
-}
-.form_select:hover {
-  outline: none;
-  border-style: solid;
-  border-color: #d1d1d1;
-  box-shadow: 0px 0px 10px 5px white, 0px 0px 10px dodgerblue,
-    0px 0px 20px dodgerblue;
-  color: dodgerblue;
-}
-#search-bar-query {
-  width: 220px;
-  height: 50px;
-  outline: none;
-  border: none;
-  position: absolute;
-  right: 74px;
-  top: 34%;
-  transform: translateY(-50%);
-  transition: all 0.6s ease;
-}
-
-#search-bar-submit {
-  display: block;
-  background: #c5464a;
-  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #c5464a,
-    0 0 70px #c5464a, 0 0 80px #c5464a, 0 0 100px #c5464a, 0 0 150px #c5464a;
-  width: 74px;
-  color: white;
-  height: 38px;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  position: absolute;
-  right: 0px;
-  top: 50%;
-  transform: translateY(-50%);
-  transition: all 0.6s ease;
-}
-
-#search-bar-submit:hover {
-  background-color: royalblue;
-  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #228dff,
-    0 0 70px #228dff, 0 0 80px #228dff, 0 0 100px #228dff, 0 0 150px #228dff;
-}
-*/
 
 .adviceList {
   /* 针对webkit内核（如Safari）进行的调整 */
@@ -853,5 +788,12 @@ export default {
 }
 .Soundtrack {
   color: #ff7792;
+}
+
+/* 使用css3 媒体查询功能进行的排版调整 */
+@media only screen and (max-width: 1156px) {
+  .nav_left li {
+    margin-left: 20px;
+  }
 }
 </style>
