@@ -33,12 +33,74 @@
       1.视频介绍里的链接功能弹出的按钮尚待优化
       2.按下浏览器的后退按钮网站没有刷新数据
 -->
+<i18n>
+  {
+  "CHS": {
+  "favorite":"收藏",
+  "modify" :"修改",
+  "copy" : "副本",
+  "add_copy":"添加副本",
+  "del_copy":"删除副本",
+  "sync_replica_label":"同步副本标签",
+  "sync_replica_label_from":"从此副本同步标签",
+  "playlist":"播放列表",
+  "management":"管理",
+  "official":"原始发布",
+  "official_repost":"官方再发布",
+  "authorized_translation":"授权翻译",
+  "authorized_repost":"授权转载",
+  "translation":"自发翻译",
+  "repost":"自发搬运",
+  "unknown":"其他",
+  "previous_article":"前一篇",
+  "no_previous_article":"没有前一篇了哦",
+  "next_article":"后一篇",
+  "no_next_article":"没有后一篇了哦",
+    "infotip":{
+  "release_type":"请修改视频的发布类型",
+  "nocopies":"此视频不存在副本",
+  "noplaylist":"本视频不包含于任何播放列表中",
+  "create_playlist":"由此视频创建播放列表"
+    }
+  },
+  "ENG": {
+  "favorite":"favorited",
+  "modify":"modifies",
+  "copy" : "copies",
+  "add_copy":"Add copies",
+  "del_copy":"Delete copies",
+  "sync_replica_label":"Synchronized copy label",
+  "sync_replica_label_from":"Sync tags in this copy",
+  "playlist":"playlists",
+  "management":"management",
+  "other":"other",
+  "official":"official",
+  "official_repost":"official_repost",
+  "authorized_translation":"authorized_translation",
+  "authorized_repost":"authorized_repost",
+  "translation":"translation",
+  "repost":"repost",
+  "unknown":"other",
+  "previous_article":"Previous article",
+  "no_previous_article":"No previous article",
+  "next_article":"Next Article",
+  "no_next_article":"No next article",
+  "infotip":{
+  "release_type":"Please edit the release type of the video",
+  "nocopies":"No copy of this video",
+  "noplaylist":"This video is not included in any playlist",
+   "create_playlist":" Create playlist from this video"
+  }
+
+  }
+  }
+</i18n>
 <template>
   <div>
     <topnavbar />
 
     <!-- 更改视频级别的弹出框 -->
-    <el-dialog title="管理" :visible.sync="managementBox" width="30%">
+    <el-dialog :title="$t('management')" :visible.sync="managementBox" width="30%">
       <div style="width:80%;margin:0 auto">
         <el-select v-model="theVideoRank" placeholder="请修改视频的等级" style="width:100%">
           <el-option v-for="item in videoRanks" :key="item" :label="item" :value="item"></el-option>
@@ -53,7 +115,7 @@
     <!-- 更改视频级别的弹出框 -->
     <el-dialog title="修改视频发布类型" :visible.sync="changeRepostType" width="30%">
       <div style="width:80%;margin:0 auto">
-        <el-select v-model="RepostType" placeholder="请修改视频的发布类型" style="width:100%">
+        <el-select v-model="RepostType" :placeholder="$t('infotip.release_type')" style="width:100%">
           <el-option
             v-for="item in RepostTypes"
             :key="item.label"
@@ -110,7 +172,7 @@
         <div class="recommend">
           <h4 style="color:#606266">
             {{videoType}}:
-            <el-button v-if="isLogin" type="text" @click="changeRepostType = true">修改</el-button>
+            <el-button v-if="isLogin" type="text" @click="changeRepostType = true">{{$t('modify')}}</el-button>
             <i
               v-if="isAdmin"
               class="el-icon-refresh"
@@ -127,8 +189,8 @@
                 type="primary"
                 round
                 @click="openMyList"
-              >收藏</el-button>
-              <el-button v-if="isAdmin" @click="managementBox = true">管理</el-button>
+              >{{$t('favorite')}}</el-button>
+              <el-button v-if="isAdmin" @click="managementBox = true">{{$t("management")}}</el-button>
             </div>
           </div>
           <h4 class="video_link">
@@ -167,15 +229,15 @@
         <!-- 副本列表 -->
         <div class="Copies_blibili">
           <div class="new_top">
-            <h2>副本</h2>
+            <h2>{{$t("copy")}}</h2>
             <p v-if="myVideoData.copies == ''">
-              此视频不存在副本
+             {{$t("infotip.nocopies")}}
               <router-link
                 :to="{ path: './postvideo', query: { copy: this.pid } }"
                 tag="a"
                 v-if="isLogin == true"
               >
-                <el-button type="text">[添加副本]</el-button>
+                <el-button type="text">[ {{$t("add_copy")}}]</el-button>
               </router-link>
             </p>
             <p v-else>
@@ -185,25 +247,25 @@
                 tag="a"
                 v-if="isLogin == true"
               >
-                <el-button type="text">[添加副本]</el-button>
+                <el-button type="text">[{{$t("add_copy")}}]</el-button>
               </router-link>
-              <el-button type="text" @click="dialogVisible = true" v-if="isLogin == true">[删除此副本]</el-button>
+              <el-button type="text" @click="dialogVisible = true" v-if="isLogin == true">[{{$t("del_copy")}}]</el-button>
               <el-button
                 type="text"
                 @click="broadcastTags()"
                 v-if="isLogin == true"
                 style="margin-left:0px"
-              >[同步副本标签]</el-button>
+              >[{{$t("sync_replica_label")}}]</el-button>
             </p>
           </div>
           <div v-for="(value, key, index) in myVideoData.copies_by_repost_type" :key="index">
-            <h3 v-if="key =='official'">原始发布</h3>
-            <h3 v-if="key =='official_repost'">官方再发布</h3>
-            <h3 v-if="key =='authorized_translation'">授权翻译</h3>
-            <h3 v-if="key =='authorized_repost'">授权转载</h3>
-            <h3 v-if="key =='translation'">自发翻译</h3>
-            <h3 v-if="key =='repost'">自发搬运</h3>
-            <h3 v-if="key =='unknown'">其他</h3>
+            <h3 v-if="key =='official'">{{$t('official')}}</h3>
+            <h3 v-if="key =='official_repost'">{{$t('official_repost')}}</h3>
+            <h3 v-if="key =='authorized_translation'">{{$t('authorized_translation')}}</h3>
+            <h3 v-if="key =='authorized_repost'">{{$t('authorized_repost')}}</h3>
+            <h3 v-if="key =='translation'">{{$t('translation')}}</h3>
+            <h3 v-if="key =='repost'">{{$t('repost')}}</h3>
+            <h3 v-if="key =='unknown'">{{$t('unknown')}}</h3>
             <ul v-for="item in value" :key="item._id.$oid" class="copies">
               <img
                 :src="require('../static/img/' + item.item.site + '.png')"
@@ -221,7 +283,7 @@
                 @click="synctags(item._id.$oid)"
                 v-if="isLogin == true"
                 style="margin-left:10px"
-              >[从此副本同步标签]</el-button>
+              >[{{$t("sync_replica_label_from")}}]</el-button>
             </ul>
           </div>
         </div>
@@ -229,15 +291,15 @@
         <!-- 播放列表 -->
         <div class="Playlists">
           <div class="new_top">
-            <h2>播放列表</h2>
+            <h2>{{$t("playlist")}}</h2>
             <p v-if="myVideoData.playlists == ''">
-              本视频不包含于任何播放列表中
+              {{$t("infotip.noplaylist")}}
               <el-dropdown v-if="isLogin == true" @command="handleCommand">
                 <span class="el-dropdown-link">
                   <i class="el-icon-more"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="a" @click="newFromSingleVideo()">【由此视频创建播放列表】</el-dropdown-item>
+                  <el-dropdown-item command="a" @click="newFromSingleVideo()">【{{$t("infotip.create_playlist")}}】</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </p>
@@ -248,7 +310,7 @@
                   <i class="el-icon-more"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="a" @click="newFromSingleVideo()">【由此视频创建播放列表】</el-dropdown-item>
+                  <el-dropdown-item command="a" @click="newFromSingleVideo()">【{{$t("infotip.create_playlist")}}】</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </p>
@@ -260,8 +322,8 @@
               :to="{ path: '/video', query: { id: item.prev } }"
               tag="a"
               @click.native="reload"
-            >【前一篇】</router-link>
-            <span v-else>【没有前一篇了哦】</span>
+            >【{{$t("previous_article")}}】</router-link>
+            <span v-else>【{{$t("no_previous_article")}}】</span>
             <router-link
               :to="{ path: '/listdetail', query: { id: item._id.$oid } }"
               tag="a"
@@ -272,8 +334,8 @@
               tag="a"
               @click.native="reload"
               style="float:right"
-            >【后一篇】</router-link>
-            <span v-else style="float:right">【没有后一篇了哦】</span>
+            >【{{$t("next_article")}}】</router-link>
+            <span v-else style="float:right">【{{$t("no_next_article")}}】</span>
           </ul>
         </div>
       </div>
@@ -366,12 +428,12 @@ export default {
       RepostType: "",
       // 视频的发布类型
       RepostTypes: [
-        { value: "official", label: "原始发布" },
-        { value: "official_repost", label: "官方再发布" },
-        { value: "authorized_translation", label: "授权翻译" },
-        { value: "authorized_repost", label: "授权转载" },
-        { value: "translation", label: "自发翻译" },
-        { value: "repost", label: "自发搬运" }
+        { value: "official", label: this.$t("official") },
+        { value: "official_repost", label: this.$t("official_repost") },
+        { value: "authorized_translation", label: this.$t("authorized_translation") },
+        { value: "authorized_repost", label: this.$t("authorized_repost") },
+        { value: "translation", label: this.$t("translation") },
+        { value: "repost", label: this.$t("repost") }
       ],
       dialogVisible: false, //删除提示框
       pid: "", //视频的id值
@@ -391,25 +453,25 @@ export default {
     videoType() {
       switch (this.myVideoData.video.item.repost_type) {
         case "official":
-          return "原始发布";
+          return this.$t("official");
           break;
         case "official_repost":
-          return "官方再发布";
+          return this.$t("official_repost");
           break;
         case "authorized_translation":
-          return "授权翻译";
+          return this.$t("authorized_translation");
           break;
         case "authorized_repost":
-          return "授权转载";
+          return this.$t("authorized_repost");
           break;
         case "translation":
-          return "自发翻译";
+          return this.$t("translation");
           break;
         case "repost":
-          return "自发搬运";
+          return this.$t("repost");
           break;
         case "unknown":
-          return "其他";
+          return this.$t("unknown");
           break;
       }
       // <h3 v-if="key =='official'">原始发布</h3>
@@ -466,6 +528,7 @@ export default {
     // 删除本地储存(和localStorage存储一起使用，已被弃用）
     // window.localStorage.removeItem("loglevel:webpack-dev-server");
     this.searchVideo();
+
   },
   mounted() {
     this.buildUrlMatchers();
