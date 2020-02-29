@@ -59,6 +59,7 @@
 <script>
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     var validatePass2 = (rule, value, callback) => {
       if (value !== this.FormRef.password1) {
         callback(new Error("两次输入密码不一致!"));

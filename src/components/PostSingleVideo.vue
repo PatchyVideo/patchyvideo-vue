@@ -89,6 +89,7 @@
 import EditTags from "../components/EditTags";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 视频的URL(与输入框绑定)
       VideoURL: "",
@@ -391,7 +392,8 @@ export default {
         method: "post",
         url: "/be/tags/autotag.do",
         data: {
-          utags: utags
+          utags: utags,
+          lang: localStorage.getItem('lang')
         }
       })
         .then(result => {

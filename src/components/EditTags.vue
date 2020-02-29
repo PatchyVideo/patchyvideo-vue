@@ -23,6 +23,34 @@
         2.新增方法：getCommonTags2
 
 -->
+
+<i18n>
+{
+  "CHS": {
+    "enter_tag": "请输入标签",
+    "edit_common_tags": "编辑共有标签",
+    "tag_already_exist": "标签已存在",
+    "tag_not_exist": "标签不存在",
+    "recommnad_tags": "推荐标签：",
+    "save": "保存修改",
+    "tag_add_succeed": "Tag添加成功！",
+    "tag_modify_succeed": "修改成功！",
+    "unknown_error": "未知错误"
+  },
+  "ENG": {
+    "enter_tag": "Enter tag",
+    "edit_common_tags": "Edit common tag",
+    "tag_already_exist": "Tag already exist",
+    "tag_not_exist": "Tag not exist",
+    "recommnad_tags": "Related tags:",
+    "save": "Save",
+    "tag_add_succeed": "Tag added",
+    "tag_modify_succeed": "Tags saved",
+    "unknown_error": "An unknown error has occurred, please report bug"
+  }
+}
+</i18n>
+
 <template>
   <transition mode="out-in">
     <div v-if="visible" class="EditTags" :class="{ active: this.msg != '' }">
@@ -187,7 +215,7 @@
                   :fetch-suggestions="querySearchAsync"
                   :trigger-on-focus="false"
                   popper-class="my-autocomplete"
-                  placeholder="请输入标签"
+                  :placeholder="$t('enter_tag')"
                   @select="handleSelect"
                   @focus="infoTipEvent(true)"
                   @blur="infoTipEvent(false)"
@@ -216,13 +244,13 @@
                 </a>
               </div>
             </div>
-            <span class="tag_title infoTip_1" :class="{ hidden: infoTip[0].isHidden }">编辑共有标签</span>
-            <span class="tag_title infoTip_2" :class="{ show: infoTip[1].isHidden }">标签已存在</span>
-            <span class="tag_title infoTip_3" :class="{ show: infoTip[2].isHidden }">标签不存在</span>
+            <span class="tag_title infoTip_1" :class="{ hidden: infoTip[0].isHidden }">{{$t('edit_common_tags')}}</span>
+            <span class="tag_title infoTip_2" :class="{ show: infoTip[1].isHidden }">{{$t('tag_already_exist')}}</span>
+            <span class="tag_title infoTip_3" :class="{ show: infoTip[2].isHidden }">{{$t('tag_not_exist')}}</span>
           </div>
           <div class="m_c">
             <div>
-              <span>推荐标签：</span>
+              <span>{{$t('recommnad_tags')}}</span>
               <transition mode="out-in">
                 <ul class="recTag Taglist" v-show="recTagsWatch">
                   <li class="item" v-for="(i, item) in recTags">
@@ -237,7 +265,7 @@
           </div>
         </div>
         <a href="javascript:;" @click="saveTag()">
-          <a id="save" v-if="this.$route.path != '/postvideo'">保存修改</a>
+          <a id="save" v-if="this.$route.path != '/postvideo'">{{$t('save')}}</a>
         </a>
       </div>
     </div>
@@ -247,6 +275,7 @@
 <script>
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       tags: [],
       tagsForRec: [],
@@ -338,30 +367,30 @@ export default {
     },
     open2() {
       this.$message({
-        message: "Tag添加成功！",
+        message: this.$t('tag_add_succeed'),
         type: "success"
       });
     },
 
     open3() {
       this.$message({
-        message: "Tag已存在！",
+        message: this.$t('tag_already_exist'),
         type: "warning"
       });
     },
 
     open4() {
-      this.$message.error("输入Tag必须存在于Tag库中!");
+      this.$message.error(this.$t('tag_not_exist'));
     },
     open5() {
       this.$message({
-        message: "修改成功！",
+        message: this.$t('tag_modify_succeed'),
         type: "success"
       });
     },
     open6() {
       this.$message({
-        message: "未知错误",
+        message: this.$t('unknown_error'),
         type: "error"
       });
     },
@@ -373,7 +402,7 @@ export default {
         this.axios({
           method: "post",
           url: "be/list/getcommontags.do",
-          data: { pid: this.msg }
+          data: { pid: this.msg, lang: localStorage.getItem('lang') }
         })
           .then(res => {
             this.tags = res.data.data; //原始数据
@@ -387,7 +416,7 @@ export default {
         this.axios({
           method: "post",
           url: "be/videos/gettags.do",
-          data: { video_id: this.msg }
+          data: { video_id: this.msg, lang: localStorage.getItem('lang') }
         })
           .then(res => {
             this.tags = res.data.data; //原始数据
@@ -403,7 +432,7 @@ export default {
       this.axios({
         method: "post",
         url: "be/list/getcommontags.do",
-        data: { pid: this.$route.query.pid }
+        data: { pid: this.$route.query.pid, lang: localStorage.getItem('lang') }
       })
         .then(res => {
           this.tags = res.data.data; //原始数据
@@ -480,7 +509,8 @@ export default {
         url: "be/tags/get_related_tags.do",
         data: {
           tags: tags,
-          exclude: this.tags
+          exclude: this.tags,
+          lang: localStorage.getItem('lang')
           }
       })
         .then(res => {

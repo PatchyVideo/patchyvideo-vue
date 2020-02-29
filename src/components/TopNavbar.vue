@@ -41,25 +41,99 @@
       3.用户头像显示
 -->
 
+<i18n>
+{
+  "CHS": {
+    "navbar": {
+      "index": "首页",
+      "playlist": "播放列表",
+      "postvideo": "发布视频",
+      "edittag": "标签",
+      "ipfs": "幻想之物",
+      "bug_report": "反馈BUG"
+    },
+
+    "search": {
+      "tag_text": "标签/文本",
+      "text": "仅文本",
+      "prompt": "请输入标签",
+      "button": "搜索"
+    },
+    "user": {
+      "signup": "注册",
+      "login": "登录",
+      "logout": "退出",
+      "logout_prompt": "你确定要退出登陆吗?",
+      "login_expire_prompt": "登录已过期，请新登录！"
+    },
+    "prompt": {
+      "msg": "提示",
+      "ok": "确 定",
+      "cancel": "取 消"
+    }
+  },
+  "ENG": {
+    "navbar": {
+      "index": "Home",
+      "playlist": "Playlists",
+      "postvideo": "Post Video",
+      "edittag": "Tags",
+      "ipfs": "幻想之物",
+      "bug_report": "Report Bugs"
+    },
+
+    "search": {
+      "tag_text": "Tag/Text",
+      "text": "Text Only",
+      "prompt": "Search...",
+      "button": "Search"
+    },
+    "user": {
+      "signup": "Sign up",
+      "login": "Log in",
+      "logout": "Log out",
+      "logout_prompt": "Are you sure you want to log out?",
+      "login_expire_prompt": "Your session has expired. Please relogin"
+    },
+    "prompt": {
+      "msg": "Are tou sure?",
+      "ok": "OK",
+      "cancel": "Cancel"
+    }
+  }
+}
+</i18n>
+
 <template>
   <div class="top-navbar w" id="top-navbar">
+    <el-select v-model="locale" placeholder="Language">
+    <el-option
+      v-for="item in langOptions"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
     <!-- 左面的四个页面链接 -->
     <div class="nav_left">
       <ul>
         <li>
-          <router-link to="/home" @click.native="cleanIptV">主页</router-link>
+          <router-link to="/home" @click.native="cleanIptV">{{$t('navbar.index')}}</router-link>
         </li>
         <li>
-          <router-link to="/lists">播放列表</router-link>
+          <router-link to="/lists">{{$t('navbar.playlist')}}</router-link>
         </li>
         <li>
-          <router-link to="/postvideo">发布索引</router-link>
+          <router-link to="/postvideo">{{$t('navbar.postvideo')}}</router-link>
         </li>
         <li>
-          <router-link to="/edittag">标签</router-link>
+          <router-link to="/edittag">{{$t('navbar.edittag')}}</router-link>
         </li>
         <li>
-          <router-link to="/ipfs">幻想之物</router-link>
+          <router-link to="/ipfs">{{$t('navbar.ipfs')}}</router-link>
+        </li>
+        <li>
+          <a href="https://github.com/zyddnys/PatchyVideo/issues">{{$t('navbar.bug_report')}}</a>
         </li>
       </ul>
     </div>
@@ -71,8 +145,8 @@
         <li id="s1">
           <!-- 搜索条件 -->
           <select ref="form_select" class="form_select">
-            <option value="tag">标签/文本</option>
-            <option value="text">仅文本</option>
+            <option value="tag">{{$t('search.tag_text')}}</option>
+            <option value="text">{{$t('search.text')}}</option>
           </select>
           <!-- 搜索框 -->
           <div id="search-bar-query">
@@ -82,7 +156,7 @@
               v-model="iptVal"
               :fetch-suggestions="querySearchAsync"
               :trigger-on-focus="false"
-              placeholder="请输入标签"
+              :placeholder="$t('search.prompt')"
               @select="handleSelect"
               @keyup.enter.native="gotoHome"
             >
@@ -105,13 +179,13 @@
               </template>
             </el-autocomplete>
           </div>
-          <input id="search-bar-submit" type="submit" value="搜索" @click="gotoHome" />
+          <input id="search-bar-submit" type="submit" :value="$t('search.button')" @click="gotoHome" />
         </li>
 
         <!-- 登录和注册按钮 -->
         <div class="loginUser" style="margin-left:20px" v-if="!isLogin">
-          <router-link to="/login" class="loginUser-login" @click.native="login">登录</router-link>
-          <router-link to="/signup" class="loginUser-signup">注册</router-link>
+          <router-link to="/login" class="loginUser-login" @click.native="login">{{$t('user.login')}}</router-link>
+          <router-link to="/signup" class="loginUser-signup">{{$t('user.signup')}}</router-link>
         </div>
 
         <!-- 登录成功后的用户界面 -->
@@ -124,16 +198,16 @@
             this.$store.state.username
             }}
           </router-link>
-          <a class="loginUser-signup" @click="dialogVisible = true" style="cursor:pointer">登出</a>
+          <a class="loginUser-signup" @click="dialogVisible = true" style="cursor:pointer">{{$t('user.logout')}}</a>
         </div>
       </ul>
     </div>
     <!-- 退出登录的弹出框 -->
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" v-loading="loading">
-      <p>你确定要退出登录吗?</p>
+    <el-dialog :title="$t('prompt.msg')" :visible.sync="dialogVisible" width="30%" v-loading="loading">
+      <p>{{$t('user.logout_prompt')}}</p>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="cleanLocalStorage">确 定</el-button>
+        <el-button @click="dialogVisible = false">{{$t('prompt.cancel')}}</el-button>
+        <el-button type="primary" @click="cleanLocalStorage">{{$t('prompt.ok')}}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -144,6 +218,7 @@ import TextComplete from "v-textcomplete";
 export default {
   inject: ["reload"],
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 控制退出登录的弹出框
       dialogVisible: false,
@@ -172,9 +247,24 @@ export default {
         { tag: "AND", cat: 6, cnt: null },
         { tag: "OR", cat: 6, cnt: null },
         { tag: "NOT", cat: 6, cnt: null },
-        { tag: "date:", cat: 6, cnt: null }
+        { tag: "date:", cat: 6, cnt: null },
+        { tag: "tags:", cat: 6, cnt: null }
       ],
-      infoTipMark: false
+      infoTipMark: false,
+      langOptions: [{
+          value: 'CHS',
+          label: '简体中文'
+        }, {
+          value: 'CHT',
+          label: '繁體中文'
+        }, {
+          value: 'JPN',
+          label: '日本語'
+        }, {
+          value: 'ENG',
+          label: 'English'
+        }],
+        locale: localStorage.getItem('lang')
     };
   },
   computed: {
@@ -231,7 +321,7 @@ export default {
             url: "/be/logout.do",
             data: {}
           }).then(result => {
-            this.open("登录已过期，请新登录！");
+            this.open(this.$t('user.login_expire_prompt'));
             this.isLogin = false;
             // 清除所有session值(退出登录)
             sessionStorage.clear();
@@ -465,6 +555,11 @@ export default {
   watch: {
     iptVal2() {
       this.iptVal = this.iptVal2;
+    },
+    locale(val) {
+      //this.$root.$i18n.locale = val;
+      localStorage.setItem('lang', val);
+      location.reload();
     }
   },
   components: { TextComplete }

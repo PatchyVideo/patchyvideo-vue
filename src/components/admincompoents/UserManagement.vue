@@ -11,6 +11,7 @@
 <script>
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       couponSelected: "",
       options: [

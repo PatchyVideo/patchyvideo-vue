@@ -46,6 +46,40 @@
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
 -->
+
+<i18n>
+{
+  "CHS": {
+    "page_count": "显示 {count} / {maxcount} 个视频",
+    "no_result": "没有搜索到视频",
+    "show_deleted": "显示已失效视频",
+    "blacklist_prompt": "已屏蔽含有敏感标签的视频，可在个人界面设置",
+    "latest": "发布时间正序",
+    "oldest": "发布时间倒序",
+    "latest_video": "原视频上传时间正序",
+    "oldest_video": "原视频上传时间倒序",
+    "popular_tags": "热门标签",
+    "search_result": "搜索结果 - {result}",
+    "syntax_error": "查询语法错误！",
+    "syntax_error_not": "所输入的查询不能与NOT连用！"
+  },
+  "ENG": {
+    "page_count": "Showing {count} / {maxcount} videos",
+    "no_result": "No video found",
+    "show_deleted": "Show deleted videos",
+    "blacklist_prompt": "Some videos are blacklisted, you can change your blacklist setting in your settings panel.",
+    "latest": "Latest",
+    "oldest": "Oldest",
+    "latest_video": "Latest Video",
+    "oldest_video": "Oldest Video",
+    "popular_tags": "Popular Tags",
+    "search_result": "Search - {result}",
+    "syntax_error": "Syntax error in query",
+    "syntax_error_not": "NOT cannot be used here"
+  }
+}
+</i18n>
+
 <template>
   <div>
     <topnavbar />
@@ -57,10 +91,10 @@
       <div class="content">
         <!-- 播放列表的抬头 -->
         <div class="video-list-header">
-          <p v-if="maxcount">显示 {{ count2 }} / {{ maxcount }} 个视频</p>
-          <p v-else>没有搜索到视频</p>
-          <el-checkbox v-model="checked">显示已失效视频</el-checkbox>
-          <span style="margin-left: 100px;font-size: 14px;color:#606266;">已屏蔽含有敏感标签的视频，可在个人界面设置</span>
+          <p v-if="maxcount">{{$t('page_count', {count: count2, maxcount: maxcount})}}</p>
+          <p v-else>{{$t('no_result')}}</p>
+          <el-checkbox v-model="checked">{{$t('show_deleted')}}</el-checkbox>
+          <span style="margin-left: 100px;font-size: 14px;color:#606266;">{{$t('blacklist_prompt')}}</span>
           <el-select id="select-order" v-model="couponSelected">
             <el-option
               v-for="item in options"
@@ -134,13 +168,14 @@ import Footer from "../components/Footer.vue";
 import { copyToClipboard } from "../static/js/generic";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 视频列表的排序规则
       options: [
-        { value: "latest", label: "发布时间正序" },
-        { value: "oldest", label: "发布时间倒序" },
-        { value: "video_latest", label: "原视频上传时间正序" },
-        { value: "video_oldest", label: "原视频上传时间倒序" }
+        { value: "latest", label: this.$t('latest') },
+        { value: "oldest", label: this.$t('oldest') },
+        { value: "video_latest", label: this.$t('latest_video') },
+        { value: "video_oldest", label: this.$t('oldest_video') }
       ],
       // 当前视频列表的排列顺序
       couponSelected: "",
@@ -181,7 +216,7 @@ export default {
     // 获取视频列表
     /* this.getListVideo(this.page, this.count);*/
     // 改变侧导航条的标题
-    this.$store.commit("changeLeftNavBarTitle", "热门标签");
+    this.$store.commit("changeLeftNavBarTitle", this.$t('popular_tags'));
     // 修改网站标题
     document.title = "Patchyvideo";
 
@@ -192,7 +227,7 @@ export default {
       this.searchKeyWord = this.$route.query.keyword;
       this.ifSearch = true;
       // 修改网站标题
-      document.title = "搜索结果- " + this.searchKeyWord;
+      document.title = this.$t('search_result', {result: this.searchKeyWord});
     }
   },
   computed: {},
@@ -309,14 +344,14 @@ export default {
           // 包含非法字符的时候
           if (result.data.data.reason == "INCORRECT_QUERY") {
             this.$message({
-              message: "查询语法错误！",
+              message: this.$t('syntax_error'),
               type: "error"
             });
           }
           // NOT使用错误的时候
           else if (result.data.data.reason == "FAILED_NOT_OP") {
             this.$message({
-              message: "所输入的查询不能与NOT连用！",
+              message: this.$t('syntax_error_not'),
               type: "error"
             });
           }
@@ -419,7 +454,7 @@ export default {
         newV.query.qtype != oldV.query.qtype
       ) {
         // 修改网站标题
-        document.title = " 搜索结果- " + newV.query.keyword;
+        document.title = this.$t('search_result', {result: newV.query.keyword});
         this.ifSearch = true;
         this.searchKeyWord = newV.query.keyword;
         //在我请求新的搜索数据之后，因为搜索是路由跳转所以会重置当前页面为1，页数会改变，也会触发监控页数里的函数

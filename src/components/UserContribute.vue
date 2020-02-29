@@ -86,6 +86,7 @@
 <script>
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       flag: true, //视频排列顺序,默认栅格
       TagData: [], //所有视频的TAG数据
@@ -137,7 +138,8 @@ export default {
           async: true,
           data: {
             page: 1,
-            page_size: 20
+            page_size: 20,
+            lang: localStorage.getItem('lang')
           }
         })
           .then(result => {
@@ -158,7 +160,8 @@ export default {
           data: {
             page: 1,
             page_size: 20,
-            uid: this.$route.params.id
+            uid: this.$route.params.id,
+            lang: localStorage.getItem('lang')
           }
         })
           .then(result => {
@@ -183,7 +186,8 @@ export default {
           async: true,
           data: {
             page: e,
-            page_size: count
+            page_size: count,
+            lang: localStorage.getItem('lang')
           }
         }).then(result => {
             this.TagData = result.data.data.tags;
@@ -202,7 +206,8 @@ export default {
           data: {
             page: e,
             page_size: count,
-            uid: this.$route.params.id
+            uid: this.$route.params.id,
+            lang: localStorage.getItem('lang')
           }
         })
           .then(result => {

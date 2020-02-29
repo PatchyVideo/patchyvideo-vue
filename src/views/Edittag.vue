@@ -18,7 +18,7 @@
           <el-tab-pane
             v-for="(item, i) in tagCategories"
             :key="item"
-            :label="item"
+            :label="tranTagCategories(item)"
             :name="i.toString()"
           >
             <tagDetail :tagCategorie="item"></tagDetail>
@@ -30,9 +30,7 @@
       </div>
     </div>
 
-    <div class="footer w">
-      <p>© 2019 www.patchyvideo.com Touhou Project</p>
-    </div>
+    <Footer></Footer>
   </div>
 </template>
 
@@ -40,8 +38,10 @@
 import topnavbar from "../components/TopNavbar.vue";
 import tagDetail from "../components/tagDetail.vue";
 import searchTag from "../components/searchTag.vue";
+import Footer from "../components/Footer.vue";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 页面是否属于加载状态的判断
       loading: true,
@@ -50,6 +50,23 @@ export default {
       // 打开标签的序号
       activeName: "0"
     };
+  },
+  computed:{
+      // 翻译标签名
+      tranTagCategories(){
+          return function(name) {
+              var map = {
+                  "General":"综合",
+                  "Character":"角色",
+                  "Copyright":"作品",
+                  "Author":"up主",
+                  "Meta":"元数据",
+                  "Language":"语言",
+                  "Soundtrack":"原曲",
+              };
+              return map[name];
+          }
+      }
   },
   mounted() {
     // 初始化页面名为home
@@ -75,7 +92,7 @@ export default {
       });
     }
   },
-  components: { topnavbar, tagDetail, searchTag }
+  components: { topnavbar, tagDetail, searchTag, Footer }
 };
 </script>
 

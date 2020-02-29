@@ -126,6 +126,7 @@ import topnavbar from "../components/TopNavbar.vue";
 import Footer from "../components/Footer.vue";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 当前页数
       page: 1,

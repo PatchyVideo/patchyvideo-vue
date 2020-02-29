@@ -29,6 +29,45 @@
       暂无
 -->
 
+<i18n>
+{
+  "CHS": {
+    "tag_history": {
+      "prompt": "标签编辑历史",
+      "add": "添加:",
+      "del": "删除:",
+      "empty": "暂无记录!"
+    },
+    "categories": {
+      "General":"综合",
+      "Character":"角色",
+      "Copyright":"作品",
+      "Author":"up主",
+      "Meta":"元数据",
+      "Language":"语言",
+      "Soundtrack":"原曲"
+    }
+  },
+  "ENG": {
+    "tag_history": {
+      "prompt": "Tag History",
+      "add": "Added:",
+      "del": "Removed:",
+      "empty": "No record found"
+    },
+    "categories": {
+      "General":"General",
+      "Character":"Character",
+      "Copyright":"Copyright",
+      "Author":"Author",
+      "Meta":"Meta",
+      "Language":"Language",
+      "Soundtrack":"Soundtrack"
+    }
+  }
+}
+</i18n>
+
 <template>
   <div class="left-navbar">
     <!-- EditTags组件-->
@@ -46,7 +85,7 @@
     </el-dialog>
 
     <!-- 显示标签组件的对话框 -->
-    <el-dialog title="标签编辑历史" :visible.sync="dialogVisible" width="70%">
+    <el-dialog :title="$t('tag_history.prompt')" :visible.sync="dialogVisible" width="70%">
       <div v-loading="loading2">
         <el-collapse>
           <el-collapse-item
@@ -56,7 +95,7 @@
           >
             <div>
               <div v-if="item.add.length">
-                <span style="margin-right:10px;margin-top:3px;color:#67C23A">添加:</span>
+                <span style="margin-right:10px;margin-top:3px;color:#67C23A">{{$t('tag_history.add')}}</span>
                 <el-tag
                   type="success"
                   v-for="tag in item.add"
@@ -67,7 +106,7 @@
               </div>
 
               <div v-if="item.del.length">
-                <span style="margin-right:10px;margin-top:3px;color:#F56C6C">删除:</span>
+                <span style="margin-right:10px;margin-top:3px;color:#F56C6C">{{$t('tag_history.del')}}</span>
                 <el-tag
                   type="danger"
                   v-for="tag in item.del"
@@ -77,7 +116,6 @@
                 <br />
               </div>
               <div v-if="item.user_obj.length" style="margin-top:5px">
-                <span style="margin-right:10px;">修改者:</span>
                 <span v-for="user in item.user_obj" :key="user.profile.username" class="editer">
                   <el-avatar
                     fit="cover"
@@ -88,7 +126,7 @@
                   <router-link :to="'/users/'+user._id.$oid">{{ user.profile.username }}</router-link>
                 </span>
               </div>
-              <span v-if="item.del.length==0 && item.add.length==0">暂无记录!</span>
+              <span v-if="item.del.length==0 && item.add.length==0">{{$t('tag_history.empty')}}</span>
             </div>
           </el-collapse-item>
         </el-collapse>
@@ -133,7 +171,7 @@
       <!-- 在Detail页面渲染的侧导航条内容 -->
       <ul ref="test" v-if="title == '标签'">
         <li class="tag belong-to-detail" v-for="(key, val) in msg" :key="val">
-          <h3>{{ val }}</h3>
+          <h3>{{ tranTagCategories(val) }}</h3>
           <!-- 根据tag名称自动渲染tag颜色 -->
           <p
             v-for="item in key"
@@ -167,6 +205,7 @@ import ShowAuthorData from "../components/ShowAuthorData.vue";
 import EditTags from "../components/EditTags";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 判断是否登录的标志
       isLogin: false,
@@ -231,7 +270,7 @@ export default {
       this.axios({
         method: "post",
         url: "/be/video/tag_log.do",
-        data: { vid: this.pid }
+        data: { vid: this.pid, lang: localStorage.getItem('lang') }
       })
         .then(res => {
           this.tagLog = res.data.data;
@@ -289,6 +328,21 @@ export default {
     // 视频的pid
     pid() {
       return this.$store.state.videoPid;
+    },
+    // 翻译标签名
+    tranTagCategories(){
+        return function(name) {
+            var map = {
+                "General":this.$t('General'),
+                "Character":this.$t('Character'),
+                "Copyright":this.$t('Copyright'),
+                "Author":this.$t('Author'),
+                "Meta":this.$t('Meta'),
+                "Language":this.$t('Language'),
+                "Soundtrack":this.$t('Soundtrack')
+            };
+            return map[name];
+        }
     }
   },
   props: ["msg"]

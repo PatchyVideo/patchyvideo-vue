@@ -303,6 +303,7 @@ import Footer from "../components/Footer.vue";
 import { copyToClipboard } from "../static/js/generic";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 视频的详细信息
       myVideoData: {
@@ -578,7 +579,7 @@ export default {
       this.axios({
         method: "post",
         url: "be/getvideo.do",
-        data: { vid: this.$route.query.id }
+        data: { vid: this.$route.query.id, lang: localStorage.getItem('lang') }
       })
         .then(result => {
           this.myVideoData = result.data.data;

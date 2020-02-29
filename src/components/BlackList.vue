@@ -3,6 +3,37 @@
 黑名单组件
 -->
 
+<i18n>
+{
+  "CHS": {
+    "default_blacklist": "系统默认屏蔽",
+    "use": "使用此方案",
+    "custom_blacklist": "自定义屏蔽",
+    "blacklist_empty_prompt": "若自定义屏蔽列表为空，则认为没有开启屏蔽",
+    "blacklist_enter_prompt": "请输入多个屏蔽词,鼠标失去焦点后添加，支持空格、换行、逗号分隔",
+    "add_blacklist": "添加屏蔽词",
+    "remove_all_blacklist": "移除全部屏蔽词",
+    "load_blacklist": "导入多个屏蔽词",
+    "tag_notexist_prompt": "输入Tag必须存在于Tag库中!",
+    "tag_already_exist_prompt": "Tag已存在！",
+    "update_successed": "修改成功！"
+  },
+  "ENG": {
+    "default_blacklist": "Default blacklist",
+    "use": "Save changes",
+    "custom_blacklist": "Custom blacklist",
+    "blacklist_empty_prompt": "Blacklist is disabled if not tags is present",
+    "blacklist_enter_prompt": "Enter multiple tags, separated by space, comma or linebreak",
+    "add_blacklist": "Add tag",
+    "remove_all_blacklist": "Remove all tags",
+    "load_blacklist": "Enter multiple tags",
+    "tag_notexist_prompt": "Tags not exist",
+    "tag_already_exist_prompt": "Tag already exist",
+    "update_successed": "Update succeed"
+  }
+}
+</i18n>
+
 <template>
 
     <div class="black-list" v-loading="loading">
@@ -10,7 +41,7 @@
             <el-card class="box-card" :class="{select:radio!==3}" @click.native="selectDiv(3)">
                 <div slot="header" class="clearfix">
                     <el-radio :label="3">
-                    <span :class="{white:radio!==3}">系统默认屏蔽</span>
+                    <span :class="{white:radio!==3}">{{$t('default_blacklist')}}</span>
 
                 </el-radio>
 
@@ -22,18 +53,18 @@
                 <el-button style=" padding: 3px 0;color: #f64c59;"
                            type="text"
                            @click.native="changeBlackList(defaultBlackData)"
-                >使用此方案</el-button>-->
+                >{{$t('use')}}</el-button>-->
             </el-card>
 
             <el-card class="box-card" :class="{select:radio!==6}"  @click.native="selectDiv(6)">
 
                 <div slot="header" class="clearfix">
                     <el-radio :label="6">
-                    <span :class="{white:radio!==6}">自定义屏蔽</span>
+                    <span :class="{white:radio!==6}">{{$t('custom_blacklist')}}</span>
                     </el-radio>
                 </div>
                 <div class="text item" :class="{white:radio!==6}" v-if="!textareaVisble&&!inputVisible&&dynamicTags.length===0">
-                    <h4>若自定义屏蔽列表为空，则认为没有开启屏蔽</h4>
+                    <h4>{{$t('blacklist_empty_prompt')}}</h4>
                 </div>
                     <div    :key="tag"
                             v-for="tag in dynamicTags" class="text item">
@@ -93,22 +124,22 @@
                             ref="saveTagTextArea"
                             @blur="handleTextAreaConfirm"
                             :autosize="{ minRows: 8}"
-                            placeholder="请输入多个屏蔽词,鼠标失去焦点后添加，支持空格、换行、逗号分隔"
+                            :placeholder="$t('blacklist_enter_prompt')"
                             v-model="textareaValue"
                             style="margin: 20px 0px;"
                     ></el-input>
 
                  <div style="display: flex;">
 
-                     <el-button    v-if="!inputVisible&&!textareaVisble" class="button-new-tag"  type="primary" size="small" @click="showInput" >添加屏蔽词</el-button>
-                     <el-button    v-if="this.dynamicTags.length!==0"    class="button-new-tag" type="danger" size="small" @click="removeBlackDataAll" >移除全部屏蔽词</el-button>
-                     <el-button    v-if="!textareaVisble&&!inputVisible" class="button-new-tag"  type="primary" size="small" @click="showTextarea" >导入多个屏蔽词</el-button>
+                     <el-button    v-if="!inputVisible&&!textareaVisble" class="button-new-tag"  type="primary" size="small" @click="showInput" >{{$t('add_blacklist')}}</el-button>
+                     <el-button    v-if="this.dynamicTags.length!==0"    class="button-new-tag" type="danger" size="small" @click="removeBlackDataAll" >{{$t('remove_all_blacklist')}}</el-button>
+                     <el-button    v-if="!textareaVisble&&!inputVisible" class="button-new-tag"  type="primary" size="small" @click="showTextarea" >{{$t('load_blacklist')}}</el-button>
 
                  </div>
 
                     <el-button style=" padding: 3px 0;color: #f64c59;" type="text"
                                @click.native="changeBlackList(dynamicTags)"
-                    >使用此方案</el-button>-->
+                    >{{$t('use')}}</el-button>-->
                 </el-card>
 
         </el-radio-group>
@@ -118,6 +149,7 @@
 <script>
     export default {
         data() {
+            this.$i18n.locale = localStorage.getItem('lang');
             return {
                 defaultBlackData:[],
                 blackData:[],
@@ -165,12 +197,12 @@
                         data: { tags: [inputValue] }
                     }).then(res => {
                         if (JSON.stringify(res.data.data.categorie_map) === "{}") {
-                            this.$message.error("输入Tag必须存在于Tag库中!");
+                            this.$message.error(this.$t('tag_notexist_prompt'));
                             this.inputValue = '';
                             return;
                         } else if (this.dynamicTags.indexOf(inputValue) !==-1) {
                             this.$message({
-                                message: "Tag已存在！",
+                                message: this.$t('tag_already_exist_prompt'),
                                 type: "warning"
                             });
                             this.inputValue = '';
@@ -208,7 +240,7 @@
                             return;
                         }
                         if (JSON.stringify(res.data.data.categorie_map) === "{}"&& textareaValue.length!==0) {
-                            this.$message.error("只能导入TAG库中存在的数据！");
+                            this.$message.error(this.$t('tag_notexist_prompt'));
                             this.inputValue = '';
                             return;
                         }else {
@@ -250,7 +282,7 @@
                 this.axios({
                     method:"post",
                     url:"be/tags/get_default_blacklist.do",
-                    data:{}
+                    data:{lang:localStorage.getItem('lang')}
                 }).then(res=>{
                     this.defaultBlackData =res.data.data.tags;
                     this.getBlackList();
@@ -267,7 +299,7 @@
                 this.axios({
                     method:"post",
                     url:"be/user/get_blacklist.do",
-                    data:{}
+                    data:{lang:localStorage.getItem('lang')}
                 }).then(res=>{
                     this.blackData =res.data.data;
                     if(res.data.data==="default" ||JSON.stringify(this.defaultBlackData)===JSON.stringify(this.blackData)){
@@ -292,7 +324,7 @@
                     data:{"blacklist":data}
                 }).then(res=>{
                     this.$message({
-                        message: "修改成功！",
+                        message: this.$t('update_successed'),
                         type: "success"
                     });
                     this.getBlackList();

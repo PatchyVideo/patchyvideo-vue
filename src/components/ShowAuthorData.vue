@@ -341,6 +341,7 @@
 export default {
   props: ["AuthorID"],
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 作者的标签名
       authorLanguages: "",
@@ -456,7 +457,8 @@ export default {
             method: "post",
             url: "/be/authors/get_record.do",
             data: {
-              tag: this.AuthorID
+              tag: this.AuthorID,
+              lang: localStorage.getItem('lang')
             }
           })
             .then(result => {

@@ -100,6 +100,7 @@ Vue.prototype.$echarts = echarts;
     import Footer from "../components/Footer.vue";
     export default {
         data() {
+            this.$i18n.locale = localStorage.getItem('lang');
             return {
                 usersid: "www",
                 gotomark: 0,
