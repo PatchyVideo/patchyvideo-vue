@@ -214,7 +214,7 @@
           <!-- 视频详细信息 -->
           <div class="re_video">
             <!-- 如果是ipfs视频直接播放视频，否则显示封面 -->
-            <div style="text-align: center;" id="nodes">{{$t('init_tip')}}</div>
+            <div v-if="isIpfs" style="text-align: center;" id="nodes">{{$t('init_tip')}}</div>
             <video
               :src="myVideoData.video.item.url"
               id="player"
