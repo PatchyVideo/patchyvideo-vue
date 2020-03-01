@@ -33,6 +33,45 @@ Vue.prototype.$echarts = echarts;
 
 -->
 
+<i18n>
+{
+  "CHS": {
+    "title":"创建播放列表",
+    "me":{
+        "tab1":"我的信息",
+        "tab2":"我贡献的索引",
+        "tab3":"我的文件夹",
+        "tab4":"我的收藏",
+        "tab5":"索引状态",
+        "tab6":"黑名单"
+    },
+    "outer_user":{
+        "tab1":"用户信息",
+        "tab2":"他贡献的索引",
+        "tab3":"他的文件夹",
+        "tab4":"他的收藏"
+    }
+  },
+  "ENG": {
+    "title":"创建播放列表",
+    "me":{
+        "tab1":"My information",
+        "tab2":"Index of my contribution",
+        "tab3":"My folder",
+        "tab4":"My Favorites",
+        "tab5":"Index status",
+        "tab6":"Blacklist"
+    },
+    "outer_user":{
+        "tab1":"User information",
+        "tab2":"The index of his contribution",
+        "tab3":"His folder",
+        "tab4":"His favorites"
+    }
+  }
+}
+</i18n>
+
 
 <template>
     <div>
@@ -56,22 +95,22 @@ Vue.prototype.$echarts = echarts;
             <!--个人界面-->
      
             <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane :label="labelInfo[0]" name="first">
+                <el-tab-pane :label="(labelInfo.length==info[0].length)?$t('me.tab1'):$t('outer_user.tab1')" name="first" v-if="labelInfo.length>=1">
                     <userprofile></userprofile>
                 </el-tab-pane>
-                <el-tab-pane :label="labelInfo[1]" name="second">
+                <el-tab-pane :label="(labelInfo.length==info[0].length)?$t('me.tab2'):$t('outer_user.tab2')" name="second" v-if="labelInfo.length>=2">
                     <usercontribute v-if="this.activeName==='second'"></usercontribute>
                 </el-tab-pane>
-                <el-tab-pane :label="labelInfo[2]" name="third">
+                <el-tab-pane :label="(labelInfo.length==info[0].length)?$t('me.tab3'):$t('outer_user.tab3')" name="third" v-if="labelInfo.length>=3">
                     <listfolder v-if="this.activeName==='third'"></listfolder>
                 </el-tab-pane>
-                <el-tab-pane :label="labelInfo[3]" name="four">
+                <el-tab-pane :label="(labelInfo.length==info[0].length)?$t('me.tab4'):$t('outer_user.tab4')" name="four" v-if="labelInfo.length>=4">
                     <userfavorites v-if="this.activeName==='four'"></userfavorites>
                 </el-tab-pane>
-                <el-tab-pane :label="labelInfo[4]" name="fifth">
+                <el-tab-pane :label="(labelInfo.length==info[0].length)?$t('me.tab5'):$t('outer_user.tab5')" name="fifth" v-if="labelInfo.length>=5">
                     <userfolder v-if="this.activeName==='fifth'"></userfolder>
                 </el-tab-pane>
-                <el-tab-pane :label="labelInfo[5]" name="six">
+                <el-tab-pane :label="(labelInfo.length==info[0].length)?$t('me.tab6'):$t('outer_user.tab6')" name="six" v-if="labelInfo.length>=6">
                     <blacklist v-if="this.activeName==='six'"></blacklist>
                 </el-tab-pane>
         <!--       <el-tab-pane label="文件管理" name="five">

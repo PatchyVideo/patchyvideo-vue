@@ -12,6 +12,34 @@
     ★待解决问题：
       1.错误信息尚未进行分类
 -->
+
+<i18n>
+{
+  "CHS": {
+    "reset_psd":"重置密码",
+    "psd_input_tip":"请输入新的密码",
+    "repeat_input_tip":"请重复密码",
+    "err_tip":"两次输入密码不一致!",
+    "input_psd":"请输入密码",
+    "psd_limit":"长度在 6 到 64 个字符",
+    "fail_msg":"请求失败，请重新在找回密码界面发送邮件！",
+    "success_msg":"密码重置成功！"
+
+  },
+  "ENG": {
+    "reset_psd":"Reset Password",
+    "psd_input_tip":"Please enter a new password",
+    "repeat_input_tip":"Please repeat password",
+    "err_tip":"Incorrect password entered twice!",
+    "input_psd":"Please enter the password",
+    "psd_limit":"6 to 64 characters",
+    "fail_msg":"The request failed, please resend the email on the password recovery interface!",
+    "success_msg":"Password reset successfully!"
+  }
+}
+</i18n>
+
+
 <template>
   <div class="loginPic">
     <!-- 重置密码框正文 -->
@@ -21,7 +49,7 @@
         <router-link to="/home">PatchyVideo</router-link>
       </h1>
       <div class="top in">
-        <h3 style="color:#909399">重置密码</h3>
+        <h3 style="color:#909399">{{$t('reset_psd')}}</h3>
       </div>
 
       <!-- 新密码的框 -->
@@ -32,7 +60,7 @@
             name="password1"
             type="password"
             v-model="FormRef.password1"
-            placeholder="请输入新的密码"
+            :placeholder="$t('psd_input_tip')"
             prefix-icon="el-icon-lock"
           ></el-input>
         </el-form-item>
@@ -42,7 +70,7 @@
             name="password2"
             type="password"
             v-model="FormRef.password2"
-            placeholder="请重复密码"
+            :placeholder="$t('repeat_input_tip')"
             prefix-icon="el-icon-key"
           ></el-input>
         </el-form-item>
@@ -50,7 +78,7 @@
 
       <!-- 登录按钮 -->
       <div class="bottom in">
-        <div @click="resetpass()" class="login in">重置密码</div>
+        <div @click="resetpass()" class="login in">{{$t('reset_psd')}}</div>
       </div>
     </div>
   </div>
@@ -62,7 +90,7 @@ export default {
     this.$i18n.locale = localStorage.getItem('lang');
     var validatePass2 = (rule, value, callback) => {
       if (value !== this.FormRef.password1) {
-        callback(new Error("两次输入密码不一致!"));
+        callback(new Error(this.$t('err_tip')));
       } else {
         callback();
       }
@@ -76,13 +104,13 @@ export default {
       // 校验密码
       rules: {
         password1: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, max: 64, message: "长度在 6 到 64 个字符", trigger: "blur" }
+          { required: true, message: this.$t('input_psd'), trigger: "blur" },
+          { min: 6, max: 64, message: this.$t('psd_limit'), trigger: "blur" }
         ],
         password2: [
-          { required: true, message: "请重复密码", trigger: "blur" },
+          { required: true, message: this.$t('repeat_input_tip'), trigger: "blur" },
           { validator: validatePass2, trigger: "blur" },
-          { min: 6, max: 64, message: "长度在 6 到 64 个字符", trigger: "blur" }
+          { min: 6, max: 64, message: this.$t('psd_limit'), trigger: "blur" }
         ]
       },
       // 视频列表是否属于加载状态的判断
@@ -102,7 +130,7 @@ export default {
     // 初始化页面名为login
     this.$store.commit("changeBgc", "resetPassword");
     // 修改网站标题
-    document.title = "重置密码 - Patchyvideo";
+    document.title = this.$t('reset_psd') + " - Patchyvideo";
   },
   mounted() {
     console.log(
@@ -141,13 +169,13 @@ export default {
     },
     open() {
       this.$message({
-        message: "请求失败，请重新在找回密码界面发送邮件！",
+        message: this.$t('fail_msg'),
         type: "error"
       });
     },
     open2() {
       this.$message({
-        message: "密码重置成功！",
+        message: this.$t('success_msg'),
         type: "success"
       });
     }

@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-03-01 13:02:28
+ * @LastEditTime: 2020-03-01 19:09:54
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \patchyvideo-vue\src\views\SuperAdmin.vue
+ -->
 
 <!--
 
@@ -7,6 +15,23 @@
     待完成
 -->
 
+<i18n>
+{
+  "CHS": {
+    "user_management":"用户管理",
+    "log_view":"日志查看",
+    "para_settings":"网站参数设置",
+    "scripts":"网站脚本"
+  },
+  "ENG": {
+    "user_management":"User management",
+    "log_view":"Log view",
+    "para_settings":"Site parameter settings",
+    "scripts":"Web site scripts"
+  }
+}
+</i18n>
+
 
 <template>
   <div>
@@ -15,12 +40,12 @@
       <el-header>
         Header
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="用户管理" name="first">
+          <el-tab-pane :label="$t('user_management')" name="first">
             <usermanagemennt></usermanagemennt>
           </el-tab-pane>
-          <el-tab-pane label="日志查看" name="second">日志查看</el-tab-pane>
-          <el-tab-pane label="网站参数设置" name="third">网站参数设置</el-tab-pane>
-          <el-tab-pane label="网站脚本" name="fourth">网站脚本</el-tab-pane>
+          <el-tab-pane :label="$t('log_view')" name="second">{{$t('log_view')}}</el-tab-pane>
+          <el-tab-pane :label="$t('para_settings')" name="third">{{$t('para_settings')}}</el-tab-pane>
+          <el-tab-pane :label="$t('scripts')" name="fourth">{{$t('scripts')}}</el-tab-pane>
         </el-tabs>
       </el-header>
       <el-main></el-main>

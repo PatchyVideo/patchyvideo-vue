@@ -96,7 +96,7 @@
       "login_expire_prompt": "Your session has expired. Please relogin"
     },
     "prompt": {
-      "msg": "Are tou sure?",
+      "msg": "Are you sure?",
       "ok": "OK",
       "cancel": "Cancel"
     }

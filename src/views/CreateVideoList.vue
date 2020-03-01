@@ -10,6 +10,20 @@
     ★待解决问题：
       暂无
 -->
+<i18n>
+{
+  "CHS": {
+    "title":"创建播放列表",
+    "create":"创建新列表",
+    "import":"导入已有列表"
+  },
+  "ENG": {
+    "title":"Create playlist",
+    "create":"Create a new list",
+    "import":"Import existing list"
+  }
+}
+</i18n>
 
 <template>
   <div>
@@ -18,10 +32,10 @@
     <!-- PostVideo页面的正文 -->
     <div class="w main-page-background-img">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick" class="topTabs">
-        <el-tab-pane label="创建新列表" name="first">
+        <el-tab-pane :label="$t('create')" name="first">
           <createNewList></createNewList>
         </el-tab-pane>
-        <el-tab-pane label="导入已有列表" name="second">
+        <el-tab-pane :label="$t('import')" name="second">
           <leadInExistingList></leadInExistingList>
         </el-tab-pane>
       </el-tabs>
@@ -48,7 +62,7 @@ export default {
     // 初始化页面名为list
     this.$store.commit("changeBgc", "createVideoList");
     // 修改网站标题
-    document.title = "创建播放列表 - Patchyvideo";
+    document.title = this.$t("title") + " - Patchyvideo";
     // 判断是否是从已有列表导入
     if (JSON.stringify(this.$route.query.exist) == "1") {
       this.activeName = "second";

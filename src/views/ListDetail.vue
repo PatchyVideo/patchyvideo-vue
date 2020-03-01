@@ -29,6 +29,75 @@
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
       2.编辑共有标签的时候有时候会弹出“添加成功”的提示
 -->
+
+<i18n>
+{
+  "CHS": {
+    "btn_group":{
+        "add_video":"添加视频",
+        "import_from_other":"从其他网站的收藏夹导入",
+        "add_favorite":"加入收藏",
+        "edit_list_info":"编辑列表信息",
+        "edit_common_tags":"编辑共有标签",
+        "reverse_list":"列表视频倒序",
+        "delete":"删除"
+    },
+    "vedio_chain_tip":"在此插入视频",
+    "edit_list_info_dialog":{
+        "title":"编辑视频详情",
+        "list_title_tip":"这里是列表标题",
+        "list_title_err_tip":"还没输入标题呢",
+        "list_introduction_tip":"来介绍一下自己的列表吧",
+        "list_introduction_err_tip":"不来介绍一下列表吗？",
+        "set_private_list":"设为私有列表",
+        "btn_ok":"确认修改",
+        "btn_cancel":"取 消"
+    },
+    "delete_dialog":{
+        "title":"提示",
+        "content":"确认删除吗？",
+        "btn_ok":"确定",
+        "btn_cancel":"取 消"
+    },
+    "commit_tip":"提交成功",
+    "oper_tip":"操作成功",
+    "delete_tip":"删除成功"
+  },
+  "ENG": {
+    "btn_group":{
+        "add_video":"Add video",
+        "import_from_other":"Import from favorites of other websites",
+        "add_favorite":"Add to favorites",
+        "edit_list_info":"Edit list information",
+        "edit_common_tags":"Edit common tags",
+        "reverse_list":"List video in reverse order",
+        "delete":"Delete"
+    },
+    "vedio_chain_tip":"Insert video here",
+    "edit_list_info_dialog":{
+        "title":"Edit video details",
+        "list_title_tip":"Here is the list title",
+        "list_title_err_tip":"Haven't entered a title yet",
+        "list_introduction_tip":"Let me introduce my list",
+        "list_introduction_err_tip":"Don't you introduce the list?",
+        "set_private_list":"Make private list",
+        "btn_ok":"Submit",
+        "btn_cancel":"Cancel"
+    },
+    "delete_dialog":{
+        "title":"Prompt",
+        "content":"Confirm delete?",
+        "btn_ok":"Yes",
+        "btn_cancel":"Cancel"
+    },
+    "commit_tip":"Submitted successfully",
+    "oper_tip":"Successful operation",
+    "delete_tip":"successfully deleted"
+  }
+}
+</i18n>
+
+
 <template>
   <div class="listDetail">
     <topnavbar />
@@ -38,7 +107,7 @@
 
     <!-- 编辑视频列表时的对话框 -->
     <el-dialog
-      title="编辑视频详情"
+      :title="$t('edit_list_info_dialog.title')"
       :visible.sync="openListEdit"
       width="40%"
       :close-on-click-modal="false"
@@ -46,42 +115,42 @@
       <el-form ref="list" :model="playlist_metadata" label-width="auto" :rules="rules">
         <!-- 标题 -->
         <el-form-item prop="title">
-          <el-input v-model="playlist_metadata.title" placeholder="这里是列表标题"></el-input>
+          <el-input v-model="playlist_metadata.title" :placeholder="$t('edit_list_info_dialog.list_title_tip')"></el-input>
         </el-form-item>
         <!-- 简介 -->
         <el-form-item prop="desc">
           <el-input
             type="textarea"
             :autosize="{ minRows: 6 }"
-            placeholder="来介绍一下自己的列表吧~"
+            :placeholder="$t('edit_list_info_dialog.list_introduction_tip')"
             v-model="playlist_metadata.desc"
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-checkbox v-model="playlist_metadata.private">设为私有列表</el-checkbox>
+          <el-checkbox v-model="playlist_metadata.private">{{$t('edit_list_info_dialog.set_private_list')}}</el-checkbox>
         </el-form-item>
         <el-form-item class="createList">
-          <el-button type="primary" @click="onSubmit" style="width:80%" :loading="loading">确认修改</el-button>
+          <el-button type="primary" @click="onSubmit" style="width:80%" :loading="loading">{{$t('edit_list_info_dialog.btn_ok')}}</el-button>
           <el-button
             @click="openListEdit = false"
             style="width:80%;margin-top:10px;margin-left:0px"
-          >取 消</el-button>
+          >{{$t('edit_list_info_dialog.btn_cancel')}}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
 
     <!-- 删除列表时的确认框 -->
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
-      <span>确认删除吗？</span>
+    <el-dialog :title="$t('delete_dialog.title')" :visible.sync="dialogVisible" width="30%">
+      <span>{{$t('delete_dialog.btn_content')}}</span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="dialogVisible = false">{{$t('delete_dialog.btn_cancel')}}</el-button>
         <el-button
           type="primary"
           @click="
             dialogVisible = false;
             deleteVideoList();
           "
-        >确 定</el-button>
+        >{{$t('delete_dialog.btn_ok')}}</el-button>
       </span>
     </el-dialog>
 
@@ -99,8 +168,8 @@
           </div>
           <!-- 打开Tag编辑页面 -->
           <div v-if="editable" class="edit_box">
-            <el-button type="success" @click="addVideo">添加视频</el-button>
-            <el-button type="success" @click="addFromList">从其他网站的收藏夹导入</el-button>
+            <el-button type="success" @click="addVideo">{{$t('btn_group.add_video')}}</el-button>
+            <el-button type="success" @click="addFromList">{{$t('btn_group.import_from_other')}}</el-button>
 
             <!--注意！此处的样式修改在App.vue的全局样式中-->
             <el-popover style="margin: 0px 10px;" width="100%" trigger="click">
@@ -115,20 +184,20 @@
                 @click="openListFolder"
                 class="EditTagsButton"
                 slot="reference"
-              >加入收藏</el-button>
+              >{{$t('btn_group.add_favorite')}}</el-button>
             </el-popover>
 
-            <el-button type="info" @click="openListEdit = true">编辑列表信息</el-button>
+            <el-button type="info" @click="openListEdit = true">{{$t('btn_group.edit_list_info')}}</el-button>
 
             <el-button
               type="primary"
               @click="openEditTags"
               class="EditTagsButton"
               :disabled="showTagPanel"
-            >编辑共有标签</el-button>
+            >{{$t('btn_group.edit_common_tags')}}</el-button>
 
-            <el-button type="warning" @click="inverse()">列表视频倒序</el-button>
-            <el-button type="danger" @click="dialogVisible = true">删除</el-button>
+            <el-button type="warning" @click="inverse()">{{$t('btn_group.reverse_list')}}</el-button>
+            <el-button type="danger" @click="dialogVisible = true">{{$t('btn_group.delete')}}</el-button>
           </div>
           <!-- 没有编辑权限的时候只提供加入收藏功能 -->
           <div v-else>
@@ -144,7 +213,7 @@
                 @click="openListFolder"
                 class="EditTagsButton"
                 slot="reference"
-              >加入收藏</el-button>
+              >{{$t('btn_group.add_favorite')}}</el-button>
             </el-popover>
           </div>
         </div>
@@ -170,7 +239,7 @@
                   v-if="editable"
                   class="item"
                   effect="dark"
-                  content="在此插入视频"
+                  :content="$t('btn_group.add_video')"
                   placement="top"
                 >
                   <router-link
@@ -292,9 +361,9 @@ export default {
       dialogVisible: false,
       // 编辑列表详情的校验数据
       rules: {
-        title: [{ required: true, message: "还没输入标题呢", trigger: "blur" }],
+        title: [{ required: true, message: this.$t('edit_list_info_dialog.list_title_err_tip'), trigger: "blur" }],
         desc: [
-          { required: true, message: "不来介绍一下列表吗？", trigger: "blur" }
+          { required: true, message: this.$t('edit_list_info_dialog.list_introduction_err_tip'), trigger: "blur" }
         ]
       },
       // 播放列表目录页面是否显示
@@ -437,7 +506,7 @@ export default {
           private: this.playlist_metadata.private
         }
       }).then(res => {
-        this.open("提交成功！");
+        this.open(this.$t('commit_tip'));
         this.openListEdit = false;
         this.getVideoList();
       });
@@ -452,7 +521,7 @@ export default {
           pid: this.videolistPid
         }
       }).then(res => {
-        this.open("操作成功！");
+        this.open(this.$t('oper_tip'));
         this.getVideoList();
       });
     },
@@ -465,7 +534,7 @@ export default {
           pid: this.videolistPid
         }
       }).then(res => {
-        this.open("删除成功！");
+        this.open(this.$t('delete_tip'));
         this.$router.push({ path: "/lists" });
       });
     },
