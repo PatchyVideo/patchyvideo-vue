@@ -135,6 +135,9 @@
         <li>
           <a href="https://github.com/zyddnys/PatchyVideo/issues">{{$t('navbar.bug_report')}}</a>
         </li>
+        <li>
+          <a href="https://patchyvideo.wiki" target="_blank">Wiki</a>
+        </li>
       </ul>
     </div>
 
