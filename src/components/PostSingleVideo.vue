@@ -54,6 +54,17 @@
           </div>
         </div>
       </el-collapse-transition>
+      <!-- 视频副本 -->
+      <div class="RepostType" v-if="copy!=''">
+        <el-select v-model="RepostType" placeholder="请修改视频的发布类型" style="width:100%">
+          <el-option
+            v-for="item in RepostTypes"
+            :key="item.label"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </div>
       <!-- 视频上传 -->
       <el-button class="postButton" type="primary" @click="postSingleVideo">
         发布视频
@@ -78,6 +89,7 @@
 import EditTags from "../components/EditTags";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 视频的URL(与输入框绑定)
       VideoURL: "",
@@ -95,6 +107,18 @@ export default {
       showTagPanel: true,
       // 视频的标签数组
       tags: [],
+      // 本页面的视频的发布类型
+      RepostType: "unknown",
+      // 视频的发布类型
+      RepostTypes: [
+        { value: "official", label: "原始发布" },
+        { value: "official_repost", label: "官方再发布" },
+        { value: "authorized_translation", label: "授权翻译" },
+        { value: "authorized_repost", label: "授权转载" },
+        { value: "translation", label: "自发翻译" },
+        { value: "repost", label: "自发搬运" },
+        { value: "unknown", label: "其他" }
+      ],
       // 匹配短地址，用以扩展成完整地址
       EXPANDERS: {},
       // 匹配URL并请求视频数据
@@ -339,6 +363,27 @@ export default {
             that.ErrorFetchingVideo();
           });
       };
+      // 站酷的匹配规则
+      this.PARSERS[
+        "https://www.zcool.com.cn/work/[0-9a-zA-Z=]*.html"
+      ] = function(responseDOM, responseURL) {
+        var err = responseDOM.find("div.error-body");
+        if (err.length > 0) {
+          that.setVideoMetadata("", "", "");
+          that.ErrorFetchingVideo();
+          return;
+        }
+        var title = responseDOM.find("div.details-contitle-box")[0];
+        title = title.getElementsByTagName("h2")[0].innerHTML;
+        title = title.replace(/\s+/g, "");
+        var num = title.search("<");
+        title = title.slice(0, num);
+        var desc = responseDOM.find("div.atricle-text")[0];
+        desc = desc.getElementsByTagName("p")[0].innerHTML;
+        desc = desc.replace(/\s+/g, "");
+        desc = desc.replace(/<br\s*?\/?>/g, "\n");
+        that.setVideoMetadata("", title, desc);
+      };
     },
     // 自动标签功能
     autotag(utags) {
@@ -347,7 +392,8 @@ export default {
         method: "post",
         url: "/be/tags/autotag.do",
         data: {
-          utags: utags
+          utags: utags,
+          lang: localStorage.getItem('lang')
         }
       })
         .then(result => {
@@ -541,7 +587,7 @@ export default {
       this.title = title;
       this.desc = desc;
       this.loading = false;
-      if (thumbnail != "" && title != "" && desc != "") {
+      if (this.thumbnail != "" && title != "" && desc != "") {
         this.show = true;
       }
     },
@@ -584,23 +630,28 @@ export default {
           pid: this.pid,
           copy: this.copy,
           url: this.VideoURL,
-          tags: this.tags
+          tags: this.tags,
+          repost_type: this.RepostType
         }
-      }).then(result => {
-        if (result.data.status == "SUCCEED") {
-          this.open4();
-        } else if (result.data.status == "FAILED") {
-          if (result.data.data.reason == "TAG_NOT_EXIST") {
-            var errorTag = result.data.data.aux;
-            this.open3(errorTag);
+      })
+        .then(result => {
+          if (result.data.status == "SUCCEED") {
+            this.open4();
+          } else if (result.data.status == "FAILED") {
+            if (result.data.data.reason == "TAG_NOT_EXIST") {
+              var errorTag = result.data.data.aux;
+              this.open3(errorTag);
+            } else {
+              this.open2();
+            }
           } else {
-            this.open2();
+            this.open5();
           }
-        } else {
-          this.open5();
-        }
-        this.loading = false;
-      });
+          this.loading = false;
+        })
+        .catch(err => {
+          this.loading = false;
+        });
       /*setTimeout(()=>{
         this.axios({
           method: "post",
@@ -706,6 +757,10 @@ export default {
 .tagBox {
   width: 100%;
   text-align: left;
+}
+.RepostType {
+  width: 30%;
+  margin-top: 10px;
 }
 .postButton {
   width: 60%;

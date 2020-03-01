@@ -245,6 +245,7 @@ import { copyToClipboard } from "../static/js/generic";
 
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 视频列表的元信息
       playlist_metadata: {
@@ -535,9 +536,10 @@ export default {
 }
 .re_video {
   display: flex;
-  justify-content: center;
+/*  justify-content: center;*/
   align-items: center;
   .edit {
+    width: 150px;
     display: flex;
     #edit_first {
       //h1
@@ -648,6 +650,9 @@ export default {
   }
 }
 
+.shadow{
+
+}
 .content {
   top: 3px;
   width: 80%;
@@ -718,7 +723,7 @@ export default {
   min-height: 125px;
 }
 .re_video_desc {
-  width: 850px;
+  width: 679px;
   display: inline-block;
   vertical-align: top;
   white-space: pre-wrap;

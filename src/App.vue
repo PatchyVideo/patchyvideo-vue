@@ -34,6 +34,7 @@ export default {
     width: 70%;
     max-width: 70%;
     max-height: 90%;
+    min-height: 50%;
     overflow: auto;
     position: absolute;
     top: 50% !important;
@@ -48,7 +49,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   width: 100%;
-  min-width: 1500px;
+  min-width: 1400px;
   height: 100%;
 }
 </style>

@@ -20,11 +20,24 @@
 
 <template>
   <div class="content2" v-loading="loading">
+    <!-- Author页面特有的，作者详情的组件 -->
+    <el-dialog
+      :close-on-click-modal="false"
+      :visible.sync="showAuthorData"
+      width="70%"
+    >
+      <ShowAuthorData ref="AuthorData" :AuthorID="AuthorID"></ShowAuthorData>
+    </el-dialog>
+
     <!-- 标签列表的抬头 -->
     <div class="video-list-header">
       <p v-if="maxcount">显示 {{ count2 }} / {{ maxcount }} 个标签</p>
       <p v-else>没有搜索到视频</p>
-      <el-select id="select-order" v-model="couponSelected" class="video-list-header-el-select">
+      <el-select
+        id="select-order"
+        v-model="couponSelected"
+        class="video-list-header-el-select"
+      >
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -33,15 +46,21 @@
         ></el-option>
       </el-select>
     </div>
+
     <!-- 添加标签列表 -->
     <div class="addTag">
       <el-input
         v-model="newTag"
-        :placeholder="'向'+this.tagCategorie+'类别添加标签'"
+        :placeholder="'向' + this.tagCategorie + '类别添加标签'"
         class="addTag-input"
         @keyup.enter.native="addTag()"
       ></el-input>
-      <el-select v-model="language" placeholder="请选择语言" size="small" class="addTag-select">
+      <el-select
+        v-model="language"
+        placeholder="请选择语言"
+        size="small"
+        class="addTag-select"
+      >
         <el-option
           v-for="item in languagesList"
           :key="item.value"
@@ -56,6 +75,13 @@
       <!-- 表格的展开项 -->
       <el-table-column type="expand">
         <template slot-scope="props">
+          <!-- 显示作者信息的按钮 -->
+          <el-button
+            class="showAuthorData"
+            v-if="tagCategorie == 'Author'"
+            @click="openAuthorData(props.row.id)"
+            >作者详情</el-button
+          >
           <!-- 为现有标签添加新的语言 -->
           <div class="languageSuppot">
             <el-row>
@@ -89,7 +115,8 @@
                   round
                   class="confirmChange"
                   @click="addTagLanguage(props.$index)"
-                >添加</el-button>
+                  >添加</el-button
+                >
               </el-col>
             </el-row>
           </div>
@@ -114,8 +141,12 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'CHS')"
-                  v-if="tagEdit[props.$index].languages.CHS!=tagData[props.$index].languages.CHS"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.CHS !=
+                      tagData[props.$index].languages.CHS
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.CHT">
@@ -137,8 +168,12 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'CHT')"
-                  v-if="tagEdit[props.$index].languages.CHT!=tagData[props.$index].languages.CHT"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.CHT !=
+                      tagData[props.$index].languages.CHT
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.JPN">
@@ -160,8 +195,12 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'JPN')"
-                  v-if="tagEdit[props.$index].languages.JPN!=tagData[props.$index].languages.JPN"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.JPN !=
+                      tagData[props.$index].languages.JPN
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.ENG">
@@ -183,8 +222,12 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'ENG')"
-                  v-if="tagEdit[props.$index].languages.ENG!=tagData[props.$index].languages.ENG"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.ENG !=
+                      tagData[props.$index].languages.ENG
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.KOR">
@@ -206,8 +249,12 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'KOR')"
-                  v-if="tagEdit[props.$index].languages.KOR!=tagData[props.$index].languages.KOR"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.KOR !=
+                      tagData[props.$index].languages.KOR
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.CSY">
@@ -229,8 +276,12 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'CSY')"
-                  v-if="tagEdit[props.$index].languages.CSY!=tagData[props.$index].languages.CSY"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.CSY !=
+                      tagData[props.$index].languages.CSY
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.NLD">
@@ -252,8 +303,12 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'NLD')"
-                  v-if="tagEdit[props.$index].languages.NLD!=tagData[props.$index].languages.NLD"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.NLD !=
+                      tagData[props.$index].languages.NLD
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.FRA">
@@ -275,8 +330,12 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'FRA')"
-                  v-if="tagEdit[props.$index].languages.FRA!=tagData[props.$index].languages.FRA"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.FRA !=
+                      tagData[props.$index].languages.FRA
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.DEU">
@@ -298,8 +357,12 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'DEU')"
-                  v-if="tagEdit[props.$index].languages.DEU!=tagData[props.$index].languages.DEU"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.DEU !=
+                      tagData[props.$index].languages.DEU
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.HUN">
@@ -321,8 +384,12 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'HUN')"
-                  v-if="tagEdit[props.$index].languages.HUN!=tagData[props.$index].languages.HUN"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.HUN !=
+                      tagData[props.$index].languages.HUN
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.ITA">
@@ -344,8 +411,12 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'ITA')"
-                  v-if="tagEdit[props.$index].languages.ITA!=tagData[props.$index].languages.ITA"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.ITA !=
+                      tagData[props.$index].languages.ITA
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.PLK">
@@ -367,8 +438,12 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'PLK')"
-                  v-if="tagEdit[props.$index].languages.PLK!=tagData[props.$index].languages.PLK"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.PLK !=
+                      tagData[props.$index].languages.PLK
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.PTB">
@@ -390,8 +465,12 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'PTB')"
-                  v-if="tagEdit[props.$index].languages.PTB!=tagData[props.$index].languages.PTB"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.PTB !=
+                      tagData[props.$index].languages.PTB
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.ROM">
@@ -413,8 +492,12 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'ROM')"
-                  v-if="tagEdit[props.$index].languages.ROM!=tagData[props.$index].languages.ROM"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.ROM !=
+                      tagData[props.$index].languages.ROM
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.RUS">
@@ -436,8 +519,12 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'RUS')"
-                  v-if="tagEdit[props.$index].languages.RUS!=tagData[props.$index].languages.RUS"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.RUS !=
+                      tagData[props.$index].languages.RUS
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.ESP">
@@ -459,8 +546,12 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'ESP')"
-                  v-if="tagEdit[props.$index].languages.ESP!=tagData[props.$index].languages.ESP"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.ESP !=
+                      tagData[props.$index].languages.ESP
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.TRK">
@@ -482,8 +573,12 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'TRK')"
-                  v-if="tagEdit[props.$index].languages.TRK!=tagData[props.$index].languages.TRK"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.TRK !=
+                      tagData[props.$index].languages.TRK
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.VIN">
@@ -505,14 +600,21 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'VIN')"
-                  v-if="tagEdit[props.$index].languages.VIN!=tagData[props.$index].languages.VIN"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].languages.VIN !=
+                      tagData[props.$index].languages.VIN
+                  "
+                  >确认</el-button
+                >
               </el-col>
             </el-row>
           </div>
           <!-- 标签别名 -->
           <div class="languageSuppot">
-            <el-row v-for="(item, i) in tagData[props.$index].alias" :key="item">
+            <el-row
+              v-for="(item, i) in tagData[props.$index].alias"
+              :key="item"
+            >
               <el-col :span="3">
                 <span class="languageSuppot_language">----:</span>
               </el-col>
@@ -531,252 +633,337 @@
                   round
                   class="confirmChange"
                   @click="confirmAliasChange(props.$index, i)"
-                  v-if="tagEdit[props.$index].alias[i]!=tagData[props.$index].alias[i]"
-                >确认</el-button>
+                  v-if="
+                    tagEdit[props.$index].alias[i] !=
+                      tagData[props.$index].alias[i]
+                  "
+                  >确认</el-button
+                >
                 <el-button
                   type="danger"
                   size="mini"
                   round
                   class="confirmChange"
                   @click="confirmAliasRemove(props.$index, i)"
-                >删除</el-button>
+                  >删除</el-button
+                >
               </el-col>
             </el-row>
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="count" label="数量" min-width="50"></el-table-column>
+      <el-table-column
+        prop="count"
+        label="数量"
+        min-width="50"
+      ></el-table-column>
       <el-table-column label="标签" min-width="800">
         <!-- 各种语言标签 -->
         <template slot-scope="scope">
           <span class="tagLabel" v-if="scope.row.languages.CHS">
             简体中文:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.CHS)"
-            >{{ scope.row.languages.CHS }}</span>
+              >{{ scope.row.languages.CHS }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.CHT">
             繁體中文:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.CHT)"
-            >{{ scope.row.languages.CHT }}</span>
+              >{{ scope.row.languages.CHT }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.JPN">
             日本語:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.JPN)"
-            >{{ scope.row.languages.JPN }}</span>
+              >{{ scope.row.languages.JPN }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ENG">
             English:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.ENG)"
-            >{{ scope.row.languages.ENG }}</span>
+              >{{ scope.row.languages.ENG }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.KOR">
             한국어:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.KOR)"
-            >{{ scope.row.languages.KOR }}</span>
+              >{{ scope.row.languages.KOR }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.CSY">
             čeština:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.CSY)"
-            >{{ scope.row.languages.CSY }}</span>
+              >{{ scope.row.languages.CSY }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.NLD">
             Nederlands:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.NLD)"
-            >{{ scope.row.languages.NLD }}</span>
+              >{{ scope.row.languages.NLD }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.FRA">
             français:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.FRA)"
-            >{{ scope.row.languages.FRA }}</span>
+              >{{ scope.row.languages.FRA }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.DEU">
             Deutsch:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.DEU)"
-            >{{ scope.row.languages.DEU }}</span>
+              >{{ scope.row.languages.DEU }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.HUN">
             magyar nyelv:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.HUN)"
-            >{{ scope.row.languages.HUN }}</span>
+              >{{ scope.row.languages.HUN }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ITA">
             italiano:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.ITA)"
-            >{{ scope.row.languages.ITA }}</span>
+              >{{ scope.row.languages.ITA }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.PLK">
             polski:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.PLK)"
-            >{{ scope.row.languages.PLK }}</span>
+              >{{ scope.row.languages.PLK }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.PTB">
             português:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.PTB)"
-            >{{ scope.row.languages.PTB }}</span>
+              >{{ scope.row.languages.PTB }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ROM">
             limba română:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.ROM)"
-            >{{ scope.row.languages.ROM }}</span>
+              >{{ scope.row.languages.ROM }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.RUS">
             русский язык:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.RUS)"
-            >{{ scope.row.languages.RUS }}</span>
+              >{{ scope.row.languages.RUS }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ESP">
             español:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.ESP)"
-            >{{ scope.row.languages.ESP }}</span>
+              >{{ scope.row.languages.ESP }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.TRK">
             Türk dili:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.TRK)"
-            >{{ scope.row.languages.TRK }}</span>
+              >{{ scope.row.languages.TRK }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.VIN">
             Tiếng Việt:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(scope.row.languages.VIN)"
-            >{{ scope.row.languages.VIN }}</span>
+              >{{ scope.row.languages.VIN }}</span
+            >
           </span>
           <!-- 标签别名 -->
           <span class="tagLabel" v-for="item in scope.row.alias" :key="item">
             -:
             <span
-              v-bind:class="{Copyright:scope.row.category=='Copyright',
-                              Language:scope.row.category=='Language',
-                              Character:scope.row.category=='Character',
-                              Author:scope.row.category=='Author',
-                              General:scope.row.category=='General',
-                              Meta:scope.row.category=='Meta'}"
+              v-bind:class="{
+                Copyright: scope.row.category == 'Copyright',
+                Soundtrack: scope.row.category == 'Soundtrack',
+                Language: scope.row.category == 'Language',
+                Character: scope.row.category == 'Character',
+                Author: scope.row.category == 'Author',
+                General: scope.row.category == 'General',
+                Meta: scope.row.category == 'Meta'
+              }"
               @click="gotoHome(item)"
-            >{{ item }}</span>
+              >{{ item }}</span
+            >
           </span>
         </template>
       </el-table-column>
@@ -784,16 +971,21 @@
       <el-table-column label="操作" min-width="230" fixed="right">
         <template slot-scope="scope">
           <div v-if="advancedOptions">
-            <el-button type="danger" round @click="removeTag(scope.$index)">删除标签</el-button>
-            <el-button type="primary" round @click="openDialog(scope.$index)">更改分类</el-button>
+            <el-button type="danger" round @click="removeTag(scope.$index)"
+              >删除标签</el-button
+            >
+            <el-button type="primary" round @click="openDialog(scope.$index)"
+              >更改分类</el-button
+            >
           </div>
           <div v-else>
             <el-button
               type="danger"
               round
-              @click="advancedOptions=true"
+              @click="advancedOptions = true"
               style="margin-left:40px"
-            >显示高级操作</el-button>
+              >显示高级操作</el-button
+            >
           </div>
         </template>
       </el-table-column>
@@ -815,8 +1007,17 @@
     <!-- 更改分类的弹出框 -->
     <el-dialog title="提示" :visible.sync="dialogVisible" width="20%">
       <div style="width:80%;margin:0 auto">
-        <el-select v-model="newTagCategorie" placeholder="请选择新的标签分类" style="width:100%">
-          <el-option v-for="item in tagCategories2" :key="item" :label="item" :value="item"></el-option>
+        <el-select
+          v-model="newTagCategorie"
+          placeholder="请选择新的标签分类"
+          style="width:100%"
+        >
+          <el-option
+            v-for="item in tagCategories2"
+            :key="item"
+            :label="item"
+            :value="item"
+          ></el-option>
         </el-select>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -828,9 +1029,11 @@
 </template>
 
 <script>
+import ShowAuthorData from "../components/ShowAuthorData.vue";
 export default {
   props: ["tagCategorie"],
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 添加新标签的内容
       newTag: "",
@@ -891,6 +1094,10 @@ export default {
       count2: 0,
       // 标签的全部数量
       maxcount: 0,
+      // 打开的作者详情的作者的ID
+      AuthorID: "ID",
+      // 是否打开作者详情页面
+      showAuthorData: false,
       // 页面是否显示高级选项
       advancedOptions: false,
       // 弹出框是否显示
@@ -1271,6 +1478,11 @@ export default {
       this.dialogVisible = true;
       this.tagIndex = index;
     },
+    // 打开作者详情对话框
+    openAuthorData(ID) {
+      this.AuthorID = ID;
+      this.showAuthorData = true;
+    },
     // 当前标签列表的页面切换的时候调用
     handleCurrentChange(val) {
       this.page = val;
@@ -1306,7 +1518,7 @@ export default {
       this.requestCategorieTags();
     }
   },
-  components: {}
+  components: { ShowAuthorData }
 };
 </script>
 
@@ -1346,6 +1558,10 @@ export default {
   margin-left: 150px;
   margin-top: 5px;
   font-size: 17px;
+}
+.showAuthorData {
+  width: 100px;
+  float: left;
 }
 .el-row {
   margin-bottom: 5px;
@@ -1401,6 +1617,10 @@ export default {
 }
 .Meta {
   color: #f80;
+  cursor: pointer;
+}
+.Soundtrack {
+  color: #ff7792;
   cursor: pointer;
 }
 </style>

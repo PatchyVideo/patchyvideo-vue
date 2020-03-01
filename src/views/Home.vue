@@ -46,6 +46,40 @@
     ★待解决问题：
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
 -->
+
+<i18n>
+{
+  "CHS": {
+    "page_count": "显示 {count} / {maxcount} 个视频",
+    "no_result": "没有搜索到视频",
+    "show_deleted": "显示已失效视频",
+    "blacklist_prompt": "*已屏蔽含有敏感标签的视频，可在个人界面设置",
+    "latest": "发布时间正序",
+    "oldest": "发布时间倒序",
+    "latest_video": "原视频上传时间正序",
+    "oldest_video": "原视频上传时间倒序",
+    "popular_tags": "热门标签",
+    "search_result": "搜索结果 - {result}",
+    "syntax_error": "查询语法错误！",
+    "syntax_error_not": "所输入的查询不能与NOT连用！"
+  },
+  "ENG": {
+    "page_count": "Showing {count} / {maxcount} videos",
+    "no_result": "No video found",
+    "show_deleted": "Show deleted videos",
+    "blacklist_prompt": "*Some videos are blacklisted, you can change your blacklist setting in your settings panel.",
+    "latest": "Latest",
+    "oldest": "Oldest",
+    "latest_video": "Latest Video",
+    "oldest_video": "Oldest Video",
+    "popular_tags": "Popular Tags",
+    "search_result": "Search - {result}",
+    "syntax_error": "Syntax error in query",
+    "syntax_error_not": "NOT cannot be used here"
+  }
+}
+</i18n>
+
 <template>
   <div>
     <topnavbar />
@@ -57,19 +91,19 @@
       <div class="content">
         <!-- 播放列表的抬头 -->
         <div class="video-list-header">
-          <p v-if="maxcount">显示 {{ count2 }} / {{ maxcount }} 个视频</p>
-          <p v-else>没有搜索到视频</p>
-          <el-checkbox v-model="checked">显示已失效视频</el-checkbox>
-          <!--    <span style="margin-left: 100px;font-size: 14px;color:#606266;">视频信息不正确，可点击其封面更新。</span>-->
-          <el-select id="select-order" v-model="couponSelected">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
+          <p v-if="maxcount">{{$t('page_count', {count: count2, maxcount: maxcount})}}</p>
+          <p v-else>{{$t('no_result')}}</p>
+          <el-checkbox class="show_deleted" v-model="checked">{{$t('show_deleted')}}</el-checkbox>
+          <p class="blacklist_prompt">{{$t('blacklist_prompt')}}</p>
         </div>
+        <el-select id="select-order" v-model="couponSelected">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
 
         <!-- 播放列表正文 -->
         <ul>
@@ -80,7 +114,6 @@
               tag="a"
             >
               <div class="video-thumbnail">
-                <!--              src="/images/covers/f5da2d4dd9eac171d47eb1100339cbad90e4648556a2f99a.png"-->
                 <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
                 <div class="Imgcover"></div>
               </div>
@@ -134,13 +167,14 @@ import Footer from "../components/Footer.vue";
 import { copyToClipboard } from "../static/js/generic";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 视频列表的排序规则
       options: [
-        { value: "latest", label: "发布时间正序" },
-        { value: "oldest", label: "发布时间倒序" },
-        { value: "video_latest", label: "原视频上传时间正序" },
-        { value: "video_oldest", label: "原视频上传时间倒序" }
+        { value: "latest", label: this.$t("latest") },
+        { value: "oldest", label: this.$t("oldest") },
+        { value: "video_latest", label: this.$t("latest_video") },
+        { value: "video_oldest", label: this.$t("oldest_video") }
       ],
       // 当前视频列表的排列顺序
       couponSelected: "",
@@ -181,7 +215,7 @@ export default {
     // 获取视频列表
     /* this.getListVideo(this.page, this.count);*/
     // 改变侧导航条的标题
-    this.$store.commit("changeLeftNavBarTitle", "热门标签");
+    this.$store.commit("changeLeftNavBarTitle", this.$t("popular_tags"));
     // 修改网站标题
     document.title = "Patchyvideo";
 
@@ -192,7 +226,7 @@ export default {
       this.searchKeyWord = this.$route.query.keyword;
       this.ifSearch = true;
       // 修改网站标题
-      document.title = "搜索结果- " + this.searchKeyWord;
+      document.title = this.$t("search_result", { result: this.searchKeyWord });
     }
   },
   computed: {},
@@ -234,7 +268,8 @@ export default {
           page: e,
           page_size: count,
           order: this.couponSelected,
-          hide_placeholder: !this.checked
+          hide_placeholder: !this.checked,
+          lang: localStorage.getItem('lang')
         }
       }).then(result => {
         this.maxcount = result.data.data.count;
@@ -272,7 +307,9 @@ export default {
           page_size: count,
           order: this.couponSelected,
           hide_placeholder: !this.checked,
-          query: str
+          query: str,
+          qtype: this.$route.query.qtype,
+          lang: localStorage.getItem('lang')
         }
       }).then(result => {
         if (result.data.status == "SUCCEED") {
@@ -308,14 +345,14 @@ export default {
           // 包含非法字符的时候
           if (result.data.data.reason == "INCORRECT_QUERY") {
             this.$message({
-              message: "查询语法错误！",
+              message: this.$t("syntax_error"),
               type: "error"
             });
           }
           // NOT使用错误的时候
           else if (result.data.data.reason == "FAILED_NOT_OP") {
             this.$message({
-              message: "所输入的查询不能与NOT连用！",
+              message: this.$t("syntax_error_not"),
               type: "error"
             });
           }
@@ -413,9 +450,14 @@ export default {
         return;
       }
       //监听路由query的值，当用户连续输入的搜索值不一样时，更新搜索关键词，调用 this.getSearchData获取搜索数据并渲染。
-      if (newV.query.keyword != oldV.query.keyword) {
+      if (
+        newV.query.keyword != oldV.query.keyword ||
+        newV.query.qtype != oldV.query.qtype
+      ) {
         // 修改网站标题
-        document.title = " 搜索结果- " + newV.query.keyword;
+        document.title = this.$t("search_result", {
+          result: newV.query.keyword
+        });
         this.ifSearch = true;
         this.searchKeyWord = newV.query.keyword;
         //在我请求新的搜索数据之后，因为搜索是路由跳转所以会重置当前页面为1，页数会改变，也会触发监控页数里的函数
@@ -454,10 +496,6 @@ export default {
   text-align: center;
 }
 
-.video-list-header p {
-  display: inline;
-}
-
 .video-detail > p {
   font-size: 1rem;
   line-height: 1.1rem;
@@ -492,12 +530,6 @@ export default {
   float: left;
   position: relative;
   z-index: 1;
-  img {
-  }
-  /*  &:hover img{
-      background-color:black;
-  }*/
-  /*  background-color:rgba(255,255,255,.5);*/
 }
 
 .list-item {
@@ -510,12 +542,9 @@ export default {
 }
 
 .video-list-header p {
-  height: 50px;
-  position: relative;
+  display: block;
 }
-.el-checkbox {
-  width: 100px;
-  margin-left: 100px;
+.show_deleted {
   text-align: center;
   line-height: 50px;
 }
@@ -528,15 +557,19 @@ export default {
   float: right;
 }
 .video-list-header {
-  width: 100%;
-  height: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(100% - 230px);
+  margin-bottom: 10px;
 }
 
 .el-select {
   width: 200px;
-  display: inline-block;
-  position: absolute;
+  float: right;
   right: 0px;
+  transform: translate(0, -50px);
 }
 .left-navbar {
   position: relative;
@@ -551,10 +584,14 @@ export default {
   text-align: left;
 }
 .main-page-background-img {
-  /*  background-image: url("./../static/img/imoto3.jpg");*/
   background-repeat: no-repeat;
   min-height: 800px;
   width: 85%;
   margin-top: 20px;
+}
+
+.blacklist_prompt {
+  font-size: 14px;
+  color: #606266;
 }
 </style>

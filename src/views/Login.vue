@@ -87,6 +87,7 @@
 import signup from "../views/SignUp";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 用户信息
       loginFormRef: {

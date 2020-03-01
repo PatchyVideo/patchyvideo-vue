@@ -87,6 +87,7 @@
 import EditTags from "../components/EditTags";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     // URL校验规则
     var validateURL = (rule, value, callback) => {
       if (!value) {

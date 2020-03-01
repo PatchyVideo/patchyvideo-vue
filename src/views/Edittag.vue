@@ -30,9 +30,7 @@
       </div>
     </div>
 
-    <div class="footer w">
-      <p>© 2019 www.patchyvideo.com Touhou Project</p>
-    </div>
+    <Footer></Footer>
   </div>
 </template>
 
@@ -40,8 +38,10 @@
 import topnavbar from "../components/TopNavbar.vue";
 import tagDetail from "../components/tagDetail.vue";
 import searchTag from "../components/searchTag.vue";
+import Footer from "../components/Footer.vue";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       // 页面是否属于加载状态的判断
       loading: true,
@@ -84,16 +84,15 @@ export default {
         url: "be/tags/query_categories.do",
         data: {}
       }).then(result => {
-        console.log(result);
         var categories = result.data.data.categories;
         for (var i = 0; i < categories.length; i++) {
           this.tagCategories.push(categories[i].name);
         }
+        this.loading = false;
       });
-      this.loading = false;
     }
   },
-  components: { topnavbar, tagDetail, searchTag }
+  components: { topnavbar, tagDetail, searchTag, Footer }
 };
 </script>
 

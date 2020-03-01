@@ -192,6 +192,7 @@
 import moment from "moment";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       asideWidth: 200,
       loading: true,

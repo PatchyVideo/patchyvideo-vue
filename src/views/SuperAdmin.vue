@@ -35,6 +35,7 @@ import Footer from "../components/Footer.vue";
 import usermanagemennt from "../components/admincompoents/UserManagement.vue";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       activeName: "second"
     };

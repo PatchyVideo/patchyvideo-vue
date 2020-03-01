@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 新增user模块 需要安装依赖
 npm install --save-dev less-loader less
 npm install echarts --save
@@ -71,6 +71,9 @@ Vue.prototype.$echarts = echarts;
                 <el-tab-pane :label="labelInfo[4]" name="fifth">
                     <userfolder v-if="this.activeName==='fifth'"></userfolder>
                 </el-tab-pane>
+                <el-tab-pane :label="labelInfo[5]" name="six">
+                    <blacklist v-if="this.activeName==='six'"></blacklist>
+                </el-tab-pane>
         <!--       <el-tab-pane label="文件管理" name="five">
                     <userfolder></userfolder>
                 </el-tab-pane>-->
@@ -92,18 +95,20 @@ Vue.prototype.$echarts = echarts;
     import userfavorites from '../components/UserFavorites.vue';
     import userfolder from '../components/UserFolder.vue';
     import userpoststate from '../components/UserPostState.vue';
+    import blacklist from '../components/BlackList.vue';
 
     import Footer from "../components/Footer.vue";
     export default {
         data() {
+            this.$i18n.locale = localStorage.getItem('lang');
             return {
                 usersid: "www",
                 gotomark: 0,
                 activeIndex: "1",
                 activeIndex2: "1",
                 activeName: "first",
-                info:[["我的信息","我贡献的索引","我的文件夹","我的收藏","索引状态"],["用户信息","他贡献的索引","他的文件夹","他的收藏"]],
-                labelInfo:["我的信息","我贡献的索引","文件夹","我的收藏","索引状态"]
+                info:[["我的信息","我贡献的索引","我的文件夹","我的收藏","索引状态","黑名单"],["用户信息","他贡献的索引","他的文件夹","他的收藏"]],
+                labelInfo:["我的信息","我贡献的索引","文件夹","我的收藏","索引状态","黑名单"]
             }
         },
        created(){
@@ -112,12 +117,14 @@ Vue.prototype.$echarts = echarts;
            // 如果用户输入的路径不为me,先判断此uid是否存在，存在则渲染其他用户界面，不存在则跳到404
            if(this.$route.params.id=="me"){
                //如果用户输入的路径为me,将User渲染为个人界面，已经在上面的条件渲染中体现
+               this.labelInfo = this.info[0]
 
            }
            if(this.$route.params.id!="me" ){
                //当路径不为me，判断输入uid是否合法，     SUCCEED FAILED
                this.isUidNull();
            }
+
        },
         mounted(){
 
@@ -139,7 +146,8 @@ Vue.prototype.$echarts = echarts;
                     url:'be/user/profile.do',
                     data:{"uid":this.$route.params.id}
                 }).then(res=>{
-                    if(res.data.status=="FAILED"){
+
+                 if(res.data.status=="FAILED"){
                         this.$router.push("/*");
                    /*     this.$router.push("/home");*/
                         //跳到404
@@ -152,7 +160,17 @@ Vue.prototype.$echarts = echarts;
             }
 
         },
-        components: {topnavbar,usercontribute,userprofile,listfolder,userfavorites,userfolder,userpoststate,Footer}
+       watch:{
+           $route(n){
+               if(n.fullPath==="/users/me"){
+                   this.labelInfo = this.info[0]
+               }
+           },
+       },
+        components: {topnavbar,usercontribute,
+            userprofile,listfolder,userfavorites,
+            userfolder,userpoststate,Footer
+        ,blacklist}
     }
 </script>
 
@@ -183,12 +201,16 @@ Vue.prototype.$echarts = echarts;
         position: absolute;
         display: block;
     }
+    .el-tabs{
+       width: 90%;
+        margin: auto;
+    }
 
     .content {
        /* width: 1600px;*/
-        width: 80%;
-        max-width: 1600px;
-        min-width: 1600px;
+        width: 98%;
+   /*     max-width: 3000px;*/
+
         height: 100%;
 
    /*     background:  url("../static/img/imoto.jpg") no-repeat top center;*/

@@ -5,78 +5,132 @@
 需要安装依赖：npm install vue-cropper -s
 -->
 
+<i18n>
+{
+  "CHS": {
+    "title": "图片裁剪",
+    "cancel": "取消",
+    "ok": "确定",
+    "upload_userphoto": "上传头像",
+    "enter_url_prompt": "请输入图片URL",
+    "from_file": "本地上传",
+    "from_url": "网络上传",
+    "upload": "上传",
+    "no_file_prompt": "请选择要上传的头像!",
+    "file_size_prompt": "上传头像图片大小不能超过 2MB!",
+    "upload_succeed": "上传成功！",
+    "no_url_prompt": "请输入链接!",
+    "INCORRECT_UPLOAD_TYPE": "上传文件不支持该图片格式!",
+    "upload_failed": "上传失败！",
+    "open_failed": "选择图片失败"
+  },
+  "ENG": {
+    "title": "Crop image",
+    "cancel": "Cancel",
+    "ok": "OK",
+    "upload_userphoto": "Upload photo",
+    "enter_url_prompt": "Please enter image URL",
+    "from_file": "Local files",
+    "from_url": "From URL",
+    "upload": "Upload",
+    "no_file_prompt": "Please choose your photo",
+    "file_size_prompt": "File size cannot exceed 2MB",
+    "upload_succeed": "Upload succeed",
+    "no_url_prompt": "Please enter image URL",
+    "INCORRECT_UPLOAD_TYPE": "File format not supported",
+    "upload_failed": "Upload failed",
+    "open_failed": "Open file failed"
+  }
+}
+</i18n>
+
 <template>
   <div class="custom-upload" v-loading="loading">
     <el-dialog
-      title="图片裁剪"
-      :visible.sync="showCropper"
-      top="6vh"
-      width="50%"
-      height="600"
-      class="cropper-dialog"
-      center
-      append-to-body
+            :title="$t('title')"
+            :visible.sync="showCropper"
+            top="6vh"
+            width="50%"
+            height="600"
+            class="cropper-dialog"
+            center
+            append-to-body
     >
       <vue-cropper
-        v-if="showCropper"
-        id="corpper"
-        ref="cropper"
-        :class="{ 'corpper-warp': showCropper }"
-        v-bind="cropper"
+              v-if="showCropper"
+              id="corpper"
+              ref="cropper"
+              :class="{ 'corpper-warp': showCropper }"
+              v-bind="cropper"
       />
       <div v-if="showCropper" class="cropper-button">
         <el-button
-          class="cancel-btn"
-          size="small"
-          @click.native="showCropper = false"
-          >取消</el-button
+                class="cancel-btn"
+                size="small"
+                @click.native="showCropper = false"
+        >{{$t('cancel')}}</el-button
         >
         <el-button
-          size="small"
-          type="primary"
-          :loading="loading"
-          @click="uploadCover"
-          >完成</el-button
+                size="small"
+                type="primary"
+                :loading="loading"
+                @click="uploadCover"
+        >{{$t('ok')}}</el-button
         >
       </div>
     </el-dialog>
+    <el-dialog
+            :modal =false
+            :title="$t('upload_userphoto')"
+            :visible.sync="dialogVisible"
+            width="40%"
+            top="30vh"
+            :before-close="handleClose">
+      <el-input v-model="imgNetUpUrl" :placeholder="$t('enter_url_prompt')" v-if="isShowNetUp" style="margin: 20px 0px 30px;"></el-input>
+      <span  class="dialog-footer" style="text-align: center;margin: 20px 0px 30px;">
+     <el-button type="primary"  @click="handleOpenFile()"  v-if="!isShowNetUp">{{$t('from_file')}}</el-button>
+     <el-button type="primary"  v-if="!isShowNetUp" @click="showNetUp(true)">{{$t('from_url')}}</el-button>
+        <el-button v-if="isShowNetUp" @click="imgNetUrlup()">{{$t('ok')}}</el-button>
+        <el-button   v-if="isShowNetUp" @click="showNetUp(false)">{{$t('cancel')}}</el-button>
+
+  </span>
+    </el-dialog>
     <form
-      action="/be/helper/upload_image.do"
-      method="post"
-      accept-charset="utf-8"
-      enctype="multipart/form-data"
-      id="form1"
-      @submit.prevent="sub"
+            action="/be/helper/upload_image.do"
+            method="post"
+            accept-charset="utf-8"
+            enctype="multipart/form-data"
+            id="form1"
+            @submit.prevent="sub"
     >
       <input
-        id="type"
-        name="type"
-        type="text"
-        value="userphoto"
-        v-show="false"
+              id="type"
+              name="type"
+              type="text"
+              value="userphoto"
+              v-show="false"
       />
       <input
-        id="file"
-        name="file"
-        type="file"
-        tag="input"
-        accept="image/*"
-        @change="onChange($event)"
-        :class="id"
-        v-show="false"
+              id="file"
+              name="file"
+              type="file"
+              tag="input"
+              accept="image/*"
+              @change="onChange($event)"
+              :class="id"
+              v-show="false"
       />
       <el-button
-        size="small"
-        type="primary"
-        :loading="loading"
-        @click="handleOpenFile()"
+              size="small"
+              type="primary"
+              :loading="loading"
+              @click="dialogVisible = true"
       >
         <i class="fa fa-upload" />
         {{ buttonName }}
       </el-button>
-      <el-input type="submit" value="上传" @click="sub"></el-input>
+      <el-input type="submit" :value="$t('upload')" @click="sub"></el-input>
     </form>
-
     <div v-if="tips" class="tips clear-margin-top">{{ tips }}</div>
   </div>
 </template>
@@ -109,7 +163,7 @@ export default {
     // 按钮文字
     buttonName: {
       type: String,
-      default: "添加图片"
+      default: 'Add Image'
     },
     // 提示内容
     tips: {
@@ -134,10 +188,14 @@ export default {
     }
   },
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
+      imgNetUpUrl:"",
       id: "cropper-input-" + +new Date(),
       loading: false,
       showCropper: false,
+      isShowNetUp:false,
+      dialogVisible: false,
       url: "",
       compress: 0.8, //压缩率
       imgFile: {},
@@ -164,7 +222,27 @@ export default {
     };
   },
   methods: {
+    handleClose(done) {
+      done();
+      /*      this.$confirm('确认关闭？')
+                    .then(_ => {
+                      done();
+                    })
+                    .catch(_ => {});*/
+    },
+    showNetUp(b){
+
+      this.isShowNetUp =b;
+      if(b ===false){
+        this.imgNetUpUrl = "";
+      }
+
+    },
     sub() {
+      if(this.imgFile.lastModified===undefined){
+        this.$message.error(this.$t('no_file_prompt'));
+        return;
+      }
       //这个司马东西还是只读不准赋值？百度半天不知道这是哪国的妖术竟然可以赋值了
       const data = new DataTransfer();
       data.items.add(this.imgFile);
@@ -181,31 +259,67 @@ export default {
         .then(res => {
           if (res.data.status == "SUCCEED") {
             this.file_key = res.data.data.file_key;
-            this.axios({
-              method: "post",
-              url: "be/user/changephoto.do",
-              data: { file_key: this.file_key }
-            }).then(res => {
-              /*       this.getMyData();*/
-              this.$emit("subUploadSucceed", this.url, true);
-              var img = res.data.data;
-              this.$store.commit("getUserAvatar", img);
-              this.setCookie(img, 7);
-              this.loading = false;
-              this.$message({
-                message: "上传成功！",
-                type: "success"
-              });
-            });
+            this.changePhtoto(this.file_key);
+
           } else {
-            this.$message.error("请选择要上传的头像!");
+            this.$message.error(this.$t('no_file_prompt'));
             this.loading = false;
           }
         })
         .catch(err => {
-          this.$message.error("上传头像图片大小不能超过 2MB!");
+          this.$message.error(this.$t('file_size_prompt'));
           this.loading = false;
         });
+    },
+    changePhtoto(key){
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "be/user/changephoto.do",
+        data: { file_key: key }
+      }).then(res => {
+        /*       this.getMyData();*/
+        this.$emit("subUploadSucceed", this.url, true);
+        var img = res.data.data;
+        this.$store.commit("getUserAvatar", img);
+        this.setCookie(img, 7);
+        this.loading = false;
+        this.$message({
+          message: this.$t('upload_succeed'),
+          type: "success"
+        });
+            this.dialogVisible = false;
+
+      });
+    },
+    imgNetUrlup(){
+
+      if(this.imgNetUpUrl.toString()===""){
+      this.$message.error(this.$t('no_url_prompt'));
+       return false;
+ }
+      this.axios({
+        method:"post",
+        url:"/be/helper/upload_image_url.do",
+        data:{"url":this.imgNetUpUrl, "type":"userphoto"}
+      }).then(res=>{
+        if (res.data.status === "SUCCEED") {
+                this.file_key = res.data.data.file_key;
+                    this.changePhtoto(this.file_key);
+        }else {
+          if(res.data.data ==="INCORRECT_UPLOAD_TYPE"){
+            this.$message.error(this.$t('INCORRECT_UPLOAD_TYPE'))
+          }
+          else {
+            this.$message.error(this.$t('upload_failed'))
+          }
+
+        }
+
+      }).catch(err=>{
+        this.$message.error(this.$t('upload_failed'))
+      })
+
     },
     // 打开文件
     handleOpenFile() {
@@ -222,11 +336,12 @@ export default {
       input.click();
     },
 
+
     // 裁剪input 监听
     async onChange(e) {
       const file = e.target.files[0];
       if (!file) {
-        return this.$message.error("选择图片失败");
+        return this.$message.error(this.$t('open_failed'));
       }
       // 验证文件类型
       if (!isImageFile(file)) {
@@ -238,7 +353,6 @@ export default {
         this.showCropper = true;
         this.cropper.img = src;
       } catch (error) {
-        console.log(error);
       }
     },
     dataURLtoFile(dataurl, filename) {
@@ -297,6 +411,7 @@ export default {
           this.$emit("subUploadSucceed", this.url, false);
           this.loading = false;
           this.showCropper = false;
+          this.dialogVisible = false;
         } catch (error) {
           this.loading = false;
           this.showCropper = false;
@@ -317,6 +432,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  .dialog-footer{
+   height: 50% !important;
+  }
 form {
   transform: translateY(50%);
   width: 100%;

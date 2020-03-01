@@ -38,6 +38,7 @@ import createNewList from "../components/CreateNewList";
 import leadInExistingList from "../components/LeadInExistingList";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       //默认打开的标签页
       activeName: "first"

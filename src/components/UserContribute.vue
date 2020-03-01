@@ -14,7 +14,7 @@
   <div>
     <div class="bigbox standard" v-loading="loading">
       <el-container>
-        <el-aside width="800px">
+        <el-aside>
           <p v-if="this.videoCount==0" class="nulldata-left">暂无数据</p>
           <canvas id="myChart" width="800" height="800"></canvas>
         </el-aside>
@@ -29,12 +29,12 @@
 
             <div class="video_lineUp" v-if="flag">
               <router-link
-                class="list-item"
-                target="_blank"
-                :to="{ path: '/video', query: { id: i._id.$oid } }"
-                tag="a"
-                v-for="i in videoData"
-                :key="i._id.$oid"
+                      class="list-item"
+                      target="_blank"
+                      :to="{ path: '/video', query: { id: i._id.$oid } }"
+                      tag="a"
+                      v-for="i in videoData"
+                      :key="i._id.$oid"
               >
                 <img :src="'/images/covers/'+i.item.cover_image" alt />
                 <h4>
@@ -44,18 +44,18 @@
             </div>
             <div class="video_straightColumn" v-if="!flag">
               <router-link
-                class="list-item"
-                target="_blank"
-                :to="{ path: '/video', query: { id: i._id.$oid } }"
-                tag="a"
-                v-for="i in videoData"
-                :key="i._id.$oid"
+                      class="list-item"
+                      target="_blank"
+                      :to="{ path: '/video', query: { id: i._id.$oid } }"
+                      tag="a"
+                      v-for="i in videoData"
+                      :key="i._id.$oid"
               >
                 <img :src="'/images/covers/'+i.item.cover_image" alt />
                 <div class="list-item_content">
                   <h4>
                     <router-link
-                      :to="{ path: '/video', query: { id: i._id.$oid } }"
+                            :to="{ path: '/video', query: { id: i._id.$oid } }"
                     >{{i.item.title}}</router-link>
                   </h4>
                   <p>{{i.item.desc}}</p>
@@ -66,16 +66,16 @@
           </div>
 
           <el-pagination
-            background
-            class="page-selector"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            layout="jumper, prev, pager, next, sizes"
-            :current-page="this.page"
-            :total="videoCount"
-            :page-size="20"
-            :page-sizes="[10, 20, 30, 40]"
-            v-if="this.videoCount!=0"
+                  background
+                  class="page-selector"
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  layout="jumper, prev, pager, next, sizes"
+                  :current-page="this.page"
+                  :total="videoCount"
+                  :page-size="20"
+                  :page-sizes="[10, 20, 30, 40]"
+                  v-if="this.videoCount!=0"
           ></el-pagination>
         </el-main>
       </el-container>
@@ -86,6 +86,7 @@
 <script>
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     return {
       flag: true, //视频排列顺序,默认栅格
       TagData: [], //所有视频的TAG数据
@@ -137,7 +138,8 @@ export default {
           async: true,
           data: {
             page: 1,
-            page_size: 20
+            page_size: 20,
+            lang: localStorage.getItem('lang')
           }
         })
           .then(result => {
@@ -158,7 +160,8 @@ export default {
           data: {
             page: 1,
             page_size: 20,
-            uid: this.$route.params.id
+            uid: this.$route.params.id,
+            lang: localStorage.getItem('lang')
           }
         })
           .then(result => {
@@ -183,7 +186,8 @@ export default {
           async: true,
           data: {
             page: e,
-            page_size: count
+            page_size: count,
+            lang: localStorage.getItem('lang')
           }
         }).then(result => {
             this.TagData = result.data.data.tags;
@@ -202,7 +206,8 @@ export default {
           data: {
             page: e,
             page_size: count,
-            uid: this.$route.params.id
+            uid: this.$route.params.id,
+            lang: localStorage.getItem('lang')
           }
         })
           .then(result => {
@@ -374,6 +379,47 @@ export default {
 </script>
 
 <style  lang="less" scoped>
+  @media screen and(max-width: 1810px){
+    .video_lineUp {
+      display: flex;
+      /*    justify-content: space-around;*/
+      justify-content: flex-start;
+      flex-direction: row;
+      flex-wrap: wrap;
+      overflow: auto;
+      max-height: 700px;
+      box-sizing: border-box;
+      .list-item {
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+        flex: 0 0 48% !important;
+        box-sizing: border-box;
+        margin: 10px 5px 5px;
+        transition: all 0.3s ease;
+        img {
+          width: 80%;
+          height: 60%;
+          min-width: 233px;
+          min-height: 145px;
+
+          /*min-width: 233px;
+          min-height: 145px;*/
+        }
+        h4 {
+          margin: auto;
+          width: 233px;
+          height: 46px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          a{
+          }
+        }
+        &:hover {
+          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+          background-color: #f4f4f5;
+        }
+      }
+    }
+  }
 .v-enter,
 .v-leave-to {
   opacity: 0;
@@ -385,7 +431,7 @@ export default {
 }
 
 .bigbox {
-  height: 900px;
+  height: 100%;
   display: flex;
   background-color: white;
   opacity: 0.9;
@@ -395,6 +441,8 @@ export default {
 }
 .el-container {
   .el-aside {
+    width: 50% !important;
+
     .nulldata-left {
       position: absolute;
       top: 50%;
@@ -404,8 +452,9 @@ export default {
   }
 
   .el-main {
-    min-width: 800px;
-    max-width: 900px;
+    width: 50%;
+/*    min-width: 800px;*/
+    overflow: auto;
     border: 1px solid #e5e9ef;
     box-sizing: border-box;
     .nulldata-right {
@@ -417,8 +466,6 @@ export default {
   }
 }
 #myChart {
-  width: 800px;
-  height: 800px;
 }
 .minibox {
   .minibox_top {
@@ -450,6 +497,7 @@ export default {
     flex-wrap: wrap;
     overflow: auto;
     max-height: 700px;
+    box-sizing: border-box;
     .list-item {
       box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
       flex: 0 0 31%;
@@ -457,15 +505,26 @@ export default {
       margin: 10px 5px 5px;
       transition: all 0.3s ease;
       img {
-        width: 233px;
-        height: 145px;
+       width: 80%;
+       height: 60%;
+        min-width: 233px;
+        min-height: 145px;
+
+        /*min-width: 233px;
+        min-height: 145px;*/
       }
       h4 {
+        margin: auto;
         width: 233px;
+        height: 46px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        a{
+        }
       }
       &:hover {
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        transform: translate3d(0, -2px, 0);
+        background-color: #f4f4f5;
       }
     }
   }

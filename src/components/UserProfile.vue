@@ -154,6 +154,7 @@
 import AppCropper from "@/components/Cropper";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem('lang');
     var validateOldPass = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("请输入旧密码"));

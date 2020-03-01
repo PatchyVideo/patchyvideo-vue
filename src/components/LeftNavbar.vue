@@ -1,7 +1,7 @@
 <!--    vue组件：LeftNavbar.vue     -->
 <!--
     组件：左侧的标签导航栏
-    大小：15% * 100%
+    大小：15%（最小150px） * 100%
     功能：home页面下对标签进行导航
     包含组件：EditTags.vue
     必要传入参数：
@@ -29,13 +29,77 @@
       暂无
 -->
 
+<i18n>
+{
+  "CHS": {
+  "tag": {
+      "title":"标签",
+      "video_action":"[使用标签发布视频]",
+      "prompt_action":"[查看编辑标签历史]",
+      "edit": "编辑"
+
+      },
+  "tag_history": {
+      "prompt": "标签编辑历史",
+      "add": "添加:",
+      "del": "删除:",
+      "empty": "暂无记录!"
+    },
+    "categories": {
+      "General":"综合",
+      "Character":"角色",
+      "Copyright":"作品",
+      "Author":"up主",
+      "Meta":"元数据",
+      "Language":"语言",
+      "Soundtrack":"原曲"
+    }
+  },
+  "ENG": {
+    "tag": {
+      "title":"Tag",
+      "video_action":"[Post video with tags]",
+      "prompt_action":"[View tag history]",
+      "edit":"Edit"
+
+      },
+    "tag_history": {
+      "prompt": "Tag History",
+      "add": "Added:",
+      "del": "Removed:",
+      "empty": "No record found"
+    },
+    "categories": {
+      "General":"General",
+      "Character":"Character",
+      "Copyright":"Copyright",
+      "Author":"Author",
+      "Meta":"Meta",
+      "Language":"Language",
+      "Soundtrack":"Soundtrack"
+    }
+  }
+}
+</i18n>
+
 <template>
   <div class="left-navbar">
     <!-- EditTags组件-->
-    <EditTags ref="editTag" :msg="pid" :visible.sync="showTagPanel" v-if="showTagPanel" class="EditTags"></EditTags>
+    <EditTags
+      ref="editTag"
+      :msg="pid"
+      :visible.sync="showTagPanel"
+      v-if="showTagPanel"
+      class="EditTags"
+    ></EditTags>
+
+    <!-- 作者详情组件 -->
+    <el-dialog :close-on-click-modal="false" :visible.sync="showAuthorData" width="70%">
+      <ShowAuthorData ref="AuthorData" :AuthorID="AuthorID"></ShowAuthorData>
+    </el-dialog>
 
     <!-- 显示标签组件的对话框 -->
-    <el-dialog title="标签编辑历史" :visible.sync="dialogVisible" width="70%">
+    <el-dialog :title="$t('tag_history.prompt')" :visible.sync="dialogVisible" width="70%">
       <div v-loading="loading2">
         <el-collapse>
           <el-collapse-item
@@ -45,8 +109,11 @@
           >
             <div>
               <div v-if="item.add.length">
-                <span style="margin-right:10px;margin-top:3px">添加:</span>
+                <span
+                  style="margin-right:10px;margin-top:3px;color:#67C23A"
+                >{{$t('tag_history.add')}}</span>
                 <el-tag
+                  type="success"
                   v-for="tag in item.add"
                   style="margin-right:5px;margin-top:3px"
                   :key="tag"
@@ -55,23 +122,29 @@
               </div>
 
               <div v-if="item.del.length">
-                <span v-if="item.del.length" style="margin-right:10px;margin-top:3px">删除:</span>
+                <span
+                  style="margin-right:10px;margin-top:3px;color:#F56C6C"
+                >{{$t('tag_history.del')}}</span>
                 <el-tag
+                  type="danger"
                   v-for="tag in item.del"
                   style="margin-right:5px;margin-top:3px"
                   :key="tag"
                 >{{tag}}</el-tag>
                 <br />
               </div>
-              <div v-if="item.user_obj.length">
-                <span style="margin-right:10px;margin-top:3px">修改者:</span>
-                <span
-                  v-for="user in item.user_obj"
-                  :key="user.profile.username"
-                  style="margin-right:5px;margin-top:3px"
-                >{{ user.profile.username }}</span>
+              <div v-if="item.user_obj.length" style="margin-top:5px">
+                <span v-for="user in item.user_obj" :key="user.profile.username" class="editer">
+                  <el-avatar
+                    fit="cover"
+                    class="loginUser-userAvatar"
+                    :size="20"
+                    :src="'be/images/userphotos/'+user.profile.image"
+                  ></el-avatar>
+                  <router-link :to="'/users/'+user._id.$oid">{{ user.profile.username }}</router-link>
+                </span>
               </div>
-              <span v-if="item.del.length==0 && item.add.length==0">暂无记录!</span>
+              <span v-if="item.del.length==0 && item.add.length==0">{{$t('tag_history.empty')}}</span>
             </div>
           </el-collapse-item>
         </el-collapse>
@@ -81,20 +154,20 @@
     <!-- 导航栏正文 -->
     <div class="left_list">
       <div class="titleTag">
-        <h1>{{ title }}</h1>
+        <h1>{{$t('tag.title')}}</h1>
         <div class="editTagButton">
           <el-button
             v-if="title == '标签' && isLogin == true"
             size="mini"
             @click="openEditTags"
             :disabled="showTagPanel"
-          >编辑</el-button>
+          >{{$t('tag.edit')}}</el-button>
         </div>
-        <p v-if="title == '标签' && isLogin == true" @click="postVideo">【使用标签发布视频】</p>
-        <p v-if="title == '标签' && isLogin == true" @click="show_tag_log">【查看标签编辑历史】</p>
+        <p v-if="title == '标签' && isLogin == true" @click="postVideo">{{$t('tag.video_action')}}</p>
+        <p v-if="title == '标签' && isLogin == true" @click="show_tag_log">{{$t('tag.prompt_action')}}</p>
       </div>
       <!-- 在Home页面渲染的侧导航条内容 -->
-      <ul ref="test" v-if="title == '热门标签' || title == '相关标签'">
+      <ul ref="test" v-if="title == '热门标签' || title == '相关标签' || title == 'Popular Tags'">
         <li class="tag belong-to-home" v-for="(val, key) in msg" :key="key">
           <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
           <!-- 根据tag名称自动渲染tag颜色 -->
@@ -105,7 +178,8 @@
               Character: val == 'Character',
               Author: val == 'Author',
               General: val == 'General',
-              Meta: val == 'Meta'
+              Meta: val == 'Meta',
+              Soundtrack:val == 'Soundtrack'
             }"
             @click="gotoHome(key)"
           >{{ key }}</p>
@@ -126,10 +200,18 @@
               Character: val == 'Character',
               Author: val == 'Author',
               General: val == 'General',
-              Meta: val == 'Meta'
+              Meta: val == 'Meta',
+              Soundtrack:val == 'Soundtrack'
             }"
-            @click="gotoHome(item)"
-          >{{ item }}</p>
+          >
+            <span @click="gotoHome(item)">{{ item }}</span>
+            <el-button
+              v-if="val == 'Author'"
+              size="mini"
+              style="margin-left:5px;"
+              @click="openAuthorData(item)"
+            >详情</el-button>
+          </p>
         </li>
       </ul>
     </div>
@@ -137,9 +219,11 @@
 </template>
 
 <script>
+import ShowAuthorData from "../components/ShowAuthorData.vue";
 import EditTags from "../components/EditTags";
 export default {
   data() {
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 判断是否登录的标志
       isLogin: false,
@@ -150,7 +234,13 @@ export default {
       // 历史标签信息页面打开的标志
       dialogVisible: false,
       // 加载标签历史信息的标志
-      loading2: false
+      loading2: false,
+      // 作者名
+      Author: "",
+      // 打开的作者详情的作者的ID
+      AuthorID: "ID",
+      // 是否打开作者详情页面
+      showAuthorData: false
     };
   },
   computed: {},
@@ -178,8 +268,14 @@ export default {
     },
     // 打开Tag编辑页面
     openEditTags() {
-    /*  this.$refs.editTag.getCommonTags();*/
+      /*  this.$refs.editTag.getCommonTags();*/
       this.showTagPanel = true;
+    },
+    // 打开作者详情对话框
+    openAuthorData(ID) {
+      this.AuthorID = ID;
+      this.Author = ID;
+      this.showAuthorData = true;
     },
     // 使用视频已有的标签发布视频
     postVideo() {
@@ -192,7 +288,7 @@ export default {
       this.axios({
         method: "post",
         url: "/be/video/tag_log.do",
-        data: { vid: this.pid }
+        data: { vid: this.pid, lang: localStorage.getItem("lang") }
       })
         .then(res => {
           this.tagLog = res.data.data;
@@ -229,7 +325,7 @@ export default {
       );
     }
   },
-  components: { EditTags },
+  components: { EditTags, ShowAuthorData },
   watch: {
     // 如果标签编辑界面被关闭，则重新请求页面数据
     showTagPanel() {
@@ -252,19 +348,19 @@ export default {
       return this.$store.state.videoPid;
     },
     // 翻译标签名
-    tranTagCategories(){
-        return function(name) {
-            var map = {
-                "General":"综合",
-                "Character":"角色",
-                "Copyright":"作品",
-                "Author":"up主",
-                "Meta":"元数据",
-                "Language":"语言",
-                "Soundtrack":"原曲",
-            };
-            return map[name];
-        }
+    tranTagCategories() {
+      return function(name) {
+        var map = {
+          General: this.$t("General"),
+          Character: this.$t("Character"),
+          Copyright: this.$t("Copyright"),
+          Author: this.$t("Author"),
+          Meta: this.$t("Meta"),
+          Language: this.$t("Language"),
+          Soundtrack: this.$t("Soundtrack")
+        };
+        return map[name];
+      };
     }
   },
   props: ["msg"]
@@ -293,14 +389,14 @@ export default {
   font-size: 100%;
   color: #999;
   text-decoration: none;
-
+  box-sizing: border-box;
   margin-block-end: 1em;
   margin-inline-start: 0px;
   margin-inline-end: 0px;
   padding-inline-start: 20px;
   font-size: 100%;
   line-height: 1.25em;
-  width: 200px;
+  width: 100%;
   word-break: break-all;
 }
 .left_list h1 {
@@ -328,6 +424,7 @@ export default {
 .left-navbar {
   position: relative;
   width: 15%;
+  min-width: 150px;
   margin-right: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -349,6 +446,12 @@ export default {
   position: relative;
   left: 300%;
 }
+.editer {
+  margin-right: 5px;
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+}
 /* 针对列表调整颜色 */
 .Copyright {
   color: #a0a;
@@ -367,5 +470,8 @@ export default {
 }
 .Meta {
   color: #f80;
+}
+.Soundtrack {
+  color: #ff7792;
 }
 </style>
