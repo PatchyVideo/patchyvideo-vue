@@ -38,6 +38,9 @@
   "CHS": {
   "favorite":"收藏",
   "modify" :"修改",
+  "init_tip":"IPFS服务初始化中..",
+  "connecting_tip":"IPFS 服务已启动，正在连接..",
+  "connect_success_tip":" IPFS 节点已连接",
   "copy" : "副本",
   "add_copy":"添加副本",
   "del_copy":"删除副本",
@@ -66,6 +69,9 @@
   "ENG": {
   "favorite":"favorited",
   "modify":"modifies",
+  "init_tip":"IPFS Service initialization..",
+  "connecting_tip":"IPFS Service started, connecting..",
+  "connect_success_tip":" IPFS node is connected",
   "copy" : "copies",
   "add_copy":"Add copies",
   "del_copy":"Delete copies",
@@ -115,7 +121,11 @@
     <!-- 更改视频级别的弹出框 -->
     <el-dialog title="修改视频发布类型" :visible.sync="changeRepostType" width="30%">
       <div style="width:80%;margin:0 auto">
-        <el-select v-model="RepostType" :placeholder="$t('infotip.release_type')" style="width:100%">
+        <el-select
+          v-model="RepostType"
+          :placeholder="$t('infotip.release_type')"
+          style="width:100%"
+        >
           <el-option
             v-for="item in RepostTypes"
             :key="item.label"
@@ -203,11 +213,8 @@
 
           <!-- 视频详细信息 -->
           <div class="re_video">
-            <img
-              :src="'/images/covers/' + myVideoData.video.item.cover_image"
-              width="320px"
-              height="200px"
-            />
+            <!-- 如果是ipfs视频直接播放视频，否则显示封面 -->
+            <div style="text-align: center;" id="nodes">{{$t('init_tip')}}</div>
             <video
               :src="myVideoData.video.item.url"
               id="player"
@@ -217,6 +224,12 @@
               v-if="isIpfs"
               style="position: relative;left: 50%;transform: translateX(-50%);"
             ></video>
+            <img
+              v-else
+              :src="'/images/covers/' + myVideoData.video.item.cover_image"
+              width="320px"
+              height="200px"
+            />
             <p
               class="videoDesc"
               @click="postAsCopy($event)"
@@ -231,7 +244,7 @@
           <div class="new_top">
             <h2>{{$t("copy")}}</h2>
             <p v-if="myVideoData.copies == ''">
-             {{$t("infotip.nocopies")}}
+              {{$t("infotip.nocopies")}}
               <router-link
                 :to="{ path: './postvideo', query: { copy: this.pid } }"
                 tag="a"
@@ -249,7 +262,11 @@
               >
                 <el-button type="text">[{{$t("add_copy")}}]</el-button>
               </router-link>
-              <el-button type="text" @click="dialogVisible = true" v-if="isLogin == true">[{{$t("del_copy")}}]</el-button>
+              <el-button
+                type="text"
+                @click="dialogVisible = true"
+                v-if="isLogin == true"
+              >[{{$t("del_copy")}}]</el-button>
               <el-button
                 type="text"
                 @click="broadcastTags()"
@@ -299,7 +316,10 @@
                   <i class="el-icon-more"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="a" @click="newFromSingleVideo()">【{{$t("infotip.create_playlist")}}】</el-dropdown-item>
+                  <el-dropdown-item
+                    command="a"
+                    @click="newFromSingleVideo()"
+                  >【{{$t("infotip.create_playlist")}}】</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </p>
@@ -310,7 +330,10 @@
                   <i class="el-icon-more"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="a" @click="newFromSingleVideo()">【{{$t("infotip.create_playlist")}}】</el-dropdown-item>
+                  <el-dropdown-item
+                    command="a"
+                    @click="newFromSingleVideo()"
+                  >【{{$t("infotip.create_playlist")}}】</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </p>
@@ -365,7 +388,7 @@ import Footer from "../components/Footer.vue";
 import { copyToClipboard } from "../static/js/generic";
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 视频的详细信息
       myVideoData: {
@@ -430,14 +453,20 @@ export default {
       RepostTypes: [
         { value: "official", label: this.$t("official") },
         { value: "official_repost", label: this.$t("official_repost") },
-        { value: "authorized_translation", label: this.$t("authorized_translation") },
+        {
+          value: "authorized_translation",
+          label: this.$t("authorized_translation")
+        },
         { value: "authorized_repost", label: this.$t("authorized_repost") },
         { value: "translation", label: this.$t("translation") },
         { value: "repost", label: this.$t("repost") }
       ],
       dialogVisible: false, //删除提示框
       pid: "", //视频的id值
+      // 视频是否为ipfs视频
       isIpfs: false,
+      // ipfs视频的URL
+      ipfsURL: "",
       // 视频列表是否属于加载状态的判断
       loading: true,
       // 匹配视频简介中的短地址，用以扩展成完整地址
@@ -474,13 +503,6 @@ export default {
           return this.$t("unknown");
           break;
       }
-      // <h3 v-if="key =='official'">原始发布</h3>
-      // <h3 v-if="key =='official_repost'">官方再发布</h3>
-      // <h3 v-if="key =='authorized_translation'">授权翻译</h3>
-      // <h3 v-if="key =='authorized_repost'">授权转载</h3>
-      // <h3 v-if="key =='translation'">自发翻译</h3>
-      // <h3 v-if="key =='repost'">自发搬运</h3>
-      // <h3 v-if="key =='unknown'">其他</h3>
     },
     // 视频的上传日期
     videodate() {
@@ -520,6 +542,10 @@ export default {
       } else {
         return false;
       }
+    },
+    // 获取dom
+    nodeShow() {
+      return document.getElementById("nodes");
     }
   },
   created() {
@@ -528,7 +554,6 @@ export default {
     // 删除本地储存(和localStorage存储一起使用，已被弃用）
     // window.localStorage.removeItem("loglevel:webpack-dev-server");
     this.searchVideo();
-
   },
   mounted() {
     this.buildUrlMatchers();
@@ -642,7 +667,7 @@ export default {
       this.axios({
         method: "post",
         url: "be/getvideo.do",
-        data: { vid: this.$route.query.id, lang: localStorage.getItem('lang') }
+        data: { vid: this.$route.query.id, lang: localStorage.getItem("lang") }
       })
         .then(result => {
           this.myVideoData = result.data.data;
@@ -657,11 +682,12 @@ export default {
           this.urlifyDesc();
           // 加载结束,加载动画消失
 
-          var ipfsURL = /(https:\/\/|http:\/\/)?(www\.)?ipfs\.globalupload\.io\/[a-zA-Z0-9]+/;
-          if (!ipfsURL.test(this.myVideoData.video.item.url)) {
-            this.isIpfs = false;
-          } else {
+          if (this.myVideoData.video.item.site == "ipfs") {
             this.isIpfs = true;
+            this.ipfsURL = this.myVideoData.video.item.url.slice(5);
+            this.establishIpfsPlayer();
+          } else {
+            this.isIpfs = false;
           }
           this.loading = false;
           this.whoami();
@@ -966,6 +992,56 @@ export default {
         }
         this.loadingList = false;
       });
+    },
+
+    // 启动ipfs播放器
+    establishIpfsPlayer() {
+      const IPFS = require("ipfs");
+      //// IPFS Settings ////
+      const ipfs = new IPFS({
+        repo: "/ipfs"
+      });
+
+      const Interval = 5 * 1000;
+      ipfs.once("ready", () => {
+        // console.log("ipfs node ready.");
+        this.nodeShow.innerHTML = this.$t("connecting_tip");
+        setInterval(() => {
+          ipfs.swarm.peers((err, peerInfos) => {
+            if (err) {
+              throw err;
+            }
+            // console.log(peerInfos.length+" ipfs node(s) connect.");
+            this.nodeShow.innerHTML =
+              peerInfos.length + this.$t("connect_success_tip");
+          });
+        }, Interval);
+        const player = document.getElementById("player");
+        var vs = this.genIpfsVideo(ipfs, this.ipfsURL, player);
+      });
+    },
+    //// This is a function to simplify the js
+    //// Need: Ipfs node init
+    genIpfsVideo(ipfsnode, hash, element) {
+      let stream;
+      const VideoStream = require("videostream");
+
+      const exampleFile = {
+        createReadStream(opts) {
+          const { start, end } = opts;
+          stream = ipfsnode.catReadableStream(hash, {
+            offset: start,
+            length: end && end - start
+          });
+          stream.on("error", err => {
+            console.log(err);
+          });
+          return stream;
+        }
+      };
+      let vs = new VideoStream(exampleFile, element);
+
+      return vs;
     }
   },
   components: { left_navbar, topnavbar, Footer }
