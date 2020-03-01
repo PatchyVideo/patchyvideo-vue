@@ -21,6 +21,51 @@
     ★待解决问题：
       1.邮件没有查重设置，注册账号的时候没有对邮箱的唯一性进行验证
 -->
+<i18n>
+{
+  "CHS": {
+    "signup":"注册",
+    "login":"登录",
+    "input_username":"请输入用户名",
+    "input_psd":"请输入用户名",
+    "input_email":"请输入邮箱",
+    "repeat_psd":"请重复密码",
+    "username_exist":"该用户名已存在！",
+    "psd_err":"两次输入密码不一致!",
+    "input_account":"请输入账号",
+    "account_limit":"长度在 2 到 32 个字符",
+    "psd_limit":"长度在 6 到 64 个字符",
+    "email_limit":"请输入正确的邮箱地址",
+    "signup_success":"注册成功",
+    "unknown_err":"未知错误",
+    "net_err":"网络异常",
+    "ready":"就绪",
+    "format_err":"填写格式不正确！"
+  },
+  "ENG": {
+    "signup":"Signup",
+    "login":"Login",
+    "input_username":"Please enter user name",
+    "input_psd":"Please enter user name",
+    "input_email":"Please input your email",
+    "repeat_psd":"Please repeat password",
+    "username_exist":"The username already exists!",
+    "psd_err":"Incorrect password entered twice!",
+    "input_account":"Please enter account",
+    "account_limit":"2 to 32 characters",
+    "psd_limit":"6 to 64 characters",
+    "email_limit":"Please input the correct email address",
+    "signup_success":"Signup success",
+    "unknown_err":"Unknown mistake",
+    "net_err":"Network exception",
+    "ready":"Ready",
+    "format_err":"Filling in the format is not correct!"
+
+  }
+}
+</i18n>
+
+
 <template>
   <div class="signupPic">
     <!-- 注册框正文 -->
@@ -30,9 +75,9 @@
         <router-link to="home">PatchyVideo</router-link>
       </h1>
       <div class="top in">
-        <router-link to="/login">登录</router-link>
+        <router-link to="/login">{{$t('login')}}</router-link>
         <b>·</b>
-        <router-link to="/signup">注册</router-link>
+        <router-link to="/signup">{{$t('signup')}}</router-link>
       </div>
 
       <!-- 输入账号和密码的框 -->
@@ -48,7 +93,7 @@
             id="username"
             name="username"
             v-model="signupFormRef.signup_username"
-            placeholder="请输入用户名"
+            :placeholder="$t('input_username')"
             clearable
             prefix-icon="el-icon-user-solid"
           ></el-input>
@@ -59,7 +104,7 @@
             name="password1"
             type="password"
             v-model="signupFormRef.signup_password1"
-            placeholder="请输入密码"
+            :placeholder="$t('input_psd')"
             prefix-icon="el-icon-lock"
           ></el-input>
         </el-form-item>
@@ -69,7 +114,7 @@
             name="password2"
             type="password"
             v-model="signupFormRef.signup_password2"
-            placeholder="请重复密码"
+            :placeholder="$t('repeat_psd')"
             prefix-icon="el-icon-key"
           ></el-input>
         </el-form-item>
@@ -84,12 +129,12 @@
             prefix-icon="el-icon-message"
           ></el-input>
         </el-form-item>
-        <p id="status" style="text-align: center;" v-bind:class="{alert:status!='就绪'}">{{ status }}</p>
+        <p id="status" style="text-align: center;" v-bind:class="{alert:status!=$t('ready')}">{{ status }}</p>
       </el-form>
 
       <!-- 注册按钮 -->
       <div class="bottom in">
-        <div class="login in" @click="signup">注册</div>
+        <div class="login in" @click="signup">{{$t('signup')}}</div>
       </div>
     </div>
   </div>
@@ -110,7 +155,7 @@ export default {
         }
       }).then(result => {
         if (result.data.data == true) {
-          callback(new Error("该用户名已存在！"));
+          callback(new Error(this.$t('account_limit')));
         } else {
           callback();
         }
@@ -119,7 +164,7 @@ export default {
     // 校验两次输入密码是否一致
     var validatePass2 = (rule, value, callback) => {
       if (value !== this.signupFormRef.signup_password1) {
-        callback(new Error("两次输入密码不一致!"));
+        callback(new Error(this.$t("psd_limit")));
       } else {
         callback();
       }
@@ -136,26 +181,26 @@ export default {
       session: "",
       rules: {
         signup_username: [
-          { required: true, message: "请输入账号", trigger: "blur" },
+          { required: true, message: this.$t('input_account'), trigger: "blur" },
           { validator: checkUsername, trigger: "blur" },
-          { min: 2, max: 32, message: "长度在 2 到 32 个字符", trigger: "blur" }
+          { min: 2, max: 32, message: this.$t('account_limit'), trigger: "blur" }
         ],
         signup_password1: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, max: 64, message: "长度在 6 到 64 个字符", trigger: "blur" }
+          { required: true, message: this.$t('input_psd'), trigger: "blur" },
+          { min: 6, max: 64, message: this.$t('psd_limit'), trigger: "blur" }
         ],
         signup_password2: [
           { required: true, message: "请重复密码", trigger: "blur" },
           { validator: validatePass2, trigger: "blur" },
-          { min: 6, max: 64, message: "长度在 6 到 64 个字符", trigger: "blur" }
+          { min: 6, max: 64, message: this.$t('psd_limit'), trigger: "blur" }
         ],
         signup_email: [
-          { required: false, message: "请输入邮箱", trigger: "blur" },
-          { type: "email", message: "请输入正确的邮箱地址", trigger: ["blur"] }
+          { required: false, message: this.$t('input_email'), trigger: "blur" },
+          { type: "email", message:  this.$t('email_limit'), trigger: ["blur"] }
         ]
       },
       // 登录状态
-      status: "就绪",
+      status: this.$t("ready"),
       // 视频列表是否属于加载状态的判断
       loading: false
     };
@@ -164,26 +209,26 @@ export default {
     // 初始化页面名为signup
     this.$store.commit("changeBgc", "signup");
     // 修改网站标题
-    document.title = "注册 - Patchyvideo";
+    document.title = this.$t('signup') + " - Patchyvideo";
   },
   methods: {
     open2() {
       this.$message({
-        message: "注册成功",
+        message: this.$t('signup_success'),
         type: "success"
       });
     },
 
     open3() {
       this.$message({
-        message: "该用户名已存在！",
+        message: this.$t('username_exist'),
         type: "warning"
       });
     },
 
     open4() {
       this.$message({
-        message: "未知错误",
+        message: this.$t('unknown_err'),
         type: "warning"
       });
     },
@@ -236,12 +281,12 @@ export default {
                   this.loading = false;
                 }
               } else {
-                this.status = "网络异常";
+                this.status = this.$t('net_err');
               }
             });
           });
         } else {
-          this.status = "填写格式不正确！";
+          this.status = this.$t('format_err');
           // 加载结束,加载动画消失
           this.loading = false;
           return false;

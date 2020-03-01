@@ -17,6 +17,49 @@
     ★待解决问题：
       暂无
 -->
+
+<i18n>
+{
+  "CHS": {
+    "title":"视频列表",
+    "create_playList":"创建播放列表",
+    "search":{
+        "input_tip":"搜索列表...",
+        "btn":"搜索",
+        "downlist":{
+            "latest":"时间正序",
+            "oldest":"时间倒序",
+            "last_modified":"最近修改"
+        }
+    },
+    "err_tip":"没有搜索到视频列表",
+    "statistics_pre":"共",
+    "statistics_suf":"个视频",
+    "author":"作者："
+
+  },
+  "ENG": {
+    "title":"playlists",
+    "create_playList":"Create playlist",
+    "search":{
+        "input_tip":"Search list...",
+        "btn":"Search",
+        "downlist":{
+            "latest":"Latest",
+            "oldest":"Oldest",
+            "last_modified":"Latest Modified"
+        }
+    },
+    "err_tip":"No playlist found",
+    "statistics_pre":"A total of",
+    "statistics_suf":"videos",
+    "author":"Author:"
+  }
+}
+</i18n>
+
+
+
 <template>
   <div>
     <topnavbar />
@@ -39,7 +82,7 @@
               plain
               class="createPlayListButton"
               @click="createVideoList"
-            >创建播放列表</el-button>
+            >{{$t('create_playList')}}</el-button>
       <!--    </div>
         </div>-->
 
@@ -47,19 +90,19 @@
           <!-- 排序选择框 -->
           <div id="select-order" class="head">
             <el-input
-              placeholder="搜索列表..."
+              :placeholder="$t('search.input_tip')"
               v-model="listSearch"
               clearable
               class="inputbox"
               @keyup.enter.native="searchList()"
             >
-              <el-button slot="append" icon="el-icon-search" @click="searchList()">搜索</el-button>
+              <el-button slot="append" icon="el-icon-search" @click="searchList()">{{$t('search.btn')}}</el-button>
             </el-input>
             <el-select v-model="couponSelected" class="select">
               <el-option
                 v-for="item in options"
                 :key="item.value"
-                :label="item.label"
+                :label="$t('search.downlist.' + item.value)"
                 :value="item.value"
               ></el-option>
             </el-select>
@@ -69,7 +112,7 @@
             <p
               v-if="videolist.length==0"
               style="display:inline-block;margin:0 auto;margin-top:10px;"
-            >没有搜索到视频列表</p>
+            >{{$t('err_tip')}}</p>
             <div class="minbox shadow" v-for="item in videolist" :key="item._id.$oid">
               <!-- 视频列表标题 -->
               <div class="re_top">
@@ -79,7 +122,7 @@
                     tag="a"
                   >{{ item.title.english }}</router-link>
                 </h2>
-                <h5 style="float: right;">共{{ item.videos }}个视频</h5>
+                <h5 style="float: right;">{{$t('statistics_pre')}} {{ item.videos }} {{$t('statistics_suf')}}</h5>
               </div>
               <!-- 视频列表详情 -->
               <div class="re_video">
@@ -93,7 +136,7 @@
                 </div>
               </div>
               <p class="minbox_creater">
-                作者：
+                {{$t('author')}}
                 <router-link
                   :to="'/users/'+item.user_detail._id.$oid"
                 >{{ item.user_detail.profile.username }}</router-link>
@@ -160,7 +203,7 @@ export default {
     // 获取视频列表列表
     this.getVideoList(this.page, this.count);
     // 修改网站标题
-    document.title = "视频列表 - Patchyvideo";
+    document.title = this.$t("title") + " - Patchyvideo";
   },
   methods: {
     // 当前播放列表的页面切换的时候调用

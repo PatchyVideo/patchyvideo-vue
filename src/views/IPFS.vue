@@ -6,34 +6,102 @@
     2/9/2020: v1.0 
       release
 -->
+<i18n>
+{
+  "CHS": {
+    "title":"",
+    "content":{
+        "introduce":"所见所闻皆遁入幻想",
+        "part1":{
+            "title":"设计思路",
+            "l1":"東方视频备份站",
+            "l2":"为被削除的東方视频提供备份服务",
+            "l3":"暂时只提供人工审核通道，有备份需求的up请移步群:757676234,私聊管理 \"IPFS归档处\"",
+            "l4":"备份站使用IPFS 分布式网络播放视频，可能会出现卡顿情况",
+            "l5":"了解<a href=\"ipfs.io\">IPFS</a> 技术可更好地使用本站功能"
+        },
+        "part2":{
+            "title":"暂行标准",
+            "l1":"限東方Project相关视频",
+            "l2":"转载视频推荐搬运至B站",
+            "l3":"外网作者同意搬运至B站，B站屑审核削除的视频 （可能需要重新和作者取得搬运权限）",
+            "l4":"在B站因政策原因打码、遮挡，影响观看体验而想保留原版备份的视频",
+            "l5":"不接收明确标有 R-18\\R-18G 的视频"
+        },
+        "video_test":{
+            "title":"示例视频",
+            "link":"实验性播放页",
+            "player_tip":"实验性播放器",
+            "err_tip":"您的浏览器不支持\"video\"标签",
+            "video_switch_test_tip":"视频切换测试，点击下列文字即可切换",
+            "click_tip":"不要点我！(╯‵□′)╯︵┻━┻  点击下列文字！"
+        },
+        "image_test":"图片测试"
+    }
+  },
+  "ENG": {
+    "title":"",
+    "content":{
+        "introduce":"What you see and what you hear is a fantasy",
+        "part1":{
+            "title":"Design ideas",
+            "l1":"Touhou Video Backup Station",
+            "l2":"Provide backup services for the deleted Touhou Video",
+            "l3":"Only provide manual review channels for the time being，If you have backup requirements, please move to the QQgroup:757676234,Private chat with manager who named \"IPFS归档处\"",
+            "l4":"Backup Station Plays Video Using IPFS Distributed Network, Stuck",
+            "l5":" Understanding <a href=\"ipfs.io\">IPFS</a> technology can make better use of the functions of this site "
+        },
+        "part2":{
+            "title":"Interim standard",
+            "l1":"Touhou related videos only",
+            "l2":"Reproduced video is recommended to be transferred to Bilibili",
+            "l3":"Video deleted by the bad reviewer of Bilibili and author agrees to move to Bilibili（May need to regain permission with the author）",
+            "l4":"In Bilibili, due to policy reasons, blocking, blocking, and affecting the viewing experience, I want to keep the original backup video",
+            "l5":"Do not receive videos explicitly labeled R-18\\R-18G"
+        },
+        "video_test":{
+            "title":"Sample video",
+            "link":"Experimental play page",
+            "player_tip":"Experimental player",
+            "err_tip":"您Your browser does not support \"video\" tag",
+            "video_switch_test_tip":"Video switching test, click the following text to switch",
+            "click_tip":"Don't click me！(╯‵□′)╯︵┻━┻  Click the following text！"
+        },
+        "image_test":"Image test"
+
+    }
+  }
+}
+</i18n>
+
 
 <template>
   <div>
     <topnavbar />
     <div class="w main-page-background-img">
       <div class="content">
-        <p>...所见所闻皆遁入幻想...</p>
-        <h1>设计思路</h1>
+        <p>...{{$t('content.introduce')}}...</p>
+        <h1>{{$t('content.part1.title')}}</h1>
         <ul>
-          <li>東方视频备份站</li>
-          <li>为被削除的東方视频提供备份服务</li>
-          <li>暂时只提供人工审核通道，有备份需求的up请移步群:757676234,私聊管理 "IPFS归档处"</li>
-          <li>备份站使用IPFS 分布式网络播放视频，可能会出现卡顿情况</li>
-          <li>了解<a href="ipfs.io">IPFS</a> 技术可更好地使用本站功能</li>
+          <li>{{$t('content.part1.l1')}}</li>
+          <li>{{$t('content.part1.l2')}}</li>
+          <li>{{$t('content.part1.l3')}}</li>
+          <li>{{$t('content.part1.l4')}}</li>
+          <li v-html="$t('content.part1.l5')"></li>
         </ul>
 
-        <h1>暂行标准</h1>
+        <h1>{{$t('content.part2.title')}}</h1>
         <ul>
-          <li>限東方Project相关视频</li>
-          <li>转载视频推荐搬运至B站</li>
-          <li>外网作者同意搬运至B站，B站屑审核削除的视频 （可能需要重新和作者取得搬运权限）</li>
-          <li>在B站因政策原因打码、遮挡，影响观看体验而想保留原版备份的视频</li>
-          <li>不接收明确标有 R-18\R-18G 的视频</li>
+          <li>{{$t('content.part2.l1')}}</li>
+          <li>{{$t('content.part2.l2')}}</li>
+          <li>{{$t('content.part2.l3')}}</li>
+          <li>{{$t('content.part2.l4')}}</li>
+          <li>{{$t('content.part2.l5')}}</li>
         </ul>
 
-        <h1>示例视频</h1>
-        <router-link to="/ipfs/player">实验性播放页</router-link>
-        <p>实验性播放器</p>
+        <h1>{{$t('content.video_test.title')}}</h1>
+        <router-link to="/ipfs/player">{{$t('content.video_test.link')}}</router-link>
+        <p>{{$t('content.video_test.player_tip')}}</p>
         <p></p>
         <video
           src="https://ipfs.globalupload.io/QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh"
@@ -42,7 +110,7 @@
           loop
           width="50%"
         >
-          <p>您的浏览器不支持"video"标签</p>
+          <p>{{$t('content.video_test.err_tip')}}</p>
         </video>
         <p />
         <button id="button" @click="changeSrc()">{{buttonInnerHTML}}</button>
@@ -53,7 +121,7 @@
         <p />
         <a @click="playErxiaojie()">最终鬼畜二小姐</a>
         <p />
-        <h1>图片测试</h1>
+        <h1>{{$t('content.image_test')}}</h1>
         <!-- TODO: 也可采用数据库检索hash值 -->
         <img src="https://ipfs.globalupload.io/QmQH2mFR9mwv5PM1toYech1uXSr5k8Tdu2qQ6XEaVy9QtL" />
         <p />
@@ -74,7 +142,7 @@ import Footer from "../components/Footer.vue";
 export default {
   data() {
     return {
-      buttonInnerHTML: "视频切换测试，点击下列文字即可切换",
+      buttonInnerHTML: this.$t('content.video_test.video_switch_test_tip'),
       badapple:
         "https://ipfs.globalupload.io/QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh",
       lanlanlu:
@@ -101,7 +169,7 @@ export default {
     changeSrc() {
       this.count++;
       if (this.count == 1) {
-        this.buttonInnerHTML = "不要点我！(╯‵□′)╯︵┻━┻  点击下列文字！";
+        this.buttonInnerHTML = this.$t('content.video_test.click_tip');
       } else if (this.count == 10) {
         alert("have fun!");
       } else {

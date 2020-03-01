@@ -11,6 +11,27 @@
     ★待解决问题：
       1.错误信息尚未进行分类
 -->
+<i18n>
+{
+  "CHS": {
+    "title":"忘记密码",
+    "reset_psd":"重置密码",
+    "input_tip":"请输入账户绑定的Email",
+    "email_tip":"请输入邮箱",
+    "err_tip":"请输入正确的邮箱地址",
+    "button":"发送邮件"
+  },
+  "ENG": {
+    "title":"Forget password",
+    "reset_psd":"Reset Password",
+    "input_tip":"Please enter the email associated with the account",
+    "email_tip":"please input your email",
+    "err_tip":"Please input the correct email address",
+    "button":"Send email"
+  }
+}
+</i18n>
+
 <template>
   <div class="loginPic">
     <div class="w" v-loading="loading">
@@ -18,7 +39,7 @@
         <router-link to="/home">PatchyVideo</router-link>
       </h1>
       <div class="top in">
-        <h3 style="color:#909399">重置密码</h3>
+        <h3 style="color:#909399">{{$t('reset_psd')}}</h3>
       </div>
 
       <el-form ref="FormRef" :model="FormRef" class="middle in" :rules="rules">
@@ -29,7 +50,7 @@
             type="email"
             v-model="FormRef.email"
             clearable
-            placeholder="请输入账户绑定的Email"
+            :placeholder="$t('input_tip')"
             prefix-icon="el-icon-message"
             @keyup.enter.native="resetpass()"
           ></el-input>
@@ -38,7 +59,7 @@
 
       <!-- 登录按钮 -->
       <div class="bottom in">
-        <div @click="resetpass()" class="login in">发送邮件</div>
+        <div @click="resetpass()" class="login in">{{$t('button')}}</div>
       </div>
     </div>
   </div>
@@ -56,8 +77,8 @@ export default {
       // 校验地址
       rules: {
         email: [
-          { required: true, message: "请输入邮箱", trigger: "blur" },
-          { type: "email", message: "请输入正确的邮箱地址", trigger: ["blur"] }
+          { required: true, message: this.$t('email_tip'), trigger: "blur" },
+          { type: "email", message: this.$t('err_tip'), trigger: ["blur"] }
         ]
       },
       // 视频列表是否属于加载状态的判断
@@ -68,7 +89,7 @@ export default {
     // 初始化页面名为login
     this.$store.commit("changeBgc", "forgetPassword");
     // 修改网站标题
-    document.title = "找回密码 - Patchyvideo";
+    document.title = this.$t('title') + " - Patchyvideo";
   },
   mounted() {
     console.log(

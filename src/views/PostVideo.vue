@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-03-01 13:02:28
+ * @LastEditTime: 2020-03-01 18:25:26
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \patchyvideo-vue\src\views\PostVideo.vue
+ -->
 <!--    vue页面：PostVideo.vue     -->
 <!--
     页面：paychyvideo的视频上传页面
@@ -8,6 +16,22 @@
     1/18/2020：
       release
 -->
+<i18n>
+{
+  "CHS": {
+    "title":"发布视频",
+    "single_release":"单个发布",
+    "batch_release":"批量发布",
+    "IPFS_release":"IPFS视频发布"
+  },
+  "ENG": {
+    "title":"Post video",
+    "single_release":"Single release",
+    "batch_release":"Batch release",
+    "IPFS_release":"IPFS video release"
+  }
+}
+</i18n>
 
 <template>
   <div>
@@ -16,13 +40,13 @@
     <!-- PostVideo页面的正文 -->
     <div class="w main-page-background-img">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick" class="topTabs">
-        <el-tab-pane label="单个发布" name="first">
+        <el-tab-pane :label="$t('single_release')" name="first">
           <PostSingleVideo></PostSingleVideo>
         </el-tab-pane>
-        <el-tab-pane label="批量发布" name="second">
+        <el-tab-pane :label="$t('batch_release')" name="second">
           <PostMultiVideos></PostMultiVideos>
         </el-tab-pane>
-        <el-tab-pane label="IPFS视频发布" name="third">
+        <el-tab-pane :label="$t('IPFS_release')" name="third">
           <PostIPFSVideo></PostIPFSVideo>
         </el-tab-pane>
       </el-tabs>
@@ -50,7 +74,7 @@ export default {
     // 初始化页面名为list
     this.$store.commit("changeBgc", "postVideo");
     // 修改网站标题
-    document.title = "发布视频 - Patchyvideo";
+    document.title = this.$t("title") + " - Patchyvideo";
   },
   mounted() {},
   methods: {
