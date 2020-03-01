@@ -7,6 +7,39 @@
     ★待解决问题：
       2.标签搜索功能的实现
 -->
+
+<i18n>
+{
+  "CHS": {
+    "title":"编辑标签",
+    "search_tag":"搜索标签",
+    "tag_categories":{
+        "General":"综合",
+        "Character":"角色",
+        "Copyright":"作品",
+        "Author":"up主",
+        "Meta":"元数据",
+        "Language":"语言",
+        "Soundtrack":"原曲"
+    }
+  },
+  "ENG": {
+    "title":"Edittag",
+    "search_tag":"Search tag",
+    "tag_categories":{
+        "General":"General",
+        "Character":"Character",
+        "Copyright":"Copyright",
+        "Author":"Author",
+        "Meta":"Meta",
+        "Language":"Language",
+        "Soundtrack":"Soundtrack"
+    }
+  }
+}
+</i18n>
+
+
 <template>
   <div>
     <topnavbar />
@@ -18,12 +51,12 @@
           <el-tab-pane
             v-for="(item, i) in tagCategories"
             :key="item"
-            :label="tranTagCategories(item)"
+            :label="$t('tag_categories.' + item)"
             :name="i.toString()"
           >
             <tagDetail :tagCategorie="item"></tagDetail>
           </el-tab-pane>
-          <el-tab-pane label="搜索标签" :name="(tagCategories.length+1).toString()">
+          <el-tab-pane :label="$t('search_tag')" :name="(tagCategories.length+1).toString()">
             <searchTag></searchTag>
           </el-tab-pane>
         </el-tabs>
@@ -51,28 +84,12 @@ export default {
       activeName: "0"
     };
   },
-  computed:{
-      // 翻译标签名
-      tranTagCategories(){
-          return function(name) {
-              var map = {
-                  "General":"综合",
-                  "Character":"角色",
-                  "Copyright":"作品",
-                  "Author":"up主",
-                  "Meta":"元数据",
-                  "Language":"语言",
-                  "Soundtrack":"原曲",
-              };
-              return map[name];
-          }
-      }
-  },
+  computed:{},
   mounted() {
     // 初始化页面名为home
     this.$store.commit("changeBgc", "tag");
     // 修改网站标题
-    document.title = "编辑标签 - Patchyvideo";
+    document.title = this.$t('title') + " - Patchyvideo";
     this.requestTagCategories();
   },
   methods: {

@@ -32,7 +32,14 @@
 <i18n>
 {
   "CHS": {
-    "tag_history": {
+  "tag": {
+      "title":"标签",
+      "video_action":"[使用标签发布视频]",
+      "prompt_action":"[查看编辑标签历史]",
+      "edit": "编辑"
+
+      },
+  "tag_history": {
       "prompt": "标签编辑历史",
       "add": "添加:",
       "del": "删除:",
@@ -49,6 +56,13 @@
     }
   },
   "ENG": {
+    "tag": {
+      "title":"Tag",
+      "video_action":"[Post video with tags]",
+      "prompt_action":"[View tag history]",
+      "edit":"Edit"
+
+      },
     "tag_history": {
       "prompt": "Tag History",
       "add": "Added:",
@@ -140,17 +154,17 @@
     <!-- 导航栏正文 -->
     <div class="left_list">
       <div class="titleTag">
-        <h1>{{ title }}</h1>
+        <h1>{{$t('tag.title')}}</h1>
         <div class="editTagButton">
           <el-button
             v-if="title == '标签' && isLogin == true"
             size="mini"
             @click="openEditTags"
             :disabled="showTagPanel"
-          >编辑</el-button>
+          >{{$t('tag.edit')}}</el-button>
         </div>
-        <p v-if="title == '标签' && isLogin == true" @click="postVideo">【使用标签发布视频】</p>
-        <p v-if="title == '标签' && isLogin == true" @click="show_tag_log">【查看标签编辑历史】</p>
+        <p v-if="title == '标签' && isLogin == true" @click="postVideo">{{$t('tag.video_action')}}</p>
+        <p v-if="title == '标签' && isLogin == true" @click="show_tag_log">{{$t('tag.prompt_action')}}</p>
       </div>
       <!-- 在Home页面渲染的侧导航条内容 -->
       <ul ref="test" v-if="title == '热门标签' || title == '相关标签' || title == 'Popular Tags'">

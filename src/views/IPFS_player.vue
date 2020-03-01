@@ -7,23 +7,54 @@
       release
 -->
 
+<i18n>
+{
+  "CHS": {
+    "title":"IPFS 视频播放页",
+    "content":{
+        "title":"实验性 内嵌js-ipfs播放页",
+        "TODO1":"自动解析到本页面",
+        "TODO2":"根据av号查到hash，填入video src中",
+        "TODO3":"后续评论功能等",
+        "init_tip":"IPFS服务初始化中..",
+        "connecting_tip":"IPFS 服务已启动，正在连接..",
+        "connect_success_tip":" IPFS 节点已连接",
+        "err_tip":"您的浏览器八成是IE"
+    }
+  },
+  "ENG": {
+    "title":"IPFS Video play page",
+    "content":{
+        "title":"Experimental Embedded js-ipfs play page",
+        "TODO1":"Automatically parse to this page",
+        "TODO2":"Find the hash according to the av number and fill it into the video src",
+        "TODO3":"Follow-up comment functions, etc.",
+        "init_tip":"IPFS Service initialization..",
+        "connecting_tip":"IPFS Service started, connecting..",
+        "connect_success_tip":" IPFS node is connected",
+        "err_tip":"Your browser may be IE"
+    }
+  }
+}
+</i18n>
+
 <template>
   <div>
     <topnavbar />
     <div class="w main-page-background-img">
       <div class="content">
-        <h1>实验性 内嵌js-ipfs播放页</h1>
+        <h1>{{$t('content.title')}}</h1>
         <h2>TODO:</h2>
         <ul>
-          <li>"/ipfs/av....." 自动解析到本页面</li>
-          <li>根据av号查到hash，填入video src中</li>
-          <li>后续评论功能等</li>
+          <li>"/ipfs/av....." {{$t('content.TODO1')}}</li>
+          <li>{{$t('content.TODO2')}}</li>
+          <li>{{$t('content.TODO3')}}</li>
           <li>—— liuAbin</li>
         </ul>
 
-        <div id="nodes">IPFS服务初始化中...</div>
+        <div id="nodes">{{$t('content.init_tip')}}</div>
         <video id="player" controls>
-          您的浏览器八成是IE
+          {{$t('content.err_tip')}}
         </video>
       </div>
     </div>
@@ -45,7 +76,7 @@ export default {
   },
   created() {
     // 修改网站标题
-    document.title = "IPFS 视频播放页 - Patchyvideo";
+    document.title = this.$t("title") + " - Patchyvideo";
   },
   mounted() {
     const IPFS = require("ipfs");
@@ -57,14 +88,14 @@ export default {
     const Interval = 5 * 1000;
     ipfs.once("ready", () => {
       // console.log("ipfs node ready.");
-      this.nodeShow.innerHTML = "IPFS 服务已启动，正在连接...";
+      this.nodeShow.innerHTML = this.$t('content.connecting_tip');
       setInterval(() => {
         ipfs.swarm.peers((err, peerInfos) => {
           if (err) {
             throw err;
           }
           // console.log(peerInfos.length+" ipfs node(s) connect.");
-          this.nodeShow.innerHTML = peerInfos.length + " IPFS 节点已连接";
+          this.nodeShow.innerHTML = peerInfos.length + this.$t("content.connect_success_tip");
         });
       }, Interval);
       const player = document.getElementById("player");

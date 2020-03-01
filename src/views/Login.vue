@@ -32,6 +32,45 @@
     ★待解决问题：
       暂无
 -->
+<i18n>
+{
+  "CHS": {
+    "login":"登录",
+    "signup":"注册",
+    "forget_psd":"忘了密码？",
+    "username":"用户名",
+    "psd":"密码",
+    "username_tip":"请输入账号",
+    "username_msg":"长度在 2 到 32 个字符",
+    "psd_tip":"请输入密码",
+    "psd_msg":"长度在 6 到 64 个字符",
+    "status":"就绪",
+    "login_success_msg":"登录成功",
+    "login_fail_msg":"登录失败",
+    "request_failed":"请求失败",
+    "net_err":"网络错误！"
+
+  },
+  "ENG": {
+    "title":"Log in",
+    "signup":"Signup",
+    "forget_psd":"Forgot password?",
+    "username":"Username",
+    "psd":"Password",
+    "username_tip":"Please enter account",
+    "username_msg":"2 to 32 characters",
+    "psd_tip":"Please enter the password",
+    "psd_msg":"6 to 64 characters",
+    "status":"Ready",
+    "login_success_msg":"login successful",
+    "login_fail_msg":"Login failed",
+    "request_failed":"Request failed",
+    "net_err":"Network Error!"
+  }
+}
+</i18n>
+
+
 <template>
   <div class="loginPic">
     <!-- 登录框正文 -->
@@ -41,9 +80,9 @@
         <router-link to="/home">PatchyVideo</router-link>
       </h1>
       <div class="top in">
-        <router-link to="/login">登录</router-link>
+        <router-link to="/login">{{$t('login')}}</router-link>
         <b>·</b>
-        <router-link to="/signup">注册</router-link>
+        <router-link to="/signup">{{$t('signup')}}</router-link>
       </div>
 
       <!-- 输入账号和密码的框 -->
@@ -52,7 +91,7 @@
           <el-input
             id="username"
             name="username"
-            placeholder="用户名"
+            :placeholder="$t('username')"
             v-model="loginFormRef.login_name"
             clearable
             prefix-icon="el-icon-user"
@@ -62,7 +101,7 @@
           <el-input
             id="password"
             name="password"
-            placeholder="密码"
+            :placeholder="$t('username')"
             v-model="loginFormRef.login_password"
             show-password
             prefix-icon="el-icon-lock"
@@ -70,14 +109,14 @@
           ></el-input>
         </el-form-item>
         <p style="text-align: left;">
-          <router-link to="/forgetPassword" class="forgetPassword">忘了密码？</router-link>
+          <router-link to="/forgetPassword" class="forgetPassword">{{$t('forget_psd')}}</router-link>
         </p>
-        <p id="status" style="text-align: center;" v-bind:class="{alert:status!='就绪'}">{{ status }}</p>
+        <p id="status" style="text-align: center;" v-bind:class="{alert:status!=$t('status')}">{{ status }}</p>
       </el-form>
 
       <!-- 登录按钮 -->
       <div class="bottom in">
-        <div @click="login" class="login in">登录</div>
+        <div @click="login" class="login in">{{$t('login')}}</div>
       </div>
     </div>
   </div>
@@ -99,16 +138,16 @@ export default {
       // 表单验证规则
       rules: {
         login_name: [
-          { required: true, message: "请输入账号", trigger: "blur" },
-          { min: 2, max: 32, message: "长度在 2 到 32 个字符", trigger: "blur" }
+          { required: true, message: this.$t('username_tip'), trigger: "blur" },
+          { min: 2, max: 32, message: this.$t('username_msg'), trigger: "blur" }
         ],
         login_password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, max: 64, message: "长度在 6 到 64 个字符", trigger: "blur" }
+          { required: true, message: this.$t('psd_tip'), trigger: "blur" },
+          { min: 6, max: 64, message: this.$t('psd_msg'), trigger: "blur" }
         ]
       },
       // 登录状态
-      status: "就绪",
+      status: this.$t('status'),
       // 视频列表是否属于加载状态的判断
       loading: false
     };
@@ -117,20 +156,20 @@ export default {
     // 初始化页面名为login
     this.$store.commit("changeBgc", "login");
     // 修改网站标题
-    document.title = "登录 - Patchyvideo";
+    document.title = this.$t('login') + " - Patchyvideo";
   },
   mounted() {},
   methods: {
     open2() {
       this.$message({
-        message: "登录成功",
+        message: this.$t('login_success_msg'),
         type: "success"
       });
     },
 
     open3() {
       this.$message({
-        message: "登录失败",
+        message: this.$t('login_fail_msg'),
         type: "warning"
       });
     },
@@ -212,19 +251,19 @@ export default {
                       this.open3();
                     }
                   } else {
-                    this.status = "请求失败";
+                    this.status = this.$t('request_failed');
                   }
                 })
                 .catch(error => {
                   this.loading = false;
                   this.open3();
-                  this.status = "网络错误！";
+                  this.status = this.$t('net_err');
                 });
             })
             .catch(error => {
               this.loading = false;
               this.open3();
-              this.status = "网络错误！";
+              this.status = this.$t('net_err');
             });
         } else {
           this.status = "error submit!!";

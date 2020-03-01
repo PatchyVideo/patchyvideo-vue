@@ -6,13 +6,26 @@
     2/1/2020: v1.0 
       release
 -->
+<i18n>
+{
+  "CHS": {
+    "errmsg":"哎呀，页面好像出错了...",
+    "click2home":"点我返回主页"
+  },
+  "ENG": {
+    "errmsg":"Sorry, the page seems to be wrong ...",
+    "click2home":"Click me to return to the homepage"
+  }
+}
+</i18n>
+
 
 <template>
   <div>
     <div class="errorPage">
       <h1>
-        哎呀，页面好像出错了...
-        <router-link to="/home">点我返回主页</router-link>
+        {{$t('errmsg')}}
+        <router-link to="/home">{{$t('click2home')}}</router-link>
       </h1>
       <el-image style="width: 50%;" :src="url" :fit="fits[0]"></el-image>
     </div>
