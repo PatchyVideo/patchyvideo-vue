@@ -402,7 +402,7 @@ export default {
             });
           } else if (res.data.data.reason === "NAME_LENGTH") {
             this.$message({
-              message: "用户名已长度长度应在 2 到 32 个字符！",
+              message: "用户名长度应在 2 到 32 个字符！",
               type: "warning"
             });
           } else {
@@ -457,6 +457,9 @@ export default {
 </script>
 
 <style scoped lang="less">
+  .el-form-item{
+    margin-bottom: 20px !important;
+  }
 .wave {
   position: absolute;
   transform: translate(-18%, -18%);
