@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-03-01 13:02:28
- * @LastEditTime: 2020-03-03 22:51:48
+ * @LastEditTime: 2020-03-03 22:56:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \patchyvideo-vue\src\views\SuperAdmin.vue
@@ -139,6 +139,7 @@ export default {
       // console.log(tab, event);
     },
     getLog() {
+	 // FIXME:后端接口会返回 date_from 字段到 最近时间的所有数据，字段 date_to 好像没有起到作用
       this.axios({
         method: "post",
         url: "/be/admin/" + this.log.form.types[this.log.form.type - 1],
