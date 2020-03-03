@@ -1,13 +1,4 @@
 <!--
- * @Author: your name
- * @Date: 2020-03-01 13:02:28
- * @LastEditTime: 2020-03-03 22:56:24
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \patchyvideo-vue\src\views\SuperAdmin.vue
- -->
-
-<!--
 
     组件：管理员页面
     更新日志：
@@ -54,7 +45,7 @@
               <el-select v-model="log.form.type" placeholder="请选择日志类型">
                 <el-option label="原始日志" value="1"></el-option>
                 <el-option label="整合后的日志" value="2"></el-option>
-              </el-select>时间范围（UTC）
+              </el-select>时间范围
               <el-date-picker
                 v-model="log.form.timeRange"
                 type="datetimerange"
@@ -63,7 +54,7 @@
                 end-placeholder="结束日期"
                 value-format="yyyy-MM-dd HH:mm:ss"
               ></el-date-picker>
-              <el-select v-model="order" class="select">
+              <el-select v-model="log.order" class="select">
                 <el-option
                   v-for="item in log.form.options"
                   :key="item.value"
@@ -77,14 +68,14 @@
             <el-table :data="log.data" border style="width: 100%">
               <el-table-column
                 prop="time.$date"
-                label="UTC日期"
+                label="日期"
                 sortable
                 :formatter="formatterDate"
                 width="180"
               ></el-table-column>
-              <el-table-column prop="_id.$oid" label="I D" width="220"></el-table-column>
-              <el-table-column prop="level" label="level" width="80"></el-table-column>
-              <el-table-column prop="ip" label="ip" width="180"></el-table-column>
+              <el-table-column prop="_id.$oid" label="I D" width="300"></el-table-column>
+              <el-table-column prop="level" label="level" width="100"></el-table-column>
+              <el-table-column prop="ip" label="ip" width="300"></el-table-column>
               <el-table-column prop="endpoint" label="endpoint" width="300"></el-table-column>
               <el-table-column prop="path" label="path" width="300"></el-table-column>
             </el-table>
@@ -93,6 +84,13 @@
           <el-tab-pane :label="$t('para_settings')" name="third">{{$t('para_settings')}}</el-tab-pane>
           <el-tab-pane :label="$t('scripts')" name="fourth">{{$t('scripts')}}</el-tab-pane>
         </el-tabs>
+
+		<el-pagination
+		background
+        @current-change="handleCurrentChange"
+		layout="prev, pager, next"
+		:total="1000">
+		</el-pagination>
       </el-header>
       <el-main></el-main>
     </el-container>
@@ -109,8 +107,13 @@ export default {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       activeName: "second",
-      order: "latest",
       log: {
+        //每页的log条目数量
+        size:10,
+        // 当前页码
+        curPageNum:1,
+        // 排序方式
+        order: "latest",
         form: {
           name: "",
           types: ["viewlogs.do", "viewlogs_aggregated.do"],
@@ -135,6 +138,11 @@ export default {
     ];
   },
   methods: {
+    handleCurrentChange(val) {
+      console.log(val);
+      this.getLog();
+      this.log.curPageNum = val;
+    },
     handleClick(tab, event) {
       // console.log(tab, event);
     },
@@ -143,13 +151,12 @@ export default {
       this.axios({
         method: "post",
         url: "/be/admin/" + this.log.form.types[this.log.form.type - 1],
-        // 时区
         data: {
-          page: 1,
-          page_size: 200,
-          date_from: this.toUTCTime(this.log.form.timeRange[0]),
-          date_to: this.toUTCTime(this.log.form.timeRange[1]),
-          order: this.order
+          page: this.log.curPageNum,
+          page_size: this.log.size,
+          date_from: this.toUTCTime("2020-03-03 19:00:00"),
+          date_to: this.toUTCTime("2020-03-03 20:00:00"),
+          order: this.log.order
         }
       })
         .then(ret => {
@@ -162,12 +169,13 @@ export default {
         });
     },
     formatterDate(row) {
+        console.log(row.time.$date);
+        
       return this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date(row.time.$date));
     },
     /**
-     *格式化UTC日期
+     *格式化日期
      */
-
     dateFormat(fmt, date) {
       let ret;
       const opt = {
@@ -220,6 +228,10 @@ export default {
   line-height: 160px;
 }
 .log-form {
+  width: 80%;
+  margin: auto;
+}
+.el-tabs{
   width: 80%;
   margin: auto;
 }
