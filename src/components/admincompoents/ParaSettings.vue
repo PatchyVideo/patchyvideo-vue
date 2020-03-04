@@ -77,10 +77,7 @@ export default {
 				data: {}
 			}).then(ret => {
 				this.data = ret.data.data;
-				console.log(ret.data.data);
-			}).catch(err => {
-				console.log("err:", err);
-			});
+			})
 		},
 		setPara(){
 			this.dialogVisible = false
@@ -96,9 +93,7 @@ export default {
 			}).then(ret => {
 				this.data = ret.data.data;
 				console.log(ret.data.data);
-			}).catch(err => {
-				console.log("err:", err);
-			}); */
+			})*/
 		},
 		handleClose(done) {
         this.$confirm('确认关闭？')

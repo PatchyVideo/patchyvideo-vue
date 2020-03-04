@@ -116,9 +116,7 @@ export default {
             }).then(ret => {
                 this.log.data = ret.data.data;
                 // return ret.data.data.video;
-            }).catch(err => {
-                console.log("err:", err);
-            });
+            })
         },
         formatterDate(row) {
             return this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date(row.time.$date));

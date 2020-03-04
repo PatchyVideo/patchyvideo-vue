@@ -65,10 +65,24 @@ export default {
 	  activeName: "second"
 	};
   },
-  created() {},
+  created() {
+	  this.isAdmin();
+  },
   methods: {
 	handleClick(tab, event) {
-	  // console.log(tab, event);
+	},
+	// 判断当前用户是不是 Admin ，不是则404
+	isAdmin(){
+		this.axios({
+			method: "post",
+			url: "/be/user/myprofile.do" ,
+			data: {}
+		}).then(ret => {
+			var status = ret.data.data.access_control.status;
+			if(status !== "admin"){
+				this.$router.push({ path: "*" });
+			}
+		})
 	}
   },
   components: { topnavbar, Footer, usermanagemennt, logview, parasettings }

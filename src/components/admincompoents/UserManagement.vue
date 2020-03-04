@@ -138,17 +138,13 @@ export default {
 		];
 	},
 	methods:{
-		handleStatus(para){
-			console.log(para);
-			
-		},
 		handleCurrentChange(val) {
 			var prePageNum = this.curPageNum;
 			this.curPageNum = val;
 			try {
 				this.getUserList();
 			} catch (error) {
-				console.log("net err");
+				// console.log("net err");
 				
 				this.curPageNum = prePageNum;
 			}
@@ -165,13 +161,9 @@ export default {
 				}
 			}).then(ret => {
 				var data = ret.data.data;
-				console.log(data);
+				// console.log(data);
 				this.usermanagement.data = data;
-				// return ret.data.data.video;
-			}).catch(err => {
-				throw new Error(err);
-				// alert("请求出错：\n"+err);
-			});
+			})
 		},
 		formatterDate(row) {
 			// return this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date(row.time.$date));
