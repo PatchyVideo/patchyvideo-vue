@@ -74,14 +74,14 @@ export default {
                 // 排序方式
                 order: "latest",
                 form: {
-                name: "",
-                types: ["viewlogs.do", "viewlogs_aggregated.do"],
-                type: "2",
-                timeRange: [],
-                options: [
-                    { value: "latest", label: "时间正序" },
-                    { value: "oldest", label: "时间倒序" }
-                ]
+                    name: "",
+                    types: ["viewlogs.do", "viewlogs_aggregated.do"],
+                    type: "2",
+                    timeRange: [],
+                    options: [
+                        { value: "latest", label: "时间正序" },
+                        { value: "oldest", label: "时间倒序" }
+                    ]
                 },
                 data: []
             }
@@ -109,8 +109,8 @@ export default {
                 data: {
                 page: this.log.curPageNum,
                 page_size: this.log.size,
-                date_from: this.toUTCTime("2020-03-03 19:00:00"),
-                date_to: this.toUTCTime("2020-03-03 20:00:00"),
+                date_from: this.toUTCTime( this.log.form.timeRange[0]),
+                date_to: this.toUTCTime( this.log.form.timeRange[1]),
                 order: this.log.order
                 }
             }).then(ret => {
