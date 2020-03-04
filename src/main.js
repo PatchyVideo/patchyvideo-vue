@@ -28,10 +28,16 @@ Vue.directive('linkified', linkify);
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;
 
-Vue.config.keyCodes.Left_Arrow = 37;
+/*Vue.config.keyCodes.Left_Arrow = 37;
 Vue.config.keyCodes.Right_Arrow = 39;
 Vue.config.keyCodes.Up_Arrow = 38;
-Vue.config.keyCodes.Dw_Arrow = 40;
+Vue.config.keyCodes.Dw_Arrow = 40;*/
+/*
+keyCode 37 = Left
+keyCode 38 = Up
+keyCode 39 = Right
+keyCode 40 = Down
+*/
 
 const i18n = new VueI18n({
   locale: 'CHS', // set locale
