@@ -85,6 +85,17 @@ POST /be/config/listconfig.do
 POST /be/config/setconfig.do
 {"attr":"参数名(key)", "data":"参数数据(value)"}
 
+
+BILICOOKIE_SESSDATA: "6e564006%2C1585493881%2Cff5d6721"
+​
+BILICOOKIE_bili_jct: "ea1db03b26184f4fe3e6cb1e9c7e6101"
+​
+DEFAULT_BLACKLIST: "453,251"
+​
+DEFAULT_BLACKLIST_POPULAR_TAG: "453,251,466,467,468,469,498,500,501,502,503,504"
+​
+YOUTUBE_API_KEYS: "AIzaSyC9veNBmKCVI7CofvXmbt-kOw4jYmQGKzE,AIzaSyD1mnyt3jcTyO5efO8fDy0gYWvXd_V4rVw"
+
 ==================================
 网站脚本
 ==================================

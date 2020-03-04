@@ -1,24 +1,24 @@
 <!--
 
-    组件：管理员页面
-    更新日志：
-    2/16/2020:
-    待完成
+	组件：管理员页面
+	更新日志：
+	2/16/2020:
+	待完成
 -->
 
 <i18n>
 {
   "CHS": {
-    "user_management":"用户管理",
-    "log_view":"日志查看",
-    "para_settings":"网站参数设置",
-    "scripts":"网站脚本"
+	"user_management":"用户管理",
+	"log_view":"日志查看",
+	"para_settings":"网站参数设置",
+	"scripts":"网站脚本"
   },
   "ENG": {
-    "user_management":"User management",
-    "log_view":"Log view",
-    "para_settings":"Site parameter settings",
-    "scripts":"Web site scripts"
+	"user_management":"User management",
+	"log_view":"Log view",
+	"para_settings":"Site parameter settings",
+	"scripts":"Web site scripts"
   }
 }
 </i18n>
@@ -26,29 +26,29 @@
 
 <template>
   <div>
-    <topnavbar></topnavbar>
-    <el-container>
-      <el-header>
-        Header
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane :label="$t('user_management')" name="first">
-            <usermanagemennt></usermanagemennt>
-          </el-tab-pane>
+	<topnavbar></topnavbar>
+	<el-container>
+	  <el-header>
+		Header
+		<el-tabs v-model="activeName" @tab-click="handleClick">
+		  <el-tab-pane :label="$t('user_management')" name="first">
+			<usermanagemennt></usermanagemennt>
+		  </el-tab-pane>
 
-          <!-- 日志查看 -->
-          <el-tab-pane :label="$t('log_view')" name="second">
-              <logview></logview>
-          </el-tab-pane>
+		  <!-- 日志查看 -->
+		  <el-tab-pane :label="$t('log_view')" name="second">
+			<logview></logview>
+		  </el-tab-pane>
 
-          <el-tab-pane :label="$t('para_settings')" name="third">
-              <parasettings></parasettings>
-          </el-tab-pane>
-          <el-tab-pane :label="$t('scripts')" name="fourth">{{$t('scripts')}}</el-tab-pane>
-        </el-tabs>
-      </el-header>
-      <el-main></el-main>
-    </el-container>
-    <!-- <Footer></Footer> -->
+		  <el-tab-pane :label="$t('para_settings')" name="third">
+			<parasettings></parasettings>
+		  </el-tab-pane>
+		  <el-tab-pane :label="$t('scripts')" name="fourth">{{$t('scripts')}}</el-tab-pane>
+		</el-tabs>
+	  </el-header>
+	  <el-main></el-main>
+	</el-container>
+	<!-- <Footer></Footer> -->
   </div>
 </template>
 
@@ -60,20 +60,18 @@ import logview from "../components/admincompoents/LogView.vue";
 import parasettings from "../components/admincompoents/ParaSettings.vue";
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem("lang");
-    return {
-      activeName: "second"
-    };
+	this.$i18n.locale = localStorage.getItem("lang");
+	return {
+	  activeName: "second"
+	};
   },
-  created() {
-
-  },
+  created() {},
   methods: {
-    handleClick(tab, event) {
-        // console.log(tab, event);
-    },
+	handleClick(tab, event) {
+	  // console.log(tab, event);
+	}
   },
-  components: { topnavbar, Footer, usermanagemennt ,logview , parasettings}
+  components: { topnavbar, Footer, usermanagemennt, logview, parasettings }
 };
 </script>
 
@@ -91,7 +89,7 @@ export default {
   text-align: center;
   line-height: 160px;
 }
-.el-tabs{
+.el-tabs {
   width: 80%;
   margin: auto;
 }
