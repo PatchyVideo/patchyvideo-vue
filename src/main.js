@@ -47,7 +47,7 @@ console.log('run!');
 if (!localStorage.getItem('lang')) {
   console.log('setting lang');
   console.log(localStorage.getItem('lang'));
-  localStorage.setItem('lang', localMap[navigator.language]);
+  localStorage.setItem('lang', localMap[navigator.language] || 'CHS');
 }
 i18n.locale = localStorage.getItem('lang');
 
