@@ -40,7 +40,9 @@
               <logview></logview>
           </el-tab-pane>
 
-          <el-tab-pane :label="$t('para_settings')" name="third">{{$t('para_settings')}}</el-tab-pane>
+          <el-tab-pane :label="$t('para_settings')" name="third">
+              <parasettings></parasettings>
+          </el-tab-pane>
           <el-tab-pane :label="$t('scripts')" name="fourth">{{$t('scripts')}}</el-tab-pane>
         </el-tabs>
       </el-header>
@@ -55,6 +57,7 @@ import topnavbar from "../components/TopNavbar.vue";
 import Footer from "../components/Footer.vue";
 import usermanagemennt from "../components/admincompoents/UserManagement.vue";
 import logview from "../components/admincompoents/LogView.vue";
+import parasettings from "../components/admincompoents/ParaSettings.vue";
 export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -70,7 +73,7 @@ export default {
         // console.log(tab, event);
     },
   },
-  components: { topnavbar, Footer, usermanagemennt ,logview}
+  components: { topnavbar, Footer, usermanagemennt ,logview , parasettings}
 };
 </script>
 
