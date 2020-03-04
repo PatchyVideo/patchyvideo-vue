@@ -1,9 +1,24 @@
+<i18n>
+{
+  "CHS": {
+    "title":"用户管理界面",
+    "latest":"时间正序",
+    "oldest":"时间倒序"
+  },
+  "ENG": {
+    "title":"User management interface",
+    "latest":"Latest",
+    "oldest":"Oldest"
+  }
+}
+</i18n>
+
 <template>
   <div>
-    <h1>用户管理界面</h1>
+    <h1>{{$t('title')}}</h1>
 
     <el-select v-model="couponSelected" class="select">
-      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+      <el-option v-for="item in options" :key="item.value" :label="$t(item.value)" :value="item.value"></el-option>
     </el-select>
   </div>
 </template>
