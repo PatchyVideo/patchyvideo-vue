@@ -4,7 +4,7 @@
     大小：100% * 800(最小高度)
     功能：上传ipfs视频
     必要传入参数：无
-    包含组件：EditTags.vue
+    包含组件：PostVideo.vue
     更新日志：
     2/5/2020：v1.0
       release
@@ -12,30 +12,84 @@
       1.IPFS视频的URL校验有待进一步优化
 -->
 
+
+<i18n>
+{
+    "CHS":{
+        "cancel":"取 消",
+        "ok":"确 定",
+        "input_addr":"在这里输入IPFS视频的地址w",
+        "input_orig_addr":"在这里输入视频的原地址（没有也没关系w）",
+        "input_title":"在这里输入视频的标题w",
+        "input_title":"在这里输入视频的标题w",
+        "introductory_video":"介绍一下自己的视频吧",
+        "upload_cover":"从这里上传视频封面",
+        "upload_no_cover":"还没上传封面呢！",
+        "upload_limit":"只能一个上传jpg/png文件哦(建议图片比例8：5)",
+        "label":"标签",
+        "no_label":"暂无标签！",
+        "post_video":"发布视频",
+        "not_input_addr":"还没输入视频地址呢！",
+        "addr_err":"视频地址格式错误！",
+        "not_input_title":"还没输入标题呢",
+        "not_introductory_video":"不来介绍一下视频吗？",
+        "upload_cover_limit":"只能上传一个封面！",
+        "upload_fail":"视频上传失败！",
+        "not_exist":"不存在！",
+        "upload_success":"上传成功！",
+        "unknown_err":"未知错误"
+    },
+    "ENG":{
+        "cancel":"Cancel",
+        "input_addr":"Enter the address of the IPFS video here",
+        "input_orig_addr":"Enter the original address of the video here (It doesn't matter if you don't)",
+        "input_title":"Enter the title of the video here",
+        "input_title":"Enter the title of the video here",
+        "introductory_video":"Introduce your own video",
+        "upload_cover":"Upload video cover from here",
+        "upload_no_cover":"Haven't uploaded a cover yet!",
+        "upload_limit":"Only one jpg / png file can be uploaded (recommended picture ratio 8: 5)",
+        "label":"label",
+        "no_label":"No tags!",
+        "post_video":"Post video",
+        "not_input_addr":"No video address yet!",
+        "addr_err":"Video address format is wrong!",
+        "not_input_title":"Haven't entered a title yet",
+        "not_introductory_video":"Don't you introduce the video?",
+        "upload_cover_limit":"Only one cover can be uploaded!",
+        "upload_fail":"Video upload failed!",
+        "not_exist":"Does not exist!",
+        "upload_success":"Uploaded successfully!",
+        "unknown_err":"Unknown mistake"
+
+    }
+}
+</i18n>
+
 <template>
   <div class="postBox" v-loading="loading">
     <div class="content">
       <el-form ref="list" :model="list" label-width="auto" :rules="rules">
         <!-- 输入URL的文本框 -->
         <el-form-item prop="URL">
-          <el-input placeholder="在这里输入IPFS视频的地址w" v-model="list.URL">
+          <el-input :placeholder="$t('input_addr')" v-model="list.URL">
             <template slot="prepend">ipfs:</template>
           </el-input>
         </el-form-item>
         <!-- 视频源地址 -->
         <el-form-item>
-          <el-input placeholder="在这里输入视频的原地址（没有也没关系w）" v-model="list.original_url"></el-input>
+          <el-input :placeholder="$t('input_orig_addr')" v-model="list.original_url"></el-input>
         </el-form-item>
         <!-- 视频标题 -->
         <el-form-item prop="title">
-          <el-input placeholder="在这里输入视频的标题w" v-model="list.title"></el-input>
+          <el-input :placeholder="$t('input_title')" v-model="list.title"></el-input>
         </el-form-item>
         <!-- 视频简介 -->
         <el-form-item prop="desc">
           <el-input
             type="textarea"
             :autosize="{ minRows: 6}"
-            placeholder="介绍一下自己的视频吧~"
+            :placeholder="$t('introductory_video')"
             v-model="list.desc"
           ></el-input>
         </el-form-item>
@@ -50,17 +104,17 @@
             :file-list="list.cover"
             :data="coverData"
           >
-            <el-button size type="primary" style="margin-right:10px;">从这里上传视频封面</el-button>
-            <span slot="tip" style="color:red" v-if="noCover">还没上传封面呢！</span>
-            <div slot="tip" class="el-upload__tip">只能一个上传jpg/png文件哦(建议图片比例8：5)</div>
+            <el-button size type="primary" style="margin-right:10px;">{{$t('upload_cover')}}</el-button>
+            <span slot="tip" style="color:red" v-if="noCover">{{$t('upload_no_cover')}}</span>
+            <div slot="tip" class="el-upload__tip">{{$t('upload_limit')}}</div>
           </el-upload>
         </el-form-item>
         <!-- 标签编辑，暂时隐藏 -->
         <el-form-item v-if="false">
           <div class="tagsEdit">
-            <h3>标签</h3>
+            <h3>{{$t('label')}}</h3>
             <div class="tagBox">
-              <p v-if="tags==''" style="margin-bottom:10px;">暂无标签！</p>
+              <p v-if="tags==''" style="margin-bottom:10px;">{{$t('no_label')}}</p>
               <el-tag effect="dark" v-else v-for="item in tags" :key="item">{{item}}</el-tag>
             </div>
           </div>
@@ -68,7 +122,7 @@
         <!-- 上传视频的按钮 -->
         <el-form-item style="text-align: center;">
           <el-button class="postButton" type="primary" @click="postMultiVideos">
-            发布视频
+            {{$t('post_video')}}
             <i class="el-icon-upload el-icon--right"></i>
           </el-button>
         </el-form-item>
@@ -91,12 +145,12 @@ export default {
     // URL校验规则
     var validateURL = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("还没输入视频地址呢！"));
+        return callback(new Error(this.$t('not_input_addr')));
       }
       var value2 = "ipfs:" + value;
       var ipfsURL = /^ipfs:[a-zA-Z0-9]+/;
       if (!ipfsURL.test(value2)) {
-        return callback(new Error("视频地址格式错误！"));
+        return callback(new Error(this.$t('addr_err')));
       } else {
         callback();
       }
@@ -115,9 +169,9 @@ export default {
       // 校验数据
       rules: {
         URL: [{ validator: validateURL, trigger: "blur" }],
-        title: [{ required: true, message: "还没输入标题呢", trigger: "blur" }],
+        title: [{ required: true, message: this.$t('not_input_title'), trigger: "blur" }],
         desc: [
-          { required: true, message: "不来介绍一下视频吗？", trigger: "blur" }
+          { required: true, message: this.$t('not_introductory_video'), trigger: "blur" }
         ]
       },
       // 校验封面是否上传
@@ -163,7 +217,7 @@ export default {
   methods: {
     // 超出限制大小时调用的函数
     handleExceed() {
-      this.$message.warning("只能上传一个封面！");
+      this.$message.warning(this.$t('upload_cover_limit'));
     },
     // 删除文件调用的函数
     beforeRemove(file, fileList) {
@@ -234,25 +288,25 @@ export default {
     // 各种各样的报错警告
     open2() {
       this.$message({
-        message: "视频上传失败！",
+        message: this.$t('upload_fail'),
         type: "error"
       });
     },
     open3(errorTag) {
       this.$message({
-        message: "标签 " + errorTag + " 不存在！",
+        message:  this.$t('label') + errorTag + " " + this.$t('not_exist'),
         type: "error"
       });
     },
     open4() {
       this.$message({
-        message: "上传成功！",
+        message: this.$t('upload_success'),
         type: "success"
       });
     },
     open5() {
       this.$message({
-        message: "未知错误",
+        message: this.$t('unknown_err'),
         type: "error"
       });
     }

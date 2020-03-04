@@ -8,25 +8,100 @@
     ★待解决问题：
     
 -->
+<i18n>
+{
+    "CHS":{
+        "cancel":"取 消",
+        "ok":"确 定",
+        "name":"名称",
+        "rename":"重命名",
+        "cover":"封面",
+        "title":"标题",
+        "video_num":"视频数",
+        "modif_date":"修改日期",
+        "search_list":"搜索列表...",
+        "search":"搜索",
+        "my_playlist":"我的播放列表",
+        "all":"全部",
+        "private":"私有",
+        "public":"公开",
+        "copy_folder_addr":"点击复制文件夹地址",
+        "tip":"提示",
+        "confirm_tip":"确认删除吗？此操作不可逆",
+        "new_folder":"新建文件夹",
+        "add":"添加",
+        "del_select":"删除选择项",
+        "add_2_cur_dir":"添加至当前目录",
+        "input_name":"请输入名称",
+        "no_permissions":"您没有权限查看此文件夹",
+        "create_success":"创建成功",
+        "folder_exist":"文件夹已存在",
+        "name_limit":"名称不能含有/或*",
+        "del_success":"删除成功",
+        "login_please":"请登录",
+        "add_sucess":"添加成功",
+        "invalid_path_or_name":"无效路径或名称"
+
+
+    },
+    "ENG":{
+        "cancel":"Cancel",
+        "ok":"O K",
+        "name":"Name",
+        "rename":"Rename",
+        "cover":"Cover",
+        "title":"Title",
+        "video_num":"Number of videos",
+        "modif_date":"Modification date",
+        "search_list":"Search list...",
+        "search":"Search",
+        "my_playlist":"My playlist",
+        "all":"All",
+        "private":"Private",
+        "public":"Public",
+        "copy_folder_addr":"Click Copy Folder Address",
+        "tip":"Tip",
+        "confirm_tip":"Confirm delete? This operation is irreversible",
+        "new_folder":"New folder",
+        "add":"Add",
+        "del_select":"Delete selection",
+        "add_2_cur_dir":"Add to current directory",
+        "input_name":"Please enter a name",
+        "no_permissions":"You do not have permission to view this folder",
+        "create_success":"Created successfully",
+        "folder_exist":"The folder already exists",
+        "name_limit":"The name cannot contain'/'or'*'",
+        "del_success":"Successfully deleted",
+        "login_please":"Please sign in",
+        "add_sucess":"Added successfully",
+        "invalid_path_or_name":"Invalid path or name"
+
+
+
+    }
+}
+</i18n>
+
+
 
 <template>
   <div v-if="visible" v-loading="loading" ref="aside">
-    <el-dialog title="提示" :visible.sync="dialogVisible" :modal-append-to-body="false" width="30%">
-      <span>确认删除吗？此操作不可逆</span>
+    <el-dialog :title="$t('tip')" :visible.sync="dialogVisible" :modal-append-to-body="false" width="30%">
+      <span>{{$t('confirm_tip')}}</span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="dialogVisible = false">{{$t('cancel')}}</el-button>
         <el-button
           type="primary"
           @click="
                 dialogVisible = false;
                 deleteSelectedItems();
             "
-        >确 定</el-button>
+        >{{$t('ok')}}</el-button>
       </span>
     </el-dialog>
     <el-dialog
       v-if="loggedIn"
-      title="新建文件夹"
+      :title="$t('new_folder')"
       :visible.sync="showNewFolderDialog"
       width="40%"
       :close-on-click-modal="true"
@@ -38,21 +113,21 @@
         :rules="folderNameRules"
         :model="newFolderForm"
       >
-        <el-form-item label="名称" prop="name">
-          <el-input placeholder="名称" v-model="newFolderForm.name"></el-input>
+        <el-form-item :label="$t('name')" prop="name">
+          <el-input :placeholder="$t('name')" v-model="newFolderForm.name"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="createFolder" style="width:80%" :loading="loading">添加</el-button>
+          <el-button type="primary" @click="createFolder" style="width:80%" :loading="loading">{{$t('add')}}</el-button>
           <el-button
             @click="showNewFolderDialog = false"
             style="width:80%;margin-top:10px;margin-left:0px"
-          >取 消</el-button>
+          >{{$t('cancel')}}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
     <el-dialog
       v-if="loggedIn"
-      title="重命名"
+      :title="$t('rename')"
       :visible.sync="showRenameFolderDialog"
       width="40%"
       :close-on-click-modal="true"
@@ -64,19 +139,19 @@
         :rules="folderNameRules"
         :model="renameFolderForm"
       >
-        <el-form-item label="名称" prop="name">
-          <el-input placeholder="名称" v-model="renameFolderForm.name"></el-input>
+        <el-form-item :label="$t('name')" prop="name">
+          <el-input :placeholder="$t('name')" v-model="renameFolderForm.name"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="renameFolder" style="width:80%" :loading="loading">重命名</el-button>
+          <el-button type="primary" @click="renameFolder" style="width:80%" :loading="loading">{{$t('rename')}}</el-button>
           <el-button
             @click="showRenameFolderDialog = false"
             style="width:80%;margin-top:10px;margin-left:0px"
-          >取 消</el-button>
+          >{{$t('cancel')}}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
-    <!--<el-button type="primary" round @click="addToCurrectFolder">添加至当前目录</el-button>
+    <!--<el-button type="primary" round @click="addToCurrectFolder">{{$t('add_2_cur_dir')}}</el-button>
     <el-button type="primary" round @click="closeSelf">关闭</el-button>-->
     <el-breadcrumb separator="/">
       <el-breadcrumb-item v-for="i in toNavigablePath()" :key="i.dst">
@@ -103,8 +178,8 @@
         <el-switch
           v-if="loggedIn"
           v-model="currentFolderObject.privateView"
-          active-text="私有"
-          inactive-text="公开"
+          :active-text="$t('private')"
+          :inactive-text="$t('public')"
           style="width: 97%;cursor: default;"
           @change="handleCurrentFolderPrivateViewChanged"
         ></el-switch>
@@ -115,14 +190,14 @@
         </el-switch>-->
       </el-aside>
       <el-main>
-        <el-button v-if="loggedIn" @click="showNewFolderDialog = true">新建文件夹</el-button>
+        <el-button v-if="loggedIn" @click="showNewFolderDialog = true">{{$t('new_folder')}}</el-button>
         <el-button
           v-if="loggedIn"
           @click="dialogVisible = true"
           type="danger"
           :disabled="this.currentSelectedItems == 0"
-        >删除选中项</el-button>
-        <el-button type="primary" round @click="addToCurrectFolder">添加至当前目录</el-button>
+        >{{$t('del_select')}}</el-button>
+        <el-button type="primary" round @click="addToCurrectFolder">{{$t('add_2_cur_dir')}}</el-button>
         <el-table
           ref="currentFolderTable"
           :data="currentFolderChildrens"
@@ -130,7 +205,7 @@
           @selection-change="handleCurrentFolderTableSelectionChange"
         >
           <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column label="封面" width="180" height="100" align="center">
+          <el-table-column :label="$t('cover')" width="180" height="100" align="center">
             <template slot-scope="scope">
               <img
                 v-if="typeof scope.row.playlist_object != 'undefined'"
@@ -141,7 +216,7 @@
               <img v-else src="/images/folder.png" width="160px" height="100px" />
             </template>
           </el-table-column>
-          <el-table-column label="标题" width="200" align="center" sortable prop="name">
+          <el-table-column :label="$t('title')" width="200" align="center" sortable prop="name">
             <template slot-scope="scope">
               <router-link
                 v-if="typeof scope.row.playlist_object != 'undefined'"
@@ -164,18 +239,18 @@
                   type="primary"
                   round
                   @click="showRenameFolderDialogFunc(scope.row)"
-                >重命名</el-button>
+                >{{$t('rename')}}</el-button>
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="视频数" align="center" width="80" prop="playlist_object.videos">
+          <el-table-column :label="$t('video_num')" align="center" width="80" prop="playlist_object.videos">
             <template slot-scope="scope">
               <h3
                 v-if="typeof scope.row.playlist_object != 'undefined'"
               >{{scope.row.playlist_object.videos}}</h3>
             </template>
           </el-table-column>
-          <el-table-column label="修改日期" align="center" prop="playlist_object.meta.modified_at">
+          <el-table-column :label="$t('modif_date')" align="center" prop="playlist_object.meta.modified_at">
             <template slot-scope="scope">
               <h3
                 v-if="typeof scope.row.playlist_object != 'undefined'"
@@ -218,7 +293,7 @@ export default {
         row: null
       },
       folderNameRules: {
-        name: [{ required: true, message: "请输入名称", trigger: "blur" }]
+        name: [{ required: true, message: this.$t('input_name'), trigger: "blur" }]
       },
       priavteView: false,
       pid: ""
@@ -293,7 +368,7 @@ export default {
         if (result.status == "SUCCEED") {
           resolve(this.folderObjectToTreeNode(result.data.children));
         } else if (result.data.reason == "UNAUTHORISED_OPERATION") {
-          this.$message.error("您没有权限查看此文件夹");
+          this.$message.error(this.$t('no_permissions'));
         }
       });
     },
@@ -321,7 +396,7 @@ export default {
             f();
           }
         } else if (result.data.reason == "UNAUTHORISED_OPERATION") {
-          this.$message.error("您没有权限查看此文件夹");
+          this.$message.error(this.$t('no_permissions'));
         }
         this.loading = false;
       });
@@ -398,7 +473,7 @@ export default {
         if (result.status == "SUCCEED") {
           this.showNewFolderDialog = false;
           this.newFolderForm.name = "";
-          this.$message({ message: "创建成功", type: "success" });
+          this.$message({ message: this.$t('create_success'), type: "success" });
           this.refreshCurrentFolder();
           const curTreeNode = this.$refs.folderTree.getNode(this.currentPath);
           if (curTreeNode) {
@@ -411,9 +486,9 @@ export default {
           }
         } else {
           if (result.data.reason == "FOLDER_ALREADY_EXIST") {
-            this.$message.error("文件夹已存在");
+            this.$message.error(this.$t('folder_exist'));
           } else if (result.data.reason == "INVALID_PATH") {
-            this.$message.error("名称不能含有/或*");
+            this.$message.error(this.$t('name_limit'));
           }
         }
         this.loading = false;
@@ -456,11 +531,11 @@ export default {
               },
               withCredentials: true
             }).then(result => {
-              this.$message.success("删除成功");
+              this.$message.success(this.$t('del_success'));
               this.getFolder();
             });
           } else if (result.data.reason == "UNAUTHORISED_OPERATION") {
-            this.$message.error("您没有权限执行此操作");
+            this.$message.error(this.$t('no_permissions'));
           }
           this.loading = false;
         });
@@ -482,10 +557,10 @@ export default {
         .then(result => {
           result = result.data;
           if (result.status == "SUCCEED") {
-            this.$message.success("添加成功");
+            this.$message.success(this.$t('add_sucess'));
             this.getFolder();
           } else if (result.data.reason == "UNAUTHORISED_OPERATION") {
-            this.$message.error("请登录");
+            this.$message.error(this.$t('login_please'));
           }
           this.loading = false;
         })
@@ -525,11 +600,11 @@ export default {
             }
           });
         } else if (result.data.reason == "UNAUTHORISED_OPERATION") {
-          this.$message.error("您没有权限执行此操作");
+          this.$message.error(this.$t('no_permissions'));
         } else if (result.data.reason == "INVALID_PATH") {
-          this.$message.error("无效路径或名称");
+          this.$message.error(this.$t('invalid_path_or_name'));
         } else if (result.data.reason == "FOLDER_ALREADY_EXIST") {
-          this.$message.error("文件夹已存在");
+          this.$message.error(this.$t('folder_exist'));
         }
         this.loading = false;
       });
