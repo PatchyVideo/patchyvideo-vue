@@ -101,17 +101,21 @@
           <el-input
             id="password"
             name="password"
-            :placeholder="$t('username')"
+            :placeholder="$t('psd')"
             v-model="loginFormRef.login_password"
             show-password
             prefix-icon="el-icon-lock"
             @keyup.enter.native="login"
           ></el-input>
         </el-form-item>
-        <p style="text-align: left;">
+        <p style="text-align: left;margin-top:30px">
           <router-link to="/forgetPassword" class="forgetPassword">{{$t('forget_psd')}}</router-link>
         </p>
-        <p id="status" style="text-align: center;" v-bind:class="{alert:status!=$t('status')}">{{ status }}</p>
+        <p
+          id="status"
+          style="text-align: center;"
+          v-bind:class="{alert:status!=$t('status')}"
+        >{{ status }}</p>
       </el-form>
 
       <!-- 登录按钮 -->
@@ -126,7 +130,7 @@
 import signup from "../views/SignUp";
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 用户信息
       loginFormRef: {
@@ -138,16 +142,16 @@ export default {
       // 表单验证规则
       rules: {
         login_name: [
-          { required: true, message: this.$t('username_tip'), trigger: "blur" },
-          { min: 2, max: 32, message: this.$t('username_msg'), trigger: "blur" }
+          { required: true, message: this.$t("username_tip"), trigger: "blur" },
+          { min: 2, max: 32, message: this.$t("username_msg"), trigger: "blur" }
         ],
         login_password: [
-          { required: true, message: this.$t('psd_tip'), trigger: "blur" },
-          { min: 6, max: 64, message: this.$t('psd_msg'), trigger: "blur" }
+          { required: true, message: this.$t("psd_tip"), trigger: "blur" },
+          { min: 6, max: 64, message: this.$t("psd_msg"), trigger: "blur" }
         ]
       },
       // 登录状态
-      status: this.$t('status'),
+      status: this.$t("status"),
       // 视频列表是否属于加载状态的判断
       loading: false
     };
@@ -156,20 +160,20 @@ export default {
     // 初始化页面名为login
     this.$store.commit("changeBgc", "login");
     // 修改网站标题
-    document.title = this.$t('login') + " - Patchyvideo";
+    document.title = this.$t("login") + " - Patchyvideo";
   },
   mounted() {},
   methods: {
     open2() {
       this.$message({
-        message: this.$t('login_success_msg'),
+        message: this.$t("login_success_msg"),
         type: "success"
       });
     },
 
     open3() {
       this.$message({
-        message: this.$t('login_fail_msg'),
+        message: this.$t("login_fail_msg"),
         type: "warning"
       });
     },
@@ -251,19 +255,19 @@ export default {
                       this.open3();
                     }
                   } else {
-                    this.status = this.$t('request_failed');
+                    this.status = this.$t("request_failed");
                   }
                 })
                 .catch(error => {
                   this.loading = false;
                   this.open3();
-                  this.status = this.$t('net_err');
+                  this.status = this.$t("net_err");
                 });
             })
             .catch(error => {
               this.loading = false;
               this.open3();
-              this.status = this.$t('net_err');
+              this.status = this.$t("net_err");
             });
         } else {
           this.status = "error submit!!";
