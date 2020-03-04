@@ -158,7 +158,9 @@ router.beforeEach((to, from, next) => {
     to.path == "/postvideo" ||
     to.path == "/edittag" ||
     to.path == "/users/me" ||
-    to.path == "/createVideoList"
+    to.path == "/createVideoList" ||
+    // 增加一个 superadmin 路由
+    to.path == "/superadmin"
   ) {
     if (getCookie() && store.state.ifTruelyLogin != 2) {
       // console.log("已登录放行");
