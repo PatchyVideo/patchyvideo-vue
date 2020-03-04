@@ -10,6 +10,7 @@
 </i18n>
 <template>
 <div>
+	可以查询，更新部分没敢测试
 	<el-dialog
 	title="提示"
 	:visible.sync="dialogVisible"
