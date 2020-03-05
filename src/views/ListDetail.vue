@@ -267,12 +267,12 @@
                     width="16px"
                     style="margin-right:2px"
                   />
-                  <a :href="item.item.url" :id="'link' + index">
+                  <a :href="item.item.url">
                     {{
                     item.item.url
                     }}
                   </a>
-                  <i @click="copyVideoLink(index)" class="fa fa-copy fa-lg" style="margin-left:2px"></i>
+                  <i @click="copyVideoLink(item.item.url)" class="fa fa-copy fa-lg" style="margin-left:2px"></i>
                 </div>
               </div>
               <div v-if="editable" class="item_end">
@@ -310,7 +310,7 @@ import Move from "../components/Move.vue";
 import DeleteVideo from "../components/DeleteVideo.vue";
 import SetCover from "../components/SetCover.vue";
 import ListFolderView from "../components/ListFolderView.vue";
-import { copyToClipboard } from "../static/js/generic";
+import { copyToClipboardText } from "../static/js/generic";
 
 export default {
   data() {
@@ -470,8 +470,14 @@ export default {
         });
     },
     // 复制视频连接
-    copyVideoLink: function(index) {
-      copyToClipboard($("#link" + index));
+    copyVideoLink: function(url) {
+      this.$alert(
+        "视频链接复制" + (copyToClipboardText(url) ? "成功！" : "失败！"),
+        "分享链接",
+        {
+          confirmButtonText: "确定"
+        }
+      );
     },
     // 添加视频
     addVideo() {
