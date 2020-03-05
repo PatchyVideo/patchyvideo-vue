@@ -572,8 +572,6 @@ export default {
       }
     },
     closeTagPanel(b) {
-      console.log(this.tagsOrigin);
-      console.log(this.tags);
       if(b===true){
         this.$emit("update:visible", false);
       }
