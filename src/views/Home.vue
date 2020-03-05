@@ -107,7 +107,7 @@
 
         <!-- 播放列表正文 -->
         <ul>
-          <li class="list-item" v-for="(item, index) in listvideo" :key="item._id.$oid">
+          <li class="list-item" v-for="(item) in listvideo" :key="item._id.$oid">
             <router-link
               target="_blank"
               :to="{ path: '/video', query: { id: item._id.$oid } }"
@@ -134,8 +134,12 @@
                   width="16px"
                   style="margin-right:2px"
                 />
-                <a target="_blank" :href="item.item.url" :id="'link' + (index)">{{item.item.url}}</a>
-                <i @click="copyVideoLink(index)" class="fa fa-copy fa-lg" style="margin-left:2px"></i>
+                <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
+                <i
+                  @click="copyVideoLink(item.item.url)"
+                  class="fa fa-copy fa-lg"
+                  style="margin-left:2px"
+                ></i>
               </div>
             </div>
           </li>
@@ -164,7 +168,7 @@
 import topnavbar from "../components/TopNavbar.vue";
 import left_navbar from "../components/LeftNavbar.vue";
 import Footer from "../components/Footer.vue";
-import { copyToClipboard } from "../static/js/generic";
+import { copyToClipboardText } from "../static/js/generic";
 export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -251,8 +255,14 @@ export default {
     //          此函数因为直接操纵dom可能导致网站受到攻击!
     // -------------------------危险提示-------------------------
     // 此外，此函数在其他页面也有调用，在优化的时候请注意其他页面的同步
-    copyVideoLink: function(index) {
-      copyToClipboard($("#link" + index));
+    copyVideoLink: function(url) {
+      this.$alert(
+        "视频链接复制" + (copyToClipboardText(url) ? "成功！" : "失败！"),
+        "分享链接",
+        {
+          confirmButtonText: "确定"
+        }
+      );
     },
     // 请求播放列表数据
     getListVideo: function(e, count, order) {
@@ -269,7 +279,7 @@ export default {
           page_size: count,
           order: this.couponSelected,
           hide_placeholder: !this.checked,
-          lang: localStorage.getItem('lang')
+          lang: localStorage.getItem("lang")
         }
       }).then(result => {
         this.maxcount = result.data.data.count;
@@ -309,7 +319,7 @@ export default {
           hide_placeholder: !this.checked,
           query: str,
           qtype: this.$route.query.qtype,
-          lang: localStorage.getItem('lang')
+          lang: localStorage.getItem("lang")
         }
       }).then(result => {
         if (result.data.status == "SUCCEED") {

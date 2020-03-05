@@ -204,9 +204,9 @@
             </div>
           </div>
           <h4 class="video_link">
-            <a id="video_link" :href="myVideoData.video.item.url">{{ myVideoData.video.item.url }}</a>
+            <a :href="myVideoData.video.item.url">{{ myVideoData.video.item.url }}</a>
             <!-- 一键复制的小图标 -->
-            <i @click="copyVideoLink" class="fa fa-copy fa-1x"></i>
+            <i @click="copyVideoLink(myVideoData.video.item.url)" class="fa fa-copy fa-1x"></i>
           </h4>
           <!-- 视频上传时间（？） -->
           <h5 style="text-align: center;">{{ videodate }}</h5>
@@ -385,7 +385,7 @@
 import topnavbar from "../components/TopNavbar.vue";
 import left_navbar from "../components/LeftNavbar.vue";
 import Footer from "../components/Footer.vue";
-import { copyToClipboard } from "../static/js/generic";
+import { copyToClipboardText } from "../static/js/generic";
 export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -620,8 +620,14 @@ export default {
       });
     },
     // 复制视频连接
-    copyVideoLink: function() {
-      copyToClipboard($("#video_link"));
+    copyVideoLink: function(url) {
+      this.$alert(
+        "视频链接复制" + (copyToClipboardText(url) ? "成功！" : "失败！"),
+        "分享链接",
+        {
+          confirmButtonText: "确定"
+        }
+      );
     },
     // 查询视频详细信息
     searchVideo: function() {

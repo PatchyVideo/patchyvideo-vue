@@ -11,7 +11,7 @@ import "font-awesome/css/font-awesome.min.css";
 import login from "./views/Login.vue";
 import $ from "jquery";
 import linkify from 'vue-linkify';
- 
+
 let echarts = require('echarts/lib/echarts')
 require('echarts/lib/chart/sunburst')
 require('echarts/lib/component/legend')
@@ -44,16 +44,23 @@ const i18n = new VueI18n({
   fallbackLocale: 'ENG',
 })
 
+//多浏览器语言识别兼容，统一小写
 const localMap = {
-  'en-US': 'ENG',
-  'zh-CN': 'CHS'
+  'en':'ENG',
+  'en-us': 'ENG',
+  'en-gb':'ENG',
+  'zh': 'CHS',
+  'zh-cn': 'CHS',
+  'zh-tw':'CHT',
+  'zh-hk':'CHT',
+  'ja':'JPN'
 }
 
 console.log('run!');
 if (!localStorage.getItem('lang')) {
-  console.log('setting lang');
-  console.log(localStorage.getItem('lang'));
-  localStorage.setItem('lang', localMap[navigator.language] || 'CHS');
+  //多浏览器语言设定兼容方案
+  var lang = (navigator.language || navigator.browserLanguage).toLowerCase();
+  localStorage.setItem('lang', localMap[lang] || 'CHS');
 }
 i18n.locale = localStorage.getItem('lang');
 
