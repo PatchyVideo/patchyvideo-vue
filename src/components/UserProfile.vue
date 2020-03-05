@@ -142,7 +142,7 @@
         <div class="desc">
           <div class="desc_name">{{userData.username}}</div>
           <div class="text-form">
-            <textarea name id cols="30" rows="10" disabled="disabled"></textarea>
+            <textarea name id cols="30" rows="10" disabled="disabled">{{userData.desc}}</textarea>
           </div>
         </div>
       </div>
