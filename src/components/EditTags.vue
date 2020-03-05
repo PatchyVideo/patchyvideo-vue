@@ -33,8 +33,8 @@
     "tag_not_exist": "标签不存在",
     "recommnad_tags": "推荐标签：",
     "save": "保存修改",
-    "cancel":"取消",
-    "issave":"是否保存?",
+    "cancel":"不保存关闭",
+    "issave":"已经修改tag但没有保存,是否保存?",
     "tag_add_succeed": "Tag添加成功！",
     "tag_modify_succeed": "修改成功！",
     "unknown_error": "未知错误"
@@ -46,8 +46,8 @@
     "tag_not_exist": "Tag not exist",
     "recommnad_tags": "Related tags:",
     "save": "Save",
-    "cancel":"Cancel",
-    "issave":"Need to save?",
+    "cancel":"Close without saving",
+    "issave":"The tag has been modified but not saved. Do you want to save it?",
     "tag_add_succeed": "Tag added",
     "tag_modify_succeed": "Tags saved",
     "unknown_error": "An unknown error has occurred, please report bug"
@@ -67,15 +67,18 @@
               :destroy-on-close="true"
               :modal-append-to-body="false"
               :before-close="handleClose">
-        <span>{{$t('issave')}}</span>
+        <span style="font-size:19px;color: #5e6d82;">{{$t('issave')}}</span>
+        <p>
+
+        </p>
         <span slot="footer" class="dialog-footer">
-    <el-button @click="closeTagPanel">{{$t('cancel')}}</el-button>
+    <el-button @click="closeTagPanel(true)">{{$t('cancel')}}</el-button>
     <el-button  type="primary" @click="saveTag()">{{$t('save')}}</el-button>
 
   </span>
       </el-dialog>
       <div id="tag">
-        <a href="javascript:;" @click="dialogVisible = true">
+        <a href="javascript:;" @click="dialogVisible = true;closeTagPanel(JSON.stringify(tagsOrigin)===JSON.stringify(tags))">
           <i class="el-icon-close" id="close" v-if="this.$route.path != '/postvideo'"></i>
         </a>
         <div class="minibox">
@@ -164,7 +167,7 @@
           </div>
         </div>
         <a href="javascript:;">
-   <!--       <a id="save" v-if="this.$route.path != '/postvideo'">{{$t('save')}}</a>-->
+          <a id="save" v-if="this.$route.path != '/postvideo'"@click="saveTag()" style="font-size: 28px">{{$t('save')}}</a>
         </a>
       </div>
     </div>
@@ -178,6 +181,7 @@ export default {
     return {
       dialogVisible: false,
       tags: [],
+      tagsOrigin:[],
       tagsForRec: [],
       tagCategoriesAll:[],
       TagCategoriesData: {},
@@ -210,10 +214,10 @@ export default {
       //左
       if (e1 && e1.keyCode == 27) {
         if (
-          that.$route.path == "/video" ||
+          that.$route.path === "/video" ||
           that.$route.path === "/listdetail"
         ) {
-          that.closeTagPanel();
+          that.closeTagPanel(true);
         }
       }
     };
@@ -311,6 +315,7 @@ export default {
           .then(res => {
             this.tags = res.data.data; //原始数据
             this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); //深拷贝，推荐Tag数据用
+            this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); //得到原始Tag数据
             this.getTagCategories(this.tags); //范围转换后展示原始数据
             this.getRecTags(this.tags); //获取推荐TAG
           })
@@ -325,6 +330,7 @@ export default {
           .then(res => {
             this.tags = res.data.data; //原始数据
             this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); //深拷贝，推荐Tag数据用
+            this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); //得到原始Tag数据
             this.getTagCategories(this.tags); //范围转换后展示原始数据
             this.getRecTags(this.tags); //获取推荐TAG
           })
@@ -341,6 +347,7 @@ export default {
         .then(res => {
           this.tags = res.data.data; //原始数据
           this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); //深拷贝，推荐Tag数据用
+          this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); //得到原始Tag数据
           this.getTagCategories(this.tags); //范围转换后展示原始数据
           this.getRecTags(this.tags); //获取推荐TAG
         })
@@ -549,7 +556,7 @@ export default {
           data: { video_id: this.msg, tags: this.tags }
         }).then(res => {
           this.open5();
-          this.closeTagPanel();
+          this.closeTagPanel(true);
         });
       }
       // 提交视频列表的标签
@@ -560,12 +567,16 @@ export default {
           data: { pid: this.msg, tags: this.tags }
         }).then(res => {
           this.open5();
-          this.closeTagPanel();
+          this.closeTagPanel(true);
         });
       }
     },
-    closeTagPanel() {
-      this.$emit("update:visible", false);
+    closeTagPanel(b) {
+      console.log(this.tagsOrigin);
+      console.log(this.tags);
+      if(b===true){
+        this.$emit("update:visible", false);
+      }
     },
     infoTipEvent(event) {
 /*      this.isInfoTipClick = true;*/
@@ -690,7 +701,7 @@ div {
    /* width: 1200px;
     height: 923px;*/
     width: 1100px;
-    height: 760px;
+    height: 690px;
    /* background: url("../static/img/test3.png") no-repeat center;*/
     background-color: #fff;
     background-size: 70% 105%;
@@ -813,7 +824,7 @@ div {
         background-color: rgba(215, 176, 184, 0.2);
         box-sizing: border-box;
         flex: 0.5;
-        max-height: 10%;
+        max-height: 12%;
         perspective: 2000px;
         position: relative;
 
