@@ -102,8 +102,9 @@ function copyToClipboard(obj) {
   document.body.appendChild(el);
   el.select();
   el.setSelectionRange(0, 99999);
-  document.execCommand("copy");
+  var res=document.execCommand("copy");
   document.body.removeChild(el);
+  return res;
 }
 
 function copyToClipboardText(txt) {
@@ -112,7 +113,8 @@ function copyToClipboardText(txt) {
   document.body.appendChild(el);
   el.select();
   el.setSelectionRange(0, 99999);
-  document.execCommand("copy");
+  var res=document.execCommand("copy");
   document.body.removeChild(el);
+  return res;
 }
 export { copyToClipboard, copyToClipboardText };

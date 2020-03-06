@@ -11,7 +11,7 @@ import "font-awesome/css/font-awesome.min.css";
 import login from "./views/Login.vue";
 import $ from "jquery";
 import linkify from 'vue-linkify';
- 
+
 let echarts = require('echarts/lib/echarts')
 require('echarts/lib/chart/sunburst')
 require('echarts/lib/component/legend')
@@ -28,26 +28,39 @@ Vue.directive('linkified', linkify);
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;
 
-Vue.config.keyCodes.Left_Arrow = 37;
+/*Vue.config.keyCodes.Left_Arrow = 37;
 Vue.config.keyCodes.Right_Arrow = 39;
 Vue.config.keyCodes.Up_Arrow = 38;
-Vue.config.keyCodes.Dw_Arrow = 40;
+Vue.config.keyCodes.Dw_Arrow = 40;*/
+/*
+keyCode 37 = Left
+keyCode 38 = Up
+keyCode 39 = Right
+keyCode 40 = Down
+*/
 
 const i18n = new VueI18n({
   locale: 'CHS', // set locale
   fallbackLocale: 'ENG',
 })
 
+//多浏览器语言识别兼容，统一小写
 const localMap = {
-  'en-US': 'ENG',
-  'zh-CN': 'CHS'
+  'en':'ENG',
+  'en-us': 'ENG',
+  'en-gb':'ENG',
+  'zh': 'CHS',
+  'zh-cn': 'CHS',
+  'zh-tw':'CHT',
+  'zh-hk':'CHT',
+  'ja':'JPN'
 }
 
 console.log('run!');
 if (!localStorage.getItem('lang')) {
-  console.log('setting lang');
-  console.log(localStorage.getItem('lang'));
-  localStorage.setItem('lang', localMap[navigator.language] || 'CHS');
+  //多浏览器语言设定兼容方案
+  var lang = (navigator.language || navigator.browserLanguage).toLowerCase();
+  localStorage.setItem('lang', localMap[lang] || 'CHS');
 }
 i18n.locale = localStorage.getItem('lang');
 

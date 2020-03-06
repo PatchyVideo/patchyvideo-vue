@@ -195,7 +195,7 @@ export default {
             return i;
           })
           .slice(1, -4);
-        that.autotag(utags);
+        that.autotag(utags, title, desc);
         that.setVideoMetadata(thumbnailURL, title, desc);
       };
       this.EXPANDERS["^av[\\d]+"] = function(short_link) {
@@ -228,7 +228,7 @@ export default {
             return i;
           })
           .slice(1, -4);
-        that.autotag(utags);
+        that.autotag(utags, title, desc);
         that.setVideoMetadata(thumbnailURL, title, desc);
       };
       this.EXPANDERS["^ac[\\d]+"] = function(short_link) {
@@ -267,7 +267,7 @@ export default {
         for (var i = 0; i < utags.length; ++i) {
           utags_array.push($(utags[i]).attr("content"));
         }
-        that.autotag(utags_array);
+        that.autotag(utags_array, title, desc);
         that.setVideoMetadata(thumbnailURL, title, desc);
       };
       this.EXPANDERS["^(s|n)m[\\d]+"] = function(short_link) {
@@ -331,7 +331,7 @@ export default {
               data.data.title,
               data.data.desc
             );
-            that.autotag(data.data.utags);
+            that.autotag(data.data.utags, data.data.title, data.data.desc);
           })
           .catch(error => {
             that.setVideoMetadata("", "", "");
@@ -386,13 +386,15 @@ export default {
       };
     },
     // 自动标签功能
-    autotag(utags) {
+    autotag(utags, title = '', desc = '') {
       /*      this.refreshMark = +new Date();*/
       this.axios({
         method: "post",
         url: "/be/tags/autotag.do",
         data: {
           utags: utags,
+          title: title,
+          desc: desc,
           lang: localStorage.getItem('lang')
         }
       })

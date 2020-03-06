@@ -88,7 +88,7 @@
           </div>
 
           <div class="text-form">
-            <textarea name v-model="myData.desc" cols="30" rows="10">{{myData.desc}}</textarea>
+            <textarea name v-model="myData.desc" cols="30" rows="10"></textarea>
           </div>
           <button @click="changeDesc()">保存</button>
         </div>
