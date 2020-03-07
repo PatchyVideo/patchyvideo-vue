@@ -15,6 +15,53 @@
 
 <template>
 <div>
+	<el-dialog
+		:title="'编辑用户: ' + editUser.username"
+		:visible.sync="dialogVisible"
+		width="30%">
+
+		<div class="usermanagement-form">
+			<el-row>
+				<el-col :span="5">
+					<label> 访问等级  </label>
+				</el-col>
+				<el-col :span="18">
+					<el-input v-model="editUser.status" style="width:100%"></el-input>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="5">
+					<label> 访问模式  </label>
+				</el-col>
+				<el-col :span="18">
+					<el-input v-model="editUser.access_mode" style="width:100%"></el-input>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="5">
+					<label> 允许的操作  </label>
+				</el-col>
+				<el-col :span="18">
+					<el-input v-model="editUser.allowed_ops" placeholder="[ ]" style="width:100%"></el-input>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="5">
+					<label> 拒绝的操作  </label>
+				</el-col>
+				<el-col :span="18">
+					<el-input v-model="editUser.denied_ops" placeholder="[ ]" style="width:100%"></el-input>
+				</el-col>
+			</el-row>
+
+		</div>
+		<span slot="footer" class="dialog-footer">
+			<el-button @click="dialogVisible = false">取 消</el-button>
+			<el-button type="primary" @click="handleOk(updateUserData)">确 定</el-button>
+		</span>
+	</el-dialog>
+
+
 	<h1>{{$t('title')}}</h1>
 	 <!-- 表单 -->
 	<div class="usermanagement-form">
@@ -52,7 +99,7 @@
 					<span>{{ props.row.profile.email }}</span>
 				</el-form-item>				
 				<el-form-item label="创建日期">
-					<span>{{ props.row.meta.created_at.$date}}</span>
+					<span>{{ dateFormat("yyyy-MM-dd HH:mm:ss", new Date(props.row.meta.created_at.$date))}}</span>
 				</el-form-item>
 				<el-form-item label="pubkey">
 					<span>{{ '"' + props.row.profile.pubkey + '"'}}</span>
@@ -75,8 +122,13 @@
 		<el-table-column prop="access_control.status" label="访问等级" width="200">
 		</el-table-column>
 		<el-table-column prop="access_control.access_mode" label="访问模式" width="200"></el-table-column>
-		<el-table-column prop="access_control.allowed_ops.toString()" label="允许的操作" width="200"></el-table-column>
-		<el-table-column prop="access_control.denied_ops.toString()" label="拒绝的操作" width="200"></el-table-column>
+		<el-table-column prop="access_control.allowed_ops" label="允许的操作" width="200"></el-table-column>
+		<el-table-column prop="access_control.denied_ops" label="拒绝的操作" width="200"></el-table-column>
+		<el-table-column  label="操作">
+			<template slot-scope="props">
+				<el-button @click="showDialog(props.row._id.$oid)">Edit</el-button>
+			</template>
+		</el-table-column>
 	</el-table>
 
 	<el-pagination
@@ -94,6 +146,7 @@ export default {
 	data() {
 		this.$i18n.locale = localStorage.getItem("lang");
 		return {
+			dialogVisible:false,
 			couponSelected: "",
 			options: [
 				{ value: "latest", label: "时间正序" },
@@ -119,6 +172,16 @@ export default {
 						{ value: "oldest", label: "时间倒序" }
 					]
 				}
+			},
+			// 编辑的用户是当前页面的第几条  0开始
+			editUserIndex:0,
+			editUser:{
+				username:"",
+				uid:"",
+				status:"normal",
+				access_mode:"blacklist",
+				allowed_ops:[],
+				denied_ops:[]
 			}
 		};
 	},
@@ -138,6 +201,83 @@ export default {
 		];
 	},
 	methods:{
+		/**
+		 *  处理弹窗点击确定时
+		 * */
+		handleOk(done) {
+			this.$confirm('确认提交？')
+			.then(_ => {
+				this.dialogVisible = false;
+				done();
+			})
+			.catch(_ => {});
+		},
+		/**
+		 * 更新用户数据
+		 */
+		async updateUserData(){
+			await this.updateUserAttr('status',"/be/user/admin/updaterole.do","role");
+			await this.updateUserAttr('access_mode',"/be/user/admin/updatemode.do","mode");
+			await this.updateUserAttr('allowed_ops',"/be/user/admin/update_allowedops.do","ops");
+			await this.updateUserAttr('denied_ops',"/be/user/admin/update_deniedops.do","ops");
+			await this.getUserList();
+		},
+		/*
+		* 提交前判断用户数据是否通过弹窗修改（由于更新接口更新的数据全是传入 access_control 下的，所以可以直接传入字符串）
+		*/
+		attrIsModify(attr){
+			var user = this.usermanagement.data.users[this.editUserIndex];
+			return this.editUser[attr] != 'undefined' && this.editUser[attr] != user.access_control[attr] ;
+		},
+
+		/**
+		 * 处理更新用户数据的单个请求
+		 */
+		async updateUserAttr(attr,reqRouter,paraName){
+			if(!await this.attrIsModify(attr)) return;
+			var paras = { uid: this.editUser.uid };
+			paras[paraName] = this.editUser[attr];
+			await this.axios({
+				method: "post",
+				url: reqRouter,
+				data: paras
+			}).then(ret => {
+				var user = this.usermanagement.data.users[this.editUserIndex];
+				var data = ret.data.data;
+				user.access_control[attr] = this.editUser[attr];
+/* 				console.log(reqRouter,paraName);
+				console.log(ret,attr); */
+			})
+		},
+		/*
+		*点下编辑按钮，显示弹窗
+		*/
+		showDialog(uid){
+			var index = this.findEditUserIndex(uid);
+			this.editUserIndex = index;
+			var user = this.usermanagement.data.users[index];
+
+			
+			this.dialogVisible = true;
+			this.editUser = {
+				username:user.profile.username,
+				uid: user._id.$oid,
+				status:user.access_control.status,
+				access_mode:user.access_control.access_mode,
+				allowed_ops:user.access_control.allowed_ops.toString(),
+				denied_ops:user.access_control.denied_ops.toString()
+			};
+		},
+		/*
+		* 根据uid 查找在data.users中的index
+		*/ 
+		findEditUserIndex(uid){
+			for(let i=0;i<this.usermanagement.data.users.length;i++){
+				if(this.usermanagement.data.users[i]._id.$oid === uid) return i;
+			}
+			
+		},
+		
 		handleCurrentChange(val) {
 			var prePageNum = this.curPageNum;
 			this.curPageNum = val;
@@ -161,12 +301,8 @@ export default {
 				}
 			}).then(ret => {
 				var data = ret.data.data;
-				// console.log(data);
 				this.usermanagement.data = data;
 			})
-		},
-		formatterDate(row) {
-			// return this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date(row.time.$date));
 		},
 		/**
 		 *格式化日期
