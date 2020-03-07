@@ -37,7 +37,7 @@
 <template>
 
     <div class="black-list" v-loading="loading">
-        <el-radio-group v-model="radio" >
+        <el-radio-group v-model="radio" ref="radiog" >
             <el-card class="box-card" :class="{select:radio!==3}" @click.native="selectDiv(3)">
                 <div slot="header" class="clearfix">
                     <el-radio :label="3">
@@ -74,7 +74,7 @@
                           {{tag}}
                       </el-tag>
                     </div>
-             <!--           <el-autocomplete
+                      <el-autocomplete
                                                    id="ipt"
                                                    v-model="inputValue"
                                                    :fetch-suggestions="querySearchAsync"
@@ -87,7 +87,7 @@
                                                    size="small"
                                                    @keyup.enter.native="handleInputConfirm"
                                                    @blur="handleInputConfirm"
-                                                   style="margin: 20px 0px;"
+                                                   style="margin: 20px 0px; width: 60%;"
                                            >
                                                <template slot-scope="{ item }">
                                                    <div class="adviceList">
@@ -106,8 +106,8 @@
                                                        <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
                                                    </div>
                                                </template>
-                                           </el-autocomplete>-->
-                  <el-input
+                                           </el-autocomplete>
+             <!--     <el-input
                             class="input-new-tag"
                             v-if="inputVisible"
                             v-model="inputValue"
@@ -117,7 +117,7 @@
                             @blur="handleInputConfirm"
                             style="margin: 20px 0px; width: 70%;"
                     >
-                    </el-input>
+                    </el-input>-->
                     <el-input
                             v-if="textareaVisble"
                             type="textarea"
@@ -166,6 +166,9 @@
              this.getDefaultBlackList();
         },
         mounted(){
+            this.$refs.radiog.$children[0].$children[0]._radioGroup.handleKeydown =function(){
+                return false;
+            };
 
         },
         methods: {
@@ -185,43 +188,44 @@
                     this.$refs.saveTagTextArea.$refs.textarea.focus();
                 });
             },
-            radioDownEvent(){
-            },
-
             handleInputConfirm() {
-                let inputValue = this.inputValue;
-                if (inputValue) {
-                    this.axios({
-                        method: "post",
-                        url: "be/tags/query_tag_categories.do ",
-                        data: { tags: [inputValue] }
-                    }).then(res => {
-                        if (JSON.stringify(res.data.data.categorie_map) === "{}") {
-                            this.$message.error(this.$t('tag_notexist_prompt'));
-                            this.inputValue = '';
-                            return;
-                        } else if (this.dynamicTags.indexOf(inputValue) !==-1) {
-                            this.$message({
-                                message: this.$t('tag_already_exist_prompt'),
-                                type: "warning"
-                            });
-                            this.inputValue = '';
-                            return;
-                        } else if (this.dynamicTags.indexOf(inputValue) ===-1){
-                            this.dynamicTags.push(inputValue);
-                            this.inputVisible = false;
-                            this.inputValue = '';
-                            return;
-                        }
-                    });
+             setTimeout(()=>{   let inputValue = this.inputValue;
 
-                }
-                this.inputVisible = false;
-                this.inputValue = '';
+                 if (inputValue) {
+                     this.loading =true;
+                     this.axios({
+                         method: "post",
+                         url: "be/tags/query_tag_categories.do ",
+                         data: { tags: [inputValue] }
+                     }).then(res => {
+                         if (JSON.stringify(res.data.data.categorie_map) === "{}") {
+                             this.$message.error(this.$t('tag_notexist_prompt'));
+                             this.inputValue = '';
+                             this.loading =false;
+                             return;
+                         } else if (this.dynamicTags.indexOf(inputValue) !==-1) {
+                             this.$message({
+                                 message: this.$t('tag_already_exist_prompt'),
+                                 type: "warning"
+                             });
+                             this.inputValue = '';
+                             return;
+                         } else if (this.dynamicTags.indexOf(inputValue) ===-1){
+                             this.dynamicTags.push(inputValue);
+                             this.inputVisible = false;
+                             this.inputValue = '';
+                             this.loading =false;
+                             return;
+                         }
+                         this.loading =false;
+                     });
+
+                 }
+                 this.inputVisible = false;
+                 this.inputValue = '';},100);
 
             },
             handleTextAreaConfirm() {
-
                 let textareaValueForAraay = this.textareaValue.replace(/[\s|,]/g,",");
                 let textareaValue =   Array.from(new Set(textareaValueForAraay.split(",")));
                 textareaValue.map((item,index,array)=>{
