@@ -18,7 +18,8 @@ export default new Vuex.Store({
     // 视频详情页面里视频的pid
     videoPid: "",
     // 侧导航条(LeftNavBar.vue)的标题
-    leftNavBarTitle: "标签",
+    // 按照以下定义：1表示“标签”，2表示“热门标签”，3表示“相关标签”
+    leftNavBarTitle: 1,
     // 顶部导航条(TopNavbar)的搜索内容
     TopNavbarSearching: "",
     // 登录界面是否是因路由拦截而跳转的标志,0表示从登录按钮跳转，1表示路由守卫拦截，2表示从其他地方跳转

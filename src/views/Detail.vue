@@ -550,7 +550,7 @@ export default {
   },
   created() {
     // 改变侧导航条的标题
-    this.$store.commit("changeLeftNavBarTitle", "标签");
+    this.$store.commit("changeLeftNavBarTitle", 1);
     // 删除本地储存(和localStorage存储一起使用，已被弃用）
     // window.localStorage.removeItem("loglevel:webpack-dev-server");
     this.searchVideo();

@@ -219,7 +219,7 @@ export default {
     // 获取视频列表
     /* this.getListVideo(this.page, this.count);*/
     // 改变侧导航条的标题
-    this.$store.commit("changeLeftNavBarTitle", this.$t("popular_tags"));
+    this.$store.commit("changeLeftNavBarTitle", 2);
     // 修改网站标题
     document.title = "Patchyvideo";
 
