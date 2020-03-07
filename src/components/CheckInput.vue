@@ -118,9 +118,11 @@ export default {
       if (!Value) return false;
       this.$emit("update:CheckStatus", 0);
       this.loading = true;
-      Value = Value.replace(" ", "_");
+      Value = Value.toLowerCase().replace(/\ /g, "_");
       this.checkValueAsync(Value, res => {
-        if (Value != this.value.replace(" ", "_")) {
+        var value = this.value;
+        value=value.toLowerCase().replace(/\ /g, "_");
+        if (Value != value) {
           this.$emit("update:CheckStatus", 0);
           this.loading = true;
           return false;
