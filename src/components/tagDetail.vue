@@ -49,8 +49,8 @@
       ></el-input>-->
 
       <!-- 添加标签自动补全 -->
-      <!--
-      <el-autocomplete
+
+      <!--<el-autocomplete
         v-model="newTag"
         :fetch-suggestions="querySearchAsync"
         :trigger-on-focus="false"
@@ -87,12 +87,16 @@
       </el-select>
       <!-- 检查标签是否已存在 -->
       <CheckInput
-        newClass="addTag-input"
         v-model="newTag"
-        :value="newTag"
-        :checkValueAsync="querySearchArrayAsync"
+        :checkValueAsync="querySearchAsync"
+        popperClass="my-autocomplete"
+        :placeholder="'向' + this.tagCategorie + '类别添加标签'"
+        filter="tag"
+        :CheckStatus.sync="checkTag"
         @keyup.enter.native="addTag()"
-      ></CheckInput>
+      >
+        <template scope="item">{{item.tag}}</template>
+      </CheckInput>
       <el-button type="info" @click="addTag()">添加标签</el-button>
     </div>
     <!-- 表格正文 -->
@@ -1067,7 +1071,9 @@ export default {
       // 弹出框是否显示
       dialogVisible: false,
       // 页面是否属于加载状态的判断
-      loading: true
+      loading: true,
+      //标签检查状态
+      checkTag: 0
     };
   },
   computed: {
@@ -1165,6 +1171,18 @@ export default {
         this.open2("请填写标签名！");
         this.loading = false;
         return false;
+      }
+      switch (this.checkTag) {
+        case -1:
+          this.open2("该标签已存在，请检查后再添加！");
+          this.loading = false;
+          return false;
+          break;
+        case 0:
+          this.open2("标签校验中，请待校验完毕再添加！");
+          this.loading = false;
+          return false;
+          break;
       }
       this.axios({
         method: "post",
@@ -1485,21 +1503,6 @@ export default {
       /*
       console.log("选中时的值为"+this.infoTipMark);*/
       /*      console.log("选中");*/
-    },
-    /*
-    标签添加检查，数据返回为数组格式
-    */
-    querySearchArrayAsync(queryString, cb) {
-      var url = "/autocomplete/?q=" + queryString.replace(' ',"_");
-      this.axios({
-        method: "get",
-        url: url
-      }).then(result => {
-        var data = result.data.map(v => {
-          return v.tag;
-        });
-        cb(data);
-      });
     }
   },
   watch: {
