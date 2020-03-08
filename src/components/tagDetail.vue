@@ -49,8 +49,8 @@
       ></el-input>-->
 
       <!-- 添加标签自动补全 -->
-      <!--
-      <el-autocomplete
+
+      <!--<el-autocomplete
         v-model="newTag"
         :fetch-suggestions="querySearchAsync"
         :trigger-on-focus="false"
@@ -87,12 +87,15 @@
       </el-select>
       <!-- 检查标签是否已存在 -->
       <CheckInput
-        newClass="addTag-input"
         v-model="newTag"
-        :value="newTag"
-        :checkValueAsync="querySearchArrayAsync"
+        :checkValueAsync="querySearchAsync"
+        popperClass="my-autocomplete"
+        :placeholder="'向' + this.tagCategorie + '类别添加标签'"
+        filter="tag"
+        :CheckStatus.sync="checkTag"
         @keyup.enter.native="addTag()"
-      ></CheckInput>
+      >
+      </CheckInput>
       <el-button type="info" @click="addTag()">添加标签</el-button>
     </div>
     <!-- 表格正文 -->
@@ -669,7 +672,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.CHS)"
-            >{{ scope.row.languages.CHS }}</span>
+            >{{ scope.row.languages.CHS.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.CHT">
             繁體中文:
@@ -714,7 +717,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.ENG)"
-            >{{ scope.row.languages.ENG }}</span>
+            >{{ scope.row.languages.ENG.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.KOR">
             한국어:
@@ -729,7 +732,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.KOR)"
-            >{{ scope.row.languages.KOR }}</span>
+            >{{ scope.row.languages.KOR.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.CSY">
             čeština:
@@ -744,7 +747,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.CSY)"
-            >{{ scope.row.languages.CSY }}</span>
+            >{{ scope.row.languages.CSY.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.NLD">
             Nederlands:
@@ -759,7 +762,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.NLD)"
-            >{{ scope.row.languages.NLD }}</span>
+            >{{ scope.row.languages.NLD.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.FRA">
             français:
@@ -774,7 +777,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.FRA)"
-            >{{ scope.row.languages.FRA }}</span>
+            >{{ scope.row.languages.FRA.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.DEU">
             Deutsch:
@@ -789,7 +792,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.DEU)"
-            >{{ scope.row.languages.DEU }}</span>
+            >{{ scope.row.languages.DEU.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.HUN">
             magyar nyelv:
@@ -804,7 +807,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.HUN)"
-            >{{ scope.row.languages.HUN }}</span>
+            >{{ scope.row.languages.HUN.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ITA">
             italiano:
@@ -819,7 +822,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.ITA)"
-            >{{ scope.row.languages.ITA }}</span>
+            >{{ scope.row.languages.ITA.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.PLK">
             polski:
@@ -834,7 +837,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.PLK)"
-            >{{ scope.row.languages.PLK }}</span>
+            >{{ scope.row.languages.PLK.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.PTB">
             português:
@@ -849,7 +852,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.PTB)"
-            >{{ scope.row.languages.PTB }}</span>
+            >{{ scope.row.languages.PTB.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ROM">
             limba română:
@@ -864,7 +867,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.ROM)"
-            >{{ scope.row.languages.ROM }}</span>
+            >{{ scope.row.languages.ROM.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.RUS">
             русский язык:
@@ -879,7 +882,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.RUS)"
-            >{{ scope.row.languages.RUS }}</span>
+            >{{ scope.row.languages.RUS.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ESP">
             español:
@@ -894,7 +897,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.ESP)"
-            >{{ scope.row.languages.ESP }}</span>
+            >{{ scope.row.languages.ESP.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.TRK">
             Türk dili:
@@ -909,7 +912,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.TRK)"
-            >{{ scope.row.languages.TRK }}</span>
+            >{{ scope.row.languages.TRK.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.VIN">
             Tiếng Việt:
@@ -924,7 +927,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.VIN)"
-            >{{ scope.row.languages.VIN }}</span>
+            >{{ scope.row.languages.VIN.replace(/\_/g, " ") }}</span>
           </span>
           <!-- 标签别名 -->
           <span class="tagLabel" v-for="item in scope.row.alias" :key="item">
@@ -940,7 +943,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(item)"
-            >{{ item }}</span>
+            >{{ item.replace(/\_/g, " ") }}</span>
           </span>
         </template>
       </el-table-column>
@@ -1067,7 +1070,9 @@ export default {
       // 弹出框是否显示
       dialogVisible: false,
       // 页面是否属于加载状态的判断
-      loading: true
+      loading: true,
+      //标签检查状态
+      checkTag: 0
     };
   },
   computed: {
@@ -1151,7 +1156,7 @@ export default {
     // 添加标签
     addTag() {
       this.loading = true;
-      var tag = this.newTag;
+      var tag = this.newTag.replace(/\ /g, "_");
       var category = this.tagCategorie;
       var language = this.language;
       // 对默认选项进行兼容性调整
@@ -1165,6 +1170,18 @@ export default {
         this.open2("请填写标签名！");
         this.loading = false;
         return false;
+      }
+      switch (this.checkTag) {
+        case -1:
+          this.open2("该标签已存在，请检查后再添加！");
+          this.loading = false;
+          return false;
+          break;
+        case 0:
+          this.open2("标签校验中，请待校验完毕再添加！");
+          this.loading = false;
+          return false;
+          break;
       }
       this.axios({
         method: "post",
@@ -1471,6 +1488,7 @@ export default {
     // 下面是消息补全框的方法
     querySearchAsync(queryString, cb) {
       /*   this.infoTipMark = true;*/
+      queryString=queryString.toLowerCase();
       var url = "/autocomplete/?q=" + queryString;
       this.axios({
         method: "get",
@@ -1485,21 +1503,6 @@ export default {
       /*
       console.log("选中时的值为"+this.infoTipMark);*/
       /*      console.log("选中");*/
-    },
-    /*
-    标签添加检查，数据返回为数组格式
-    */
-    querySearchArrayAsync(queryString, cb) {
-      var url = "/autocomplete/?q=" + queryString.replace(' ',"_");
-      this.axios({
-        method: "get",
-        url: url
-      }).then(result => {
-        var data = result.data.map(v => {
-          return v.tag;
-        });
-        cb(data);
-      });
     }
   },
   watch: {
