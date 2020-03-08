@@ -68,37 +68,42 @@
     <div class="w main-page-background-img" v-loading="loading">
       <div class="content">
         <!-- 视频列表介绍 -->
-        <!--<div class="deemo shadow">
+        <div class="deemo shadow">
           <div class="d_t">
-            <img src="../static/img/4.png" style="float:left" />
-            <img src="../static/img/3.png" style="float:right" />
+            <!-- <img src="../static/img/4.png" style="float:left" />
+            <img src="../static/img/3.png" style="float:right" />-->
             <p>
               Playlists help people organize videos of the same series or have other attributes in common that require order.
               <br />Use playlist ONLY IF order is a must, otherwise using tags falls better in line with the site's design.
               <br />播放列表功能的核心是为视频提供顺序，如果顺序不是必须要求则使用tag是更好的选择。
-            </p>-->
+            </p>
             <el-button
               type="primary"
               plain
               class="createPlayListButton"
               @click="createVideoList"
             >{{$t('create_playList')}}</el-button>
-      <!--    </div>
-        </div>-->
+          </div>
+        </div>
 
         <div class="recommend">
-          <!-- 排序选择框 -->
           <div id="select-order" class="head">
+            <!-- 搜索框 -->
             <el-input
               :placeholder="$t('search.input_tip')"
               v-model="listSearch"
               clearable
               class="inputbox"
-              @keyup.enter.native="searchList()"
+              @keyup.enter.native="goToSearch()"
             >
-              <el-button slot="append" icon="el-icon-search" @click="searchList()">{{$t('search.btn')}}</el-button>
+              <el-button
+                slot="append"
+                icon="el-icon-search"
+                @click="goToSearch()"
+              >{{$t('search.btn')}}</el-button>
             </el-input>
-            <el-select v-model="couponSelected" class="select">
+            <!-- 排序选择框 -->
+            <el-select v-model="couponSelected" @change="handleCouponChange" class="select">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -122,7 +127,9 @@
                     tag="a"
                   >{{ item.title.english }}</router-link>
                 </h2>
-                <h5 style="float: right;">{{$t('statistics_pre')}} {{ item.videos }} {{$t('statistics_suf')}}</h5>
+                <h5
+                  style="float: right;"
+                >{{$t('statistics_pre')}} {{ item.videos }} {{$t('statistics_suf')}}</h5>
               </div>
               <!-- 视频列表详情 -->
               <div class="re_video">
@@ -169,7 +176,7 @@ import topnavbar from "../components/TopNavbar.vue";
 import Footer from "../components/Footer.vue";
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 当前页数
       page: 1,
@@ -190,7 +197,7 @@ export default {
         { value: "last_modified", label: "最新修改" }
       ],
       // 当前视频列表的排列顺序
-      couponSelected: "",
+      couponSelected: "latest",
       // 视频列表的搜索关键字
       listSearch: ""
     };
@@ -200,19 +207,115 @@ export default {
     this.$store.commit("changeBgc", "list");
     // 初始化排列顺序为最新上传排序
     this.couponSelected = this.options[0].value;
-    // 获取视频列表列表
-    this.getVideoList(this.page, this.count);
+    this.checkURL();
     // 修改网站标题
     document.title = this.$t("title") + " - Patchyvideo";
   },
   methods: {
+    // 格式化URL
+    checkURL() {
+      // 获取视频列表页数
+      if (!this.$route.query.page) {
+        this.page = 1;
+      } else {
+        this.page = parseInt(this.$route.query.page);
+      }
+      // 获取视频列表每页显示顺序
+      if (!this.$route.query.size) {
+        this.count = 20;
+      } else {
+        this.count = parseInt(this.$route.query.size);
+      }
+      // 获取视频列表每页显示顺序
+      if (!this.$route.query.order) {
+        this.couponSelected = "latest";
+      } else {
+        this.couponSelected = this.$route.query.order;
+      }
+      // 是否为搜索状态
+      if (!this.$route.query.key) {
+        this.getVideoList(this.page, this.count);
+      } else {
+        this.listSearch = this.$route.query.key;
+        this.searchList();
+      }
+    },
     // 当前播放列表的页面切换的时候调用
     handleCurrentChange(val) {
       this.page = val;
+      // 修改路由参数
+      this.$router.push({
+        path: "/lists",
+        query: {
+          page: this.page,
+          size: this.count,
+          order: this.couponSelected,
+          key: this.listSearch
+        }
+      });
+      // 是否为搜索状态
+      if (!this.$route.query.key || this.$route.query.key == "") {
+        this.getVideoList(this.page, this.count);
+      } else {
+        this.listSearch = this.$route.query.key;
+        this.searchList();
+      }
     },
     // 当前页面显示视频条数切换的时候调用
     handleSizeChange(val) {
+      this.page = 1;
       this.count = val;
+      this.$router.push({
+        path: "/lists",
+        query: {
+          page: this.page,
+          size: this.count,
+          order: this.couponSelected,
+          key: this.listSearch
+        }
+      });
+      // 是否为搜索状态
+      if (!this.$route.query.key || this.$route.query.key == "") {
+        this.getVideoList(this.page, this.count);
+      } else {
+        this.listSearch = this.$route.query.key;
+        this.searchList();
+      }
+    },
+    // 当前页面视频显示顺序切换的时候调用
+    handleCouponChange() {
+      this.page = 1;
+      this.$router.push({
+        path: "/lists",
+        query: {
+          page: this.page,
+          size: this.count,
+          order: this.couponSelected,
+          key: this.listSearch
+        }
+      });
+      // 是否为搜索状态
+      if (!this.$route.query.key || this.$route.query.key == "") {
+        this.getVideoList(this.page, this.count);
+      } else {
+        this.listSearch = this.$route.query.key;
+        this.searchList();
+      }
+    },
+    // 搜索视频的时候按下搜索按钮调用
+    goToSearch() {
+      this.page = 1;
+      this.couponSelected = "latest";
+      this.$router.push({
+        path: "/lists",
+        query: {
+          page: this.page,
+          size: this.count,
+          order: this.couponSelected,
+          key: this.listSearch
+        }
+      });
+      this.searchList();
     },
     // 请求播放列表列表数据
     getVideoList: function(e, count) {
@@ -268,17 +371,7 @@ export default {
       this.$router.push({ path: "/createVideoList" });
     }
   },
-  watch: {
-    page(v) {
-      this.getVideoList(this.page, this.count);
-    },
-    count(v) {
-      this.getVideoList(this.page, this.count);
-    },
-    couponSelected(v) {
-      this.getVideoList(this.page, this.count);
-    }
-  },
+  watch: {},
   components: { topnavbar, Footer }
 };
 </script>
@@ -377,18 +470,18 @@ export default {
      !* background: repeating-linear-gradient(to bottom, #fff 0%, #fff 10%, #000 10%);*!
     }
   }*/
-  .shadow{
-    box-shadow: 0 0 15px 0 rgba(0,0,0,.1);
-    border-radius: 20px;
-  }
+.shadow {
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+}
 
-  .shadow:hover{
+.shadow:hover {
   /*  animation-name:anim-shadow;
     animation-iteration-count:infinite;
     animation-direction:alternate;
     animation-fill-mode:forwards;
     animation-duration:5000ms;*/
-  }
+}
 .recommend {
   display: flex;
   flex-wrap: wrap;
@@ -411,7 +504,7 @@ export default {
   float: right;
 }
 .main-page-background-img {
-/*  background-image: url("./../static/img/imoto3.jpg");*/
+  /*  background-image: url("./../static/img/imoto3.jpg");*/
   background-repeat: no-repeat;
   min-height: 800px;
   width: 85%;
@@ -477,7 +570,6 @@ export default {
   margin-top: 20px;
   padding-bottom: 20px;
   border-bottom: 3px solid red;
-
 }
 .re_top h5 {
   margin-right: 5px;
