@@ -545,7 +545,12 @@ export default {
     },
     // 获取dom
     nodeShow() {
-      return document.getElementById("nodes");
+      var node = document.getElementById("nodes");
+      if (node) {
+        return node;
+      } else {
+        return false;
+      }
     }
   },
   created() {
