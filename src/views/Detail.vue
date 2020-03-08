@@ -211,8 +211,14 @@
           <!-- 视频上传时间（？） -->
           <h5 style="text-align: center;">{{ videodate }}</h5>
 
+
           <!-- 视频详细信息 -->
           <div class="re_video">
+            <iframe :src="iframeUrl"
+                    v-if="this.iframeUrl!==''"
+                    allowfullscreen='true'
+                    style="width: 948px; height: 763px;  margin:10px auto 30px;display: block;">
+            </iframe>
             <!-- 如果是ipfs视频直接播放视频，否则显示封面 -->
             <div v-if="isIpfs" style="text-align: center;" id="nodes">{{$t('init_tip')}}</div>
             <video
@@ -225,7 +231,7 @@
               style="position: relative;left: 50%;transform: translateX(-50%);"
             ></video>
             <img
-              v-else
+              v-if="this.iframeUrl===''"
               :src="'/images/covers/' + myVideoData.video.item.cover_image"
               width="320px"
               height="200px"
@@ -472,9 +478,10 @@ export default {
       // 匹配视频简介中的短地址，用以扩展成完整地址
       URL_MATCHERS: {},
       // 扩展成的完整地址
-      URL_EXPANDERS: {}
+      URL_EXPANDERS: {},
       // 获取到的所有视频，以页数为第一维组成二维数组(和localStorage存储一起使用，已被弃用）
       // localStorageNum: []
+      iframeUrl:""
     };
   },
   computed: {
@@ -557,6 +564,7 @@ export default {
   },
   mounted() {
     this.buildUrlMatchers();
+
   },
   methods: {
     open1(message) {
@@ -629,6 +637,45 @@ export default {
         }
       );
     },
+    regToIframe(url){
+let str = url;
+let regBili = /(https:\/\/|http:\/\/)www.bilibili.com\/video\/av(\S+)/;
+let regNico = /(https:\/\/|http:\/\/)www.nicovideo.jp\/watch\/sm(\S+)/;
+let regYtb =  /(https:\/\/|http:\/\/)www.youtube.com\/watch\?v=(\S+)/;
+let regAcf =  /(https:\/\/|http:\/\/)www.acfun.cn\/v\/ac(\S+)/;
+      if(regBili.exec(str)!==null){
+        return `//player.bilibili.com/player.html?aid=${regBili.exec(str)[2]}`;
+      }
+      if(regNico.exec(str)!==null){
+        return `//embed.nicovideo.jp/watch/sm${regNico.exec(str)[2]}`;
+      }
+      if(regYtb.exec(str)!==null){
+        return `https://www.youtube.com/embed/${regYtb.exec(str)[2]}`;
+      }
+      if(regAcf.exec(str)!==null){
+        return `https://www.acfun.cn/player/ac${regAcf.exec(str)[2]}`;
+      }
+      return "";
+      /*let regNico =/(https:\/\/|() /*/
+/*
+     内嵌规则：匹配末尾的参数即可
+        let reg =  /^(https\/\/:|http:\/\/)?www.(bilibili).com\/video\/av[a-zA-Z0-9]+/
+      Bilibili:
+              <iframe src="//player.bilibili.com/player.html?aid=94314258"></iframe>
+                        https://www.bilibili.com/video/av2653648
+      Niconico:
+              <iframe src="//embed.nicovideo.jp/watch/sm27106142"> </iframe>
+                        https://www.nicovideo.jp/watch/sm36469723
+      Youtube：
+             <iframe src="https://www.youtube.com/embed/4Xq3mIsF-z4"></iframe>
+                          https://www.youtube.com/watch?v=9w3oEINp9xU
+      Acfun:
+              <iframe src="https://www.acfun.cn/player/ac13167581"></iframe>
+                            https://www.acfun.cn/v/ac13113814
+  */
+
+
+    },
     // 查询视频详细信息
     searchVideo: function() {
       this.loading = true;
@@ -677,6 +724,7 @@ export default {
       })
         .then(result => {
           this.myVideoData = result.data.data;
+          this.iframeUrl = this.regToIframe(this.myVideoData.video.item.url);
           this.theVideoRank = result.data.data.video.clearence;
 
           // 修改网站标题
