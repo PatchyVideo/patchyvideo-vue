@@ -38,7 +38,6 @@ keyCode 38 = Up
 keyCode 39 = Right
 keyCode 40 = Down
 */
-
 const i18n = new VueI18n({
   locale: 'CHS', // set locale
   fallbackLocale: 'ENG',
@@ -70,4 +69,3 @@ var vm = new Vue({
   store,
   render: h => h(App)
 }).$mount("#app");
-
