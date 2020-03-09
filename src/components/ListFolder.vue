@@ -43,8 +43,7 @@
         "invalid_path_or_name":"无效路径或名称",
         "latest": "时间正序",
         "oldest": "时间倒序",
-        "last_modified": "最新修改",
-
+        "last_modified": "最新修改"
     },
     "ENG":{
         "cancel":"Cancel",
@@ -79,10 +78,7 @@
         "invalid_path_or_name":"Invalid path or name",
         "latest": "Latest",
         "oldest": "Oldest",
-        "last_modified": "Latest Modified",
-
-
-
+        "last_modified": "Latest Modified"
     }
 }
 </i18n>

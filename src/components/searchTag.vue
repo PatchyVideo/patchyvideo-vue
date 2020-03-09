@@ -56,7 +56,7 @@
     "delete_failed": "删除失败，请重试！",
     "delete_alias_prompt": "此操作将永久删除该标签的别名, 是否继续?",
     "rename_succeed": "修改成功！",
-    "rename_failed": "修改失败，请重试！",
+    "rename_failed": "修改失败，请重试！"
   }
 }
 </i18n>
