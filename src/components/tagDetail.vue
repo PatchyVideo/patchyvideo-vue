@@ -18,6 +18,15 @@
       2.不同标签对应不同的颜色分类
 -->
 
+<i18n>
+{
+  "CHS": {
+    "count_prompt": "显示 {count2} / {maxcount} 个标签",
+    "no_video_found": "没有搜索到视频"
+  }
+}
+</i18n>
+
 <template>
   <div class="content2" v-loading="loading">
     <!-- Author页面特有的，作者详情的组件 -->
@@ -27,8 +36,8 @@
 
     <!-- 标签列表的抬头 -->
     <div class="video-list-header">
-      <p v-if="maxcount">显示 {{ count2 }} / {{ maxcount }} 个标签</p>
-      <p v-else>没有搜索到视频</p>
+      <p v-if="maxcount">{{$t('count_prompt', {count2: count2, maxcount: maxcount})}}</p>
+      <p v-else>{{$t('no_video_found')}}</p>
       <el-select id="select-order" v-model="couponSelected" class="video-list-header-el-select">
         <el-option
           v-for="item in options"
