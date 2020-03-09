@@ -24,12 +24,40 @@
       暂无
 -->
 
+<i18n>
+{
+  "CHS": {
+    "video_url": "视频地址",
+    "get_info": "获取信息",
+    "tag": "标签",
+    "no_tag": "暂无标签！",
+    "choose_repost_type": "请修改视频的发布类型",
+    "post_video": "发布视频",
+    "official": "原始发布",
+    "official_repost": "官方再发布",
+    "authorized_translation": "授权翻译",
+    "authorized_repost": "授权转载",
+    "translation": "自发翻译",
+    "repost": "自发搬运",
+    "unknown": "其他",
+    "url_passed": "URL验证成功!",
+    "invalid_url": "非法地址或者不支持指向的网站!",
+    "enter_url": "请输入视频地址!",
+    "fetch_failed": "获取视频信息失败,请检查链接是否有效!",
+    "post_failed": "视频上传失败！",
+    "tag_not_exist": "标签 {tag} 不存在！",
+    "post_succeed": "上传成功！",
+    "unknown_error": "未知错误"
+  }
+}
+</i18n>
+
 <template>
   <div class="postBox" v-loading="loading">
     <div class="content">
       <!-- 视频输入框 -->
-      <el-input v-model="VideoURL" @keyup.enter.native="onFetchVideo_Click" placeholder="视频地址">
-        <el-button slot="append" @click="onFetchVideo_Click">获取信息</el-button>
+      <el-input v-model="VideoURL" @keyup.enter.native="onFetchVideo_Click" :placeholder="$t('video_url')">
+        <el-button slot="append" @click="onFetchVideo_Click">{{$t('get_info')}}</el-button>
       </el-input>
       <!-- 视频URL验证成功的时候出现的内容 -->
       <el-collapse-transition>
@@ -40,9 +68,9 @@
           <p>{{desc}}</p>
           <!-- 标签编辑 -->
           <div class="tagsEdit" v-if="false">
-            <h3>标签</h3>
+            <h3>{{$t('tag')}}</h3>
             <div class="tagBox">
-              <p v-if="tags==''">暂无标签！</p>
+              <p v-if="tags==''">{{$t('no_tag')}}</p>
               <el-tag
                 effect="dark"
                 v-else
@@ -56,7 +84,7 @@
       </el-collapse-transition>
       <!-- 视频副本 -->
       <div class="RepostType" v-if="copy!=''">
-        <el-select v-model="RepostType" placeholder="请修改视频的发布类型" style="width:100%">
+        <el-select v-model="RepostType" :placeholder="$t('choose_repost_type')" style="width:100%">
           <el-option
             v-for="item in RepostTypes"
             :key="item.label"
@@ -67,7 +95,7 @@
       </div>
       <!-- 视频上传 -->
       <el-button class="postButton" type="primary" @click="postSingleVideo">
-        发布视频
+        {{$t('post_video')}}
         <i class="el-icon-upload el-icon--right"></i>
       </el-button>
     </div>
@@ -111,13 +139,13 @@ export default {
       RepostType: "unknown",
       // 视频的发布类型
       RepostTypes: [
-        { value: "official", label: "原始发布" },
-        { value: "official_repost", label: "官方再发布" },
-        { value: "authorized_translation", label: "授权翻译" },
-        { value: "authorized_repost", label: "授权转载" },
-        { value: "translation", label: "自发翻译" },
-        { value: "repost", label: "自发搬运" },
-        { value: "unknown", label: "其他" }
+        { value: "official", label: this.$t('official') },
+        { value: "official_repost", label: this.$t('official_repost') },
+        { value: "authorized_translation", label: this.$t('authorized_translation') },
+        { value: "authorized_repost", label: this.$t('authorized_repost') },
+        { value: "translation", label: this.$t('translation') },
+        { value: "repost", label: this.$t('repost') },
+        { value: "unknown", label: this.$t('unknown') }
       ],
       // 匹配短地址，用以扩展成完整地址
       EXPANDERS: {},
@@ -357,6 +385,7 @@ export default {
               data.data.title,
               data.data.desc
             );
+            that.autotag([], data.data.title, data.data.desc);
           })
           .catch(error => {
             that.setVideoMetadata("", "", "");
@@ -383,6 +412,7 @@ export default {
         desc = desc.replace(/\s+/g, "");
         desc = desc.replace(/<br\s*?\/?>/g, "\n");
         that.setVideoMetadata("", title, desc);
+        that.autotag([], title, desc);
       };
     },
     // 自动标签功能
@@ -511,21 +541,21 @@ export default {
     // URL验证成功的弹出框
     openSuccessfully() {
       this.$message({
-        message: "URL验证成功!",
+        message: this.$t('url_passed'),
         type: "success"
       });
     },
     // URL验证失败的弹出框
     openfailed() {
-      this.$message.error("非法地址或者不支持指向的网站!");
+      this.$message.error(this.$t('invalid_url'));
     },
     // URL为空的弹出窗
     InvalidURL() {
-      this.$message.error("请输入视频地址!");
+      this.$message.error(this.$t('enter_url'));
     },
     // 获取视频信息失败的弹出框
     ErrorFetchingVideo() {
-      this.$message.error("获取视频信息失败,请检查链接是否有效!");
+      this.$message.error(this.$t('fetch_failed'));
     },
     // 获取视频的详细信息
     fetchVideo(url) {
@@ -685,25 +715,25 @@ export default {
     // 各种各样的报错警告
     open2() {
       this.$message({
-        message: "视频上传失败！",
+        message: this.$t('post_failed'),
         type: "error"
       });
     },
     open3(errorTag) {
       this.$message({
-        message: "标签 " + errorTag + " 不存在！",
+        message: this.$t('tag_not_exist', {tag: errorTag}),
         type: "error"
       });
     },
     open4() {
       this.$message({
-        message: "上传成功！",
+        message: this.$t('post_succeed'),
         type: "success"
       });
     },
     open5() {
       this.$message({
-        message: "未知错误",
+        message: this.$t('unknown_error'),
         type: "error"
       });
     }

@@ -40,8 +40,10 @@
         "del_success":"删除成功",
         "login_please":"请登录",
         "add_sucess":"添加成功",
-        "invalid_path_or_name":"无效路径或名称"
-
+        "invalid_path_or_name":"无效路径或名称",
+        "latest": "时间正序",
+        "oldest": "时间倒序",
+        "last_modified": "最新修改",
 
     },
     "ENG":{
@@ -74,7 +76,10 @@
         "del_success":"Successfully deleted",
         "login_please":"Please sign in",
         "add_sucess":"Added successfully",
-        "invalid_path_or_name":"Invalid path or name"
+        "invalid_path_or_name":"Invalid path or name",
+        "latest": "Latest",
+        "oldest": "Oldest",
+        "last_modified": "Latest Modified",
 
 
 
@@ -490,9 +495,9 @@
             currentPlaylistPageSize: 20,
             allPlaylistsCount: 1,
             playlistOrderOptions:  [
-                { value: "latest", label: "时间正序" },
-                { value: "oldest", label: "时间倒序" },
-                { value: "last_modified", label: "最新修改" }
+                { value: "latest", label: this.$t("latest") },
+                { value: "oldest", label: this.$t("oldest") },
+                { value: "last_modified", label: this.$t("last_modified") }
             ],
         };
     },

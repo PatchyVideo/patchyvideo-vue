@@ -18,6 +18,49 @@
       1.各种语言的支持希望可以用v-for实现（现在由于v-if和v-for无法兼容实现不了）
 -->
 
+<i18n>
+{
+  "CHS": {
+    "tag_count_prompt": "显示 {{ count2 }} / {{ maxcount }} 个标签",
+    "no_tag_found": "没有搜索到标签",
+    "tag_prompt": "搜索标签（可不填）",
+    "category_prompt": "请选择类别（可不选）",
+    "search": "搜索标签",
+    "author_detial": "作者详情",
+    "select_language": "请选择语言",
+    "add": "添加",
+    "confirm": "确认",
+    "del": "删除",
+    "count": "数量",
+    "category": "类别",
+    "tag": "标签",
+    "delete_tag": "删除标签",
+    "change_category": "更改分类",
+    "show_advance": "显示高级操作",
+    "prompt": "提示",
+    "select_categoty": "请选择标签分类",
+    "cancel": "取 消",
+    "cancel2": "取消",
+    "confirm2": "确 定",
+    "latest": "按照时间正序",
+    "oldest": "按照时间倒序",
+    "count": "按照使用数量倒序",
+    "count_inv": "按照使用数量正序",
+    "tag_name_prompt": "请填写标签名称！",
+    "add_succeed": "添加成功！",
+    "tag_already_exist": "此标签已经存在！",
+    "add_failed": "添加失败，请重试！",
+    "delete_confirm_prompt": "此操作将永久删除该标签, 是否继续?",
+    "delete_succeed": "删除成功！",
+    "unauthorised_prompt": "抱歉,只有管理员或者标签的创建者有权修改标签!",
+    "delete_failed": "删除失败，请重试！",
+    "delete_alias_prompt": "此操作将永久删除该标签的别名, 是否继续?",
+    "rename_succeed": "修改成功！",
+    "rename_failed": "修改失败，请重试！",
+  }
+}
+</i18n>
+
 <template>
   <div class="content2" v-loading="loading">
     <!-- Author页面特有的，作者详情的组件 -->
@@ -31,8 +74,8 @@
 
     <!-- 标签列表的抬头 -->
     <div class="video-list-header">
-      <p v-if="maxcount">显示 {{ count2 }} / {{ maxcount }} 个标签</p>
-      <p v-else>没有搜索到标签</p>
+      <p v-if="maxcount">{{$t('tag_count_prompt', {count2: count2, maxcount: maxcount})}}</p>
+      <p v-else>{{$t('no_tag_found')}}</p>
       <el-select
         id="select-order"
         v-model="couponSelected"
@@ -50,13 +93,13 @@
     <div class="addTag">
       <el-input
         v-model="searchTag"
-        placeholder="搜索标签（可不填）"
+        :placeholder="$t('tag_prompt')"
         class="addTag-input"
         @keyup.enter.native="requestSearchedTags()"
       ></el-input>
       <el-select
         v-model="searchCategory"
-        placeholder="请选择类别（可不选）"
+        :placeholder="$t('category_prompt')"
         size="small"
         class="addTag-select"
       >
@@ -67,7 +110,7 @@
           :value="item"
         ></el-option>
       </el-select>
-      <el-button type="info" @click="requestSearchedTags()">搜索标签</el-button>
+      <el-button type="info" @click="requestSearchedTags()">{{$t('search')}}</el-button>
     </div>
     <!-- 表格正文 -->
     <el-table :data="tagData" style="width: 100%">
@@ -79,7 +122,7 @@
             class="showAuthorData"
             v-if="props.row.category == 'Author'"
             @click="openAuthorData(props.row.id)"
-            >作者详情</el-button
+            >{{$t('author_detial')}}</el-button
           >
           <!-- 为现有标签添加新的语言 -->
           <div class="languageSuppot">
@@ -87,7 +130,7 @@
               <el-col :span="3">
                 <el-select
                   v-model="newTagLanguage"
-                  placeholder="请选择语言"
+                  :placeholder="$t('select_language')"
                   size="mini"
                   style="width:95%"
                 >
@@ -114,7 +157,7 @@
                   round
                   class="confirmChange"
                   @click="addTagLanguage(props.$index)"
-                  >添加</el-button
+                  >{{$t('add')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -144,7 +187,7 @@
                     tagEdit[props.$index].languages.CHS !=
                       tagData[props.$index].languages.CHS
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -171,7 +214,7 @@
                     tagEdit[props.$index].languages.CHT !=
                       tagData[props.$index].languages.CHT
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -198,7 +241,7 @@
                     tagEdit[props.$index].languages.JPN !=
                       tagData[props.$index].languages.JPN
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -225,7 +268,7 @@
                     tagEdit[props.$index].languages.ENG !=
                       tagData[props.$index].languages.ENG
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -252,7 +295,7 @@
                     tagEdit[props.$index].languages.KOR !=
                       tagData[props.$index].languages.KOR
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -279,7 +322,7 @@
                     tagEdit[props.$index].languages.CSY !=
                       tagData[props.$index].languages.CSY
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -306,7 +349,7 @@
                     tagEdit[props.$index].languages.NLD !=
                       tagData[props.$index].languages.NLD
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -333,7 +376,7 @@
                     tagEdit[props.$index].languages.FRA !=
                       tagData[props.$index].languages.FRA
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -360,7 +403,7 @@
                     tagEdit[props.$index].languages.DEU !=
                       tagData[props.$index].languages.DEU
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -387,7 +430,7 @@
                     tagEdit[props.$index].languages.HUN !=
                       tagData[props.$index].languages.HUN
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -414,7 +457,7 @@
                     tagEdit[props.$index].languages.ITA !=
                       tagData[props.$index].languages.ITA
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -441,7 +484,7 @@
                     tagEdit[props.$index].languages.PLK !=
                       tagData[props.$index].languages.PLK
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -468,7 +511,7 @@
                     tagEdit[props.$index].languages.PTB !=
                       tagData[props.$index].languages.PTB
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -495,7 +538,7 @@
                     tagEdit[props.$index].languages.ROM !=
                       tagData[props.$index].languages.ROM
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -522,7 +565,7 @@
                     tagEdit[props.$index].languages.RUS !=
                       tagData[props.$index].languages.RUS
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -549,7 +592,7 @@
                     tagEdit[props.$index].languages.ESP !=
                       tagData[props.$index].languages.ESP
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -576,7 +619,7 @@
                     tagEdit[props.$index].languages.TRK !=
                       tagData[props.$index].languages.TRK
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -603,7 +646,7 @@
                     tagEdit[props.$index].languages.VIN !=
                       tagData[props.$index].languages.VIN
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -636,7 +679,7 @@
                     tagEdit[props.$index].alias[i] !=
                       tagData[props.$index].alias[i]
                   "
-                  >确认</el-button
+                  >{{$t('confirm')}}</el-button
                 >
                 <el-button
                   type="danger"
@@ -644,7 +687,7 @@
                   round
                   class="confirmChange"
                   @click="confirmAliasRemove(props.$index, i)"
-                  >删除</el-button
+                  >{{$t('del')}}</el-button
                 >
               </el-col>
             </el-row>
@@ -653,10 +696,10 @@
       </el-table-column>
       <el-table-column
         prop="count"
-        label="数量"
+        :label="$t('count')"
         min-width="50"
       ></el-table-column>
-      <el-table-column label="类别" min-width="120">
+      <el-table-column :label="$t('category')" min-width="120">
         <template slot-scope="scope">
           <div
             class="category"
@@ -674,7 +717,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="标签" min-width="680">
+      <el-table-column :label="$t('tag')" min-width="680">
         <!-- 各种语言标签 -->
         <template slot-scope="scope">
           <span class="tagLabel" v-if="scope.row.languages.CHS">
@@ -1008,10 +1051,10 @@
         <template slot-scope="scope">
           <div v-if="advancedOptions">
             <el-button type="danger" round @click="removeTag(scope.$index)"
-              >删除标签</el-button
+              >{{$t('delete_tag')}}</el-button
             >
             <el-button type="primary" round @click="openDialog(scope.$index)"
-              >更改分类</el-button
+              >{{$t('change_category')}}</el-button
             >
           </div>
           <div v-else>
@@ -1020,7 +1063,7 @@
               round
               @click="advancedOptions = true"
               style="margin-left:40px"
-              >显示高级操作</el-button
+              >{{$t('show_advance')}}</el-button
             >
           </div>
         </template>
@@ -1042,11 +1085,11 @@
     ></el-pagination>
 
     <!-- 更改分类的弹出框 -->
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="20%">
+    <el-dialog :title="$t('prompt')" :visible.sync="dialogVisible" width="20%">
       <div style="width:80%;margin:0 auto">
         <el-select
           v-model="newTagCategorie"
-          placeholder="请选择新的标签分类"
+          :placeholder="$t('select_categoty')"
           style="width:100%"
         >
           <el-option
@@ -1058,8 +1101,8 @@
         </el-select>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="renameAlias()">确 定</el-button>
+        <el-button @click="dialogVisible = false">{{$t('cancel')}}</el-button>
+        <el-button type="primary" @click="renameAlias()">{{$t('confirm2')}}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -1115,10 +1158,10 @@ export default {
       tagEdit: [],
       // 标签列表的排序规则
       options: [
-        { value: "latest", label: "按照时间正序" },
-        { value: "oldest", label: "按照时间倒序" },
-        { value: "count", label: "按照使用数量倒序" },
-        { value: "count_inv", label: "按照使用数量正序" }
+        { value: "latest", label: this.$t('latest') },
+        { value: "oldest", label: this.$t('oldest') },
+        { value: "count", label: this.$t('count') },
+        { value: "count_inv", label: this.$t('count_inv') }
       ],
       // 当前标签列表的排列顺序
       couponSelected: "latest",
@@ -1243,12 +1286,12 @@ export default {
       var language = this.newTagLanguage.value;
       // 校验数据
       if (language == undefined) {
-        this.open2("请选择语言！");
+        this.open2(this.$t('select_language'));
         this.loading = false;
         return false;
       }
       if (new_tag == "") {
-        this.open2("请填写标签名称！");
+        this.open2(this.$t('tag_name_prompt'));
         this.loading = false;
         return false;
       }
@@ -1266,17 +1309,17 @@ export default {
         }
       }).then(result => {
         if (result.data.status == "SUCCEED") {
-          this.open("添加成功！");
+          this.open(this.$t('add_succeed'));
           this.new_Tag = "";
           this.loading = false;
           this.requestSearchedTags();
         } else {
           if (result.data.data.reason == "TAG_ALREADY_EXIST") {
             this.loading = false;
-            this.open2("此名称已经存在！");
+            this.open2(this.$t('tag_already_exist'));
           } else {
             this.loading = false;
-            this.open2("添加失败，请重试！");
+            this.open2(this.$t('add_failed'));
           }
         }
       });
@@ -1316,10 +1359,10 @@ export default {
         } else {
           if (result.data.data.reason == "ALIAS_ALREADY_EXIST") {
             this.loading = false;
-            this.open2("此名称已经存在！");
+            this.open2(this.$t('tag_already_exist'));
           } else {
             this.loading = false;
-            this.open2("添加失败，请重试！");
+            this.open2(this.$t('add_failed'));
           }
         }
       });
@@ -1327,9 +1370,9 @@ export default {
     // 删除标签
     removeTag(index) {
       var tag = this.tagEdit[index].id;
-      this.$confirm("此操作将永久删除该标签, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
+      this.$confirm(this.$t('delete_confirm_prompt'), this.$t('prompt'), {
+        confirmButtonText: this.$t('confirm'),
+        cancelButtonText: this.$t('cancel2'),
         type: "warning"
       })
         // 点击确定之后
@@ -1345,13 +1388,13 @@ export default {
           }).then(result => {
             if (result.data.status == "SUCCEED") {
               this.loading = false;
-              this.open("删除成功！");
+              this.open(this.$t('delete_succeed'));
               this.requestSearchedTags();
             } else {
               if (result.data.data.reason == "UNAUTHORISED_OPERATION") {
-                this.open2("抱歉,只有管理员或者标签的创建者有权修改标签!");
+                this.open2(this.$t('unauthorised_prompt'));
               } else {
-                this.open2("删除失败，请重试！");
+                this.open2(this.$t('delete_failed'));
               }
               this.loading = false;
             }
@@ -1363,9 +1406,9 @@ export default {
     // 删除标签别名
     confirmAliasRemove(index, i) {
       var alias = this.tagEdit[index].alias[i];
-      this.$confirm("此操作将永久删除该标签的别名, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
+      this.$confirm(this.$t('delete_alias_prompt'), this.$t('prompt'), {
+        confirmButtonText: this.$t('confirm'),
+        cancelButtonText: this.$t('cancel2'),
         type: "warning"
       })
         // 点击确定之后
@@ -1380,13 +1423,13 @@ export default {
           }).then(result => {
             if (result.data.status == "SUCCEED") {
               this.loading = false;
-              this.open("删除成功！");
+              this.open(this.$t('delete_succeed'));
               this.requestSearchedTags();
             } else {
               if (result.data.data.reason == "UNAUTHORISED_OPERATION") {
-                this.open2("抱歉,只有管理员或者标签的创建者有权修改标签!");
+                this.open2(this.$t('unauthorised_prompt'));
               } else {
-                this.open2("删除失败，请重试！");
+                this.open2(this.$t('delete_failed'));
               }
               this.loading = false;
             }
@@ -1401,7 +1444,7 @@ export default {
       var tag = this.tagData[index].languages[language];
       var new_tag = this.tagEdit[index].languages[language];
       if (new_tag == "") {
-        this.open2("请填写标签名称！");
+        this.open2(this.$t('tag_name_prompt'));
         this.loading = false;
         return false;
       }
@@ -1416,11 +1459,11 @@ export default {
       }).then(result => {
         if (result.data.status == "SUCCEED") {
           this.loading = false;
-          this.open("修改成功！");
+          this.open(this.$t('rename_succeed'));
           this.requestSearchedTags();
         } else {
           this.loading = false;
-          this.open2("修改失败，请重试！");
+          this.open2(this.$t('rename_failed'));
         }
       });
     },
@@ -1430,7 +1473,7 @@ export default {
       var tag = this.tagData[$index].alias[i];
       var new_tag = this.tagEdit[$index].alias[i];
       if (new_tag == "") {
-        this.open2("请填写标签名称！");
+        this.open2(this.$t('tag_name_prompt'));
         this.loading = false;
         return false;
       }
@@ -1444,11 +1487,11 @@ export default {
       }).then(result => {
         if (result.data.status == "SUCCEED") {
           this.loading = false;
-          this.open("修改成功！");
+          this.open(this.$t('rename_succeed'));
           this.requestSearchedTags();
         } else {
           this.loading = false;
-          this.open2("修改失败，请重试！");
+          this.open2(this.$t('rename_failed'));
         }
       });
     },
@@ -1457,7 +1500,7 @@ export default {
       var tag = this.tagData[this.tagIndex].id;
       var category = this.newTagCategorie;
       if (category == "") {
-        this.open2("请选择标签种类!");
+        this.open2(this.$t('select_categoty'));
         return false;
       }
       this.dialogVisible = false;
@@ -1471,12 +1514,12 @@ export default {
         }
       }).then(result => {
         if (result.data.status == "SUCCEED") {
-          this.open("修改成功！");
+          this.open(this.$t('rename_succeed'));
           this.loading = false;
           this.$router.go(0);
         } else {
           this.loading = false;
-          this.open2("修改失败，请重试！");
+          this.open2(this.$t('rename_failed'));
         }
       });
     },
