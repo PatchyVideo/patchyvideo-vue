@@ -53,7 +53,7 @@ Vue.prototype.$echarts = echarts;
     }
   },
   "ENG": {
-    "title":"创建播放列表",
+    "title":"Create playlist",
     "me":{
         "tab1":"Profile",
         "tab2":"My posts",
