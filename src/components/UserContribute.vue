@@ -10,20 +10,30 @@
      没做分页，默认展示所有视频，如果用户视频多，数据可能会很庞大会有卡顿现象。
 -->
 
+<i18n>
+{
+  "CHS": {
+    "no_data": "暂无数据",
+    "video_list": "视频索引列表",
+    "video_count": "共有{videoCount}个视频"
+  }
+}
+</i18n>
+
 <template>
   <div>
     <div class="bigbox standard" v-loading="loading">
       <el-container>
         <el-aside>
-          <p v-if="this.videoCount==0" class="nulldata-left">暂无数据</p>
+          <p v-if="this.videoCount==0" class="nulldata-left">{{$t('no_data')}}</p>
           <canvas id="myChart" width="800" height="800"></canvas>
         </el-aside>
         <el-main>
-          <p v-if="this.videoCount==0" class="nulldata-right">暂无数据</p>
+          <p v-if="this.videoCount==0" class="nulldata-right">{{$t('no_data')}}</p>
           <div class="minibox" v-if="this.videoCount!=0">
             <div class="minibox_top">
-              <h3>视频索引列表</h3>
-              <span>共有{{videoCount}}个视频</span>
+              <h3>{{$t('video_list')}}</h3>
+              <span>{{$t('video_count', {videoCount: videoCount})}}</span>
               <i @click="changeLine" :class="{'el-icon-s-grid':flag,'el-icon-menu':!flag}"></i>
             </div>
 
