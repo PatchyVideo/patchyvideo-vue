@@ -48,6 +48,29 @@
     "tag_not_exist": "标签 {tag} 不存在！",
     "post_succeed": "上传成功！",
     "unknown_error": "未知错误"
+  },
+  "ENG": {
+    "video_url": "Video URL",
+    "get_info": "Fetch",
+    "tag": "Tags",
+    "no_tag": "No tags",
+    "choose_repost_type": "Please select a repost type",
+    "post_video": "Post video",
+    "official": "Original",
+    "official_repost": "Official Repost",
+    "authorized_translation": "Authorized Translation",
+    "authorized_repost": "Authorized Repost",
+    "translation": "User Translation",
+    "repost": "User Repost",
+    "unknown": "Other",
+    "url_passed": "URL verify succeed",
+    "invalid_url": "Invalid URL or not supported website",
+    "enter_url": "Please enter video URL",
+    "fetch_failed": "Fetch failed",
+    "post_failed": "Ipload failed",
+    "tag_not_exist": "Tag {tag} does not exist",
+    "post_succeed": "Upload succeed",
+    "unknown_error": "Unknown error, please report bug"
   }
 }
 </i18n>

@@ -4,6 +4,10 @@
   "CHS": {
     "move_up": "上移",
     "move_down": "下移"
+  },
+  "ENG": {
+    "move_up": "Move Up",
+    "move_down": "Move Down"
   }
 }
 </i18n>

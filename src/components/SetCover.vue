@@ -2,6 +2,9 @@
 {
     "CHS": {
         "set_as_playlist_cover": "设置此视频封面为播放列表封面"
+    },
+    "ENG": {
+        "set_as_playlist_cover": "Set video cover as playlist cover"
     }
 }
 </i18n>

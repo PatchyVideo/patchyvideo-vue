@@ -26,9 +26,9 @@
   },
   "ENG": {
     "title":"Post video",
-    "single_release":"Single release",
-    "batch_release":"Batch release",
-    "IPFS_release":"IPFS video release"
+    "single_release":"Single",
+    "batch_release":"Batch",
+    "IPFS_release":"IPFS video"
   }
 }
 </i18n>

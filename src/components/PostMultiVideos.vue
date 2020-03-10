@@ -29,6 +29,18 @@
     "tag_not_exist": "标签 {tag} 不存在！",
     "post_succeed": "上传成功！",
     "unknown_error": "未知错误"
+  },
+  "ENG": {
+    "enter_url_prompt": "Please enter video URLs, separated by line breaks",
+    "tag": "Tags",
+    "no_tag": "No tags!",
+    "advance": "Advance",
+    "mutually_copies": "Mutually copies",
+    "post_video": "Post video",
+    "post_failed": "Upload failed",
+    "tag_not_exist": "Tag {tag} does not exist",
+    "post_succeed": "Upload succeed",
+    "unknown_error": "Unknown error, please report bug"
   }
 }
 </i18n>
