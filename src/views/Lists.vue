@@ -65,25 +65,6 @@
     <!-- list页面的正文 -->
     <div class="w main-page-background-img" v-loading="loading">
       <div class="content">
-        <!-- 视频列表介绍 -->
-        <div class="deemo shadow">
-          <div class="d_t">
-            <!-- <img src="../static/img/4.png" style="float:left" />
-            <img src="../static/img/3.png" style="float:right" />-->
-            <p>
-              Playlists help people organize videos of the same series or have other attributes in common that require order.
-              <br />Use playlist ONLY IF order is a must, otherwise using tags falls better in line with the site's design.
-              <br />播放列表功能的核心是为视频提供顺序，如果顺序不是必须要求则使用tag是更好的选择。
-            </p>
-            <el-button
-              type="primary"
-              plain
-              class="createPlayListButton"
-              @click="createVideoList"
-            >{{$t('create_playList')}}</el-button>
-          </div>
-        </div>
-
         <div class="recommend">
           <div id="select-order" class="head">
             <!-- 搜索框 -->
