@@ -30,7 +30,7 @@
     "add": "添加",
     "confirm": "确认",
     "del": "删除",
-    "count": "数量",
+    "count2": "数量",
     "tag": "标签",
     "op": "操作",
     "del_tag": "删除标签",
@@ -699,7 +699,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="count" :label="$t('count')" min-width="50"></el-table-column>
+      <el-table-column prop="count" :label="$t('count2')" min-width="50"></el-table-column>
       <el-table-column :label="$t('tag')" min-width="800">
         <!-- 各种语言标签 -->
         <template slot-scope="scope">
