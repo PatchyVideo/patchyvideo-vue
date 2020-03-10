@@ -45,21 +45,21 @@
   "ENG": {
     "signup":"Signup",
     "login":"Login",
-    "input_username":"Please enter user name",
+    "input_username":"Please enter username",
     "input_psd":"Please enter password",
-    "input_email":"Please input your email",
+    "input_email":"Please enter email",
     "repeat_psd":"Please repeat password",
-    "username_exist":"The username already exists!",
-    "psd_err":"Incorrect password entered twice!",
-    "input_account":"Please enter account",
-    "account_limit":"2 to 32 characters",
-    "psd_limit":"6 to 64 characters",
-    "email_limit":"Please input the correct email address",
-    "signup_success":"Signup success",
-    "unknown_err":"Unknown mistake",
-    "net_err":"Network exception",
+    "username_exist":"The username has been taken",
+    "psd_err":"Passwords mismatch",
+    "input_account":"Please enter username",
+    "account_limit":"Username length: 2 to 32 characters",
+    "psd_limit":"Password length: 6 to 64 characters",
+    "email_limit":"Please enter a valid email address",
+    "signup_success":"Signup succeed",
+    "unknown_err":"Unknown error, please report bug",
+    "net_err":"Network error, please try again",
     "ready":"Ready",
-    "format_err":"Filling in the format is not correct!"
+    "format_err":"Please fill all information correctly"
 
   }
 }

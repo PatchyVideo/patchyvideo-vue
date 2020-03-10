@@ -16,6 +16,11 @@
     "no_data": "暂无数据",
     "video_list": "视频索引列表",
     "video_count": "共有{videoCount}个视频"
+  },
+  "ENG": {
+    "no_data": "No data",
+    "video_list": "Video list",
+    "video_count": "Total {videoCount} videos"
   }
 }
 </i18n>

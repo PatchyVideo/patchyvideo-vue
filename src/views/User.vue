@@ -41,8 +41,8 @@ Vue.prototype.$echarts = echarts;
         "tab1":"我的信息",
         "tab2":"我贡献的索引",
         "tab3":"我的文件夹",
-        "tab4":"我的收藏",
-        "tab5":"索引状态",
+        "tab4":"我的播放列表",
+        "tab5":"发布状态",
         "tab6":"黑名单"
     },
     "outer_user":{
@@ -55,18 +55,18 @@ Vue.prototype.$echarts = echarts;
   "ENG": {
     "title":"创建播放列表",
     "me":{
-        "tab1":"My information",
-        "tab2":"Index of my contribution",
+        "tab1":"Profile",
+        "tab2":"My posts",
         "tab3":"My folder",
-        "tab4":"My Favorites",
-        "tab5":"Index status",
+        "tab4":"My playlists",
+        "tab5":"Post status",
         "tab6":"Blacklist"
     },
     "outer_user":{
-        "tab1":"User information",
-        "tab2":"The index of his contribution",
-        "tab3":"His folder",
-        "tab4":"His favorites"
+        "tab1":"Profile",
+        "tab2":"Posts",
+        "tab3":"Folder",
+        "tab4":"Playlists"
     }
   }
 }

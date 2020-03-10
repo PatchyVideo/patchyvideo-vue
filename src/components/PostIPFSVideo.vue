@@ -40,7 +40,7 @@
     },
     "ENG":{
         "cancel":"Cancel",
-        "input_addr":"Enter the address of the IPFS video here",
+        "input_addr":"Enter IPFS video CID here",
         "input_orig_addr":"Enter the original address of the video here (Optional)",
         "input_title":"Enter the title of the video here",
         "introductory_video":"Describe your own video",
@@ -50,7 +50,7 @@
         "label":"label",
         "no_label":"No tags!",
         "post_video":"Post video",
-        "not_input_addr":"Please enter video URL",
+        "not_input_addr":"Please enter video CID",
         "addr_err":"Incorrect Video URL",
         "not_input_title":"Haven't entered a title yet",
         "not_introductory_video":"Don't you introduce the video?",

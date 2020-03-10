@@ -18,6 +18,13 @@
         "latest": "时间正序",
         "oldest": "时间倒序",
         "last_modified": "最新修改"
+    },
+    "ENG": {
+        "no_data": "No data",
+        "search": "Search...",
+        "latest": "Latest",
+        "oldest": "Oldest",
+        "last_modified": "Last modified"
     }
 }
 </i18n>

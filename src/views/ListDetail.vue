@@ -66,33 +66,33 @@
   "ENG": {
     "btn_group":{
         "add_video":"Add video",
-        "import_from_other":"Import from favorites of other websites",
-        "add_favorite":"Add to favorites",
-        "edit_list_info":"Edit list information",
+        "import_from_other":"Extend from playlist of other websites",
+        "add_favorite":"Add to folder",
+        "edit_list_info":"Edit playlist information",
         "edit_common_tags":"Edit common tags",
-        "reverse_list":"List video in reverse order",
+        "reverse_list":"Reverse video order",
         "delete":"Delete"
     },
     "vedio_chain_tip":"Insert video here",
     "edit_list_info_dialog":{
         "title":"Edit video details",
-        "list_title_tip":"Here is the list title",
-        "list_title_err_tip":"Haven't entered a title yet",
-        "list_introduction_tip":"Let me introduce my list",
-        "list_introduction_err_tip":"Don't you introduce the list?",
-        "set_private_list":"Make private list",
+        "list_title_tip":"Playlist title",
+        "list_title_err_tip":"Please enter playlist title",
+        "list_introduction_tip":"Playlist description",
+        "list_introduction_err_tip":"Please enter playlist description",
+        "set_private_list":"Private playlist",
         "btn_ok":"Submit",
         "btn_cancel":"Cancel"
     },
     "delete_dialog":{
-        "title":"Prompt",
-        "content":"Confirm delete?",
+        "title":"Confirm",
+        "content":"Are you sure you want to delete this playlist? This operation is irreversible.",
         "btn_ok":"Yes",
         "btn_cancel":"Cancel"
     },
-    "commit_tip":"Submitted successfully",
-    "oper_tip":"Successful operation",
-    "delete_tip":"successfully deleted"
+    "commit_tip":"Submit succeed",
+    "oper_tip":"Operation succeed",
+    "delete_tip":"Delete succeed"
   }
 }
 </i18n>

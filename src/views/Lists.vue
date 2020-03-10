@@ -33,8 +33,7 @@
         }
     },
     "err_tip":"没有搜索到视频列表",
-    "statistics_pre":"共",
-    "statistics_suf":"个视频",
+    "statistics":"共{count}个视频",
     "author":"作者："
 
   },
@@ -47,13 +46,12 @@
         "downlist":{
             "latest":"Latest",
             "oldest":"Oldest",
-            "last_modified":"Latest Modified"
+            "last_modified":"Last Modified"
         }
     },
     "err_tip":"No playlist found",
-    "statistics_pre":"A total of",
-    "statistics_suf":"videos",
-    "author":"Author:"
+    "statistics":"Total {count} videos",
+    "author":"Creator:"
   }
 }
 </i18n>
@@ -129,7 +127,7 @@
                 </h2>
                 <h5
                   style="float: right;"
-                >{{$t('statistics_pre')}} {{ item.videos }} {{$t('statistics_suf')}}</h5>
+                >{{$t('statistics', {count: item.videos})}}</h5>
               </div>
               <!-- 视频列表详情 -->
               <div class="re_video">

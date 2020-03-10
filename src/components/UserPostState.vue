@@ -5,6 +5,12 @@
         "no_pending": "暂无待处理的索引",
         "failed_post": "失败的索引",
         "total_count": "共计{count}个"
+    },
+    "ENG": {
+        "pending_post": "Pending posts",
+        "no_pending": "No pending posts",
+        "failed_post": "Failed posts",
+        "total_count": "Total {count}"
     }
 }
 </i18n>

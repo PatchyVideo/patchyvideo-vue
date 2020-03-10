@@ -14,6 +14,12 @@
     "failed_post": "已失败索引",
     "show_url_time": "显示url和时间",
     "show_all": "显示全部"
+  },
+  "ENG": {
+    "pending_post": "Pending posts",
+    "failed_post": "Failed posts",
+    "show_url_time": "Show URL and time",
+    "show_all": "Show all"
   }
 }
 </i18n>
