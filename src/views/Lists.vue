@@ -65,6 +65,20 @@
     <!-- list页面的正文 -->
     <div class="w main-page-background-img" v-loading="loading">
       <div class="content">
+        <!-- 视频列表介绍 -->
+        <div class="deemo shadow">
+          <div class="d_t">
+            <!-- <img src="../static/img/4.png" style="float:left" />
+            <img src="../static/img/3.png" style="float:right" />-->
+            <el-button
+              type="primary"
+              plain
+              class="createPlayListButton"
+              @click="createVideoList"
+            >{{$t('create_playList')}}</el-button>
+          </div>
+        </div>
+
         <div class="recommend">
           <div id="select-order" class="head">
             <!-- 搜索框 -->
