@@ -24,7 +24,7 @@
     "count_prompt": "显示 {count2} / {maxcount} 个标签",
     "no_video_found": "没有搜索到视频",
     "select_lang_prompt": "请选择语言",
-    "add_to_category": "'向{cat}类别添加标签'",
+    "add_to_category": "向{cat}类别添加标签",
     "add_tag": "添加标签",
     "author_detail": "作者详情",
     "add": "添加",
