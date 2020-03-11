@@ -49,6 +49,7 @@
         <!-- 每个标签种类的表单 -->
         <el-tabs type="border-card" v-model="activeName">
           <el-tab-pane
+            :lazy="true"
             v-for="(item, i) in tagCategories"
             :key="item"
             :label="$t('tag_categories.' + item)"
@@ -56,7 +57,11 @@
           >
             <tagDetail :tagCategorie="item"></tagDetail>
           </el-tab-pane>
-          <el-tab-pane :label="$t('search_tag')" :name="(tagCategories.length+1).toString()">
+          <el-tab-pane
+            :lazy="true"
+            :label="$t('search_tag')"
+            :name="(tagCategories.length+1).toString()"
+          >
             <searchTag></searchTag>
           </el-tab-pane>
         </el-tabs>
@@ -74,7 +79,7 @@ import searchTag from "../components/searchTag.vue";
 import Footer from "../components/Footer.vue";
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 页面是否属于加载状态的判断
       loading: true,
@@ -84,12 +89,12 @@ export default {
       activeName: "0"
     };
   },
-  computed:{},
+  computed: {},
   mounted() {
     // 初始化页面名为home
     this.$store.commit("changeBgc", "tag");
     // 修改网站标题
-    document.title = this.$t('title') + " - Patchyvideo";
+    document.title = this.$t("title") + " - Patchyvideo";
     this.requestTagCategories();
   },
   methods: {

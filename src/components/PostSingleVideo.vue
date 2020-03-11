@@ -140,7 +140,7 @@
 import EditTags from "../components/EditTags";
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 视频的URL(与输入框绑定)
       VideoURL: "",
@@ -439,7 +439,7 @@ export default {
       };
     },
     // 自动标签功能
-    autotag(utags, title = '', desc = '') {
+    autotag(utags, title = "", desc = "") {
       /*      this.refreshMark = +new Date();*/
       this.axios({
         method: "post",
@@ -448,7 +448,7 @@ export default {
           utags: utags,
           title: title,
           desc: desc,
-          lang: localStorage.getItem('lang')
+          lang: localStorage.getItem("lang")
         }
       })
         .then(result => {
@@ -642,7 +642,7 @@ export default {
       this.title = title;
       this.desc = desc;
       this.loading = false;
-      if (this.thumbnail != "" && title != "" && desc != "") {
+      if (this.thumbnail != "" && title != "") {
         this.show = true;
       }
     },
