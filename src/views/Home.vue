@@ -506,6 +506,14 @@ export default {
   text-align: center;
 }
 
+.video-detail > h4 {
+  /* 使文字变为最多显示1行，多余的使用省略号代替 */
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .video-detail > p {
   font-size: 1rem;
   line-height: 1.1rem;

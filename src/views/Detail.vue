@@ -211,14 +211,14 @@
           <!-- 视频上传时间（？） -->
           <h5 style="text-align: center;">{{ videodate }}</h5>
 
-
           <!-- 视频详细信息 -->
           <div class="re_video">
-            <iframe :src="iframeUrl"
-                    v-if="this.iframeUrl!==''"
-                    allowfullscreen='true'
-                    style="width: 948px; height: 763px;  margin:10px auto 30px;display: block;">
-            </iframe>
+            <iframe
+              :src="iframeUrl"
+              v-if="this.iframeUrl!==''"
+              allowfullscreen="true"
+              style="width: 948px; height: 763px;  margin:10px auto 30px;display: block;"
+            ></iframe>
             <!-- 如果是ipfs视频直接播放视频，否则显示封面 -->
             <div v-if="isIpfs" style="text-align: center;" id="nodes">{{$t('init_tip')}}</div>
             <video
@@ -367,7 +367,14 @@
             <span v-else style="float:right">【{{$t("no_next_article")}}】</span>
           </ul>
         </div>
+
+        <!-- 评论区 -->
+        <div>
+          <Commits :sid="sid"></Commits>
+        </div>
       </div>
+
+      <!-- 删除副本的提示框 -->
       <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
         <span>确认删除？</span>
         <span slot="footer" class="dialog-footer">
@@ -391,6 +398,7 @@
 import topnavbar from "../components/TopNavbar.vue";
 import left_navbar from "../components/LeftNavbar.vue";
 import Footer from "../components/Footer.vue";
+import Commits from "../components/commits.vue";
 import { copyToClipboardText } from "../static/js/generic";
 export default {
   data() {
@@ -429,6 +437,8 @@ export default {
       myVideoList: [],
       // 我的全部视频列表（处理视频是否存在于该列表）
       allVideoList: [],
+      // 视频评论的sid
+      sid: "",
       // 视频列表的关键词
       myListQuery: "",
       // 我的视频列表的当前页数
@@ -481,7 +491,7 @@ export default {
       URL_EXPANDERS: {},
       // 获取到的所有视频，以页数为第一维组成二维数组(和localStorage存储一起使用，已被弃用）
       // localStorageNum: []
-      iframeUrl:""
+      iframeUrl: ""
     };
   },
   computed: {
@@ -569,7 +579,6 @@ export default {
   },
   mounted() {
     this.buildUrlMatchers();
-
   },
   methods: {
     open1(message) {
@@ -642,27 +651,27 @@ export default {
         }
       );
     },
-    regToIframe(url){
-let str = url;
-let regBili = /(https:\/\/|http:\/\/)www.bilibili.com\/video\/av(\S+)/;
-let regNico = /(https:\/\/|http:\/\/)www.nicovideo.jp\/watch\/sm(\S+)/;
-let regYtb =  /(https:\/\/|http:\/\/)www.youtube.com\/watch\?v=(\S+)/;
-let regAcf =  /(https:\/\/|http:\/\/)www.acfun.cn\/v\/ac(\S+)/;
-      if(regBili.exec(str)!==null){
+    regToIframe(url) {
+      let str = url;
+      let regBili = /(https:\/\/|http:\/\/)www.bilibili.com\/video\/av(\S+)/;
+      let regNico = /(https:\/\/|http:\/\/)www.nicovideo.jp\/watch\/sm(\S+)/;
+      let regYtb = /(https:\/\/|http:\/\/)www.youtube.com\/watch\?v=(\S+)/;
+      let regAcf = /(https:\/\/|http:\/\/)www.acfun.cn\/v\/ac(\S+)/;
+      if (regBili.exec(str) !== null) {
         return `//player.bilibili.com/player.html?aid=${regBili.exec(str)[2]}`;
       }
-      if(regNico.exec(str)!==null){
+      if (regNico.exec(str) !== null) {
         return `//embed.nicovideo.jp/watch/sm${regNico.exec(str)[2]}`;
       }
-      if(regYtb.exec(str)!==null){
+      if (regYtb.exec(str) !== null) {
         return `https://www.youtube.com/embed/${regYtb.exec(str)[2]}`;
       }
-      if(regAcf.exec(str)!==null){
+      if (regAcf.exec(str) !== null) {
         return `https://www.acfun.cn/player/ac${regAcf.exec(str)[2]}`;
       }
       return "";
       /*let regNico =/(https:\/\/|() /*/
-/*
+      /*
      内嵌规则：匹配末尾的参数即可
         let reg =  /^(https\/\/:|http:\/\/)?www.(bilibili).com\/video\/av[a-zA-Z0-9]+/
       Bilibili:
@@ -678,8 +687,6 @@ let regAcf =  /(https:\/\/|http:\/\/)www.acfun.cn\/v\/ac(\S+)/;
               <iframe src="https://www.acfun.cn/player/ac13167581"></iframe>
                             https://www.acfun.cn/v/ac13113814
   */
-
-
     },
     // 查询视频详细信息
     searchVideo: function() {
@@ -731,6 +738,9 @@ let regAcf =  /(https:\/\/|http:\/\/)www.acfun.cn\/v\/ac(\S+)/;
           this.myVideoData = result.data.data;
           this.iframeUrl = this.regToIframe(this.myVideoData.video.item.url);
           this.theVideoRank = result.data.data.video.clearence;
+          if (result.data.data.video.comment_thread) {
+            this.sid = result.data.data.video.comment_thread.$oid;
+          }
 
           // 修改网站标题
           document.title = this.myVideoData.video.item.title;
@@ -1103,7 +1113,7 @@ let regAcf =  /(https:\/\/|http:\/\/)www.acfun.cn\/v\/ac(\S+)/;
       return vs;
     }
   },
-  components: { left_navbar, topnavbar, Footer }
+  components: { left_navbar, topnavbar, Footer, Commits }
 };
 </script>
 
