@@ -1,16 +1,30 @@
+
+<i18n>
+{
+  "CHS": {
+    "move_up": "上移",
+    "move_down": "下移"
+  },
+  "ENG": {
+    "move_up": "Move Up",
+    "move_down": "Move Down"
+  }
+}
+</i18n>
+
 <template>
   <div>
     <!--  <i class="fa fa-arrow-up move-up" aria-hidden="true" @click="moveUp()"></i>
     <i class="fa fa-arrow-down move-down" aria-hidden="true"  @click="moveDown"></i>
     -->
 
-    <el-tooltip class="item move-up-box" effect="dark" content="上移" placement="top">
+    <el-tooltip class="item move-up-box" effect="dark" :content="$t('move_up')" placement="top">
       <el-button>
         <i class="fa fa-arrow-up move-up" aria-hidden="true" @click="moveUp()"></i>
       </el-button>
     </el-tooltip>
 
-    <el-tooltip class="item move-down-box" effect="dark" content="下移" placement="bottom">
+    <el-tooltip class="item move-down-box" effect="dark" :content="$t('move_down')" placement="bottom">
       <el-button>
         <i class="fa fa-arrow-down move-down" aria-hidden="true" @click="moveDown"></i>
       </el-button>

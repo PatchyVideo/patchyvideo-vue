@@ -29,7 +29,7 @@
         "TODO1":"Automatically parse to this page",
         "TODO2":"Find the hash according to the av number and fill it into the video src",
         "TODO3":"Follow-up comment functions, etc.",
-        "init_tip":"IPFS Service initialization..",
+        "init_tip":"IPFS Service initializing..",
         "connecting_tip":"IPFS Service started, connecting..",
         "connect_success_tip":" IPFS node is connected",
         "err_tip":"Your browser may be IE"

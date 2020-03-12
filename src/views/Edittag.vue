@@ -24,7 +24,7 @@
     }
   },
   "ENG": {
-    "title":"Edittag",
+    "title":"Edit tag",
     "search_tag":"Search tag",
     "tag_categories":{
         "General":"General",

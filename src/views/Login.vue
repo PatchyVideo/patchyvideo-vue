@@ -57,15 +57,15 @@
     "forget_psd":"Forgot password?",
     "username":"Username",
     "psd":"Password",
-    "username_tip":"Please enter account",
-    "username_msg":"2 to 32 characters",
+    "username_tip":"Please enter username",
+    "username_msg":"Username length: 2 to 32 characters",
     "psd_tip":"Please enter the password",
-    "psd_msg":"6 to 64 characters",
+    "psd_msg":"Password length: 6 to 64 characters",
     "status":"Ready",
-    "login_success_msg":"login successful",
+    "login_success_msg":"Login succeed",
     "login_fail_msg":"Login failed",
     "request_failed":"Request failed",
-    "net_err":"Network Error!"
+    "net_err":"Network Error"
   }
 }
 </i18n>

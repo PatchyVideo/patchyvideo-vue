@@ -25,7 +25,7 @@
     "title":"Forget password",
     "reset_psd":"Reset Password",
     "input_tip":"Please enter the email associated with the account",
-    "email_tip":"please input your email",
+    "email_tip":"please enter your email",
     "err_tip":"Please input the correct email address",
     "button":"Send email"
   }

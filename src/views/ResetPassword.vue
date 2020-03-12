@@ -30,11 +30,11 @@
     "reset_psd":"Reset Password",
     "psd_input_tip":"Please enter a new password",
     "repeat_input_tip":"Please repeat password",
-    "err_tip":"Incorrect password entered twice!",
-    "input_psd":"Please enter the password",
-    "psd_limit":"6 to 64 characters",
-    "fail_msg":"The request failed, please resend the email on the password recovery interface!",
-    "success_msg":"Password reset successfully!"
+    "err_tip":"Passwords mismatch",
+    "input_psd":"Please enter password",
+    "psd_limit":"Password length: 6 to 64 characters",
+    "fail_msg":"Reset failed, please report bug",
+    "success_msg":"An reset password email has been sent to your email address."
   }
 }
 </i18n>

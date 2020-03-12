@@ -21,7 +21,6 @@
         "input_addr":"在这里输入IPFS视频的地址w",
         "input_orig_addr":"在这里输入视频的原地址（没有也没关系w）",
         "input_title":"在这里输入视频的标题w",
-        "input_title":"在这里输入视频的标题w",
         "introductory_video":"介绍一下自己的视频吧",
         "upload_cover":"从这里上传视频封面",
         "upload_no_cover":"还没上传封面呢！",
@@ -41,26 +40,25 @@
     },
     "ENG":{
         "cancel":"Cancel",
-        "input_addr":"Enter the address of the IPFS video here",
-        "input_orig_addr":"Enter the original address of the video here (It doesn't matter if you don't)",
+        "input_addr":"Enter IPFS video CID here",
+        "input_orig_addr":"Enter the original address of the video here (Optional)",
         "input_title":"Enter the title of the video here",
-        "input_title":"Enter the title of the video here",
-        "introductory_video":"Introduce your own video",
+        "introductory_video":"Describe your own video",
         "upload_cover":"Upload video cover from here",
         "upload_no_cover":"Haven't uploaded a cover yet!",
-        "upload_limit":"Only one jpg / png file can be uploaded (recommended picture ratio 8: 5)",
+        "upload_limit":"Only one jpg / png file can be uploaded (recommend picture ratio 8: 5)",
         "label":"label",
         "no_label":"No tags!",
         "post_video":"Post video",
-        "not_input_addr":"No video address yet!",
-        "addr_err":"Video address format is wrong!",
+        "not_input_addr":"Please enter video CID",
+        "addr_err":"Incorrect Video URL",
         "not_input_title":"Haven't entered a title yet",
         "not_introductory_video":"Don't you introduce the video?",
         "upload_cover_limit":"Only one cover can be uploaded!",
-        "upload_fail":"Video upload failed!",
+        "upload_fail":"Ipload failed",
         "not_exist":"Does not exist!",
-        "upload_success":"Uploaded successfully!",
-        "unknown_err":"Unknown mistake"
+        "upload_success":"Upload succeed",
+        "unknown_err":"Unknown error, please report bug"
 
     }
 }

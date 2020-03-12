@@ -1,6 +1,17 @@
+<i18n>
+{
+    "CHS": {
+        "set_as_playlist_cover": "设置此视频封面为播放列表封面"
+    },
+    "ENG": {
+        "set_as_playlist_cover": "Set video cover as playlist cover"
+    }
+}
+</i18n>
+
 <template>
 <div>
-    <el-tooltip class="item" effect="dark" content="设置此视频封面为播放列表封面" placement="top-end">
+    <el-tooltip class="item" effect="dark" :content="$t('set_as_playlist_cover')" placement="top-end">
         <i class="fa fa-picture-o" aria-hidden="true" @click="setCover()"></i>
     </el-tooltip>
 

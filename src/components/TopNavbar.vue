@@ -78,7 +78,7 @@
       "playlist": "Playlists",
       "postvideo": "Post Video",
       "edittag": "Tags",
-      "ipfs": "幻想之物",
+      "ipfs": "IPFS",
       "bug_report": "Report Bugs"
     },
 
