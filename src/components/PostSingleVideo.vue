@@ -79,7 +79,11 @@
   <div class="postBox" v-loading="loading">
     <div class="content">
       <!-- 视频输入框 -->
-      <el-input v-model="VideoURL" @keyup.enter.native="onFetchVideo_Click" :placeholder="$t('video_url')">
+      <el-input
+        v-model="VideoURL"
+        @keyup.enter.native="onFetchVideo_Click"
+        :placeholder="$t('video_url')"
+      >
         <el-button slot="append" @click="onFetchVideo_Click">{{$t('get_info')}}</el-button>
       </el-input>
       <!-- 视频URL验证成功的时候出现的内容 -->
@@ -88,7 +92,7 @@
         <div class="videoDetail" v-show="show">
           <img :src="thumbnail" />
           <h2>{{title}}</h2>
-          <p>{{desc}}</p>
+          <p style="word-break: break-all;">{{desc}}</p>
           <!-- 标签编辑 -->
           <div class="tagsEdit" v-if="false">
             <h3>{{$t('tag')}}</h3>
@@ -162,13 +166,16 @@ export default {
       RepostType: "unknown",
       // 视频的发布类型
       RepostTypes: [
-        { value: "official", label: this.$t('official') },
-        { value: "official_repost", label: this.$t('official_repost') },
-        { value: "authorized_translation", label: this.$t('authorized_translation') },
-        { value: "authorized_repost", label: this.$t('authorized_repost') },
-        { value: "translation", label: this.$t('translation') },
-        { value: "repost", label: this.$t('repost') },
-        { value: "unknown", label: this.$t('unknown') }
+        { value: "official", label: this.$t("official") },
+        { value: "official_repost", label: this.$t("official_repost") },
+        {
+          value: "authorized_translation",
+          label: this.$t("authorized_translation")
+        },
+        { value: "authorized_repost", label: this.$t("authorized_repost") },
+        { value: "translation", label: this.$t("translation") },
+        { value: "repost", label: this.$t("repost") },
+        { value: "unknown", label: this.$t("unknown") }
       ],
       // 匹配短地址，用以扩展成完整地址
       EXPANDERS: {},
@@ -564,21 +571,21 @@ export default {
     // URL验证成功的弹出框
     openSuccessfully() {
       this.$message({
-        message: this.$t('url_passed'),
+        message: this.$t("url_passed"),
         type: "success"
       });
     },
     // URL验证失败的弹出框
     openfailed() {
-      this.$message.error(this.$t('invalid_url'));
+      this.$message.error(this.$t("invalid_url"));
     },
     // URL为空的弹出窗
     InvalidURL() {
-      this.$message.error(this.$t('enter_url'));
+      this.$message.error(this.$t("enter_url"));
     },
     // 获取视频信息失败的弹出框
     ErrorFetchingVideo() {
-      this.$message.error(this.$t('fetch_failed'));
+      this.$message.error(this.$t("fetch_failed"));
     },
     // 获取视频的详细信息
     fetchVideo(url) {
@@ -738,25 +745,25 @@ export default {
     // 各种各样的报错警告
     open2() {
       this.$message({
-        message: this.$t('post_failed'),
+        message: this.$t("post_failed"),
         type: "error"
       });
     },
     open3(errorTag) {
       this.$message({
-        message: this.$t('tag_not_exist', {tag: errorTag}),
+        message: this.$t("tag_not_exist", { tag: errorTag }),
         type: "error"
       });
     },
     open4() {
       this.$message({
-        message: this.$t('post_succeed'),
+        message: this.$t("post_succeed"),
         type: "success"
       });
     },
     open5() {
       this.$message({
-        message: this.$t('unknown_error'),
+        message: this.$t("unknown_error"),
         type: "error"
       });
     }
