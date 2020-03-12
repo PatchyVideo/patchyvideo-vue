@@ -21,7 +21,7 @@
 <i18n>
 {
   "CHS": {
-    "tag_count_prompt": "显示 {{ count2 }} / {{ maxcount }} 个标签",
+    "tag_count_prompt": "显示 {count2} / {maxcount} 个标签",
     "no_tag_found": "没有搜索到标签",
     "tag_prompt": "搜索标签（可不填）",
     "category_prompt": "请选择类别（可不选）",
@@ -59,7 +59,7 @@
     "rename_failed": "修改失败，请重试！"
   },
   "ENG": {
-    "tag_count_prompt": "Showing {{ count2 }} / {{ maxcount }} tags",
+    "tag_count_prompt": "Showing {count2} / {maxcount} tags",
     "no_tag_found": "No tag found",
     "tag_prompt": "Partial tag (Optional)",
     "category_prompt": "Category (Optional)",
