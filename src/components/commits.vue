@@ -336,7 +336,6 @@ export default {
         }
       })
         .then(result => {
-          console.log(result);
           this.allCommits = result.data.data.comments;
           this.allUsers = result.data.data.users;
 
