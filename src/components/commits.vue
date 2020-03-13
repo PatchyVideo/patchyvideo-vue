@@ -57,13 +57,10 @@
       <div class="commitDetail" v-if="!item.hidden&&!item.deleted">
         <!-- 用户头像 -->
         <div class="avatar">
-          <el-avatar
-            :src="userAvatar(commitUser(item.meta.created_by.$oid).profile.image)"
-            style="margin:15px;margin-top:0px;"
-          ></el-avatar>
+          <el-avatar :src="userAvatar(commitUser(item.meta.created_by.$oid).profile.image)"></el-avatar>
         </div>
         <!-- 右半部分 -->
-        <div>
+        <div class="commitContent">
           <div>
             <router-link
               :to="'/users/'+item.meta.created_by.$oid"
@@ -97,15 +94,14 @@
             <div v-show="showReplies[index].show">
               <div class="allReply" v-for="(reply,i) in item.children" :key="i">
                 <!-- 楼中楼头像 -->
-                <div class="avatar">
+                <div class="avatar" style="margin:0">
                   <el-avatar
                     :src="userAvatar(commitUser(reply.meta.created_by.$oid).profile.image)"
                     size="small"
-                    style="margin-right:5px"
                   ></el-avatar>
                 </div>
                 <!-- 楼中楼右半部分 -->
-                <div>
+                <div class="commitContent" style="margin-left:40px;">
                   <div>
                     <router-link
                       :to="'/users/'+item.meta.created_by.$oid"
@@ -468,6 +464,12 @@ export default {
 
 .avatar {
   float: left;
+  margin: 15px;
+  margin-top: 0px;
+}
+.commitContent {
+  margin-left: 70px;
+  white-space: pre-line;
 }
 .commitDate {
   font-size: 13px;
