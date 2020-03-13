@@ -22,7 +22,7 @@
 
 
 <template>
-  <div>
+  <div style="text-align: left;">
     <!-- 标题 -->
     <div class="new_top">
       <h2>评论</h2>
@@ -254,9 +254,25 @@ export default {
       } else {
         return false;
       }
+    },
+    // 判断请求的URL
+    requestURL() {
+      if (this.$route.path === "/listdetail")
+        return {
+          url: "/be/comments/add_to_playlist.do",
+          data: { pid: this.$route.query.id, text: this.commit }
+        };
+      else if (this.$route.path === "/video")
+        return {
+          url: "/be/comments/add_to_video.do",
+          data: { vid: this.$route.query.id, text: this.commit }
+        };
+      else return false;
     }
   },
-  created() {},
+  created() {
+    this.isAuthorized();
+  },
   methods: {
     // 获取评论
     getCommits() {
@@ -312,14 +328,10 @@ export default {
       this.posting = true;
       this.axios({
         method: "post",
-        url: "/be/comments/add_to_video.do",
-        data: {
-          vid: this.$route.query.id,
-          text: this.commit
-        }
+        url: this.requestURL.url,
+        data: this.requestURL.data
       })
         .then(result => {
-          console.log(result);
           this.posting = false;
           if (result.data.status == "SUCCEED") {
             this.tid = result.data.data.thread_id;
@@ -365,7 +377,6 @@ export default {
         }
       })
         .then(result => {
-          console.log(result);
           if (result.data.status == "SUCCEED") {
             this.reply = "";
             this.replycommits[index].show = false;
@@ -383,6 +394,18 @@ export default {
     // 登录跳转
     login() {
       this.$store.commit("changeifRouter", "0");
+    },
+    // 查看是否有编辑权限
+    isAuthorized() {
+      this.axios({
+        method: "post",
+        url: "/be/user/is_authorized",
+        data: {
+          op: "commentAdmin"
+        }
+      }).then(result => {
+        console.log(result);
+      });
     },
     // 各种信息
     openSuccessful(message) {
