@@ -22,7 +22,20 @@
 
 
 <template>
-  <div>
+  <div style="text-align: left;">
+    <!-- 管理操作的弹出框 -->
+    <el-dialog title="请选择操作" :visible.sync="AuthOps" width="50%">
+      <div v-loading="Authorizing">
+        <el-button style="width:100%;" @click="deletCommit()">删除评论</el-button>
+        <br />
+        <br />
+        <el-button style="width:100%;" @click="hideCommit()">隐藏评论</el-button>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="AuthOps = false">取 消</el-button>
+      </span>
+    </el-dialog>
+
     <!-- 标题 -->
     <div class="new_top">
       <h2>评论</h2>
@@ -57,13 +70,10 @@
       <div class="commitDetail" v-if="!item.hidden&&!item.deleted">
         <!-- 用户头像 -->
         <div class="avatar">
-          <el-avatar
-            :src="userAvatar(commitUser(item.meta.created_by.$oid).profile.image)"
-            style="margin:15px;margin-top:0px;"
-          ></el-avatar>
+          <el-avatar :src="userAvatar(commitUser(item.meta.created_by.$oid).profile.image)"></el-avatar>
         </div>
         <!-- 右半部分 -->
-        <div>
+        <div class="commitContent">
           <div>
             <router-link
               :to="'/users/'+item.meta.created_by.$oid"
@@ -90,41 +100,66 @@
             type="text"
             @click="replycommits[index].show=false"
           >收起回复</el-button>
+
+          <!-- 权限操作 -->
+          <el-button
+            class="replyCommit"
+            v-if="isLogin&&(Authorized||myCommit(commitUser(item.meta.created_by.$oid).profile.username))"
+            type="text"
+            @click="AuthorizeCommit(item._id.$oid)"
+          >管理</el-button>
         </div>
+
         <!-- 楼中楼 -->
         <div>
           <el-collapse-transition>
             <div v-show="showReplies[index].show">
               <div class="allReply" v-for="(reply,i) in item.children" :key="i">
-                <!-- 楼中楼头像 -->
-                <div class="avatar">
-                  <el-avatar
-                    :src="userAvatar(commitUser(reply.meta.created_by.$oid).profile.image)"
-                    size="small"
-                    style="margin-right:5px"
-                  ></el-avatar>
-                </div>
-                <!-- 楼中楼右半部分 -->
-                <div>
-                  <div>
-                    <router-link
-                      :to="'/users/'+item.meta.created_by.$oid"
-                      target="_blank"
-                    >{{commitUser(reply.meta.created_by.$oid).profile.username}}:</router-link>
-                    {{reply.content}}
+                <!-- 正常情况下的渲染 -->
+                <div v-if="!reply.hidden&&!reply.deleted">
+                  <!-- 楼中楼头像 -->
+                  <div class="avatar" style="margin:0">
+                    <el-avatar
+                      :src="userAvatar(commitUser(reply.meta.created_by.$oid).profile.image)"
+                      size="small"
+                    ></el-avatar>
                   </div>
-                  <span class="commitDate">{{commitdate(reply.meta.created_at.$date)}}</span>
-                  <el-button
-                    v-if="isLogin"
-                    class="replyCommit"
-                    type="text"
-                    @click="openReplyBox(index,commitUser(reply.meta.created_by.$oid).profile.username,reply._id.$oid)"
-                  >回复</el-button>
+                  <!-- 楼中楼右半部分 -->
+                  <div class="commitContent" style="margin-left:40px;">
+                    <div>
+                      <router-link
+                        :to="'/users/'+item.meta.created_by.$oid"
+                        target="_blank"
+                      >{{commitUser(reply.meta.created_by.$oid).profile.username}}:</router-link>
+                      {{reply.content}}
+                    </div>
+                    <span class="commitDate">{{commitdate(reply.meta.created_at.$date)}}</span>
+                    <el-button
+                      v-if="isLogin"
+                      class="replyCommit"
+                      type="text"
+                      @click="openReplyBox(index,commitUser(reply.meta.created_by.$oid).profile.username,reply._id.$oid)"
+                    >回复</el-button>
+                    <!-- 权限操作 -->
+                    <el-button
+                      class="replyCommit"
+                      v-if="isLogin&&(Authorized||myCommit(commitUser(reply.meta.created_by.$oid).profile.username))"
+                      type="text"
+                      @click="AuthorizeCommit(reply._id.$oid)"
+                    >管理</el-button>
+                  </div>
                 </div>
+                <!-- 被隐藏的时候的渲染 -->
+                <div style="margin-left:40px;" v-if="reply.hidden">
+                  该评论已被隐藏
+                  <el-button type="text" @click="reply.hidden=false">点我展开</el-button>
+                </div>
+                <div style="margin-left:40px;margin-bottom:10px" v-if="reply.deleted">抱歉，该评论已被删除</div>
               </div>
             </div>
           </el-collapse-transition>
         </div>
+
         <!-- 楼中楼的回复框 -->
         <div>
           <el-collapse-transition>
@@ -194,7 +229,15 @@ export default {
       // 回复是否正在发表中
       replying: false,
       // 评论是否在加载中
-      loadingCommit: false
+      loadingCommit: false,
+      // 是否有管理权限
+      Authorized: false,
+      // 管理页面的弹出框
+      AuthOps: false,
+      // 被管理对象的cid
+      AuthorizedCid: "",
+      // 管理页面是否加载的标志
+      Authorizing: false
     };
   },
   computed: {
@@ -244,7 +287,7 @@ export default {
         );
       };
     },
-    // 判断是否登录的标志
+    // 判断是否登录
     isLogin() {
       if (
         JSON.stringify(this.$store.state.username) != "null" &&
@@ -254,9 +297,32 @@ export default {
       } else {
         return false;
       }
+    },
+    // 判断是否为自己的评论
+    // *因为是凭借用户名进行判断，所以可能会有些许误差*
+    myCommit() {
+      return function(name) {
+        return name == this.$store.state.username;
+      };
+    },
+    // 判断请求的URL
+    requestURL() {
+      if (this.$route.path === "/listdetail")
+        return {
+          url: "/be/comments/add_to_playlist.do",
+          data: { pid: this.$route.query.id, text: this.commit }
+        };
+      else if (this.$route.path === "/video")
+        return {
+          url: "/be/comments/add_to_video.do",
+          data: { vid: this.$route.query.id, text: this.commit }
+        };
+      else return false;
     }
   },
-  created() {},
+  created() {
+    this.isAuthorized();
+  },
   methods: {
     // 获取评论
     getCommits() {
@@ -270,7 +336,6 @@ export default {
         }
       })
         .then(result => {
-          console.log(result);
           this.allCommits = result.data.data.comments;
           this.allUsers = result.data.data.users;
 
@@ -291,6 +356,7 @@ export default {
         })
         .catch(error => {
           console.log(error);
+          this.openFailed("获取视频失败，请检查网络设置！");
           this.loadingCommit = false;
         });
     },
@@ -312,14 +378,10 @@ export default {
       this.posting = true;
       this.axios({
         method: "post",
-        url: "/be/comments/add_to_video.do",
-        data: {
-          vid: this.$route.query.id,
-          text: this.commit
-        }
+        url: this.requestURL.url,
+        data: this.requestURL.data
       })
         .then(result => {
-          console.log(result);
           this.posting = false;
           if (result.data.status == "SUCCEED") {
             this.tid = result.data.data.thread_id;
@@ -327,11 +389,12 @@ export default {
             this.getCommits();
             this.openSuccessful("发表成功！");
           } else {
-            this.openFailed("发表失败！");
+            this.openFailed("发表失败，请检查网络设置！");
           }
         })
         .catch(error => {
           console.log(error);
+          this.openFailed("发表失败，请检查网络设置！");
           this.posting = false;
         });
     },
@@ -365,24 +428,108 @@ export default {
         }
       })
         .then(result => {
-          console.log(result);
           if (result.data.status == "SUCCEED") {
             this.reply = "";
             this.replycommits[index].show = false;
             this.showReplies[index].show = true;
             this.getCommits();
             this.openSuccessful("发表成功！");
+          } else {
+            this.openFailed("发表失败，请检查网络设置！");
           }
           this.replying = false;
         })
         .catch(error => {
           console.log(error);
           this.replying = false;
+          this.openFailed("发表失败，请检查网络设置！");
         });
     },
     // 登录跳转
     login() {
       this.$store.commit("changeifRouter", "0");
+    },
+    // 查看是否有编辑权限
+    // op可选参数：
+    // 评论操作：commentAdmin
+    // 标签操作：tagAdmin
+    // 播放列表操作：editPlaylist
+    // 设置视频权限：setVideoClearence
+    isAuthorized() {
+      this.axios({
+        method: "post",
+        url: "/be/user/is_authorized",
+        data: {
+          op: "commentAdmin"
+        }
+      })
+        .then(result => {
+          if (result.data.status == "SUCCEED") {
+            this.Authorized = true;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    // 打开权限管理窗口
+    AuthorizeCommit(cid) {
+      this.AuthorizedCid = cid;
+      this.AuthOps = true;
+    },
+    // 删除评论
+    deletCommit() {
+      this.Authorizing = true;
+      this.axios({
+        method: "post",
+        url: "be/comments/del.do",
+        data: {
+          cid: this.AuthorizedCid
+        }
+      })
+        .then(result => {
+          if (result.data.status == "SUCCEED") {
+            this.openSuccessful("操作成功！");
+            this.getCommits();
+          } else {
+            this.openFailed("操作失败，请检查网络设置！");
+          }
+          this.Authorizing = false;
+          this.AuthOps = false;
+        })
+        .catch(error => {
+          console.log(error);
+          this.openFailed("操作失败，请检查网络设置！");
+          this.Authorizing = false;
+          this.AuthOps = false;
+        });
+    },
+    // 隐藏评论
+    hideCommit() {
+      this.Authorizing = true;
+      this.axios({
+        method: "post",
+        url: "be/comments/hide.do",
+        data: {
+          cid: this.AuthorizedCid
+        }
+      })
+        .then(result => {
+          if (result.data.status == "SUCCEED") {
+            this.openSuccessful("操作成功！");
+            this.getCommits();
+          } else {
+            this.openFailed("操作失败，请检查网络设置！");
+          }
+          this.Authorizing = false;
+          this.AuthOps = false;
+        })
+        .catch(error => {
+          console.log(error);
+          this.openFailed("操作失败，请检查网络设置！");
+          this.Authorizing = false;
+          this.AuthOps = false;
+        });
     },
     // 各种信息
     openSuccessful(message) {
@@ -445,6 +592,12 @@ export default {
 
 .avatar {
   float: left;
+  margin: 15px;
+  margin-top: 0px;
+}
+.commitContent {
+  margin-left: 70px;
+  white-space: pre-line;
 }
 .commitDate {
   font-size: 13px;
@@ -453,6 +606,7 @@ export default {
 }
 .replyCommit {
   float: right;
+  margin-left: 10px;
 }
 .replyBox {
   background-color: #90939909;
@@ -468,5 +622,11 @@ export default {
   padding: 5px;
   margin-left: 70px;
   font-size: 14px;
+}
+.hiddenCommit {
+  margin-left: 70px;
+}
+.deletedCommit {
+  margin-left: 70px;
 }
 </style>
