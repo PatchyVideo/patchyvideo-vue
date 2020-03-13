@@ -231,7 +231,7 @@
               style="position: relative;left: 50%;transform: translateX(-50%);"
             ></video>
             <img
-              v-if="this.iframeUrl===''"
+              v-if="this.iframeUrl===''&&!isIpfs"
               :src="'/images/covers/' + myVideoData.video.item.cover_image"
               width="320px"
               height="200px"
