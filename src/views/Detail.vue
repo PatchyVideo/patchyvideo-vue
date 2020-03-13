@@ -239,6 +239,7 @@
             <p
               class="videoDesc"
               @click="postAsCopy($event)"
+              style="word-break: break-all;"
               v-html="myVideoData.video.item.desc"
               v-linkified
             ></p>
