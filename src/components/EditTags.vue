@@ -51,6 +51,19 @@
     "tag_add_succeed": "Tag added",
     "tag_modify_succeed": "Tags saved",
     "unknown_error": "An unknown error has occurred, please report bug"
+  },
+  "CHT": {
+    "enter_tag": "請輸入標簽",
+    "edit_common_tags": "編輯共有標簽",
+    "tag_already_exist": "標簽已存在",
+    "tag_not_exist": "標簽不存在",
+    "recommnad_tags": "推薦標簽：",
+    "save": "保存修改",
+    "cancel":"不保存關閉",
+    "issave":"已經修改tag但沒有保存,是否保存?",
+    "tag_add_succeed": "Tag添加成功！",
+    "tag_modify_succeed": "修改成功！",
+    "unknown_error": "未知錯誤"
   }
 }
 </i18n>

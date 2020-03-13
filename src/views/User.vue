@@ -68,6 +68,23 @@ Vue.prototype.$echarts = echarts;
         "tab3":"Folder",
         "tab4":"Playlists"
     }
+  },
+  "CHT": {
+    "title":"創建播放列表",
+    "me":{
+        "tab1":"我的信息",
+        "tab2":"我貢獻的索引",
+        "tab3":"我的文件夾",
+        "tab4":"我的播放列表",
+        "tab5":"發布狀態",
+        "tab6":"黑名單"
+    },
+    "outer_user":{
+        "tab1":"用戶信息",
+        "tab2":"他貢獻的索引",
+        "tab3":"他的文件夾",
+        "tab4":"他的收藏"
+    }
   }
 }
 </i18n>

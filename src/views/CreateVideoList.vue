@@ -21,6 +21,11 @@
     "title":"Create playlist",
     "create":"Create a new list",
     "import":"Import existing list"
+  },
+  "CHT": {
+    "title":"創建播放列表",
+    "create":"創建新列表",
+    "import":"導入已有列表"
   }
 }
 </i18n>

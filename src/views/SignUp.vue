@@ -60,7 +60,25 @@
     "net_err":"Network error, please try again",
     "ready":"Ready",
     "format_err":"Please fill all information correctly"
-
+  },
+  "CHT": {
+    "signup":"註冊",
+    "login":"登錄",
+    "input_username":"請輸入用戶名",
+    "input_psd":"請輸入密碼",
+    "input_email":"請輸入郵箱",
+    "repeat_psd":"請重復密碼",
+    "username_exist":"該用戶名已存在！",
+    "psd_err":"兩次輸入密碼不壹致!",
+    "input_account":"請輸入賬號",
+    "account_limit":"長度在 2 到 32 個字符",
+    "psd_limit":"長度在 6 到 64 個字符",
+    "email_limit":"請輸入正確的郵箱地址",
+    "signup_success":"註冊成功",
+    "unknown_err":"未知錯誤",
+    "net_err":"網絡異常",
+    "ready":"就绪",
+    "format_err":"填寫格式不正確！"
   }
 }
 </i18n>

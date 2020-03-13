@@ -93,6 +93,37 @@
     "commit_tip":"Submit succeed",
     "oper_tip":"Operation succeed",
     "delete_tip":"Delete succeed"
+  },
+  "CHT": {
+    "btn_group":{
+        "add_video":"添加視頻",
+        "import_from_other":"從其他網站的收藏夾導入",
+        "add_favorite":"加入收藏",
+        "edit_list_info":"編輯列表信息",
+        "edit_common_tags":"編輯共有標簽",
+        "reverse_list":"列表視頻倒序",
+        "delete":"刪除"
+    },
+    "vedio_chain_tip":"在此插入視頻",
+    "edit_list_info_dialog":{
+        "title":"編輯視頻詳情",
+        "list_title_tip":"這裏是列表標題",
+        "list_title_err_tip":"還沒輸入標題呢",
+        "list_introduction_tip":"來介紹壹下自己的列表吧",
+        "list_introduction_err_tip":"不來介紹壹下列表嗎？",
+        "set_private_list":"設為私有列表",
+        "btn_ok":"確認修改",
+        "btn_cancel":"取 消"
+    },
+    "delete_dialog":{
+        "title":"提示",
+        "content":"確認刪除嗎？",
+        "btn_ok":"確定",
+        "btn_cancel":"取 消"
+    },
+    "commit_tip":"提交成功",
+    "oper_tip":"操作成功",
+    "delete_tip":"刪除成功"
   }
 }
 </i18n>

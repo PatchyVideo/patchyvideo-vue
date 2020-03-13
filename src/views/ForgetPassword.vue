@@ -28,6 +28,14 @@
     "email_tip":"please enter your email",
     "err_tip":"Please input the correct email address",
     "button":"Send email"
+  },
+  "CHT": {
+    "title":"忘記密碼",
+    "reset_psd":"重置密碼",
+    "input_tip":"請輸入賬戶綁定的Email",
+    "email_tip":"請輸入郵箱",
+    "err_tip":"請輸入正確的郵箱地址",
+    "button":"發送郵件"
   }
 }
 </i18n>

@@ -59,7 +59,29 @@
         "not_exist":"Does not exist!",
         "upload_success":"Upload succeed",
         "unknown_err":"Unknown error, please report bug"
-
+    },
+    "CHT":{
+        "cancel":"取 消",
+        "ok":"確 定",
+        "input_addr":"在這裏輸入IPFS視頻的地址w",
+        "input_orig_addr":"在這裏輸入視頻的原地址（沒有也沒關系w）",
+        "input_title":"在這裏輸入視頻的標題w",
+        "introductory_video":"介紹壹下自己的視頻吧",
+        "upload_cover":"從這裏上傳視頻封面",
+        "upload_no_cover":"還沒上傳封面呢！",
+        "upload_limit":"只能壹個上傳jpg/png文件哦(建議圖片比例8：5)",
+        "label":"標簽",
+        "no_label":"暫無標簽！",
+        "post_video":"發布視頻",
+        "not_input_addr":"還沒輸入視頻地址呢！",
+        "addr_err":"視頻地址格式錯誤！",
+        "not_input_title":"還沒輸入標題呢",
+        "not_introductory_video":"不來介紹壹下視頻嗎？",
+        "upload_cover_limit":"只能上傳壹個封面！",
+        "upload_fail":"視頻上傳失敗！",
+        "not_exist":"不存在！",
+        "upload_success":"上傳成功！",
+        "unknown_err":"未知錯誤"
     }
 }
 </i18n>

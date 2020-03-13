@@ -76,6 +76,20 @@
     "search_result": "Search - {result}",
     "syntax_error": "Syntax error in query",
     "syntax_error_not": "NOT cannot be used here"
+  },
+  "CHT": {
+    "page_count": "顯示 {count} / {maxcount} 個視頻",
+    "no_result": "沒有搜索到視頻",
+    "show_deleted": "顯示已失效視頻",
+    "blacklist_prompt": "*已屏蔽含有敏感標簽的視頻，可在個人界面設置",
+    "latest": "發布時間正序",
+    "oldest": "發布時間倒序",
+    "latest_video": "原視頻上傳時間正序",
+    "oldest_video": "原視頻上傳時間倒序",
+    "popular_tags": "熱門標簽",
+    "search_result": "搜索結果 - {result}",
+    "syntax_error": "查詢語法錯誤！",
+    "syntax_error_not": "所輸入的查詢不能與NOT連用！"
   }
 }
 </i18n>

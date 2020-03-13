@@ -29,6 +29,12 @@
     "single_release":"Single",
     "batch_release":"Batch",
     "IPFS_release":"IPFS video"
+  },
+  "CHT": {
+    "title":"發布視頻",
+    "single_release":"單個發布",
+    "batch_release":"批量發布",
+    "IPFS_release":"IPFS視頻發布"
   }
 }
 </i18n>

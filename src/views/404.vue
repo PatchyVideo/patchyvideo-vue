@@ -13,8 +13,12 @@
     "click2home":"点我返回主页"
   },
   "ENG": {
-    "errmsg":"Sorry, the page seems to be wrong ...",
-    "click2home":"Click me to return to the homepage"
+    "errmsg":"Sorry, this page is not found ...",
+    "click2home":"Click me to return to homepage"
+  },
+  "CHT": {
+    "errmsg":"哎呀，頁面好像出錯了...",
+    "click2home":"點我返回主頁"
   }
 }
 </i18n>

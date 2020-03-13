@@ -19,6 +19,12 @@
 	"log_view":"Log view",
 	"para_settings":"Site parameter settings",
 	"scripts":"Web site scripts"
+  },
+  "CHT": {
+	"user_management":"用戶管理",
+	"log_view":"日誌查看",
+	"para_settings":"網站參數設置",
+	"scripts":"網站腳本"
   }
 }
 </i18n>

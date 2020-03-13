@@ -40,6 +40,19 @@
     "create_failed": "Operation failed, please try again",
     "not_login": "Authentication failed, please relogin",
     "create_succeed": "Playlist successfully created"
+  },
+  "CHT": {
+    "this_is_playlist_title": "這裏是列表標題",
+    "describe_your_playlist": "來介紹壹下自己的列表吧~",
+    "set_as_private_playlist": "設為私有列表",
+    "create_now": "立即創建",
+    "no_title_prompt": "還沒輸入標題呢",
+    "no_desc_prompt": "不來介紹壹下列表嗎？",
+    "one_cover_prompt": "只能上傳壹個封面！",
+    "delete_confirm_prompt": "確定移除 {name}？",
+    "create_failed": "列表創建失敗，請重試！",
+    "not_login": "登錄驗證失敗，請先登錄！",
+    "create_succeed": "列表創建成功！"
   }
 }
 </i18n>

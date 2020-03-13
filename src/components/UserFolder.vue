@@ -20,6 +20,12 @@
     "failed_post": "Failed posts",
     "show_url_time": "Show URL and time",
     "show_all": "Show all"
+  },
+  "CHT": {
+    "pending_post": "待處理索引",
+    "failed_post": "已失敗索引",
+    "show_url_time": "顯示url和時間",
+    "show_all": "顯示全部"
   }
 }
 </i18n>

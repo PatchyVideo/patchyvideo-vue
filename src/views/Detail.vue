@@ -98,6 +98,37 @@
    "create_playlist":"Create playlist from this video"
   }
 
+  },
+  "CHT": {
+  "favorite":"收藏",
+  "modify" :"修改",
+  "init_tip":"IPFS服務初始化中..",
+  "connecting_tip":"IPFS 服務已啟動，正在連接..",
+  "connect_success_tip":" IPFS 節點已連接",
+  "copy" : "副本",
+  "add_copy":"添加副本",
+  "del_copy":"刪除副本",
+  "sync_replica_label":"同步副本標簽",
+  "sync_replica_label_from":"從此副本同步標簽",
+  "playlist":"播放列表",
+  "management":"管理",
+  "official":"原始發布",
+  "official_repost":"官方再發布",
+  "authorized_translation":"授權翻譯",
+  "authorized_repost":"授權轉載",
+  "translation":"自發翻譯",
+  "repost":"自發搬運",
+  "unknown":"其他",
+  "previous_article":"前壹篇",
+  "no_previous_article":"沒有前壹篇了哦",
+  "next_article":"後壹篇",
+  "no_next_article":"沒有後壹篇了哦",
+    "infotip":{
+  "release_type":"請修改視頻的發布類型",
+  "nocopies":"此視頻不存在副本",
+  "noplaylist":"本視頻不包含於任何播放列表中",
+  "create_playlist":"由此視頻創建播放列表"
+    }
   }
 }
 </i18n>

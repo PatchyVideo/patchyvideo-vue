@@ -5,6 +5,9 @@
     },
     "ENG": {
         "set_as_playlist_cover": "Set video cover as playlist cover"
+    },
+    "CHT": {
+        "set_as_playlist_cover": "設置此視頻封面為播放列表封面"
     }
 }
 </i18n>
