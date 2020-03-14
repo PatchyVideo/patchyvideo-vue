@@ -21,6 +21,11 @@
     "no_data": "No data",
     "video_list": "Video list",
     "video_count": "Total {videoCount} videos"
+  },
+  "CHT": {
+    "no_data": "暫無數據",
+    "video_list": "視頻索引列表",
+    "video_count": "共有{videoCount}個視頻"
   }
 }
 </i18n>

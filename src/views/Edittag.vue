@@ -35,6 +35,19 @@
         "Language":"Language",
         "Soundtrack":"Soundtrack"
     }
+  },
+  "CHT": {
+    "title":"編輯標簽",
+    "search_tag":"搜索標簽",
+    "tag_categories":{
+        "General":"綜合",
+        "Character":"角色",
+        "Copyright":"作品",
+        "Author":"up主",
+        "Meta":"元數據",
+        "Language":"語言",
+        "Soundtrack":"原曲"
+    }
   }
 }
 </i18n>

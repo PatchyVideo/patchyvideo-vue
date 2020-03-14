@@ -52,6 +52,22 @@
     "err_tip":"No playlist found",
     "statistics":"Total {count} videos",
     "author":"Creator:"
+  },
+  "CHT": {
+    "title":"視頻列表",
+    "create_playList":"創建播放列表",
+    "search":{
+        "input_tip":"搜索列表...",
+        "btn":"搜索",
+        "downlist":{
+            "latest":"時間正序",
+            "oldest":"時間倒序",
+            "last_modified":"最近修改"
+        }
+    },
+    "err_tip":"沒有搜索到視頻列表",
+    "statistics":"共{count}個視頻",
+    "author":"作者："
   }
 }
 </i18n>

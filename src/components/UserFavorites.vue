@@ -25,6 +25,13 @@
         "latest": "Latest",
         "oldest": "Oldest",
         "last_modified": "Last modified"
+    },
+    "CHT": {
+        "no_data": "暫無數據",
+        "search": "搜索列表...",
+        "latest": "時間正序",
+        "oldest": "時間倒序",
+        "last_modified": "最新修改"
     }
 }
 </i18n>

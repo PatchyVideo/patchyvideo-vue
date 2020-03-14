@@ -100,6 +100,35 @@
       "ok": "OK",
       "cancel": "Cancel"
     }
+  },
+  "CHT": {
+    "navbar": {
+      "index": "首頁",
+      "playlist": "播放列表",
+      "postvideo": "發布視頻",
+      "edittag": "標簽",
+      "ipfs": "幻想之物",
+      "bug_report": "反饋BUG"
+    },
+
+    "search": {
+      "tag_text": "標簽/文本",
+      "text": "僅文本",
+      "prompt": "請輸入標簽",
+      "button": "搜索"
+    },
+    "user": {
+      "signup": "註冊",
+      "login": "登錄",
+      "logout": "退出",
+      "logout_prompt": "妳確定要退出登陸嗎?",
+      "login_expire_prompt": "登錄已過期，請新登錄！"
+    },
+    "prompt": {
+      "msg": "提示",
+      "ok": "確 定",
+      "cancel": "取 消"
+    }
   }
 }
 </i18n>

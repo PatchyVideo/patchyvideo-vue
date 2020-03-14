@@ -86,6 +86,38 @@
     "user_exist": "This username has been taken",
     "user_length": "Username length must be between 2 to 32 characters",
     "wrong_pass": "Incorrect password"
+  },
+  "CHT": {
+    "cur_pic": "當前頭像",
+    "pic_prompt": "選擇圖片上傳：大小256 * 256像素",
+    "change_username": "更改用戶名",
+    "update": "更改",
+    "cancel": "取消",
+    "save": "保存",
+    "change_pass": "更改密碼",
+    "old_pass": "舊密碼",
+    "new_pass": "新密碼",
+    "confirm_pass": "確認密碼",
+    "submit": "提交",
+    "reset": "重置",
+    "bind_mail": "綁定郵箱",
+    "enter_email": "請輸入郵箱",
+    "bind": "綁定",
+    "enter_old_pass": "請輸入舊密碼",
+    "pass_short": "密碼長度必須至少為6個字符",
+    "pass_long": "密碼長度必須至多為64個字符",
+    "enter_new_pass": "請輸入新密碼",
+    "enter_new_pass_again": "請再次輸入新密碼",
+    "pass_mismatch": "兩次輸入密碼不壹致!",
+    "invalid_email": "請檢查所填寫郵箱是否合法",
+    "bind_succeed": "綁定成功",
+    "check_form": "請檢查所填寫信息是否正確",
+    "update_succeed": "修改成功！",
+    "update_failed": "更改失敗！",
+    "desc_long": "字數不能超過2000哦！",
+    "user_exist": "用戶名已存在！",
+    "user_length": "用戶名長度應在 2 到 32 個字符！",
+    "wrong_pass": "請檢查舊密碼是否正確"
   }
 }
 </i18n>

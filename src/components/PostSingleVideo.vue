@@ -71,6 +71,29 @@
     "tag_not_exist": "Tag {tag} does not exist",
     "post_succeed": "Upload succeed",
     "unknown_error": "Unknown error, please report bug"
+  },
+  "CHT": {
+    "video_url": "視頻地址",
+    "get_info": "獲取信息",
+    "tag": "標簽",
+    "no_tag": "暫無標簽！",
+    "choose_repost_type": "請修改視頻的發布類型",
+    "post_video": "發布視頻",
+    "official": "原始發布",
+    "official_repost": "官方再發布",
+    "authorized_translation": "授權翻譯",
+    "authorized_repost": "授權轉載",
+    "translation": "自發翻譯",
+    "repost": "自發搬運",
+    "unknown": "其他",
+    "url_passed": "URL驗證成功!",
+    "invalid_url": "非法地址或者不支持指向的網站!",
+    "enter_url": "請輸入視頻地址!",
+    "fetch_failed": "獲取視頻信息失敗,請檢查鏈接是否有效!",
+    "post_failed": "視頻上傳失敗！",
+    "tag_not_exist": "標簽 {tag} 不存在！",
+    "post_succeed": "上傳成功！",
+    "unknown_error": "未知錯誤"
   }
 }
 </i18n>

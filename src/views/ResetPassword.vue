@@ -35,6 +35,16 @@
     "psd_limit":"Password length: 6 to 64 characters",
     "fail_msg":"Reset failed, please report bug",
     "success_msg":"An reset password email has been sent to your email address."
+  },
+  "CHT": {
+    "reset_psd":"重置密碼",
+    "psd_input_tip":"請輸入新的密碼",
+    "repeat_input_tip":"請重復密碼",
+    "err_tip":"兩次輸入密碼不壹致!",
+    "input_psd":"請輸入密碼",
+    "psd_limit":"長度在 6 到 64 個字符",
+    "fail_msg":"請求失敗，請重新在找回密碼界面發送郵件！",
+    "success_msg":"密碼重置成功！"
   }
 }
 </i18n>

@@ -11,6 +11,12 @@
         "no_pending": "No pending posts",
         "failed_post": "Failed posts",
         "total_count": "Total {count}"
+    },
+    "CHT": {
+        "pending_post": "待處理的索引",
+        "no_pending": "暫無待處理的索引",
+        "failed_post": "失敗的索引",
+        "total_count": "共計{count}個"
     }
 }
 </i18n>

@@ -41,6 +41,18 @@
     "tag_not_exist": "Tag {tag} does not exist",
     "post_succeed": "Upload succeed",
     "unknown_error": "Unknown error, please report bug"
+  },
+  "CHT": {
+    "enter_url_prompt": "請輸入視頻的URL, 壹行壹個",
+    "tag": "標簽",
+    "no_tag": "暫無標簽！",
+    "advance": "高級選項",
+    "mutually_copies": "視頻互為副本",
+    "post_video": "發布視頻",
+    "post_failed": "視頻上傳失敗！",
+    "tag_not_exist": "標簽 {tag} 不存在！",
+    "post_succeed": "上傳成功！",
+    "unknown_error": "未知錯誤"
   }
 }
 </i18n>
