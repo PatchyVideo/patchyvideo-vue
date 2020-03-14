@@ -68,107 +68,150 @@
 }
 </i18n>
 
-
 <template>
   <div style="text-align: left;">
     <!-- 管理操作的弹出框 -->
     <el-dialog :title="$t('selectOpts')" :visible.sync="AuthOps" width="50%">
       <div v-loading="Authorizing">
-        <el-button style="width:100%;" @click="deletCommit()">{{$t('deletCommit')}}</el-button>
+        <el-button style="width:100%;" @click="deletCommit()">{{
+          $t("deletCommit")
+        }}</el-button>
         <br />
         <br />
-        <el-button style="width:100%;" @click="hideCommit()">{{$t('hideCommit')}}</el-button>
+        <el-button style="width:100%;" @click="hideCommit()">{{
+          $t("hideCommit")
+        }}</el-button>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="AuthOps = false">{{$t('cancel')}}</el-button>
+        <el-button @click="AuthOps = false">{{ $t("cancel") }}</el-button>
       </span>
     </el-dialog>
 
     <!-- 标题 -->
     <div class="new_top">
-      <h2>{{$t('commit')}}</h2>
-      <p v-if="allCommits.length">{{$t('commitCount', {length: allCommits.length})}}</p>
-      <p v-else>{{$t('noCommit')}}</p>
+      <h2>{{ $t("commit") }}</h2>
+      <p v-if="allCommits.length">
+        {{ $t("commitCount", { length: allCommits.length }) }}
+      </p>
+      <p v-else>{{ $t("noCommit") }}</p>
     </div>
 
     <!-- 发表评论 -->
     <div class="commit" v-if="isLogin">
       <el-input
         type="textarea"
-        :autosize="{ minRows: 4}"
+        :autosize="{ minRows: 4 }"
         :placeholder="$t('saySth')"
         maxlength="500"
         show-word-limit
         v-model="commit"
         @keyup.enter.native="postCommitOnInput()"
       ></el-input>
-      <el-checkbox v-model="UsingEnter">{{$t('usingEnter')}}</el-checkbox>
-      <el-button type="primary" @click="postCommit()" :loading="posting">{{$t('post')}}</el-button>
+      <el-checkbox v-model="UsingEnter">{{ $t("usingEnter") }}</el-checkbox>
+      <el-button type="primary" @click="postCommit()" :loading="posting">{{
+        $t("post")
+      }}</el-button>
     </div>
     <!-- 未登录时显示 -->
     <div v-else>
-      {{$t('joinDiscuss')}}
-      <router-link to="/login" @click.native="login">{{$t('login')}}</router-link>
+      {{ $t("joinDiscuss") }}
+      <router-link to="/login" @click.native="login">{{
+        $t("login")
+      }}</router-link>
     </div>
 
     <!-- 评论详情 -->
     <el-divider></el-divider>
-    <div class="commitBox" v-for="(item,index) in allCommits" :key="index">
+    <div class="commitBox" v-for="(item, index) in allCommits" :key="index">
       <!-- 正常情况下的渲染 -->
-      <div class="commitDetail" v-if="!item.hidden&&!item.deleted">
+      <div class="commitDetail" v-if="!item.hidden && !item.deleted">
         <!-- 用户头像 -->
         <div class="avatar">
-          <el-avatar :src="userAvatar(commitUser(item.meta.created_by.$oid).profile.image)"></el-avatar>
+          <el-avatar
+            :src="
+              userAvatar(commitUser(item.meta.created_by.$oid).profile.image)
+            "
+          ></el-avatar>
         </div>
         <!-- 右半部分 -->
         <div class="commitContent">
           <div>
             <router-link
-              :to="'/users/'+item.meta.created_by.$oid"
+              :to="'/users/' + item.meta.created_by.$oid"
               target="_blank"
-            >{{commitUser(item.meta.created_by.$oid).profile.username}}:</router-link>
-            {{item.content}}
+              >{{
+                commitUser(item.meta.created_by.$oid).profile.username
+              }}:</router-link
+            >
+            {{ item.content }}
           </div>
-          <span class="commitDate">{{commitdate(item.meta.created_at.$date)}}</span>
+
+          <span class="commitDate">{{
+            commitdate(item.meta.created_at.$date)
+          }}</span>
           <el-button
             class="replyCommit"
-            v-if="item.children.length&&!showReplies[index].show"
+            v-if="item.children.length && !showReplies[index].show"
             type="text"
-            @click="showReplies[index].show=true"
-          >{{$t('showRplies', {length: item.children.length})}}</el-button>
+            @click="showReplies[index].show = true"
+            >{{ $t("showRplies", { length: item.children.length }) }}</el-button
+          >
           <el-button
             class="replyCommit"
-            v-else-if="!replycommits[index].show&&isLogin"
+            v-else-if="!replycommits[index].show && isLogin"
             type="text"
-            @click="openReplyBox(index, commitUser(item.meta.created_by.$oid).profile.username,item._id.$oid)"
-          >{{$t('reply')}}</el-button>
+            @click="
+              openReplyBox(
+                index,
+                commitUser(item.meta.created_by.$oid).profile.username,
+                item._id.$oid
+              )
+            "
+            >{{ $t("reply") }}</el-button
+          >
           <el-button
             class="replyCommit"
             v-else-if="isLogin"
             type="text"
-            @click="replycommits[index].show=false"
-          >{{$t('hideReply')}}</el-button>
+            @click="replycommits[index].show = false"
+            >{{ $t("hideReply") }}</el-button
+          >
 
           <!-- 权限操作 -->
           <el-button
             class="replyCommit"
-            v-if="isLogin&&(Authorized||myCommit(commitUser(item.meta.created_by.$oid).profile.username))"
+            v-if="
+              isLogin &&
+                (Authorized ||
+                  myCommit(
+                    commitUser(item.meta.created_by.$oid).profile.username
+                  ))
+            "
             type="text"
             @click="AuthorizeCommit(item._id.$oid)"
-          >{{$t('manage')}}</el-button>
+            >{{ $t("manage") }}</el-button
+          >
         </div>
 
         <!-- 楼中楼 -->
         <div>
           <el-collapse-transition>
             <div v-show="showReplies[index].show">
-              <div class="allReply" v-for="(reply,i) in item.children" :key="i">
+              <div
+                class="allReply"
+                v-for="(reply, i) in item.children"
+                :key="i"
+              >
                 <!-- 正常情况下的渲染 -->
-                <div v-if="!reply.hidden&&!reply.deleted">
+                <div v-if="!reply.hidden && !reply.deleted">
                   <!-- 楼中楼头像 -->
                   <div class="avatar" style="margin:0">
                     <el-avatar
-                      :src="userAvatar(commitUser(reply.meta.created_by.$oid).profile.image)"
+                      :src="
+                        userAvatar(
+                          commitUser(reply.meta.created_by.$oid).profile.image
+                        )
+                      "
                       size="small"
                     ></el-avatar>
                   </div>
@@ -176,36 +219,62 @@
                   <div class="commitContent" style="margin-left:40px;">
                     <div>
                       <router-link
-                        :to="'/users/'+item.meta.created_by.$oid"
+                        :to="'/users/' + item.meta.created_by.$oid"
                         target="_blank"
-                      >{{commitUser(reply.meta.created_by.$oid).profile.username}}:</router-link>
-                      {{reply.content}}
+                        >{{
+                          commitUser(reply.meta.created_by.$oid).profile
+                            .username
+                        }}:</router-link
+                      >
+                      {{ reply.content }}
                     </div>
-                    <span class="commitDate">{{commitdate(reply.meta.created_at.$date)}}</span>
+                    <span class="commitDate">{{
+                      commitdate(reply.meta.created_at.$date)
+                    }}</span>
                     <el-button
                       v-if="isLogin"
                       class="replyCommit"
                       type="text"
-                      @click="openReplyBox(index,commitUser(reply.meta.created_by.$oid).profile.username,reply._id.$oid)"
-                    >{{$t('reply')}}</el-button>
+                      @click="
+                        openReplyBox(
+                          index,
+                          commitUser(reply.meta.created_by.$oid).profile
+                            .username,
+                          reply._id.$oid
+                        )
+                      "
+                      >{{ $t("reply") }}</el-button
+                    >
                     <!-- 权限操作 -->
                     <el-button
                       class="replyCommit"
-                      v-if="isLogin&&(Authorized||myCommit(commitUser(reply.meta.created_by.$oid).profile.username))"
+                      v-if="
+                        isLogin &&
+                          (Authorized ||
+                            myCommit(
+                              commitUser(reply.meta.created_by.$oid).profile
+                                .username
+                            ))
+                      "
                       type="text"
                       @click="AuthorizeCommit(reply._id.$oid)"
-                    >{{$t('manage')}}</el-button>
+                      >{{ $t("manage") }}</el-button
+                    >
                   </div>
                 </div>
                 <!-- 被隐藏的时候的渲染 -->
-                <div style="margin-left:40px;" v-if="reply.hidden">
-                  {{$t('hiddenCommit')}}
-                  <el-button type="text" @click="reply.hidden=false">{{$t('openCommit')}}</el-button>
-                </div>
                 <div
                   style="margin-left:40px;margin-bottom:10px"
                   v-if="reply.deleted"
-                >{{$t('deletedCommit')}}</div>
+                >
+                  {{ $t("deletedCommit") }}
+                </div>
+                <div style="margin-left:40px;" v-else-if="reply.hidden">
+                  {{ $t("hiddenCommit") }}
+                  <el-button type="text" @click="reply.hidden = false">{{
+                    $t("openCommit")
+                  }}</el-button>
+                </div>
               </div>
             </div>
           </el-collapse-transition>
@@ -218,7 +287,7 @@
               <div class="replyBox">
                 <el-input
                   type="textarea"
-                  :autosize="{ minRows: 1, maxRows: 4}"
+                  :autosize="{ minRows: 1, maxRows: 4 }"
                   :placeholder="$t('replyTo')"
                   v-model="reply"
                   maxlength="500"
@@ -232,18 +301,23 @@
                   round
                   @click="postReply(index)"
                   :loading="replying"
-                >{{$t('post')}}</el-button>
+                  >{{ $t("post") }}</el-button
+                >
               </div>
             </div>
           </el-collapse-transition>
         </div>
       </div>
       <!-- 被隐藏的时候的渲染 -->
-      <div class="hiddenCommit" v-if="item.hidden">
-        {{$t('hiddenCommit')}}
-        <el-button type="text" @click="item.hidden=false">{{$t('openCommit')}}</el-button>
+      <div class="deletedCommit" v-if="item.deleted">
+        {{ $t("deletedCommit") }}
       </div>
-      <div class="deletedCommit" v-if="item.deleted">{{$t('deletedCommit')}}</div>
+      <div class="hiddenCommit" v-else-if="item.hidden">
+        {{ $t("hiddenCommit") }}
+        <el-button type="text" @click="item.hidden = false">{{
+          $t("openCommit")
+        }}</el-button>
+      </div>
       <el-divider></el-divider>
     </div>
   </div>
