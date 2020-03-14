@@ -10,12 +10,60 @@
 <i18n>
 {
   "CHS": {
-    "errmsg":"哎呀，页面好像出错了...",
-    "click2home":"点我返回主页"
+    "commit":"评论",
+    "commitCount":"共{length}条评论",
+    "noCommit":"暂无评论！",
+    "saySth":"说点儿什么吧~",
+    "usingEnter":"使用Enter键发表评论",
+    "post":"发表",
+    "joinDiscuss":"想要一起参与讨论？",
+    "login":"点我登录",
+    "showRplies":"查看{length}条回复",
+    "reply":"回复",
+    "hideReply":"收起回复",
+    "manage":"管理",
+    "replyTo":"回复Ta",
+    "hiddenCommit":"该评论已被隐藏",
+    "openCommit":"点我展开",
+    "deletedCommit":"抱歉，该评论已被删除",
+    "selectOpts":"请选择操作",
+    "deletCommit":"删除评论",
+    "hideCommit":"隐藏评论",
+    "cancel":"取 消",
+    "getCommitFailed":"获取评论失败，请检查网络设置！",
+    "PsaySth":"请输入内容！",
+    "postSuccessfully":"发表成功！",
+    "postFailed":"发表失败，请检查网络设置！",
+    "operationSuccessfully":"操作成功！",
+    "operationFailed":"操作失败，请检查网络设置！"
   },
   "ENG": {
-    "errmsg":"Sorry, the page seems to be wrong ...",
-    "click2home":"Click me to return to the homepage"
+    "commit":"Commit",
+    "commitCount":"{length} commits in total",
+    "noCommit":"No commit here!",
+    "saySth":"Say something...",
+    "usingEnter":"Post commit using Enter key",
+    "post":"Post",
+    "joinDiscuss":"Want to join the discuss? ",
+    "login":"Click me to login",
+    "showRplies":"Show {length} commits",
+    "reply":"Reply ",
+    "hideReply":"Hide the reply",
+    "manage":"Manage",
+    "replyTo":"Reply to...",
+    "hiddenCommit":"The commit has been hidden. ",
+    "openCommit":"Click me to show the commit",
+    "deletedCommit":"Sorry, the commit has been deleted",
+    "selectOpts":"Please select the operation",
+    "deletCommit":"Delet the commit",
+    "hideCommit":"Hide the commit",
+    "cancel":"Cancel",
+    "getCommitFailed":"Geting commit data failed, please check your Internet!",
+    "PsaySth":"Please say something!",
+    "postSuccessfully":"Post Successfully",
+    "postFailed":"Failed post , please check your Internet!",
+    "operationSuccessfully":"Operate Successfully",
+    "operationFailed":"Failed operation, please check your Internet!"
   }
 }
 </i18n>
@@ -24,23 +72,23 @@
 <template>
   <div style="text-align: left;">
     <!-- 管理操作的弹出框 -->
-    <el-dialog title="请选择操作" :visible.sync="AuthOps" width="50%">
+    <el-dialog :title="$t('selectOpts')" :visible.sync="AuthOps" width="50%">
       <div v-loading="Authorizing">
-        <el-button style="width:100%;" @click="deletCommit()">删除评论</el-button>
+        <el-button style="width:100%;" @click="deletCommit()">{{$t('deletCommit')}}</el-button>
         <br />
         <br />
-        <el-button style="width:100%;" @click="hideCommit()">隐藏评论</el-button>
+        <el-button style="width:100%;" @click="hideCommit()">{{$t('hideCommit')}}</el-button>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="AuthOps = false">取 消</el-button>
+        <el-button @click="AuthOps = false">{{$t('cancel')}}</el-button>
       </span>
     </el-dialog>
 
     <!-- 标题 -->
     <div class="new_top">
-      <h2>评论</h2>
-      <p v-if="allCommits.length">共{{ allCommits.length }}条评论</p>
-      <p v-else>暂无评论！</p>
+      <h2>{{$t('commit')}}</h2>
+      <p v-if="allCommits.length">{{$t('commitCount', {length: allCommits.length})}}</p>
+      <p v-else>{{$t('noCommit')}}</p>
     </div>
 
     <!-- 发表评论 -->
@@ -48,19 +96,19 @@
       <el-input
         type="textarea"
         :autosize="{ minRows: 4}"
-        placeholder="说点儿什么吧~"
+        :placeholder="$t('saySth')"
         maxlength="500"
         show-word-limit
         v-model="commit"
         @keyup.enter.native="postCommitOnInput()"
       ></el-input>
-      <el-checkbox v-model="UsingEnter">使用Enter键发表评论</el-checkbox>
-      <el-button type="primary" @click="postCommit()" :loading="posting">发表</el-button>
+      <el-checkbox v-model="UsingEnter">{{$t('usingEnter')}}</el-checkbox>
+      <el-button type="primary" @click="postCommit()" :loading="posting">{{$t('post')}}</el-button>
     </div>
     <!-- 未登录时显示 -->
     <div v-else>
-      想要一起参与讨论？
-      <router-link to="/login" @click.native="login">点我登录</router-link>
+      {{$t('joinDiscuss')}}
+      <router-link to="/login" @click.native="login">{{$t('login')}}</router-link>
     </div>
 
     <!-- 评论详情 -->
@@ -87,19 +135,19 @@
             v-if="item.children.length&&!showReplies[index].show"
             type="text"
             @click="showReplies[index].show=true"
-          >查看{{item.children.length}}条回复</el-button>
+          >{{$t('showRplies', {length: item.children.length})}}</el-button>
           <el-button
             class="replyCommit"
             v-else-if="!replycommits[index].show&&isLogin"
             type="text"
             @click="openReplyBox(index, commitUser(item.meta.created_by.$oid).profile.username,item._id.$oid)"
-          >回复</el-button>
+          >{{$t('reply')}}</el-button>
           <el-button
             class="replyCommit"
             v-else-if="isLogin"
             type="text"
             @click="replycommits[index].show=false"
-          >收起回复</el-button>
+          >{{$t('hideReply')}}</el-button>
 
           <!-- 权限操作 -->
           <el-button
@@ -107,7 +155,7 @@
             v-if="isLogin&&(Authorized||myCommit(commitUser(item.meta.created_by.$oid).profile.username))"
             type="text"
             @click="AuthorizeCommit(item._id.$oid)"
-          >管理</el-button>
+          >{{$t('manage')}}</el-button>
         </div>
 
         <!-- 楼中楼 -->
@@ -139,22 +187,25 @@
                       class="replyCommit"
                       type="text"
                       @click="openReplyBox(index,commitUser(reply.meta.created_by.$oid).profile.username,reply._id.$oid)"
-                    >回复</el-button>
+                    >{{$t('reply')}}</el-button>
                     <!-- 权限操作 -->
                     <el-button
                       class="replyCommit"
                       v-if="isLogin&&(Authorized||myCommit(commitUser(reply.meta.created_by.$oid).profile.username))"
                       type="text"
                       @click="AuthorizeCommit(reply._id.$oid)"
-                    >管理</el-button>
+                    >{{$t('manage')}}</el-button>
                   </div>
                 </div>
                 <!-- 被隐藏的时候的渲染 -->
                 <div style="margin-left:40px;" v-if="reply.hidden">
-                  该评论已被隐藏
-                  <el-button type="text" @click="reply.hidden=false">点我展开</el-button>
+                  {{$t('hiddenCommit')}}
+                  <el-button type="text" @click="reply.hidden=false">{{$t('openCommit')}}</el-button>
                 </div>
-                <div style="margin-left:40px;margin-bottom:10px" v-if="reply.deleted">抱歉，该评论已被删除</div>
+                <div
+                  style="margin-left:40px;margin-bottom:10px"
+                  v-if="reply.deleted"
+                >{{$t('deletedCommit')}}</div>
               </div>
             </div>
           </el-collapse-transition>
@@ -168,7 +219,7 @@
                 <el-input
                   type="textarea"
                   :autosize="{ minRows: 1, maxRows: 4}"
-                  placeholder="回复Ta："
+                  :placeholder="$t('replyTo')"
                   v-model="reply"
                   maxlength="500"
                   show-word-limit
@@ -181,7 +232,7 @@
                   round
                   @click="postReply(index)"
                   :loading="replying"
-                >发表</el-button>
+                >{{$t('post')}}</el-button>
               </div>
             </div>
           </el-collapse-transition>
@@ -189,10 +240,10 @@
       </div>
       <!-- 被隐藏的时候的渲染 -->
       <div class="hiddenCommit" v-if="item.hidden">
-        该评论已被隐藏
-        <el-button type="text" @click="item.hidden=false">点我展开</el-button>
+        {{$t('hiddenCommit')}}
+        <el-button type="text" @click="item.hidden=false">{{$t('openCommit')}}</el-button>
       </div>
-      <div class="deletedCommit" v-if="item.deleted">抱歉，该评论已被删除</div>
+      <div class="deletedCommit" v-if="item.deleted">{{$t('deletedCommit')}}</div>
       <el-divider></el-divider>
     </div>
   </div>
@@ -356,7 +407,7 @@ export default {
         })
         .catch(error => {
           console.log(error);
-          this.openFailed("获取视频失败，请检查网络设置！");
+          this.openFailed(this.$t("getCommitFailed"));
           this.loadingCommit = false;
         });
     },
@@ -372,7 +423,7 @@ export default {
     postCommit() {
       if (this.commit == "" || this.commit == "\n") {
         this.commit = "";
-        this.openFailed("请输入内容！");
+        this.openFailed(this.$t("PsaySth"));
         return;
       }
       this.posting = true;
@@ -387,14 +438,14 @@ export default {
             this.tid = result.data.data.thread_id;
             this.commit = "";
             this.getCommits();
-            this.openSuccessful("发表成功！");
+            this.openSuccessful(this.$t("postSuccessfully"));
           } else {
-            this.openFailed("发表失败，请检查网络设置！");
+            this.openFailed(this.$t("postFailed"));
           }
         })
         .catch(error => {
           console.log(error);
-          this.openFailed("发表失败，请检查网络设置！");
+          this.openFailed(this.$t("postFailed"));
           this.posting = false;
         });
     },
@@ -406,13 +457,13 @@ export default {
         this.replycommits[i].show = false;
       }
       this.replycommits[index].show = true;
-      this.reply = "回复 " + name + " :";
+      this.reply = this.$t("reply") + name + " :";
     },
     // 发表回复
     postReply(index) {
       if (this.reply == "" || this.reply == "\n") {
         this.reply = "";
-        this.openFailed("请输入内容！");
+        this.openFailed(this.$t("PsaySth"));
         return;
       }
       if (this.reply.charAt(this.reply.length - 1) == "\n") {
@@ -433,16 +484,16 @@ export default {
             this.replycommits[index].show = false;
             this.showReplies[index].show = true;
             this.getCommits();
-            this.openSuccessful("发表成功！");
+            this.openSuccessful(this.$t("postSuccessfully"));
           } else {
-            this.openFailed("发表失败，请检查网络设置！");
+            this.openFailed(this.$t("postFailed"));
           }
           this.replying = false;
         })
         .catch(error => {
           console.log(error);
           this.replying = false;
-          this.openFailed("发表失败，请检查网络设置！");
+          this.openFailed(this.$t("postFailed"));
         });
     },
     // 登录跳转
@@ -489,17 +540,17 @@ export default {
       })
         .then(result => {
           if (result.data.status == "SUCCEED") {
-            this.openSuccessful("操作成功！");
+            this.openSuccessful(this.$t("operationSuccessfully"));
             this.getCommits();
           } else {
-            this.openFailed("操作失败，请检查网络设置！");
+            this.openFailed(this.$t("operationFailed"));
           }
           this.Authorizing = false;
           this.AuthOps = false;
         })
         .catch(error => {
           console.log(error);
-          this.openFailed("操作失败，请检查网络设置！");
+          this.openFailed(this.$t("operationFailed"));
           this.Authorizing = false;
           this.AuthOps = false;
         });
@@ -516,17 +567,17 @@ export default {
       })
         .then(result => {
           if (result.data.status == "SUCCEED") {
-            this.openSuccessful("操作成功！");
+            this.openSuccessful(this.$t("operationSuccessfully"));
             this.getCommits();
           } else {
-            this.openFailed("操作失败，请检查网络设置！");
+            this.openFailed(this.$t("operationFailed"));
           }
           this.Authorizing = false;
           this.AuthOps = false;
         })
         .catch(error => {
           console.log(error);
-          this.openFailed("操作失败，请检查网络设置！");
+          this.openFailed(this.$t("operationFailed"));
           this.Authorizing = false;
           this.AuthOps = false;
         });
