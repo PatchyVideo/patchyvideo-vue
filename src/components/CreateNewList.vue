@@ -26,7 +26,8 @@
     "delete_confirm_prompt": "确定移除 {name}？",
     "create_failed": "列表创建失败，请重试！",
     "not_login": "登录验证失败，请先登录！",
-    "create_succeed": "列表创建成功！"
+    "create_succeed": "列表创建成功！",
+    "showListRules":"查看创建播放列表的规则"
   },
   "ENG": {
     "this_is_playlist_title": "Title",
@@ -39,7 +40,8 @@
     "delete_confirm_prompt": "Are you sure you want to remove {name}?",
     "create_failed": "Operation failed, please try again",
     "not_login": "Authentication failed, please relogin",
-    "create_succeed": "Playlist successfully created"
+    "create_succeed": "Playlist successfully created",
+    "showListRules":"See the rules of creating a list"
   },
   "CHT": {
     "this_is_playlist_title": "這裏是列表標題",
@@ -52,7 +54,8 @@
     "delete_confirm_prompt": "確定移除 {name}？",
     "create_failed": "列表創建失敗，請重試！",
     "not_login": "登錄驗證失敗，請先登錄！",
-    "create_succeed": "列表創建成功！"
+    "create_succeed": "列表創建成功！",
+    "showListRules":"查看創建播放列表的規則"
   }
 }
 </i18n>
@@ -84,7 +87,7 @@
           href="https://patchyvideo.wiki/Playlist"
           target="_blank"
           style="float:right"
-          >点我查看创建播放列表的规则</a
+          >{{ $t("showListRules") }}</a
         >
       </el-form-item>
       <!-- 封面上传,暂时用不上 -->
