@@ -72,7 +72,7 @@
     "individual": "Individual",
     "group": "Doujin Circle",
     "refresh": "Refreash",
-    "change_author_data": "Change",
+    "change_author_data": "Contribute",
     "select_author_type": "Please select author type",
     "enter_url": "Please enter URL",
     "one_picture": "Only one photo is allowed",
