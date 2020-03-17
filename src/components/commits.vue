@@ -135,7 +135,7 @@
         </div>
         <!-- 右半部分 -->
         <div class="commitContent">
-          <div>
+          <div v-linkified>
             <router-link
               :to="'/users/' + item.meta.created_by.$oid"
               target="_blank"
@@ -217,7 +217,7 @@
                   </div>
                   <!-- 楼中楼右半部分 -->
                   <div class="commitContent" style="margin-left:40px;">
-                    <div>
+                    <div v-linkified>
                       <router-link
                         :to="'/users/' + item.meta.created_by.$oid"
                         target="_blank"

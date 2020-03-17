@@ -72,7 +72,7 @@
     "individual": "Individual",
     "group": "Doujin Circle",
     "refresh": "Refreash",
-    "change_author_data": "Change",
+    "change_author_data": "Contribute",
     "select_author_type": "Please select author type",
     "enter_url": "Please enter URL",
     "one_picture": "Only one photo is allowed",
@@ -445,7 +445,7 @@
           </el-form-item>
           <el-form-item :label="$t('user_desc')">
             <p v-if="author.desc == ''">{{ $t("no_desc") }}</p>
-            <p v-else style="white-space: pre-line;">{{ author.desc }}</p>
+            <p v-else style="white-space: pre-line;" v-linkified>{{ author.desc }}</p>
           </el-form-item>
         </el-form>
       </div>
