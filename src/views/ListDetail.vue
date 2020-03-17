@@ -335,7 +335,7 @@
 
         <!-- 评论区 -->
         <div>
-          <Commits :sid="sid"></Commits>
+          <Comments :sid="sid"></Comments>
         </div>
 
         <!-- ElementUI自带的分页器 -->
@@ -365,7 +365,7 @@ import Move from "../components/Move.vue";
 import DeleteVideo from "../components/DeleteVideo.vue";
 import SetCover from "../components/SetCover.vue";
 import ListFolderView from "../components/ListFolderView.vue";
-import Commits from "../components/commits.vue";
+import Comments from "../components/comments.vue";
 import { copyToClipboardText } from "../static/js/generic";
 
 export default {
@@ -656,7 +656,7 @@ export default {
     DeleteVideo,
     ListFolderView,
     SetCover,
-    Commits
+    Comments
   }
 };
 </script>

@@ -10,9 +10,9 @@
 <i18n>
 {
   "CHS": {
-    "commit":"评论",
-    "commitCount":"共{length}条评论",
-    "noCommit":"暂无评论！",
+    "comment":"评论",
+    "commentCount":"共{length}条评论",
+    "nocomment":"暂无评论！",
     "saySth":"说点儿什么吧~",
     "usingEnter":"使用Enter键发表评论",
     "post":"发表",
@@ -23,14 +23,14 @@
     "hideReply":"收起回复",
     "manage":"管理",
     "replyTo":"回复Ta",
-    "hiddenCommit":"该评论已被隐藏",
-    "openCommit":"点我展开",
-    "deletedCommit":"抱歉，该评论已被删除",
+    "hiddencomment":"该评论已被隐藏",
+    "opencomment":"点我展开",
+    "deletedcomment":"抱歉，该评论已被删除",
     "selectOpts":"请选择操作",
-    "deletCommit":"删除评论",
-    "hideCommit":"隐藏评论",
+    "deletcomment":"删除评论",
+    "hidecomment":"隐藏评论",
     "cancel":"取 消",
-    "getCommitFailed":"获取评论失败，请检查网络设置！",
+    "getcommentFailed":"获取评论失败，请检查网络设置！",
     "PsaySth":"请输入内容！",
     "postSuccessfully":"发表成功！",
     "postFailed":"发表失败，请检查网络设置！",
@@ -38,27 +38,27 @@
     "operationFailed":"操作失败，请检查网络设置！"
   },
   "ENG": {
-    "commit":"Commit",
-    "commitCount":"{length} commits in total",
-    "noCommit":"No commit here!",
+    "comment":"comment",
+    "commentCount":"{length} comments in total",
+    "nocomment":"No comment here!",
     "saySth":"Say something...",
-    "usingEnter":"Post commit using Enter key",
+    "usingEnter":"Post comment using Enter key",
     "post":"Post",
     "joinDiscuss":"Want to join the discuss? ",
     "login":"Click me to login",
-    "showRplies":"Show {length} commits",
+    "showRplies":"Show {length} comments",
     "reply":"Reply ",
     "hideReply":"Hide the reply",
     "manage":"Manage",
     "replyTo":"Reply to...",
-    "hiddenCommit":"The commit has been hidden. ",
-    "openCommit":"Click me to show the commit",
-    "deletedCommit":"Sorry, the commit has been deleted",
+    "hiddencomment":"The comment has been hidden. ",
+    "opencomment":"Click me to show the comment",
+    "deletedcomment":"Sorry, the comment has been deleted",
     "selectOpts":"Please select the operation",
-    "deletCommit":"Delet the commit",
-    "hideCommit":"Hide the commit",
+    "deletcomment":"Delet the comment",
+    "hidecomment":"Hide the comment",
     "cancel":"Cancel",
-    "getCommitFailed":"Geting commit data failed, please check your Internet!",
+    "getcommentFailed":"Geting comment data failed, please check your Internet!",
     "PsaySth":"Please say something!",
     "postSuccessfully":"Post Successfully",
     "postFailed":"Failed post , please check your Internet!",
@@ -73,13 +73,13 @@
     <!-- 管理操作的弹出框 -->
     <el-dialog :title="$t('selectOpts')" :visible.sync="AuthOps" width="50%">
       <div v-loading="Authorizing">
-        <el-button style="width:100%;" @click="deletCommit()">{{
-          $t("deletCommit")
+        <el-button style="width:100%;" @click="deletcomment()">{{
+          $t("deletcomment")
         }}</el-button>
         <br />
         <br />
-        <el-button style="width:100%;" @click="hideCommit()">{{
-          $t("hideCommit")
+        <el-button style="width:100%;" @click="hidecomment()">{{
+          $t("hidecomment")
         }}</el-button>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -89,26 +89,26 @@
 
     <!-- 标题 -->
     <div class="new_top">
-      <h2>{{ $t("commit") }}</h2>
-      <p v-if="allCommits.length">
-        {{ $t("commitCount", { length: allCommits.length }) }}
+      <h2>{{ $t("comment") }}</h2>
+      <p v-if="allcomments.length">
+        {{ $t("commentCount", { length: allcomments.length }) }}
       </p>
-      <p v-else>{{ $t("noCommit") }}</p>
+      <p v-else>{{ $t("nocomment") }}</p>
     </div>
 
     <!-- 发表评论 -->
-    <div class="commit" v-if="isLogin">
+    <div class="comment" v-if="isLogin">
       <el-input
         type="textarea"
         :autosize="{ minRows: 4 }"
         :placeholder="$t('saySth')"
         maxlength="500"
         show-word-limit
-        v-model="commit"
-        @keyup.enter.native="postCommitOnInput()"
+        v-model="comment"
+        @keyup.enter.native="postcommentOnInput()"
       ></el-input>
       <el-checkbox v-model="UsingEnter">{{ $t("usingEnter") }}</el-checkbox>
-      <el-button type="primary" @click="postCommit()" :loading="posting">{{
+      <el-button type="primary" @click="postcomment()" :loading="posting">{{
         $t("post")
       }}</el-button>
     </div>
@@ -122,73 +122,73 @@
 
     <!-- 评论详情 -->
     <el-divider></el-divider>
-    <div class="commitBox" v-for="(item, index) in allCommits" :key="index">
+    <div class="commentBox" v-for="(item, index) in allcomments" :key="index">
       <!-- 正常情况下的渲染 -->
-      <div class="commitDetail" v-if="!item.hidden && !item.deleted">
+      <div class="commentDetail" v-if="!item.hidden && !item.deleted">
         <!-- 用户头像 -->
         <div class="avatar">
           <el-avatar
             :src="
-              userAvatar(commitUser(item.meta.created_by.$oid).profile.image)
+              userAvatar(commentUser(item.meta.created_by.$oid).profile.image)
             "
           ></el-avatar>
         </div>
         <!-- 右半部分 -->
-        <div class="commitContent">
+        <div class="commentContent">
           <div v-linkified>
             <router-link
               :to="'/users/' + item.meta.created_by.$oid"
               target="_blank"
               >{{
-                commitUser(item.meta.created_by.$oid).profile.username
+                commentUser(item.meta.created_by.$oid).profile.username
               }}:</router-link
             >
             {{ item.content }}
           </div>
 
-          <span class="commitDate">{{
-            commitdate(item.meta.created_at.$date)
+          <span class="commentDate">{{
+            commentdate(item.meta.created_at.$date)
           }}</span>
           <el-button
-            class="replyCommit"
+            class="replycomment"
             v-if="item.children.length && !showReplies[index].show"
             type="text"
             @click="showReplies[index].show = true"
             >{{ $t("showRplies", { length: item.children.length }) }}</el-button
           >
           <el-button
-            class="replyCommit"
-            v-else-if="!replycommits[index].show && isLogin"
+            class="replycomment"
+            v-else-if="!replycomments[index].show && isLogin"
             type="text"
             @click="
               openReplyBox(
                 index,
-                commitUser(item.meta.created_by.$oid).profile.username,
+                commentUser(item.meta.created_by.$oid).profile.username,
                 item._id.$oid
               )
             "
             >{{ $t("reply") }}</el-button
           >
           <el-button
-            class="replyCommit"
+            class="replycomment"
             v-else-if="isLogin"
             type="text"
-            @click="replycommits[index].show = false"
+            @click="replycomments[index].show = false"
             >{{ $t("hideReply") }}</el-button
           >
 
           <!-- 权限操作 -->
           <el-button
-            class="replyCommit"
+            class="replycomment"
             v-if="
               isLogin &&
                 (Authorized ||
-                  myCommit(
-                    commitUser(item.meta.created_by.$oid).profile.username
+                  mycomment(
+                    commentUser(item.meta.created_by.$oid).profile.username
                   ))
             "
             type="text"
-            @click="AuthorizeCommit(item._id.$oid)"
+            @click="Authorizecomment(item._id.$oid)"
             >{{ $t("manage") }}</el-button
           >
         </div>
@@ -209,36 +209,36 @@
                     <el-avatar
                       :src="
                         userAvatar(
-                          commitUser(reply.meta.created_by.$oid).profile.image
+                          commentUser(reply.meta.created_by.$oid).profile.image
                         )
                       "
                       size="small"
                     ></el-avatar>
                   </div>
                   <!-- 楼中楼右半部分 -->
-                  <div class="commitContent" style="margin-left:40px;">
+                  <div class="commentContent" style="margin-left:40px;">
                     <div v-linkified>
                       <router-link
                         :to="'/users/' + item.meta.created_by.$oid"
                         target="_blank"
                         >{{
-                          commitUser(reply.meta.created_by.$oid).profile
+                          commentUser(reply.meta.created_by.$oid).profile
                             .username
                         }}:</router-link
                       >
                       {{ reply.content }}
                     </div>
-                    <span class="commitDate">{{
-                      commitdate(reply.meta.created_at.$date)
+                    <span class="commentDate">{{
+                      commentdate(reply.meta.created_at.$date)
                     }}</span>
                     <el-button
                       v-if="isLogin"
-                      class="replyCommit"
+                      class="replycomment"
                       type="text"
                       @click="
                         openReplyBox(
                           index,
-                          commitUser(reply.meta.created_by.$oid).profile
+                          commentUser(reply.meta.created_by.$oid).profile
                             .username,
                           reply._id.$oid
                         )
@@ -247,17 +247,17 @@
                     >
                     <!-- 权限操作 -->
                     <el-button
-                      class="replyCommit"
+                      class="replycomment"
                       v-if="
                         isLogin &&
                           (Authorized ||
-                            myCommit(
-                              commitUser(reply.meta.created_by.$oid).profile
+                            mycomment(
+                              commentUser(reply.meta.created_by.$oid).profile
                                 .username
                             ))
                       "
                       type="text"
-                      @click="AuthorizeCommit(reply._id.$oid)"
+                      @click="Authorizecomment(reply._id.$oid)"
                       >{{ $t("manage") }}</el-button
                     >
                   </div>
@@ -267,12 +267,12 @@
                   style="margin-left:40px;margin-bottom:10px"
                   v-if="reply.deleted"
                 >
-                  {{ $t("deletedCommit") }}
+                  {{ $t("deletedcomment") }}
                 </div>
                 <div style="margin-left:40px;" v-else-if="reply.hidden">
-                  {{ $t("hiddenCommit") }}
+                  {{ $t("hiddencomment") }}
                   <el-button type="text" @click="reply.hidden = false">{{
-                    $t("openCommit")
+                    $t("opencomment")
                   }}</el-button>
                 </div>
               </div>
@@ -283,7 +283,7 @@
         <!-- 楼中楼的回复框 -->
         <div>
           <el-collapse-transition>
-            <div v-show="replycommits[index].show">
+            <div v-show="replycomments[index].show">
               <div class="replyBox">
                 <el-input
                   type="textarea"
@@ -309,13 +309,13 @@
         </div>
       </div>
       <!-- 被隐藏的时候的渲染 -->
-      <div class="deletedCommit" v-if="item.deleted">
-        {{ $t("deletedCommit") }}
+      <div class="deletedcomment" v-if="item.deleted">
+        {{ $t("deletedcomment") }}
       </div>
-      <div class="hiddenCommit" v-else-if="item.hidden">
-        {{ $t("hiddenCommit") }}
+      <div class="hiddencomment" v-else-if="item.hidden">
+        {{ $t("hiddencomment") }}
         <el-button type="text" @click="item.hidden = false">{{
-          $t("openCommit")
+          $t("opencomment")
         }}</el-button>
       </div>
       <el-divider></el-divider>
@@ -334,17 +334,17 @@ export default {
       // 评论区的ID
       tid: "",
       // 评论区的内容
-      allCommits: [],
+      allcomments: [],
       // 评论区所有用户的信息
       allUsers: [],
       // 用户输入的评论
-      commit: "",
+      comment: "",
       // 用户输入的楼中楼的回复
       reply: "",
       // 用户评论对象的cid
       cidReplied: "",
       // 楼层评论区是否打开的数组
-      replycommits: [],
+      replycomments: [],
       // 楼层详情是否打开的数组
       showReplies: [],
       // 是否使用Enter键发表评论
@@ -354,7 +354,7 @@ export default {
       // 回复是否正在发表中
       replying: false,
       // 评论是否在加载中
-      loadingCommit: false,
+      loadingcomment: false,
       // 是否有管理权限
       Authorized: false,
       // 管理页面的弹出框
@@ -367,7 +367,7 @@ export default {
   },
   computed: {
     // 评论的用户
-    commitUser() {
+    commentUser() {
       return function(id) {
         for (var i = 0; i < this.allUsers.length; i++) {
           if (id == this.allUsers[i]._id.$oid) {
@@ -387,7 +387,7 @@ export default {
       };
     },
     // 评论的日期
-    commitdate() {
+    commentdate() {
       return function(date) {
         var upload_time = new Date(date);
         var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
@@ -425,7 +425,7 @@ export default {
     },
     // 判断是否为自己的评论
     // *因为是凭借用户名进行判断，所以可能会有些许误差*
-    myCommit() {
+    mycomment() {
       return function(name) {
         return name == this.$store.state.username;
       };
@@ -435,12 +435,12 @@ export default {
       if (this.$route.path === "/listdetail")
         return {
           url: "/be/comments/add_to_playlist.do",
-          data: { pid: this.$route.query.id, text: this.commit }
+          data: { pid: this.$route.query.id, text: this.comment }
         };
       else if (this.$route.path === "/video")
         return {
           url: "/be/comments/add_to_video.do",
-          data: { vid: this.$route.query.id, text: this.commit }
+          data: { vid: this.$route.query.id, text: this.comment }
         };
       else return false;
     }
@@ -450,8 +450,8 @@ export default {
   },
   methods: {
     // 获取评论
-    getCommits() {
-      this.loadingCommit = true;
+    getcomments() {
+      this.loadingcomment = true;
 
       this.axios({
         method: "post",
@@ -461,42 +461,42 @@ export default {
         }
       })
         .then(result => {
-          this.allCommits = result.data.data.comments;
+          this.allcomments = result.data.data.comments;
           this.allUsers = result.data.data.users;
 
           // 初始化评论区开启标志
-          for (var i = 0; i < this.allCommits.length; i++) {
+          for (var i = 0; i < this.allcomments.length; i++) {
             this.showReplies.push({
               show: false
             });
           }
           // 初始化回复框开启标志
-          for (var i = 0; i < this.allCommits.length; i++) {
-            this.replycommits.push({
+          for (var i = 0; i < this.allcomments.length; i++) {
+            this.replycomments.push({
               show: false
             });
           }
 
-          this.loadingCommit = false;
+          this.loadingcomment = false;
         })
         .catch(error => {
           console.log(error);
-          this.openFailed(this.$t("getCommitFailed"));
-          this.loadingCommit = false;
+          this.openFailed(this.$t("getcommentFailed"));
+          this.loadingcomment = false;
         });
     },
     // 使用Enter键发布视频
-    postCommitOnInput() {
+    postcommentOnInput() {
       if (this.UsingEnter) {
-        this.commit = this.commit.substr(0, this.commit.length - 1);
-        this.postCommit();
+        this.comment = this.comment.substr(0, this.comment.length - 1);
+        this.postcomment();
       }
       return false;
     },
     // 发表评论
-    postCommit() {
-      if (this.commit == "" || this.commit == "\n") {
-        this.commit = "";
+    postcomment() {
+      if (this.comment == "" || this.comment == "\n") {
+        this.comment = "";
         this.openFailed(this.$t("PsaySth"));
         return;
       }
@@ -510,8 +510,8 @@ export default {
           this.posting = false;
           if (result.data.status == "SUCCEED") {
             this.tid = result.data.data.thread_id;
-            this.commit = "";
-            this.getCommits();
+            this.comment = "";
+            this.getcomments();
             this.openSuccessful(this.$t("postSuccessfully"));
           } else {
             this.openFailed(this.$t("postFailed"));
@@ -527,11 +527,11 @@ export default {
     openReplyBox(index, name, cid) {
       this.cidReplied = cid;
       this.reply = "";
-      for (var i = 0; i < this.replycommits.length; i++) {
-        this.replycommits[i].show = false;
+      for (var i = 0; i < this.replycomments.length; i++) {
+        this.replycomments[i].show = false;
       }
-      this.replycommits[index].show = true;
-      this.reply = this.$t("reply") + name + " :";
+      this.replycomments[index].show = true;
+      this.reply = "";
     },
     // 发表回复
     postReply(index) {
@@ -555,9 +555,9 @@ export default {
         .then(result => {
           if (result.data.status == "SUCCEED") {
             this.reply = "";
-            this.replycommits[index].show = false;
+            this.replycomments[index].show = false;
             this.showReplies[index].show = true;
-            this.getCommits();
+            this.getcomments();
             this.openSuccessful(this.$t("postSuccessfully"));
           } else {
             this.openFailed(this.$t("postFailed"));
@@ -572,7 +572,7 @@ export default {
     },
     // 登录跳转
     login() {
-      this.$store.commit("changeifRouter", "0");
+      this.$store.comment("changeifRouter", "0");
     },
     // 查看是否有编辑权限
     // op可选参数：
@@ -598,12 +598,12 @@ export default {
         });
     },
     // 打开权限管理窗口
-    AuthorizeCommit(cid) {
+    Authorizecomment(cid) {
       this.AuthorizedCid = cid;
       this.AuthOps = true;
     },
     // 删除评论
-    deletCommit() {
+    deletcomment() {
       this.Authorizing = true;
       this.axios({
         method: "post",
@@ -615,7 +615,7 @@ export default {
         .then(result => {
           if (result.data.status == "SUCCEED") {
             this.openSuccessful(this.$t("operationSuccessfully"));
-            this.getCommits();
+            this.getcomments();
           } else {
             this.openFailed(this.$t("operationFailed"));
           }
@@ -630,7 +630,7 @@ export default {
         });
     },
     // 隐藏评论
-    hideCommit() {
+    hidecomment() {
       this.Authorizing = true;
       this.axios({
         method: "post",
@@ -642,7 +642,7 @@ export default {
         .then(result => {
           if (result.data.status == "SUCCEED") {
             this.openSuccessful(this.$t("operationSuccessfully"));
-            this.getCommits();
+            this.getcomments();
           } else {
             this.openFailed(this.$t("operationFailed"));
           }
@@ -676,7 +676,7 @@ export default {
       this.tid = this.sid;
     },
     tid() {
-      this.getCommits();
+      this.getcomments();
     }
   },
   components: {}
@@ -697,20 +697,20 @@ export default {
 .new_top h2 {
   text-align: center;
 }
-.commit {
+.comment {
   /* border: 3px solid #1414142d; */
   text-align: right;
 }
-.commit .el-textarea {
+.comment .el-textarea {
   width: calc(100% - 10px);
   margin: 5px;
 }
-.commit .el-checkbox {
+.comment .el-checkbox {
   float: left;
   margin-left: 10%;
   margin-top: 15px;
 }
-.commit .el-button {
+.comment .el-button {
   width: 30%;
   margin: 5px;
 }
@@ -720,16 +720,16 @@ export default {
   margin: 15px;
   margin-top: 0px;
 }
-.commitContent {
+.commentContent {
   margin-left: 70px;
   white-space: pre-line;
 }
-.commitDate {
+.commentDate {
   font-size: 13px;
   line-height: 2.5;
   color: #909399;
 }
-.replyCommit {
+.replycomment {
   float: right;
   margin-left: 10px;
 }
@@ -748,10 +748,10 @@ export default {
   margin-left: 70px;
   font-size: 14px;
 }
-.hiddenCommit {
+.hiddencomment {
   margin-left: 70px;
 }
-.deletedCommit {
+.deletedcomment {
   margin-left: 70px;
 }
 </style>

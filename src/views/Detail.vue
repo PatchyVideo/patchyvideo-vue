@@ -402,7 +402,7 @@
 
         <!-- 评论区 -->
         <div>
-          <Commits :sid="sid"></Commits>
+          <Comments :sid="sid"></Comments>
         </div>
       </div>
 
@@ -430,7 +430,7 @@
 import topnavbar from "../components/TopNavbar.vue";
 import left_navbar from "../components/LeftNavbar.vue";
 import Footer from "../components/Footer.vue";
-import Commits from "../components/commits.vue";
+import Comments from "../components/comments.vue";
 import { copyToClipboardText } from "../static/js/generic";
 export default {
   data() {
@@ -1145,7 +1145,7 @@ export default {
       return vs;
     }
   },
-  components: { left_navbar, topnavbar, Footer, Commits }
+  components: { left_navbar, topnavbar, Footer, Comments }
 };
 </script>
 
