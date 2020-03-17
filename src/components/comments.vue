@@ -19,6 +19,7 @@
     "joinDiscuss":"想要一起参与讨论？",
     "login":"点我登录",
     "showRplies":"查看{length}条回复",
+    "replyPrompt":" 回复",
     "reply":"回复",
     "hideReply":"收起回复",
     "manage":"管理",
@@ -47,7 +48,8 @@
     "joinDiscuss":"Want to join the discuss? ",
     "login":"Click me to login",
     "showRplies":"Show {length} comments",
-    "reply":"Reply ",
+    "replyPrompt":" Reply ",
+    "reply":"Reply",
     "hideReply":"Hide the reply",
     "manage":"Manage",
     "replyTo":"Reply to...",
@@ -226,6 +228,14 @@
                             .username
                         }}:</router-link
                       >
+                      <span v-if="typeof reply.reply_to !== 'undefined'">
+                        {{ $t('replyPrompt') }}
+                        <router-link
+                          :to="'/users/' + cid_comment_map.get(reply.reply_to.$oid).meta.created_by.$oid"
+                          target="_blank"
+                          >@{{commentUser(cid_comment_map.get(reply.reply_to.$oid).meta.created_by.$oid).profile.username}}</router-link
+                        >:
+                      </span>
                       {{ reply.content }}
                     </div>
                     <span class="commentDate">{{
@@ -335,6 +345,7 @@ export default {
       tid: "",
       // 评论区的内容
       allcomments: [],
+      cid_comment_map: new Map(),
       // 评论区所有用户的信息
       allUsers: [],
       // 用户输入的评论
@@ -463,6 +474,15 @@ export default {
         .then(result => {
           this.allcomments = result.data.data.comments;
           this.allUsers = result.data.data.users;
+          this.cid_comment_map = new Map();
+
+          for (var i = 0; i < this.allcomments.length; i++) {
+            //console.log(this.allcomments[i]);
+            for (var j = 0; j < this.allcomments[i].children.length; ++j) {
+              //console.log(this.allcomments[i].children[j]._id.$oid);
+              this.cid_comment_map.set(this.allcomments[i].children[j]._id.$oid, this.allcomments[i].children[j]);
+            }
+          }
 
           // 初始化评论区开启标志
           for (var i = 0; i < this.allcomments.length; i++) {
