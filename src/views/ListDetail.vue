@@ -187,7 +187,7 @@
 
     <!-- 删除列表时的确认框 -->
     <el-dialog :title="$t('delete_dialog.title')" :visible.sync="dialogVisible" width="30%">
-      <span>{{$t('delete_dialog.btn_content')}}</span>
+      <span>{{$t('delete_dialog.content')}}</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">{{$t('delete_dialog.btn_cancel')}}</el-button>
         <el-button
