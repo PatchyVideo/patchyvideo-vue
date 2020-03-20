@@ -533,7 +533,7 @@ export default {
   line-height: 1.1rem;
   white-space: pre-wrap;
   overflow: hidden;
-  height: 4.3rem;
+  height: 4.2rem;
   /* 使文字变为最多显示4行，多余的使用省略号代替 */
   display: -webkit-box;
   -webkit-line-clamp: 4;
