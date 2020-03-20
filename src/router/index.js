@@ -1,22 +1,24 @@
-﻿import Vue        from     "vue"                         ;
-import VueRouter     from  "vue-router"                      ;
-import store             from "../store/index.js"                     ;
-/*import*/const error           =()=>import /*       from*/ ("../views/404.vue"            )    ;
-/*import*/const Home            =()=>import /*      from */ ("../views/Home.vue"           )          ;
-/*import*/const detail          =()=>import /*       from*/ ("../views/Detail.vue"         )      ;
-/*import*/const lists           =()=>import /*     from  */ ("../views/Lists.vue"          )     ;
-/*import*/const createVideoList =()=>import /*     from  */ ("../views/CreateVideoList.vue")           ;
-/*import*/const listdetail      =()=>import /*       from*/ ("../views/ListDetail.vue"     )           ;
-/*import*/const postvideo       =()=>import /*     from  */ ("../views/PostVideo.vue"      )         ;
-/*import*/const login           =()=>import /*      from */ ( "../views/Login.vue"        )          ;
-/*import*/const signup          =()=>import /*       from*/ ("../views/SignUp.vue"         )     ;
-/*import*/const forgetPassword  =()=>import /*       from*/ ("../views/ForgetPassword.vue" )               ;
-/*import*/const resetpassword   =()=>import /*       from*/ ( "../views/ResetPassword.vue")              ;
-/*import*/const edittag         =()=>import /*       from*/ ( "../views/Edittag.vue"      )            ;
-/*import*/const User            =()=>import /*       from*/ ("../views/User"               )             ;
-/*import*/const superadmin      =()=>import /*       from*/ ("../views/SuperAdmin.vue"     )                 ;
-/*import*/const ipfs            =()=>import /*       from*/ ("../views/IPFS.vue"           )                   ;
-/*import*/const ipfs_player     =()=>import /*       from*/ ( "../views/IPFS_player.vue"  )                        ;
+﻿import Vue from "vue";
+import VueRouter from "vue-router";
+import store from "../store/index.js";
+const error = () => import("../views/404.vue");
+const Home = () => import("../views/Home.vue");
+const detail = () => import("../views/Detail.vue");
+const lists = () => import("../views/Lists.vue");
+const createVideoList = () => import("../views/CreateVideoList.vue");
+const listdetail = () => import("../views/ListDetail.vue");
+const postvideo = () => import("../views/PostVideo.vue");
+const login = () => import("../views/Login.vue");
+const signup = () => import("../views/SignUp.vue");
+const forgetPassword = () => import("../views/ForgetPassword.vue");
+const resetpassword = () => import("../views/ResetPassword.vue");
+const edittag = () => import("../views/Edittag.vue");
+const User = () => import("../views/User");
+const superadmin = () => import("../views/SuperAdmin.vue");
+const ipfs = () => import("../views/IPFS.vue");
+const ipfs_player = () => import("../views/IPFS_player.vue");
+const Messages = () => import("../views/Messages.vue");
+
 Vue.use(VueRouter);
 
 /*
@@ -133,6 +135,10 @@ const routes = [
   {
     path: "/ipfs/player",
     component: ipfs_player
+  },
+  {
+    path: "/messages",
+    component: Messages
   }
 ];
 
