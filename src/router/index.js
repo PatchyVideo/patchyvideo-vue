@@ -156,9 +156,8 @@ router.beforeEach((to, from, next) => {
   // from从哪个路径跳转而来
   //next('/xxx')表示放行,或强制跳转到/xxx
 
-  if (to.path == "/login" || to.path == "/home") {
-    // console.log("无权限页面放行");
-    return next();
+  if (to.path == "/messages" && !getCookie()) {
+    return next("/home");
   }
   if (
     to.path == "/postvideo" ||
