@@ -1,4 +1,4 @@
-<!--    vue页面：Foot.vue     -->
+<!--    vue页面：404.vue     -->
 <!--
     组件：网站的404页面
     功能：网站的网址错误页面
@@ -39,7 +39,7 @@
 <script>
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       fits: ["fill", "contain", "cover", "none", "scale-down"],
       url: "http://localhost:888/images/covers/"
