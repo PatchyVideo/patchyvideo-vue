@@ -305,11 +305,11 @@
                         lang: localStorage.getItem("lang")
                     }
                 }).then(result => {
-                    console.log(result);
+
                     /*      let a = result.data.data.videos[0];
                           console.log(a);*/
                     this.listvideo=  this.match_video_query(result.data.data.videos,result.data.data.objs);
-                    console.log(this.listvideo);
+
                     this.maxcount = result.data.data.total;
                     //取得总页数制作分页
                     this.maxpage = Math.ceil(result.data.data.total / count);

@@ -98,7 +98,7 @@
                 </el-collapse-item>
             </el-collapse>
             <transition mode="out-in">
-                <div  class="sub-add" v-if="tagsAddIptVisible">
+                <div  class="sub-add" v-if="subAddIptVisible">
                     <div class="sub-name">
                         <el-checkbox v-model="checked" class="check" label="name" border></el-checkbox>
                         <el-input v-model="subAddName"placeholder="name可为空"  v-if="checked"></el-input>
@@ -146,11 +146,11 @@
 
                     <div class="sub-action">
                         <el-button @click.native="subAdd(subTagsIptValue,subTagsIptName,'tag')" type="primary">添加标签订阅</el-button>
-                        <el-button @click.native="tagsAddIptVisible=false" style="margin: 0">取消</el-button>
+                        <el-button @click.native="subAddIptVisible=false" style="margin: 0">取消</el-button>
                     </div>
                 </div>
 
-                <el-button v-else class="button-new-tag" size="small"type="primary" @click="showTagsAddInput" style="width: 20%;">+ 添加订阅</el-button>
+                <el-button v-else class="button-new-tag" size="small"type="primary" @click="showAddInput" style="width: 20%;">+ 添加订阅</el-button>
             </transition>
         </el-card>
     </div>
@@ -164,10 +164,12 @@
             return {
                 loading:false,
                 subDataTextIptId:[],
+                //更新订阅时不同输入框的值
                 iptValue: '',
+                //添加订阅时输入框的值
                 subAddIptValue:"",
+                //添加订阅时输入框的名字
                 subAddName:"",
-
                 iptVisble:false,
                 checked: true,
                 checkboxGroup1: [],
@@ -189,7 +191,7 @@
                 subDataTagsQtData:[],
                 subTagsIptValue:"",
                 subTagsIptName:"",
-                tagsAddIptVisible:false,
+                subAddIptVisible:false,
 
                 activeNames: ['1','2'],
                 subObj:[],
@@ -212,37 +214,17 @@
         },
         methods: {
             handleChange(val) {
-                console.log(val);
             },
             handleSubIptConfirm(m){
-                console.log(m);
                 m.iptVisble =false;
                 this.$forceUpdate();
             },
-            showTextAddInput(){
-                this.textAddIptVisible =true;
-            },
-            showTagsAddInput(){
-                this.tagsAddIptVisible =true;
-            },
-            createIpt(m){
-
-                /*    let num = ++this.testId;
-                    console.log(num);*/
-                return num
-            },
-            changeText(event){
-
+            showAddInput(){
+                this.subAddIptVisible =true;
             },
             showIpt(m,i){
                 m.iptVisble =true;
                 this.$forceUpdate();
-
-            },
-
-            textEdit(){
-                console.log(this.$refs.subtext);
-                this.$refs.subtext.contentEditable = true;
 
             },
             handleSelect(item) {
@@ -258,10 +240,7 @@
                     cb(result.data);
                 });
             },
-            //默认订阅是tag
             subAdd(val,name,str){
-                console.log(this.subAddName);
-
                 this.axios({
                     method:"post",
                     url:"/be/subs/add.do",
@@ -342,6 +321,7 @@
                 if(e!==undefined){
                     const el = e.target;
                     let value = el.innerText;
+                    //阻止更新订阅时回车的换行
                     if(e.keyCode === '13')
                         value = value.substring(0,value.length-1);
                     if(e.keyCode === '8'){
@@ -358,7 +338,6 @@
                     if(value.charCodeAt(0) === 10 && value.length ===1){
                         value="";
                     }
-                    console.log(value );
                     if(value===""){
                         this.$message({
                             message: this.$t('值不能为空！'),
@@ -401,8 +380,6 @@
                     url:"be/subs/all.do",
                     data:{}
                 }).then(res=>{
-                    console.log(res);
-
                     /*        console.log(res.data.data);*/
                     this.subDataText =  res.data.data.subs.filter((item,index,array)=>{
                         return item.qt==="text"
@@ -434,7 +411,6 @@
                     url:"be/subs/tags.do",
                     data:{}
                 }).then(res=>{
-                    console.log(res.data.data);
                 })
             }
         },
