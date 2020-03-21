@@ -1,10 +1,9 @@
 ﻿<!--    vue组件：TopNavbar.vue     -->
 <!--
     组件：左侧的热门标签导航栏
-    大小：100% * 70px
+    大小：100% * 80px
     功能：网站主导航栏
     必要传入参数：无
-    文件依赖：jquery.textcomplete.js
     更新日志：
     12/1/2019: v1.0 
       release
@@ -62,6 +61,7 @@
     "user": {
       "signup": "注册",
       "login": "登录",
+      "message": "消息",
       "logout": "退出",
       "logout_prompt": "你确定要退出登陆吗?",
       "login_expire_prompt": "登录已过期，请新登录！"
@@ -91,6 +91,7 @@
     "user": {
       "signup": "Sign up",
       "login": "Log in",
+      "message": "Messages",
       "logout": "Log out",
       "logout_prompt": "Are you sure you want to log out?",
       "login_expire_prompt": "Your session has expired. Please relogin"
@@ -120,6 +121,7 @@
     "user": {
       "signup": "註冊",
       "login": "登錄",
+      "message": "消息",
       "logout": "退出",
       "logout_prompt": "妳確定要退出登陸嗎?",
       "login_expire_prompt": "登錄已過期，請新登錄！"
@@ -134,7 +136,7 @@
 </i18n>
 
 <template>
-  <div class="top-navbar w" id="top-navbar">
+  <div class="top-navbar" id="top-navbar">
     <el-select v-model="locale" placeholder="Language">
       <el-option
         v-for="item in langOptions"
@@ -268,6 +270,9 @@
             this.$store.state.username
             }}
           </router-link>
+          <el-badge :value="messagesNum" :hidden="!messagesNum" class="item">
+            <router-link class="loginUser-message" to="/messages">{{$t('user.message')}}</router-link>
+          </el-badge>
           <a
             class="loginUser-signup"
             @click="dialogVisible = true"
@@ -348,6 +353,9 @@ export default {
           label: "English"
         }
       ],
+      // 未读信息的数量
+      messagesNum: 0,
+      // 多语言支持
       locale: localStorage.getItem("lang")
     };
   },
@@ -370,14 +378,15 @@ export default {
     if (this.$store.state.ifTruelyLogin == 0) {
       this.checkUser();
     }
+    this.getCookie();
     // 查看是否登录
     if (
       JSON.stringify(this.$store.state.username) != "null" &&
       this.$store.state.username != ""
     ) {
       this.isLogin = true;
+      this.getUnreadCount();
     }
-    this.getCookie();
     this.iptVal = this.iptVal2;
   },
   mounted() {},
@@ -537,6 +546,20 @@ export default {
       }
       this.$store.commit("getUserName", "");
       return false;
+    },
+    // 获取未读通知数量
+    getUnreadCount() {
+      this.axios({
+        method: "post",
+        url: "be/notes/list_unread.do",
+        data: {}
+      })
+        .then(result => {
+          this.messagesNum = result.data.data.notes.length;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     // --------------------------------------------------危险提示--------------------------------------------------
     //                                   此函数因为直接操纵dom可能导致网站受到攻击!
@@ -897,7 +920,13 @@ export default {
       flex-shrink: 1;
       font-size: 20px;
     }
+    .loginUser-message {
+      white-space: nowrap;
+      flex-shrink: 1;
+      font-size: 20px;
+    }
     .loginUser-signup {
+      margin-left: 10px;
       white-space: nowrap;
       flex-shrink: 1;
       font-size: 20px;
@@ -906,14 +935,14 @@ export default {
 }
 .top-navbar {
   margin: 0 auto;
-  height: 70px;
-  width: calc(100% - 20px);
+  height: 80px;
+  width: calc(100% - 0px);
   display: flex !important;
   align-items: center;
   overflow: hidden;
   position: relative;
   background-color: #fff;
-  box-shadow: 0 1px 0px #a78c97;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
 }
 
 .top-navbar li a {
@@ -929,7 +958,6 @@ export default {
 .nav_left {
   width: 50%;
   text-align: left;
-  padding-left: 20px;
 }
 .nav_left ul {
   display: flex;
