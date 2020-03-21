@@ -202,7 +202,7 @@
       </div>
 
       <!-- 在Home页面渲染的侧导航条内容 -->
-      <ul v-if="$route.path === '/home'">
+      <ul v-if="$route.path === '/home'&&(this.name==='main')">
         <li class="tag belong-to-home" v-for="(val, key) in msg" :key="key">
           <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
           <!-- 根据tag名称自动渲染tag颜色 -->
@@ -220,7 +220,24 @@
           >{{ key.replace(/_/g," ") }}</p>
         </li>
       </ul>
-
+      <ul v-if="$route.path === '/home'&&(this.name==='sub')">
+        <li class="tag belong-to-home" v-for="(val, key) in msg" :key="key">
+          <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
+          <!-- 根据tag名称自动渲染tag颜色 -->
+          <p
+                  v-bind:class="{
+              Copyright: val == 'Copyright',
+              Language: val == 'Language',
+              Character: val == 'Character',
+              Author: val == 'Author',
+              General: val == 'General',
+              Meta: val == 'Meta',
+              Soundtrack:val == 'Soundtrack'
+            }"
+                  @click="gotoHome(val)"
+          >{{ val}}</p>
+        </li>
+      </ul>
       <!-- 在Detail页面渲染的侧导航条内容 -->
       <ul v-if="$route.path === '/video'">
         <li class="tag belong-to-detail" v-for="(key, val) in msg" :key="val">
@@ -399,7 +416,7 @@ export default {
       };
     }
   },
-  props: ["msg"]
+  props: ["msg","name"]
 };
 </script>
 
