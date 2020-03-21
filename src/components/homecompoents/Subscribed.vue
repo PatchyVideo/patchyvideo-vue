@@ -96,7 +96,7 @@
                             </div>
 
                         </div>
-                        订阅来源： <el-tag v-for="i in item.sat_objs" style="margin: 0 5px">{{i.qs}}</el-tag>
+                        订阅来源： <el-tag v-for="i in item.sat_objs" :key="item._id.$oid" style="margin: 0 5px">{{i.qs}}</el-tag>
                     </li>
                 </ul>
 
