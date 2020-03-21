@@ -182,7 +182,7 @@
           </select>
           <!-- 搜索框 -->
           <div id="search-bar-query">
-            <el-autocomplete
+            <!--<el-autocomplete
               id="ipt"
               ref="ipt"
               v-model="iptVal"
@@ -206,6 +206,35 @@
                       Soundtrack: item.cat == 6
                     }"
                   >{{ item.tag }}</div>
+                  <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
+                </div>
+              </template>
+            </el-autocomplete>-->
+            <el-autocomplete
+              id="ipt"
+              ref="ipt"
+              v-model="iptVal"
+              :fetch-suggestions="querySearchAsync2"
+              :trigger-on-focus="false"
+              :placeholder="$t('search.prompt')"
+              @select="handleSelect2"
+              @keyup.enter.native="gotoHome"
+            >
+              <template slot-scope="{ item }">
+                <div class="adviceList">
+                  <div
+                    class="name"
+                    v-bind:class="{
+                      Copyright: item.cat == 2,
+                      Language: item.cat == 5,
+                      Character: item.cat == 1,
+                      Author: item.cat == 3,
+                      General: item.cat == 0,
+                      Meta: item.cat == 4,
+                      Soundtrack: item.cat == 6
+                    }"
+                    v-html="item.tag||ConvertLangRes(item.langs)"
+                  ></div>
                   <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
                 </div>
               </template>
@@ -552,6 +581,45 @@ export default {
         cb(resultList);
       });
     },
+    querySearchAsync2(queryString, cb) {
+      // 这里的get(0)是将jq对象转换为原生js对象
+      // selectionStart是获取光标当前位置
+      var endlocation = $("#ipt").get(0).selectionStart;
+      // 切割输入框内的字符串，切割下光标左面的字符串
+      var query = queryString.slice(0, endlocation);
+      // 获取所需要搜索的字符串的开头在搜索框内字符串的位置
+      var startlocation = this.match(query);
+      // 切割下所需要查询的字符串
+      query = query.slice(startlocation, endlocation);
+      // 字符串为空格的话不搜索
+      if (this.isNull(query)) {
+        cb([]);
+        return;
+      }
+
+      // 备份参数防止出现玄学问题
+      var query2 = query;
+      // 搜索是否包含sites变量的关键字
+      var results = this.sites.filter(this.createFilter(query2));
+
+      // 对输入框现在的数据进行备份
+      this.iptVal3 = this.iptVal;
+      this.startlocation = startlocation;
+      this.endlocation = endlocation;
+
+      var url = "/be/autocomplete/ql?q=" + query;
+      this.axios({
+        method: "get",
+        url: url
+      }).then(result => {
+        if (result.status == "FALIED") {
+          cb([]);
+          return;
+        }
+        var resultList = results.concat(result.data);
+        cb(resultList);
+      });
+    },
     // 搜索输入框内的搜索文字是否包含网站内容
     createFilter(query) {
       return sites => {
@@ -590,11 +658,113 @@ export default {
       var re = new RegExp(regu);
       return re.test(str);
     },
+    ConvertLangRes(langs, hastran = true) {
+      if (!langs) return;
+      var LangList = [
+        { id: 1, lang: "CHS" },
+        { id: 2, lang: "CHT" },
+        { id: 5, lang: "ENG" },
+        { id: 10, lang: "JPN" }
+      ];
+      var level = [10, 5, 1, 2];
+      var Lang = "";
+      var mainLang = "";
+      var subLang = "";
+      //经过一系列计算得出主副语言
+
+      //匹配当前语言的ID
+      var CurrLangID = LangList.find(x => {
+        return x.lang == this.$i18n.locale;
+      });
+      CurrLangID = CurrLangID ? CurrLangID.id : 1;
+
+      //匹配对应ID的内容
+      var CurrLangWord = langs.find(x => {
+        return x.l == CurrLangID;
+      });
+      if (!CurrLangWord) {
+        for (var i = 0; i < level.length; i++) {
+          CurrLangWord = langs.find(x => {
+            return x.l == level[i];
+          });
+          if (CurrLangWord) break;
+        }
+      }
+      mainLang = CurrLangWord.w;
+
+      if (hastran) {
+        /*
+      副语言匹配
+      优先级：日语，英语，简体中文，繁体中文
+      */
+        var SubLangWord = null;
+        for (var i = 0; i < level.length; i++) {
+          if (level[i] == CurrLangWord.l) continue;
+          SubLangWord = langs.find(x => {
+            return x.l == level[i];
+          });
+          if (SubLangWord) break;
+        }
+        subLang = SubLangWord ? SubLangWord.w : mainLang;
+
+        //合成语言
+        Lang = `${mainLang.replace(/\_/g, " ")}`;
+        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(
+          /\_/g,
+          " "
+        )}</span>`;
+      } else {
+        Lang = mainLang;
+      }
+      return Lang;
+    },
     handleSelect(item) {
       // 切割字符串，并在中间加入搜索到的标签拼接成新的输入框的内容
       var iptVal1 = this.iptVal3.slice(0, this.startlocation);
       var iptVal2 = this.iptVal3.slice(this.endlocation);
       var iptVal = iptVal1 + item.tag + " " + iptVal2;
+      this.iptVal = iptVal;
+      // 光标设置焦点事件
+      var endlocation = $("#ipt").focus();
+      this.infoTipMark = true;
+    },
+    open(message) {
+      this.$message({
+        message: message,
+        type: "error"
+      });
+    },
+    handleSelect2(item) {
+      /*var LangList = [
+        { id: 1, lang: "CHS" },
+        { id: 2, lang: "CHT" },
+        { id: 5, lang: "ENG" },
+        { id: 10, lang: "JPN" }
+      ];
+      var langs = item.langs;
+      //匹配当前语言的ID
+      var CurrLangID = LangList.find(x => {
+        return x.lang == this.$i18n.locale;
+      });
+      CurrLangID = CurrLangID ? CurrLangID.id : 1;
+
+      //匹配对应ID的内容
+      var CurrLangWord = langs.find(x => {
+        return x.l == CurrLangID;
+      });
+      if (!CurrLangWord) {
+        for (var i = 0; i < level.length; i++) {
+          CurrLangWord = langs.find(x => {
+            return x.l == level[i];
+          });
+          if (CurrLangWord) break;
+        }
+      }*/
+      // 切割字符串，并在中间加入搜索到的标签拼接成新的输入框的内容
+      var iptVal1 = this.iptVal3.slice(0, this.startlocation);
+      var iptVal2 = this.iptVal3.slice(this.endlocation);
+      var iptVal =
+        iptVal1 + this.ConvertLangRes(item.langs, false) + " " + iptVal2;
       this.iptVal = iptVal;
       // 光标设置焦点事件
       var endlocation = $("#ipt").focus();

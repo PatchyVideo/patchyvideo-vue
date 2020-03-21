@@ -69,50 +69,48 @@
 </i18n>
 
 <template>
-
   <transition mode="out-in">
-
     <div v-if="visible" class="EditTags" :class="{ active: this.msg != '' }">
       <el-dialog
-              v-if="dialogVisible"
-              :visible.sync="dialogVisible"
-              width="30%"
-              :destroy-on-close="true"
-              :modal-append-to-body="false"
-              :before-close="handleClose">
+        v-if="dialogVisible"
+        :visible.sync="dialogVisible"
+        width="30%"
+        :destroy-on-close="true"
+        :modal-append-to-body="false"
+        :before-close="handleClose"
+      >
         <span style="font-size:19px;color: #5e6d82;">{{$t('issave')}}</span>
-        <p>
-
-        </p>
+        <p></p>
         <span slot="footer" class="dialog-footer">
-    <el-button @click="closeTagPanel(true)">{{$t('cancel')}}</el-button>
-    <el-button  type="primary" @click="saveTag()">{{$t('save')}}</el-button>
-
-  </span>
+          <el-button @click="closeTagPanel(true)">{{$t('cancel')}}</el-button>
+          <el-button type="primary" @click="saveTag()">{{$t('save')}}</el-button>
+        </span>
       </el-dialog>
       <div id="tag">
-        <a href="javascript:;" @click="dialogVisible = true;closeTagPanel(JSON.stringify(tagsOrigin)===JSON.stringify(tags))">
+        <a
+          href="javascript:;"
+          @click="dialogVisible = true;closeTagPanel(JSON.stringify(tagsOrigin)===JSON.stringify(tags))"
+        >
           <i class="el-icon-close" id="close" v-if="this.$route.path != '/postvideo'"></i>
         </a>
         <div class="minibox">
           <div class="m_bg"></div>
           <div class="m_a activeTag">
-
-             <ul class="Taglist":class="v" v-for="v in this.tagCategoriesAll">
-               <li
-                       class="item"
-                       v-for="(i, item) in TagCategoriesData"
-                       :key="item"
-                       v-if="i === v"
-                       :class="{ selected: -1 === tagsForRec.indexOf(item) }"
-                       @click.stop="selected(i, item)"
-               >
-                 <p :class="`val_`+item">{{ item }}</p>
-                 <a href="javascript:;" @click.stop="deleteObj(i, item)">
-                   <i class="el-icon-close"></i>
-                 </a>
-               </li>
-             </ul>
+            <ul class="Taglist" :class="v" v-for="v in this.tagCategoriesAll">
+              <li
+                class="item"
+                v-for="(i, item) in TagCategoriesData"
+                :key="item"
+                v-if="i === v"
+                :class="{ selected: -1 === tagsForRec.indexOf(item) }"
+                @click.stop="selected(i, item)"
+              >
+                <p :class="`val_`+item">{{ item }}</p>
+                <a href="javascript:;" @click.stop="deleteObj(i, item)">
+                  <i class="el-icon-close"></i>
+                </a>
+              </li>
+            </ul>
           </div>
 
           <div class="m_b">
@@ -125,7 +123,7 @@
               />-->
               <!-- 新输入框，带有自动补全功能 -->
               <div id="ipt">
-                <el-autocomplete
+                <!--<el-autocomplete
                   v-model="iptVal"
                   :fetch-suggestions="querySearchAsync"
                   :trigger-on-focus="false"
@@ -153,15 +151,54 @@
                       <div class="addr">{{ item.cnt }}</div>
                     </div>
                   </template>
+                </el-autocomplete>-->
+                <el-autocomplete
+                  v-model="iptVal"
+                  :fetch-suggestions="querySearchAsync2"
+                  :trigger-on-focus="false"
+                  popper-class="my-autocomplete"
+                  :placeholder="$t('enter_tag')"
+                  @select="handleSelect2"
+                  @focus="infoTipEvent(true)"
+                  @blur="infoTipEvent(false)"
+                  @keyup.enter.native="addTag"
+                >
+                  <template slot-scope="{ item }">
+                    <div class="adviceList">
+                      <div
+                        class="name"
+                        v-bind:class="{
+                          Copyright: item.cat == 2,
+                          Language: item.cat == 5,
+                          Character: item.cat == 1,
+                          Author: item.cat == 3,
+                          General: item.cat == 0,
+                          Meta: item.cat == 4,
+                          Soundtrack: item.cat == 6
+                        }"
+                        v-html="item.tag||ConvertLangRes(item.langs)"
+                      ></div>
+                      <div class="addr">{{ item.cnt }}</div>
+                    </div>
+                  </template>
                 </el-autocomplete>
                 <a href="javascript:;" @click="addTag">
                   <i class="el-icon-plus" id="add"></i>
                 </a>
               </div>
             </div>
-            <span class="tag_title infoTip_1" :class="{ hidden: infoTip[0].isHidden }">{{$t('edit_common_tags')}}</span>
-            <span class="tag_title infoTip_2" :class="{ show: infoTip[1].isHidden }">{{$t('tag_already_exist')}}</span>
-            <span class="tag_title infoTip_3" :class="{ show: infoTip[2].isHidden }">{{$t('tag_not_exist')}}</span>
+            <span
+              class="tag_title infoTip_1"
+              :class="{ hidden: infoTip[0].isHidden }"
+            >{{$t('edit_common_tags')}}</span>
+            <span
+              class="tag_title infoTip_2"
+              :class="{ show: infoTip[1].isHidden }"
+            >{{$t('tag_already_exist')}}</span>
+            <span
+              class="tag_title infoTip_3"
+              :class="{ show: infoTip[2].isHidden }"
+            >{{$t('tag_not_exist')}}</span>
           </div>
           <div class="m_c">
             <div>
@@ -180,7 +217,12 @@
           </div>
         </div>
         <a href="javascript:;">
-          <a id="save" v-if="this.$route.path != '/postvideo'"@click="saveTag()" style="font-size: 28px">{{$t('save')}}</a>
+          <a
+            id="save"
+            v-if="this.$route.path != '/postvideo'"
+            @click="saveTag()"
+            style="font-size: 28px"
+          >{{$t('save')}}</a>
         </a>
       </div>
     </div>
@@ -190,13 +232,13 @@
 <script>
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       dialogVisible: false,
       tags: [],
-      tagsOrigin:[],
+      tagsOrigin: [],
       tagsForRec: [],
-      tagCategoriesAll:[],
+      tagCategoriesAll: [],
       TagCategoriesData: {},
       recTags: [],
       iptVal: "",
@@ -210,7 +252,7 @@ export default {
       firstFlag: true,
       msgMark: false,
       animeMark: 0,
-      isInfoTipClick:false,
+      isInfoTipClick: false,
       infoTipMark: false,
       // 自动补全标签的内容
       taglist: []
@@ -253,20 +295,17 @@ export default {
         this.tagCategoriesAll.push(categories[i].name);
       }
     });
-
   },
-  mounted(){
-
-
-
-  },
-  updated(){
+  mounted() {},
+  updated() {
     let _that = this;
-    var infoTipObj = document.getElementsByClassName("el-autocomplete-suggestion");
-    for(let i =0 ; i<infoTipObj.length;++i){
-      infoTipObj[i].onclick = function () {
+    var infoTipObj = document.getElementsByClassName(
+      "el-autocomplete-suggestion"
+    );
+    for (let i = 0; i < infoTipObj.length; ++i) {
+      infoTipObj[i].onclick = function() {
         _that.isInfoTipClick = true;
-      }
+      };
     }
   },
   methods: {
@@ -280,38 +319,37 @@ export default {
       /!*  console.log(m_Mark);*!/
     },*/
     handleClose(done) {
-                done();
-
+      done();
     },
     open1() {
       this.$message("这是一条消息提示");
     },
     open2() {
       this.$message({
-        message: this.$t('tag_add_succeed'),
+        message: this.$t("tag_add_succeed"),
         type: "success"
       });
     },
 
     open3() {
       this.$message({
-        message: this.$t('tag_already_exist'),
+        message: this.$t("tag_already_exist"),
         type: "warning"
       });
     },
 
     open4() {
-      this.$message.error(this.$t('tag_not_exist'));
+      this.$message.error(this.$t("tag_not_exist"));
     },
     open5() {
       this.$message({
-        message: this.$t('tag_modify_succeed'),
+        message: this.$t("tag_modify_succeed"),
         type: "success"
       });
     },
     open6() {
       this.$message({
-        message: this.$t('unknown_error'),
+        message: this.$t("unknown_error"),
         type: "error"
       });
     },
@@ -323,7 +361,7 @@ export default {
         this.axios({
           method: "post",
           url: "be/list/getcommontags.do",
-          data: { pid: this.msg, lang: localStorage.getItem('lang') }
+          data: { pid: this.msg, lang: localStorage.getItem("lang") }
         })
           .then(res => {
             this.tags = res.data.data; //原始数据
@@ -338,7 +376,7 @@ export default {
         this.axios({
           method: "post",
           url: "be/videos/gettags.do",
-          data: { video_id: this.msg, lang: localStorage.getItem('lang') }
+          data: { video_id: this.msg, lang: localStorage.getItem("lang") }
         })
           .then(res => {
             this.tags = res.data.data; //原始数据
@@ -355,7 +393,7 @@ export default {
       this.axios({
         method: "post",
         url: "be/list/getcommontags.do",
-        data: { pid: this.$route.query.pid, lang: localStorage.getItem('lang') }
+        data: { pid: this.$route.query.pid, lang: localStorage.getItem("lang") }
       })
         .then(res => {
           this.tags = res.data.data; //原始数据
@@ -408,7 +446,10 @@ export default {
             /*     setTimeout(function () {
                             _that.infoTip[1].isHidden=false;
                         },2000);*/
-          } else if (this.tags.indexOf(this.iptVal) === -1 && this.iptVal != "") {
+          } else if (
+            this.tags.indexOf(this.iptVal) === -1 &&
+            this.iptVal != ""
+          ) {
             //不存在则添加
             this.tags.push(this.iptVal);
             /* 如果所有的标签都没有被选中，那下次一添加的标签被选中*/
@@ -434,8 +475,8 @@ export default {
         data: {
           tags: tags,
           exclude: this.tags,
-          lang: localStorage.getItem('lang')
-          }
+          lang: localStorage.getItem("lang")
+        }
       })
         .then(res => {
           this.recTags = res.data.data.tags;
@@ -480,26 +521,26 @@ export default {
       this.getTagCategoriesForAdd(this.iptVal);
     },
     addTag() {
-/*
+      /*
       console.log("添加Tag之前的值——————是否鼠标点中:"+this.isInfoTipClick+"---是否键盘选中:"+this.infoTipMark);
 */
-  /*    if(this.isInfoTipClick ===true){ //是否鼠标点中了
+      /*    if(this.isInfoTipClick ===true){ //是否鼠标点中了
         if (this.infoTipMark === true) { //是否属于键盘回车添加的Tag
           this.infoTipMark = false;
           this.isInfoTipClick = false;
           return;
         }
       }*/
-  if(this.isInfoTipClick ===true){ //是否属于鼠标点击选中的Tag
-
-
-  }else {
-    if (this.infoTipMark === true) { //是否属于键盘回车选中的Tag
-      this.infoTipMark = false;
-      this.isInfoTipClick = false;
-      return;
-    }
-  }
+      if (this.isInfoTipClick === true) {
+        //是否属于鼠标点击选中的Tag
+      } else {
+        if (this.infoTipMark === true) {
+          //是否属于键盘回车选中的Tag
+          this.infoTipMark = false;
+          this.isInfoTipClick = false;
+          return;
+        }
+      }
       this.infoTip[0].isHidden = true;
       this.getTagCategoriesForAdd(this.iptVal);
       this.isInfoTipClick = false;
@@ -518,7 +559,7 @@ export default {
 
       }*/
       //方案二,所有操作都在函数的成功和失败回调中进行，代码冗余
-     /* this.infoTip[0].isHidden = true;
+      /* this.infoTip[0].isHidden = true;
       this.getTagCategoriesForAdd(this.iptVal);*/
       /*    方案一已废弃，
                     console.time("start");
@@ -585,12 +626,12 @@ export default {
       }
     },
     closeTagPanel(b) {
-      if(b===true){
+      if (b === true) {
         this.$emit("update:visible", false);
       }
     },
     infoTipEvent(event) {
-/*      this.isInfoTipClick = true;*/
+      /*      this.isInfoTipClick = true;*/
       //添加TAG行为消息提示
       if (event == true) {
         this.infoTip[0].isHidden = true;
@@ -600,6 +641,66 @@ export default {
         this.infoTip[0].isHidden = false;
         return;
       }
+    },
+    ConvertLangRes(langs, hastran = true) {
+      if (!langs) return;
+      var LangList = [
+        { id: 1, lang: "CHS" },
+        { id: 2, lang: "CHT" },
+        { id: 5, lang: "ENG" },
+        { id: 10, lang: "JPN" }
+      ];
+      var level = [10, 5, 1, 2];
+      var Lang = "";
+      var mainLang = "";
+      var subLang = "";
+      //经过一系列计算得出主副语言
+
+      //匹配当前语言的ID
+      var CurrLangID = LangList.find(x => {
+        return x.lang == this.$i18n.locale;
+      });
+      CurrLangID = CurrLangID ? CurrLangID.id : 1;
+
+      //匹配对应ID的内容
+      var CurrLangWord = langs.find(x => {
+        return x.l == CurrLangID;
+      });
+      if (!CurrLangWord) {
+        for (var i = 0; i < level.length; i++) {
+          CurrLangWord = langs.find(x => {
+            return x.l == level[i];
+          });
+          if (CurrLangWord) break;
+        }
+      }
+      mainLang = CurrLangWord.w;
+
+      if (hastran) {
+        /*
+      副语言匹配
+      优先级：日语，英语，简体中文，繁体中文
+      */
+        var SubLangWord = null;
+        for (var i = 0; i < level.length; i++) {
+          if (level[i] == CurrLangWord.l) continue;
+          SubLangWord = langs.find(x => {
+            return x.l == level[i];
+          });
+          if (SubLangWord) break;
+        }
+        subLang = SubLangWord ? SubLangWord.w : mainLang;
+
+        //合成语言
+        Lang = `${mainLang.replace(/\_/g, " ")}`;
+        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(
+          /\_/g,
+          " "
+        )}</span>`;
+      } else {
+        Lang = mainLang;
+      }
+      return Lang;
     },
     // 下面是消息补全框的方法
     querySearchAsync(queryString, cb) {
@@ -613,17 +714,34 @@ export default {
         cb(result.data);
       });
     },
+    querySearchAsync2(queryString, cb) {
+      /*   this.infoTipMark = true;*/
+      var url = "/be/autocomplete/ql?q=" + queryString;
+      this.axios({
+        method: "get",
+        url: url
+      }).then(result => {
+        this.taglist = result.data;
+        cb(result.data);
+      });
+    },
     handleSelect(item) {
       this.iptVal = item.tag;
       this.infoTipMark = true;
-/*
+      /*
+      console.log("选中时的值为"+this.infoTipMark);*/
+      /*      console.log("选中");*/
+    },
+    handleSelect2(item) {
+      this.iptVal = this.ConvertLangRes(item.langs, false);
+      this.infoTipMark = true;
+      /*
       console.log("选中时的值为"+this.infoTipMark);*/
       /*      console.log("选中");*/
     }
     // 消息提示
   },
   watch: {
-
     tags(n) {
       this.$emit("getEditTagsData", n);
     },
@@ -709,11 +827,11 @@ div {
 }
 div {
   #tag {
-   /* width: 1200px;
+    /* width: 1200px;
     height: 923px;*/
     width: 1100px;
     height: 690px;
-   /* background: url("../static/img/test3.png") no-repeat center;*/
+    /* background: url("../static/img/test3.png") no-repeat center;*/
     background-color: #fff;
     background-size: 70% 105%;
     text-align: center;
