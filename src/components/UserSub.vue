@@ -228,7 +228,7 @@
 
             },
             handleSelect(item) {
-                this.subTagsIptValue = item.tag;
+                this.subAddIptValue = item.tag;
             },
             querySearchAsync(queryString, cb) {
                 var url = "/autocomplete/?q=" + queryString;
