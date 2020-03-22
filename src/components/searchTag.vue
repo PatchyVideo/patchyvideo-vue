@@ -165,6 +165,10 @@
         ></el-option>
       </el-select>
     </div>
+    <!-- 合并标签按钮 -->
+    <div class="video-list-header">
+      <el-button @click="onMergeTagButtonClicked" :disabled="mergeDst == -1 || mergeSrc == -1" class="video-list-header-el-select">合并标签</el-button>
+    </div>
     <!-- 添加标签列表 -->
     <div class="addTag">
       <el-input
@@ -1144,6 +1148,22 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column
+        prop=""
+        label="合并选项"
+        min-width="50"
+      >
+      <template slot-scope="scope">
+        <el-select @change="(arg1) => onMergeOptionChanged(scope.row, arg1)" v-model="scope.merge" placeholder="-">
+          <el-option
+            v-for="item in mergeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      </el-table-column>
     </el-table>
 
     <!-- ElementUI自带的分页器 -->
@@ -1259,6 +1279,12 @@ export default {
       advancedOptions: false,
       // 弹出框是否显示
       dialogVisible: false,
+      // 合并标签选项
+      mergeOptions: [{value: '-', label: '-'}, {value: 'dst', label: '目标标签'}, {value: 'src', label: '源标签'}],
+      // 合并标签的源
+      mergeSrc: -1,
+      // 合并标签的目标
+      mergeDst: -1,
       // 页面是否属于加载状态的判断
       loading: true
     };
@@ -1310,6 +1336,8 @@ export default {
     },
     // 请求搜索数据
     requestSearchedTags() {
+      this.mergeSrc = -1;
+      this.mergeDst = -1;
       var query = this.searchTag;
       var category = this.searchCategory;
       // 对全部数据种类进行兼容性调整
@@ -1630,6 +1658,18 @@ export default {
         message: message,
         type: "error"
       });
+    },
+    onMergeOptionChanged(item, value) {
+      if (value == "dst") {
+        this.mergeDst = item.id;
+      }
+      if (value == "src") {
+        this.mergeSrc = item.id;
+      }
+    },
+    onMergeTagButtonClicked() {
+      console.log(`Merging tag ${this.mergeSrc} into tag ${this.mergeDst}`);
+      this.requestSearchedTags();
     }
   },
   watch: {
