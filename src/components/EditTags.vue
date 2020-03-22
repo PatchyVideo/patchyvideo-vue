@@ -283,6 +283,8 @@ export default {
     if (this.$route.path === "/postvideo") {
       if (this.$route.query.pid) {
         this.getCommonTags2();
+      }else {
+        this.getRecTags("");
       }
     }
     this.axios({
@@ -354,7 +356,7 @@ export default {
       });
     },
     getCommonTags() {
-      if (this.msg == "") {
+      if (this.msg === "") {
         return;
       }
       if (this.$route.path === "/listdetail") {
@@ -372,7 +374,7 @@ export default {
           })
           .catch(error => {});
       }
-      if (this.$route.path == "/video" || this.$route.path === "/postvideo") {
+      if (this.$route.path === "/video" || this.$route.path === "/postvideo") {
         this.axios({
           method: "post",
           url: "be/videos/gettags.do",
@@ -390,6 +392,7 @@ export default {
     },
     // 从视频列表里添加视频的时候添加视频列表的共有标签
     getCommonTags2() {
+      alert("3213");
       this.axios({
         method: "post",
         url: "be/list/getcommontags.do",
@@ -830,7 +833,7 @@ div {
     /* width: 1200px;
     height: 923px;*/
     width: 1100px;
-    height: 690px;
+    height: 720px;
     /* background: url("../static/img/test3.png") no-repeat center;*/
     background-color: #fff;
     background-size: 70% 105%;
@@ -1057,6 +1060,8 @@ div {
             transition: all 0.1s ease;
           }
           .recTag {
+            max-height: 160px;
+            overflow: auto;
             li {
               background-color: #fff;
               display: inline-block;
@@ -1082,7 +1087,7 @@ div {
     }
     #save {
       position: absolute;
-      bottom: 38px;
+      bottom: 22px;
       left: 50%;
       font-size: 40px;
       transform: translateX(-50%);
