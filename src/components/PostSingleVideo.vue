@@ -257,7 +257,7 @@ export default {
       var that = this;
       // B站的匹配规则
       this.PARSERS[
-        "^(https:\\/\\/|http:\\/\\/)?(www\\.)?(bilibili\\.com\\/video\\/av[\\d]+|b23\\.tv\\/[aA][vV][\\d]+)"
+        "^(https:\\/\\/|http:\\/\\/)?(www\\.)?(bilibili\\.com\\/video\\/([aA][vV][\\d]+|BV[a-zA-Z0-9]+)|b23\\.tv\\/([aA][vV][\\d]+|BV[a-zA-Z0-9]+))"
       ] = function(responseDOM, responseURL) {
         var err = responseDOM.find("div.error-body");
         if (err.length > 0) {
@@ -281,7 +281,7 @@ export default {
         that.autotag(utags, title, desc);
         that.setVideoMetadata(thumbnailURL, title, desc);
       };
-      this.EXPANDERS["^av[\\d]+"] = function(short_link) {
+      this.EXPANDERS["^([aA][vV][\\d]+|BV[a-zA-Z0-9]+)"] = function(short_link) {
         return "https://www.bilibili.com/video/" + short_link;
       };
       // A站的匹配规则
