@@ -55,9 +55,9 @@
               <router-link :to="'/users/' + item.replied_by.$oid" target="_blank">
                 {{
                 commentUser(item.replied_by.$oid).profile.username
-                }}:
+                }}
               </router-link>
-              {{ $t("replyTo") }}:
+              {{ $t("replyTo") }}
             </div>
             <div v-linkified>{{ item.content }}</div>
 
