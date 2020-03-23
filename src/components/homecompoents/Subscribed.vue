@@ -37,6 +37,10 @@
     <!-- <topnavbar />
     -->
     <!-- home页面的正文 -->
+    <div>
+      <el-tag @click="(e) => onSubsChange()" style="margin: 0 5px" key="" :type="visibleSubs.includes('') ? '' : 'info'">全部</el-tag>
+      <el-tag v-for="item in allSubs" :key="item._id.$oid" style="margin: 0 5px" @click="(e) => onSubsChange(item._id.$oid)" :type="visibleSubs.includes(item._id.$oid) ? '' : 'info'">{{item.name || item.qs}}</el-tag>
+    </div>
     <div class="w main-page-background-img" v-loading="loading">
       <left_navbar :msg="tags" :name="'sub'"></left_navbar>
 
@@ -94,7 +98,7 @@
                 ></i>
               </div>
             </div>订阅来源：
-            <el-tag v-for="i in item.sat_objs" :key="item._id.$oid" style="margin: 0 5px">{{i.qs}}</el-tag>
+            <el-tag v-for="i in item.sat_objs" :key="'s' + item._id.$oid" style="margin: 0 5px">{{i.name || i.qs}}</el-tag>
           </li>
         </ul>
 
@@ -151,11 +155,13 @@ export default {
       loading: false,
       ifSearch: false,
       //是否显示隐藏视频
-      checked: true
+      checked: true,
+      visibleSubs: [''],
+      allSubs: {}
     };
   },
   created() {
-    this.couponSelected = this.options[0].value;
+    this.couponSelected = this.options[2].value;
   },
   methods: {
     match_video_query(videos, querys) {
@@ -314,6 +320,60 @@ export default {
           page_size: count,
           order: this.couponSelected,
           hide_placeholder: this.checked,
+          visible: this.visibleSubs,
+          lang: localStorage.getItem("lang")
+        }
+      })
+        .then(result => {
+          /*      let a = result.data.data.videos[0];
+                          console.log(a);*/
+          this.listvideo = this.match_video_query(
+            result.data.data.videos,
+            result.data.data.objs
+          );
+          this.allSubs = {};
+          for (var i = 0; i < result.data.data.objs.length; ++i) {
+            this.allSubs[result.data.data.objs[i]._id.$oid] = result.data.data.objs[i];
+          }
+
+          this.maxcount = result.data.data.total;
+          //取得总页数制作分页
+          this.maxpage = Math.ceil(result.data.data.total / count);
+          this.$store.commit("getMaxPage", this.maxpage);
+          /*                 this.listvideo = result.data.data.videos;*/
+          this.tags = result.data.data.related_tags;
+          this.count2 = result.data.data.videos.length;
+
+          // 加载结束,加载动画消失
+          this.loading = false;
+
+          // 回到顶部
+          if ($("html").scrollTop()) {
+            //动画效果
+            $("html").animate({ scrollTop: 0 }, 100);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          this.listvideo = "";
+          this.loading = false;
+        });
+    },
+    getListVideo_VideoOnly: function(e, count, order) { // 只更新视频数据，不更新其他（包括订阅对象）
+      // 先使页面出于加载状态
+
+      this.loading = true;
+
+      // 请求数据
+      this.axios({
+        method: "post",
+        url: "be/subs/list.do",
+        data: {
+          page: e,
+          page_size: count,
+          order: this.couponSelected,
+          hide_placeholder: this.checked,
+          visible: this.visibleSubs,
           lang: localStorage.getItem("lang")
         }
       })
@@ -347,6 +407,24 @@ export default {
           this.listvideo = "";
           this.loading = false;
         });
+    },
+    onSubsChange(id = "") {
+      if (id == "") {
+        this.visibleSubs = [''];
+      } else {
+        if (this.visibleSubs.includes(id)) {
+          const index = this.visibleSubs.indexOf(id);
+          this.visibleSubs.splice(index, 1);
+        } else {
+          this.visibleSubs.push(id);
+          const index = this.visibleSubs.indexOf("");
+          if (index > -1) {
+            this.visibleSubs.splice(index, 1);
+          }
+        }
+      }
+      console.log(this.visibleSubs);
+      this.getListVideo_VideoOnly(this.page, this.count);
     }
   },
   watch: {
