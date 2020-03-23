@@ -39,7 +39,7 @@
     <!-- home页面的正文 -->
     <div>
       <el-tag @click="(e) => onSubsChange()" style="margin: 0 5px" key="" :type="visibleSubs.includes('') ? '' : 'info'">全部</el-tag>
-      <el-tag v-for="item in allSubs" :key="item._id.$oid" style="margin: 0 5px" @click="(e) => onSubsChange(item._id.$oid)" :type="visibleSubs.includes(item._id.$oid) ? '' : 'info'">{{item.name | item.qs}}</el-tag>
+      <el-tag v-for="item in allSubs" :key="item._id.$oid" style="margin: 0 5px" @click="(e) => onSubsChange(item._id.$oid)" :type="visibleSubs.includes(item._id.$oid) ? '' : 'info'">{{item.name || item.qs}}</el-tag>
     </div>
     <div class="w main-page-background-img" v-loading="loading">
       <left_navbar :msg="tags" :name="'sub'"></left_navbar>
@@ -98,7 +98,7 @@
                 ></i>
               </div>
             </div>订阅来源：
-            <el-tag v-for="i in item.sat_objs" :key="'s' + item._id.$oid" style="margin: 0 5px">{{i.name | i.qs}}</el-tag>
+            <el-tag v-for="i in item.sat_objs" :key="'s' + item._id.$oid" style="margin: 0 5px">{{i.name || i.qs}}</el-tag>
           </li>
         </ul>
 
