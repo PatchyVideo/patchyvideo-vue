@@ -7,16 +7,19 @@
 <i18n>
 {
   "CHS": {
-    "errmsg":"哎呀，页面好像出错了...",
-    "click2home":"点我返回主页"
+    "MsgCenter":"消息中心",
+    "UnreadMsg":"未读消息",
+    "AllMsg":"全部消息"
   },
   "ENG": {
-    "errmsg":"Sorry, this page is not found ...",
-    "click2home":"Click me to return to homepage"
+    "MsgCenter":"Message Center",
+    "UnreadMsg":"Unread Messages",
+    "AllMsg":"All Messages"
   },
   "CHT": {
-    "errmsg":"哎呀，頁面好像出錯了...",
-    "click2home":"點我返回主頁"
+    "MsgCenter":"消息中心",
+    "UnreadMsg":"未讀消息",
+    "AllMsg":"全部消息"
   }
 }
 </i18n>
@@ -29,22 +32,23 @@
       <div class="messageNav">
         <div class="messageNav-title">
           <i class="el-icon-s-promotion"></i>
-          消息中心
+          {{ $t("MsgCenter") }}
         </div>
         <ul class="messageNav-list">
-          <li v-bind:class="{ messageNavListActive: messageType == 0 }">
+          <li v-bind:class="{ messageNavListActive: messageType == 0 }" @click="messageType=0">
             <i class="el-icon-star-on"></i>
-            未读消息
+            {{ $t("UnreadMsg") }}
           </li>
-          <li v-bind:class="{ messageNavListActive: messageType == 1 }">
+          <li v-bind:class="{ messageNavListActive: messageType == 1 }" @click="messageType=1">
             <i class="el-icon-star-on"></i>
-            全部消息
+            {{ $t("AllMsg") }}
           </li>
         </ul>
       </div>
       <!-- 右面的详情 -->
       <div class="msgDetail">
         <unreadMsg v-if="messageType == 0"></unreadMsg>
+        <allMsg v-if="messageType == 1"></allMsg>
       </div>
     </div>
   </div>
@@ -52,7 +56,8 @@
 
 <script>
 import topnavbar from "../components/TopNavbar.vue";
-import unreadMsg from "../components/UnreadMsg.vue";
+import unreadMsg from "../components/messageCompoents/UnreadMsg.vue";
+import allMsg from "../components/messageCompoents/AllMessage.vue";
 export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -68,7 +73,7 @@ export default {
     document.title = "消息中心 - Patchyvideo";
   },
   methods: {},
-  components: { topnavbar, unreadMsg }
+  components: { topnavbar, unreadMsg, allMsg }
 };
 </script>
 
