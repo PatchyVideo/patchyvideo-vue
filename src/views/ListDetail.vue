@@ -333,11 +333,6 @@
           </div>
         </div>
 
-        <!-- 评论区 -->
-        <div>
-          <Comments :sid="sid"></Comments>
-        </div>
-
         <!-- ElementUI自带的分页器 -->
         <el-pagination
           background
@@ -350,6 +345,11 @@
           :page-size="20"
           :page-sizes="[10, 20, 30, 40]"
         ></el-pagination>
+
+        <!-- 评论区 -->
+        <div>
+          <Comments :sid="sid"></Comments>
+        </div>
       </div>
     </div>
 

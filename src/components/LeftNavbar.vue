@@ -195,10 +195,7 @@
           v-if="$route.path === '/video' && isLogin == true"
           @click="postVideo"
         >{{$t('tag.video_action')}}</p>
-        <p
-          v-if="$route.path === '/video' && isLogin == true"
-          @click="show_tag_log"
-        >{{$t('tag.prompt_action')}}</p>
+        <p v-if="$route.path === '/video'" @click="show_tag_log">{{$t('tag.prompt_action')}}</p>
       </div>
 
       <!-- 在Home页面渲染的侧导航条内容 -->
@@ -225,7 +222,7 @@
           <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
           <!-- 根据tag名称自动渲染tag颜色 -->
           <p
-                  v-bind:class="{
+            v-bind:class="{
               Copyright: val == 'Copyright',
               Language: val == 'Language',
               Character: val == 'Character',
@@ -234,7 +231,7 @@
               Meta: val == 'Meta',
               Soundtrack:val == 'Soundtrack'
             }"
-                  @click="gotoHome(val)"
+            @click="gotoHome(val)"
           >{{ val}}</p>
         </li>
       </ul>
@@ -416,7 +413,7 @@ export default {
       };
     }
   },
-  props: ["msg","name"]
+  props: ["msg", "name"]
 };
 </script>
 
