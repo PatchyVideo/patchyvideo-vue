@@ -271,7 +271,11 @@
             }}
           </router-link>
           <el-badge :value="messagesNum" :hidden="!messagesNum" class="item">
-            <router-link class="loginUser-message" to="/messages">{{$t('user.message')}}</router-link>
+            <router-link
+              target="_blank"
+              class="loginUser-message"
+              to="/messages"
+            >{{$t('user.message')}}</router-link>
           </el-badge>
           <a
             class="loginUser-signup"
@@ -355,6 +359,8 @@ export default {
       ],
       // 未读信息的数量
       messagesNum: 0,
+      // 控制读取未读信息方法的变量
+      queryMessages: "",
       // 多语言支持
       locale: localStorage.getItem("lang")
     };
@@ -385,7 +391,10 @@ export default {
       this.$store.state.username != ""
     ) {
       this.isLogin = true;
-      this.getUnreadCount();
+      if (this.$route.path != "/messages") this.getUnreadCount();
+      // 每2min查询一次未读消息
+      // 注意,这里的this.getUnreadCount不能加括号!
+      this.queryMessages = setInterval(this.getUnreadCount, 120000);
     }
     this.iptVal = this.iptVal2;
   },
