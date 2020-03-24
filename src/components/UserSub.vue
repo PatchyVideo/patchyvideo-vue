@@ -137,6 +137,7 @@
                                                      Meta: item.cat === 4,
                                                      Soundtrack: item.cat === 6
                                                    }"
+                                            v-html="item.tag||ConvertLangRes(item.langs)"
                                     >{{ item.tag }}</div>
                                     <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
                                 </div>
@@ -213,6 +214,7 @@
 
         },
         methods: {
+
             handleChange(val) {
             },
             handleSubIptConfirm(m){
@@ -227,11 +229,71 @@
                 this.$forceUpdate();
 
             },
+            ConvertLangRes(langs, hastran = true) {
+                if (!langs) return;
+                var LangList = [
+                    { id: 1, lang: "CHS" },
+                    { id: 2, lang: "CHT" },
+                    { id: 5, lang: "ENG" },
+                    { id: 10, lang: "JPN" }
+                ];
+                var level = [10, 5, 1, 2];
+                var Lang = "";
+                var mainLang = "";
+                var subLang = "";
+                //经过一系列计算得出主副语言
+
+                //匹配当前语言的ID
+                var CurrLangID = LangList.find(x => {
+                    return x.lang == this.$i18n.locale;
+                });
+                CurrLangID = CurrLangID ? CurrLangID.id : 1;
+
+                //匹配对应ID的内容
+                var CurrLangWord = langs.find(x => {
+                    return x.l == CurrLangID;
+                });
+                if (!CurrLangWord) {
+                    for (var i = 0; i < level.length; i++) {
+                        CurrLangWord = langs.find(x => {
+                            return x.l == level[i];
+                        });
+                        if (CurrLangWord) break;
+                    }
+                }
+                mainLang = CurrLangWord.w;
+
+                if (hastran) {
+                    /*
+                  副语言匹配
+                  优先级：日语，英语，简体中文，繁体中文
+                  */
+                    var SubLangWord = null;
+                    for (var i = 0; i < level.length; i++) {
+                        if (level[i] == CurrLangWord.l) continue;
+                        SubLangWord = langs.find(x => {
+                            return x.l == level[i];
+                        });
+                        if (SubLangWord) break;
+                    }
+                    subLang = SubLangWord ? SubLangWord.w : mainLang;
+
+                    //合成语言
+                    Lang = `${mainLang.replace(/\_/g, " ")}`;
+                    Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(
+                        /\_/g,
+                        " "
+                    )}</span>`;
+                } else {
+                    Lang = mainLang;
+                }
+                return Lang;
+            },
             handleSelect(item) {
                 this.subAddIptValue = item.tag;
             },
             querySearchAsync(queryString, cb) {
-                var url = "/autocomplete/?q=" + queryString;
+                var url = "/be/autocomplete/ql?q=" + queryString;
                 this.axios({
                     method: "get",
                     url: url
