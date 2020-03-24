@@ -44,8 +44,6 @@ export default {
         }
     },
     created(){
-        console.log(this.isLogin());
-        
         this.isLogin() ? this.getMyScore():this.getTotalRating();
     },
 /*     watch:{
@@ -59,7 +57,6 @@ export default {
     }, */
     methods:{
         getMyScore(){
-            console.log(this.pid,this.type);
             // var url = this.type="vedio"?"/be/rating/get_video.do":"/be/rating/get_playlist.do ";
             var data = {};
             var url = "";
@@ -84,7 +81,7 @@ export default {
                 // 评分过
                 this.scoreStatus = true;
                 this.data = data.data;
-                console.log(data);
+                // console.log(data);
                 
                 this.showStar(this.data.user_rating);
             });
@@ -105,7 +102,7 @@ export default {
                 data: data
             }).then(res => {
                 this.data = res.data.data;
-                console.log(this.data);
+                // console.log(this.data);
             });
         },
         showStar(num){
@@ -176,7 +173,7 @@ export default {
                 var data = res.data;
                 this.scoreStatus = true;
                 this.enableListener=false;
-                console.log(data);
+                // console.log(data);
                 this.getMyScore();
                 
             });
