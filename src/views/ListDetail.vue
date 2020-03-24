@@ -66,33 +66,64 @@
   "ENG": {
     "btn_group":{
         "add_video":"Add video",
-        "import_from_other":"Import from favorites of other websites",
-        "add_favorite":"Add to favorites",
-        "edit_list_info":"Edit list information",
+        "import_from_other":"Extend from playlist of other websites",
+        "add_favorite":"Add to folder",
+        "edit_list_info":"Edit playlist information",
         "edit_common_tags":"Edit common tags",
-        "reverse_list":"List video in reverse order",
+        "reverse_list":"Reverse video order",
         "delete":"Delete"
     },
     "vedio_chain_tip":"Insert video here",
     "edit_list_info_dialog":{
         "title":"Edit video details",
-        "list_title_tip":"Here is the list title",
-        "list_title_err_tip":"Haven't entered a title yet",
-        "list_introduction_tip":"Let me introduce my list",
-        "list_introduction_err_tip":"Don't you introduce the list?",
-        "set_private_list":"Make private list",
+        "list_title_tip":"Playlist title",
+        "list_title_err_tip":"Please enter playlist title",
+        "list_introduction_tip":"Playlist description",
+        "list_introduction_err_tip":"Please enter playlist description",
+        "set_private_list":"Private playlist",
         "btn_ok":"Submit",
         "btn_cancel":"Cancel"
     },
     "delete_dialog":{
-        "title":"Prompt",
-        "content":"Confirm delete?",
+        "title":"Confirm",
+        "content":"Are you sure you want to delete this playlist? This operation is irreversible.",
         "btn_ok":"Yes",
         "btn_cancel":"Cancel"
     },
-    "commit_tip":"Submitted successfully",
-    "oper_tip":"Successful operation",
-    "delete_tip":"successfully deleted"
+    "commit_tip":"Submit succeed",
+    "oper_tip":"Operation succeed",
+    "delete_tip":"Delete succeed"
+  },
+  "CHT": {
+    "btn_group":{
+        "add_video":"添加視頻",
+        "import_from_other":"從其他網站的收藏夾導入",
+        "add_favorite":"加入收藏",
+        "edit_list_info":"編輯列表信息",
+        "edit_common_tags":"編輯共有標簽",
+        "reverse_list":"列表視頻倒序",
+        "delete":"刪除"
+    },
+    "vedio_chain_tip":"在此插入視頻",
+    "edit_list_info_dialog":{
+        "title":"編輯視頻詳情",
+        "list_title_tip":"這裏是列表標題",
+        "list_title_err_tip":"還沒輸入標題呢",
+        "list_introduction_tip":"來介紹壹下自己的列表吧",
+        "list_introduction_err_tip":"不來介紹壹下列表嗎？",
+        "set_private_list":"設為私有列表",
+        "btn_ok":"確認修改",
+        "btn_cancel":"取 消"
+    },
+    "delete_dialog":{
+        "title":"提示",
+        "content":"確認刪除嗎？",
+        "btn_ok":"確定",
+        "btn_cancel":"取 消"
+    },
+    "commit_tip":"提交成功",
+    "oper_tip":"操作成功",
+    "delete_tip":"刪除成功"
   }
 }
 </i18n>
@@ -103,7 +134,12 @@
     <topnavbar />
 
     <!-- EditTags组件-->
-    <EditTags ref="editTag" :msg="temporaryValForVLP" :visible.sync="showTagPanel" v-if="showTagPanel"></EditTags>
+    <EditTags
+      ref="editTag"
+      :msg="temporaryValForVLP"
+      :visible.sync="showTagPanel"
+      v-if="showTagPanel"
+    ></EditTags>
 
     <!-- 编辑视频列表时的对话框 -->
     <el-dialog
@@ -115,7 +151,10 @@
       <el-form ref="list" :model="playlist_metadata" label-width="auto" :rules="rules">
         <!-- 标题 -->
         <el-form-item prop="title">
-          <el-input v-model="playlist_metadata.title" :placeholder="$t('edit_list_info_dialog.list_title_tip')"></el-input>
+          <el-input
+            v-model="playlist_metadata.title"
+            :placeholder="$t('edit_list_info_dialog.list_title_tip')"
+          ></el-input>
         </el-form-item>
         <!-- 简介 -->
         <el-form-item prop="desc">
@@ -127,10 +166,17 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-checkbox v-model="playlist_metadata.private">{{$t('edit_list_info_dialog.set_private_list')}}</el-checkbox>
+          <el-checkbox
+            v-model="playlist_metadata.private"
+          >{{$t('edit_list_info_dialog.set_private_list')}}</el-checkbox>
         </el-form-item>
         <el-form-item class="createList">
-          <el-button type="primary" @click="onSubmit" style="width:80%" :loading="loading">{{$t('edit_list_info_dialog.btn_ok')}}</el-button>
+          <el-button
+            type="primary"
+            @click="onSubmit"
+            style="width:80%"
+            :loading="loading"
+          >{{$t('edit_list_info_dialog.btn_ok')}}</el-button>
           <el-button
             @click="openListEdit = false"
             style="width:80%;margin-top:10px;margin-left:0px"
@@ -141,7 +187,7 @@
 
     <!-- 删除列表时的确认框 -->
     <el-dialog :title="$t('delete_dialog.title')" :visible.sync="dialogVisible" width="30%">
-      <span>{{$t('delete_dialog.btn_content')}}</span>
+      <span>{{$t('delete_dialog.content')}}</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">{{$t('delete_dialog.btn_cancel')}}</el-button>
         <el-button
@@ -272,7 +318,11 @@
                     item.item.url
                     }}
                   </a>
-                  <i @click="copyVideoLink(item.item.url)" class="fa fa-copy fa-lg" style="margin-left:2px"></i>
+                  <i
+                    @click="copyVideoLink(item.item.url)"
+                    class="fa fa-copy fa-lg"
+                    style="margin-left:2px"
+                  ></i>
                 </div>
               </div>
               <div v-if="editable" class="item_end">
@@ -295,6 +345,11 @@
           :page-size="20"
           :page-sizes="[10, 20, 30, 40]"
         ></el-pagination>
+
+        <!-- 评论区 -->
+        <div>
+          <Comments :sid="sid"></Comments>
+        </div>
       </div>
     </div>
 
@@ -310,11 +365,12 @@ import Move from "../components/Move.vue";
 import DeleteVideo from "../components/DeleteVideo.vue";
 import SetCover from "../components/SetCover.vue";
 import ListFolderView from "../components/ListFolderView.vue";
+import Comments from "../components/comments.vue";
 import { copyToClipboardText } from "../static/js/generic";
 
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 视频列表的元信息
       playlist_metadata: {
@@ -347,6 +403,8 @@ export default {
       count: 20,
       // 视频的全部数量
       maxcount: 0,
+      // 列表评论的sid
+      sid: "",
       // 传入Tags组件视频页的ID
       videolistPid: "",
       //传入Tags组件视频页的ID临时变量
@@ -361,9 +419,19 @@ export default {
       dialogVisible: false,
       // 编辑列表详情的校验数据
       rules: {
-        title: [{ required: true, message: this.$t('edit_list_info_dialog.list_title_err_tip'), trigger: "blur" }],
+        title: [
+          {
+            required: true,
+            message: this.$t("edit_list_info_dialog.list_title_err_tip"),
+            trigger: "blur"
+          }
+        ],
         desc: [
-          { required: true, message: this.$t('edit_list_info_dialog.list_introduction_err_tip'), trigger: "blur" }
+          {
+            required: true,
+            message: this.$t("edit_list_info_dialog.list_introduction_err_tip"),
+            trigger: "blur"
+          }
         ]
       },
       // 播放列表目录页面是否显示
@@ -440,6 +508,9 @@ export default {
           this.videolistPid = this.videolistDetail.playlist._id.$oid;
           this.maxcount = result.data.data.count;
           this.maxpage = result.data.data.page_count;
+          if (result.data.data.playlist.comment_thread) {
+            this.sid = result.data.data.playlist.comment_thread.$oid;
+          }
 
           // 请求单个播放列表的元数据
           this.axios({
@@ -512,7 +583,7 @@ export default {
           private: this.playlist_metadata.private
         }
       }).then(res => {
-        this.open(this.$t('commit_tip'));
+        this.open(this.$t("commit_tip"));
         this.openListEdit = false;
         this.getVideoList();
       });
@@ -527,7 +598,7 @@ export default {
           pid: this.videolistPid
         }
       }).then(res => {
-        this.open(this.$t('oper_tip'));
+        this.open(this.$t("oper_tip"));
         this.getVideoList();
       });
     },
@@ -540,7 +611,7 @@ export default {
           pid: this.videolistPid
         }
       }).then(res => {
-        this.open(this.$t('delete_tip'));
+        this.open(this.$t("delete_tip"));
         this.$router.push({ path: "/lists" });
       });
     },
@@ -548,7 +619,7 @@ export default {
     openEditTags: function() {
       this.temporaryValForVLP = this.videolistPid;
       this.showTagPanel = true;
-  /*    this.$refs.editTag.getCommonTags();*/
+      /*    this.$refs.editTag.getCommonTags();*/
     },
     openListFolder() {
       this.showListFolder = true;
@@ -584,7 +655,8 @@ export default {
     Move,
     DeleteVideo,
     ListFolderView,
-    SetCover
+    SetCover,
+    Comments
   }
 };
 </script>
@@ -611,7 +683,7 @@ export default {
 }
 .re_video {
   display: flex;
-/*  justify-content: center;*/
+  /*  justify-content: center;*/
   align-items: center;
   .edit {
     width: 150px;
@@ -725,8 +797,7 @@ export default {
   }
 }
 
-.shadow{
-
+.shadow {
 }
 .content {
   top: 3px;

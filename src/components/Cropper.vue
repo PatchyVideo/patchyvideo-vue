@@ -40,6 +40,23 @@
     "INCORRECT_UPLOAD_TYPE": "File format not supported",
     "upload_failed": "Upload failed",
     "open_failed": "Open file failed"
+  },
+  "CHT": {
+    "title": "圖片裁剪",
+    "cancel": "取消",
+    "ok": "確定",
+    "upload_userphoto": "上傳頭像",
+    "enter_url_prompt": "請輸入圖片URL",
+    "from_file": "本地上傳",
+    "from_url": "網絡上傳",
+    "upload": "上傳",
+    "no_file_prompt": "請選擇要上傳的頭像!",
+    "file_size_prompt": "上傳頭像圖片大小不能超過 2MB!",
+    "upload_succeed": "上傳成功！",
+    "no_url_prompt": "請輸入鏈接!",
+    "INCORRECT_UPLOAD_TYPE": "上傳文件不支持該圖片格式!",
+    "upload_failed": "上傳失敗！",
+    "open_failed": "選擇圖片失敗"
   }
 }
 </i18n>

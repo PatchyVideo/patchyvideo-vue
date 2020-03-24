@@ -28,6 +28,14 @@
     "no_url_prompt": "Please enter URL",
     "upload_failed": "Upload failed, please check if playlist is ",
     "upload_succeed": "Upload succeed!"
+  },
+ "CHT": {
+    "prompt": "這裏可以直接導入播放列表，但是請註意，本功能僅限於b站收藏夾、YouTube播放列表和nicovideo的mylist哦",
+    "url_placeholder": "在這裏輸入列表的網址",
+    "upload_now": "立即導入",
+    "no_url_prompt": "還沒輸入地址呢",
+    "upload_failed": "列表導入失敗，請檢查地址是否正確！",
+    "upload_succeed": "列表導入成功！"
   }
 }
 </i18n>

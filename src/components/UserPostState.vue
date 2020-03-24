@@ -1,14 +1,37 @@
+<i18n>
+{
+    "CHS": {
+        "pending_post": "待处理的索引",
+        "no_pending": "暂无待处理的索引",
+        "failed_post": "失败的索引",
+        "total_count": "共计{count}个"
+    },
+    "ENG": {
+        "pending_post": "Pending posts",
+        "no_pending": "No pending posts",
+        "failed_post": "Failed posts",
+        "total_count": "Total {count}"
+    },
+    "CHT": {
+        "pending_post": "待處理的索引",
+        "no_pending": "暫無待處理的索引",
+        "failed_post": "失敗的索引",
+        "total_count": "共計{count}個"
+    }
+}
+</i18n>
+
 <template>
 
     <div class="bigbox">
         <div class="doing">
-            <h3>待处理的索引</h3>
-            <p>暂无待处理的索引</p>
+            <h3>{{$t('pending_post')}}</h3>
+            <p>{{$t('no_pending')}}</p>
         </div>
         <div class="failed">
-            <h3>失败的索引</h3>
-            <p>共计{{failedData.count}}个</p>
-         <p v-for="(item,i) in failedData.posts":key="item._id.$oid">
+            <h3>{{$t('failed_post')}}</h3>
+            <p>{{$t('total_count', {count: failedData.count})}}</p>
+         <p v-for="(item, i) in failedData.posts" :key="item._id.$oid">
              <a :href="item.post_param.url">{{item.post_param.url}}</a>
             </p>
         </div>

@@ -34,7 +34,7 @@
       2.按下浏览器的后退按钮网站没有刷新数据
 -->
 <i18n>
-  {
+{
   "CHS": {
   "favorite":"收藏",
   "modify" :"修改",
@@ -67,39 +67,70 @@
     }
   },
   "ENG": {
-  "favorite":"favorited",
-  "modify":"modifies",
-  "init_tip":"IPFS Service initialization..",
+  "favorite":"Add to playlist",
+  "modify":"Change",
+  "init_tip":"IPFS Service initializing..",
   "connecting_tip":"IPFS Service started, connecting..",
   "connect_success_tip":" IPFS node is connected",
-  "copy" : "copies",
+  "copy" : "Copies",
   "add_copy":"Add copies",
   "del_copy":"Delete copies",
-  "sync_replica_label":"Synchronized copy label",
-  "sync_replica_label_from":"Sync tags in this copy",
-  "playlist":"playlists",
-  "management":"management",
-  "other":"other",
-  "official":"official",
-  "official_repost":"official_repost",
-  "authorized_translation":"authorized_translation",
-  "authorized_repost":"authorized_repost",
-  "translation":"translation",
-  "repost":"repost",
-  "unknown":"other",
-  "previous_article":"Previous article",
-  "no_previous_article":"No previous article",
-  "next_article":"Next Article",
-  "no_next_article":"No next article",
+  "sync_replica_label":"Synchronize copies tags",
+  "sync_replica_label_from":"Sync tags from this video",
+  "playlist":"Playlists",
+  "management":"Management",
+  "other":"Other",
+  "official": "Original",
+  "official_repost": "Official Repost",
+  "authorized_translation": "Authorized Translation",
+  "authorized_repost": "Authorized Repost",
+  "translation": "User Translation",
+  "repost": "User Repost",
+  "unknown": "Other",
+  "previous_article":"Previous video",
+  "no_previous_article":"No previous video",
+  "next_article":"Next video",
+  "no_next_article":"No next video",
   "infotip":{
-  "release_type":"Please edit the release type of the video",
-  "nocopies":"No copy of this video",
-  "noplaylist":"This video is not included in any playlist",
-   "create_playlist":" Create playlist from this video"
+  "release_type":"Please select repost type for this video",
+  "nocopies":"No copies exist for this video",
+  "noplaylist":"This video is not included in any playlists",
+   "create_playlist":"Create playlist from this video"
   }
 
+  },
+  "CHT": {
+  "favorite":"收藏",
+  "modify" :"修改",
+  "init_tip":"IPFS服務初始化中..",
+  "connecting_tip":"IPFS 服務已啟動，正在連接..",
+  "connect_success_tip":" IPFS 節點已連接",
+  "copy" : "副本",
+  "add_copy":"添加副本",
+  "del_copy":"刪除副本",
+  "sync_replica_label":"同步副本標簽",
+  "sync_replica_label_from":"從此副本同步標簽",
+  "playlist":"播放列表",
+  "management":"管理",
+  "official":"原始發布",
+  "official_repost":"官方再發布",
+  "authorized_translation":"授權翻譯",
+  "authorized_repost":"授權轉載",
+  "translation":"自發翻譯",
+  "repost":"自發搬運",
+  "unknown":"其他",
+  "previous_article":"前壹篇",
+  "no_previous_article":"沒有前壹篇了哦",
+  "next_article":"後壹篇",
+  "no_next_article":"沒有後壹篇了哦",
+    "infotip":{
+  "release_type":"請修改視頻的發布類型",
+  "nocopies":"此視頻不存在副本",
+  "noplaylist":"本視頻不包含於任何播放列表中",
+  "create_playlist":"由此視頻創建播放列表"
+    }
   }
-  }
+}
 </i18n>
 <template>
   <div>
@@ -213,6 +244,12 @@
 
           <!-- 视频详细信息 -->
           <div class="re_video">
+            <iframe
+              :src="iframeUrl"
+              v-if="this.iframeUrl!==''"
+              allowfullscreen="true"
+              style="width: 948px; height: 763px;  margin:10px auto 30px;display: block;"
+            ></iframe>
             <!-- 如果是ipfs视频直接播放视频，否则显示封面 -->
             <div v-if="isIpfs" style="text-align: center;" id="nodes">{{$t('init_tip')}}</div>
             <video
@@ -225,7 +262,7 @@
               style="position: relative;left: 50%;transform: translateX(-50%);"
             ></video>
             <img
-              v-else
+              v-if="this.iframeUrl===''&&!isIpfs"
               :src="'/images/covers/' + myVideoData.video.item.cover_image"
               width="320px"
               height="200px"
@@ -233,6 +270,7 @@
             <p
               class="videoDesc"
               @click="postAsCopy($event)"
+              style="word-break: break-all;"
               v-html="myVideoData.video.item.desc"
               v-linkified
             ></p>
@@ -361,7 +399,14 @@
             <span v-else style="float:right">【{{$t("no_next_article")}}】</span>
           </ul>
         </div>
+
+        <!-- 评论区 -->
+        <div>
+          <Comments :sid="sid"></Comments>
+        </div>
       </div>
+
+      <!-- 删除副本的提示框 -->
       <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
         <span>确认删除？</span>
         <span slot="footer" class="dialog-footer">
@@ -385,6 +430,7 @@
 import topnavbar from "../components/TopNavbar.vue";
 import left_navbar from "../components/LeftNavbar.vue";
 import Footer from "../components/Footer.vue";
+import Comments from "../components/comments.vue";
 import { copyToClipboardText } from "../static/js/generic";
 export default {
   data() {
@@ -423,6 +469,8 @@ export default {
       myVideoList: [],
       // 我的全部视频列表（处理视频是否存在于该列表）
       allVideoList: [],
+      // 视频评论的sid
+      sid: "",
       // 视频列表的关键词
       myListQuery: "",
       // 我的视频列表的当前页数
@@ -472,9 +520,10 @@ export default {
       // 匹配视频简介中的短地址，用以扩展成完整地址
       URL_MATCHERS: {},
       // 扩展成的完整地址
-      URL_EXPANDERS: {}
+      URL_EXPANDERS: {},
       // 获取到的所有视频，以页数为第一维组成二维数组(和localStorage存储一起使用，已被弃用）
       // localStorageNum: []
+      iframeUrl: ""
     };
   },
   computed: {
@@ -545,12 +594,17 @@ export default {
     },
     // 获取dom
     nodeShow() {
-      return document.getElementById("nodes");
+      var node = document.getElementById("nodes");
+      if (node) {
+        return node;
+      } else {
+        return false;
+      }
     }
   },
   created() {
     // 改变侧导航条的标题
-    this.$store.commit("changeLeftNavBarTitle", "标签");
+    this.$store.commit("changeLeftNavBarTitle", 1);
     // 删除本地储存(和localStorage存储一起使用，已被弃用）
     // window.localStorage.removeItem("loglevel:webpack-dev-server");
     this.searchVideo();
@@ -629,6 +683,43 @@ export default {
         }
       );
     },
+    regToIframe(url) {
+      let str = url;
+      let regBili = /(https:\/\/|http:\/\/)www.bilibili.com\/video\/av(\S+)/;
+      let regNico = /(https:\/\/|http:\/\/)www.nicovideo.jp\/watch\/sm(\S+)/;
+      let regYtb = /(https:\/\/|http:\/\/)www.youtube.com\/watch\?v=(\S+)/;
+      let regAcf = /(https:\/\/|http:\/\/)www.acfun.cn\/v\/ac(\S+)/;
+      if (regBili.exec(str) !== null) {
+        return `//player.bilibili.com/player.html?aid=${regBili.exec(str)[2]}`;
+      }
+      if (regNico.exec(str) !== null) {
+        return `//embed.nicovideo.jp/watch/sm${regNico.exec(str)[2]}`;
+      }
+      if (regYtb.exec(str) !== null) {
+        return `https://www.youtube.com/embed/${regYtb.exec(str)[2]}`;
+      }
+      if (regAcf.exec(str) !== null) {
+        return `https://www.acfun.cn/player/ac${regAcf.exec(str)[2]}`;
+      }
+      return "";
+      /*let regNico =/(https:\/\/|() /*/
+      /*
+     内嵌规则：匹配末尾的参数即可
+        let reg =  /^(https\/\/:|http:\/\/)?www.(bilibili).com\/video\/av[a-zA-Z0-9]+/
+      Bilibili:
+              <iframe src="//player.bilibili.com/player.html?aid=94314258"></iframe>
+                        https://www.bilibili.com/video/av2653648
+      Niconico:
+              <iframe src="//embed.nicovideo.jp/watch/sm27106142"> </iframe>
+                        https://www.nicovideo.jp/watch/sm36469723
+      Youtube：
+             <iframe src="https://www.youtube.com/embed/4Xq3mIsF-z4"></iframe>
+                          https://www.youtube.com/watch?v=9w3oEINp9xU
+      Acfun:
+              <iframe src="https://www.acfun.cn/player/ac13167581"></iframe>
+                            https://www.acfun.cn/v/ac13113814
+  */
+    },
     // 查询视频详细信息
     searchVideo: function() {
       this.loading = true;
@@ -677,7 +768,11 @@ export default {
       })
         .then(result => {
           this.myVideoData = result.data.data;
+          this.iframeUrl = this.regToIframe(this.myVideoData.video.item.url);
           this.theVideoRank = result.data.data.video.clearence;
+          if (result.data.data.video.comment_thread) {
+            this.sid = result.data.data.video.comment_thread.$oid;
+          }
 
           // 修改网站标题
           document.title = this.myVideoData.video.item.title;
@@ -1050,7 +1145,7 @@ export default {
       return vs;
     }
   },
-  components: { left_navbar, topnavbar, Footer }
+  components: { left_navbar, topnavbar, Footer, Comments }
 };
 </script>
 

@@ -30,6 +30,19 @@
     "tag_notexist_prompt": "Tags not exist",
     "tag_already_exist_prompt": "Tag already exist",
     "update_successed": "Update succeed"
+  },
+  "CHT": {
+    "default_blacklist": "系統默認屏蔽",
+    "use": "使用此方案",
+    "custom_blacklist": "自定義屏蔽",
+    "blacklist_empty_prompt": "若自定義屏蔽列表為空，則認為沒有開啟屏蔽",
+    "blacklist_enter_prompt": "請輸入多個屏蔽詞,鼠標失去焦點後添加，支持空格、換行、逗號分隔",
+    "add_blacklist": "添加屏蔽詞",
+    "remove_all_blacklist": "移除全部屏蔽詞",
+    "load_blacklist": "導入多個屏蔽詞",
+    "tag_notexist_prompt": "輸入Tag必須存在於Tag庫中!",
+    "tag_already_exist_prompt": "Tag已存在！",
+    "update_successed": "修改成功！"
   }
 }
 </i18n>

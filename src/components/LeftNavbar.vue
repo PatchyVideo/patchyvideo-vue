@@ -34,10 +34,11 @@
   "CHS": {
   "tag": {
       "title":"标签",
+      "title2":"热门标签",
+      "title3":"相关标签",
       "video_action":"[使用标签发布视频]",
       "prompt_action":"[查看编辑标签历史]",
       "edit": "编辑"
-
       },
   "tag_history": {
       "prompt": "标签编辑历史",
@@ -58,10 +59,11 @@
   "ENG": {
     "tag": {
       "title":"Tag",
+      "title2":"Popular Tags",
+      "title3":"Related Tags",
       "video_action":"[Post video with tags]",
       "prompt_action":"[View tag history]",
       "edit":"Edit"
-
       },
     "tag_history": {
       "prompt": "Tag History",
@@ -77,6 +79,31 @@
       "Meta":"Meta",
       "Language":"Language",
       "Soundtrack":"Soundtrack"
+    }
+  },
+  "CHT": {
+    "tag": {
+      "title":"標簽",
+      "title2":"熱門標簽",
+      "title3":"相關標簽",
+      "video_action":"[使用標簽發布視頻]",
+      "prompt_action":"[查看編輯標簽歷史]",
+      "edit": "編輯"
+      },
+    "tag_history": {
+      "prompt": "標簽編輯歷史",
+      "add": "添加:",
+      "del": "刪除:",
+      "empty": "暫無記錄!"
+    },
+    "categories": {
+      "General":"綜合",
+      "Character":"角色",
+      "Copyright":"作品",
+      "Author":"up主",
+      "Meta":"元數據",
+      "Language":"語言",
+      "Soundtrack":"原曲"
     }
   }
 }
@@ -153,21 +180,26 @@
 
     <!-- 导航栏正文 -->
     <div class="left_list">
+      <!-- 导航栏标题 -->
       <div class="titleTag">
-        <h1>{{$t('tag.title')}}</h1>
+        <h1>{{ title }}</h1>
         <div class="editTagButton">
           <el-button
-            v-if="title == '标签' && isLogin == true"
+            v-if="$route.path === '/video' && isLogin == true"
             size="mini"
             @click="openEditTags"
             :disabled="showTagPanel"
           >{{$t('tag.edit')}}</el-button>
         </div>
-        <p v-if="title == '标签' && isLogin == true" @click="postVideo">{{$t('tag.video_action')}}</p>
-        <p v-if="title == '标签' && isLogin == true" @click="show_tag_log">{{$t('tag.prompt_action')}}</p>
+        <p
+          v-if="$route.path === '/video' && isLogin == true"
+          @click="postVideo"
+        >{{$t('tag.video_action')}}</p>
+        <p v-if="$route.path === '/video'" @click="show_tag_log">{{$t('tag.prompt_action')}}</p>
       </div>
+
       <!-- 在Home页面渲染的侧导航条内容 -->
-      <ul ref="test" v-if="title == '热门标签' || title == '相关标签' || title == 'Popular Tags'">
+      <ul v-if="$route.path === '/home'&&(this.name==='main')">
         <li class="tag belong-to-home" v-for="(val, key) in msg" :key="key">
           <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
           <!-- 根据tag名称自动渲染tag颜色 -->
@@ -182,12 +214,29 @@
               Soundtrack:val == 'Soundtrack'
             }"
             @click="gotoHome(key)"
-          >{{ key }}</p>
+          >{{ key.replace(/_/g," ") }}</p>
         </li>
       </ul>
-
+      <ul v-if="$route.path === '/home'&&(this.name==='sub')">
+        <li class="tag belong-to-home" v-for="(val, key) in msg" :key="key">
+          <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
+          <!-- 根据tag名称自动渲染tag颜色 -->
+          <p
+            v-bind:class="{
+              Copyright: val == 'Copyright',
+              Language: val == 'Language',
+              Character: val == 'Character',
+              Author: val == 'Author',
+              General: val == 'General',
+              Meta: val == 'Meta',
+              Soundtrack:val == 'Soundtrack'
+            }"
+            @click="gotoHome(val)"
+          >{{ val}}</p>
+        </li>
+      </ul>
       <!-- 在Detail页面渲染的侧导航条内容 -->
-      <ul ref="test" v-if="title == '标签'">
+      <ul v-if="$route.path === '/video'">
         <li class="tag belong-to-detail" v-for="(key, val) in msg" :key="val">
           <h3>{{ tranTagCategories(val) }}</h3>
           <!-- 根据tag名称自动渲染tag颜色 -->
@@ -204,7 +253,7 @@
               Soundtrack:val == 'Soundtrack'
             }"
           >
-            <span @click="gotoHome(item)">{{ item }}</span>
+            <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
             <el-button
               v-if="val == 'Author'"
               size="mini"
@@ -243,7 +292,6 @@ export default {
       showAuthorData: false
     };
   },
-  computed: {},
   mounted() {
     // 查看是否登录
     if (
@@ -338,9 +386,11 @@ export default {
     // 导航条的标题
     title() {
       if (this.$parent.ifSearch == true && this.$route.path == "/home") {
-        return "相关标签";
-      } else {
-        return this.$store.state.leftNavBarTitle;
+        return this.$t("tag.title3");
+      } else if (this.$store.state.leftNavBarTitle == 1) {
+        return this.$t("tag.title");
+      } else if (this.$store.state.leftNavBarTitle == 2) {
+        return this.$t("tag.title2");
       }
     },
     // 视频的pid
@@ -363,7 +413,7 @@ export default {
       };
     }
   },
-  props: ["msg"]
+  props: ["msg", "name"]
 };
 </script>
 

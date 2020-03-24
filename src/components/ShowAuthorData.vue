@@ -8,154 +8,236 @@
     更新日志：
     ★待解决问题：
 -->
+<i18n>
+{
+  "CHS": {
+    "author_type": "作者类型",
+    "user_url": "官网/空间",
+    "no_user_url": "暂无官网/空间地址",
+    "enter_user_url_prompt": "在这里输入官网/空间地址",
+    "add": "添加",
+    "author_tags": "相关标签",
+    "no_tag": "暂无标签",
+    "no_desc": "暂无简介",
+    "enter_tag_prompt": "请输入标签",
+    "user_desc": "简介",
+    "write_something": "写点儿什么吧~",
+    "user_picture": "头像",
+    "change_method": "切换上传方式",
+    "upload_picture": "从这里上传头像",
+    "file_too_large": "没反应？文件太大了哦",
+    "upload_succeed": "上传成功！",
+    "del": "删除",
+    "no_url": "暂无URL",
+    "enter_pic_url_prompt": "在这里输入头像的URL~",
+    "back": "返回",
+    "commit": "提交修改",
+    "no_author_data": "暂无该作者数据",
+    "individual": "个人",
+    "group": "社团",
+    "refresh": "刷新",
+    "change_author_data": "修改内容",
+    "select_author_type": "请选择作者类型!",
+    "enter_url": "请输入至少一个地址!",
+    "one_picture": "只能上传一个头像！",
+    "update_succeed": "修改成功!",
+    "tag_not_exist": "输入Tag必须存在于Tag库中!",
+    "tag_add_succeed": "Tag添加成功!",
+    "tag_already_exist": "Tag已存在！",
+    "unknown_error": "未知错误"
+  },
+  "ENG": {
+    "author_type": "Author Type",
+    "user_url": "Author URLs",
+    "no_user_url": "No URLs",
+    "enter_user_url_prompt": "Enter author URLs here",
+    "add": "Add",
+    "author_tags": "Author tags",
+    "no_tag": "No tags",
+    "no_desc": "No description",
+    "enter_tag_prompt": "Enter tag",
+    "user_desc": "Description",
+    "write_something": "Describe him/her",
+    "user_picture": "Author Photo",
+    "change_method": "Toggle Upload",
+    "upload_picture": "Upload here",
+    "file_too_large": "File too large",
+    "upload_succeed": "Upload succeed",
+    "del": "Delete",
+    "no_url": "No URL",
+    "enter_pic_url_prompt": "Enter URL to author photo",
+    "back": "Back",
+    "commit": "Commit",
+    "no_author_data": "No author data found",
+    "individual": "Individual",
+    "group": "Doujin Circle",
+    "refresh": "Refreash",
+    "change_author_data": "Contribute",
+    "select_author_type": "Please select author type",
+    "enter_url": "Please enter URL",
+    "one_picture": "Only one photo is allowed",
+    "update_succeed": "Update succeed",
+    "tag_not_exist": "Tag not exist",
+    "tag_add_succeed": "Add tag succeed",
+    "tag_already_exist": "Tag already exist",
+    "unknown_error": "Unknown error, please report bug"
+  },
+  "CHT": {
+    "author_type": "作者類型",
+    "user_url": "官網/空間",
+    "no_user_url": "暫無官網/空間地址",
+    "enter_user_url_prompt": "在這裏輸入官網/空間地址",
+    "add": "添加",
+    "author_tags": "相關標簽",
+    "no_tag": "暫無標簽",
+    "no_desc": "暫無簡介",
+    "enter_tag_prompt": "請輸入標簽",
+    "user_desc": "簡介",
+    "write_something": "寫點兒什麽吧~",
+    "user_picture": "頭像",
+    "change_method": "切換上傳方式",
+    "upload_picture": "從這裏上傳頭像",
+    "file_too_large": "沒反應？文件太大了哦",
+    "upload_succeed": "上傳成功！",
+    "del": "刪除",
+    "no_url": "暫無URL",
+    "enter_pic_url_prompt": "在這裏輸入頭像的URL~",
+    "back": "返回",
+    "commit": "提交修改",
+    "no_author_data": "暫無該作者數據",
+    "individual": "個人",
+    "group": "社團",
+    "refresh": "刷新",
+    "change_author_data": "修改內容",
+    "select_author_type": "請選擇作者類型!",
+    "enter_url": "請輸入至少壹個地址!",
+    "one_picture": "只能上傳壹個頭像！",
+    "update_succeed": "修改成功!",
+    "tag_not_exist": "輸入Tag必須存在於Tag庫中!",
+    "tag_add_succeed": "Tag添加成功!",
+    "tag_already_exist": "Tag已存在！",
+    "unknown_error": "未知錯誤"
+  }
+}
+</i18n>
+
 <template>
   <div v-loading="loading">
     <!-- 头像&各种语言标签 -->
     <div class="AuthorName">
       <!-- 头像 -->
-      <el-avatar fit="cover" style="margin-right:5px" :size="30" :src="author.avatar"></el-avatar>
+      <el-avatar
+        fit="cover"
+        style="margin-right:5px"
+        :size="30"
+        :src="author.avatar"
+      ></el-avatar>
       <span class="tagLabel" v-if="authorLanguages.CHS">
         简体中文:
         <span class="tagName" @click="gotoHome(authorLanguages.CHS)">
-          {{
-          authorLanguages.CHS
-          }}
+          {{ authorLanguages.CHS }}
         </span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.CHT">
         繁體中文:
         <span class="tagName" @click="gotoHome(authorLanguages.CHT)">
-          {{
-          authorLanguages.CHT
-          }}
+          {{ authorLanguages.CHT }}
         </span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.JPN">
         日本語:
         <span class="tagName" @click="gotoHome(authorLanguages.JPN)">
-          {{
-          authorLanguages.JPN
-          }}
+          {{ authorLanguages.JPN }}
         </span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.ENG">
         English:
         <span class="tagName" @click="gotoHome(authorLanguages.ENG)">
-          {{
-          authorLanguages.ENG
-          }}
+          {{ authorLanguages.ENG }}
         </span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.KOR">
         한국어:
         <span class="tagName" @click="gotoHome(authorLanguages.KOR)">
-          {{
-          authorLanguages.KOR
-          }}
+          {{ authorLanguages.KOR }}
         </span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.CSY">
         čeština:
         <span class="tagName" @click="gotoHome(authorLanguages.CSY)">
-          {{
-          authorLanguages.CSY
-          }}
+          {{ authorLanguages.CSY }}
         </span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.NLD">
         Nederlands:
         <span class="tagName" @click="gotoHome(authorLanguages.NLD)">
-          {{
-          authorLanguages.NLD
-          }}
+          {{ authorLanguages.NLD }}
         </span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.FRA">
         français:
         <span class="tagName" @click="gotoHome(authorLanguages.FRA)">
-          {{
-          authorLanguages.FRA
-          }}
+          {{ authorLanguages.FRA }}
         </span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.DEU">
         Deutsch:
         <span class="tagName" @click="gotoHome(authorLanguages.DEU)">
-          {{
-          authorLanguages.DEU
-          }}
+          {{ authorLanguages.DEU }}
         </span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.HUN">
         magyar nyelv:
         <span class="tagName" @click="gotoHome(authorLanguages.HUN)">
-          {{
-          authorLanguages.HUN
-          }}
+          {{ authorLanguages.HUN }}
         </span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.ITA">
         italiano:
         <span class="tagName" @click="gotoHome(authorLanguages.ITA)">
-          {{
-          authorLanguages.ITA
-          }}
+          {{ authorLanguages.ITA }}
         </span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.PLK">
         polski:
         <span class="tagName" @click="gotoHome(authorLanguages.PLK)">
-          {{
-          authorLanguages.PLK
-          }}
+          {{ authorLanguages.PLK }}
         </span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.PTB">
         português:
         <span class="tagName" @click="gotoHome(authorLanguages.PTB)">
-          {{
-          authorLanguages.PTB
-          }}
+          {{ authorLanguages.PTB }}
         </span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.ROM">
         limba română:
         <span class="tagName" @click="gotoHome(authorLanguages.ROM)">
-          {{
-          authorLanguages.ROM
-          }}
+          {{ authorLanguages.ROM }}
         </span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.RUS">
         русский язык:
         <span class="tagName" @click="gotoHome(authorLanguages.RUS)">
-          {{
-          authorLanguages.RUS
-          }}
+          {{ authorLanguages.RUS }}
         </span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.ESP">
         español:
         <span class="tagName" @click="gotoHome(authorLanguages.ESP)">
-          {{
-          authorLanguages.ESP
-          }}
+          {{ authorLanguages.ESP }}
         </span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.TRK">
         Türk dili:
         <span class="tagName" @click="gotoHome(authorLanguages.TRK)">
-          {{
-          authorLanguages.TRK
-          }}
+          {{ authorLanguages.TRK }}
         </span>
       </span>
       <span class="tagLabel" v-if="authorLanguages.VIN">
         Tiếng Việt:
         <span class="tagName" @click="gotoHome(authorLanguages.VIN)">
-          {{
-          authorLanguages.VIN
-          }}
+          {{ authorLanguages.VIN }}
         </span>
       </span>
       <!-- 标签别名 -->
@@ -167,8 +249,13 @@
     <!-- 编辑信息页面 -->
     <div v-if="edit" class="content">
       <div class="main">
-        <el-form ref="authorForm" :model="author" label-width="auto" :rules="rules">
-          <el-form-item label="作者类型" prop="authorType">
+        <el-form
+          ref="authorForm"
+          :model="author"
+          label-width="auto"
+          :rules="rules"
+        >
+          <el-form-item :label="$t('author_type')" prop="authorType">
             <el-select v-model="author.authorType">
               <el-option
                 v-for="item in authorTypes"
@@ -178,25 +265,32 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="官网/空间" prop="userSpaces">
+          <el-form-item :label="$t('user_url')" prop="userSpaces">
             <p v-for="(URL, index) in author.userSpaces" :key="URL">
               <a target="_blank" :href="URL" :key="URL">{{ URL }}</a>
-              <el-button type="text" style="margin-left:5px" @click="deluserSpace(index)">删除</el-button>
+              <el-button
+                type="text"
+                style="margin-left:5px"
+                @click="deluserSpace(index)"
+                >删除</el-button
+              >
             </p>
-            <p v-if="!author.userSpaces.length">暂无官网/空间地址</p>
+            <p v-if="!author.userSpaces.length">{{ $t("no_user_url") }}</p>
           </el-form-item>
           <el-form-item>
             <el-input
-              placeholder="在这里输入官网/空间地址"
+              :placeholder="$t('enter_user_url_prompt')"
               clearable
               v-model="URLval"
               @keyup.enter.native="adduserSpace()"
             >
               <template slot="prepend"></template>
-              <el-button slot="append" @click="adduserSpace()">添加</el-button>
+              <el-button slot="append" @click="adduserSpace()">{{
+                $t("add")
+              }}</el-button>
             </el-input>
           </el-form-item>
-          <el-form-item label="相关标签">
+          <el-form-item :label="$t('author_tags')">
             <el-tag
               :disable-transitions="true"
               v-for="tag in author.commonTags"
@@ -204,8 +298,9 @@
               style="margin:10px;"
               closable
               @close="handleClose(tag)"
-            >{{ tag }}</el-tag>
-            <p v-if="!author.commonTags.length">暂无标签</p>
+              >{{ tag }}</el-tag
+            >
+            <p v-if="!author.commonTags.length">{{ $t("no_tag") }}</p>
           </el-form-item>
           <el-form-item>
             <el-autocomplete
@@ -213,7 +308,7 @@
               :fetch-suggestions="querySearchAsync"
               :trigger-on-focus="false"
               popper-class="my-autocomplete"
-              placeholder="请输入标签"
+              :placeholder="$t('enter_tag_prompt')"
               @select="handleSelect"
               @focus="infoTipEvent(true)"
               @blur="infoTipEvent(false)"
@@ -232,24 +327,30 @@
                       Meta: item.cat == 4,
                       Soundtrack: item.cat == 6
                     }"
-                  >{{ item.tag }}</div>
+                  >
+                    {{ item.tag }}
+                  </div>
                   <div class="addr">{{ item.cnt }}</div>
                 </div>
               </template>
-              <el-button @click="addTag" slot="append" :loading="loading2">添加</el-button>
+              <el-button @click="addTag" slot="append" :loading="loading2">{{
+                $t("add")
+              }}</el-button>
             </el-autocomplete>
           </el-form-item>
-          <el-form-item label="简介" style="margin-top:5px">
+          <el-form-item :label="$t('desc')" style="margin-top:5px">
             <el-input
               type="textarea"
               :autosize="{ minRows: 4 }"
-              placeholder="写点儿什么吧~"
+              :placeholder="$t('write_something')"
               clearable
               v-model="author.desc"
             ></el-input>
           </el-form-item>
-          <el-form-item label="头像" style="margin-top:5px">
-            <el-button @click="useFile = !useFile" style="float:right">切换上传方式</el-button>
+          <el-form-item :label="$t('user_picture')" style="margin-top:5px">
+            <el-button @click="useFile = !useFile" style="float:right">{{
+              $t("change_method")
+            }}</el-button>
             <el-upload
               v-if="useFile"
               action="be/helper/upload_image.do"
@@ -260,24 +361,36 @@
               :file-list="avatarKey"
               :data="avatarData"
             >
-              <el-button size type="primary" style="margin-right:10px;">从这里上传头像</el-button>
-              <div>没反应？文件太大了哦</div>
+              <el-button size type="primary" style="margin-right:10px;">{{
+                $t("change_method")
+              }}</el-button>
+              <div>{{ $t("file_too_large") }}</div>
             </el-upload>
             <div v-else>
-              <p v-if="avatarURL!=''">
-                上传成功！
-                <el-button type="text" style="margin-left:5px" @click="avatarURL=''">删除</el-button>
+              <p v-if="avatarURL != ''">
+                {{ $t("upload_succeed") }}
+                <el-button
+                  type="text"
+                  style="margin-left:5px"
+                  @click="avatarURL = ''"
+                  >{{ $t("del") }}</el-button
+                >
               </p>
-              <p v-else>暂无URL</p>
+              <p v-else>{{ $t("no_url") }}</p>
               <el-input
                 style="width:60%"
-                placeholder="在这里输入头像的URL~"
+                :placeholder="$t('enter_pic_url_prompt')"
                 clearable
                 v-model="avatarIpt"
                 @keyup.enter.native="uploadImageUrl"
               >
                 <template slot="prepend"></template>
-                <el-button slot="append" @click="uploadImageUrl" :loading="loading3">添加</el-button>
+                <el-button
+                  slot="append"
+                  @click="uploadImageUrl"
+                  :loading="loading3"
+                  >{{ $t("add") }}</el-button
+                >
               </el-input>
             </div>
           </el-form-item>
@@ -286,27 +399,38 @@
       <!-- 填补foot的空间的容器 -->
       <div style="width:100%;height:60px;"></div>
       <div class="foot">
-        <el-button class="Edit" @click="edit = false">返回</el-button>
-        <el-button type="primary" class="Edit" @click="submitData()">提交修改</el-button>
+        <el-button class="Edit" @click="edit = false">{{
+          $t("back")
+        }}</el-button>
+        <el-button type="primary" class="Edit" @click="submitData()">{{
+          $t("commit")
+        }}</el-button>
       </div>
     </div>
 
     <!-- 详情页面 -->
     <div v-else class="content">
-      <span v-if="!haveData">暂无该作者数据</span>
+      <span v-if="!haveData">{{ $t("no_author_data") }}</span>
       <div v-else class="main">
-        <el-form ref="authorForm" :model="author" label-width="auto" :rules="rules">
-          <el-form-item label="作者类型">
-            <p v-if="author.authorType == 'individual'">个人</p>
-            <p v-else>社团</p>
+        <el-form
+          ref="authorForm"
+          :model="author"
+          label-width="auto"
+          :rules="rules"
+        >
+          <el-form-item :label="$t('author_type')">
+            <p v-if="author.authorType == 'individual'">
+              {{ $t("individual") }}
+            </p>
+            <p v-else>{{ $t("group") }}</p>
           </el-form-item>
-          <el-form-item label="官网/空间" prop="userSpaces">
+          <el-form-item :v-else="$t('user_url')" prop="userSpaces">
             <p v-for="URL in author.userSpaces" :key="URL">
               <a target="_blank" :href="URL" :key="URL">{{ URL }}</a>
             </p>
-            <p v-if="!author.userSpaces.length">暂无官网/空间地址</p>
+            <p v-if="!author.userSpaces.length">{{ $t("no_user_url") }}</p>
           </el-form-item>
-          <el-form-item label="相关标签">
+          <el-form-item :label="$t('author_tags')">
             <el-tag
               :disable-transitions="true"
               v-for="tag in author.commonTags"
@@ -314,24 +438,26 @@
               style="margin:10px;"
             >
               <span style="cursor: pointer;" @click="gotoHome(tag)">
-                {{
-                tag
-                }}
+                {{ tag }}
               </span>
             </el-tag>
-            <p v-if="!author.commonTags.length">暂无标签</p>
+            <p v-if="!author.commonTags.length">{{ $t("no_tag") }}</p>
           </el-form-item>
-          <el-form-item label="简介">
-            <p v-if="author.desc == ''">暂无简介</p>
-            <p v-else style="white-space: pre-line;">{{ author.desc }}</p>
+          <el-form-item :label="$t('user_desc')">
+            <p v-if="author.desc == ''">{{ $t("no_desc") }}</p>
+            <p v-else style="white-space: pre-line;" v-linkified>{{ author.desc }}</p>
           </el-form-item>
         </el-form>
       </div>
       <!-- 填补foot的空间的容器 -->
       <div style="width:100%;height:60px;"></div>
       <div class="foot">
-        <el-button class="Edit" @click="getAuthorData()">刷新</el-button>
-        <el-button type="primary" class="Edit" @click="edit = true">修改内容</el-button>
+        <el-button class="Edit" @click="getAuthorData()">{{
+          $t("refresh")
+        }}</el-button>
+        <el-button type="primary" class="Edit" @click="edit = true">{{
+          $t("change_author_data")
+        }}</el-button>
       </div>
     </div>
   </div>
@@ -341,7 +467,7 @@
 export default {
   props: ["AuthorID"],
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 作者的标签名
       authorLanguages: "",
@@ -378,8 +504,8 @@ export default {
       taglist: [],
       // 作者的性质选项
       authorTypes: [
-        { value: "individual", label: "个人" },
-        { value: "group", label: "社团" }
+        { value: "individual", label: this.$t("individual") },
+        { value: "group", label: this.$t("group") }
       ],
       // 作者是否有资料的标志
       haveData: false,
@@ -396,10 +522,14 @@ export default {
       // 表单校验规则
       rules: {
         authorType: [
-          { required: true, message: "请选择作者类型!", trigger: "change" }
+          {
+            required: true,
+            message: this.$t("select_author_type"),
+            trigger: "change"
+          }
         ],
         userSpaces: [
-          { required: false, message: "请输入至少一个地址!", trigger: "change" }
+          { required: false, message: this.$t("enter_url"), trigger: "change" }
         ]
       },
       infoTip: [
@@ -458,7 +588,7 @@ export default {
             url: "/be/authors/get_record.do",
             data: {
               tag: this.AuthorID,
-              lang: localStorage.getItem('lang')
+              lang: localStorage.getItem("lang")
             }
           })
             .then(result => {
@@ -505,7 +635,7 @@ export default {
     adduserSpace() {
       if (this.URLval == "") {
         if (!this.nowSubmit) {
-          this.open4("请输入地址!");
+          this.open4(this.$("enter_url"));
         }
         return;
       }
@@ -522,7 +652,7 @@ export default {
     },
     // 超出限制大小时调用的函数
     handleExceed() {
-      this.$message.warning("只能上传一个头像！");
+      this.$message.warning(this.$t("one_picture"));
     },
     // 删除文件调用的函数
     beforeRemove(file, fileList) {
@@ -588,7 +718,7 @@ export default {
             }
           })
             .then(result => {
-              this.open2("修改成功!");
+              this.open2(this.$t("update_succeed"));
               this.getAuthorData();
               this.edit = false;
             })
@@ -655,7 +785,7 @@ export default {
       })
         .then(res => {
           if (JSON.stringify(res.data.data.categorie_map) == "{}") {
-            this.open4("输入Tag必须存在于Tag库中!");
+            this.open4(this.$t("tag_not_exist"));
           } else if (this.author.commonTags.indexOf(this.iptVal) != -1) {
             //存在则不允许添加
             this.iptVal = "";
@@ -665,7 +795,7 @@ export default {
             this.iptVal != ""
           ) {
             //不存在则添加
-            this.open2("Tag添加成功!");
+            this.open2(this.$t("tag_add_succeed"));
             this.author.commonTags.push(this.iptVal);
             this.iptVal = "";
           }
@@ -683,7 +813,7 @@ export default {
     },
     open3() {
       this.$message({
-        message: "Tag已存在！",
+        message: this.$t("tag_already_exist"),
         type: "warning"
       });
     },
@@ -692,13 +822,13 @@ export default {
     },
     open5() {
       this.$message({
-        message: "修改成功！",
+        message: this.$t("update_succeed"),
         type: "success"
       });
     },
     open6() {
       this.$message({
-        message: "未知错误",
+        message: this.$t("unknown_error"),
         type: "error"
       });
     }
@@ -713,7 +843,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .content {
   width: 100%;
   min-height: 400px;

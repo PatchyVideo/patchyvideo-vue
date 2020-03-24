@@ -24,12 +24,90 @@
       暂无
 -->
 
+<i18n>
+{
+  "CHS": {
+    "video_url": "视频地址",
+    "get_info": "获取信息",
+    "tag": "标签",
+    "no_tag": "暂无标签！",
+    "choose_repost_type": "请修改视频的发布类型",
+    "post_video": "发布视频",
+    "official": "原始发布",
+    "official_repost": "官方再发布",
+    "authorized_translation": "授权翻译",
+    "authorized_repost": "授权转载",
+    "translation": "自发翻译",
+    "repost": "自发搬运",
+    "unknown": "其他",
+    "url_passed": "URL验证成功!",
+    "invalid_url": "非法地址或者不支持指向的网站!",
+    "enter_url": "请输入视频地址!",
+    "fetch_failed": "获取视频信息失败,请检查链接是否有效!",
+    "post_failed": "视频上传失败！",
+    "tag_not_exist": "标签 {tag} 不存在！",
+    "post_succeed": "上传成功！",
+    "unknown_error": "未知错误"
+  },
+  "ENG": {
+    "video_url": "Video URL",
+    "get_info": "Fetch",
+    "tag": "Tags",
+    "no_tag": "No tags",
+    "choose_repost_type": "Please select a repost type",
+    "post_video": "Post video",
+    "official": "Original",
+    "official_repost": "Official Repost",
+    "authorized_translation": "Authorized Translation",
+    "authorized_repost": "Authorized Repost",
+    "translation": "User Translation",
+    "repost": "User Repost",
+    "unknown": "Other",
+    "url_passed": "URL verify succeed",
+    "invalid_url": "Invalid URL or not supported website",
+    "enter_url": "Please enter video URL",
+    "fetch_failed": "Fetch failed",
+    "post_failed": "Ipload failed",
+    "tag_not_exist": "Tag {tag} does not exist",
+    "post_succeed": "Upload succeed",
+    "unknown_error": "Unknown error, please report bug"
+  },
+  "CHT": {
+    "video_url": "視頻地址",
+    "get_info": "獲取信息",
+    "tag": "標簽",
+    "no_tag": "暫無標簽！",
+    "choose_repost_type": "請修改視頻的發布類型",
+    "post_video": "發布視頻",
+    "official": "原始發布",
+    "official_repost": "官方再發布",
+    "authorized_translation": "授權翻譯",
+    "authorized_repost": "授權轉載",
+    "translation": "自發翻譯",
+    "repost": "自發搬運",
+    "unknown": "其他",
+    "url_passed": "URL驗證成功!",
+    "invalid_url": "非法地址或者不支持指向的網站!",
+    "enter_url": "請輸入視頻地址!",
+    "fetch_failed": "獲取視頻信息失敗,請檢查鏈接是否有效!",
+    "post_failed": "視頻上傳失敗！",
+    "tag_not_exist": "標簽 {tag} 不存在！",
+    "post_succeed": "上傳成功！",
+    "unknown_error": "未知錯誤"
+  }
+}
+</i18n>
+
 <template>
   <div class="postBox" v-loading="loading">
     <div class="content">
       <!-- 视频输入框 -->
-      <el-input v-model="VideoURL" @keyup.enter.native="onFetchVideo_Click" placeholder="视频地址">
-        <el-button slot="append" @click="onFetchVideo_Click">获取信息</el-button>
+      <el-input
+        v-model="VideoURL"
+        @keyup.enter.native="onFetchVideo_Click"
+        :placeholder="$t('video_url')"
+      >
+        <el-button slot="append" @click="onFetchVideo_Click">{{$t('get_info')}}</el-button>
       </el-input>
       <!-- 视频URL验证成功的时候出现的内容 -->
       <el-collapse-transition>
@@ -37,12 +115,12 @@
         <div class="videoDetail" v-show="show">
           <img :src="thumbnail" />
           <h2>{{title}}</h2>
-          <p>{{desc}}</p>
+          <p style="word-break: break-all;">{{desc}}</p>
           <!-- 标签编辑 -->
           <div class="tagsEdit" v-if="false">
-            <h3>标签</h3>
+            <h3>{{$t('tag')}}</h3>
             <div class="tagBox">
-              <p v-if="tags==''">暂无标签！</p>
+              <p v-if="tags==''">{{$t('no_tag')}}</p>
               <el-tag
                 effect="dark"
                 v-else
@@ -56,7 +134,7 @@
       </el-collapse-transition>
       <!-- 视频副本 -->
       <div class="RepostType" v-if="copy!=''">
-        <el-select v-model="RepostType" placeholder="请修改视频的发布类型" style="width:100%">
+        <el-select v-model="RepostType" :placeholder="$t('choose_repost_type')" style="width:100%">
           <el-option
             v-for="item in RepostTypes"
             :key="item.label"
@@ -67,7 +145,7 @@
       </div>
       <!-- 视频上传 -->
       <el-button class="postButton" type="primary" @click="postSingleVideo">
-        发布视频
+        {{$t('post_video')}}
         <i class="el-icon-upload el-icon--right"></i>
       </el-button>
     </div>
@@ -89,7 +167,7 @@
 import EditTags from "../components/EditTags";
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 视频的URL(与输入框绑定)
       VideoURL: "",
@@ -111,13 +189,16 @@ export default {
       RepostType: "unknown",
       // 视频的发布类型
       RepostTypes: [
-        { value: "official", label: "原始发布" },
-        { value: "official_repost", label: "官方再发布" },
-        { value: "authorized_translation", label: "授权翻译" },
-        { value: "authorized_repost", label: "授权转载" },
-        { value: "translation", label: "自发翻译" },
-        { value: "repost", label: "自发搬运" },
-        { value: "unknown", label: "其他" }
+        { value: "official", label: this.$t("official") },
+        { value: "official_repost", label: this.$t("official_repost") },
+        {
+          value: "authorized_translation",
+          label: this.$t("authorized_translation")
+        },
+        { value: "authorized_repost", label: this.$t("authorized_repost") },
+        { value: "translation", label: this.$t("translation") },
+        { value: "repost", label: this.$t("repost") },
+        { value: "unknown", label: this.$t("unknown") }
       ],
       // 匹配短地址，用以扩展成完整地址
       EXPANDERS: {},
@@ -163,7 +244,9 @@ export default {
       }
     }
   },
-  created() {},
+  created() {
+
+  },
   mounted() {
     this.buildParsersAndExpanders();
   },
@@ -174,7 +257,7 @@ export default {
       var that = this;
       // B站的匹配规则
       this.PARSERS[
-        "^(https:\\/\\/|http:\\/\\/)?(www\\.)?(bilibili\\.com\\/video\\/av[\\d]+|b23\\.tv\\/[aA][vV][\\d]+)"
+        "^(https:\\/\\/|http:\\/\\/)?(www\\.)?(bilibili\\.com\\/video\\/([aA][vV][\\d]+|BV[a-zA-Z0-9]+)|b23\\.tv\\/([aA][vV][\\d]+|BV[a-zA-Z0-9]+))"
       ] = function(responseDOM, responseURL) {
         var err = responseDOM.find("div.error-body");
         if (err.length > 0) {
@@ -198,7 +281,7 @@ export default {
         that.autotag(utags, title, desc);
         that.setVideoMetadata(thumbnailURL, title, desc);
       };
-      this.EXPANDERS["^av[\\d]+"] = function(short_link) {
+      this.EXPANDERS["^([aA][vV][\\d]+|BV[a-zA-Z0-9]+)"] = function(short_link) {
         return "https://www.bilibili.com/video/" + short_link;
       };
       // A站的匹配规则
@@ -357,6 +440,7 @@ export default {
               data.data.title,
               data.data.desc
             );
+            that.autotag([], data.data.title, data.data.desc);
           })
           .catch(error => {
             that.setVideoMetadata("", "", "");
@@ -383,10 +467,11 @@ export default {
         desc = desc.replace(/\s+/g, "");
         desc = desc.replace(/<br\s*?\/?>/g, "\n");
         that.setVideoMetadata("", title, desc);
+        that.autotag([], title, desc);
       };
     },
     // 自动标签功能
-    autotag(utags, title = '', desc = '') {
+    autotag(utags, title = "", desc = "") {
       /*      this.refreshMark = +new Date();*/
       this.axios({
         method: "post",
@@ -395,7 +480,7 @@ export default {
           utags: utags,
           title: title,
           desc: desc,
-          lang: localStorage.getItem('lang')
+          lang: localStorage.getItem("lang")
         }
       })
         .then(result => {
@@ -511,21 +596,21 @@ export default {
     // URL验证成功的弹出框
     openSuccessfully() {
       this.$message({
-        message: "URL验证成功!",
+        message: this.$t("url_passed"),
         type: "success"
       });
     },
     // URL验证失败的弹出框
     openfailed() {
-      this.$message.error("非法地址或者不支持指向的网站!");
+      this.$message.error(this.$t("invalid_url"));
     },
     // URL为空的弹出窗
     InvalidURL() {
-      this.$message.error("请输入视频地址!");
+      this.$message.error(this.$t("enter_url"));
     },
     // 获取视频信息失败的弹出框
     ErrorFetchingVideo() {
-      this.$message.error("获取视频信息失败,请检查链接是否有效!");
+      this.$message.error(this.$t("fetch_failed"));
     },
     // 获取视频的详细信息
     fetchVideo(url) {
@@ -589,7 +674,7 @@ export default {
       this.title = title;
       this.desc = desc;
       this.loading = false;
-      if (this.thumbnail != "" && title != "" && desc != "") {
+      if (this.thumbnail != "" && title != "") {
         this.show = true;
       }
     },
@@ -685,25 +770,25 @@ export default {
     // 各种各样的报错警告
     open2() {
       this.$message({
-        message: "视频上传失败！",
+        message: this.$t("post_failed"),
         type: "error"
       });
     },
     open3(errorTag) {
       this.$message({
-        message: "标签 " + errorTag + " 不存在！",
+        message: this.$t("tag_not_exist", { tag: errorTag }),
         type: "error"
       });
     },
     open4() {
       this.$message({
-        message: "上传成功！",
+        message: this.$t("post_succeed"),
         type: "success"
       });
     },
     open5() {
       this.$message({
-        message: "未知错误",
+        message: this.$t("unknown_error"),
         type: "error"
       });
     }

@@ -1,4 +1,4 @@
-<!--    vue页面：Foot.vue     -->
+<!--    vue页面：404.vue     -->
 <!--
     组件：网站的404页面
     功能：网站的网址错误页面
@@ -13,8 +13,12 @@
     "click2home":"点我返回主页"
   },
   "ENG": {
-    "errmsg":"Sorry, the page seems to be wrong ...",
-    "click2home":"Click me to return to the homepage"
+    "errmsg":"Sorry, this page is not found ...",
+    "click2home":"Click me to return to homepage"
+  },
+  "CHT": {
+    "errmsg":"哎呀，頁面好像出錯了...",
+    "click2home":"點我返回主頁"
   }
 }
 </i18n>
@@ -35,7 +39,7 @@
 <script>
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       fits: ["fill", "contain", "cover", "none", "scale-down"],
       url: "http://localhost:888/images/covers/"

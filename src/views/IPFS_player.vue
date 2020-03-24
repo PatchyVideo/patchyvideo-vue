@@ -29,10 +29,23 @@
         "TODO1":"Automatically parse to this page",
         "TODO2":"Find the hash according to the av number and fill it into the video src",
         "TODO3":"Follow-up comment functions, etc.",
-        "init_tip":"IPFS Service initialization..",
+        "init_tip":"IPFS Service initializing..",
         "connecting_tip":"IPFS Service started, connecting..",
         "connect_success_tip":" IPFS node is connected",
         "err_tip":"Your browser may be IE"
+    }
+  },
+  "CHT": {
+    "title":"IPFS 視頻播放頁",
+    "content":{
+        "title":"實驗性 內嵌js-ipfs播放頁",
+        "TODO1":"自動解析到本頁面",
+        "TODO2":"根據av號查到hash，填入video src中",
+        "TODO3":"後續評論功能等",
+        "init_tip":"IPFS服務初始化中..",
+        "connecting_tip":"IPFS 服務已啟動，正在連接..",
+        "connect_success_tip":" IPFS 節點已連接",
+        "err_tip":"您的瀏覽器八成是IE"
     }
   }
 }

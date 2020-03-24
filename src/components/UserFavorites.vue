@@ -10,12 +10,36 @@
      本地登录提示错误暂未做处理。
 -->
 
-
+<i18n>
+{
+    "CHS": {
+        "no_data": "暂无数据",
+        "search": "搜索列表...",
+        "latest": "时间正序",
+        "oldest": "时间倒序",
+        "last_modified": "最新修改"
+    },
+    "ENG": {
+        "no_data": "No data",
+        "search": "Search...",
+        "latest": "Latest",
+        "oldest": "Oldest",
+        "last_modified": "Last modified"
+    },
+    "CHT": {
+        "no_data": "暫無數據",
+        "search": "搜索列表...",
+        "latest": "時間正序",
+        "oldest": "時間倒序",
+        "last_modified": "最新修改"
+    }
+}
+</i18n>
 
 <template>
 <div v-loading="loading">
     <div class="data_null standard" v-if="firstmaxcount==0">
-        <p>暂无数据</p>
+        <p>{{$t('no_data')}}</p>
     </div>
     <div class="bigbox standard"  v-if="firstmaxcount!=0">
      <div class="ky-wrap">
@@ -28,7 +52,7 @@
              ></el-option>
          </el-select>
          <el-input
-                 placeholder="搜索列表..."
+                 :placeholder="$t('search')"
                  v-model="listSearch"
                  clearable
                  class="inputbox"
@@ -43,7 +67,7 @@
         <div class="fav">
 
             <p class="nodata" v-if="myListVideoData.length===0">
-                没有找到相关的数据！
+                {{$t('no_data')}}
             </p>
             <router-link
                     target="_blank"
@@ -95,9 +119,9 @@
                 ],
                 couponSelected:"",
                 options: [
-                    { value: "latest", label: "时间正序  " },
-                    { value: "oldest", label: "时间倒序  " },
-                    { value: "last_modified", label: "最新修改" },
+                    { value: "latest", label: this.$t('latest') },
+                    { value: "oldest", label: this.$t('oldest') },
+                    { value: "last_modified", label: this.$t('last_modified') },
                 ],
                 listSearch:"",
                 loading:true

@@ -57,15 +57,31 @@
     "forget_psd":"Forgot password?",
     "username":"Username",
     "psd":"Password",
-    "username_tip":"Please enter account",
-    "username_msg":"2 to 32 characters",
+    "username_tip":"Please enter username",
+    "username_msg":"Username length: 2 to 32 characters",
     "psd_tip":"Please enter the password",
-    "psd_msg":"6 to 64 characters",
+    "psd_msg":"Password length: 6 to 64 characters",
     "status":"Ready",
-    "login_success_msg":"login successful",
+    "login_success_msg":"Login succeed",
     "login_fail_msg":"Login failed",
     "request_failed":"Request failed",
-    "net_err":"Network Error!"
+    "net_err":"Network Error"
+  },
+  "CHT": {
+    "login":"登錄",
+    "signup":"註冊",
+    "forget_psd":"忘了密碼？",
+    "username":"用戶名",
+    "psd":"密碼",
+    "username_tip":"請輸入賬號",
+    "username_msg":"長度在 2 到 32 個字符",
+    "psd_tip":"請輸入密碼",
+    "psd_msg":"長度在 6 到 64 個字符",
+    "status":"就緒",
+    "login_success_msg":"登錄成功",
+    "login_fail_msg":"登錄失敗",
+    "request_failed":"請求失敗",
+    "net_err":"網絡錯誤！"
   }
 }
 </i18n>

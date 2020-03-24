@@ -18,7 +18,7 @@
             "l2":"为被削除的東方视频提供备份服务",
             "l3":"暂时只提供人工审核通道，有备份需求的up请移步群:757676234,私聊管理 \"IPFS归档处\"",
             "l4":"备份站使用IPFS 分布式网络播放视频，可能会出现卡顿情况",
-            "l5":"了解<a href=\"ipfs.io\">IPFS</a> 技术可更好地使用本站功能"
+            "l5":"了解<a href=\"https://ipfs.io\">IPFS</a> 技术可更好地使用本站功能"
         },
         "part2":{
             "title":"暂行标准",
@@ -49,7 +49,7 @@
             "l2":"Provide backup services for the deleted Touhou Video",
             "l3":"Only provide manual review channels for the time being，If you have backup requirements, please move to the QQgroup:757676234,Private chat with manager who named \"IPFS归档处\"",
             "l4":"Backup Station Plays Video Using IPFS Distributed Network, Stuck",
-            "l5":" Understanding <a href=\"ipfs.io\">IPFS</a> technology can make better use of the functions of this site "
+            "l5":" Understanding <a href=\"https://ipfs.io\">IPFS</a> technology can make better use of the functions of this site "
         },
         "part2":{
             "title":"Interim standard",
@@ -69,6 +69,37 @@
         },
         "image_test":"Image test"
 
+    }
+  },
+  "CHT": {
+    "title":"",
+    "content":{
+        "introduce":"所見所聞皆遁入幻想",
+        "part1":{
+            "title":"設計思路",
+            "l1":"東方視頻備份站",
+            "l2":"為被削除的東方視頻提供備份服務",
+            "l3":"暫時只提供人工審核通道，有備份需求的up請移步群:757676234,私聊管理 \"IPFS歸檔處\"",
+            "l4":"備份站使用IPFS 分布式網絡播放視頻，可能會出現卡頓情況",
+            "l5":"了解<a href=\"https://ipfs.io\">IPFS</a> 技術可更好地使用本站功能"
+        },
+        "part2":{
+            "title":"暫行標準",
+            "l1":"限東方Project相關視頻",
+            "l2":"轉載視頻推薦搬運至B站",
+            "l3":"外網作者同意搬運至B站，B站屑審核削除的視頻 （可能需要重新和作者取得搬運權限）",
+            "l4":"在B站因政策原因打碼、遮擋，影響觀看體驗而想保留原版備份的視頻",
+            "l5":"不接收明確標有 R-18\\R-18G 的視頻"
+        },
+        "video_test":{
+            "title":"示例視頻",
+            "link":"實驗性播放頁",
+            "player_tip":"實驗性播放器",
+            "err_tip":"您的瀏覽器不支持\"video\"標簽",
+            "video_switch_test_tip":"視頻切換測試，點擊下列文字即可切換",
+            "click_tip":"不要點我！(╯‵□′)╯︵┻━┻  點擊下列文字！"
+        },
+        "image_test":"圖片測試"
     }
   }
 }

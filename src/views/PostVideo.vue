@@ -26,9 +26,15 @@
   },
   "ENG": {
     "title":"Post video",
-    "single_release":"Single release",
-    "batch_release":"Batch release",
-    "IPFS_release":"IPFS video release"
+    "single_release":"Single",
+    "batch_release":"Batch",
+    "IPFS_release":"IPFS video"
+  },
+  "CHT": {
+    "title":"發布視頻",
+    "single_release":"單個發布",
+    "batch_release":"批量發布",
+    "IPFS_release":"IPFS視頻發布"
   }
 }
 </i18n>
@@ -40,13 +46,13 @@
     <!-- PostVideo页面的正文 -->
     <div class="w main-page-background-img">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick" class="topTabs">
-        <el-tab-pane :label="$t('single_release')" name="first">
+        <el-tab-pane :label="$t('single_release')" name="first" :lazy="true">
           <PostSingleVideo></PostSingleVideo>
         </el-tab-pane>
-        <el-tab-pane :label="$t('batch_release')" name="second">
+        <el-tab-pane :label="$t('batch_release')" name="second" :lazy="true">
           <PostMultiVideos></PostMultiVideos>
         </el-tab-pane>
-        <el-tab-pane :label="$t('IPFS_release')" name="third">
+        <el-tab-pane :label="$t('IPFS_release')" name="third" :lazy="true">
           <PostIPFSVideo></PostIPFSVideo>
         </el-tab-pane>
       </el-tabs>
@@ -64,7 +70,7 @@ import PostMultiVideos from "../components/PostMultiVideos";
 import PostIPFSVideo from "../components/PostIPFSVideo";
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       //默认打开的标签页
       activeName: "first"

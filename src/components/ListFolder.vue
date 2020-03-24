@@ -40,19 +40,20 @@
         "del_success":"删除成功",
         "login_please":"请登录",
         "add_sucess":"添加成功",
-        "invalid_path_or_name":"无效路径或名称"
-
-
+        "invalid_path_or_name":"无效路径或名称",
+        "latest": "时间正序",
+        "oldest": "时间倒序",
+        "last_modified": "最新修改"
     },
     "ENG":{
         "cancel":"Cancel",
-        "ok":"O K",
+        "ok":"Confirm",
         "name":"Name",
         "rename":"Rename",
         "cover":"Cover",
         "title":"Title",
-        "video_num":"Number of videos",
-        "modif_date":"Modification date",
+        "video_num":"Video Count",
+        "modif_date":"Last modified",
         "search_list":"Search list...",
         "search":"Search",
         "my_playlist":"My playlist",
@@ -64,7 +65,7 @@
         "confirm_tip":"Confirm delete? This operation is irreversible",
         "new_folder":"New folder",
         "add":"Add",
-        "del_select":"Delete selection",
+        "del_select":"Delete selected",
         "add_2_cur_dir":"Add to current directory",
         "input_name":"Please enter a name",
         "no_permissions":"You do not have permission to view this folder",
@@ -74,10 +75,45 @@
         "del_success":"Successfully deleted",
         "login_please":"Please sign in",
         "add_sucess":"Added successfully",
-        "invalid_path_or_name":"Invalid path or name"
-
-
-
+        "invalid_path_or_name":"Invalid path or name",
+        "latest": "Latest",
+        "oldest": "Oldest",
+        "last_modified": "Latest Modified"
+    },
+    "CHT":{
+        "cancel":"取 消",
+        "ok":"確 定",
+        "name":"名稱",
+        "rename":"重命名",
+        "cover":"封面",
+        "title":"標題",
+        "video_num":"视频数",
+        "modif_date":"修改日期",
+        "search_list":"搜索列表...",
+        "search":"搜索",
+        "my_playlist":"我的播放列表",
+        "all":"全部",
+        "private":"私有",
+        "public":"公開",
+        "copy_folder_addr":"點擊復制文件夾地址",
+        "tip":"提示",
+        "confirm_tip":"確認刪除嗎？此操作不可逆",
+        "new_folder":"新建文件夾",
+        "add":"添加",
+        "del_select":"刪除選擇項",
+        "add_2_cur_dir":"添加至當前目錄",
+        "input_name":"請輸入名稱",
+        "no_permissions":"您沒有權限查看此文件夾",
+        "create_success":"創建成功",
+        "folder_exist":"文件夾已存在",
+        "name_limit":"名稱不能含有/或*",
+        "del_success":"刪除成功",
+        "login_please":"請登錄",
+        "add_sucess":"添加成功",
+        "invalid_path_or_name":"無效路徑或名稱",
+        "latest": "時間正序",
+        "oldest": "時間倒序",
+        "last_modified": "最新修改"
     }
 }
 </i18n>
@@ -490,9 +526,9 @@
             currentPlaylistPageSize: 20,
             allPlaylistsCount: 1,
             playlistOrderOptions:  [
-                { value: "latest", label: "时间正序" },
-                { value: "oldest", label: "时间倒序" },
-                { value: "last_modified", label: "最新修改" }
+                { value: "latest", label: this.$t("latest") },
+                { value: "oldest", label: this.$t("oldest") },
+                { value: "last_modified", label: this.$t("last_modified") }
             ],
         };
     },

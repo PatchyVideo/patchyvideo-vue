@@ -6,6 +6,9 @@
     },
     "ENG": {
         "remove": "Remove from playlist"
+    },
+    "CHT": {
+        "remove": "從播放列表中移除"
     }
 }
 </i18n>

@@ -20,6 +20,108 @@
 
 
 -->
+
+<i18n>
+{
+  "CHS": {
+    "cur_pic": "当前头像",
+    "pic_prompt": "选择图片上传：大小256 * 256像素",
+    "change_username": "更改用户名",
+    "update": "更改",
+    "cancel": "取消",
+    "save": "保存",
+    "change_pass": "更改密码",
+    "old_pass": "旧密码",
+    "new_pass": "新密码",
+    "confirm_pass": "确认密码",
+    "submit": "提交",
+    "reset": "重置",
+    "bind_mail": "绑定邮箱",
+    "enter_email": "请输入邮箱",
+    "bind": "绑定",
+    "enter_old_pass": "请输入旧密码",
+    "pass_short": "密码长度必须至少为6个字符",
+    "pass_long": "密码长度必须至多为64个字符",
+    "enter_new_pass": "请输入新密码",
+    "enter_new_pass_again": "请再次输入新密码",
+    "pass_mismatch": "两次输入密码不一致!",
+    "invalid_email": "请检查所填写邮箱是否合法",
+    "bind_succeed": "绑定成功",
+    "check_form": "请检查所填写信息是否正确",
+    "update_succeed": "修改成功！",
+    "update_failed": "更改失败！",
+    "desc_long": "字数不能超过2000哦！",
+    "user_exist": "用户名已存在！",
+    "user_length": "用户名长度应在 2 到 32 个字符！",
+    "wrong_pass": "请检查旧密码是否正确"
+  },
+  "ENG": {
+    "cur_pic": "Current photo",
+    "pic_prompt": "Upload photo, it will be scaled to 256x256",
+    "change_username": "Update username",
+    "update": "Update",
+    "cancel": "Cancel",
+    "save": "Save",
+    "change_pass": "Update password",
+    "old_pass": "Current password",
+    "new_pass": "New password",
+    "confirm_pass": "Confirm password",
+    "submit": "Submit",
+    "reset": "Reset",
+    "bind_mail": "Email",
+    "enter_email": "Enter email",
+    "bind": "Confirm",
+    "enter_old_pass": "Please enter current password",
+    "pass_short": "Password must be at least 6 characters long",
+    "pass_long": "Password length exceed 64 characters",
+    "enter_new_pass": "Please enter new password",
+    "enter_new_pass_again": "Please enter confirm password",
+    "pass_mismatch": "Passwords mismatch",
+    "invalid_email": "Invalid email address",
+    "bind_succeed": "Email update succeed",
+    "check_form": "Please check if you have filled all information correctly",
+    "update_succeed": "Update succeed",
+    "update_failed": "Update failed",
+    "desc_long": "Description too long (max 2000 characters)",
+    "user_exist": "This username has been taken",
+    "user_length": "Username length must be between 2 to 32 characters",
+    "wrong_pass": "Incorrect password"
+  },
+  "CHT": {
+    "cur_pic": "當前頭像",
+    "pic_prompt": "選擇圖片上傳：大小256 * 256像素",
+    "change_username": "更改用戶名",
+    "update": "更改",
+    "cancel": "取消",
+    "save": "保存",
+    "change_pass": "更改密碼",
+    "old_pass": "舊密碼",
+    "new_pass": "新密碼",
+    "confirm_pass": "確認密碼",
+    "submit": "提交",
+    "reset": "重置",
+    "bind_mail": "綁定郵箱",
+    "enter_email": "請輸入郵箱",
+    "bind": "綁定",
+    "enter_old_pass": "請輸入舊密碼",
+    "pass_short": "密碼長度必須至少為6個字符",
+    "pass_long": "密碼長度必須至多為64個字符",
+    "enter_new_pass": "請輸入新密碼",
+    "enter_new_pass_again": "請再次輸入新密碼",
+    "pass_mismatch": "兩次輸入密碼不壹致!",
+    "invalid_email": "請檢查所填寫郵箱是否合法",
+    "bind_succeed": "綁定成功",
+    "check_form": "請檢查所填寫信息是否正確",
+    "update_succeed": "修改成功！",
+    "update_failed": "更改失敗！",
+    "desc_long": "字數不能超過2000哦！",
+    "user_exist": "用戶名已存在！",
+    "user_length": "用戶名長度應在 2 到 32 個字符！",
+    "wrong_pass": "請檢查舊密碼是否正確"
+  }
+}
+</i18n>
+
 <template>
   <div>
     <!--<el-button @click="testIpfs">dwa</el-button>-->
@@ -36,8 +138,8 @@
             <img :src="'be/images/userphotos/'+myData.image" alt v-if="this.url===''" />
           </div>
 
-          <p>当前头像</p>
-          <p>选择图片上传：大小256 * 256像素</p>
+          <p>{{$t('cur_pic')}}</p>
+          <p>{{$t('pic_prompt')}}</p>
           <div>
             <App-cropper
               :width="300"
@@ -69,7 +171,7 @@
             <i v-if="isNameEdit===false" class="el-icon-edit" @click="islSetUserName(true)"></i>
             <el-input
               v-if="isNameEdit===true"
-              placeholder="更改用户名"
+              :placeholder="$t('change_username')"
               prefix-icon="el-icon-user"
               v-model="myName"
             ></el-input>
@@ -79,21 +181,21 @@
               icon="el-icon-edit"
               :disabled="myName===''"
               @click="setUserName"
-            >更改</el-button>
+            >{{$t('update')}}</el-button>
             <el-button
               v-if="isNameEdit===true"
               type="primary"
               @click.native="islSetUserName(false)"
-            >取消</el-button>
+            >{{$t('cancel')}}</el-button>
           </div>
 
           <div class="text-form">
             <textarea name v-model="myData.desc" cols="30" rows="10"></textarea>
           </div>
-          <button @click="changeDesc()">保存</button>
+          <button @click="changeDesc()">{{$t('save')}}</button>
         </div>
         <div class="psd">
-          <div class="desc_name">更改密码</div>
+          <div class="desc_name">{{$t('change_pass')}}</div>
           <div class="psd-form">
             <!--  <input type="password" placeholder="Old Password">
                         <input type="password" placeholder="New Password">
@@ -106,18 +208,18 @@
               label-width="100px"
               class="demo-ruleForm"
             >
-              <el-form-item label="旧密码" prop="old_pass">
+              <el-form-item :label="$t('old_pass')" prop="old_pass">
                 <el-input v-model.number="ruleForm.old_pass"></el-input>
               </el-form-item>
-              <el-form-item label="新密码" prop="pass">
+              <el-form-item :label="$t('new_pass')" prop="pass">
                 <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
               </el-form-item>
-              <el-form-item label="确认密码" prop="checkPass">
+              <el-form-item :label="$t('confirm_pass')" prop="checkPass">
                 <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item class="post">
-                <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-                <el-button @click="resetForm('ruleForm')">重置</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')">{{$t('submit')}}</el-button>
+                <el-button @click="resetForm('ruleForm')">{{$t('reset')}}</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -125,10 +227,10 @@
           <!--          <button>保存</button>-->
         </div>
         <div class="email">
-          <div class="email-info">绑定邮箱</div>
+          <div class="email-info">{{$t('bind_mail')}}</div>
 
-          <el-input placeholder="请输入邮箱" prefix-icon="el-icon-message" v-model="myEmail"></el-input>
-          <button @click="bindEmail()">绑定</button>
+          <el-input :placeholder="$t('enter_email')" prefix-icon="el-icon-message" v-model="myEmail"></el-input>
+          <button @click="bindEmail()">{{$t('bind')}}</button>
         </div>
       </div>
     </div>
@@ -157,25 +259,25 @@ export default {
     this.$i18n.locale = localStorage.getItem('lang');
     var validateOldPass = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("请输入旧密码"));
+        return callback(new Error(this.$t('enter_old_pass')));
       }
       if (JSON.stringify(value).length < 8) {
-        return callback(new Error("密码长度必须至少为8个字符"));
+        return callback(new Error(this.$t('pass_short')));
       }
       if (JSON.stringify(value).length > 64) {
-        return callback(new Error("密码长度必须至多为64个字符"));
+        return callback(new Error(this.$t('pass_long')));
       }
       callback();
     };
     var validatePass = (rule, value, callback) => {
       if (value === "") {
-        callback(new Error("请输入新密码"));
+        callback(new Error(this.$t('enter_new_pass')));
       } else {
         if (JSON.stringify(value).length < 10) {
-          return callback(new Error("密码长度必须至少为8个字符"));
+          return callback(new Error(this.$t('pass_short')));
         }
         if (JSON.stringify(value).length > 66) {
-          return callback(new Error("密码长度必须至多为64个字符"));
+          return callback(new Error(this.$t('pass_long')));
         } else if (this.ruleForm.checkPass !== "") {
           this.$refs.ruleForm.validateField("checkPass");
         }
@@ -184,9 +286,9 @@ export default {
     };
     var validatePass2 = (rule, value, callback) => {
       if (value === "") {
-        callback(new Error("请再次输入新密码"));
+        callback(new Error(this.$t('enter_new_pass_again')));
       } else if (value !== this.ruleForm.pass) {
-        callback(new Error("两次输入密码不一致!"));
+        callback(new Error(this.$t('pass_mismatch')));
       } else {
         callback();
       }
@@ -284,12 +386,12 @@ export default {
       }).then(res => {
         if (res.data.status === "FAILED") {
           this.$message({
-            message: "请检查所填写邮箱是否合法",
+            message: this.$t('invalid_email'),
             type: "warning"
           });
         } else {
           this.$message({
-            message: "绑定成功",
+            message: this.$t('bind_succeed'),
             type: "success"
           });
         }
@@ -305,7 +407,7 @@ export default {
           this.changePass();
         } else {
           this.$message({
-            message: "请检查所填写信息是否正确",
+            message: this.$t('check_form'),
             type: "warning"
           });
           return false;
@@ -320,14 +422,14 @@ export default {
     },
     open2() {
       this.$message({
-        message: "修改成功！",
+        message: this.$t('update_succeed'),
         type: "success"
       });
     },
 
     open3() {
       this.$message({
-        message: "请检查信息是否正确",
+        message: this.$t('check_form'),
         type: "warning"
       });
     },
@@ -370,7 +472,7 @@ export default {
     changeDesc() {
       if (this.myData.desc.length > 2000) {
         this.$message({
-          message: "字数不能超过2000哦！",
+          message: this.$t('desc_long'),
           type: "warning"
         });
         return;
@@ -397,16 +499,16 @@ export default {
         if (res.data.status === "FAILED") {
           if (res.data.data.reason === "USER_ALREADY_EXIST") {
             this.$message({
-              message: "用户名已存在！",
+              message: this.$t('user_exist'),
               type: "warning"
             });
           } else if (res.data.data.reason === "NAME_LENGTH") {
             this.$message({
-              message: "用户名长度应在 2 到 32 个字符！",
+              message: this.$t('user_length'),
               type: "warning"
             });
           } else {
-            this.$message.error("更改失败！");
+            this.$message.error(this.$t('update_failed'));
           }
         }
         if (res.data.status === "SUCCEED") {
@@ -433,7 +535,7 @@ export default {
         }
       }).then(res => {
         if (res.data.status == "FAILED") {
-          this.$message.error("请检查旧密码是否正确");
+          this.$message.error(this.$t('wrong_pass'));
         } else {
           this.open2();
         }

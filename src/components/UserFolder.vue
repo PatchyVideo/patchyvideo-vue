@@ -7,6 +7,28 @@
 下次更新时取消该组件的制作
 -->
 
+<i18n>
+{
+  "CHS": {
+    "pending_post": "待处理索引",
+    "failed_post": "已失败索引",
+    "show_url_time": "显示url和时间",
+    "show_all": "显示全部"
+  },
+  "ENG": {
+    "pending_post": "Pending posts",
+    "failed_post": "Failed posts",
+    "show_url_time": "Show URL and time",
+    "show_all": "Show all"
+  },
+  "CHT": {
+    "pending_post": "待處理索引",
+    "failed_post": "已失敗索引",
+    "show_url_time": "顯示url和時間",
+    "show_all": "顯示全部"
+  }
+}
+</i18n>
 
 <template>
   <div>
@@ -14,11 +36,11 @@
       <div class="aside">
         <div class="new-create" @click="changeDoingSatate()" :class="{active:doingState}">
 
-          <a>    <i class="el-icon-goblet-square"></i>待处理索引</a>
+          <a>    <i class="el-icon-goblet-square"></i>{{$t('pending_post')}}</a>
         </div>
         <div class="new-create" @click="changeFailedSatate()" :class="{active:failedState}">
 
-          <a>   <i class="el-icon-goblet-full"></i> 已失败索引</a>
+          <a>   <i class="el-icon-goblet-full"></i>{{$t('failed_post')}}</a>
         </div>
       </div>
       <div class="main">
@@ -43,8 +65,8 @@
               v-model="value"
               active-color="#13ce66"
               inactive-color="#ff4949"
-              active-text="显示url和时间"
-              inactive-text="显示全部"
+              :active-text="$t('show_url_time')"
+              :inactive-text="$t('show_all')"
             ></el-switch>
             <transition mode="out-in">
               <el-table
