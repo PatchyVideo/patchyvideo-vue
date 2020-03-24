@@ -262,6 +262,11 @@
               >{{$t('btn_group.add_favorite')}}</el-button>
             </el-popover>
           </div>
+            <!-- 评分区 -->
+            <div>
+                <Score type="playlist"></Score>
+            </div>
+
         </div>
 
         <!-- 视频列表 -->
@@ -366,6 +371,7 @@ import DeleteVideo from "../components/DeleteVideo.vue";
 import SetCover from "../components/SetCover.vue";
 import ListFolderView from "../components/ListFolderView.vue";
 import Comments from "../components/comments.vue";
+import Score from "../components/Score.vue";
 import { copyToClipboardText } from "../static/js/generic";
 
 export default {
@@ -656,7 +662,8 @@ export default {
     DeleteVideo,
     ListFolderView,
     SetCover,
-    Comments
+    Comments,
+    Score
   }
 };
 </script>

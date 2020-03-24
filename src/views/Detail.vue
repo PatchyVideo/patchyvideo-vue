@@ -277,6 +277,11 @@
           </div>
         </div>
 
+        <!-- 评分区 -->
+        <div>
+          <Score type="vedio"></Score>
+        </div>
+
         <!-- 副本列表 -->
         <div class="Copies_blibili">
           <div class="new_top">
@@ -431,6 +436,7 @@ import topnavbar from "../components/TopNavbar.vue";
 import left_navbar from "../components/LeftNavbar.vue";
 import Footer from "../components/Footer.vue";
 import Comments from "../components/comments.vue";
+import Score from "../components/Score.vue";
 import { copyToClipboardText } from "../static/js/generic";
 export default {
   data() {
@@ -1145,7 +1151,7 @@ export default {
       return vs;
     }
   },
-  components: { left_navbar, topnavbar, Footer, Comments }
+  components: { left_navbar, topnavbar, Footer, Comments, Score}
 };
 </script>
 
