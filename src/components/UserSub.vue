@@ -229,7 +229,7 @@
                 this.$forceUpdate();
 
             },
-            ConvertLangRes(langs, hastran = true) {
+                ConvertLangRes(langs, hastran = true) {
                 if (!langs) return;
                 var LangList = [
                     { id: 1, lang: "CHS" },
@@ -290,7 +290,7 @@
                 return Lang;
             },
             handleSelect(item) {
-                this.subAddIptValue = item.tag;
+                this.subAddIptValue = this.ConvertLangRes(item.langs,false);
             },
             querySearchAsync(queryString, cb) {
                 var url = "/be/autocomplete/ql?q=" + queryString;
