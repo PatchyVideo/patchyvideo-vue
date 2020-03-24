@@ -392,7 +392,6 @@ export default {
     },
     // 从视频列表里添加视频的时候添加视频列表的共有标签
     getCommonTags2() {
-      alert("3213");
       this.axios({
         method: "post",
         url: "be/list/getcommontags.do",
