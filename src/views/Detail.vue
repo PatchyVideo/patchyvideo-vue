@@ -279,7 +279,7 @@
 
         <!-- 评分区 -->
         <div>
-          <Score type="vedio" :pid="this.pid"></Score>
+          <Score type="vedio"></Score>
         </div>
 
         <!-- 副本列表 -->

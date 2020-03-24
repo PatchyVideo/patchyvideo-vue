@@ -7,7 +7,7 @@
             <div class="left" @mouseover="starHover(index,0)"></div>
             <div class="right" @mouseover="starHover(index,1)"></div>
         </div>
-        <span v-if="!scoreStatus && isLogin"><el-link type="primary" @click="submitScore">提交</el-link></span>
+        <span v-if="!scoreStatus && isLogin()"><el-link type="primary" @click="submitScore">提交</el-link></span>
         <span class="aveScore">
             均分：{{data.total_rating/data.total_user||0}} 分
             <span>{{data.total_user||0}}人评价</span>
@@ -23,11 +23,12 @@ import star_full from "../assets/star/star_full.png"
 export default {
     props: {
         type: "",
-        pid: "",
+        
     },
     data:function () { 
         this.$i18n.locale = localStorage.getItem("lang");
         return {
+            pid: this.$route.query.id,
             enableListener: true,
             starIcon:[star_hollow,star_half,star_full],
             // 评分状态，true=已经评过
@@ -43,9 +44,11 @@ export default {
         }
     },
     created(){
-       
+        console.log(this.isLogin());
+        
+        this.isLogin() ? this.getMyScore():this.getTotalRating();
     },
-    watch:{
+/*     watch:{
         pid:function (val) {             
             this.getMyScore();
         },
@@ -53,18 +56,24 @@ export default {
             
         }
 
-    },
+    }, */
     methods:{
         getMyScore(){
-            console.log(this.pid);
-            
+            console.log(this.pid,this.type);
+            // var url = this.type="vedio"?"/be/rating/get_video.do":"/be/rating/get_playlist.do ";
+            var data = {};
+            var url = "";
+            if(this.type=="vedio"){
+                url = "/be/rating/get_video.do";
+                data.vid = this.pid;
+            }else{
+                url = "/be/rating/get_playlist.do";
+                data.pid = this.pid;
+            }
             this.axios({
                 method: "post",
-                url: "/be/rating/get_video.do",
-                data: { 
-                    vid: this.pid,
-                    // stars:7
-                }
+                url: url,
+                data: data
             }).then(res => {
                 var data = res.data;
                 if(data.data.reason === "NOT_RATED"){
@@ -75,8 +84,28 @@ export default {
                 // 评分过
                 this.scoreStatus = true;
                 this.data = data.data;
+                console.log(data);
                 
                 this.showStar(this.data.user_rating);
+            });
+        },
+        getTotalRating(){
+            var data = {};
+            var url = "";
+            if(this.type=="vedio"){
+                url = "/be/rating/get_video_total.do ";
+                data.vid = this.pid;
+            }else{
+                url = "/be/rating/get_playlist_total.do ";
+                data.pid = this.pid;
+            }
+            this.axios({
+                method: "post",
+                url: url,
+                data: data
+            }).then(res => {
+                this.data = res.data.data;
+                console.log(this.data);
             });
         },
         showStar(num){
@@ -85,7 +114,7 @@ export default {
                 var img = stars[i].getElementsByTagName("img")[0];
                 var index = parseInt(num/2);
                 var pos = num%2;
-                if(i<=index && img!=this.starIcon[2]){
+                if(i<index && img!=this.starIcon[2]){
                    img.src = this.starIcon[2];
                 };
                 if(i>index && img.src!=this.starIcon[2]){
@@ -99,6 +128,7 @@ export default {
         // index 第几个星星， pos 0左1右
         starHover(index,pos){
             if(this.scoreStatus) return;
+            if(!this.isLogin()) return;
             if(!this.enableListener) return;
 
             this.lastStar = {index:index,position:pos};
@@ -126,19 +156,29 @@ export default {
             var score = (this.lastStar.index-1)*2 + this.lastStar.position + 1;
             if(score<1){alert("你还没有评分呢!");return;}
             // TODO:根据type判断 是视频还是播放列表
-            var url = this.type=="vedio"?"/be/rating/video.do":"/be/rating/playlist.do ";
+            // var url = this.type=="vedio"?"/be/rating/video.do":"/be/rating/playlist.do ";
+            var data = {};
+            var url = "";
+            if(this.type=="vedio"){
+                url = "/be/rating/video.do";
+                data.vid = this.pid;
+                data.stars = score;
+            }else{
+                url = "/be/rating/playlist.do";
+                data.pid = this.pid;
+                data.stars = score;
+            }
             this.axios({
                 method: "post",
                 url: url,
-                data: { 
-                    vid: this.pid,
-                    stars:score
-                }
+                data: data
             }).then(res => {
                 var data = res.data;
                 this.scoreStatus = true;
                 this.enableListener=false;
+                console.log(data);
                 this.getMyScore();
+                
             });
         },
         // 判断是否登录的标志
@@ -151,7 +191,7 @@ export default {
             } else {
                 return false;
             }
-            },
+        },
         }
 }
 </script>
