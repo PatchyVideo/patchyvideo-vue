@@ -1,16 +1,69 @@
 
+<i18n>
+{
+    "CHS": {
+        "score":"评分",
+        "submit":"提交",
+        "average":"均分",
+        "evaluation":"评价",
+        "login":"登录",
+        "prompt":"提示",
+        "OK":"确 定",
+        "prompt_content":"你还没有评分！无法提交！"
+
+    },
+    "ENG": {
+        "score":"Score",
+        "submit":"Submit",
+        "average":"Average",
+        "evaluation":"Evaluation",
+        "login":"Login",
+        "prompt":"Prompt",
+        "OK":"O K",
+        "prompt_content":"You have not rated yet! Unable to submit!"
+    },
+    "CHT": {
+        "score":"評分",
+        "submit":"提交",
+        "average":"均分",
+        "Evaluation":"評價",
+        "login":"登錄",
+        "prompt":"提示",
+        "OK":"確 定",
+        "prompt_content":"妳還沒有評分！無法提交！"
+    }
+}
+</i18n>
+
+
 <template>
+
     <div style="position:relative">
-        <span>评分</span>
+
+        <!-- 没有评分就提交（分数<1）时  弹出框-->
+
+        <el-dialog
+        :title="$t('prompt')"
+        :visible.sync="dialogVisible"
+        width="30%">
+        <span>{{$t("prompt_content")}}</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">{{$t("OK")}}</el-button>
+            </span>
+        </el-dialog>
+
+        <!-- 主题 -->
+        <span>{{$t("score")}}</span>
         <div class="star" v-for="index in [1,2,3,4,5]" :key="index" @click="enableListener = !enableListener">
             <img :src="(index<=lastStar.index)?starIcon[2]:starIcon[0]">
             <div class="left" @mouseover="starHover(index,0)"></div>
             <div class="right" @mouseover="starHover(index,1)"></div>
         </div>
-        <span v-if="!scoreStatus && isLogin()"><el-link type="primary" @click="submitScore">提交</el-link></span>
+        <span v-if="!scoreStatus && isLogin()"><el-link type="primary" @click="submitScore">{{$t("submit")}}</el-link></span>
+        <span v-if="!isLogin()"><router-link to="/login" @click.native="login">{{$t("login")}}</router-link></span>
         <span class="aveScore">
-            均分：{{data.total_rating/data.total_user||0}} 分
-            <span>{{data.total_user||0}}人评价</span>
+            {{$t("average")}}：{{data.total_rating/data.total_user||0}}
+            <span>{{data.total_user||0}} {{$t("evaluation")}}</span>
         </span>
     </div>
 </template>
@@ -29,6 +82,7 @@ export default {
         this.$i18n.locale = localStorage.getItem("lang");
         return {
             pid: this.$route.query.id,
+            dialogVisible: false,
             enableListener: true,
             starIcon:[star_hollow,star_half,star_full],
             // 评分状态，true=已经评过
@@ -56,6 +110,10 @@ export default {
 
     }, */
     methods:{
+        // 登录跳转
+        login() {
+        this.$store.commit("changeifRouter", "0");
+        },
         getMyScore(){
             // var url = this.type="vedio"?"/be/rating/get_video.do":"/be/rating/get_playlist.do ";
             var data = {};
@@ -151,8 +209,10 @@ export default {
         
         submitScore(){
             var score = (this.lastStar.index-1)*2 + this.lastStar.position + 1;
-            if(score<1){alert("你还没有评分呢!");return;}
-            // TODO:根据type判断 是视频还是播放列表
+            if(score<1){
+                this.dialogVisible = true;
+                return;
+            }
             // var url = this.type=="vedio"?"/be/rating/video.do":"/be/rating/playlist.do ";
             var data = {};
             var url = "";
