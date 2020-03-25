@@ -78,7 +78,7 @@ export default {
 .footer {
   margin-top: 3px;
   height: 100px;
-  width: calc(100% - 20px);
+  width: calc(100%);
   background-color: #fff;
   border-top: 1px solid #c5464a;
   text-align: left;

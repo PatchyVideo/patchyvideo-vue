@@ -187,7 +187,7 @@
 
     <!-- 删除列表时的确认框 -->
     <el-dialog :title="$t('delete_dialog.title')" :visible.sync="dialogVisible" width="30%">
-      <span>{{$t('delete_dialog.btn_content')}}</span>
+      <span>{{$t('delete_dialog.content')}}</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">{{$t('delete_dialog.btn_cancel')}}</el-button>
         <el-button
@@ -333,11 +333,6 @@
           </div>
         </div>
 
-        <!-- 评论区 -->
-        <div>
-          <Commits :sid="sid"></Commits>
-        </div>
-
         <!-- ElementUI自带的分页器 -->
         <el-pagination
           background
@@ -350,6 +345,11 @@
           :page-size="20"
           :page-sizes="[10, 20, 30, 40]"
         ></el-pagination>
+
+        <!-- 评论区 -->
+        <div>
+          <Comments :sid="sid"></Comments>
+        </div>
       </div>
     </div>
 
@@ -365,7 +365,7 @@ import Move from "../components/Move.vue";
 import DeleteVideo from "../components/DeleteVideo.vue";
 import SetCover from "../components/SetCover.vue";
 import ListFolderView from "../components/ListFolderView.vue";
-import Commits from "../components/commits.vue";
+import Comments from "../components/comments.vue";
 import { copyToClipboardText } from "../static/js/generic";
 
 export default {
@@ -656,7 +656,7 @@ export default {
     DeleteVideo,
     ListFolderView,
     SetCover,
-    Commits
+    Comments
   }
 };
 </script>

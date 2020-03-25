@@ -43,7 +43,8 @@ Vue.prototype.$echarts = echarts;
         "tab3":"我的文件夹",
         "tab4":"我的播放列表",
         "tab5":"发布状态",
-        "tab6":"黑名单"
+        "tab6":"黑名单",
+        "tab7":"订阅"
     },
     "outer_user":{
         "tab1":"用户信息",
@@ -60,7 +61,8 @@ Vue.prototype.$echarts = echarts;
         "tab3":"My folder",
         "tab4":"My playlists",
         "tab5":"Post status",
-        "tab6":"Blacklist"
+        "tab6":"Blacklist",
+        "tab7":"Subscribed"
     },
     "outer_user":{
         "tab1":"Profile",
@@ -130,6 +132,9 @@ Vue.prototype.$echarts = echarts;
                 <el-tab-pane :label="(labelInfo.length==info[0].length)?$t('me.tab6'):$t('outer_user.tab6')" name="six" v-if="labelInfo.length>=6">
                     <blacklist v-if="this.activeName==='six'"></blacklist>
                 </el-tab-pane>
+                <el-tab-pane :label="(labelInfo.length==info[0].length)?$t('me.tab7'):$t('outer_user.tab7')" name="seven" v-if="labelInfo.length>=7">
+                    <usersub v-if="this.activeName==='seven'"></usersub>
+                </el-tab-pane>
         <!--       <el-tab-pane label="文件管理" name="five">
                     <userfolder></userfolder>
                 </el-tab-pane>-->
@@ -152,6 +157,7 @@ Vue.prototype.$echarts = echarts;
     import userfolder from '../components/UserFolder.vue';
     import userpoststate from '../components/UserPostState.vue';
     import blacklist from '../components/BlackList.vue';
+    import usersub from  '../components/UserSub.vue'
 
     import Footer from "../components/Footer.vue";
     export default {
@@ -163,8 +169,8 @@ Vue.prototype.$echarts = echarts;
                 activeIndex: "1",
                 activeIndex2: "1",
                 activeName: "first",
-                info:[["我的信息","我贡献的索引","我的文件夹","我的收藏","索引状态","黑名单"],["用户信息","他贡献的索引","他的文件夹","他的收藏"]],
-                labelInfo:["我的信息","我贡献的索引","文件夹","我的收藏","索引状态","黑名单"]
+                info:[["我的信息","我贡献的索引","我的文件夹","我的收藏","索引状态","订阅","黑名单"],["用户信息","他贡献的索引","他的文件夹","他的收藏"]],
+                labelInfo:["我的信息","我贡献的索引","文件夹","我的收藏","索引状态","订阅","黑名单"]
             }
         },
        created(){
@@ -224,7 +230,7 @@ Vue.prototype.$echarts = echarts;
            },
        },
         components: {topnavbar,usercontribute,
-            userprofile,listfolder,userfavorites,
+            userprofile,listfolder,userfavorites,usersub,
             userfolder,userpoststate,Footer
         ,blacklist}
     }

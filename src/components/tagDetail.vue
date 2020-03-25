@@ -199,7 +199,12 @@
           </div>
         </template>
       </el-autocomplete>-->
-      <el-select v-model="language" :placeholder="$t('select_lang_prompt')" size="small" class="addTag-select">
+      <el-select
+        v-model="language"
+        :placeholder="$t('select_lang_prompt')"
+        size="small"
+        class="addTag-select"
+      >
         <el-option
           v-for="item in languagesList"
           :key="item.value"
@@ -210,14 +215,12 @@
       <!-- 检查标签是否已存在 -->
       <CheckInput
         v-model="newTag"
-        :checkValueAsync="querySearchAsync"
+        :checkValueAsync="querySearchAsync2"
         popperClass="my-autocomplete"
         :placeholder="$t('add_to_category', {cat: this.tagCategorie})"
-        filter="tag"
         :CheckStatus.sync="checkTag"
-        @keyup.enter.native="addTag()"
-      >
-      </CheckInput>
+        @keyup.enter.native="addTag"
+      ></CheckInput>
       <el-button type="info" @click="addTag()">{{$t('add_tag')}}</el-button>
     </div>
     <!-- 表格正文 -->
@@ -824,7 +827,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.JPN)"
-            >{{ scope.row.languages.JPN }}</span>
+            >{{ scope.row.languages.JPN.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ENG">
             English:
@@ -1074,7 +1077,11 @@
         <template slot-scope="scope">
           <div v-if="advancedOptions">
             <el-button type="danger" round @click="removeTag(scope.$index)">{{$t('del_tag')}}</el-button>
-            <el-button type="primary" round @click="openDialog(scope.$index)">{{$t('change_category')}}</el-button>
+            <el-button
+              type="primary"
+              round
+              @click="openDialog(scope.$index)"
+            >{{$t('change_category')}}</el-button>
           </div>
           <div v-else>
             <el-button
@@ -1104,7 +1111,11 @@
     <!-- 更改分类的弹出框 -->
     <el-dialog :title="$t('prompt')" :visible.sync="dialogVisible" width="20%">
       <div style="width:80%;margin:0 auto">
-        <el-select v-model="newTagCategorie" :placeholder="$t('select_categoty')" style="width:100%">
+        <el-select
+          v-model="newTagCategorie"
+          :placeholder="$t('select_categoty')"
+          style="width:100%"
+        >
           <el-option v-for="item in tagCategories2" :key="item" :label="item" :value="item"></el-option>
         </el-select>
       </div>
@@ -1166,10 +1177,10 @@ export default {
       tagEdit: [],
       // 标签列表的排序规则
       options: [
-        { value: "latest", label: this.$t('latest') },
-        { value: "oldest", label: this.$t('oldest') },
-        { value: "count", label: this.$t('count') },
-        { value: "count_inv", label: this.$t('count_inv') }
+        { value: "latest", label: this.$t("latest") },
+        { value: "oldest", label: this.$t("oldest") },
+        { value: "count", label: this.$t("count") },
+        { value: "count_inv", label: this.$t("count_inv") }
       ],
       // 当前标签列表的排列顺序
       couponSelected: "latest",
@@ -1289,18 +1300,18 @@ export default {
       }
       // 校验数据
       if (tag == "") {
-        this.open2(this.$t('enter_alias_prompt'));
+        this.open2(this.$t("enter_alias_prompt"));
         this.loading = false;
         return false;
       }
       switch (this.checkTag) {
         case -1:
-          this.open2(this.$t('tag_already_exist'));
+          this.open2(this.$t("tag_already_exist"));
           this.loading = false;
           return false;
           break;
         case 0:
-          this.open2(this.$t('tag_checking'));
+          this.open2(this.$t("tag_checking"));
           this.loading = false;
           return false;
           break;
@@ -1315,17 +1326,17 @@ export default {
         }
       }).then(result => {
         if (result.data.status == "SUCCEED") {
-          this.open(this.$t('add_succeed'));
+          this.open(this.$t("add_succeed"));
           this.newTag = "";
           this.language = "简体中文";
           this.loading = false;
           this.requestCategorieTags();
         } else {
           if (result.data.data.reason == "TAG_ALREADY_EXIST") {
-            this.open2(this.$t('tag_already_exist'));
+            this.open2(this.$t("tag_already_exist"));
             this.loading = false;
           } else {
-            this.open2(this.$t('failed'));
+            this.open2(this.$t("failed"));
             this.loading = false;
           }
         }
@@ -1339,12 +1350,12 @@ export default {
       var language = this.newTagLanguage.value;
       // 校验数据
       if (language == undefined) {
-        this.open2(this.$t('select_lang_prompt'));
+        this.open2(this.$t("select_lang_prompt"));
         this.loading = false;
         return false;
       }
       if (new_tag == "") {
-        this.open2(this.$t('enter_alias_prompt'));
+        this.open2(this.$t("enter_alias_prompt"));
         this.loading = false;
         return false;
       }
@@ -1362,17 +1373,17 @@ export default {
         }
       }).then(result => {
         if (result.data.status == "SUCCEED") {
-          this.open(this.$t('add_succeed'));
+          this.open(this.$t("add_succeed"));
           this.new_Tag = "";
           this.loading = false;
           this.requestCategorieTags();
         } else {
           if (result.data.data.reason == "TAG_ALREADY_EXIST") {
             this.loading = false;
-            this.open2(this.$t('tag_already_exist'));
+            this.open2(this.$t("tag_already_exist"));
           } else {
             this.loading = false;
-            this.open2(this.$t('failed'));
+            this.open2(this.$t("failed"));
           }
         }
       });
@@ -1406,16 +1417,16 @@ export default {
       }).then(result => {
         if (result.data.status == "SUCCEED") {
           this.loading = false;
-          this.open(this.$t('add_succeed'));
+          this.open(this.$t("add_succeed"));
           this.new_Tag = "";
           this.requestCategorieTags();
         } else {
           if (result.data.data.reason == "ALIAS_ALREADY_EXIST") {
             this.loading = false;
-            this.open2(this.$t('tag_already_exist'));
+            this.open2(this.$t("tag_already_exist"));
           } else {
             this.loading = false;
-            this.open2(this.$t('failed'));
+            this.open2(this.$t("failed"));
           }
         }
       });
@@ -1423,9 +1434,9 @@ export default {
     // 删除标签
     removeTag(index) {
       var tag = this.tagEdit[index].id;
-      this.$confirm(this.$t('delete_confirm_prompt'), this.$t('prompt'), {
-        confirmButtonText: this.$t('ok'),
-        cancelButtonText: this.$t('cancel'),
+      this.$confirm(this.$t("delete_confirm_prompt"), this.$t("prompt"), {
+        confirmButtonText: this.$t("ok"),
+        cancelButtonText: this.$t("cancel"),
         type: "warning"
       })
         // 点击确定之后
@@ -1441,13 +1452,13 @@ export default {
           }).then(result => {
             if (result.data.status == "SUCCEED") {
               this.loading = false;
-              this.open(this.$t('delete_succeed'));
+              this.open(this.$t("delete_succeed"));
               this.requestCategorieTags();
             } else {
               if (result.data.data.reason == "UNAUTHORISED_OPERATION") {
-                this.open2(this.$t('unauthorised_prompt'));
+                this.open2(this.$t("unauthorised_prompt"));
               } else {
-                this.open2(this.$t('delete_failed'));
+                this.open2(this.$t("delete_failed"));
               }
               this.loading = false;
             }
@@ -1459,9 +1470,9 @@ export default {
     // 删除标签别名
     confirmAliasRemove(index, i) {
       var alias = this.tagEdit[index].alias[i];
-      this.$confirm(this.$t('delete_confirm_prompt'), this.$t('prompt'), {
-        confirmButtonText: this.$t('ok'),
-        cancelButtonText: this.$t('cancel'),
+      this.$confirm(this.$t("delete_confirm_prompt"), this.$t("prompt"), {
+        confirmButtonText: this.$t("ok"),
+        cancelButtonText: this.$t("cancel"),
         type: "warning"
       })
         // 点击确定之后
@@ -1476,13 +1487,13 @@ export default {
           }).then(result => {
             if (result.data.status == "SUCCEED") {
               this.loading = false;
-              this.open(this.$t('delete_succeed'));
+              this.open(this.$t("delete_succeed"));
               this.requestCategorieTags();
             } else {
               if (result.data.data.reason == "UNAUTHORISED_OPERATION") {
-                this.open2(this.$t('unauthorised_prompt'));
+                this.open2(this.$t("unauthorised_prompt"));
               } else {
-                this.open2(this.$t('delete_failed'));
+                this.open2(this.$t("delete_failed"));
               }
               this.loading = false;
             }
@@ -1495,9 +1506,9 @@ export default {
     confirmChange(index, language) {
       this.loading = true;
       var tag = this.tagData[index].languages[language];
-      var new_tag = this.tagEdit[index].languages[language];
+      var new_tag = this.tagEdit[index].languages[language].replace(/\ /g, "_");
       if (new_tag == "") {
-        this.open2(this.$t('enter_alias_prompt'));
+        this.open2(this.$t("enter_alias_prompt"));
         this.loading = false;
         return false;
       }
@@ -1512,11 +1523,11 @@ export default {
       }).then(result => {
         if (result.data.status == "SUCCEED") {
           this.loading = false;
-          this.open(this.$t('rename_succeed'));
+          this.open(this.$t("rename_succeed"));
           this.requestCategorieTags();
         } else {
           this.loading = false;
-          this.open2(this.$t('rename_failed'));
+          this.open2(this.$t("rename_failed"));
         }
       });
     },
@@ -1524,9 +1535,9 @@ export default {
     confirmAliasChange($index, i) {
       this.loading = true;
       var tag = this.tagData[$index].alias[i];
-      var new_tag = this.tagEdit[$index].alias[i];
+      var new_tag = this.tagEdit[$index].alias[i].replace(/\ /g, "_");
       if (new_tag == "") {
-        this.open2(this.$t('enter_alias_prompt'));
+        this.open2(this.$t("enter_alias_prompt"));
         this.loading = false;
         return false;
       }
@@ -1540,11 +1551,11 @@ export default {
       }).then(result => {
         if (result.data.status == "SUCCEED") {
           this.loading = false;
-          this.open(this.$t('rename_succeed'));
+          this.open(this.$t("rename_succeed"));
           this.requestCategorieTags();
         } else {
           this.loading = false;
-          this.open2(this.$t('rename_failed'));
+          this.open2(this.$t("rename_failed"));
         }
       });
     },
@@ -1553,7 +1564,7 @@ export default {
       var tag = this.tagData[this.tagIndex].id;
       var category = this.newTagCategorie;
       if (category == "") {
-        this.open2(this.$t('select_categoty'));
+        this.open2(this.$t("select_categoty"));
         return false;
       }
       this.dialogVisible = false;
@@ -1567,12 +1578,12 @@ export default {
         }
       }).then(result => {
         if (result.data.status == "SUCCEED") {
-          this.open(this.$t('rename_succeed'));
+          this.open(this.$t("rename_succeed"));
           this.loading = false;
           this.$router.go(0);
         } else {
           this.loading = false;
-          this.open2(this.$t('rename_failed'));
+          this.open2(this.$t("rename_failed"));
         }
       });
     },
@@ -1610,8 +1621,20 @@ export default {
     // 下面是消息补全框的方法
     querySearchAsync(queryString, cb) {
       /*   this.infoTipMark = true;*/
-      queryString=queryString.toLowerCase();
+      queryString = queryString;
       var url = "/autocomplete/?q=" + queryString;
+      this.axios({
+        method: "get",
+        url: url
+      }).then(result => {
+        this.taglist = result.data;
+        cb(result.data);
+      });
+    },
+    querySearchAsync2(queryString, cb) {
+      /*   this.infoTipMark = true;*/
+      queryString = queryString;
+      var url = "/be/autocomplete/ql?q=" + queryString;
       this.axios({
         method: "get",
         url: url

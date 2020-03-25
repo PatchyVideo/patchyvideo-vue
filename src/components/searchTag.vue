@@ -165,6 +165,10 @@
         ></el-option>
       </el-select>
     </div>
+    <!-- 合并标签按钮 -->
+    <div class="video-list-header">
+      <el-button @click="onMergeTagButtonClicked" :disabled="mergeDst == -1 || mergeSrc == -1" class="video-list-header-el-select">合并标签</el-button>
+    </div>
     <!-- 添加标签列表 -->
     <div class="addTag">
       <el-input
@@ -810,7 +814,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.CHS)"
-              >{{ scope.row.languages.CHS }}</span
+              >{{ scope.row.languages.CHS.replace(/\_/g, " ") }}</span
             >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.CHT">
@@ -827,7 +831,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.CHT)"
-              >{{ scope.row.languages.CHT }}</span
+              >{{ scope.row.languages.CHT.replace(/\_/g, " ") }}</span
             >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.JPN">
@@ -844,7 +848,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.JPN)"
-              >{{ scope.row.languages.JPN }}</span
+              >{{ scope.row.languages.JPN.replace(/\_/g, " ") }}</span
             >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ENG">
@@ -861,7 +865,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.ENG)"
-              >{{ scope.row.languages.ENG }}</span
+              >{{ scope.row.languages.ENG.replace(/\_/g, " ") }}</span
             >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.KOR">
@@ -878,7 +882,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.KOR)"
-              >{{ scope.row.languages.KOR }}</span
+              >{{ scope.row.languages.KOR.replace(/\_/g, " ") }}</span
             >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.CSY">
@@ -895,7 +899,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.CSY)"
-              >{{ scope.row.languages.CSY }}</span
+              >{{ scope.row.languages.CSY.replace(/\_/g, " ") }}</span
             >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.NLD">
@@ -912,7 +916,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.NLD)"
-              >{{ scope.row.languages.NLD }}</span
+              >{{ scope.row.languages.NLD.replace(/\_/g, " ") }}</span
             >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.FRA">
@@ -929,7 +933,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.FRA)"
-              >{{ scope.row.languages.FRA }}</span
+              >{{ scope.row.languages.FRA.replace(/\_/g, " ") }}</span
             >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.DEU">
@@ -946,7 +950,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.DEU)"
-              >{{ scope.row.languages.DEU }}</span
+              >{{ scope.row.languages.DEU.replace(/\_/g, " ") }}</span
             >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.HUN">
@@ -963,7 +967,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.HUN)"
-              >{{ scope.row.languages.HUN }}</span
+              >{{ scope.row.languages.HUN.replace(/\_/g, " ") }}</span
             >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ITA">
@@ -980,7 +984,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.ITA)"
-              >{{ scope.row.languages.ITA }}</span
+              >{{ scope.row.languages.ITA.replace(/\_/g, " ") }}</span
             >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.PLK">
@@ -997,7 +1001,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.PLK)"
-              >{{ scope.row.languages.PLK }}</span
+              >{{ scope.row.languages.PLK.replace(/\_/g, " ") }}</span
             >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.PTB">
@@ -1014,7 +1018,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.PTB)"
-              >{{ scope.row.languages.PTB }}</span
+              >{{ scope.row.languages.PTB.replace(/\_/g, " ") }}</span
             >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ROM">
@@ -1031,7 +1035,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.ROM)"
-              >{{ scope.row.languages.ROM }}</span
+              >{{ scope.row.languages.ROM.replace(/\_/g, " ") }}</span
             >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.RUS">
@@ -1048,7 +1052,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.RUS)"
-              >{{ scope.row.languages.RUS }}</span
+              >{{ scope.row.languages.RUS.replace(/\_/g, " ") }}</span
             >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ESP">
@@ -1065,7 +1069,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.ESP)"
-              >{{ scope.row.languages.ESP }}</span
+              >{{ scope.row.languages.ESP.replace(/\_/g, " ") }}</span
             >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.TRK">
@@ -1082,7 +1086,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.TRK)"
-              >{{ scope.row.languages.TRK }}</span
+              >{{ scope.row.languages.TRK.replace(/\_/g, " ") }}</span
             >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.VIN">
@@ -1099,7 +1103,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.VIN)"
-              >{{ scope.row.languages.VIN }}</span
+              >{{ scope.row.languages.VIN.replace(/\_/g, " ") }}</span
             >
           </span>
           <!-- 标签别名 -->
@@ -1117,7 +1121,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(item)"
-              >{{ item }}</span
+              >{{ item.replace(/\_/g, " ") }}</span
             >
           </span>
         </template>
@@ -1143,6 +1147,22 @@
             >
           </div>
         </template>
+      </el-table-column>
+      <el-table-column
+        prop=""
+        label="合并选项"
+        min-width="50"
+      >
+      <template slot-scope="scope">
+        <el-select @change="(arg1) => onMergeOptionChanged(scope.row, arg1)" v-model="scope.merge" placeholder="-">
+          <el-option
+            v-for="item in mergeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
       </el-table-column>
     </el-table>
 
@@ -1259,6 +1279,12 @@ export default {
       advancedOptions: false,
       // 弹出框是否显示
       dialogVisible: false,
+      // 合并标签选项
+      mergeOptions: [{value: '-', label: '-'}, {value: 'dst', label: '目标标签'}, {value: 'src', label: '源标签'}],
+      // 合并标签的源
+      mergeSrc: -1,
+      // 合并标签的目标
+      mergeDst: -1,
       // 页面是否属于加载状态的判断
       loading: true
     };
@@ -1310,6 +1336,8 @@ export default {
     },
     // 请求搜索数据
     requestSearchedTags() {
+      this.mergeSrc = -1;
+      this.mergeDst = -1;
       var query = this.searchTag;
       var category = this.searchCategory;
       // 对全部数据种类进行兼容性调整
@@ -1518,7 +1546,7 @@ export default {
     confirmChange(index, language) {
       this.loading = true;
       var tag = this.tagData[index].languages[language];
-      var new_tag = this.tagEdit[index].languages[language];
+      var new_tag = this.tagEdit[index].languages[language].replace(/\ /g, "_");
       if (new_tag == "") {
         this.open2(this.$t('tag_name_prompt'));
         this.loading = false;
@@ -1547,7 +1575,7 @@ export default {
     confirmAliasChange($index, i) {
       this.loading = true;
       var tag = this.tagData[$index].alias[i];
-      var new_tag = this.tagEdit[$index].alias[i];
+      var new_tag = this.tagEdit[$index].alias[i].replace(/\ /g, "_");
       if (new_tag == "") {
         this.open2(this.$t('tag_name_prompt'));
         this.loading = false;
@@ -1630,6 +1658,18 @@ export default {
         message: message,
         type: "error"
       });
+    },
+    onMergeOptionChanged(item, value) {
+      if (value == "dst") {
+        this.mergeDst = item.id;
+      }
+      if (value == "src") {
+        this.mergeSrc = item.id;
+      }
+    },
+    onMergeTagButtonClicked() {
+      console.log(`Merging tag ${this.mergeSrc} into tag ${this.mergeDst}`);
+      this.requestSearchedTags();
     }
   },
   watch: {

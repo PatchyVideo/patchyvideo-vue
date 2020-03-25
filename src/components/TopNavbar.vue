@@ -1,10 +1,9 @@
 ﻿<!--    vue组件：TopNavbar.vue     -->
 <!--
     组件：左侧的热门标签导航栏
-    大小：100% * 70px
+    大小：100% * 80px
     功能：网站主导航栏
     必要传入参数：无
-    文件依赖：jquery.textcomplete.js
     更新日志：
     12/1/2019: v1.0 
       release
@@ -62,6 +61,7 @@
     "user": {
       "signup": "注册",
       "login": "登录",
+      "message": "消息",
       "logout": "退出",
       "logout_prompt": "你确定要退出登陆吗?",
       "login_expire_prompt": "登录已过期，请新登录！"
@@ -91,6 +91,7 @@
     "user": {
       "signup": "Sign up",
       "login": "Log in",
+      "message": "Messages",
       "logout": "Log out",
       "logout_prompt": "Are you sure you want to log out?",
       "login_expire_prompt": "Your session has expired. Please relogin"
@@ -120,6 +121,7 @@
     "user": {
       "signup": "註冊",
       "login": "登錄",
+      "message": "消息",
       "logout": "退出",
       "logout_prompt": "妳確定要退出登陸嗎?",
       "login_expire_prompt": "登錄已過期，請新登錄！"
@@ -134,7 +136,7 @@
 </i18n>
 
 <template>
-  <div class="top-navbar w" id="top-navbar">
+  <div class="top-navbar" id="top-navbar">
     <el-select v-model="locale" placeholder="Language">
       <el-option
         v-for="item in langOptions"
@@ -182,7 +184,7 @@
           </select>
           <!-- 搜索框 -->
           <div id="search-bar-query">
-            <el-autocomplete
+            <!--<el-autocomplete
               id="ipt"
               ref="ipt"
               v-model="iptVal"
@@ -206,6 +208,35 @@
                       Soundtrack: item.cat == 6
                     }"
                   >{{ item.tag }}</div>
+                  <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
+                </div>
+              </template>
+            </el-autocomplete>-->
+            <el-autocomplete
+              id="ipt"
+              ref="ipt"
+              v-model="iptVal"
+              :fetch-suggestions="querySearchAsync2"
+              :trigger-on-focus="false"
+              :placeholder="$t('search.prompt')"
+              @select="handleSelect2"
+              @keyup.enter.native="gotoHome"
+            >
+              <template slot-scope="{ item }">
+                <div class="adviceList">
+                  <div
+                    class="name"
+                    v-bind:class="{
+                      Copyright: item.cat == 2,
+                      Language: item.cat == 5,
+                      Character: item.cat == 1,
+                      Author: item.cat == 3,
+                      General: item.cat == 0,
+                      Meta: item.cat == 4,
+                      Soundtrack: item.cat == 6
+                    }"
+                    v-html="item.tag||ConvertLangRes(item.langs)"
+                  ></div>
                   <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
                 </div>
               </template>
@@ -239,6 +270,13 @@
             this.$store.state.username
             }}
           </router-link>
+          <el-badge :value="messagesNum" :hidden="!messagesNum" class="item">
+            <router-link
+              target="_blank"
+              class="loginUser-message"
+              to="/messages"
+            >{{$t('user.message')}}</router-link>
+          </el-badge>
           <a
             class="loginUser-signup"
             @click="dialogVisible = true"
@@ -319,6 +357,11 @@ export default {
           label: "English"
         }
       ],
+      // 未读信息的数量
+      messagesNum: 0,
+      // 控制读取未读信息方法的变量
+      queryMessages: "",
+      // 多语言支持
       locale: localStorage.getItem("lang")
     };
   },
@@ -341,14 +384,18 @@ export default {
     if (this.$store.state.ifTruelyLogin == 0) {
       this.checkUser();
     }
+    this.getCookie();
     // 查看是否登录
     if (
       JSON.stringify(this.$store.state.username) != "null" &&
       this.$store.state.username != ""
     ) {
       this.isLogin = true;
+      if (this.$route.path != "/messages") this.getUnreadCount();
+      // 每2min查询一次未读消息
+      // 注意,这里的this.getUnreadCount不能加括号!
+      this.queryMessages = setInterval(this.getUnreadCount, 120000);
     }
-    this.getCookie();
     this.iptVal = this.iptVal2;
   },
   mounted() {},
@@ -509,6 +556,20 @@ export default {
       this.$store.commit("getUserName", "");
       return false;
     },
+    // 获取未读通知数量
+    getUnreadCount() {
+      this.axios({
+        method: "post",
+        url: "be/notes/list_unread.do",
+        data: {}
+      })
+        .then(result => {
+          this.messagesNum = result.data.data.notes.length;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     // --------------------------------------------------危险提示--------------------------------------------------
     //                                   此函数因为直接操纵dom可能导致网站受到攻击!
     // --------------------------------------------------危险提示--------------------------------------------------
@@ -540,6 +601,45 @@ export default {
       this.endlocation = endlocation;
 
       var url = "/autocomplete/?q=" + query;
+      this.axios({
+        method: "get",
+        url: url
+      }).then(result => {
+        if (result.status == "FALIED") {
+          cb([]);
+          return;
+        }
+        var resultList = results.concat(result.data);
+        cb(resultList);
+      });
+    },
+    querySearchAsync2(queryString, cb) {
+      // 这里的get(0)是将jq对象转换为原生js对象
+      // selectionStart是获取光标当前位置
+      var endlocation = $("#ipt").get(0).selectionStart;
+      // 切割输入框内的字符串，切割下光标左面的字符串
+      var query = queryString.slice(0, endlocation);
+      // 获取所需要搜索的字符串的开头在搜索框内字符串的位置
+      var startlocation = this.match(query);
+      // 切割下所需要查询的字符串
+      query = query.slice(startlocation, endlocation);
+      // 字符串为空格的话不搜索
+      if (this.isNull(query)) {
+        cb([]);
+        return;
+      }
+
+      // 备份参数防止出现玄学问题
+      var query2 = query;
+      // 搜索是否包含sites变量的关键字
+      var results = this.sites.filter(this.createFilter(query2));
+
+      // 对输入框现在的数据进行备份
+      this.iptVal3 = this.iptVal;
+      this.startlocation = startlocation;
+      this.endlocation = endlocation;
+
+      var url = "/be/autocomplete/ql?q=" + query;
       this.axios({
         method: "get",
         url: url
@@ -590,11 +690,113 @@ export default {
       var re = new RegExp(regu);
       return re.test(str);
     },
+    ConvertLangRes(langs, hastran = true) {
+      if (!langs) return;
+      var LangList = [
+        { id: 1, lang: "CHS" },
+        { id: 2, lang: "CHT" },
+        { id: 5, lang: "ENG" },
+        { id: 10, lang: "JPN" }
+      ];
+      var level = [10, 5, 1, 2];
+      var Lang = "";
+      var mainLang = "";
+      var subLang = "";
+      //经过一系列计算得出主副语言
+
+      //匹配当前语言的ID
+      var CurrLangID = LangList.find(x => {
+        return x.lang == this.$i18n.locale;
+      });
+      CurrLangID = CurrLangID ? CurrLangID.id : 1;
+
+      //匹配对应ID的内容
+      var CurrLangWord = langs.find(x => {
+        return x.l == CurrLangID;
+      });
+      if (!CurrLangWord) {
+        for (var i = 0; i < level.length; i++) {
+          CurrLangWord = langs.find(x => {
+            return x.l == level[i];
+          });
+          if (CurrLangWord) break;
+        }
+      }
+      mainLang = CurrLangWord.w;
+
+      if (hastran) {
+        /*
+      副语言匹配
+      优先级：日语，英语，简体中文，繁体中文
+      */
+        var SubLangWord = null;
+        for (var i = 0; i < level.length; i++) {
+          if (level[i] == CurrLangWord.l) continue;
+          SubLangWord = langs.find(x => {
+            return x.l == level[i];
+          });
+          if (SubLangWord) break;
+        }
+        subLang = SubLangWord ? SubLangWord.w : mainLang;
+
+        //合成语言
+        Lang = `${mainLang.replace(/\_/g, " ")}`;
+        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(
+          /\_/g,
+          " "
+        )}</span>`;
+      } else {
+        Lang = mainLang;
+      }
+      return Lang;
+    },
     handleSelect(item) {
       // 切割字符串，并在中间加入搜索到的标签拼接成新的输入框的内容
       var iptVal1 = this.iptVal3.slice(0, this.startlocation);
       var iptVal2 = this.iptVal3.slice(this.endlocation);
       var iptVal = iptVal1 + item.tag + " " + iptVal2;
+      this.iptVal = iptVal;
+      // 光标设置焦点事件
+      var endlocation = $("#ipt").focus();
+      this.infoTipMark = true;
+    },
+    open(message) {
+      this.$message({
+        message: message,
+        type: "error"
+      });
+    },
+    handleSelect2(item) {
+      /*var LangList = [
+        { id: 1, lang: "CHS" },
+        { id: 2, lang: "CHT" },
+        { id: 5, lang: "ENG" },
+        { id: 10, lang: "JPN" }
+      ];
+      var langs = item.langs;
+      //匹配当前语言的ID
+      var CurrLangID = LangList.find(x => {
+        return x.lang == this.$i18n.locale;
+      });
+      CurrLangID = CurrLangID ? CurrLangID.id : 1;
+
+      //匹配对应ID的内容
+      var CurrLangWord = langs.find(x => {
+        return x.l == CurrLangID;
+      });
+      if (!CurrLangWord) {
+        for (var i = 0; i < level.length; i++) {
+          CurrLangWord = langs.find(x => {
+            return x.l == level[i];
+          });
+          if (CurrLangWord) break;
+        }
+      }*/
+      // 切割字符串，并在中间加入搜索到的标签拼接成新的输入框的内容
+      var iptVal1 = this.iptVal3.slice(0, this.startlocation);
+      var iptVal2 = this.iptVal3.slice(this.endlocation);
+      var iptVal =
+        iptVal1 + this.ConvertLangRes(item.langs, false) + " " + iptVal2;
       this.iptVal = iptVal;
       // 光标设置焦点事件
       var endlocation = $("#ipt").focus();
@@ -727,7 +929,13 @@ export default {
       flex-shrink: 1;
       font-size: 20px;
     }
+    .loginUser-message {
+      white-space: nowrap;
+      flex-shrink: 1;
+      font-size: 20px;
+    }
     .loginUser-signup {
+      margin-left: 10px;
       white-space: nowrap;
       flex-shrink: 1;
       font-size: 20px;
@@ -736,14 +944,14 @@ export default {
 }
 .top-navbar {
   margin: 0 auto;
-  height: 70px;
-  width: calc(100% - 20px);
+  height: 80px;
+  width: calc(100% - 0px);
   display: flex !important;
   align-items: center;
   overflow: hidden;
   position: relative;
   background-color: #fff;
-  box-shadow: 0 1px 0px #a78c97;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
 }
 
 .top-navbar li a {
@@ -759,7 +967,6 @@ export default {
 .nav_left {
   width: 50%;
   text-align: left;
-  padding-left: 20px;
 }
 .nav_left ul {
   display: flex;
