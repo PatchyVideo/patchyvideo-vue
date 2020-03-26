@@ -115,10 +115,10 @@ export default {
         this.$store.commit("changeifRouter", "0");
         },
         getMyScore(){
-            // var url = this.type="vedio"?"/be/rating/get_video.do":"/be/rating/get_playlist.do ";
+            // var url = this.type="video"?"/be/rating/get_video.do":"/be/rating/get_playlist.do ";
             var data = {};
             var url = "";
-            if(this.type=="vedio"){
+            if(this.type=="video"){
                 url = "/be/rating/get_video.do";
                 data.vid = this.pid;
             }else{
@@ -147,7 +147,7 @@ export default {
         getTotalRating(){
             var data = {};
             var url = "";
-            if(this.type=="vedio"){
+            if(this.type=="video"){
                 url = "/be/rating/get_video_total.do ";
                 data.vid = this.pid;
             }else{
@@ -213,10 +213,10 @@ export default {
                 this.dialogVisible = true;
                 return;
             }
-            // var url = this.type=="vedio"?"/be/rating/video.do":"/be/rating/playlist.do ";
+            // var url = this.type=="video"?"/be/rating/video.do":"/be/rating/playlist.do ";
             var data = {};
             var url = "";
-            if(this.type=="vedio"){
+            if(this.type=="video"){
                 url = "/be/rating/video.do";
                 data.vid = this.pid;
                 data.stars = score;
