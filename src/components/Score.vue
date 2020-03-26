@@ -136,8 +136,8 @@ export default {
                     this.scoreStatus = false;
                     return;
                 }
-                // 评分过
-                this.scoreStatus = true;
+                // user_rating == -1 时也没有评分
+                this.scoreStatus = !(data.data.user_rating == -1);
                 this.data = data.data;
                 // console.log(data);
                 
@@ -294,6 +294,6 @@ export default {
     }
     .aveScore span{
         font-size: 10px;
-        color: aliceblue;
+        color:rgb(175, 175, 175);
     }
 </style>
