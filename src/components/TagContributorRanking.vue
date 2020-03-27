@@ -21,7 +21,7 @@ export default {
         this.$i18n.locale = localStorage.getItem("lang");
         return {
             loading: true,
-            timeSpan: 24 * 30,// 过去24小时
+            timeSpan: 24 * 7,// 过去一周
             displaySize: 30, // 显示前30个
             ranking: []
         }
