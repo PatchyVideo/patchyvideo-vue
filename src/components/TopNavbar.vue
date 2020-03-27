@@ -796,7 +796,7 @@ export default {
       var iptVal1 = this.iptVal3.slice(0, this.startlocation);
       var iptVal2 = this.iptVal3.slice(this.endlocation);
       var iptVal =
-        iptVal1 + this.ConvertLangRes(item.langs, false) + " " + iptVal2;
+        iptVal1 + (item.tag||this.ConvertLangRes(item.langs, false)) + " " + iptVal2;
       this.iptVal = iptVal;
       // 光标设置焦点事件
       var endlocation = $("#ipt").focus();

@@ -115,14 +115,14 @@
                             ></el-option>
                         </el-select>
                         <el-autocomplete
-                                id="ipt"
+                                id="saveTagInput"
+                                ref="saveTagInput"
                                 v-model="subAddIptValue"
                                 :fetch-suggestions="querySearchAsync"
                                 :trigger-on-focus="false"
                                 placeholder="要添加的标签内容"
                                 @select="handleSelect"
                                 class="input-new-tag"
-                                ref="saveTagInput"
                         >
                             <template slot-scope="{ item }">
                                 <div class="adviceList">
@@ -137,6 +137,7 @@
                                                      Meta: item.cat === 4,
                                                      Soundtrack: item.cat === 6
                                                    }"
+                                            v-html="item.tag||ConvertLangRes(item.langs)"
                                     >{{ item.tag }}</div>
                                     <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
                                 </div>
@@ -178,6 +179,26 @@
                     { value: "tag", label:"Tag/Text" },
                     { value: "text", label: "Text Only"}
                 ],
+                sites: [
+                    { tag: "site:acfun", cat: 6, cnt: null },
+                    { tag: "site:bilibili", cat: 6, cnt: null },
+                    { tag: "site:nicovideo", cat: 6, cnt: null },
+                    { tag: "site:twitter", cat: 6, cnt: null },
+                    { tag: "site:youtube", cat: 6, cnt: null },
+                    { tag: "site:zcool", cat: 6, cnt: null },
+                    { tag: "site:ipfs", cat: 6, cnt: null },
+                    { tag: "AND", cat: 6, cnt: null },
+                    { tag: "OR", cat: 6, cnt: null },
+                    { tag: "NOT", cat: 6, cnt: null },
+                    { tag: "date:", cat: 6, cnt: null },
+                    { tag: "tags:", cat: 6, cnt: null }
+                ],
+                iptVal3: "",
+                // 进行搜索的时候关键字的开头位置(起始位置)
+                startlocation: 0,
+                // 进行搜索的时候光标的位置(终止位置)
+                endlocation: 0,
+                // 退出登录时退出框处于加载状态的判断
 
                 subDataText:{},
                 subTextIptValue:"",
@@ -195,6 +216,7 @@
 
                 activeNames: ['1','2'],
                 subObj:[],
+
             }
         },
         created(){
@@ -213,6 +235,7 @@
 
         },
         methods: {
+
             handleChange(val) {
             },
             handleSubIptConfirm(m){
@@ -227,11 +250,133 @@
                 this.$forceUpdate();
 
             },
+                ConvertLangRes(langs, hastran = true) {
+                if (!langs) return;
+                var LangList = [
+                    { id: 1, lang: "CHS" },
+                    { id: 2, lang: "CHT" },
+                    { id: 5, lang: "ENG" },
+                    { id: 10, lang: "JPN" }
+                ];
+                var level = [10, 5, 1, 2];
+                var Lang = "";
+                var mainLang = "";
+                var subLang = "";
+                //经过一系列计算得出主副语言
+
+                //匹配当前语言的ID
+                var CurrLangID = LangList.find(x => {
+                    return x.lang == this.$i18n.locale;
+                });
+                CurrLangID = CurrLangID ? CurrLangID.id : 1;
+
+                //匹配对应ID的内容
+                var CurrLangWord = langs.find(x => {
+                    return x.l == CurrLangID;
+                });
+                if (!CurrLangWord) {
+                    for (var i = 0; i < level.length; i++) {
+                        CurrLangWord = langs.find(x => {
+                            return x.l == level[i];
+                        });
+                        if (CurrLangWord) break;
+                    }
+                }
+                mainLang = CurrLangWord.w;
+
+                if (hastran) {
+                    /*
+                  副语言匹配
+                  优先级：日语，英语，简体中文，繁体中文
+                  */
+                    var SubLangWord = null;
+                    for (var i = 0; i < level.length; i++) {
+                        if (level[i] == CurrLangWord.l) continue;
+                        SubLangWord = langs.find(x => {
+                            return x.l == level[i];
+                        });
+                        if (SubLangWord) break;
+                    }
+                    subLang = SubLangWord ? SubLangWord.w : mainLang;
+
+                    //合成语言
+                    Lang = `${mainLang.replace(/\_/g, " ")}`;
+                    Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(
+                        /\_/g,
+                        " "
+                    )}</span>`;
+                } else {
+                    Lang = mainLang;
+                }
+                return Lang;
+            },
             handleSelect(item) {
-                this.subAddIptValue = item.tag;
+
+                var iptVal1 = this.iptVal3.slice(0, this.startlocation);
+                var iptVal2 = this.iptVal3.slice(this.endlocation);
+                var iptVal =
+                    iptVal1 + this.ConvertLangRes(item.langs, false) + " " + iptVal2;
+                this.subAddIptValue = iptVal;
+                // 光标设置焦点事件
+                var endlocation = $("#saveTagInput").focus();
+              /*  this.subAddIptValue = this.ConvertLangRes(item.langs,false);*/
+            },
+            match(text) {
+                var i = text.length;
+                while (i--) {
+                    if (
+                        text.charAt(i) === " " ||
+                        text.charAt(i) === "\t" ||
+                        text.charAt(i) === "\n" ||
+                        text.charAt(i) === "\v" ||
+                        text.charAt(i) === "\f" ||
+                        text.charAt(i) === "\r" ||
+                        // 把括号转化成ascII码判断,否则谜之报错
+                        text.charAt(i).charCodeAt() === 41
+                    ) {
+                        return i + 1;
+                    } else if (text.charAt(i).charCodeAt() === 40) {
+                        if (i > 0 && text.charAt(i - 1) === "_") {
+                            continue;
+                        } else {
+                            return i + 1;
+                        }
+                    }
+                }
+                return 0;
+            },
+            isNull(str) {
+                if (str === "") return true;
+                var regu = "^[ ]+$";
+                var re = new RegExp(regu);
+                return re.test(str);
             },
             querySearchAsync(queryString, cb) {
-                var url = "/autocomplete/?q=" + queryString;
+                // 这里的get(0)是将jq对象转换为原生js对象
+                // selectionStart是获取光标当前位置
+                var endlocation = $("#saveTagInput").get(0).selectionStart;
+                // 切割输入框内的字符串，切割下光标左面的字符串
+                var query = queryString.slice(0, endlocation);
+                // 获取所需要搜索的字符串的开头在搜索框内字符串的位置
+                var startlocation = this.match(query);
+                // 切割下所需要查询的字符串
+                query = query.slice(startlocation, endlocation);
+                // 字符串为空格的话不搜索
+                if (this.isNull(query)) {
+                    cb([]);
+                    return;
+                }
+
+                // 备份参数防止出现玄学问题
+                var query2 = query;
+                // 搜索是否包含sites变量的关键字
+                var results = this.sites.filter(this.createFilter(query2));
+
+                this.iptVal3 = queryString;
+                this.startlocation = startlocation;
+                this.endlocation = endlocation;
+
+                var url = "/be/autocomplete/ql?q=" + query;
                 this.axios({
                     method: "get",
                     url: url
@@ -239,6 +384,11 @@
                     this.taglist = result.data;
                     cb(result.data);
                 });
+            },
+            createFilter(query) {
+                return sites => {
+                    return sites.tag.toLowerCase().indexOf(query.toLowerCase()) === 0;
+                };
             },
             subAdd(val,name,str){
                 this.axios({
@@ -362,7 +512,6 @@
                         "subid":m._id.$oid
                     }
                 }).then(res=>{
-                    console.log(res);
                     if(res.data.status ==="SUCCEED"){
                         this.$message({
                             message: "修改成功",
