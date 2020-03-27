@@ -48,7 +48,13 @@
 
 
 <template>
+<div>
+  <div class="tag-box">
+      <el-tag @click="(e) => onSitesChange()" style="margin: 0 5px" key="" :type="visibleSites.includes('') ? '' : 'info'">全部</el-tag>
+      <el-tag v-for="item in allSites" :key="item.id" style="margin: 0 5px" @click="(e) => onSitesChange(item.id)" :type="visibleSites.includes(item.id) ? '' : 'info'">{{item.label}}</el-tag>
+    </div>
   <div class="w main-page-background-img" v-loading="loading">
+    
     <left_navbar :msg="tags" :name="'main'"></left_navbar>
 
     <div class="content">
@@ -122,6 +128,7 @@
       ></el-pagination>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
@@ -167,7 +174,17 @@ export default {
       //这时会触发page监听的事件，重新请求搜索的数据，因为根据关键词的改变也会重新请求的数据，会造成资源浪费。
       pageMark: false,
       //是否显示隐藏视频
-      checked: false
+      checked: false,
+      visibleSites: [''],
+      allSites: [
+        {label: 'Bilibili', id: 'bili'},
+        {label: 'Nicovideo', id: 'nico'},
+        {label: 'YouTube', id: 'ytb'},
+        {label: 'Twitter', id: 'twitter'},
+        {label: 'Acfun', id: 'acfun'},
+        {label: '站酷', id: 'zcool'},
+        {label: 'IPFS', id: 'ipfs'}
+        ]
     };
   },
   created() {
@@ -228,7 +245,13 @@ export default {
       // 先使页面出于加载状态
 
       this.loading = true;
-
+      var sites = '';
+      const index = this.visibleSites.indexOf("");
+      if (index == -1) { // 用户选择了某几个网站
+        for (var i = 0; i < this.visibleSites.length; ++i) {
+          sites += 'site:' + this.visibleSites[i] + " ";
+        }
+      }
       // 请求数据
       this.axios({
         method: "post",
@@ -238,12 +261,16 @@ export default {
           page_size: count,
           order: this.couponSelected,
           hide_placeholder: !this.checked,
+          additional_constraint: sites,
           lang: localStorage.getItem("lang")
         }
       }).then(result => {
         this.maxcount = result.data.data.count;
         //取得总页数制作分页
         this.maxpage = Math.ceil(result.data.data.count / count);
+        if (this.maxpage < this.page) {
+          this.page = 1;
+        }
         this.$store.commit("getMaxPage", this.maxpage);
         this.listvideo = result.data.data.videos;
         this.tags = result.data.data.tags;
@@ -268,6 +295,13 @@ export default {
                 }*/
       this.loading = true;
       this.$store.commit("getTopNavbarSearching", this.searchKeyWord);
+      var sites = '';
+      const index = this.visibleSites.indexOf("");
+      if (index == -1) { // 用户选择了某几个网站
+        for (var i = 0; i < this.visibleSites.length; ++i) {
+          sites += 'site:' + this.visibleSites[i] + " ";
+        }
+      }
       this.axios({
         method: "post",
         url: "be/queryvideo.do",
@@ -278,6 +312,7 @@ export default {
           hide_placeholder: !this.checked,
           query: str,
           qtype: this.$route.query.qtype,
+          additional_constraint: sites,
           lang: localStorage.getItem("lang")
         }
       }).then(result => {
@@ -285,6 +320,9 @@ export default {
           this.maxcount = result.data.data.count;
           //取得总页数制作分页
           this.maxpage = Math.ceil(result.data.data.count / count);
+          if (this.maxpage < this.page) {
+            this.page = 1;
+          }
           this.listvideo = result.data.data.videos;
           this.tags = result.data.data.tags;
           this.count2 = result.data.data.videos.length;
@@ -334,6 +372,32 @@ export default {
           $("html").animate({ scrollTop: 0 }, 100);
         }
       });
+    },
+    onSitesChange(id = "") {
+      if (id == "") {
+        this.visibleSites = [''];
+      } else {
+        if (this.visibleSites.includes(id)) {
+          const index = this.visibleSites.indexOf(id);
+          this.visibleSites.splice(index, 1);
+        } else {
+          this.visibleSites.push(id);
+          const index = this.visibleSites.indexOf("");
+          if (index > -1) {
+            this.visibleSites.splice(index, 1);
+          }
+        }
+      }
+      console.log(this.visibleSites);
+      if (this.ifSearch === false) {
+        this.getListVideo(this.page, this.count);
+        return;
+      }
+      if (this.ifSearch === true) {
+        this.getSearchData(this.page, this.count, this.searchKeyWord);
+        return;
+      }
+      //this.getListVideo_VideoOnly(this.page, this.count);
     }
   },
 
@@ -445,6 +509,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.tag-box{
+        .el-tag{
+            cursor: pointer;
+        }
+    }
 .Imgcover {
   position: absolute;
   width: 100%;
@@ -563,7 +632,7 @@ export default {
 .main-page-background-img {
   background-repeat: no-repeat;
   min-height: 800px;
-  width: 100%;
+  width: 85%;
   margin-top: 20px;
 }
 
