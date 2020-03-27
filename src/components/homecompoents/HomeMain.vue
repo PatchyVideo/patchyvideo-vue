@@ -388,7 +388,9 @@ export default {
           }
         }
       }
-      console.log(this.visibleSites);
+      if (this.visibleSites.length == 0) {
+        this.visibleSites = [''];
+      }
       if (this.ifSearch === false) {
         this.getListVideo(this.page, this.count);
         return;
