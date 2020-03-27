@@ -251,6 +251,7 @@ export default {
         for (var i = 0; i < this.visibleSites.length; ++i) {
           sites += 'site:' + this.visibleSites[i] + " ";
         }
+        sites = 'ANY(' + sites + ')';
       }
       // 请求数据
       this.axios({
@@ -301,6 +302,7 @@ export default {
         for (var i = 0; i < this.visibleSites.length; ++i) {
           sites += 'site:' + this.visibleSites[i] + " ";
         }
+        sites = 'ANY(' + sites + ')';
       }
       this.axios({
         method: "post",
