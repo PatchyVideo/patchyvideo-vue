@@ -133,7 +133,7 @@
         </div>
       </el-collapse-transition>
       <!-- 视频副本 -->
-      <div class="RepostType" v-if="copy!=''">
+      <div class="RepostType">
         <el-select v-model="RepostType" :placeholder="$t('choose_repost_type')" style="width:100%">
           <el-option
             v-for="item in RepostTypes"

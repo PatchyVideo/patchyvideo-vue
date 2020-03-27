@@ -777,9 +777,10 @@
       <el-table-column
         prop="count"
         :label="$t('count')"
-        min-width="50"
+        min-width="80"
+        align="center"
       ></el-table-column>
-      <el-table-column :label="$t('category')" min-width="120">
+      <el-table-column :label="$t('category')" min-width="130" align="center">
         <template slot-scope="scope">
           <div
             class="category"
@@ -797,7 +798,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('tag')" min-width="680">
+      <el-table-column :label="$t('tag')" header-align="center"  min-width="550">
         <!-- 各种语言标签 -->
         <template slot-scope="scope">
           <span class="tagLabel" v-if="scope.row.languages.CHS">
@@ -1127,9 +1128,9 @@
         </template>
       </el-table-column>
       <!-- 操作,一般隐藏 -->
-      <el-table-column label="操作" min-width="230" fixed="right">
+      <el-table-column label="操作" min-width="200" align="center" fixed="right">
         <template slot-scope="scope">
-          <div v-if="advancedOptions">
+          <div v-if="advancedOptions" class="tabs-op">
             <el-button type="danger" round @click="removeTag(scope.$index)"
               >{{$t('delete_tag')}}</el-button
             >
@@ -1151,7 +1152,7 @@
       <el-table-column
         prop=""
         label="合并选项"
-        min-width="50"
+        min-width="80"
       >
       <template slot-scope="scope">
         <el-select @change="(arg1) => onMergeOptionChanged(scope.row, arg1)" v-model="scope.merge" placeholder="-">
@@ -1690,6 +1691,12 @@ export default {
 </script>
 
 <style scoped>
+  .tabs-op button{
+
+    margin: auto;
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
 .content2 {
   width: 100%;
   min-height: 600px;
