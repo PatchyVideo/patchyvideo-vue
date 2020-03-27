@@ -164,6 +164,9 @@
           <router-link to="/ipfs">{{$t('navbar.ipfs')}}</router-link>
         </li>
         <li>
+          <router-link to="/logscontributes">历史和贡献</router-link>
+        </li>
+        <li>
           <a href="https://github.com/zyddnys/PatchyVideo/issues">{{$t('navbar.bug_report')}}</a>
         </li>
         <li>
