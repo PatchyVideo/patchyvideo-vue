@@ -898,7 +898,7 @@ export default {
     buildUrlMatchers() {
       var that = this;
       this.URL_MATCHERS[
-        "(https:\\/\\/|http:\\/\\/)?(www\\.)?bilibili\\.com\\/video\\/av[\\d]+"
+        "(https:\\/\\/|http:\\/\\/)?(www\\.)?bilibili\\.com\\/video\\/([aA][vV][\\d]+|BV[a-zA-Z0-9]+)+"
       ] = function(match) {
         return [match, "video"];
       };
@@ -926,6 +926,9 @@ export default {
         return ["https://www.acfun.cn/v/" + short_link, "video"];
       };
       this.URL_MATCHERS["av[\\d]+"] = function(short_link) {
+        return ["https://www.bilibili.com/video/" + short_link, "video"];
+      };
+      this.URL_MATCHERS["BV[a-zA-Z0-9]+"] = function(short_link) {
         return ["https://www.bilibili.com/video/" + short_link, "video"];
       };
       this.URL_MATCHERS["(s|n)m[\\d]+"] = function(short_link) {
@@ -1151,7 +1154,7 @@ export default {
       return vs;
     }
   },
-  components: { left_navbar, topnavbar, Footer, Comments, Score}
+  components: { left_navbar, topnavbar, Footer, Comments, Score }
 };
 </script>
 
