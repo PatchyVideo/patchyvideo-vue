@@ -83,18 +83,17 @@ export default {
 		setPara(){
 			this.dialogVisible = false
 			console.log(this.data[this.targetPara]);
-			// TODO:危险系数太高，暂不测试
-/* 			this.axios({
+ 			this.axios({
 				method: "post",
 				url: "/be/config/setconfig.do" ,
 				data: {
-					attr:targetPara,
-					data:this.data[targetPara]
+					attr:this.targetPara,
+					data:this.data[this.targetPara]
 				}
 			}).then(ret => {
 				this.data = ret.data.data;
 				console.log(ret.data.data);
-			})*/
+			})
 		},
 		handleClose(done) {
         this.$confirm('确认关闭？')
