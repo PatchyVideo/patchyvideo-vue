@@ -266,7 +266,7 @@ export default {
           lang: localStorage.getItem("lang")
         }
       }).then(result => {
-        this.maxcount = result.data.data.count;
+          this.maxcount = result.data.data.count;
         //取得总页数制作分页
         this.maxpage = Math.ceil(result.data.data.count / count);
         if (this.maxpage < this.page) {
