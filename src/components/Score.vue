@@ -70,9 +70,9 @@
 
 
 <script>
-import star_hollow from "../assets/star/star_hollow.png"
-import star_half from "../assets/star/star_half.png"
-import star_full from "../assets/star/star_full.png"
+import star_hollow from "../static/img/star_hollow.png"
+import star_half from "../static/img/star_half.png"
+import star_full from "../static/img/star_full.png"
 export default {
     props: {
         type: "",
@@ -100,7 +100,7 @@ export default {
     created(){
         this.isLogin() ? this.getMyScore():this.getTotalRating();
     },
-/*     watch:{
+    watch:{
         pid:function (val) {             
             this.getMyScore();
         },
@@ -108,7 +108,7 @@ export default {
             
         }
 
-    }, */
+    },
     methods:{
         // 登录跳转
         login() {
