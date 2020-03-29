@@ -18,6 +18,7 @@ const superadmin = () => import("../views/SuperAdmin.vue");
 const ipfs = () => import("../views/IPFS.vue");
 const ipfs_player = () => import("../views/IPFS_player.vue");
 const Messages = () => import("../views/Messages.vue");
+const ContributionLogs = () => import("../views/ContributionLogs.vue");
 
 Vue.use(VueRouter);
 
@@ -139,6 +140,10 @@ const routes = [
   {
     path: "/messages",
     component: Messages
+  },
+  {
+    path: "/logscontributes",
+    component: ContributionLogs
   }
 ];
 

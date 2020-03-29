@@ -423,7 +423,9 @@ export default {
           }
         }
       }
-      console.log(this.visibleSubs);
+      if (this.visibleSubs.length == 0) {
+        this.visibleSubs = [''];
+      }
       this.getListVideo_VideoOnly(this.page, this.count);
     }
   },
