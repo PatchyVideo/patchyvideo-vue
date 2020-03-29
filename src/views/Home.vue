@@ -54,9 +54,11 @@
     <topnavbar />
 
     <!-- home页面的正文 -->
-    <el-tabs type="border-card" v-model="activeName"@tab-click="handleClick">
+    <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
       <el-tab-pane :label="labelInfo[0]" name="first"  >
-        <homemain v-if="activeName === 'first'"></homemain>
+        <i @click="changeLine" :class="{'el-icon-s-grid':flag,'el-icon-menu':!flag}"></i>
+        <homemain v-if="activeName === 'first' && !flag"></homemain>
+        <girdhomemain v-if="activeName === 'first' && flag"></girdhomemain>
       </el-tab-pane>
       <el-tab-pane :label="labelInfo[1]"  name="second" v-if="isLogin()">
         <subscribed v-if="activeName === 'second'"></subscribed>
@@ -72,6 +74,7 @@
   import left_navbar from "../components/LeftNavbar.vue";
   import subscribed from  "../components/homecompoents/Subscribed.vue";
   import homemain from  "../components/homecompoents/HomeMain.vue";
+  import girdhomemain from  "../components/homecompoents/GirdHomeMain.vue";
   import Footer from "../components/Footer.vue";
   import { copyToClipboardText } from "../static/js/generic";
   export default {
@@ -79,13 +82,15 @@
       this.$i18n.locale = localStorage.getItem("lang");
       return {
         activeName: "first",
+        // true表示网格视图，false表示列表视图
+        flag:false,
         label:["主页"],
         labelInfo:["主页","订阅"]
 
       };
     },
     created() {
-
+        this.flag = !!localStorage.getItem("homeVideoDisplayStatus");
     },
     computed: {},
     mounted() {
@@ -105,6 +110,12 @@
       },
       handleClick(e){
         console.log(this.activeName);
+      },
+      // 切换网格/列表视图
+      changeLine(){
+        //   1表示网格，0表示列表
+          localStorage.setItem("homeVideoDisplayStatus", !this.flag+0);
+          this.flag = !this.flag;
       }
     },
     watch:{
@@ -112,7 +123,7 @@
         this.activeName ="first";
       }
     },
-    components: { left_navbar, topnavbar, Footer,subscribed,homemain }
+    components: { left_navbar, topnavbar, Footer,subscribed,homemain,girdhomemain }
   };
 </script>
 
@@ -136,5 +147,11 @@
 .blacklist_prompt {
   font-size: 14px;
   color: #606266;
+}
+i{
+    position: absolute;
+    font-size: 30px;
+    top: 62px;
+    right: 80px;
 }
 </style>
