@@ -65,10 +65,7 @@
     <el-form ref="list" :model="list" label-width="auto" :rules="rules">
       <!-- 标题 -->
       <el-form-item prop="title">
-        <el-input
-          v-model="list.title"
-          :placeholder="$t('this_is_playlist_title')"
-        ></el-input>
+        <el-input v-model="list.title" :placeholder="$t('this_is_playlist_title')"></el-input>
       </el-form-item>
       <!-- 简介 -->
       <el-form-item prop="desc">
@@ -80,15 +77,16 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-checkbox v-model="list.private">{{
+        <el-checkbox v-model="list.private">
+          {{
           $t("set_as_private_playlist")
-        }}</el-checkbox>
+          }}
+        </el-checkbox>
         <a
           href="https://patchyvideo.wiki/Playlist"
           target="_blank"
           style="float:right"
-          >{{ $t("showListRules") }}</a
-        >
+        >{{ $t("showListRules") }}</a>
       </el-form-item>
       <!-- 封面上传,暂时用不上 -->
       <el-form-item v-if="false">
@@ -104,9 +102,11 @@
         </el-upload>-->
       </el-form-item>
       <el-form-item class="createList">
-        <el-button type="primary" @click="onSubmit" style="width:80%">{{
+        <el-button type="primary" @click="onSubmit" style="width:80%">
+          {{
           $t("create_now")
-        }}</el-button>
+          }}
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -114,6 +114,13 @@
 
 <script>
 export default {
+  props: {
+    // 创建列表完成后是否需要跳转
+    needGo: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -187,7 +194,12 @@ export default {
             // 提交成功
             else {
               this.open2(this.$t("create_succeed"));
-              this.$router.push({ path: "/lists" });
+              this.list.title = "";
+              this.list.desc = "";
+              this.list.cover = "";
+              this.list.private = false;
+              if (this.needGo) this.$router.push({ path: "/lists" });
+              else this.$emit("closeMe", true);
             }
           });
         } else {

@@ -173,6 +173,18 @@
 
     <!--添加到我的播放列表的弹出框 -->
     <el-dialog title="添加到列表" :visible.sync="addToList" width="30%">
+      <!-- 新建列表的嵌套弹出框 -->
+      <el-dialog width="60%" title="新建列表:" :visible.sync="newListDialog" append-to-body>
+        <createNewList
+          @closeMe="$event => {this.newListDialog = false}"
+          :needGo="!newListDialog"
+          style="margin:0 auto"
+        ></createNewList>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="newListDialog = false">取 消</el-button>
+        </div>
+      </el-dialog>
+
       <div v-loading="loadingList">
         <el-input placeholder="搜索我的列表..." v-model="myListQuery" @keyup.enter.native="getMyList()">
           <el-button slot="append" icon="el-icon-search" @click="getMyList()"></el-button>
@@ -201,6 +213,7 @@
           :total="maxcount"
           :page-size="10"
         ></el-pagination>
+        <el-button class="createNewList" @click="newListDialog=true" type="primary">新建列表</el-button>
       </div>
     </el-dialog>
 
@@ -279,7 +292,7 @@
 
         <!-- 评分区 -->
         <div>
-          <Score type="vedio"></Score>
+          <Score type="video"></Score>
         </div>
 
         <!-- 副本列表 -->
@@ -437,6 +450,7 @@ import left_navbar from "../components/LeftNavbar.vue";
 import Footer from "../components/Footer.vue";
 import Comments from "../components/comments.vue";
 import Score from "../components/Score.vue";
+import createNewList from "../components/CreateNewList";
 import { copyToClipboardText } from "../static/js/generic";
 export default {
   data() {
@@ -495,6 +509,8 @@ export default {
       changeRepostType: false,
       // 添加到我的播放列表的弹出框
       addToList: false,
+      // 新建播放列表的弹出框
+      newListDialog: false,
       // 获取我的播放列表的时候的加载状态
       loadingList: false,
       // 本页面的视频的等级
@@ -898,7 +914,7 @@ export default {
     buildUrlMatchers() {
       var that = this;
       this.URL_MATCHERS[
-        "(https:\\/\\/|http:\\/\\/)?(www\\.)?bilibili\\.com\\/video\\/av[\\d]+"
+        "(https:\\/\\/|http:\\/\\/)?(www\\.)?bilibili\\.com\\/video\\/([aA][vV][\\d]+|BV[a-zA-Z0-9]+)+"
       ] = function(match) {
         return [match, "video"];
       };
@@ -926,6 +942,9 @@ export default {
         return ["https://www.acfun.cn/v/" + short_link, "video"];
       };
       this.URL_MATCHERS["av[\\d]+"] = function(short_link) {
+        return ["https://www.bilibili.com/video/" + short_link, "video"];
+      };
+      this.URL_MATCHERS["BV[a-zA-Z0-9]+"] = function(short_link) {
         return ["https://www.bilibili.com/video/" + short_link, "video"];
       };
       this.URL_MATCHERS["(s|n)m[\\d]+"] = function(short_link) {
@@ -1151,7 +1170,12 @@ export default {
       return vs;
     }
   },
-  components: { left_navbar, topnavbar, Footer, Comments, Score}
+  watch: {
+    newListDialog() {
+      if (!this.newListDialog) this.getMyList();
+    }
+  },
+  components: { left_navbar, topnavbar, Footer, Comments, Score, createNewList }
 };
 </script>
 
@@ -1293,6 +1317,10 @@ export default {
   color: rgba(0, 0, 0, 0.568);
   flex: 1;
   text-align: right;
+}
+.createNewList {
+  width: 100%;
+  margin-top: 10px;
 }
 
 .el-dropdown-link {
