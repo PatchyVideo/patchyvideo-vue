@@ -37,7 +37,7 @@
     <!-- <topnavbar />
     -->
     <!-- home页面的正文 -->
-    <div>
+    <div class="tag-box">
       <el-tag @click="(e) => onSubsChange()" style="margin: 0 5px" key="" :type="visibleSubs.includes('') ? '' : 'info'">全部</el-tag>
       <el-tag v-for="item in allSubs" :key="item._id.$oid" style="margin: 0 5px" @click="(e) => onSubsChange(item._id.$oid)" :type="visibleSubs.includes(item._id.$oid) ? '' : 'info'">{{item.name || item.qs}}</el-tag>
     </div>
@@ -423,7 +423,9 @@ export default {
           }
         }
       }
-      console.log(this.visibleSubs);
+      if (this.visibleSubs.length == 0) {
+        this.visibleSubs = [''];
+      }
       this.getListVideo_VideoOnly(this.page, this.count);
     }
   },
@@ -532,6 +534,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+    .tag-box{
+        .el-tag{
+            cursor: pointer;
+        }
+    }
 .Imgcover {
   position: absolute;
   width: 100%;

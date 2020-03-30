@@ -65,7 +65,7 @@
 
                 <el-button style=" padding: 3px 0;color: #f64c59;"
                            type="text"
-                           @click.native="changeBlackList(defaultBlackData)"
+                           @click.native="changeBlackList('default')"
                 >{{$t('use')}}</el-button>-->
             </el-card>
 

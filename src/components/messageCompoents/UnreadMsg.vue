@@ -59,7 +59,9 @@
               </router-link>
               {{ $t("replyTo") }}
             </div>
-            <div v-linkified>{{ item.content }}</div>
+            <div v-linkified>
+              <span v-html="parseComment(item.content)"></span>
+            </div>
 
             <span class="commentDate">
               {{
@@ -74,6 +76,7 @@
 </template>
 
 <script>
+import { ParseComment } from "../../static/js/comment";
 export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -187,6 +190,9 @@ export default {
           this.loading = false;
           console.log(error);
         });
+    },
+    parseComment(content) {
+      return ParseComment(content);
     },
     // 跳转至视频详情/列表详情页面
     toDetail(type, id) {

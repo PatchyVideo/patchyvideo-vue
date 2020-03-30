@@ -48,78 +48,95 @@
 
 
 <template>
-  <div class="w main-page-background-img" v-loading="loading">
-    <left_navbar :msg="tags" :name="'main'"></left_navbar>
+  <div>
+    <div class="tag-box">
+      <el-tag
+        @click="(e) => onSitesChange()"
+        style="margin: 0 5px"
+        key
+        :type="visibleSites.includes('') ? '' : 'info'"
+      >全部</el-tag>
+      <el-tag
+        v-for="item in allSites"
+        :key="item.id"
+        style="margin: 0 5px"
+        @click="(e) => onSitesChange(item.id)"
+        :type="visibleSites.includes(item.id) ? '' : 'info'"
+      >{{item.label}}</el-tag>
+    </div>
+    <div class="w main-page-background-img" v-loading="loading">
+      <left_navbar :msg="tags" :name="'main'"></left_navbar>
 
-    <div class="content">
-      <!-- 播放列表的抬头 -->
-      <div class="video-list-header">
-        <p v-if="maxcount">{{$t('page_count', {count: count2, maxcount: maxcount})}}</p>
-        <p v-else>{{$t('no_result')}}</p>
-        <el-checkbox class="show_deleted" v-model="checked">{{$t('show_deleted')}}</el-checkbox>
-        <p class="blacklist_prompt">{{$t('blacklist_prompt')}}</p>
+      <div class="content">
+        <!-- 播放列表的抬头 -->
+        <div class="video-list-header">
+          <p v-if="maxcount">{{$t('page_count', {count: count2, maxcount: maxcount})}}</p>
+          <p v-else>{{$t('no_result')}}</p>
+          <el-checkbox class="show_deleted" v-model="checked">{{$t('show_deleted')}}</el-checkbox>
+          <p class="blacklist_prompt">{{$t('blacklist_prompt')}}</p>
+        </div>
+        <el-select id="select-order" v-model="couponSelected">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+
+        <!-- 播放列表正文 -->
+        <ul>
+          <li class="list-item" v-for="(item) in listvideo" :key="item._id.$oid">
+            <router-link
+              target="_blank"
+              :to="{ path: '/video', query: { id: item._id.$oid } }"
+              tag="a"
+            >
+              <div class="video-thumbnail">
+                <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
+                <div class="Imgcover"></div>
+              </div>
+            </router-link>
+
+            <div class="video-detail">
+              <h4>
+                <router-link
+                  target="_blank"
+                  :to="{ path: '/video', query: { id: item._id.$oid } }"
+                  tag="a"
+                >{{ item.item.title }}</router-link>
+              </h4>
+              <p>{{ item.item.desc }}</p>
+              <div>
+                <img
+                  :src="require('../../static/img/' + item.item.site + '.png')"
+                  width="16px"
+                  style="margin-right:2px"
+                />
+                <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
+                <i
+                  @click="copyVideoLink(item.item.url)"
+                  class="fa fa-copy fa-lg"
+                  style="margin-left:2px"
+                ></i>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <!-- ElementUI自带的分页器 -->
+        <el-pagination
+          background
+          class="page-selector"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          layout="jumper, prev, pager, next, sizes"
+          :current-page="this.page"
+          :total="this.maxcount"
+          :page-size="20"
+          :page-sizes="[10, 20, 30, 40]"
+        ></el-pagination>
       </div>
-      <el-select id="select-order" v-model="couponSelected">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-
-      <!-- 播放列表正文 -->
-      <ul>
-        <li class="list-item" v-for="(item) in listvideo" :key="item._id.$oid">
-          <router-link
-            target="_blank"
-            :to="{ path: '/video', query: { id: item._id.$oid } }"
-            tag="a"
-          >
-            <div class="video-thumbnail">
-              <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
-              <div class="Imgcover"></div>
-            </div>
-          </router-link>
-
-          <div class="video-detail">
-            <h4>
-              <router-link
-                target="_blank"
-                :to="{ path: '/video', query: { id: item._id.$oid } }"
-                tag="a"
-              >{{ item.item.title }}</router-link>
-            </h4>
-            <p>{{ item.item.desc }}</p>
-            <div>
-              <img
-                :src="require('../../static/img/' + item.item.site + '.png')"
-                width="16px"
-                style="margin-right:2px"
-              />
-              <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
-              <i
-                @click="copyVideoLink(item.item.url)"
-                class="fa fa-copy fa-lg"
-                style="margin-left:2px"
-              ></i>
-            </div>
-          </div>
-        </li>
-      </ul>
-
-      <!-- ElementUI自带的分页器 -->
-      <el-pagination
-        background
-        class="page-selector"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        layout="jumper, prev, pager, next, sizes"
-        :current-page="this.page"
-        :total="this.maxcount"
-        :page-size="20"
-        :page-sizes="[10, 20, 30, 40]"
-      ></el-pagination>
     </div>
   </div>
 </template>
@@ -167,7 +184,17 @@ export default {
       //这时会触发page监听的事件，重新请求搜索的数据，因为根据关键词的改变也会重新请求的数据，会造成资源浪费。
       pageMark: false,
       //是否显示隐藏视频
-      checked: false
+      checked: false,
+      visibleSites: [""],
+      allSites: [
+        { label: "Bilibili", id: "bili" },
+        { label: "Nicovideo", id: "nico" },
+        { label: "YouTube", id: "ytb" },
+        { label: "Twitter", id: "twitter" },
+        { label: "Acfun", id: "acfun" },
+        { label: "站酷", id: "zcool" },
+        { label: "IPFS", id: "ipfs" }
+      ]
     };
   },
   created() {
@@ -228,7 +255,15 @@ export default {
       // 先使页面出于加载状态
 
       this.loading = true;
-
+      var sites = "";
+      const index = this.visibleSites.indexOf("");
+      if (index == -1) {
+        // 用户选择了某几个网站
+        for (var i = 0; i < this.visibleSites.length; ++i) {
+          sites += "site:" + this.visibleSites[i] + " ";
+        }
+        sites = "ANY(" + sites + ")";
+      }
       // 请求数据
       this.axios({
         method: "post",
@@ -238,15 +273,36 @@ export default {
           page_size: count,
           order: this.couponSelected,
           hide_placeholder: !this.checked,
+          additional_constraint: sites,
           lang: localStorage.getItem("lang")
         }
       }).then(result => {
-        this.maxcount = result.data.data.count;
+          this.maxcount = result.data.data.count;
         //取得总页数制作分页
         this.maxpage = Math.ceil(result.data.data.count / count);
+        if (this.maxpage < this.page) {
+          this.page = 1;
+        }
         this.$store.commit("getMaxPage", this.maxpage);
         this.listvideo = result.data.data.videos;
-        this.tags = result.data.data.tags;
+
+        /* 排序处理 */
+
+        // 获得热门标签
+        var tags = result.data.data.tags;
+        var tagswithcount = result.data.data.tag_pops;
+        // 排序热门标签
+        var ntags = {};
+        tagswithcount = Object.keys(tagswithcount)
+          .sort((a, b) => tagswithcount[b] - tagswithcount[a])
+          .forEach(key => {
+            ntags[key] = tags[key];
+          });
+
+        this.tags = ntags;
+        /* 处理结束 */
+
+        //this.tags = result.data.data.tags;
         this.count2 = result.data.data.videos.length;
 
         // 加载结束,加载动画消失
@@ -268,6 +324,15 @@ export default {
                 }*/
       this.loading = true;
       this.$store.commit("getTopNavbarSearching", this.searchKeyWord);
+      var sites = "";
+      const index = this.visibleSites.indexOf("");
+      if (index == -1) {
+        // 用户选择了某几个网站
+        for (var i = 0; i < this.visibleSites.length; ++i) {
+          sites += "site:" + this.visibleSites[i] + " ";
+        }
+        sites = "ANY(" + sites + ")";
+      }
       this.axios({
         method: "post",
         url: "be/queryvideo.do",
@@ -278,6 +343,7 @@ export default {
           hide_placeholder: !this.checked,
           query: str,
           qtype: this.$route.query.qtype,
+          additional_constraint: sites,
           lang: localStorage.getItem("lang")
         }
       }).then(result => {
@@ -285,6 +351,9 @@ export default {
           this.maxcount = result.data.data.count;
           //取得总页数制作分页
           this.maxpage = Math.ceil(result.data.data.count / count);
+          if (this.maxpage < this.page) {
+            this.page = 1;
+          }
           this.listvideo = result.data.data.videos;
           this.tags = result.data.data.tags;
           this.count2 = result.data.data.videos.length;
@@ -334,6 +403,34 @@ export default {
           $("html").animate({ scrollTop: 0 }, 100);
         }
       });
+    },
+    onSitesChange(id = "") {
+      if (id == "") {
+        this.visibleSites = [""];
+      } else {
+        if (this.visibleSites.includes(id)) {
+          const index = this.visibleSites.indexOf(id);
+          this.visibleSites.splice(index, 1);
+        } else {
+          this.visibleSites.push(id);
+          const index = this.visibleSites.indexOf("");
+          if (index > -1) {
+            this.visibleSites.splice(index, 1);
+          }
+        }
+      }
+      if (this.visibleSites.length == 0) {
+        this.visibleSites = [""];
+      }
+      if (this.ifSearch === false) {
+        this.getListVideo(this.page, this.count);
+        return;
+      }
+      if (this.ifSearch === true) {
+        this.getSearchData(this.page, this.count, this.searchKeyWord);
+        return;
+      }
+      //this.getListVideo_VideoOnly(this.page, this.count);
     }
   },
 
@@ -445,6 +542,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.tag-box {
+  .el-tag {
+    cursor: pointer;
+  }
+}
 .Imgcover {
   position: absolute;
   width: 100%;
@@ -563,7 +665,7 @@ export default {
 .main-page-background-img {
   background-repeat: no-repeat;
   min-height: 800px;
-  width: 100%;
+  width: 85%;
   margin-top: 20px;
 }
 
