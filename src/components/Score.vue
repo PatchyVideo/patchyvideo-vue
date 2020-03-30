@@ -70,9 +70,9 @@
 
 
 <script>
-import star_hollow from "../assets/star/star_hollow.png"
-import star_half from "../assets/star/star_half.png"
-import star_full from "../assets/star/star_full.png"
+import star_hollow from "../static/img/star_hollow.png"
+import star_half from "../static/img/star_half.png"
+import star_full from "../static/img/star_full.png"
 export default {
     props: {
         type: "",
@@ -100,7 +100,7 @@ export default {
     created(){
         this.isLogin() ? this.getMyScore():this.getTotalRating();
     },
-/*     watch:{
+    watch:{
         pid:function (val) {             
             this.getMyScore();
         },
@@ -108,17 +108,17 @@ export default {
             
         }
 
-    }, */
+    },
     methods:{
         // 登录跳转
         login() {
         this.$store.commit("changeifRouter", "0");
         },
         getMyScore(){
-            // var url = this.type="vedio"?"/be/rating/get_video.do":"/be/rating/get_playlist.do ";
+            // var url = this.type="video"?"/be/rating/get_video.do":"/be/rating/get_playlist.do ";
             var data = {};
             var url = "";
-            if(this.type=="vedio"){
+            if(this.type=="video"){
                 url = "/be/rating/get_video.do";
                 data.vid = this.pid;
             }else{
@@ -136,8 +136,8 @@ export default {
                     this.scoreStatus = false;
                     return;
                 }
-                // 评分过
-                this.scoreStatus = true;
+                // user_rating == -1 时也没有评分
+                this.scoreStatus = !(data.data.user_rating == -1);
                 this.data = data.data;
                 // console.log(data);
                 
@@ -147,7 +147,7 @@ export default {
         getTotalRating(){
             var data = {};
             var url = "";
-            if(this.type=="vedio"){
+            if(this.type=="video"){
                 url = "/be/rating/get_video_total.do ";
                 data.vid = this.pid;
             }else{
@@ -213,10 +213,10 @@ export default {
                 this.dialogVisible = true;
                 return;
             }
-            // var url = this.type=="vedio"?"/be/rating/video.do":"/be/rating/playlist.do ";
+            // var url = this.type=="video"?"/be/rating/video.do":"/be/rating/playlist.do ";
             var data = {};
             var url = "";
-            if(this.type=="vedio"){
+            if(this.type=="video"){
                 url = "/be/rating/video.do";
                 data.vid = this.pid;
                 data.stars = score;
@@ -294,6 +294,6 @@ export default {
     }
     .aveScore span{
         font-size: 10px;
-        color: aliceblue;
+        color:rgb(175, 175, 175);
     }
 </style>
