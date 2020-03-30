@@ -59,7 +59,9 @@
               </router-link>
               {{ $t("replyTo") }}
             </div>
-            <div v-linkified>{{ item.content }}</div>
+            <div v-linkified>
+              <span v-html="parseComment(item.content)"></span>
+            </div>
 
             <span class="commentDate">
               {{
@@ -74,6 +76,7 @@
 </template>
 
 <script>
+import { ParseComment } from "../../static/js/comment";
 export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -181,6 +184,29 @@ export default {
           console.log(error);
         });
     },
+    parseComment(content) {
+      return ParseComment(content);
+    },
+    /*parseComment(content) {
+      var match = content.match(/((?<=\[\[)[^\(\]\]]+)/g);
+      match.map((v, i) => {
+        var kv = v.split(":");
+        if (kv.length <= 1) return;
+        var action = kv[0];
+        var value = kv[1];
+        var newvalue = "";
+        switch (action) {
+          case "表情":
+            newvalue = `<img src='${ParseFace(value)}' />`;
+            break;
+          default:
+            newvalue = v;
+            break;
+        }
+        content = content.replace(`[[${v}]]`, newvalue);
+      });
+      return content;
+    },*/
     // 跳转至视频详情/列表详情页面
     toDetail(type, id) {
       if (event.target.tagName == "IMG" || event.target.tagName == "A") return;
