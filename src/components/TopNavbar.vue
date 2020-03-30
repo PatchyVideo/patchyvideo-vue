@@ -164,6 +164,9 @@
           <router-link to="/ipfs">{{$t('navbar.ipfs')}}</router-link>
         </li>
         <li>
+          <router-link to="/logscontributes">历史和贡献</router-link>
+        </li>
+        <li>
           <a href="https://github.com/zyddnys/PatchyVideo/issues">{{$t('navbar.bug_report')}}</a>
         </li>
         <li>
@@ -1028,7 +1031,12 @@ export default {
 .Soundtrack {
   color: #ff7792;
 }
+@media only screen and (max-width: 1555px) {
 
+  .nav_left li a{
+   font-size: 15px;
+  }
+}
 /* 使用css3 媒体查询功能进行的排版调整 */
 @media only screen and (max-width: 1156px) {
   .nav_left li {
