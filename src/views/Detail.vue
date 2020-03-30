@@ -292,7 +292,7 @@
 
         <!-- 评分区 -->
         <div>
-          <Score type="vedio"></Score>
+          <Score type="video"></Score>
         </div>
 
         <!-- 副本列表 -->
