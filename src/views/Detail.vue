@@ -633,6 +633,9 @@ export default {
   },
   mounted() {
     this.buildUrlMatchers();
+
+    // 防止B站侦测ferrer导致视频链接跳转出现404
+    $("head").append('<meta name="referrer" content="never">');
   },
   methods: {
     open1(message) {
