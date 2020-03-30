@@ -46,8 +46,6 @@
 }
 </i18n>
 
-
-
 <template>
   <div>
     <div class="tag-box">
