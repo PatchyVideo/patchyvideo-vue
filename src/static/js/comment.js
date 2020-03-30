@@ -87,7 +87,8 @@ function ParseComment(content) {
             switch (action) {
                 case "表情":
                     var face = ParseFace(value);
-                    newvalue = (face) ? `<img src='${face}' />` : v;
+              /*      newvalue = (face) ? `<img src='${face}' />` : v;*/
+                    newvalue = face;
                     break;
                 case "emoji":
                     var emoji = ParseEmoji(value);
@@ -103,4 +104,4 @@ function ParseComment(content) {
     return content;
 }
 
-export { ParseFace, ParseComment };
+export { ParseFace, ParseComment,faceslist };

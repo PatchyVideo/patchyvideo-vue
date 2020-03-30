@@ -102,6 +102,28 @@
 
     <!-- 发表评论 -->
     <div class="comment" v-if="isLogin">
+       <!--表情区域-->
+      <el-popover
+              placement="top"
+              trigger="manual"
+              content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+              v-model="visible">
+        <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3"
+               style="border-collapse:collapse;">
+          <tr v-for="(p,index) in emojiData" >
+            <td v-for="(m,n) in p" border="1"  style="border-collapse:collapse;">
+              <a @click="addEmojiToComments(m)" v-for="(z,x) in m">
+                <img :src="z" alt="">
+              </a>
+            </td>
+          </tr>
+        </table>
+        <el-button class="emoji" type="success" icon="el-icon-magic-stick" slot="reference"
+                   style="width: 100px" @click="visible = !visible">
+          emoji
+        </el-button>
+      </el-popover>
+
       <el-input
         type="textarea"
         :autosize="{ minRows: 4 }"
@@ -329,6 +351,7 @@
 
 <script>
 import { ParseComment } from "../static/js/comment";
+import { faceslist } from "../static/js/comment";
 export default {
   props: {
     sid: { type: String }
@@ -368,7 +391,13 @@ export default {
       // 被管理对象的cid
       AuthorizedCid: "",
       // 管理页面是否加载的标志
-      Authorizing: false
+      Authorizing: false,
+      // emoji弹出标志
+      visible: false,
+      // emoji数据
+      emojiData:[],
+      // emoji行数
+      emojiRow:0
     };
   },
   computed: {
@@ -452,9 +481,37 @@ export default {
     }
   },
   created() {
+    this.getEmoji();
     this.isAuthorized();
   },
   methods: {
+    getEmoji(){
+      //规定一排多少个
+      let array=[];
+      const MAXROW =10;
+      //读取emoji数据,转换成[{"呵呵":"src"},{}]格式
+      for(let i in faceslist){
+        let obj ={};
+        obj[i] = ParseComment(`[[表情:${i}]]`);
+        array.push(obj);
+      }
+      //计算最后一排个数
+      this.emojiRow =Math.ceil(array.length/MAXROW);
+      /*      var  lastRowCount= array.length%10;*/
+      let c=[];
+      //转换成[[{"呵呵":"src"},{}],[]]格式
+      for(let i=0;i<this.emojiRow;++i){
+        c[i]=[];
+        for(let m =i*MAXROW;m<(i*MAXROW)+MAXROW;++m ){
+          c[i].push(array[m]);
+        }
+      }
+      this.emojiData =c;
+    },
+    addEmojiToComments(obj){
+      this.comment= this.comment +`[[${Object.keys(obj)}]]`;
+      this.visible = false;
+    },
     // 获取评论
     getcomments() {
       this.loadingcomment = true;
@@ -725,7 +782,38 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="less">
+  .comment{
+    text-align: center !important;
+    .emoji{
+
+    }
+  }
+
+  tr{
+    td{
+      border-collapse: collapse;
+      background-color: rgb(255, 255, 255);
+      vertical-align: middle;
+      border: 1px solid  #e3e3e3;
+      width: 54px;
+      height: 54px;
+      a{
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        img{
+          position: absolute;
+          top:50%;
+          left: 50%;
+          transform: translate(-50%,-50%);
+          width: 30px;
+          height: 30px;
+        }
+      }
+    }
+  }
 .new_top {
   padding-bottom: 10px;
   border-bottom: 3px solid #21c6ef;

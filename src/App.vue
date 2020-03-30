@@ -30,7 +30,7 @@ export default {
 </script>
 
 <style>
-  .el-popover{
+/*  .el-popover{
     width: 70%;
     max-width: 70%;
     max-height: 90%;
@@ -41,7 +41,7 @@ export default {
 
     transform: translate(10%,-50%);
     margin: 0px 20px !important;
-  }
+  }*/
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
