@@ -49,8 +49,24 @@
 
 
 <template>
-  <div class="w main-page-background-img" v-loading="loading">
-    <left_navbar :msg="tags" :name="'main'"></left_navbar>
+  <div>
+    <div class="tag-box">
+      <el-tag
+        @click="(e) => onSitesChange()"
+        style="margin: 0 5px"
+        key
+        :type="visibleSites.includes('') ? '' : 'info'"
+      >全部</el-tag>
+      <el-tag
+        v-for="item in allSites"
+        :key="item.id"
+        style="margin: 0 5px"
+        @click="(e) => onSitesChange(item.id)"
+        :type="visibleSites.includes(item.id) ? '' : 'info'"
+      >{{item.label}}</el-tag>
+    </div>
+    <div class="w main-page-background-img" v-loading="loading">
+      <left_navbar :msg="tags" :name="'main'"></left_navbar>
 
     <div class="content">
       <!-- 播放列表的抬头 -->
@@ -70,7 +86,6 @@
       </el-select>
 
       <!-- 播放列表正文 -->
-      <!-- BM网格单元 html -->
       <ul>
         <li class="list-item" v-for="(item) in listvideo" :key="item._id.$oid">
           <router-link
@@ -129,6 +144,7 @@
       ></el-pagination>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
@@ -173,7 +189,17 @@ export default {
             //这时会触发page监听的事件，重新请求搜索的数据，因为根据关键词的改变也会重新请求的数据，会造成资源浪费。
             pageMark: false,
             //是否显示隐藏视频
-            checked: false
+            checked: false,
+            visibleSites: [""],
+            allSites: [
+                { label: "Bilibili", id: "bili" },
+                { label: "Nicovideo", id: "nico" },
+                { label: "YouTube", id: "ytb" },
+                { label: "Twitter", id: "twitter" },
+                { label: "Acfun", id: "acfun" },
+                { label: "站酷", id: "zcool" },
+                { label: "IPFS", id: "ipfs" }
+            ]
         };
     },
     created() {
@@ -262,7 +288,15 @@ export default {
             // 先使页面出于加载状态
 
             this.loading = true;
-
+            var sites = "";
+            const index = this.visibleSites.indexOf("");
+            if (index == -1) {
+                // 用户选择了某几个网站
+                for (var i = 0; i < this.visibleSites.length; ++i) {
+                sites += "site:" + this.visibleSites[i] + " ";
+                }
+                sites = "ANY(" + sites + ")";
+            }
             // 请求数据
             this.axios({
                 method: "post",
@@ -272,15 +306,37 @@ export default {
                 page_size: count,
                 order: this.couponSelected,
                 hide_placeholder: !this.checked,
+                additional_constraint: sites,
                 lang: localStorage.getItem("lang")
                 }
             }).then(result => {
                 this.maxcount = result.data.data.count;
                 //取得总页数制作分页
                 this.maxpage = Math.ceil(result.data.data.count / count);
+                if (this.maxpage < this.page) {
+                    this.page = 1;
+                }
                 this.$store.commit("getMaxPage", this.maxpage);
                 this.listvideo = result.data.data.videos;
-                this.tags = result.data.data.tags;
+                
+                /* 排序处理 */
+
+                // 获得热门标签
+                var tags = result.data.data.tags;
+                var tagswithcount = result.data.data.tag_pops;
+                // 排序热门标签
+                var ntags = {};
+                tagswithcount = Object.keys(tagswithcount)
+                .sort((a, b) => tagswithcount[b] - tagswithcount[a])
+                .forEach(key => {
+                    ntags[key] = tags[key];
+                });
+
+                this.tags = ntags;
+                /* 处理结束 */
+
+                //this.tags = result.data.data.tags;
+                
                 this.count2 = result.data.data.videos.length;
 
                 // 加载结束,加载动画消失
@@ -302,6 +358,15 @@ export default {
                     }*/
         this.loading = true;
         this.$store.commit("getTopNavbarSearching", this.searchKeyWord);
+        var sites = "";
+        const index = this.visibleSites.indexOf("");
+        if (index == -1) {
+            // 用户选择了某几个网站
+            for (var i = 0; i < this.visibleSites.length; ++i) {
+            sites += "site:" + this.visibleSites[i] + " ";
+            }
+            sites = "ANY(" + sites + ")";
+        }
         this.axios({
                 method: "post",
                 url: "be/queryvideo.do",
@@ -312,6 +377,7 @@ export default {
                     hide_placeholder: !this.checked,
                     query: str,
                     qtype: this.$route.query.qtype,
+                    additional_constraint: sites,
                     lang: localStorage.getItem("lang")
                 }
             }).then(result => {
@@ -319,6 +385,9 @@ export default {
                 this.maxcount = result.data.data.count;
                 //取得总页数制作分页
                 this.maxpage = Math.ceil(result.data.data.count / count);
+                if (this.maxpage < this.page) {
+                    this.page = 1;
+                }
                 this.listvideo = result.data.data.videos;
                 this.tags = result.data.data.tags;
                 this.count2 = result.data.data.videos.length;
@@ -368,6 +437,34 @@ export default {
                     $("html").animate({ scrollTop: 0 }, 100);
                 }
             });
+        },
+        onSitesChange(id = "") {
+            if (id == "") {
+                this.visibleSites = [""];
+            } else {
+                if (this.visibleSites.includes(id)) {
+                const index = this.visibleSites.indexOf(id);
+                this.visibleSites.splice(index, 1);
+                } else {
+                this.visibleSites.push(id);
+                const index = this.visibleSites.indexOf("");
+                if (index > -1) {
+                    this.visibleSites.splice(index, 1);
+                }
+                }
+            }
+            if (this.visibleSites.length == 0) {
+                this.visibleSites = [""];
+            }
+            if (this.ifSearch === false) {
+                this.getListVideo(this.page, this.count);
+                return;
+            }
+            if (this.ifSearch === true) {
+                this.getSearchData(this.page, this.count, this.searchKeyWord);
+                return;
+            }
+            //this.getListVideo_VideoOnly(this.page, this.count);
         }
     },
     watch: {
@@ -479,6 +576,11 @@ export default {
 
 
 <style lang="less" scoped>
+.tag-box {
+  .el-tag {
+    cursor: pointer;
+  }
+}
 .Imgcover {
     position: absolute;
     width: 100%;
@@ -501,7 +603,7 @@ export default {
   display: block;
   text-align: center;
 }
-// BM:网格单元 css
+
 .video-detail > h4 {
   /* 使文字变为最多显示1行，多余的使用省略号代替 */
   display: -webkit-box;
@@ -537,12 +639,7 @@ export default {
         display: -webkit-flex;
         display: flex;
         flex-wrap:nowrap;
-        // max-width: 90%;
-        // flex-shrink:8;
         overflow: hidden;
-        // display: -webkit-box;
-        // -webkit-line-clamp: 1;
-        // -webkit-box-orient: vertical;
 
     }
 }
@@ -583,7 +680,6 @@ export default {
     width: auto;
 }
 
-// BM单元 css
 .list-item {
     position: relative;
     height: 340px;
@@ -653,7 +749,7 @@ ul{
 .main-page-background-img {
   background-repeat: no-repeat;
   min-height: 800px;
-  width: 100%;
+  width: 85%;
   margin-top: 20px;
 }
 
