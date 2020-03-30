@@ -96,17 +96,20 @@
             <span class="rating">{{item.total_rating||0}} </span>
             <span class="updatetime">{{toGMT(item.item.upload_time.$date)}}</span>
             <div>
-              <img
-                :src="require('../../static/img/' + item.item.site + '.png')"
-                width="16px"
-                style="margin-right:2px"
-              />
-              <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
-              <i
-                @click="copyVideoLink(item.item.url)"
-                class="fa fa-copy fa-lg"
-                style="margin-left:2px"
-              ></i>
+                <div class="link">
+                    <img
+                        :src="require('../../static/img/' + item.item.site + '.png')"
+                        width="16px"
+                        style="margin-right:2px"
+                    />
+                    <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
+
+                </div>
+                <i
+                    @click="copyVideoLink(item.item.url)"
+                    class="fa fa-copy fa-lg"
+                    style="margin-left:2px"
+                ></i>
             </div>
           </div>
         </li>
@@ -130,6 +133,7 @@
 
 <script>
 import left_navbar from "../../components/LeftNavbar.vue";
+import { copyToClipboardText } from "../../static/js/generic";
 export default {
   data: function() {
         this.$i18n.locale = localStorage.getItem("lang");
@@ -521,9 +525,26 @@ export default {
 }
 .video-detail > div {
     position: absolute;
+    width: 100%;
     bottom: 0px;
     font-size: 12px;
 
+    display: -webkit-flex;
+    display: flex;
+    flex-wrap:nowrap;
+    justify-content:space-between;
+    .link{
+        display: -webkit-flex;
+        display: flex;
+        flex-wrap:nowrap;
+        // max-width: 90%;
+        // flex-shrink:8;
+        overflow: hidden;
+        // display: -webkit-box;
+        // -webkit-line-clamp: 1;
+        // -webkit-box-orient: vertical;
+
+    }
 }
 .video-detail {
     height: 125px;
