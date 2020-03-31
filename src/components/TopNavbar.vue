@@ -291,6 +291,7 @@
     <!-- 退出登录的弹出框 -->
     <el-dialog
       :title="$t('prompt.msg')"
+      :modal-append-to-body="false"
       :visible.sync="dialogVisible"
       width="30%"
       v-loading="loading"
