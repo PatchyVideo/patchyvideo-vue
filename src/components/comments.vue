@@ -102,26 +102,72 @@
 
     <!-- 发表评论 -->
     <div class="comment" v-if="isLogin">
-       <!--表情区域-->
+      <!--表情区域-->
       <el-popover
-              placement="top"
-              trigger="manual"
-              content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
-              v-model="visible">
-        <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3"
-               style="border-collapse:collapse;">
-          <tr v-for="(p,index) in emojiData" >
-            <td v-for="(m,n) in p" border="1"  style="border-collapse:collapse;">
-              <a @click="addEmojiToComments(m)" v-for="(z,x) in m">
-                <img :src="z" alt="">
+        placement="top"
+        trigger="manual"
+        content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+        v-model="faceVisible"
+      >
+        <table
+          cellpadding="1"
+          cellspacing="1"
+          align="center"
+          border="1"
+          bordercolor="#e3e3e3"
+          style="border-collapse:collapse;"
+        >
+          <tr v-for="p in faceData">
+            <td v-for="(m,n) in p" border="1" style="border-collapse:collapse;">
+              <a @click="addFaceToComments(m)" v-for="(z,x) in m">
+                <img :src="z" :alt="x" :title="x" />
               </a>
             </td>
           </tr>
         </table>
-        <el-button class="emoji" type="success" icon="el-icon-magic-stick" slot="reference"
-                   style="width: 100px" @click="visible = !visible">
-          emoji
-        </el-button>
+        <el-button
+          class="face"
+          type="success"
+          icon="el-icon-magic-stick"
+          slot="reference"
+          style="width: 100px"
+          @click="faceVisible = !faceVisible;emojiVisible=false;"
+        >表情</el-button>
+      </el-popover>
+      <el-popover
+        placement="top"
+        trigger="manual"
+        content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+        v-model="emojiVisible"
+      >
+        <table
+          cellpadding="1"
+          cellspacing="1"
+          align="center"
+          border="1"
+          bordercolor="#e3e3e3"
+          style="border-collapse:collapse;"
+        >
+          <tr v-for="p in emojiData">
+            <td v-for="(m,n) in p" border="1" style="border-collapse:collapse;">
+              <a
+                @click="addEmojiToComments(m)"
+                class="emoji"
+                v-for="(z,x) in m"
+                v-text="z"
+                :title="x"
+              ></a>
+            </td>
+          </tr>
+        </table>
+        <el-button
+          class="face"
+          type="success"
+          icon="el-icon-magic-stick"
+          slot="reference"
+          style="width: 100px"
+          @click="emojiVisible = !emojiVisible;faceVisible=false;"
+        >Emoji</el-button>
       </el-popover>
 
       <el-input
@@ -312,6 +358,73 @@
           <el-collapse-transition>
             <div v-show="replycomments[index].show">
               <div class="replyBox">
+                <!--表情区域-->
+                <el-popover
+                  placement="top"
+                  trigger="manual"
+                  content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+                  v-model="replycomments[index].face"
+                >
+                  <table
+                    cellpadding="1"
+                    cellspacing="1"
+                    align="center"
+                    border="1"
+                    bordercolor="#e3e3e3"
+                    style="border-collapse:collapse;"
+                  >
+                    <tr v-for="p in faceData">
+                      <td v-for="(m,n) in p" border="1" style="border-collapse:collapse;">
+                        <a @click="addFaceToReply(m,index)" v-for="(z,x) in m">
+                          <img :src="z" :alt="x" :title="x" />
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+                  <el-button
+                    class="face"
+                    type="success"
+                    icon="el-icon-magic-stick"
+                    slot="reference"
+                    style="width: 100px"
+                    @click="replycomments[index].face = !replycomments[index].face;replycomments[index].emoji=false;"
+                  >表情</el-button>
+                </el-popover>
+                <el-popover
+                  placement="top"
+                  trigger="manual"
+                  content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+                  v-model="replycomments[index].emoji"
+                >
+                  <table
+                    cellpadding="1"
+                    cellspacing="1"
+                    align="center"
+                    border="1"
+                    bordercolor="#e3e3e3"
+                    style="border-collapse:collapse;"
+                  >
+                    <tr v-for="p in emojiData">
+                      <td v-for="(m,n) in p" border="1" style="border-collapse:collapse;">
+                        <a
+                          @click="addEmojiToReply(m,index)"
+                          class="emoji"
+                          v-for="(z,x) in m"
+                          v-text="z"
+                          :title="x"
+                        ></a>
+                      </td>
+                    </tr>
+                  </table>
+                  <el-button
+                    class="face"
+                    type="success"
+                    icon="el-icon-magic-stick"
+                    slot="reference"
+                    style="width: 100px"
+                    @click="replycomments[index].emoji = !replycomments[index].emoji;replycomments[index].face=false;"
+                  >Emoji</el-button>
+                </el-popover>
                 <el-input
                   type="textarea"
                   :autosize="{ minRows: 1, maxRows: 4 }"
@@ -350,8 +463,7 @@
 </template>
 
 <script>
-import { ParseComment } from "../static/js/comment";
-import { faceslist } from "../static/js/comment";
+import { ParseComment, getFace, getEmoji } from "../static/js/comment";
 export default {
   props: {
     sid: { type: String }
@@ -392,12 +504,14 @@ export default {
       AuthorizedCid: "",
       // 管理页面是否加载的标志
       Authorizing: false,
-      // emoji弹出标志
-      visible: false,
+      // face弹出标志
+      faceVisible: false,
+      // face数据
+      faceData: [],
       // emoji数据
-      emojiData:[],
-      // emoji行数
-      emojiRow:0
+      emojiData: [],
+      // emoji弹出标志
+      emojiVisible: false
     };
   },
   computed: {
@@ -481,36 +595,71 @@ export default {
     }
   },
   created() {
-    this.getEmoji();
+    this.faceData = getFace();
+    this.emojiData = getEmoji();
     this.isAuthorized();
   },
   methods: {
-    getEmoji(){
+    /*
+    getFace() {
       //规定一排多少个
-      let array=[];
-      const MAXROW =10;
-      //读取emoji数据,转换成[{"呵呵":"src"},{}]格式
-      for(let i in faceslist){
-        let obj ={};
-        obj[i] = ParseComment(`[[表情:${i}]]`);
+      let array = [];
+      const MAXROW = 10;
+      //读取face数据,转换成[{"呵呵":"src"},{}]格式
+      for (let i in faceslist) {
+        let obj = {};
+        obj[i] = ParseFace(i);
         array.push(obj);
       }
       //计算最后一排个数
-      this.emojiRow =Math.ceil(array.length/MAXROW);
-      /*      var  lastRowCount= array.length%10;*/
-      let c=[];
+      var faceRow = Math.ceil(array.length / MAXROW);
+      let c = [];
       //转换成[[{"呵呵":"src"},{}],[]]格式
-      for(let i=0;i<this.emojiRow;++i){
-        c[i]=[];
-        for(let m =i*MAXROW;m<(i*MAXROW)+MAXROW;++m ){
+      for (let i = 0; i < faceRow; ++i) {
+        c[i] = [];
+        for (let m = i * MAXROW; m < i * MAXROW + MAXROW; ++m) {
           c[i].push(array[m]);
         }
       }
-      this.emojiData =c;
+      this.faceData = c;
+    },*/
+    /*getEmoji() {
+      //规定一排多少个
+      let array = [];
+      const MAXROW = 10;
+      //读取face数据,转换成[{"呵呵":"src"},{}]格式
+      for (let i in emojislist) {
+        let obj = {};
+        obj[i] = ParseEmoji(i);
+        array.push(obj);
+      }
+      //计算最后一排个数
+      var faceRow = Math.ceil(array.length / MAXROW);
+      let c = [];
+      //转换成[[{"呵呵":"src"},{}],[]]格式
+      for (let i = 0; i < faceRow; ++i) {
+        c[i] = [];
+        for (let m = i * MAXROW; m < i * MAXROW + MAXROW; ++m) {
+          c[i].push(array[m]);
+        }
+      }
+      this.emojiData = c;
+    },*/
+    addFaceToComments(obj) {
+      this.comment = this.comment + `[[表情:${Object.keys(obj)}]]`;
+      this.faceVisible = false;
     },
-    addEmojiToComments(obj){
-      this.comment= this.comment +`[[${Object.keys(obj)}]]`;
-      this.visible = false;
+    addEmojiToComments(obj) {
+      this.comment = this.comment + `[[emoji:${Object.keys(obj)}]]`;
+      this.emojiVisible = false;
+    },
+    addFaceToReply(obj,index) {
+      this.reply = this.reply + `[[表情:${Object.keys(obj)}]]`;
+      this.replycomments[index].face = false;
+    },
+    addEmojiToReply(obj,index) {
+      this.reply = this.reply + `[[emoji:${Object.keys(obj)}]]`;
+      this.replycomments[index].emoji = false;
     },
     // 获取评论
     getcomments() {
@@ -542,13 +691,17 @@ export default {
           // 初始化评论区开启标志
           for (var i = 0; i < this.allcomments.length; i++) {
             this.showReplies.push({
-              show: false
+              show: false,
+              face: false,
+              emoji: false
             });
           }
           // 初始化回复框开启标志
           for (var i = 0; i < this.allcomments.length; i++) {
             this.replycomments.push({
-              show: false
+              show: false,
+              face: false,
+              emoji: false
             });
           }
 
@@ -580,8 +733,7 @@ export default {
       });
       return content;
     },*/
-    parseComment(content)
-    {
+    parseComment(content) {
       return ParseComment(content);
     },
     // 使用Enter键发布视频
@@ -628,6 +780,8 @@ export default {
       this.reply = "";
       for (var i = 0; i < this.replycomments.length; i++) {
         this.replycomments[i].show = false;
+        this.replycomments[i].face = false;
+        this.replycomments[i].emoji = false;
       }
       this.replycomments[index].show = true;
       this.reply = "";
@@ -783,37 +937,40 @@ export default {
 </script>
 
 <style scoped lang="less">
-  .comment{
-    text-align: center !important;
-    .emoji{
-
-    }
+.comment {
+  text-align: center !important;
+  .face {
   }
+}
 
-  tr{
-    td{
-      border-collapse: collapse;
-      background-color: rgb(255, 255, 255);
-      vertical-align: middle;
-      border: 1px solid  #e3e3e3;
-      width: 54px;
-      height: 54px;
-      a{
-        display: inline-block;
-        width: 100%;
-        height: 100%;
-        position: relative;
-        img{
-          position: absolute;
-          top:50%;
-          left: 50%;
-          transform: translate(-50%,-50%);
-          width: 30px;
-          height: 30px;
-        }
+tr {
+  td {
+    border-collapse: collapse;
+    background-color: rgb(255, 255, 255);
+    vertical-align: middle;
+    border: 1px solid #e3e3e3;
+    width: 54px;
+    height: 54px;
+    a {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 30px;
+        height: 30px;
       }
     }
+    .emoji {
+      text-align: center;
+      font-size: 2rem;
+    }
   }
+}
 .new_top {
   padding-bottom: 10px;
   border-bottom: 3px solid #21c6ef;
