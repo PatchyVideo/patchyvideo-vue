@@ -346,11 +346,7 @@
                 style="margin-right:2px"
               />
               <!-- 将页面参数刷新并重载页面，其中@click.native应该是router-link为了阻止a标签的默认跳转事件 -->
-              <router-link
-                :to="{ path: '/video', query: { id: item._id.$oid } }"
-                tag="a"
-                @click.native="reload"
-              >{{ item.item.title }}</router-link>
+              <a @click="shiftID(item._id.$oid)">{{ item.item.title }}</a>
               <el-button
                 type="text"
                 @click="synctags(item._id.$oid)"
@@ -395,25 +391,17 @@
             </p>
           </div>
           <ul v-for="item in myVideoData.playlists" :key="item._id.$oid">
-            <!-- 将页面参数刷新并重载页面，其中@click.native应该是router-link为了阻止a标签的默认跳转事件 -->
-            <router-link
-              v-if="item.prev != ''"
-              :to="{ path: '/video', query: { id: item.prev } }"
-              tag="a"
-              @click.native="reload"
-            >【{{$t("previous_article")}}】</router-link>
+            <a v-if="item.prev != ''" @click="shiftID(item.prev)">【{{$t("previous_article")}}】</a>
             <span v-else>【{{$t("no_previous_article")}}】</span>
             <router-link
               :to="{ path: '/listdetail', query: { id: item._id.$oid } }"
               tag="a"
             >{{ item.title.english }}</router-link>
-            <router-link
+            <a
               v-if="item.next != ''"
-              :to="{ path: '/video', query: { id: item.next } }"
-              tag="a"
-              @click.native="reload"
+              @click="shiftID(item.next)"
               style="float:right"
-            >【{{$t("next_article")}}】</router-link>
+            >【{{$t("next_article")}}】</a>
             <span v-else style="float:right">【{{$t("no_next_article")}}】</span>
           </ul>
         </div>
@@ -813,6 +801,12 @@ export default {
           this.urlifyDesc();
           // 加载结束,加载动画消失
 
+          // 回到顶部
+          if ($("html").scrollTop()) {
+            //动画效果
+            $("html").animate({ scrollTop: 0 }, 100);
+          }
+
           if (this.myVideoData.video.item.site == "ipfs") {
             this.isIpfs = true;
             this.ipfsURL = this.myVideoData.video.item.url.slice(5);
@@ -914,9 +908,9 @@ export default {
         }
       });
     },
-    // 刷新页面
-    reload: function() {
-      this.$router.go(0);
+    // 切换视频ID
+    shiftID(id) {
+      this.$router.push({ path: "/video", query: { id: id } });
     },
     // 匹配视频简介中的URL的规则
     buildUrlMatchers() {
@@ -1179,6 +1173,9 @@ export default {
     }
   },
   watch: {
+    $route(newV, oldV) {
+      this.searchVideo();
+    },
     newListDialog() {
       if (!this.newListDialog) this.getMyList();
     }
