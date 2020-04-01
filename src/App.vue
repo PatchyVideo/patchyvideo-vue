@@ -30,22 +30,22 @@ export default {
 </script>
 
 <style>
-.el-popover {
-  width: 70%;
-  max-width: 70%;
-  max-height: 90%;
-  min-height: 50%;
-  overflow: auto;
-  position: absolute;
-  top: 50% !important;
+/*  .el-popover{
+    width: 70%;
+    max-width: 70%;
+    max-height: 90%;
+    min-height: 50%;
+    overflow: auto;
+    position: absolute;
+    top: 50% !important;
 
-  transform: translate(10%, -50%);
-  margin: 0px 20px !important;
-}
-a {
-  cursor: pointer;
-  transition: all 0.4s ease;
-}
+    transform: translate(10%,-50%);
+    margin: 0px 20px !important;
+  }*/
+  a {
+    cursor: pointer;
+    transition: all 0.4s ease;
+  }
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

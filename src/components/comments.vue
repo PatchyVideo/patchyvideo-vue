@@ -75,14 +75,18 @@
     <!-- 管理操作的弹出框 -->
     <el-dialog :title="$t('selectOpts')" :visible.sync="AuthOps" width="50%">
       <div v-loading="Authorizing">
-        <el-button style="width:100%;" @click="deletcomment()">{{
+        <el-button style="width:100%;" @click="deletcomment()">
+          {{
           $t("deletcomment")
-        }}</el-button>
+          }}
+        </el-button>
         <br />
         <br />
-        <el-button style="width:100%;" @click="hidecomment()">{{
+        <el-button style="width:100%;" @click="hidecomment()">
+          {{
           $t("hidecomment")
-        }}</el-button>
+          }}
+        </el-button>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="AuthOps = false">{{ $t("cancel") }}</el-button>
@@ -92,14 +96,80 @@
     <!-- 标题 -->
     <div class="new_top">
       <h2>{{ $t("comment") }}</h2>
-      <p v-if="allcomments.length">
-        {{ $t("commentCount", { length: allcomments.length }) }}
-      </p>
+      <p v-if="allcomments.length">{{ $t("commentCount", { length: allcomments.length }) }}</p>
       <p v-else>{{ $t("nocomment") }}</p>
     </div>
 
     <!-- 发表评论 -->
     <div class="comment" v-if="isLogin">
+      <!--表情区域-->
+      <el-popover
+        placement="top"
+        trigger="manual"
+        content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+        v-model="faceVisible"
+      >
+        <table
+          cellpadding="1"
+          cellspacing="1"
+          align="center"
+          border="1"
+          bordercolor="#e3e3e3"
+          style="border-collapse:collapse;"
+        >
+          <tr v-for="p in faceData">
+            <td v-for="(m,n) in p" border="1" style="border-collapse:collapse;">
+              <a @click="addFaceToComments(m)" v-for="(z,x) in m">
+                <img :src="z" :alt="x" :title="x" />
+              </a>
+            </td>
+          </tr>
+        </table>
+        <el-button
+          class="face"
+          type="success"
+          icon="el-icon-magic-stick"
+          slot="reference"
+          style="width: 100px"
+          @click="faceVisible = !faceVisible;emojiVisible=false;"
+        >表情</el-button>
+      </el-popover>
+      <el-popover
+        placement="top"
+        trigger="manual"
+        content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+        v-model="emojiVisible"
+      >
+        <table
+          cellpadding="1"
+          cellspacing="1"
+          align="center"
+          border="1"
+          bordercolor="#e3e3e3"
+          style="border-collapse:collapse;"
+        >
+          <tr v-for="p in emojiData">
+            <td v-for="(m,n) in p" border="1" style="border-collapse:collapse;">
+              <a
+                @click="addEmojiToComments(m)"
+                class="emoji"
+                v-for="(z,x) in m"
+                v-text="z"
+                :title="x"
+              ></a>
+            </td>
+          </tr>
+        </table>
+        <el-button
+          class="face"
+          type="success"
+          icon="el-icon-magic-stick"
+          slot="reference"
+          style="width: 100px"
+          @click="emojiVisible = !emojiVisible;faceVisible=false;"
+        >Emoji</el-button>
+      </el-popover>
+
       <el-input
         type="textarea"
         :autosize="{ minRows: 4 }"
@@ -110,16 +180,20 @@
         @keyup.enter.native="postcommentOnInput()"
       ></el-input>
       <el-checkbox v-model="UsingEnter">{{ $t("usingEnter") }}</el-checkbox>
-      <el-button type="primary" @click="postcomment()" :loading="posting">{{
+      <el-button type="primary" @click="postcomment()" :loading="posting">
+        {{
         $t("post")
-      }}</el-button>
+        }}
+      </el-button>
     </div>
     <!-- 未登录时显示 -->
     <div v-else>
       {{ $t("joinDiscuss") }}
-      <router-link to="/login" @click.native="login">{{
+      <router-link to="/login" @click.native="login">
+        {{
         $t("login")
-      }}</router-link>
+        }}
+      </router-link>
     </div>
 
     <!-- 评论详情 -->
@@ -138,26 +212,25 @@
         <!-- 右半部分 -->
         <div class="commentContent">
           <div v-linkified>
-            <router-link
-              :to="'/users/' + item.meta.created_by.$oid"
-              target="_blank"
-              >{{
-                commentUser(item.meta.created_by.$oid).profile.username
-              }}:</router-link
-            >
-            {{ item.content }}
+            <router-link :to="'/users/' + item.meta.created_by.$oid" target="_blank">
+              {{
+              commentUser(item.meta.created_by.$oid).profile.username
+              }}:
+            </router-link>
+            <span v-html="parseComment(item.content)"></span>
           </div>
 
-          <span class="commentDate">{{
+          <span class="commentDate">
+            {{
             commentdate(item.meta.created_at.$date)
-          }}</span>
+            }}
+          </span>
           <el-button
             class="replycomment"
             v-if="item.children.length && !showReplies[index].show"
             type="text"
             @click="showReplies[index].show = true"
-            >{{ $t("showRplies", { length: item.children.length }) }}</el-button
-          >
+          >{{ $t("showRplies", { length: item.children.length }) }}</el-button>
           <el-button
             class="replycomment"
             v-else-if="!replycomments[index].show && isLogin"
@@ -169,15 +242,13 @@
                 item._id.$oid
               )
             "
-            >{{ $t("reply") }}</el-button
-          >
+          >{{ $t("reply") }}</el-button>
           <el-button
             class="replycomment"
             v-else-if="isLogin"
             type="text"
             @click="replycomments[index].show = false"
-            >{{ $t("hideReply") }}</el-button
-          >
+          >{{ $t("hideReply") }}</el-button>
 
           <!-- 权限操作 -->
           <el-button
@@ -191,19 +262,14 @@
             "
             type="text"
             @click="Authorizecomment(item._id.$oid)"
-            >{{ $t("manage") }}</el-button
-          >
+          >{{ $t("manage") }}</el-button>
         </div>
 
         <!-- 楼中楼 -->
         <div>
           <el-collapse-transition>
             <div v-show="showReplies[index].show">
-              <div
-                class="allReply"
-                v-for="(reply, i) in item.children"
-                :key="i"
-              >
+              <div class="allReply" v-for="(reply, i) in item.children" :key="i">
                 <!-- 正常情况下的渲染 -->
                 <div v-if="!reply.hidden && !reply.deleted">
                   <!-- 楼中楼头像 -->
@@ -220,27 +286,26 @@
                   <!-- 楼中楼右半部分 -->
                   <div class="commentContent" style="margin-left:40px;">
                     <div v-linkified>
-                      <router-link
-                        :to="'/users/' + item.meta.created_by.$oid"
-                        target="_blank"
-                        >{{
-                          commentUser(reply.meta.created_by.$oid).profile
-                            .username
-                        }}:</router-link
-                      >
+                      <router-link :to="'/users/' + item.meta.created_by.$oid" target="_blank">
+                        {{
+                        commentUser(reply.meta.created_by.$oid).profile
+                        .username
+                        }}:
+                      </router-link>
                       <span v-if="typeof reply.reply_to !== 'undefined'">
                         {{ $t('replyPrompt') }}
                         <router-link
                           :to="'/users/' + cid_comment_map.get(reply.reply_to.$oid).meta.created_by.$oid"
                           target="_blank"
-                          >@{{commentUser(cid_comment_map.get(reply.reply_to.$oid).meta.created_by.$oid).profile.username}}</router-link
-                        >:
+                        >@{{commentUser(cid_comment_map.get(reply.reply_to.$oid).meta.created_by.$oid).profile.username}}</router-link>:
                       </span>
-                      {{ reply.content }}
+                      <span v-html="parseComment(reply.content)"></span>
                     </div>
-                    <span class="commentDate">{{
+                    <span class="commentDate">
+                      {{
                       commentdate(reply.meta.created_at.$date)
-                    }}</span>
+                      }}
+                    </span>
                     <el-button
                       v-if="isLogin"
                       class="replycomment"
@@ -253,8 +318,7 @@
                           reply._id.$oid
                         )
                       "
-                      >{{ $t("reply") }}</el-button
-                    >
+                    >{{ $t("reply") }}</el-button>
                     <!-- 权限操作 -->
                     <el-button
                       class="replycomment"
@@ -268,22 +332,21 @@
                       "
                       type="text"
                       @click="Authorizecomment(reply._id.$oid)"
-                      >{{ $t("manage") }}</el-button
-                    >
+                    >{{ $t("manage") }}</el-button>
                   </div>
                 </div>
                 <!-- 被隐藏的时候的渲染 -->
                 <div
                   style="margin-left:40px;margin-bottom:10px"
                   v-if="reply.deleted"
-                >
-                  {{ $t("deletedcomment") }}
-                </div>
+                >{{ $t("deletedcomment") }}</div>
                 <div style="margin-left:40px;" v-else-if="reply.hidden">
                   {{ $t("hiddencomment") }}
-                  <el-button type="text" @click="reply.hidden = false">{{
+                  <el-button type="text" @click="reply.hidden = false">
+                    {{
                     $t("opencomment")
-                  }}</el-button>
+                    }}
+                  </el-button>
                 </div>
               </div>
             </div>
@@ -295,6 +358,73 @@
           <el-collapse-transition>
             <div v-show="replycomments[index].show">
               <div class="replyBox">
+                <!--表情区域-->
+                <el-popover
+                  placement="top"
+                  trigger="manual"
+                  content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+                  v-model="replycomments[index].face"
+                >
+                  <table
+                    cellpadding="1"
+                    cellspacing="1"
+                    align="center"
+                    border="1"
+                    bordercolor="#e3e3e3"
+                    style="border-collapse:collapse;"
+                  >
+                    <tr v-for="p in faceData">
+                      <td v-for="(m,n) in p" border="1" style="border-collapse:collapse;">
+                        <a @click="addFaceToReply(m,index)" v-for="(z,x) in m">
+                          <img :src="z" :alt="x" :title="x" />
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+                  <el-button
+                    class="face"
+                    type="success"
+                    icon="el-icon-magic-stick"
+                    slot="reference"
+                    style="width: 100px"
+                    @click="replycomments[index].face = !replycomments[index].face;replycomments[index].emoji=false;"
+                  >表情</el-button>
+                </el-popover>
+                <el-popover
+                  placement="top"
+                  trigger="manual"
+                  content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+                  v-model="replycomments[index].emoji"
+                >
+                  <table
+                    cellpadding="1"
+                    cellspacing="1"
+                    align="center"
+                    border="1"
+                    bordercolor="#e3e3e3"
+                    style="border-collapse:collapse;"
+                  >
+                    <tr v-for="p in emojiData">
+                      <td v-for="(m,n) in p" border="1" style="border-collapse:collapse;">
+                        <a
+                          @click="addEmojiToReply(m,index)"
+                          class="emoji"
+                          v-for="(z,x) in m"
+                          v-text="z"
+                          :title="x"
+                        ></a>
+                      </td>
+                    </tr>
+                  </table>
+                  <el-button
+                    class="face"
+                    type="success"
+                    icon="el-icon-magic-stick"
+                    slot="reference"
+                    style="width: 100px"
+                    @click="replycomments[index].emoji = !replycomments[index].emoji;replycomments[index].face=false;"
+                  >Emoji</el-button>
+                </el-popover>
                 <el-input
                   type="textarea"
                   :autosize="{ minRows: 1, maxRows: 4 }"
@@ -311,22 +441,21 @@
                   round
                   @click="postReply(index)"
                   :loading="replying"
-                  >{{ $t("post") }}</el-button
-                >
+                >{{ $t("post") }}</el-button>
               </div>
             </div>
           </el-collapse-transition>
         </div>
       </div>
       <!-- 被隐藏的时候的渲染 -->
-      <div class="deletedcomment" v-if="item.deleted">
-        {{ $t("deletedcomment") }}
-      </div>
+      <div class="deletedcomment" v-if="item.deleted">{{ $t("deletedcomment") }}</div>
       <div class="hiddencomment" v-else-if="item.hidden">
         {{ $t("hiddencomment") }}
-        <el-button type="text" @click="item.hidden = false">{{
+        <el-button type="text" @click="item.hidden = false">
+          {{
           $t("opencomment")
-        }}</el-button>
+          }}
+        </el-button>
       </div>
       <el-divider></el-divider>
     </div>
@@ -334,6 +463,7 @@
 </template>
 
 <script>
+import { ParseComment, getFace, getEmoji } from "../static/js/comment";
 export default {
   props: {
     sid: { type: String }
@@ -373,7 +503,15 @@ export default {
       // 被管理对象的cid
       AuthorizedCid: "",
       // 管理页面是否加载的标志
-      Authorizing: false
+      Authorizing: false,
+      // face弹出标志
+      faceVisible: false,
+      // face数据
+      faceData: [],
+      // emoji数据
+      emojiData: [],
+      // emoji弹出标志
+      emojiVisible: false
     };
   },
   computed: {
@@ -457,9 +595,72 @@ export default {
     }
   },
   created() {
+    this.faceData = getFace();
+    this.emojiData = getEmoji();
     this.isAuthorized();
   },
   methods: {
+    /*
+    getFace() {
+      //规定一排多少个
+      let array = [];
+      const MAXROW = 10;
+      //读取face数据,转换成[{"呵呵":"src"},{}]格式
+      for (let i in faceslist) {
+        let obj = {};
+        obj[i] = ParseFace(i);
+        array.push(obj);
+      }
+      //计算最后一排个数
+      var faceRow = Math.ceil(array.length / MAXROW);
+      let c = [];
+      //转换成[[{"呵呵":"src"},{}],[]]格式
+      for (let i = 0; i < faceRow; ++i) {
+        c[i] = [];
+        for (let m = i * MAXROW; m < i * MAXROW + MAXROW; ++m) {
+          c[i].push(array[m]);
+        }
+      }
+      this.faceData = c;
+    },*/
+    /*getEmoji() {
+      //规定一排多少个
+      let array = [];
+      const MAXROW = 10;
+      //读取face数据,转换成[{"呵呵":"src"},{}]格式
+      for (let i in emojislist) {
+        let obj = {};
+        obj[i] = ParseEmoji(i);
+        array.push(obj);
+      }
+      //计算最后一排个数
+      var faceRow = Math.ceil(array.length / MAXROW);
+      let c = [];
+      //转换成[[{"呵呵":"src"},{}],[]]格式
+      for (let i = 0; i < faceRow; ++i) {
+        c[i] = [];
+        for (let m = i * MAXROW; m < i * MAXROW + MAXROW; ++m) {
+          c[i].push(array[m]);
+        }
+      }
+      this.emojiData = c;
+    },*/
+    addFaceToComments(obj) {
+      this.comment = this.comment + `[[表情:${Object.keys(obj)}]]`;
+      this.faceVisible = false;
+    },
+    addEmojiToComments(obj) {
+      this.comment = this.comment + `[[emoji:${Object.keys(obj)}]]`;
+      this.emojiVisible = false;
+    },
+    addFaceToReply(obj,index) {
+      this.reply = this.reply + `[[表情:${Object.keys(obj)}]]`;
+      this.replycomments[index].face = false;
+    },
+    addEmojiToReply(obj,index) {
+      this.reply = this.reply + `[[emoji:${Object.keys(obj)}]]`;
+      this.replycomments[index].emoji = false;
+    },
     // 获取评论
     getcomments() {
       this.loadingcomment = true;
@@ -480,20 +681,27 @@ export default {
             //console.log(this.allcomments[i]);
             for (var j = 0; j < this.allcomments[i].children.length; ++j) {
               //console.log(this.allcomments[i].children[j]._id.$oid);
-              this.cid_comment_map.set(this.allcomments[i].children[j]._id.$oid, this.allcomments[i].children[j]);
+              this.cid_comment_map.set(
+                this.allcomments[i].children[j]._id.$oid,
+                this.allcomments[i].children[j]
+              );
             }
           }
 
           // 初始化评论区开启标志
           for (var i = 0; i < this.allcomments.length; i++) {
             this.showReplies.push({
-              show: false
+              show: false,
+              face: false,
+              emoji: false
             });
           }
           // 初始化回复框开启标志
           for (var i = 0; i < this.allcomments.length; i++) {
             this.replycomments.push({
-              show: false
+              show: false,
+              face: false,
+              emoji: false
             });
           }
 
@@ -504,6 +712,29 @@ export default {
           this.openFailed(this.$t("getcommentFailed"));
           this.loadingcomment = false;
         });
+    },
+    /*parseComment(content) {
+      var match = content.match(/((?<=\[\[)[^\(\]\]]+)/g);
+      match.map((v, i) => {
+        var kv = v.split(":");
+        if (kv.length <= 1) return;
+        var action = kv[0];
+        var value = kv[1];
+        var newvalue = "";
+        switch (action) {
+          case "表情":
+            newvalue = `<img src='${ParseFace(value)}' />`;
+            break;
+          default:
+            newvalue = v;
+            break;
+        }
+        content = content.replace(`[[${v}]]`, newvalue);
+      });
+      return content;
+    },*/
+    parseComment(content) {
+      return ParseComment(content);
     },
     // 使用Enter键发布视频
     postcommentOnInput() {
@@ -549,6 +780,8 @@ export default {
       this.reply = "";
       for (var i = 0; i < this.replycomments.length; i++) {
         this.replycomments[i].show = false;
+        this.replycomments[i].face = false;
+        this.replycomments[i].emoji = false;
       }
       this.replycomments[index].show = true;
       this.reply = "";
@@ -703,7 +936,41 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="less">
+.comment {
+  text-align: center !important;
+  .face {
+  }
+}
+
+tr {
+  td {
+    border-collapse: collapse;
+    background-color: rgb(255, 255, 255);
+    vertical-align: middle;
+    border: 1px solid #e3e3e3;
+    width: 54px;
+    height: 54px;
+    a {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 30px;
+        height: 30px;
+      }
+    }
+    .emoji {
+      text-align: center;
+      font-size: 2rem;
+    }
+  }
+}
 .new_top {
   padding-bottom: 10px;
   border-bottom: 3px solid #21c6ef;

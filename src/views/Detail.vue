@@ -47,7 +47,7 @@
   "sync_replica_label":"同步副本标签",
   "sync_replica_label_from":"从此副本同步标签",
   "playlist":"播放列表",
-  "management":"管理",
+  "management":"视频等级管理",
   "official":"原始发布",
   "official_repost":"官方再发布",
   "authorized_translation":"授权翻译",
@@ -78,7 +78,7 @@
   "sync_replica_label":"Synchronize copies tags",
   "sync_replica_label_from":"Sync tags from this video",
   "playlist":"Playlists",
-  "management":"Management",
+  "management":"Video Level Management",
   "other":"Other",
   "official": "Original",
   "official_repost": "Official Repost",
@@ -111,7 +111,7 @@
   "sync_replica_label":"同步副本標簽",
   "sync_replica_label_from":"從此副本同步標簽",
   "playlist":"播放列表",
-  "management":"管理",
+  "management":"視頻等級管理",
   "official":"原始發布",
   "official_repost":"官方再發布",
   "authorized_translation":"授權翻譯",
@@ -140,7 +140,7 @@
     <el-dialog :title="$t('management')" :visible.sync="managementBox" width="30%">
       <div style="width:80%;margin:0 auto">
         <el-select v-model="theVideoRank" placeholder="请修改视频的等级" style="width:100%">
-          <el-option v-for="item in videoRanks" :key="item" :label="item" :value="item"></el-option>
+          <el-option v-for="(val,key) in videoRanks" :key="key" :label="key" :value="val">{{key}}</el-option>
         </el-select>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -504,7 +504,12 @@ export default {
       // 本页面的视频的等级
       theVideoRank: 3,
       // 视频的等级（0~3，其中3为所有人可见）
-      videoRanks: [0, 1, 2, 3],
+      videoRanks: {
+        仅管理员可见: 0,
+        登录用户可见: 1,
+        发布者和管理员可见: 2,
+        所有人可见: 3
+      },
       // 本页面的视频的发布类型
       RepostType: "",
       // 视频的发布类型
