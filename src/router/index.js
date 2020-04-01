@@ -1,11 +1,11 @@
 ﻿import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "../store/index.js";
-import axios from 'axios';
+import axios from "axios";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import "../static/css/base.css";
-import { Loading, Message } from 'element-ui';
+import { Loading, Message } from "element-ui";
 const error = () => import("../views/404.vue");
 const Home = () => import("../views/Home.vue");
 const detail = () => import("../views/Detail.vue");
@@ -24,22 +24,26 @@ const ipfs = () => import("../views/IPFS.vue");
 const ipfs_player = () => import("../views/IPFS_player.vue");
 const Messages = () => import("../views/Messages.vue");
 const ContributionLogs = () => import("../views/ContributionLogs.vue");
+// 测试用页面
+const test = () => import("../views/About.vue");
 
 Vue.use(VueRouter);
 Vue.use(ElementUI);
 
 var loading;
-function startLoading() {    //使用Element loading-start 方法
+function startLoading() {
+  //使用Element loading-start 方法
   loading = Loading.service({
     lock: true,
-    text: '少女祈祷中....',
+    text: "少女祈祷中...."
     //customClass: 'eloading'
     //background: 'rgba(0, 0, 0, 0.7)'
   });
   return loading;
 }
-function endLoading() {    //使用Element loading-close 方法
-  loading.close()
+function endLoading() {
+  //使用Element loading-close 方法
+  loading.close();
 }
 
 //吾有一言，请诸位倾听
@@ -87,16 +91,16 @@ const yiyan = [
 //整活页面
 var page;
 function startPage() {
-  var random = (Math.floor(Math.random() * 100, 2)) % yiyan.length;
+  var random = Math.floor(Math.random() * 100, 2) % yiyan.length;
   page = Loading.service({
     lock: true,
     text: `${yiyan[random]}`,
-    customClass: 'eloading',
+    customClass: "eloading"
     //background: 'rgba(0, 0, 0, 0.7)'
   });
 }
 function endPage() {
-  page.close()
+  page.close();
 }
 
 /*
@@ -221,6 +225,10 @@ const routes = [
   {
     path: "/logscontributes",
     component: ContributionLogs
+  },
+  {
+    path: "/test",
+    component: test
   }
 ];
 
@@ -241,97 +249,95 @@ router.beforeEach((to, from, next) => {
   startLoading();
   axios({
     method: "get",
-    url:"/be/alive.txt"
+    url: "/be/alive.txt"
     //url: "http://127.0.0.1:9800/"
-  }).then(result => {
-    endLoading();
-    // 开始执行路由
+  })
+    .then(result => {
+      endLoading();
+      // 开始执行路由
 
-    // to将要访问的路径
-    // from从哪个路径跳转而来
-    //next('/xxx')表示放行,或强制跳转到/xxx
+      // to将要访问的路径
+      // from从哪个路径跳转而来
+      //next('/xxx')表示放行,或强制跳转到/xxx
 
-    if (to.path == "/messages" && !getCookie()) {
-      return next("/home");
-    }
-    if (
-      to.path == "/postvideo" ||
-      to.path == "/edittag" ||
-      to.path == "/users/me" ||
-      to.path == "/createVideoList" ||
-      // 增加一个 superadmin 路由
-      to.path == "/superadmin"
-    ) {
-      if (getCookie() && store.state.ifTruelyLogin != 2) {
-        // console.log("已登录放行");
-        return next();
-      } else {
-        // console.log("未登录不放行");
-        // 保存跳转状态
-        store.commit("changeifRouter", "1");
-        store.commit("changerouterPath", to.path);
-        if (to.path == "/postvideo") {
-          if (to.query !== undefined) {
-            store.commit("changerouterparams", to.query);
+      if (to.path == "/messages" && !getCookie()) {
+        return next("/home");
+      }
+      if (
+        to.path == "/postvideo" ||
+        to.path == "/edittag" ||
+        to.path == "/users/me" ||
+        to.path == "/createVideoList" ||
+        // 增加一个 superadmin 路由
+        to.path == "/superadmin"
+      ) {
+        if (getCookie() && store.state.ifTruelyLogin != 2) {
+          // console.log("已登录放行");
+          return next();
+        } else {
+          // console.log("未登录不放行");
+          // 保存跳转状态
+          store.commit("changeifRouter", "1");
+          store.commit("changerouterPath", to.path);
+          if (to.path == "/postvideo") {
+            if (to.query !== undefined) {
+              store.commit("changerouterparams", to.query);
+            }
           }
+          return next("/login");
         }
-        return next("/login");
       }
-    }
-    next();
-  }).catch((ex) => {
-    endLoading();
-    var res = ex.response;
-    if (res) {
-      if (res.status == 404) {
-        return next("/404");
+      next();
+    })
+    .catch(ex => {
+      endLoading();
+      var res = ex.response;
+      if (res) {
+        if (res.status == 404) {
+          return next("/404");
+        } else if (res.status == 502) {
+          startPage();
+          Message({
+            message: "巴瓦鲁魔法服务器正在跃迁中",
+            type: "warning",
+            duration: 0
+          });
+          return false;
+        } else if (res.status == 500) {
+          startPage();
+          Message.error({
+            message: "巴瓦鲁魔法服务器哮喘犯了",
+            type: "error",
+            duration: 0
+          });
+          return false;
+        } else if (res.status == 503) {
+          startPage();
+          Message({
+            message: "巴瓦鲁魔法服务器正在睡觉",
+            type: "error",
+            duration: 0
+          });
+          return false;
+        } else if (res.status == 403) {
+          startPage();
+          Message({
+            message: "你被帕秋莉禁止进入巴瓦鲁魔法服务器",
+            type: "error",
+            duration: 0
+          });
+          return false;
+        }
       }
-      else if (res.status == 502) {
-        startPage();
-        Message({
-          message: "巴瓦鲁魔法服务器正在跃迁中",
-          type: 'warning',
-          duration: 0
-        });
-        return false;
-      }
-      else if (res.status == 500) {
-        startPage();
-        Message.error({
-          message: "巴瓦鲁魔法服务器哮喘犯了",
-          type: 'error',
-          duration: 0
-        });
-        return false;
-      }
-      else if (res.status == 503) {
-        startPage();
-        Message({
-          message: "巴瓦鲁魔法服务器正在睡觉",
-          type: 'error',
-          duration: 0
-        });
-        return false;
-      }
-      else if (res.status == 403) {
-        startPage();
-        Message({
-          message: "你被帕秋莉禁止进入巴瓦鲁魔法服务器",
-          type: 'error',
-          duration: 0
-        });
-        return false;
-      }
-    }
-    // 跳转到未知错误页面
-    startPage();
-    Message({
-      message: "巴瓦鲁魔法服务器被隙间了",
-      type: 'error',
-      duration: 0
+      // 跳转到未知错误页面
+      startPage();
+      Message({
+        message: "巴瓦鲁魔法服务器被隙间了",
+        type: "error",
+        duration: 0
+      });
+      return false;
     });
-    return false;
-  });
 });
 
 // 获取cookie
