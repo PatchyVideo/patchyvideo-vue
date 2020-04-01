@@ -799,7 +799,10 @@ export default {
       var iptVal1 = this.iptVal3.slice(0, this.startlocation);
       var iptVal2 = this.iptVal3.slice(this.endlocation);
       var iptVal =
-        iptVal1 + (item.tag||this.ConvertLangRes(item.langs, false)) + " " + iptVal2;
+        iptVal1 +
+        (item.tag || this.ConvertLangRes(item.langs, false)) +
+        " " +
+        iptVal2;
       this.iptVal = iptVal;
       // 光标设置焦点事件
       var endlocation = $("#ipt").focus();
@@ -948,7 +951,7 @@ export default {
 .top-navbar {
   margin: 0 auto;
   height: 80px;
-  width: calc(100% - 0px);
+  width: calc(100% - 10px);
   display: flex !important;
   align-items: center;
   overflow: hidden;
@@ -1032,9 +1035,8 @@ export default {
   color: #ff7792;
 }
 @media only screen and (max-width: 1555px) {
-
-  .nav_left li a{
-   font-size: 15px;
+  .nav_left li a {
+    font-size: 15px;
   }
 }
 /* 使用css3 媒体查询功能进行的排版调整 */
