@@ -488,7 +488,6 @@ export default {
   color: #c539c5;
 }
 .editTagButton {
-  width: 50%;
   text-align: left;
   display: inline-block;
 }
