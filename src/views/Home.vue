@@ -116,11 +116,9 @@
         }
       },
       handleClick(e){
-        console.log(this.activeName);
       },
       // 切换网格/列表视图
       changeLine(){
-        console.log(!this.flag);
         this.flag = !this.flag;
         //   1表示网格，0表示列表
         if(this.flag===true){

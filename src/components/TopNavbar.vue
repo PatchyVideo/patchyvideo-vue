@@ -987,6 +987,9 @@ export default {
   margin-left: 3%;
   text-align: center;
   font-size: 19px;
+  a{
+    white-space: nowrap;
+  }
 }
 
 .adviceList {
