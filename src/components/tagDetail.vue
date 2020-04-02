@@ -780,8 +780,8 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="count" :label="$t('count2')" min-width="50"></el-table-column>
-      <el-table-column :label="$t('tag')" min-width="800">
+      <el-table-column prop="count" :label="$t('count2')" min-width="70"></el-table-column>
+      <el-table-column :label="$t('tag')" min-width="720">
         <!-- 各种语言标签 -->
         <template slot-scope="scope">
           <span class="tagLabel" v-if="scope.row.languages.CHS">
@@ -1073,7 +1073,7 @@
         </template>
       </el-table-column>
       <!-- 操作,选项一般隐藏 -->
-      <el-table-column :label="$t('op')" min-width="230" fixed="right">
+      <el-table-column :label="$t('op')" min-width="300" fixed="right">
         <template slot-scope="scope">
           <div v-if="advancedOptions">
             <el-button type="danger" round @click="removeTag(scope.$index)">{{$t('del_tag')}}</el-button>
