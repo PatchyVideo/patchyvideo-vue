@@ -11,7 +11,52 @@
       1.修改了注释内容  
     2/7/2020：v1.0.2
       1.显示内容更改为网站的代码提交地址的前八位
+    4/1/2020: v1.1.0
+      1.翻新了foot排版,将顶部导航栏的wiki,ipfs,bug反馈界面以及语言选择界面移动到了里面
 -->
+<i18n>
+{
+  "CHS": {
+    "LanguageSettings":"语言选项",
+    "About":"关于帕琪站",
+    "Wiki":"网站维基",
+    "OfficialAccount":"B站官方账户",
+    "JoinUs":"招募祈愿",
+    "AboutIPFS":"IPFS相关",
+    "IPFS":"幻想之物",
+    "WhatIsIPFS":"IPFS是什么?",
+    "Codes":"代码相关",
+    "Repositories":"项目仓库",
+    "bug_report":"反馈BUG"
+  },
+  "ENG": {
+    "LanguageSettings":"Languages",
+    "About":"About Patchyvideo",
+    "Wiki":"Wiki",
+    "OfficialAccount":"BiliBili Official Account",
+    "JoinUs":"Join Us",
+    "AboutIPFS":"About IPFS",
+    "IPFS":"IPFS",
+    "WhatIsIPFS":"What is IPFS?",
+    "Codes":"Codes",
+    "Repositories":"Repositories",
+    "bug_report":"Report Bugs"
+  },
+  "CHT": {
+    "LanguageSettings":"語言選項",
+    "About":"關於帕琪站",
+    "Wiki":"網站維基",
+    "OfficialAccount":"B站官方账户",
+    "JoinUs":"招募祈願",
+    "AboutIPFS":"關於IPFS",
+    "IPFS":"幻想之物",
+    "WhatIsIPFS":"什麼是IPFS?",
+    "Codes":"代碼相關",
+    "Repositories":"項目倉庫",
+    "bug_report":"反饋BUG"
+  }
+}
+</i18n>
 
 <template>
   <div class="patchyvideo-footer">
@@ -20,7 +65,7 @@
     <!-- 语言选项 -->
     <div class="patchyvideo-languageSettings">
       <p style="margin-top:10px">
-        <strong>语言选项</strong>
+        <strong>{{$t('LanguageSettings')}}</strong>
       </p>
       <span @click="locale='CHS'">简体中文</span>
       <span @click="locale='CHT'">繁體中文</span>
@@ -31,27 +76,27 @@
     <div class="patchyvideo-links">
       <div class="patchyvideo-links-item">
         <p>
-          <strong>关于帕琪站</strong>
+          <strong>{{$t('About')}}</strong>
         </p>
-        <a href="https://patchyvideo.wiki" target="_blank">网站维基</a>
-        <a href="https://space.bilibili.com/515657675">B站官方号</a>
-        <a href="https://patchyvideo.wiki/JoinUs" target="_blank">招募祈愿</a>
+        <a href="https://patchyvideo.wiki" target="_blank">{{$t('Wiki')}}</a>
+        <a href="https://space.bilibili.com/515657675">{{$t('OfficialAccount')}}</a>
+        <a href="https://patchyvideo.wiki/JoinUs" target="_blank">{{$t('JoinUs')}}</a>
       </div>
       <div class="patchyvideo-links-item">
         <p>
-          <strong>IPFS相关</strong>
+          <strong>{{$t('AboutIPFS')}}</strong>
         </p>
-        <router-link to="/ipfs">幻想之物</router-link>
+        <router-link to="/ipfs">{{$t('IPFS')}}</router-link>
         <a
           href="https://zh.wikipedia.org/wiki/%E6%98%9F%E9%99%85%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"
-        >IPFS是什么?</a>
+        >{{$t('WhatIsIPFS')}}</a>
       </div>
       <div class="patchyvideo-links-item">
         <p>
-          <strong>网站代码</strong>
+          <strong>{{$t('Codes')}}</strong>
         </p>
-        <a href="https://patchyvideo.wiki/Repositories" target="_blank">项目仓库</a>
-        <a href="https://github.com/zyddnys/PatchyVideo/issues" target="_blank">反馈BUG</a>
+        <a href="https://patchyvideo.wiki/Repositories" target="_blank">{{$t('Repositories')}}</a>
+        <a href="https://github.com/zyddnys/PatchyVideo/issues" target="_blank">{{$t('bug_report')}}</a>
       </div>
     </div>
     <!-- 最下部的网站声明 -->

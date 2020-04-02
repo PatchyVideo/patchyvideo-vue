@@ -90,7 +90,14 @@
       };
     },
     created() {
-        this.flag = !!localStorage.getItem("homeVideoDisplayStatus");
+      if(this.$store.state.homeVideoDisplayStatus===0){
+        this.flag =false;
+      }else if(this.$store.state.homeVideoDisplayStatus===1){
+        this.flag =true;
+      }
+/*      this.flag =this.$store.state.homeVideoDisplayStatus;*/
+/*        this.flag = !localStorage.getItem("homeVideoDisplayStatus");*/
+
     },
     computed: {},
     mounted() {
@@ -113,9 +120,16 @@
       },
       // 切换网格/列表视图
       changeLine(){
+        console.log(!this.flag);
+        this.flag = !this.flag;
         //   1表示网格，0表示列表
-          localStorage.setItem("homeVideoDisplayStatus", !this.flag+0);
-          this.flag = !this.flag;
+        if(this.flag===true){
+          localStorage.setItem("homeVideoDisplayStatus",1);
+          this.$store.commit("changeHomeVDS",1);
+        }else{
+          localStorage.setItem("homeVideoDisplayStatus",0);
+          this.$store.commit("changeHomeVDS",0);
+        }
       }
     },
     watch:{

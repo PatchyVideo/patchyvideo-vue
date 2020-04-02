@@ -66,6 +66,35 @@
     "postFailed":"Failed post , please check your Internet!",
     "operationSuccessfully":"Operate Successfully",
     "operationFailed":"Failed operation, please check your Internet!"
+  },
+  "CHT": {
+    "comment":"評論",
+    "commentCount":"共{length}條評論",
+    "nocomment":"暫無評論！",
+    "saySth":"說點兒什麼吧~",
+    "usingEnter":"使用Enter鍵發表評論",
+    "post":"發表",
+    "joinDiscuss":"想要一起參與討論？",
+    "login":"點我登錄",
+    "showRplies":"查看{length}條回复",
+    "replyPrompt":" 回复",
+    "reply":"回复",
+    "hideReply":"收起回复",
+    "manage":"管理",
+    "replyTo":"回复Ta",
+    "hiddencomment":"該評論已被隱藏",
+    "opencomment":"點我展開",
+    "deletedcomment":"抱歉，該評論已被刪除",
+    "selectOpts":"請選擇操作",
+    "deletcomment":"刪除評論",
+    "hidecomment":"隱藏評論",
+    "cancel":"取 消",
+    "getcommentFailed":"獲取評論失敗，請檢查網絡設置！",
+    "PsaySth":"請輸入內容！",
+    "postSuccessfully":"發表成功！",
+    "postFailed":"發表失敗，請檢查網絡設置！",
+    "operationSuccessfully":"操作成功！",
+    "operationFailed":"操作失敗，請檢查網絡設置！"
   }
 }
 </i18n>
@@ -653,11 +682,11 @@ export default {
       this.comment = this.comment + `[[emoji:${Object.keys(obj)}]]`;
       this.emojiVisible = false;
     },
-    addFaceToReply(obj,index) {
+    addFaceToReply(obj, index) {
       this.reply = this.reply + `[[表情:${Object.keys(obj)}]]`;
       this.replycomments[index].face = false;
     },
-    addEmojiToReply(obj,index) {
+    addEmojiToReply(obj, index) {
       this.reply = this.reply + `[[emoji:${Object.keys(obj)}]]`;
       this.replycomments[index].emoji = false;
     },

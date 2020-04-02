@@ -31,9 +31,13 @@ export default new Vuex.Store({
     // 验证用户是否真的登录（有时候用户在其他设备上登录之后再在本设备上登录，登录信息会失效）
     // 0为未验证，1为验证登录，2为验证未登录
     ifTruelyLogin: 0,
-    refreshCount: 0
+    refreshCount: 0,
+    homeVideoDisplayStatus:localStorage.getItem("homeVideoDisplayStatus")? Number(localStorage.getItem("homeVideoDisplayStatus")):0
   },
   mutations: {
+    changeHomeVDS(state,e){
+      state.homeVideoDisplayStatus =e;
+    },
     refreshPage(state, e) {
       state.refreshCount++;
     },
