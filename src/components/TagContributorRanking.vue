@@ -66,7 +66,6 @@ export default {
                     size: this.displaySize
                 }
             }).then(result => {
-                console.log(result);
                 var data = result.data.data;
                 this.ranking = data;
                 this.loading = false;
