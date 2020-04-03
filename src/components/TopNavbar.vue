@@ -716,7 +716,7 @@ export default {
 }
 
 .search-bar-query .el-select {
-  width: 105px;
+  width: 110px;
 }
 
 .loginUser {
