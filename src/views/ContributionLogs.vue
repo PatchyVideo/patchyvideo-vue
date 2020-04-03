@@ -54,7 +54,7 @@
     updated() {},
     methods:{
       handleClick(e){
-        console.log(this.activeName);
+
       }
     },
     watch:{
