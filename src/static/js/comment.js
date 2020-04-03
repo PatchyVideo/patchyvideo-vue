@@ -146,6 +146,29 @@ function getFace() {
     return c;
 }
 
+/*function getFace() {
+    //[{1:{name:name,src:src},2:{name:name,src:src}},{1:{name:name,src:src},2:{name:name,src:src}}]
+    let faces = [];
+    const MAXROW = 10;
+    //读取face数据,转换成[{name:"呵呵",src:"src"},{}]格式
+    for (let i in faceslist) {
+        let obj = { name: i, src: ParseFace(i) };
+        faces.push(obj);
+    }
+    //计算最后一排个数
+    var faceRow = Math.ceil(faces.length / MAXROW);
+    var facesData = [];
+    for (let i = 0; i < faceRow; i++) {
+        var list = {};
+        for (let j = i * MAXROW, k = 0; j < i * MAXROW + MAXROW; j++, k++) {
+            list[k] = faces[j];
+        }
+        facesData.push(list);
+    }
+    //console.log(facesData);
+    return facesData;
+}*/
+
 function getEmoji() {
     //规定一排多少个
     let array = [];
@@ -171,9 +194,11 @@ function getEmoji() {
 }
 
 function ParseComment(content) {
-    var match = content.match(/((?<=\[\[)[^\(\]\]]+)/g);
+    //var match = content.match(/((?<=\[\[)[^\(\]\]]+)/g);
+    var match = content.match(/\[\[[^\[\]]*\]\]/g);
     if (match) {
         match.forEach(v => {
+            v=v.replace(/\[\[/g,"").replace(/\]\]/g,"");
             var kv = v.split(":");
             if (kv.length <= 1) return;
             var action = kv[0];
