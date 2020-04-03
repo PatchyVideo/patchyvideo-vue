@@ -1,43 +1,10 @@
 <!--    vue组件：TopNavbar.vue     -->
 <!--
-    组件：左侧的热门标签导航栏
+    组件：页面顶部的导航栏
     大小：100% * 80px
     功能：网站主导航栏
     必要传入参数：无
     更新日志：
-    12/1/2019: v1.0 
-      release
-    12/3/2019：v1.0.1
-      1.修复了导航栏因为边框导致网站宽度大于浏览器宽度的问题
-    12/7/2019: v1.0.2
-      1.新增退出登录效果
-    12/14/2019: v1.0.3
-      1.导航条中文化完成
-    12/30/2019: v1.0.4
-      1.导航条登录功能完善
-    12/31/2019：v1.0.5
-      1.导航条注册链接完成
-    1/9/2020：v1.0.6
-      1.搜索框部分功能完成（搜索功能完成，还差正则表达式的匹配）
-    1/21/2020：v1.0.5
-      1.用户信息调取方式改为使用cookie储存
-    1/27/2020：v1.0.6
-      1.搜索框会自动填写搜索中的标签
-      2.搜索框按下回车会直接搜索
-    1/28/2020：v1.0.7
-      1.搜索框的自动补全功能完成
-    1/29/2020：v1.0.8
-      1.搜索框的搜索建议列表优化
-      2.新增对网站搜索的支持
-    2/8/2020：v1.0.9
-      1.搜索框的自动补全优化
-      2.自动补全加入新的搜索关键字
-      3.在home页面搜索的时候会触发页面刷新
-    ★待解决问题：
-      1.搜索框在自动补全的时候焦点总是在文本的最右边（改变selectionStart和selectionEnd属性不知道为什么不起作用）
-      2.搜索框的css渲染待补全（搜索结果与关键字重合的地方加粗、加下划线等）
-      2.用户个人界面未完善
-      3.用户头像显示
 -->
 
 <i18n>
@@ -169,7 +136,7 @@
         @keyup.enter.native="gotoHome"
       >
         <!-- 搜索条件 -->
-        <el-select ref="form_select" v-model="searchType" slot="prepend">
+        <el-select v-model="searchType" slot="prepend">
           <el-option :label="$t('search.tag_text')" value="tag"></el-option>
           <el-option :label="$t('search.text')" value="text"></el-option>
         </el-select>
@@ -394,7 +361,7 @@ export default {
         this.$router
           .push({
             path: "/home",
-            query: { keyword: this.iptVal, qtype: this.$refs.form_select.value }
+            query: { keyword: this.iptVal, qtype: this.searchType }
           })
           .catch(err => {
             return err;
@@ -700,7 +667,6 @@ export default {
   position: relative;
   background-color: rgb(255, 255, 255);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
-  z-index: 500;
 }
 .iconAndTitle {
   display: flex;
@@ -721,6 +687,13 @@ export default {
 }
 .navItem {
   margin: 10px;
+  font-size: 20px;
+}
+.navItem a {
+  color: rgb(46, 46, 46);
+}
+.navItem a:hover {
+  color: rgb(255, 166, 251);
 }
 
 .search-bar-query .el-select {
