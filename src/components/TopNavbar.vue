@@ -97,98 +97,7 @@
 </i18n>
 
 <template>
-  <div class="top-navbar">
-    <!-- 网站icon &标题 -->
-    <div class="iconAndTitle">
-      <img class="patchyvideo-icon" src="../static/img/patchyvideo.svg" />
-      <span class="patchyvideo-title">Patchy Video</span>
-    </div>
-
-    <!-- 左面的四个页面链接 -->
-    <div class="nav_left">
-      <div class="navItem">
-        <router-link to="/home" @click.native="cleanIptV">{{$t('navbar.index')}}</router-link>
-      </div>
-      <div class="navItem">
-        <router-link to="/lists">{{$t('navbar.playlist')}}</router-link>
-      </div>
-      <div class="navItem">
-        <router-link to="/postvideo">{{$t('navbar.postvideo')}}</router-link>
-      </div>
-      <div class="navItem">
-        <router-link to="/edittag">{{$t('navbar.edittag')}}</router-link>
-      </div>
-      <div class="navItem">
-        <router-link to="/logscontributes">历史和贡献</router-link>
-      </div>
-    </div>
-
-    <!-- 搜索框 -->
-    <div class="search-bar-query">
-      <el-autocomplete
-        id="ipt"
-        ref="ipt"
-        v-model="iptVal"
-        :fetch-suggestions="querySearchAsync2"
-        :trigger-on-focus="false"
-        :placeholder="$t('search.prompt')"
-        @select="handleSelect2"
-        @keyup.enter.native="gotoHome"
-      >
-        <!-- 搜索条件 -->
-        <el-select v-model="searchType" slot="prepend">
-          <el-option :label="$t('search.tag_text')" value="tag"></el-option>
-          <el-option :label="$t('search.text')" value="text"></el-option>
-        </el-select>
-        <!-- 自动补全的模板 -->
-        <template slot-scope="{ item }">
-          <div class="adviceList">
-            <div
-              class="name"
-              v-bind:class="{
-                      Copyright: item.cat == 2,
-                      Language: item.cat == 5,
-                      Character: item.cat == 1,
-                      Author: item.cat == 3,
-                      General: item.cat == 0,
-                      Meta: item.cat == 4,
-                      Soundtrack: item.cat == 6
-                    }"
-              v-html="item.tag||ConvertLangRes(item.langs)"
-            ></div>
-            <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
-          </div>
-        </template>
-        <!-- 搜索按钮 -->
-        <el-button slot="append" icon="el-icon-search" @click="gotoHome"></el-button>
-      </el-autocomplete>
-    </div>
-
-    <!-- 登录和注册按钮 -->
-    <div class="loginUser" style="margin-left:20px" v-if="!isLogin">
-      <router-link to="/login" class="loginUser-login" @click.native="login">{{$t('user.login')}}</router-link>
-      <router-link to="/signup" class="loginUser-signup">{{$t('user.signup')}}</router-link>
-    </div>
-
-    <!-- 登录成功后的用户界面 -->
-    <div class="userHome" v-if="isLogin">
-      <div @click="gotoUserPage">
-        <el-avatar fit="cover" class="loginUser-userAvatar" :size="40" :src="userAvatar"></el-avatar>
-      </div>
-      <router-link class="loginUser-login" to="/users/me">
-        {{
-        this.$store.state.username
-        }}
-      </router-link>
-      <el-badge :value="messagesNum" :hidden="!messagesNum" class="item">
-        <router-link target="_blank" class="loginUser-message" to="/messages">{{$t('user.message')}}</router-link>
-      </el-badge>
-      <a
-        class="loginUser-signup"
-        @click="dialogVisible = true"
-        style="cursor:pointer"
-      >{{$t('user.logout')}}</a>
-    </div>
+  <div>
     <!-- 退出登录的弹出框 -->
     <el-dialog
       :title="$t('prompt.msg')"
@@ -203,6 +112,113 @@
         <el-button type="primary" @click="cleanLocalStorage">{{$t('prompt.ok')}}</el-button>
       </span>
     </el-dialog>
+    <div class="top-navbar">
+      <!-- 网站icon &标题 -->
+      <div class="iconAndTitle">
+        <img class="patchyvideo-icon" src="../static/img/patchyvideo.svg" />
+        <span class="patchyvideo-title">Patchy Video</span>
+      </div>
+
+      <!-- 左面的四个页面链接 -->
+      <div class="nav_left">
+        <div class="navItem">
+          <router-link to="/home" @click.native="cleanIptV">{{$t('navbar.index')}}</router-link>
+        </div>
+        <div class="navItem">
+          <router-link to="/lists">{{$t('navbar.playlist')}}</router-link>
+        </div>
+        <div class="navItem">
+          <router-link to="/postvideo">{{$t('navbar.postvideo')}}</router-link>
+        </div>
+        <div class="navItem">
+          <router-link to="/edittag">{{$t('navbar.edittag')}}</router-link>
+        </div>
+        <div class="navItem">
+          <router-link to="/logscontributes">历史和贡献</router-link>
+        </div>
+      </div>
+
+      <!-- 搜索框 -->
+      <div class="search-bar-query">
+        <el-autocomplete
+          id="ipt"
+          ref="ipt"
+          v-model="iptVal"
+          :fetch-suggestions="querySearchAsync2"
+          :trigger-on-focus="false"
+          :placeholder="$t('search.prompt')"
+          @select="handleSelect2"
+          @keyup.enter.native="gotoHome"
+        >
+          <!-- 搜索条件 -->
+          <el-select v-model="searchType" slot="prepend">
+            <el-option :label="$t('search.tag_text')" value="tag"></el-option>
+            <el-option :label="$t('search.text')" value="text"></el-option>
+          </el-select>
+          <!-- 自动补全的模板 -->
+          <template slot-scope="{ item }">
+            <div class="adviceList">
+              <div
+                class="name"
+                v-bind:class="{
+                      Copyright: item.cat == 2,
+                      Language: item.cat == 5,
+                      Character: item.cat == 1,
+                      Author: item.cat == 3,
+                      General: item.cat == 0,
+                      Meta: item.cat == 4,
+                      Soundtrack: item.cat == 6
+                    }"
+                v-html="item.tag||ConvertLangRes(item.langs)"
+              ></div>
+              <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
+            </div>
+          </template>
+          <!-- 搜索按钮 -->
+          <el-button slot="append" icon="el-icon-search" @click="gotoHome"></el-button>
+        </el-autocomplete>
+      </div>
+
+      <div>
+        <!-- 登录和注册按钮 -->
+        <div class="loginUser" v-if="!isLogin">
+          <router-link
+            to="/login"
+            class="loginUser-login"
+            @click.native="login"
+          >{{$t('user.login')}}</router-link>
+          <router-link to="/signup" class="loginUser-signup">{{$t('user.signup')}}</router-link>
+        </div>
+
+        <!-- 登录成功后的用户界面 -->
+        <div class="userHome" v-else>
+          <div @click="gotoUserPage">
+            <el-avatar fit="cover" class="loginUser-userAvatar" :size="40" :src="userAvatar"></el-avatar>
+          </div>
+          <router-link
+            class="loginUser-login"
+            style="max-width:100px;overflow: hidden;"
+            to="/users/me"
+          >
+            {{
+            this.$store.state.username
+            }}
+          </router-link>
+          <el-badge :value="messagesNum" :hidden="!messagesNum" class="item">
+            <router-link
+              target="_blank"
+              class="loginUser-message"
+              to="/messages"
+            >{{$t('user.message')}}</router-link>
+          </el-badge>
+          <a
+            class="loginUser-signup"
+            @click="dialogVisible = true"
+            style="cursor:pointer"
+          >{{$t('user.logout')}}</a>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -661,6 +677,7 @@ export default {
   padding: 10px;
   width: calc(100% - 20px);
   display: flex;
+  display: -webkit-flex;
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
@@ -670,6 +687,7 @@ export default {
 }
 .iconAndTitle {
   display: flex;
+  display: -webkit-flex;
   align-items: center;
 }
 .patchyvideo-icon {
@@ -682,6 +700,7 @@ export default {
 }
 .nav_left {
   display: flex;
+  display: -webkit-flex;
   flex-direction: row;
   justify-content: space-around;
 }
@@ -703,35 +722,31 @@ export default {
 .loginUser {
   width: 50%;
   display: flex;
+  display: -webkit-flex;
   align-items: center;
 }
 .userHome {
-  max-width: 40%;
   display: flex;
+  display: -webkit-flex;
   align-items: center;
-  justify-content: flex-start;
 }
 .loginUser-userAvatar {
-  margin-right: 10px;
-  flex-shrink: 0;
+  margin: 5px;
 }
 .loginUser-login {
-  margin-right: 10px;
+  margin: 5px;
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
-  flex-shrink: 1;
   font-size: 20px;
 }
 .loginUser-message {
+  margin: 5px;
   white-space: nowrap;
-  flex-shrink: 1;
   font-size: 20px;
 }
 .loginUser-signup {
-  margin-left: 10px;
+  margin: 5px;
   white-space: nowrap;
-  flex-shrink: 1;
   font-size: 20px;
 }
 
