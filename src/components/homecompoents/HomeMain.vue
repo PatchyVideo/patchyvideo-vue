@@ -100,20 +100,22 @@
               </router-link>
 
               <div class="video-detail">
-                <img
+                <div class="title-div">
+                  <img
                     :src="require('../../static/img/' + item.item.site + '.png')"
                     width="16px"
                     style="margin-right:2px;display:inline;"
                   />
-                <h4 style="display:inline;">
-                  <router-link
-                    target="_blank"
-                    :to="{ path: '/video', query: { id: item._id.$oid } }"
-                    tag="a"
-                  >{{ item.item.title }}</router-link>
-                </h4>
+                  <h4>
+                    <router-link
+                      target="_blank"
+                      :to="{ path: '/video', query: { id: item._id.$oid } }"
+                      tag="a"
+                    >{{ item.item.title }}</router-link>
+                  </h4>
+                </div>
                 <p>{{ item.item.desc }}</p>
-                <div>
+                <div class="link-div">
                   <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
                   <i
                     @click="copyVideoLink(item.item.url)"
@@ -569,13 +571,14 @@ export default {
   text-align: center;
 }
 
-.video-detail > h4 {
+.video-detail > .title-div {
   /* 使文字变为最多显示1行，多余的使用省略号代替 */
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.video-detail > .title-div > h4 {
+  display: inline;
 }
 .video-detail > p {
   font-size: 1rem;
@@ -591,7 +594,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.video-detail > div {
+.video-detail > .link-div {
   position: absolute;
   bottom: 0px;
   left: 220px;
