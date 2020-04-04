@@ -64,38 +64,40 @@
         <!-- 播放列表正文 -->
         <ul>
           <li class="list-item" v-for="(item) in listvideo" :key="item._id.$oid">
-            <router-link
-              target="_blank"
-              :to="{ path: '/video', query: { id: item._id.$oid } }"
-              tag="a"
-            >
-              <div class="video-thumbnail">
-                <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
-                <div class="Imgcover"></div>
-              </div>
-            </router-link>
+            <div class="video-item">
+              <router-link
+                target="_blank"
+                :to="{ path: '/video', query: { id: item._id.$oid } }"
+                tag="a"
+              >
+                <div class="video-thumbnail">
+                  <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
+                  <div class="Imgcover"></div>
+                </div>
+              </router-link>
 
-            <div class="video-detail">
-              <h4>
-                <router-link
-                  target="_blank"
-                  :to="{ path: '/video', query: { id: item._id.$oid } }"
-                  tag="a"
-                >{{ item.item.title }}</router-link>
-              </h4>
-              <p>{{ item.item.desc }}</p>
-              <div>
+              <div class="video-detail">
                 <img
-                  :src="require('../../static/img/' + item.item.site + '.png')"
-                  width="16px"
-                  style="margin-right:2px"
-                />
-                <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
-                <i
-                  @click="copyVideoLink(item.item.url)"
-                  class="fa fa-copy fa-lg"
-                  style="margin-left:2px"
-                ></i>
+                    :src="require('../../static/img/' + item.item.site + '.png')"
+                    width="16px"
+                    style="margin-right:2px;display:inline;"
+                  />
+                <h4 style="display:inline;">
+                  <router-link
+                    target="_blank"
+                    :to="{ path: '/video', query: { id: item._id.$oid } }"
+                    tag="a"
+                  >{{ item.item.title }}</router-link>
+                </h4>
+                <p>{{ item.item.desc }}</p>
+                <div>
+                  <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
+                  <i
+                    @click="copyVideoLink(item.item.url)"
+                    class="fa fa-copy fa-lg"
+                    style="margin-left:2px"
+                  ></i>
+                </div>
               </div>
             </div>订阅来源：
             <el-tag v-for="i in item.sat_objs" :key="'s' + item._id.$oid" style="margin: 0 5px">{{i.name || i.qs}}</el-tag>
@@ -564,7 +566,8 @@ export default {
   line-height: 1.1rem;
   white-space: pre-wrap;
   overflow: hidden;
-  height: 4.15rem;
+  height: 4.2rem;
+  padding-top: 5px;
   /* 使文字变为最多显示4行，多余的使用省略号代替 */
   display: -webkit-box;
   -webkit-line-clamp: 4;
@@ -589,14 +592,25 @@ export default {
 }
 
 .video-thumbnail {
+  padding-left: 2px;
   margin-right: 20px;
   float: left;
   position: relative;
   z-index: 1;
 }
+.video-thumbnail img{
+  border-radius: 4px;
+}
+
+.video-item {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border: 1px solid #e5e9ef;
+}
 
 .list-item {
-  padding-bottom: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .fa-copy:hover {
