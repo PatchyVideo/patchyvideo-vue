@@ -54,7 +54,9 @@ export default {
         return {
             options: [
                 { value: 24 * 7*52*10, label: "至今为止" },
-                { value: 24 * 7, label: "过去一周" }
+                { value: 24 * 30, label: "过去一个月" },
+                { value: 24 * 7, label: "过去一周" },
+                { value: 24 * 1, label: "过去一天" }
             ],
             couponSelected:"",
             loading: true,

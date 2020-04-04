@@ -700,7 +700,7 @@ export default {
     width: 23.5%;
     margin-bottom: 15px;
     transition: all 0.3s ease;
-    border: 1px solid #e5e9ef;
+/*    border: 1px solid #e5e9ef;*/
     &:hover {
         background-color: rgb(244, 244, 245);
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);

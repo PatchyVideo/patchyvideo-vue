@@ -605,7 +605,7 @@ export default {
 .video-item {
   padding-top: 2px;
   padding-bottom: 2px;
-  border: 1px solid #e5e9ef;
+/*  border: 1px solid #e5e9ef;*/
 }
 
 .list-item {
