@@ -1074,7 +1074,7 @@
       <el-table-column prop label="合并选项" min-width="130">
         <template slot-scope="scope">
           <el-select
-            @change="(arg1) => onMergeOptionChanged(scope.row, arg1)"
+            @change="(arg1) => onMergeOptionChanged(scope.row, scope.$index, arg1)"
             v-model="mergeArray[scope.$index]"
             placeholder="-"
           >
@@ -1572,18 +1572,55 @@ export default {
         }
       });
     },
-    onMergeOptionChanged(item, value) {
+    // 原标签和目标标签的下拉框修改时调用
+    // 记录原标签和目标标签的标签ID
+    onMergeOptionChanged(item, index, value) {
       if (value == "dst") {
+        this.mergeArray = this.mergeArray.map(item => {
+          if (item == "dst") {
+            return undefined;
+          } else return item;
+        });
+        this.mergeArray[index] = "dst";
         this.mergeDst = item.id;
       }
       if (value == "src") {
+        this.mergeArray = this.mergeArray.map(item => {
+          if (item == "src") {
+            return undefined;
+          } else return item;
+        });
+        this.mergeArray[index] = "src";
         this.mergeSrc = item.id;
       }
     },
+    // 合并标签
     onMergeTagButtonClicked() {
-      console.log(`Merging tag ${this.mergeSrc} into tag ${this.mergeDst}`);
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "/be/tags/merge_tag.do",
+        data: {
+          tags_dst: this.mergeDst,
+          tag_src: this.mergeSrc
+        }
+      })
+        .then(result => {
+          this.loading = false;
+          if (result.data.status == "FAILED") {
+            this.open2("合并失败,请重试!");
+          } else {
+            this.open2("合并成功!");
+            this.requestSearchedTags();
+          }
+          console.log(result);
+        })
+        .catch(error => {
+          this.open2("合并失败,请重试!");
+          this.loading = false;
+          console.log(error);
+        });
       this.mergeArray = [];
-      this.requestSearchedTags();
     },
     // 打开对话框
     openDialog(index) {
