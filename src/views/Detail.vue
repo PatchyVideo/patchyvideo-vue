@@ -250,7 +250,7 @@
           <h4 class="video_link">
             <a :href="myVideoData.video.item.url">{{ myVideoData.video.item.url }}</a>
             <!-- 一键复制的小图标 -->
-            <i @click="copyVideoLink(myVideoData.video.item.url)" class="fa fa-copy fa-1x"></i>
+            <i @click="copyVideoLink(myVideoData.video.item.url)" class="fa fa-copy fa-1x" style="margin-left:4px;"></i>
           </h4>
           <!-- 视频上传时间（？） -->
           <h5 style="text-align: center;">{{ videodate }}</h5>
