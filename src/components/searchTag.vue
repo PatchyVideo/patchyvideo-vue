@@ -31,9 +31,10 @@
     "add": "添加",
     "confirm": "确认",
     "del": "删除",
-    "count": "数量",
+    "num": "数量",
     "category": "类别",
     "tag": "标签",
+    "op": "操作",
     "delete_tag": "删除标签",
     "change_category": "更改分类",
     "show_advance": "显示高级操作",
@@ -69,9 +70,10 @@
     "add": "Add",
     "confirm": "Confirm",
     "del": "Delete",
-    "count": "Count",
+    "num": "Count",
     "category": "Category",
     "tag": "Tag",
+    "op": "Operations",
     "delete_tag": "Delete Tag",
     "change_category": "Change category",
     "show_advance": "Show Advance",
@@ -107,9 +109,10 @@
     "add": "添加",
     "confirm": "確認",
     "del": "刪除",
-    "count": "數量",
+    "num": "數量",
     "category": "類別",
     "tag": "標簽",
+    "op": "操作",
     "delete_tag": "刪除標簽",
     "change_category": "更改分類",
     "show_advance": "顯示高級操作",
@@ -140,11 +143,7 @@
 <template>
   <div class="content2" v-loading="loading">
     <!-- Author页面特有的，作者详情的组件 -->
-    <el-dialog
-      :close-on-click-modal="false"
-      :visible.sync="showAuthorData"
-      width="70%"
-    >
+    <el-dialog :close-on-click-modal="false" :visible.sync="showAuthorData" width="70%">
       <ShowAuthorData ref="AuthorData" :AuthorID="AuthorID"></ShowAuthorData>
     </el-dialog>
 
@@ -152,11 +151,7 @@
     <div class="video-list-header">
       <p v-if="maxcount">{{$t('tag_count_prompt', {count2: count2, maxcount: maxcount})}}</p>
       <p v-else>{{$t('no_tag_found')}}</p>
-      <el-select
-        id="select-order"
-        v-model="couponSelected"
-        class="video-list-header-el-select"
-      >
+      <el-select id="select-order" v-model="couponSelected" class="video-list-header-el-select">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -167,7 +162,11 @@
     </div>
     <!-- 合并标签按钮 -->
     <div class="video-list-header">
-      <el-button @click="onMergeTagButtonClicked" :disabled="mergeDst == -1 || mergeSrc == -1" class="video-list-header-el-select">合并标签</el-button>
+      <el-button
+        @click="onMergeTagButtonClicked"
+        :disabled="mergeDst == -1 || mergeSrc == -1"
+        class="video-list-header-el-select"
+      >合并标签</el-button>
     </div>
     <!-- 添加标签列表 -->
     <div class="addTag">
@@ -183,12 +182,7 @@
         size="small"
         class="addTag-select"
       >
-        <el-option
-          v-for="item in tagCategories3"
-          :key="item"
-          :label="item"
-          :value="item"
-        ></el-option>
+        <el-option v-for="item in tagCategories3" :key="item" :label="item" :value="item"></el-option>
       </el-select>
       <el-button type="info" @click="requestSearchedTags()">{{$t('search')}}</el-button>
     </div>
@@ -202,8 +196,7 @@
             class="showAuthorData"
             v-if="props.row.category == 'Author'"
             @click="openAuthorData(props.row.id)"
-            >{{$t('author_detial')}}</el-button
-          >
+          >{{$t('author_detial')}}</el-button>
           <!-- 为现有标签添加新的语言 -->
           <div class="languageSuppot">
             <el-row>
@@ -237,8 +230,7 @@
                   round
                   class="confirmChange"
                   @click="addTagLanguage(props.$index)"
-                  >{{$t('add')}}</el-button
-                >
+                >{{$t('add')}}</el-button>
               </el-col>
             </el-row>
           </div>
@@ -267,8 +259,7 @@
                     tagEdit[props.$index].languages.CHS !=
                       tagData[props.$index].languages.CHS
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.CHT">
@@ -294,8 +285,7 @@
                     tagEdit[props.$index].languages.CHT !=
                       tagData[props.$index].languages.CHT
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.JPN">
@@ -321,8 +311,7 @@
                     tagEdit[props.$index].languages.JPN !=
                       tagData[props.$index].languages.JPN
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.ENG">
@@ -348,8 +337,7 @@
                     tagEdit[props.$index].languages.ENG !=
                       tagData[props.$index].languages.ENG
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.KOR">
@@ -375,8 +363,7 @@
                     tagEdit[props.$index].languages.KOR !=
                       tagData[props.$index].languages.KOR
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.CSY">
@@ -402,8 +389,7 @@
                     tagEdit[props.$index].languages.CSY !=
                       tagData[props.$index].languages.CSY
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.NLD">
@@ -429,8 +415,7 @@
                     tagEdit[props.$index].languages.NLD !=
                       tagData[props.$index].languages.NLD
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.FRA">
@@ -456,8 +441,7 @@
                     tagEdit[props.$index].languages.FRA !=
                       tagData[props.$index].languages.FRA
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.DEU">
@@ -483,8 +467,7 @@
                     tagEdit[props.$index].languages.DEU !=
                       tagData[props.$index].languages.DEU
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.HUN">
@@ -510,8 +493,7 @@
                     tagEdit[props.$index].languages.HUN !=
                       tagData[props.$index].languages.HUN
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.ITA">
@@ -537,8 +519,7 @@
                     tagEdit[props.$index].languages.ITA !=
                       tagData[props.$index].languages.ITA
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.PLK">
@@ -564,8 +545,7 @@
                     tagEdit[props.$index].languages.PLK !=
                       tagData[props.$index].languages.PLK
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.PTB">
@@ -591,8 +571,7 @@
                     tagEdit[props.$index].languages.PTB !=
                       tagData[props.$index].languages.PTB
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.ROM">
@@ -618,8 +597,7 @@
                     tagEdit[props.$index].languages.ROM !=
                       tagData[props.$index].languages.ROM
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.RUS">
@@ -645,8 +623,7 @@
                     tagEdit[props.$index].languages.RUS !=
                       tagData[props.$index].languages.RUS
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.ESP">
@@ -672,8 +649,7 @@
                     tagEdit[props.$index].languages.ESP !=
                       tagData[props.$index].languages.ESP
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.TRK">
@@ -699,8 +675,7 @@
                     tagEdit[props.$index].languages.TRK !=
                       tagData[props.$index].languages.TRK
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.VIN">
@@ -726,17 +701,13 @@
                     tagEdit[props.$index].languages.VIN !=
                       tagData[props.$index].languages.VIN
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
           </div>
           <!-- 标签别名 -->
           <div class="languageSuppot">
-            <el-row
-              v-for="(item, i) in tagData[props.$index].alias"
-              :key="item"
-            >
+            <el-row v-for="(item, i) in tagData[props.$index].alias" :key="item">
               <el-col :span="3">
                 <span class="languageSuppot_language">----:</span>
               </el-col>
@@ -759,28 +730,21 @@
                     tagEdit[props.$index].alias[i] !=
                       tagData[props.$index].alias[i]
                   "
-                  >{{$t('confirm')}}</el-button
-                >
+                >{{$t('confirm')}}</el-button>
                 <el-button
                   type="danger"
                   size="mini"
                   round
                   class="confirmChange"
                   @click="confirmAliasRemove(props.$index, i)"
-                  >{{$t('del')}}</el-button
-                >
+                >{{$t('del')}}</el-button>
               </el-col>
             </el-row>
           </div>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="count"
-        :label="$t('count')"
-        min-width="80"
-        align="center"
-      ></el-table-column>
-      <el-table-column :label="$t('category')" min-width="130" align="center">
+      <el-table-column prop="count" :label="$t('num')" min-width="60"></el-table-column>
+      <el-table-column :label="$t('category')" min-width="130">
         <template slot-scope="scope">
           <div
             class="category"
@@ -793,12 +757,10 @@
               General: scope.row.category == 'General',
               Meta: scope.row.category == 'Meta'
             }"
-          >
-            {{ scope.row.category }}
-          </div>
+          >{{ scope.row.category }}</div>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('tag')" header-align="center"  min-width="550">
+      <el-table-column :label="$t('tag')" min-width="550">
         <!-- 各种语言标签 -->
         <template slot-scope="scope">
           <span class="tagLabel" v-if="scope.row.languages.CHS">
@@ -815,8 +777,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.CHS)"
-              >{{ scope.row.languages.CHS.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.CHS.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.CHT">
             繁體中文:
@@ -832,8 +793,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.CHT)"
-              >{{ scope.row.languages.CHT.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.CHT.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.JPN">
             日本語:
@@ -849,8 +809,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.JPN)"
-              >{{ scope.row.languages.JPN.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.JPN.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ENG">
             English:
@@ -866,8 +825,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.ENG)"
-              >{{ scope.row.languages.ENG.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.ENG.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.KOR">
             한국어:
@@ -883,8 +841,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.KOR)"
-              >{{ scope.row.languages.KOR.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.KOR.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.CSY">
             čeština:
@@ -900,8 +857,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.CSY)"
-              >{{ scope.row.languages.CSY.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.CSY.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.NLD">
             Nederlands:
@@ -917,8 +873,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.NLD)"
-              >{{ scope.row.languages.NLD.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.NLD.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.FRA">
             français:
@@ -934,8 +889,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.FRA)"
-              >{{ scope.row.languages.FRA.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.FRA.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.DEU">
             Deutsch:
@@ -951,8 +905,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.DEU)"
-              >{{ scope.row.languages.DEU.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.DEU.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.HUN">
             magyar nyelv:
@@ -968,8 +921,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.HUN)"
-              >{{ scope.row.languages.HUN.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.HUN.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ITA">
             italiano:
@@ -985,8 +937,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.ITA)"
-              >{{ scope.row.languages.ITA.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.ITA.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.PLK">
             polski:
@@ -1002,8 +953,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.PLK)"
-              >{{ scope.row.languages.PLK.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.PLK.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.PTB">
             português:
@@ -1019,8 +969,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.PTB)"
-              >{{ scope.row.languages.PTB.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.PTB.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ROM">
             limba română:
@@ -1036,8 +985,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.ROM)"
-              >{{ scope.row.languages.ROM.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.ROM.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.RUS">
             русский язык:
@@ -1053,8 +1001,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.RUS)"
-              >{{ scope.row.languages.RUS.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.RUS.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ESP">
             español:
@@ -1070,8 +1017,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.ESP)"
-              >{{ scope.row.languages.ESP.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.ESP.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.TRK">
             Türk dili:
@@ -1087,8 +1033,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.TRK)"
-              >{{ scope.row.languages.TRK.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.TRK.replace(/\_/g, " ") }}</span>
           </span>
           <span class="tagLabel" v-if="scope.row.languages.VIN">
             Tiếng Việt:
@@ -1104,8 +1049,7 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.VIN)"
-              >{{ scope.row.languages.VIN.replace(/\_/g, " ") }}</span
-            >
+            >{{ scope.row.languages.VIN.replace(/\_/g, " ") }}</span>
           </span>
           <!-- 标签别名 -->
           <span class="tagLabel" v-for="item in scope.row.alias" :key="item">
@@ -1122,21 +1066,37 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(item)"
-              >{{ item.replace(/\_/g, " ") }}</span
-            >
+            >{{ item.replace(/\_/g, " ") }}</span>
           </span>
         </template>
       </el-table-column>
+      <!-- 合并标签选项 -->
+      <el-table-column prop label="合并选项" min-width="130">
+        <template slot-scope="scope">
+          <el-select
+            @change="(arg1) => onMergeOptionChanged(scope.row, arg1)"
+            v-model="mergeArray[scope.$index]"
+            placeholder="-"
+          >
+            <el-option
+              v-for="item in mergeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
       <!-- 操作,一般隐藏 -->
-      <el-table-column label="操作" min-width="200" align="center" fixed="right">
+      <el-table-column :label="$t('op')" min-width="200" fixed="right">
         <template slot-scope="scope">
           <div v-if="advancedOptions" class="tabs-op">
-            <el-button type="danger" round @click="removeTag(scope.$index)"
-              >{{$t('delete_tag')}}</el-button
-            >
-            <el-button type="primary" round @click="openDialog(scope.$index)"
-              >{{$t('change_category')}}</el-button
-            >
+            <el-button type="danger" round @click="removeTag(scope.$index)">{{$t('delete_tag')}}</el-button>
+            <el-button
+              type="primary"
+              round
+              @click="openDialog(scope.$index)"
+            >{{$t('change_category')}}</el-button>
           </div>
           <div v-else>
             <el-button
@@ -1144,26 +1104,9 @@
               round
               @click="advancedOptions = true"
               style="margin-left:40px"
-              >{{$t('show_advance')}}</el-button
-            >
+            >{{$t('show_advance')}}</el-button>
           </div>
         </template>
-      </el-table-column>
-      <el-table-column
-        prop=""
-        label="合并选项"
-        min-width="80"
-      >
-      <template slot-scope="scope">
-        <el-select @change="(arg1) => onMergeOptionChanged(scope.row, arg1)" v-model="scope.merge" placeholder="-">
-          <el-option
-            v-for="item in mergeOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </template>
       </el-table-column>
     </el-table>
 
@@ -1189,12 +1132,7 @@
           :placeholder="$t('select_categoty')"
           style="width:100%"
         >
-          <el-option
-            v-for="item in tagCategories2"
-            :key="item"
-            :label="item"
-            :value="item"
-          ></el-option>
+          <el-option v-for="item in tagCategories2" :key="item" :label="item" :value="item"></el-option>
         </el-select>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -1209,7 +1147,7 @@
 import ShowAuthorData from "../components/ShowAuthorData.vue";
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 搜索标签的内容
       searchTag: "",
@@ -1255,10 +1193,10 @@ export default {
       tagEdit: [],
       // 标签列表的排序规则
       options: [
-        { value: "latest", label: this.$t('latest') },
-        { value: "oldest", label: this.$t('oldest') },
-        { value: "count", label: this.$t('count') },
-        { value: "count_inv", label: this.$t('count_inv') }
+        { value: "latest", label: this.$t("latest") },
+        { value: "oldest", label: this.$t("oldest") },
+        { value: "count", label: this.$t("count") },
+        { value: "count_inv", label: this.$t("count_inv") }
       ],
       // 当前标签列表的排列顺序
       couponSelected: "latest",
@@ -1281,11 +1219,17 @@ export default {
       // 弹出框是否显示
       dialogVisible: false,
       // 合并标签选项
-      mergeOptions: [{value: '-', label: '-'}, {value: 'dst', label: '目标标签'}, {value: 'src', label: '源标签'}],
+      mergeOptions: [
+        { value: "-", label: "-" },
+        { value: "dst", label: "目标标签" },
+        { value: "src", label: "源标签" }
+      ],
       // 合并标签的源
       mergeSrc: -1,
       // 合并标签的目标
       mergeDst: -1,
+      // 标记不同标签是否处于合并状态下的数组
+      mergeArray: [],
       // 页面是否属于加载状态的判断
       loading: true
     };
@@ -1391,12 +1335,12 @@ export default {
       var language = this.newTagLanguage.value;
       // 校验数据
       if (language == undefined) {
-        this.open2(this.$t('select_language'));
+        this.open2(this.$t("select_language"));
         this.loading = false;
         return false;
       }
       if (new_tag == "") {
-        this.open2(this.$t('tag_name_prompt'));
+        this.open2(this.$t("tag_name_prompt"));
         this.loading = false;
         return false;
       }
@@ -1414,17 +1358,17 @@ export default {
         }
       }).then(result => {
         if (result.data.status == "SUCCEED") {
-          this.open(this.$t('add_succeed'));
+          this.open(this.$t("add_succeed"));
           this.new_Tag = "";
           this.loading = false;
           this.requestSearchedTags();
         } else {
           if (result.data.data.reason == "TAG_ALREADY_EXIST") {
             this.loading = false;
-            this.open2(this.$t('tag_already_exist'));
+            this.open2(this.$t("tag_already_exist"));
           } else {
             this.loading = false;
-            this.open2(this.$t('add_failed'));
+            this.open2(this.$t("add_failed"));
           }
         }
       });
@@ -1464,10 +1408,10 @@ export default {
         } else {
           if (result.data.data.reason == "ALIAS_ALREADY_EXIST") {
             this.loading = false;
-            this.open2(this.$t('tag_already_exist'));
+            this.open2(this.$t("tag_already_exist"));
           } else {
             this.loading = false;
-            this.open2(this.$t('add_failed'));
+            this.open2(this.$t("add_failed"));
           }
         }
       });
@@ -1475,9 +1419,9 @@ export default {
     // 删除标签
     removeTag(index) {
       var tag = this.tagEdit[index].id;
-      this.$confirm(this.$t('delete_confirm_prompt'), this.$t('prompt'), {
-        confirmButtonText: this.$t('confirm'),
-        cancelButtonText: this.$t('cancel2'),
+      this.$confirm(this.$t("delete_confirm_prompt"), this.$t("prompt"), {
+        confirmButtonText: this.$t("confirm"),
+        cancelButtonText: this.$t("cancel2"),
         type: "warning"
       })
         // 点击确定之后
@@ -1493,13 +1437,13 @@ export default {
           }).then(result => {
             if (result.data.status == "SUCCEED") {
               this.loading = false;
-              this.open(this.$t('delete_succeed'));
+              this.open(this.$t("delete_succeed"));
               this.requestSearchedTags();
             } else {
               if (result.data.data.reason == "UNAUTHORISED_OPERATION") {
-                this.open2(this.$t('unauthorised_prompt'));
+                this.open2(this.$t("unauthorised_prompt"));
               } else {
-                this.open2(this.$t('delete_failed'));
+                this.open2(this.$t("delete_failed"));
               }
               this.loading = false;
             }
@@ -1511,9 +1455,9 @@ export default {
     // 删除标签别名
     confirmAliasRemove(index, i) {
       var alias = this.tagEdit[index].alias[i];
-      this.$confirm(this.$t('delete_alias_prompt'), this.$t('prompt'), {
-        confirmButtonText: this.$t('confirm'),
-        cancelButtonText: this.$t('cancel2'),
+      this.$confirm(this.$t("delete_alias_prompt"), this.$t("prompt"), {
+        confirmButtonText: this.$t("confirm"),
+        cancelButtonText: this.$t("cancel2"),
         type: "warning"
       })
         // 点击确定之后
@@ -1528,13 +1472,13 @@ export default {
           }).then(result => {
             if (result.data.status == "SUCCEED") {
               this.loading = false;
-              this.open(this.$t('delete_succeed'));
+              this.open(this.$t("delete_succeed"));
               this.requestSearchedTags();
             } else {
               if (result.data.data.reason == "UNAUTHORISED_OPERATION") {
-                this.open2(this.$t('unauthorised_prompt'));
+                this.open2(this.$t("unauthorised_prompt"));
               } else {
-                this.open2(this.$t('delete_failed'));
+                this.open2(this.$t("delete_failed"));
               }
               this.loading = false;
             }
@@ -1549,7 +1493,7 @@ export default {
       var tag = this.tagData[index].languages[language];
       var new_tag = this.tagEdit[index].languages[language].replace(/\ /g, "_");
       if (new_tag == "") {
-        this.open2(this.$t('tag_name_prompt'));
+        this.open2(this.$t("tag_name_prompt"));
         this.loading = false;
         return false;
       }
@@ -1564,11 +1508,11 @@ export default {
       }).then(result => {
         if (result.data.status == "SUCCEED") {
           this.loading = false;
-          this.open(this.$t('rename_succeed'));
+          this.open(this.$t("rename_succeed"));
           this.requestSearchedTags();
         } else {
           this.loading = false;
-          this.open2(this.$t('rename_failed'));
+          this.open2(this.$t("rename_failed"));
         }
       });
     },
@@ -1578,7 +1522,7 @@ export default {
       var tag = this.tagData[$index].alias[i];
       var new_tag = this.tagEdit[$index].alias[i].replace(/\ /g, "_");
       if (new_tag == "") {
-        this.open2(this.$t('tag_name_prompt'));
+        this.open2(this.$t("tag_name_prompt"));
         this.loading = false;
         return false;
       }
@@ -1592,11 +1536,11 @@ export default {
       }).then(result => {
         if (result.data.status == "SUCCEED") {
           this.loading = false;
-          this.open(this.$t('rename_succeed'));
+          this.open(this.$t("rename_succeed"));
           this.requestSearchedTags();
         } else {
           this.loading = false;
-          this.open2(this.$t('rename_failed'));
+          this.open2(this.$t("rename_failed"));
         }
       });
     },
@@ -1605,7 +1549,7 @@ export default {
       var tag = this.tagData[this.tagIndex].id;
       var category = this.newTagCategorie;
       if (category == "") {
-        this.open2(this.$t('select_categoty'));
+        this.open2(this.$t("select_categoty"));
         return false;
       }
       this.dialogVisible = false;
@@ -1619,14 +1563,27 @@ export default {
         }
       }).then(result => {
         if (result.data.status == "SUCCEED") {
-          this.open(this.$t('rename_succeed'));
+          this.open(this.$t("rename_succeed"));
           this.loading = false;
           this.$router.go(0);
         } else {
           this.loading = false;
-          this.open2(this.$t('rename_failed'));
+          this.open2(this.$t("rename_failed"));
         }
       });
+    },
+    onMergeOptionChanged(item, value) {
+      if (value == "dst") {
+        this.mergeDst = item.id;
+      }
+      if (value == "src") {
+        this.mergeSrc = item.id;
+      }
+    },
+    onMergeTagButtonClicked() {
+      console.log(`Merging tag ${this.mergeSrc} into tag ${this.mergeDst}`);
+      this.mergeArray = [];
+      this.requestSearchedTags();
     },
     // 打开对话框
     openDialog(index) {
@@ -1659,18 +1616,6 @@ export default {
         message: message,
         type: "error"
       });
-    },
-    onMergeOptionChanged(item, value) {
-      if (value == "dst") {
-        this.mergeDst = item.id;
-      }
-      if (value == "src") {
-        this.mergeSrc = item.id;
-      }
-    },
-    onMergeTagButtonClicked() {
-      console.log(`Merging tag ${this.mergeSrc} into tag ${this.mergeDst}`);
-      this.requestSearchedTags();
     }
   },
   watch: {
@@ -1691,12 +1636,11 @@ export default {
 </script>
 
 <style scoped>
-  .tabs-op button{
-
-    margin: auto;
-    margin-right: 5px;
-    margin-bottom: 5px;
-  }
+.tabs-op button {
+  margin: auto;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
 .content2 {
   width: 100%;
   min-height: 600px;
