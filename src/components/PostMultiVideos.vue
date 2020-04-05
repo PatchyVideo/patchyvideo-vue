@@ -23,6 +23,7 @@
     "tag": "标签",
     "no_tag": "暂无标签！",
     "advance": "高级选项",
+    "PostRules":"发布规则",
     "mutually_copies": "视频互为副本",
     "post_video": "发布视频",
     "post_failed": "视频上传失败！",
@@ -35,6 +36,7 @@
     "tag": "Tags",
     "no_tag": "No tags!",
     "advance": "Advance",
+    "PostRules":"Post rules",
     "mutually_copies": "Mutually copies",
     "post_video": "Post video",
     "post_failed": "Upload failed",
@@ -47,6 +49,7 @@
     "tag": "標簽",
     "no_tag": "暫無標簽！",
     "advance": "高級選項",
+    "PostRules":"發布規則",
     "mutually_copies": "視頻互為副本",
     "post_video": "發布視頻",
     "post_failed": "視頻上傳失敗！",
@@ -80,6 +83,12 @@
         {{$t('advance')}}
         <i class="el-icon-caret-bottom" v-if="!advancedOptions"></i>
         <i class="el-icon-caret-top" v-else></i>
+        <!-- Wiki链接 -->
+        <a
+          href="https://patchyvideo.wiki/Upload"
+          target="_blank"
+          style="color:#409EFF;float:right;margin-right:100px;margin-top:0px;"
+        >{{$t('PostRules')}}</a>
       </p>
       <el-collapse-transition style="margin-bottom:20px">
         <div v-show="advancedOptions" class="options">
@@ -107,7 +116,7 @@
 import EditTags from "../components/EditTags";
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 标签页面是否打开
       showTagPanel: true,
@@ -151,8 +160,7 @@ export default {
       }
     }
   },
-  created() {
-  },
+  created() {},
   mounted() {},
   methods: {
     // 显示标签编辑组件
@@ -200,25 +208,25 @@ export default {
     // 各种各样的报错警告
     open2() {
       this.$message({
-        message: this.$t('post_failed'),
+        message: this.$t("post_failed"),
         type: "error"
       });
     },
     open3(errorTag) {
       this.$message({
-        message: this.$t('tag_not_exist', {tag: errorTag}),
+        message: this.$t("tag_not_exist", { tag: errorTag }),
         type: "error"
       });
     },
     open4() {
       this.$message({
-        message: this.$t('post_succeed'),
+        message: this.$t("post_succeed"),
         type: "success"
       });
     },
     open5() {
       this.$message({
-        message: this.$t('unknown_error'),
+        message: this.$t("unknown_error"),
         type: "error"
       });
     }

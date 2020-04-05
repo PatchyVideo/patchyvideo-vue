@@ -200,23 +200,26 @@
 
       <!-- 在Home页面渲染的侧导航条内容 -->
       <ul v-if="$route.path === '/home'&&(this.name==='main')" class="tag-ul">
-        <li class="tag belong-to-home" v-for="(val, key) in msg" :key="key">
-          <div class="tag-div">
-            <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
-            <!-- 根据tag名称自动渲染tag颜色 -->
-            <p
-              v-bind:class="{
-                Copyright: val == 'Copyright',
-                Language: val == 'Language',
-                Character: val == 'Character',
-                Author: val == 'Author',
-                General: val == 'General',
-                Meta: val == 'Meta',
-                Soundtrack:val == 'Soundtrack'
-              }"
-              @click="gotoHome(key)"
-            >{{ key.replace(/_/g," ") }}</p>
-          </div>
+        <li v-for="(val, key) in msg" :key="key">
+          <el-tooltip effect="light" :content="key.replace(/_/g,' ')" placement="left">
+            <div class="tag belong-to-home">
+              <div class="tag-div">
+                <!-- 根据tag名称自动渲染tag颜色 -->
+                <p
+                  v-bind:class="{
+                    Copyright: val == 'Copyright',
+                    Language: val == 'Language',
+                    Character: val == 'Character',
+                    Author: val == 'Author',
+                    General: val == 'General',
+                    Meta: val == 'Meta',
+                    Soundtrack:val == 'Soundtrack'
+                  }"
+                  @click="gotoHome(key)"
+                >{{ key.replace(/_/g," ") }}</p>
+              </div>
+            </div>
+          </el-tooltip>
         </li>
       </ul>
       <ul v-if="$route.path === '/home'&&(this.name==='sub')" class="tag-ul">
@@ -245,9 +248,11 @@
           <h3>{{ tranTagCategories(val) }}</h3>
           <!-- 根据tag名称自动渲染tag颜色 -->
           <div class="tag-ul">
-            <div class="tag-div" v-for="item in key" :key="item">
-              <p
-                v-bind:class="{
+            <div v-for="item in key" :key="item">
+              <el-tooltip effect="light" :content="item.replace(/_/g,' ')" placement="left">
+                <div class="tag-div">
+                  <p
+                    v-bind:class="{
                   Copyright: val == 'Copyright',
                   Language: val == 'Language',
                   Character: val == 'Character',
@@ -256,15 +261,17 @@
                   Meta: val == 'Meta',
                   Soundtrack:val == 'Soundtrack'
                 }"
-              >
-                <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
-                <el-button
-                  v-if="val == 'Author'"
-                  size="mini"
-                  style="margin-left:5px;"
-                  @click="openAuthorData(item)"
-                >详情</el-button>
-              </p>
+                  >
+                    <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
+                    <el-button
+                      v-if="val == 'Author'"
+                      size="mini"
+                      style="margin-left:5px;"
+                      @click="openAuthorData(item)"
+                    >详情</el-button>
+                  </p>
+                </div>
+              </el-tooltip>
             </div>
           </div>
         </li>
