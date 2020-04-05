@@ -57,7 +57,14 @@
     "delete_failed": "删除失败，请重试！",
     "delete_alias_prompt": "此操作将永久删除该标签的别名, 是否继续?",
     "rename_succeed": "修改成功！",
-    "rename_failed": "修改失败，请重试！"
+    "rename_failed": "修改失败，请重试！",
+    "dstTag":"目标标签",
+    "srcTag":"源标签",
+    "adminOnly":"只有管理员有权限合并标签",
+    "mergeFailed":"合并失败,请重试!",
+    "mergeSuccessful":"合并成功!"
+
+
   },
   "ENG": {
     "tag_count_prompt": "Showing {count2} / {maxcount} tags",
@@ -96,7 +103,12 @@
     "delete_failed": "Delete failed",
     "delete_alias_prompt": "This alias will be deleted permanently, are you sure you want to proceed?",
     "rename_succeed": "Update succeed",
-    "rename_failed": "Update failed"
+    "rename_failed": "Update failed",
+    "dstTag":"Dst tag",
+    "srcTag":"Src tag",
+    "adminOnly":"Administrator Only!",
+    "mergeFailed":"Merging failed, please try again!",
+    "mergeSuccessful":"Merging successful!"
   },
   "CHT": {
     "tag_count_prompt": "顯示 {count2} / {maxcount} 個標簽",
@@ -135,7 +147,12 @@
     "delete_failed": "刪除失敗，請重試！",
     "delete_alias_prompt": "此操作將永久刪除該標簽的別名, 是否繼續?",
     "rename_succeed": "修改成功！",
-    "rename_failed": "修改失敗，請重試！"
+    "rename_failed": "修改失敗，請重試！",
+    "dstTag":"目标标签",
+    "srcTag":"源标签",
+    "adminOnly":"只有管​​理員有權限合併標籤!",
+    "mergeFailed":"合併失敗,請重試!",
+    "mergeSuccessful":"合併成功!"
   }
 }
 </i18n>
@@ -1221,8 +1238,8 @@ export default {
       // 合并标签选项
       mergeOptions: [
         { value: "-", label: "-" },
-        { value: "dst", label: "目标标签" },
-        { value: "src", label: "源标签" }
+        { value: "dst", label: this.$t("dstTag") },
+        { value: "src", label: this.$t("srcTag") }
       ],
       // 合并标签的源
       mergeSrc: -1,
@@ -1601,22 +1618,25 @@ export default {
         method: "post",
         url: "/be/tags/merge_tag.do",
         data: {
-          tags_dst: this.mergeDst,
+          tag_dst: this.mergeDst,
           tag_src: this.mergeSrc
         }
       })
         .then(result => {
           this.loading = false;
           if (result.data.status == "FAILED") {
-            this.open2("合并失败,请重试!");
+            if (result.data.data.reason == "UNAUTHORISED_OPERATION") {
+              this.open2(this.$t("adminOnly"));
+            } else {
+              this.open2(this.$t("mergeFailed"));
+            }
           } else {
-            this.open2("合并成功!");
+            this.open(this.$t("mergeSuccessful"));
             this.requestSearchedTags();
           }
-          console.log(result);
         })
         .catch(error => {
-          this.open2("合并失败,请重试!");
+          this.open2(this.$t("mergeFailed"));
           this.loading = false;
           console.log(error);
         });
