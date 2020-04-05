@@ -231,6 +231,7 @@
 
           <el-input :placeholder="$t('enter_email')" prefix-icon="el-icon-message" v-model="myEmail"></el-input>
           <button @click="bindEmail()">{{$t('bind')}}</button>
+          <p style="margin-top: 20px" v-if="myData.email!==''">已绑定邮箱:{{myData.email}}</p>
         </div>
       </div>
     </div>
@@ -309,7 +310,8 @@ export default {
       myData: {
         image: "null",
         username: "null",
-        desc: "null"
+        desc: "null",
+        email:"null"
       },
       userData: {
         desc: "null",
