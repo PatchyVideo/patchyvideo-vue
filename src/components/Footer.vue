@@ -146,14 +146,14 @@ export default {
       // 获取前端地址
       this.axios({
         method: "get",
-        url: "https://patchyvideo.com/v/fe/"
+        url: "https://thvideo.tv/v/fe/"
       }).then(result => {
         this.commitOfClient = result.data;
       });
       // 获取后端地址
       this.axios({
         method: "get",
-        url: "https://patchyvideo.com/v/be/"
+        url: "https://thvideo.tv/v/be/"
       }).then(result => {
         this.commitOfServer = result.data;
       });
@@ -171,6 +171,7 @@ export default {
 
 <style scoped>
 .patchyvideo-footer {
+  position: relative;
   width: calc(100% - 40px);
   padding: 20px;
   padding-bottom: 3px;
