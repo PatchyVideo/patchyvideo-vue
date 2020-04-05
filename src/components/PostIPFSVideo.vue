@@ -27,6 +27,7 @@
         "upload_limit":"只能一个上传jpg/png文件哦(建议图片比例8：5)",
         "label":"标签",
         "no_label":"暂无标签！",
+        "HowToPost":"如何上传IPFS视频?",
         "post_video":"发布视频",
         "not_input_addr":"还没输入视频地址呢！",
         "addr_err":"视频地址格式错误！",
@@ -49,6 +50,7 @@
         "upload_limit":"Only one jpg / png file can be uploaded (recommend picture ratio 8: 5)",
         "label":"label",
         "no_label":"No tags!",
+        "HowToPost":"How to post IPFS video?",
         "post_video":"Post video",
         "not_input_addr":"Please enter video CID",
         "addr_err":"Incorrect Video URL",
@@ -72,6 +74,7 @@
         "upload_limit":"只能壹個上傳jpg/png文件哦(建議圖片比例8：5)",
         "label":"標簽",
         "no_label":"暫無標簽！",
+        "HowToPost":"如何上傳IPFS視頻?",
         "post_video":"發布視頻",
         "not_input_addr":"還沒輸入視頻地址呢！",
         "addr_err":"視頻地址格式錯誤！",
@@ -139,6 +142,14 @@
             </div>
           </div>
         </el-form-item>
+        <el-form-item>
+          <!-- Wiki链接 -->
+          <a
+            href="https://patchyvideo.wiki/Upload"
+            target="_blank"
+            style="color:#409EFF;float:right;font-size:17px;"
+          >{{$t('HowToPost')}}</a>
+        </el-form-item>
         <!-- 上传视频的按钮 -->
         <el-form-item style="text-align: center;">
           <el-button class="postButton" type="primary" @click="postMultiVideos">
@@ -161,16 +172,16 @@
 import EditTags from "../components/EditTags";
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     // URL校验规则
     var validateURL = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error(this.$t('not_input_addr')));
+        return callback(new Error(this.$t("not_input_addr")));
       }
       var value2 = "ipfs:" + value;
       var ipfsURL = /^ipfs:[a-zA-Z0-9]+/;
       if (!ipfsURL.test(value2)) {
-        return callback(new Error(this.$t('addr_err')));
+        return callback(new Error(this.$t("addr_err")));
       } else {
         callback();
       }
@@ -189,9 +200,19 @@ export default {
       // 校验数据
       rules: {
         URL: [{ validator: validateURL, trigger: "blur" }],
-        title: [{ required: true, message: this.$t('not_input_title'), trigger: "blur" }],
+        title: [
+          {
+            required: true,
+            message: this.$t("not_input_title"),
+            trigger: "blur"
+          }
+        ],
         desc: [
-          { required: true, message: this.$t('not_introductory_video'), trigger: "blur" }
+          {
+            required: true,
+            message: this.$t("not_introductory_video"),
+            trigger: "blur"
+          }
         ]
       },
       // 校验封面是否上传
@@ -237,7 +258,7 @@ export default {
   methods: {
     // 超出限制大小时调用的函数
     handleExceed() {
-      this.$message.warning(this.$t('upload_cover_limit'));
+      this.$message.warning(this.$t("upload_cover_limit"));
     },
     // 删除文件调用的函数
     beforeRemove(file, fileList) {
@@ -308,25 +329,25 @@ export default {
     // 各种各样的报错警告
     open2() {
       this.$message({
-        message: this.$t('upload_fail'),
+        message: this.$t("upload_fail"),
         type: "error"
       });
     },
     open3(errorTag) {
       this.$message({
-        message:  this.$t('label') + errorTag + " " + this.$t('not_exist'),
+        message: this.$t("label") + errorTag + " " + this.$t("not_exist"),
         type: "error"
       });
     },
     open4() {
       this.$message({
-        message: this.$t('upload_success'),
+        message: this.$t("upload_success"),
         type: "success"
       });
     },
     open5() {
       this.$message({
-        message: this.$t('unknown_err'),
+        message: this.$t("unknown_err"),
         type: "error"
       });
     }

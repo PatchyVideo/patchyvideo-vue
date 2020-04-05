@@ -15,6 +15,9 @@
     "nocomment":"暂无评论！",
     "saySth":"说点儿什么吧~",
     "usingEnter":"使用Enter键发表评论",
+    "respect":"请遵守",
+    "commentRules":"评论规则",
+    "yo":"哟",
     "post":"发表",
     "joinDiscuss":"想要一起参与讨论？",
     "login":"点我登录",
@@ -44,6 +47,9 @@
     "nocomment":"No comment here!",
     "saySth":"Say something...",
     "usingEnter":"Post comment using Enter key",
+    "respect":"Please respect ",
+    "commentRules":"the commentRules",
+    "yo":" ",
     "post":"Post",
     "joinDiscuss":"Want to join the discuss? ",
     "login":"Click me to login",
@@ -73,6 +79,9 @@
     "nocomment":"暫無評論！",
     "saySth":"說點兒什麼吧~",
     "usingEnter":"使用Enter鍵發表評論",
+    "respect":"請遵守",
+    "commentRules":"評論規則",
+    "yo":"哦",
     "post":"發表",
     "joinDiscuss":"想要一起參與討論？",
     "login":"點我登錄",
@@ -132,72 +141,75 @@
     <!-- 发表评论 -->
     <div class="comment" v-if="isLogin">
       <!--表情区域-->
-      <el-popover
-        placement="top"
-        trigger="manual"
-        content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
-        v-model="faceVisible"
-      >
-        <table
-          cellpadding="1"
-          cellspacing="1"
-          align="center"
-          border="1"
-          bordercolor="#e3e3e3"
-          style="border-collapse:collapse;"
+      <div style="text-align: center !important;">
+        <el-popover
+          placement="top"
+          trigger="manual"
+          content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+          v-model="faceVisible"
         >
-          <tr v-for="p in faceData">
-            <td v-for="(m,n) in p" border="1" style="border-collapse:collapse;">
-              <a @click="addFaceToComments(m)" v-for="(z,x) in m">
-                <img :src="z" :alt="x" :title="x" />
-              </a>
-            </td>
-          </tr>
-        </table>
-        <el-button
-          class="face"
-          type="success"
-          icon="el-icon-magic-stick"
-          slot="reference"
-          style="width: 100px"
-          @click="faceVisible = !faceVisible;emojiVisible=false;"
-        >表情</el-button>
-      </el-popover>
-      <el-popover
-        placement="top"
-        trigger="manual"
-        content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
-        v-model="emojiVisible"
-      >
-        <table
-          cellpadding="1"
-          cellspacing="1"
-          align="center"
-          border="1"
-          bordercolor="#e3e3e3"
-          style="border-collapse:collapse;"
+          <table
+            cellpadding="1"
+            cellspacing="1"
+            align="center"
+            border="1"
+            bordercolor="#e3e3e3"
+            style="border-collapse:collapse;"
+          >
+            <tr v-for="(p,i) in faceData" :key="i">
+              <td v-for="(m,n) in p" :key="n" border="1" style="border-collapse:collapse;">
+                <a @click="addFaceToComments(m)" v-for="(z,x) in m" :key="z">
+                  <img :src="z" :alt="x" :title="x" />
+                </a>
+              </td>
+            </tr>
+          </table>
+          <el-button
+            class="face"
+            type="success"
+            icon="el-icon-magic-stick"
+            slot="reference"
+            style="width: 100px"
+            @click="faceVisible = !faceVisible;emojiVisible=false;"
+          >表情</el-button>
+        </el-popover>
+        <el-popover
+          placement="top"
+          trigger="manual"
+          content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+          v-model="emojiVisible"
         >
-          <tr v-for="p in emojiData">
-            <td v-for="(m,n) in p" border="1" style="border-collapse:collapse;">
-              <a
-                @click="addEmojiToComments(m)"
-                class="emoji"
-                v-for="(z,x) in m"
-                v-text="z"
-                :title="x"
-              ></a>
-            </td>
-          </tr>
-        </table>
-        <el-button
-          class="face"
-          type="success"
-          icon="el-icon-magic-stick"
-          slot="reference"
-          style="width: 100px"
-          @click="emojiVisible = !emojiVisible;faceVisible=false;"
-        >Emoji</el-button>
-      </el-popover>
+          <table
+            cellpadding="1"
+            cellspacing="1"
+            align="center"
+            border="1"
+            bordercolor="#e3e3e3"
+            style="border-collapse:collapse;"
+          >
+            <tr v-for="(p,i) in emojiData" :key="i">
+              <td v-for="(m,n) in p" :key="n" border="1" style="border-collapse:collapse;">
+                <a
+                  @click="addEmojiToComments(m)"
+                  class="emoji"
+                  v-for="(z,x) in m"
+                  :key="x"
+                  v-text="z"
+                  :title="x"
+                ></a>
+              </td>
+            </tr>
+          </table>
+          <el-button
+            class="face"
+            type="success"
+            icon="el-icon-magic-stick"
+            slot="reference"
+            style="width: 100px"
+            @click="emojiVisible = !emojiVisible;faceVisible=false;"
+          >Emoji</el-button>
+        </el-popover>
+      </div>
 
       <el-input
         type="textarea"
@@ -209,6 +221,15 @@
         @keyup.enter.native="postcommentOnInput()"
       ></el-input>
       <el-checkbox v-model="UsingEnter">{{ $t("usingEnter") }}</el-checkbox>
+      <span>
+        {{$t('respect')}}
+        <a
+          href="https://patchyvideo.wiki/Comments"
+          target="_blank"
+          style="color:#409EFF"
+        >{{$t('commentRules')}}</a>
+        {{$t('yo')}}
+      </span>
       <el-button type="primary" @click="postcomment()" :loading="posting">
         {{
         $t("post")
@@ -402,9 +423,9 @@
                     bordercolor="#e3e3e3"
                     style="border-collapse:collapse;"
                   >
-                    <tr v-for="p in faceData">
-                      <td v-for="(m,n) in p" border="1" style="border-collapse:collapse;">
-                        <a @click="addFaceToReply(m,index)" v-for="(z,x) in m">
+                    <tr v-for="(p,i) in faceData" :key="i">
+                      <td v-for="(m,n) in p" :key="n" border="1" style="border-collapse:collapse;">
+                        <a @click="addFaceToReply(m,index)" v-for="(z,x) in m" :key="x">
                           <img :src="z" :alt="x" :title="x" />
                         </a>
                       </td>
@@ -433,12 +454,13 @@
                     bordercolor="#e3e3e3"
                     style="border-collapse:collapse;"
                   >
-                    <tr v-for="p in emojiData">
-                      <td v-for="(m,n) in p" border="1" style="border-collapse:collapse;">
+                    <tr v-for="(p,i) in emojiData" :key="i">
+                      <td v-for="(m,n) in p" :key="n" border="1" style="border-collapse:collapse;">
                         <a
                           @click="addEmojiToReply(m,index)"
                           class="emoji"
                           v-for="(z,x) in m"
+                          :key="x"
                           v-text="z"
                           :title="x"
                         ></a>
@@ -966,12 +988,6 @@ export default {
 </script>
 
 <style scoped lang="less">
-.comment {
-  text-align: center !important;
-  .face {
-  }
-}
-
 tr {
   td {
     border-collapse: collapse;
@@ -1014,7 +1030,6 @@ tr {
   text-align: center;
 }
 .comment {
-  /* border: 3px solid #1414142d; */
   text-align: right;
 }
 .comment .el-textarea {

@@ -24,6 +24,7 @@
     "count_prompt": "显示 {count2} / {maxcount} 个标签",
     "no_video_found": "没有搜索到视频",
     "select_lang_prompt": "请选择语言",
+    "rulesOfTags":"标签细则",
     "add_to_category": "向{cat}类别添加标签",
     "add_tag": "添加标签",
     "author_detail": "作者详情",
@@ -63,6 +64,7 @@
     "count_prompt": "Showing {count2} / {maxcount} tags",
     "no_video_found": "No video found",
     "select_lang_prompt": "Select language",
+    "rulesOfTags":"See the rules of creating a tag",
     "add_to_category": "Add tag to {cat}",
     "add_tag": "Add tag",
     "author_detail": "Author Data",
@@ -102,6 +104,7 @@
     "count_prompt": "顯示 {count2} / {maxcount} 個標簽",
     "no_video_found": "沒有搜索到視頻",
     "select_lang_prompt": "請選擇語言",
+    "rulesOfTags":"標籤細則",
     "add_to_category": "向{cat}類別添加標簽",
     "add_tag": "添加標簽",
     "author_detail": "作者詳情",
@@ -222,6 +225,12 @@
         @keyup.enter.native="addTag"
       ></CheckInput>
       <el-button type="info" @click="addTag()">{{$t('add_tag')}}</el-button>
+      <!-- Wiki链接 -->
+      <a
+        href="https://patchyvideo.wiki/Tags"
+        target="_blank"
+        style="color:#409EFF;float:right;margin-right:100px;margin-top:15px;"
+      >{{$t('rulesOfTags')}}</a>
     </div>
     <!-- 表格正文 -->
     <el-table :data="tagData" style="width: 100%">
