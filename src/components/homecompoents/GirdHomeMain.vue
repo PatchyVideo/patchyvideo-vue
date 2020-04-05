@@ -86,43 +86,47 @@
       <!-- 播放列表正文 -->
       <ul>
         <li class="list-item" v-for="(item) in listvideo" :key="item._id.$oid">
-          <router-link
-            target="_blank"
-            :to="{ path: '/video', query: { id: item._id.$oid } }"
-            tag="a"
-          >
-            <div class="video-thumbnail">
-              <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
-              <div class="Imgcover"></div>
-            </div>
-          </router-link>
-          <div class="video-detail">
-            <h4>
-              <router-link
-                target="_blank"
-                :to="{ path: '/video', query: { id: item._id.$oid } }"
-                tag="a"
-                :title="item.item.title"
-              >{{ item.item.title }}</router-link>
-            </h4>
-            <p :title="item.item.desc">{{ item.item.desc }}</p>
-            <span class="rating">{{item.total_rating||0}} </span>
-            <span class="updatetime">{{toGMT(item.item.upload_time.$date)}}</span>
-            <div>
-                <div class="link">
-                    <img
-                        :src="require('../../static/img/' + item.item.site + '.png')"
-                        width="16px"
-                        style="margin-right:2px"
-                    />
+          <div class="video-item">
+            <router-link
+              target="_blank"
+              :to="{ path: '/video', query: { id: item._id.$oid } }"
+              tag="a"
+            >
+              <div class="video-thumbnail">
+                <img :src="'/images/covers/'+item.item.cover_image" />
+                <div class="Imgcover"></div>
+              </div>
+            </router-link>
+            <div class="video-detail">
+              <div class="title-div">
+                <img
+                  :src="require('../../static/img/' + item.item.site + '.png')"
+                  width="16px"
+                  style="margin-right:2px;display:inline;"
+                />
+                <h4>
+                  <router-link
+                    target="_blank"
+                    :to="{ path: '/video', query: { id: item._id.$oid } }"
+                    tag="a"
+                    :title="item.item.title"
+                  >{{ item.item.title }}</router-link>
+                </h4>
+              </div>
+              <p :title="item.item.desc">{{ item.item.desc }}</p>
+              <span class="rating">{{item.total_rating||0}} </span>
+              <span class="updatetime">{{toGMT(item.item.upload_time.$date)}}</span>
+              <div class="link-div">
+                  <div class="link">
                     <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
 
-                </div>
-                <i
+                  </div>
+                  <i
                     @click="copyVideoLink(item.item.url)"
                     class="fa fa-copy fa-lg"
-                    style="margin-left:2px"
-                ></i>
+                    style="margin-right:2px"
+                  ></i>
+              </div>
             </div>
           </div>
         </li>
@@ -602,13 +606,15 @@ export default {
   text-align: center;
 }
 
-.video-detail > h4 {
+.video-detail > .title-div {
   /* 使文字变为最多显示1行，多余的使用省略号代替 */
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
+  white-space: nowrap; 
+  width: 100%; 
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.video-detail > .title-div > h4 {
+  display: inline;
 }
 .video-detail > p {
   font-size: 1rem;
@@ -623,7 +629,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.video-detail > div {
+.video-detail > .link-div {
     position: absolute;
     width: 100%;
     bottom: 0px;
@@ -634,10 +640,11 @@ export default {
     flex-wrap:nowrap;
     justify-content:space-between;
     .link{
-        display: -webkit-flex;
-        display: flex;
-        flex-wrap:nowrap;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
         overflow: hidden;
+        text-overflow: ellipsis;
 
     }
 }
@@ -668,6 +675,7 @@ export default {
     overflow: hidden;
     position: relative;
     z-index: 1;
+    border-radius: 4px;
 }
 .video-thumbnail img{
     position: absolute;
@@ -678,13 +686,21 @@ export default {
     width: auto;
 }
 
+.video-item {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 1%;
+  padding-right: 1%;
+}
+
 .list-item {
     position: relative;
-    height: 340px;
+    height: 350px;
     margin-right: 1%;
-    width: 24%;
+    width: 23.5%;
     margin-bottom: 15px;
     transition: all 0.3s ease;
+/*    border: 1px solid #e5e9ef;*/
     &:hover {
         background-color: rgb(244, 244, 245);
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);

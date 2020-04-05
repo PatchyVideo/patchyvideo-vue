@@ -56,4 +56,39 @@ export default {
   min-width: 1400px;
   height: 100%;
 }
+
+
+.anime-fade-enter-active {
+  transition: all .6s ease;
+}
+.anime-fade-leave-active {
+  transition: all .5s ease;
+}
+.anime-fade-enter, .anime-fade-leave-active {
+  transform: translateX(60px);
+  opacity: 0;
+}
+
+.anime-left-enter-active {
+  transition: all .8s ease;
+}
+.anime-left-leave-active {
+  transition: all .6s ease-out;
+}
+.anime-left-enter, .anime-left-leave-active {
+  transform: translateX(-150px);
+  opacity: 0;
+}
+
+.anime-top-enter-active {
+  transition: all .5s ease;
+}
+.anime-top-leave-active {
+  transition: all .2s ease-out;
+}
+.anime-top-enter, .anime-top-leave-active {
+  transform: translateY(-5px);
+  opacity: 0;
+}
+
 </style>
