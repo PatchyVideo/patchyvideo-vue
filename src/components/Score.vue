@@ -62,7 +62,7 @@
         <span v-if="!scoreStatus && isLogin()"><el-link type="primary" @click="submitScore">{{$t("submit")}}</el-link></span>
         <span v-if="!isLogin()"><router-link to="/login" @click.native="login">{{$t("login")}}</router-link></span>
         <span class="aveScore">
-            {{$t("average")}}：{{data.total_rating/data.total_user||0}}
+            {{$t("average")}}：{{(data.total_rating/data.total_user||0).toFixed(1)}}
             <span>{{data.total_user||0}} {{$t("evaluation")}}</span>
         </span>
     </div>

@@ -114,7 +114,9 @@
                 </h4>
               </div>
               <p :title="item.item.desc">{{ item.item.desc }}</p>
-              <span class="rating">{{item.total_rating||0}} </span>
+              <span class="rating">                    
+                {{parseInt(item.total_rating/item.total_rating_user||0)}} 
+              </span>
               <span class="updatetime">{{toGMT(item.item.upload_time.$date)}}</span>
               <div class="link-div">
                   <div class="link">
@@ -645,6 +647,12 @@ export default {
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
+
+        a{
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+        }
 
     }
 }

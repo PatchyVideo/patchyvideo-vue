@@ -115,6 +115,13 @@
                   </h4>
                 </div>
                 <p>{{ item.item.desc }}</p>
+                <span class="updatetime">
+                    {{toGMT(item.item.upload_time.$date)}}
+                </span>
+                <span class="rating" title="评分">
+                    {{(item.total_rating/item.total_rating_user||0).toFixed(1)}} 
+                </span>
+             
                 <div class="link-div">
                   <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
                   <i
@@ -223,7 +230,37 @@ export default {
       document.title = this.$t("search_result", { result: this.searchKeyWord });
     }
   },
-  computed: {},
+  computed: {
+    toGMT(timeStamp) {
+        return function (timeStamp) {
+            var upload_time = new Date(timeStamp);
+            // 设置为东八区的时间
+            upload_time.setTime(upload_time.getTime() + 1000 * 3600 * 8);
+            var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
+            var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+            var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+            var h = upload_time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
+            var m = upload_time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
+            var s = upload_time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+            return (
+                "视频发布于 " +
+                y +
+                "-" +
+                // 数字不足两位自动补零，下同
+                (Array(2).join(0) + M).slice(-2) +
+                "-" +
+                (Array(2).join(0) + d).slice(-2) +
+                " " +
+                (Array(2).join(0) + h).slice(-2) +
+                ":" +
+                (Array(2).join(0) + m).slice(-2) +
+                ":" +
+                (Array(2).join(0) + s).slice(-2) +
+                " GMT+8"
+            );
+        }
+    },
+  },
   mounted() {},
   updated() {},
   methods: {
@@ -693,4 +730,18 @@ export default {
   font-size: 14px;
   color: #606266;
 }
+.updatetime{
+    margin-top: 5px;
+    font-size: 12px;
+    color:rgb(0, 0, 0);
+}
+.rating{
+    position: absolute;
+    right: 0;
+    bottom: 20px;
+    color: #f8d714;
+    font-size: 25px;
+    font-weight: bolder;
+}
+
 </style>
