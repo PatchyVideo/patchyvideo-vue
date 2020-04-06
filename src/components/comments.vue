@@ -15,6 +15,9 @@
     "nocomment":"暂无评论！",
     "saySth":"说点儿什么吧~",
     "usingEnter":"使用Enter键发表评论",
+    "respect":"请遵守",
+    "commentRules":"评论规则",
+    "yo":"哟",
     "post":"发表",
     "joinDiscuss":"想要一起参与讨论？",
     "login":"点我登录",
@@ -44,6 +47,9 @@
     "nocomment":"No comment here!",
     "saySth":"Say something...",
     "usingEnter":"Post comment using Enter key",
+    "respect":"Please respect ",
+    "commentRules":"the commentRules",
+    "yo":" ",
     "post":"Post",
     "joinDiscuss":"Want to join the discuss? ",
     "login":"Click me to login",
@@ -66,6 +72,38 @@
     "postFailed":"Failed post , please check your Internet!",
     "operationSuccessfully":"Operate Successfully",
     "operationFailed":"Failed operation, please check your Internet!"
+  },
+  "CHT": {
+    "comment":"評論",
+    "commentCount":"共{length}條評論",
+    "nocomment":"暫無評論！",
+    "saySth":"說點兒什麼吧~",
+    "usingEnter":"使用Enter鍵發表評論",
+    "respect":"請遵守",
+    "commentRules":"評論規則",
+    "yo":"哦",
+    "post":"發表",
+    "joinDiscuss":"想要一起參與討論？",
+    "login":"點我登錄",
+    "showRplies":"查看{length}條回复",
+    "replyPrompt":" 回复",
+    "reply":"回复",
+    "hideReply":"收起回复",
+    "manage":"管理",
+    "replyTo":"回复Ta",
+    "hiddencomment":"該評論已被隱藏",
+    "opencomment":"點我展開",
+    "deletedcomment":"抱歉，該評論已被刪除",
+    "selectOpts":"請選擇操作",
+    "deletcomment":"刪除評論",
+    "hidecomment":"隱藏評論",
+    "cancel":"取 消",
+    "getcommentFailed":"獲取評論失敗，請檢查網絡設置！",
+    "PsaySth":"請輸入內容！",
+    "postSuccessfully":"發表成功！",
+    "postFailed":"發表失敗，請檢查網絡設置！",
+    "operationSuccessfully":"操作成功！",
+    "operationFailed":"操作失敗，請檢查網絡設置！"
   }
 }
 </i18n>
@@ -102,6 +140,77 @@
 
     <!-- 发表评论 -->
     <div class="comment" v-if="isLogin">
+      <!--表情区域-->
+      <div style="text-align: center !important;">
+        <el-popover
+          placement="top"
+          trigger="manual"
+          content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+          v-model="faceVisible"
+        >
+          <table
+            cellpadding="1"
+            cellspacing="1"
+            align="center"
+            border="1"
+            bordercolor="#e3e3e3"
+            style="border-collapse:collapse;"
+          >
+            <tr v-for="(p,i) in faceData" :key="i">
+              <td v-for="(m,n) in p" :key="n" border="1" style="border-collapse:collapse;">
+                <a @click="addFaceToComments(m)" v-for="(z,x) in m" :key="z">
+                  <img :src="z" :alt="x" :title="x" />
+                </a>
+              </td>
+            </tr>
+          </table>
+          <el-button
+            class="face"
+            type="success"
+            icon="el-icon-magic-stick"
+            slot="reference"
+            style="width: 100px"
+            @click="faceVisible = !faceVisible;emojiVisible=false;"
+          >表情</el-button>
+        </el-popover>
+        <el-popover
+          placement="top"
+          trigger="manual"
+          content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+          v-model="emojiVisible"
+        >
+          <table
+            cellpadding="1"
+            cellspacing="1"
+            align="center"
+            border="1"
+            bordercolor="#e3e3e3"
+            style="border-collapse:collapse;"
+          >
+            <tr v-for="(p,i) in emojiData" :key="i">
+              <td v-for="(m,n) in p" :key="n" border="1" style="border-collapse:collapse;">
+                <a
+                  @click="addEmojiToComments(m)"
+                  class="emoji"
+                  v-for="(z,x) in m"
+                  :key="x"
+                  v-text="z"
+                  :title="x"
+                ></a>
+              </td>
+            </tr>
+          </table>
+          <el-button
+            class="face"
+            type="success"
+            icon="el-icon-magic-stick"
+            slot="reference"
+            style="width: 100px"
+            @click="emojiVisible = !emojiVisible;faceVisible=false;"
+          >Emoji</el-button>
+        </el-popover>
+      </div>
+
       <el-input
         type="textarea"
         :autosize="{ minRows: 4 }"
@@ -112,6 +221,15 @@
         @keyup.enter.native="postcommentOnInput()"
       ></el-input>
       <el-checkbox v-model="UsingEnter">{{ $t("usingEnter") }}</el-checkbox>
+      <span>
+        {{$t('respect')}}
+        <a
+          href="https://patchyvideo.wiki/Comments"
+          target="_blank"
+          style="color:#409EFF"
+        >{{$t('commentRules')}}</a>
+        {{$t('yo')}}
+      </span>
       <el-button type="primary" @click="postcomment()" :loading="posting">
         {{
         $t("post")
@@ -290,6 +408,74 @@
           <el-collapse-transition>
             <div v-show="replycomments[index].show">
               <div class="replyBox">
+                <!--表情区域-->
+                <el-popover
+                  placement="top"
+                  trigger="manual"
+                  content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+                  v-model="replycomments[index].face"
+                >
+                  <table
+                    cellpadding="1"
+                    cellspacing="1"
+                    align="center"
+                    border="1"
+                    bordercolor="#e3e3e3"
+                    style="border-collapse:collapse;"
+                  >
+                    <tr v-for="(p,i) in faceData" :key="i">
+                      <td v-for="(m,n) in p" :key="n" border="1" style="border-collapse:collapse;">
+                        <a @click="addFaceToReply(m,index)" v-for="(z,x) in m" :key="x">
+                          <img :src="z" :alt="x" :title="x" />
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+                  <el-button
+                    class="face"
+                    type="success"
+                    icon="el-icon-magic-stick"
+                    slot="reference"
+                    style="width: 100px"
+                    @click="replycomments[index].face = !replycomments[index].face;replycomments[index].emoji=false;"
+                  >表情</el-button>
+                </el-popover>
+                <el-popover
+                  placement="top"
+                  trigger="manual"
+                  content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+                  v-model="replycomments[index].emoji"
+                >
+                  <table
+                    cellpadding="1"
+                    cellspacing="1"
+                    align="center"
+                    border="1"
+                    bordercolor="#e3e3e3"
+                    style="border-collapse:collapse;"
+                  >
+                    <tr v-for="(p,i) in emojiData" :key="i">
+                      <td v-for="(m,n) in p" :key="n" border="1" style="border-collapse:collapse;">
+                        <a
+                          @click="addEmojiToReply(m,index)"
+                          class="emoji"
+                          v-for="(z,x) in m"
+                          :key="x"
+                          v-text="z"
+                          :title="x"
+                        ></a>
+                      </td>
+                    </tr>
+                  </table>
+                  <el-button
+                    class="face"
+                    type="success"
+                    icon="el-icon-magic-stick"
+                    slot="reference"
+                    style="width: 100px"
+                    @click="replycomments[index].emoji = !replycomments[index].emoji;replycomments[index].face=false;"
+                  >Emoji</el-button>
+                </el-popover>
                 <el-input
                   type="textarea"
                   :autosize="{ minRows: 1, maxRows: 4 }"
@@ -328,7 +514,7 @@
 </template>
 
 <script>
-import { ParseComment } from "../static/js/comment";
+import { ParseComment, getFace, getEmoji } from "../static/js/comment";
 export default {
   props: {
     sid: { type: String }
@@ -368,7 +554,15 @@ export default {
       // 被管理对象的cid
       AuthorizedCid: "",
       // 管理页面是否加载的标志
-      Authorizing: false
+      Authorizing: false,
+      // face弹出标志
+      faceVisible: false,
+      // face数据
+      faceData: [],
+      // emoji数据
+      emojiData: [],
+      // emoji弹出标志
+      emojiVisible: false
     };
   },
   computed: {
@@ -452,9 +646,72 @@ export default {
     }
   },
   created() {
+    this.faceData = getFace();
+    this.emojiData = getEmoji();
     this.isAuthorized();
   },
   methods: {
+    /*
+    getFace() {
+      //规定一排多少个
+      let array = [];
+      const MAXROW = 10;
+      //读取face数据,转换成[{"呵呵":"src"},{}]格式
+      for (let i in faceslist) {
+        let obj = {};
+        obj[i] = ParseFace(i);
+        array.push(obj);
+      }
+      //计算最后一排个数
+      var faceRow = Math.ceil(array.length / MAXROW);
+      let c = [];
+      //转换成[[{"呵呵":"src"},{}],[]]格式
+      for (let i = 0; i < faceRow; ++i) {
+        c[i] = [];
+        for (let m = i * MAXROW; m < i * MAXROW + MAXROW; ++m) {
+          c[i].push(array[m]);
+        }
+      }
+      this.faceData = c;
+    },*/
+    /*getEmoji() {
+      //规定一排多少个
+      let array = [];
+      const MAXROW = 10;
+      //读取face数据,转换成[{"呵呵":"src"},{}]格式
+      for (let i in emojislist) {
+        let obj = {};
+        obj[i] = ParseEmoji(i);
+        array.push(obj);
+      }
+      //计算最后一排个数
+      var faceRow = Math.ceil(array.length / MAXROW);
+      let c = [];
+      //转换成[[{"呵呵":"src"},{}],[]]格式
+      for (let i = 0; i < faceRow; ++i) {
+        c[i] = [];
+        for (let m = i * MAXROW; m < i * MAXROW + MAXROW; ++m) {
+          c[i].push(array[m]);
+        }
+      }
+      this.emojiData = c;
+    },*/
+    addFaceToComments(obj) {
+      this.comment = this.comment + `[[表情:${Object.keys(obj)}]]`;
+      this.faceVisible = false;
+    },
+    addEmojiToComments(obj) {
+      this.comment = this.comment + `[[emoji:${Object.keys(obj)}]]`;
+      this.emojiVisible = false;
+    },
+    addFaceToReply(obj, index) {
+      this.reply = this.reply + `[[表情:${Object.keys(obj)}]]`;
+      this.replycomments[index].face = false;
+    },
+    addEmojiToReply(obj, index) {
+      this.reply = this.reply + `[[emoji:${Object.keys(obj)}]]`;
+      this.replycomments[index].emoji = false;
+    },
     // 获取评论
     getcomments() {
       this.loadingcomment = true;
@@ -485,13 +742,17 @@ export default {
           // 初始化评论区开启标志
           for (var i = 0; i < this.allcomments.length; i++) {
             this.showReplies.push({
-              show: false
+              show: false,
+              face: false,
+              emoji: false
             });
           }
           // 初始化回复框开启标志
           for (var i = 0; i < this.allcomments.length; i++) {
             this.replycomments.push({
-              show: false
+              show: false,
+              face: false,
+              emoji: false
             });
           }
 
@@ -523,8 +784,7 @@ export default {
       });
       return content;
     },*/
-    parseComment(content)
-    {
+    parseComment(content) {
       return ParseComment(content);
     },
     // 使用Enter键发布视频
@@ -571,6 +831,8 @@ export default {
       this.reply = "";
       for (var i = 0; i < this.replycomments.length; i++) {
         this.replycomments[i].show = false;
+        this.replycomments[i].face = false;
+        this.replycomments[i].emoji = false;
       }
       this.replycomments[index].show = true;
       this.reply = "";
@@ -725,7 +987,35 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="less">
+tr {
+  td {
+    border-collapse: collapse;
+    background-color: rgb(255, 255, 255);
+    vertical-align: middle;
+    border: 1px solid #e3e3e3;
+    width: 54px;
+    height: 54px;
+    a {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 30px;
+        height: 30px;
+      }
+    }
+    .emoji {
+      text-align: center;
+      font-size: 2rem;
+    }
+  }
+}
 .new_top {
   padding-bottom: 10px;
   border-bottom: 3px solid #21c6ef;
@@ -740,7 +1030,6 @@ export default {
   text-align: center;
 }
 .comment {
-  /* border: 3px solid #1414142d; */
   text-align: right;
 }
 .comment .el-textarea {

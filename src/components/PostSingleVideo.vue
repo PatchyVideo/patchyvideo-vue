@@ -32,6 +32,7 @@
     "tag": "标签",
     "no_tag": "暂无标签！",
     "choose_repost_type": "请修改视频的发布类型",
+    "PostRules":"发布规则",
     "post_video": "发布视频",
     "official": "原始发布",
     "official_repost": "官方再发布",
@@ -55,6 +56,7 @@
     "tag": "Tags",
     "no_tag": "No tags",
     "choose_repost_type": "Please select a repost type",
+    "PostRules":"Post rules",
     "post_video": "Post video",
     "official": "Original",
     "official_repost": "Official Repost",
@@ -78,6 +80,7 @@
     "tag": "標簽",
     "no_tag": "暫無標簽！",
     "choose_repost_type": "請修改視頻的發布類型",
+    "PostRules":"發布規則",
     "post_video": "發布視頻",
     "official": "原始發布",
     "official_repost": "官方再發布",
@@ -132,9 +135,9 @@
           </div>
         </div>
       </el-collapse-transition>
-      <!-- 视频副本 -->
+      <!-- 发布类型 -->
       <div class="RepostType">
-        <el-select v-model="RepostType" :placeholder="$t('choose_repost_type')" style="width:100%">
+        <el-select v-model="RepostType" :placeholder="$t('choose_repost_type')" style="width:30%">
           <el-option
             v-for="item in RepostTypes"
             :key="item.label"
@@ -142,6 +145,12 @@
             :value="item.value"
           ></el-option>
         </el-select>
+        <!-- Wiki链接 -->
+        <a
+          href="https://patchyvideo.wiki/Upload"
+          target="_blank"
+          style="color:#409EFF;float:right;margin-right:100px;margin-top:10px;"
+        >{{$t('PostRules')}}</a>
       </div>
       <!-- 视频上传 -->
       <el-button class="postButton" type="primary" @click="postSingleVideo">
@@ -244,9 +253,7 @@ export default {
       }
     }
   },
-  created() {
-
-  },
+  created() {},
   mounted() {
     this.buildParsersAndExpanders();
   },
@@ -281,7 +288,9 @@ export default {
         that.autotag(utags, title, desc);
         that.setVideoMetadata(thumbnailURL, title, desc);
       };
-      this.EXPANDERS["^([aA][vV][\\d]+|BV[a-zA-Z0-9]+)"] = function(short_link) {
+      this.EXPANDERS["^([aA][vV][\\d]+|BV[a-zA-Z0-9]+)"] = function(
+        short_link
+      ) {
         return "https://www.bilibili.com/video/" + short_link;
       };
       // A站的匹配规则
@@ -846,7 +855,8 @@ export default {
   text-align: left;
 }
 .RepostType {
-  width: 30%;
+  text-align: left;
+  width: 100%;
   margin-top: 10px;
 }
 .postButton {

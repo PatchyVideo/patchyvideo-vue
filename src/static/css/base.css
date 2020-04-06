@@ -1,58 +1,57 @@
 * {
-    padding: 0;
-    margin: 0;
-    border: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
 }
 
 body {
-    background: #eee;
+  /* background: #eee; */
+/*  filter: grayscale(100%);*/
 }
 
 .top-navbar {
-    width: 100%;
-    background-color: #fafafb;
-    padding-top: 10px;
-    padding-left: 10px;
-    padding-bottom: 10px;
-    position: fixed;
-    z-index: 10;
-    top: 0px;
+  width: 100%;
+  background-color: #fafafb;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  position: fixed;
+  z-index: 10;
+  top: 0px;
 }
 
 .content-outer {
-    top: 39px;
-    position: relative;
+  top: 39px;
+  position: relative;
 }
 
 .user-content {
-    display: inline;
+  display: inline;
 }
 
 .eloading {
-    background: linear-gradient(45deg,#feac5e,#c779d0,#4bc0c8);
-    background-size: 200% 200%;
-    background-position: 0 100%;
-    animation: bgposition 2s infinite linear alternate;
+  background: linear-gradient(45deg, #feac5e, #c779d0, #4bc0c8);
+  background-size: 200% 200%;
+  background-position: 0 100%;
+  animation: bgposition 2s infinite linear alternate;
 }
 
-.eloading .path
-{
-    stroke:#fff;
+.eloading .path {
+  stroke: #fff;
 }
 
-.eloading .el-loading-text
-{
-    width: 80%;
-    padding-left: 10%;
-    font-size: 1.5rem;
-    color:#fff;
+.eloading .el-loading-text {
+  width: 80%;
+  padding-left: 10%;
+  font-size: 1.5rem;
+  color: #fff;
 }
-  
+
 @keyframes bgposition {
-    0% {
-        background-position: 0 100%;
-    }
-    100% {
-        background-position: 100% 0;
-    }
+  0% {
+    background-position: 0 100%;
+  }
+  100% {
+    background-position: 100% 0;
+  }
 }

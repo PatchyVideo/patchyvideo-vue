@@ -1,43 +1,10 @@
-﻿<!--    vue组件：TopNavbar.vue     -->
+<!--    vue组件：TopNavbar.vue     -->
 <!--
-    组件：左侧的热门标签导航栏
+    组件：页面顶部的导航栏
     大小：100% * 80px
     功能：网站主导航栏
     必要传入参数：无
     更新日志：
-    12/1/2019: v1.0 
-      release
-    12/3/2019：v1.0.1
-      1.修复了导航栏因为边框导致网站宽度大于浏览器宽度的问题
-    12/7/2019: v1.0.2
-      1.新增退出登录效果
-    12/14/2019: v1.0.3
-      1.导航条中文化完成
-    12/30/2019: v1.0.4
-      1.导航条登录功能完善
-    12/31/2019：v1.0.5
-      1.导航条注册链接完成
-    1/9/2020：v1.0.6
-      1.搜索框部分功能完成（搜索功能完成，还差正则表达式的匹配）
-    1/21/2020：v1.0.5
-      1.用户信息调取方式改为使用cookie储存
-    1/27/2020：v1.0.6
-      1.搜索框会自动填写搜索中的标签
-      2.搜索框按下回车会直接搜索
-    1/28/2020：v1.0.7
-      1.搜索框的自动补全功能完成
-    1/29/2020：v1.0.8
-      1.搜索框的搜索建议列表优化
-      2.新增对网站搜索的支持
-    2/8/2020：v1.0.9
-      1.搜索框的自动补全优化
-      2.自动补全加入新的搜索关键字
-      3.在home页面搜索的时候会触发页面刷新
-    ★待解决问题：
-      1.搜索框在自动补全的时候焦点总是在文本的最右边（改变selectionStart和selectionEnd属性不知道为什么不起作用）
-      2.搜索框的css渲染待补全（搜索结果与关键字重合的地方加粗、加下划线等）
-      2.用户个人界面未完善
-      3.用户头像显示
 -->
 
 <i18n>
@@ -47,9 +14,7 @@
       "index": "首页",
       "playlist": "播放列表",
       "postvideo": "发布视频",
-      "edittag": "标签",
-      "ipfs": "幻想之物",
-      "bug_report": "反馈BUG"
+      "edittag": "标签"
     },
 
     "search": {
@@ -77,9 +42,7 @@
       "index": "Home",
       "playlist": "Playlists",
       "postvideo": "Post Video",
-      "edittag": "Tags",
-      "ipfs": "IPFS",
-      "bug_report": "Report Bugs"
+      "edittag": "Tags"
     },
 
     "search": {
@@ -107,9 +70,7 @@
       "index": "首頁",
       "playlist": "播放列表",
       "postvideo": "發布視頻",
-      "edittag": "標簽",
-      "ipfs": "幻想之物",
-      "bug_report": "反饋BUG"
+      "edittag": "標簽"
     },
 
     "search": {
@@ -136,72 +97,70 @@
 </i18n>
 
 <template>
-  <div class="top-navbar" id="top-navbar">
-    <el-select v-model="locale" placeholder="Language">
-      <el-option
-        v-for="item in langOptions"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-      ></el-option>
-    </el-select>
-    <!-- 左面的四个页面链接 -->
-    <div class="nav_left">
-      <ul>
-        <li>
+  <div>
+    <!-- 退出登录的弹出框 -->
+    <el-dialog
+      :title="$t('prompt.msg')"
+      :modal-append-to-body="false"
+      :visible.sync="dialogVisible"
+      width="30%"
+      v-loading="loading"
+    >
+      <p>{{$t('user.logout_prompt')}}</p>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">{{$t('prompt.cancel')}}</el-button>
+        <el-button type="primary" @click="cleanLocalStorage">{{$t('prompt.ok')}}</el-button>
+      </span>
+    </el-dialog>
+    <div class="top-navbar">
+      <!-- 网站icon &标题 -->
+      <div class="iconAndTitle">
+        <img class="patchyvideo-icon" src="../static/img/patchyvideo.svg" />
+        <span class="patchyvideo-title">Patchy Video</span>
+      </div>
+
+      <!-- 左面的四个页面链接 -->
+      <div class="nav_left">
+        <div class="navItem">
           <router-link to="/home" @click.native="cleanIptV">{{$t('navbar.index')}}</router-link>
-        </li>
-        <li>
+        </div>
+        <div class="navItem">
           <router-link to="/lists">{{$t('navbar.playlist')}}</router-link>
-        </li>
-        <li>
+        </div>
+        <div class="navItem">
           <router-link to="/postvideo">{{$t('navbar.postvideo')}}</router-link>
-        </li>
-        <li>
+        </div>
+        <div class="navItem">
           <router-link to="/edittag">{{$t('navbar.edittag')}}</router-link>
-        </li>
-        <li>
-          <router-link to="/ipfs">{{$t('navbar.ipfs')}}</router-link>
-        </li>
-        <li>
+        </div>
+        <div class="navItem">
           <router-link to="/logscontributes">历史和贡献</router-link>
-        </li>
-        <li>
-          <a href="https://github.com/zyddnys/PatchyVideo/issues">{{$t('navbar.bug_report')}}</a>
-        </li>
-        <li>
-          <a href="https://patchyvideo.wiki" target="_blank">Wiki</a>
-        </li>
-      </ul>
-    </div>
+        </div>
+      </div>
 
-    <!-- 右面的功能性界面 -->
-    <div class="nav_right">
-      <ul>
-        <!-- 下拉框和搜索框 -->
-        <li id="s1">
+      <!-- 搜索框 -->
+      <div class="search-bar-query">
+        <el-autocomplete
+          id="ipt"
+          ref="ipt"
+          v-model="iptVal"
+          :fetch-suggestions="querySearchAsync2"
+          :trigger-on-focus="false"
+          :placeholder="$t('search.prompt')"
+          @select="handleSelect2"
+          @keyup.enter.native="gotoHome"
+        >
           <!-- 搜索条件 -->
-          <select ref="form_select" class="form_select">
-            <option value="tag">{{$t('search.tag_text')}}</option>
-            <option value="text">{{$t('search.text')}}</option>
-          </select>
-          <!-- 搜索框 -->
-          <div id="search-bar-query">
-            <!--<el-autocomplete
-              id="ipt"
-              ref="ipt"
-              v-model="iptVal"
-              :fetch-suggestions="querySearchAsync"
-              :trigger-on-focus="false"
-              :placeholder="$t('search.prompt')"
-              @select="handleSelect"
-              @keyup.enter.native="gotoHome"
-            >
-              <template slot-scope="{ item }">
-                <div class="adviceList">
-                  <div
-                    class="name"
-                    v-bind:class="{
+          <el-select v-model="searchType" slot="prepend">
+            <el-option :label="$t('search.tag_text')" value="tag"></el-option>
+            <el-option :label="$t('search.text')" value="text"></el-option>
+          </el-select>
+          <!-- 自动补全的模板 -->
+          <template slot-scope="{ item }">
+            <div class="adviceList">
+              <div
+                class="name"
+                v-bind:class="{
                       Copyright: item.cat == 2,
                       Language: item.cat == 5,
                       Character: item.cat == 1,
@@ -210,51 +169,19 @@
                       Meta: item.cat == 4,
                       Soundtrack: item.cat == 6
                     }"
-                  >{{ item.tag }}</div>
-                  <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
-                </div>
-              </template>
-            </el-autocomplete>-->
-            <el-autocomplete
-              id="ipt"
-              ref="ipt"
-              v-model="iptVal"
-              :fetch-suggestions="querySearchAsync2"
-              :trigger-on-focus="false"
-              :placeholder="$t('search.prompt')"
-              @select="handleSelect2"
-              @keyup.enter.native="gotoHome"
-            >
-              <template slot-scope="{ item }">
-                <div class="adviceList">
-                  <div
-                    class="name"
-                    v-bind:class="{
-                      Copyright: item.cat == 2,
-                      Language: item.cat == 5,
-                      Character: item.cat == 1,
-                      Author: item.cat == 3,
-                      General: item.cat == 0,
-                      Meta: item.cat == 4,
-                      Soundtrack: item.cat == 6
-                    }"
-                    v-html="item.tag||ConvertLangRes(item.langs)"
-                  ></div>
-                  <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
-                </div>
-              </template>
-            </el-autocomplete>
-          </div>
-          <input
-            id="search-bar-submit"
-            type="submit"
-            :value="$t('search.button')"
-            @click="gotoHome"
-          />
-        </li>
+                v-html="item.tag||ConvertLangRes(item.langs)"
+              ></div>
+              <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
+            </div>
+          </template>
+          <!-- 搜索按钮 -->
+          <el-button slot="append" icon="el-icon-search" @click="gotoHome"></el-button>
+        </el-autocomplete>
+      </div>
 
+      <div>
         <!-- 登录和注册按钮 -->
-        <div class="loginUser" style="margin-left:20px" v-if="!isLogin">
+        <div class="loginUser" v-if="!isLogin">
           <router-link
             to="/login"
             class="loginUser-login"
@@ -264,11 +191,15 @@
         </div>
 
         <!-- 登录成功后的用户界面 -->
-        <div class="userHome" v-if="isLogin">
+        <div class="userHome" v-else>
           <div @click="gotoUserPage">
             <el-avatar fit="cover" class="loginUser-userAvatar" :size="40" :src="userAvatar"></el-avatar>
           </div>
-          <router-link class="loginUser-login" to="/users/me">
+          <router-link
+            class="loginUser-login"
+            style="max-width:100px;overflow: hidden;"
+            to="/users/me"
+          >
             {{
             this.$store.state.username
             }}
@@ -286,21 +217,8 @@
             style="cursor:pointer"
           >{{$t('user.logout')}}</a>
         </div>
-      </ul>
+      </div>
     </div>
-    <!-- 退出登录的弹出框 -->
-    <el-dialog
-      :title="$t('prompt.msg')"
-      :visible.sync="dialogVisible"
-      width="30%"
-      v-loading="loading"
-    >
-      <p>{{$t('user.logout_prompt')}}</p>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{$t('prompt.cancel')}}</el-button>
-        <el-button type="primary" @click="cleanLocalStorage">{{$t('prompt.ok')}}</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -315,6 +233,8 @@ export default {
       dialogVisible: false,
       // 判断是否登录
       isLogin: false,
+      // 搜索框的搜索类型(标签+文本或仅文本)
+      searchType: "tag",
       // 搜索框的内容，不知道为什么在自动补全之后会被清空
       iptVal: "",
       // 搜索框的内容，在自动补全的时候作为备份使用，防止搜索框内容被清空
@@ -342,30 +262,10 @@ export default {
         { tag: "tags:", cat: 6, cnt: null }
       ],
       infoTipMark: false,
-      langOptions: [
-        {
-          value: "CHS",
-          label: "简体中文"
-        },
-        {
-          value: "CHT",
-          label: "繁體中文"
-        },
-        {
-          value: "JPN",
-          label: "日本語"
-        },
-        {
-          value: "ENG",
-          label: "English"
-        }
-      ],
       // 未读信息的数量
       messagesNum: 0,
       // 控制读取未读信息方法的变量
-      queryMessages: "",
-      // 多语言支持
-      locale: localStorage.getItem("lang")
+      queryMessages: ""
     };
   },
   computed: {
@@ -404,15 +304,6 @@ export default {
   mounted() {},
   updated() {},
   methods: {
-    /*  watchAutoComplete(){
-      let m  =  Array.from(document.getElementsByClassName("el-autocomplete-suggestion el-popper"));
-      let  m_Mark =[];
-      for(let i =0;i<m.length;++i){
-        m_Mark[i] = m[i].style.display;
-      }
-      this.infoTipMark =m_Mark;
-      console.log(m_Mark);
-    },*/
     // 测试用户的登录状态
     checkUser() {
       this.axios({
@@ -477,32 +368,16 @@ export default {
     },
     // 点击搜索按钮使home页面显示搜索结果
     gotoHome() {
-      /*      console.log(this.infoTipMark);*/
-      /*   this.watchAutoComplete();*/
       //如果回车搜索之前有选中建议框的数据，则取消这次搜索
       if (this.infoTipMark === true) {
         this.infoTipMark = false;
         return;
       }
-
-      /* {
-        let count = 0;
-        for(let i=0;i<this.infoTipMark.length;++i){
-          if( this.infoTipMark[i].toString()=="none"){
-            count++
-          }
-        }
-        if(count!=this.infoTipMark.length){
-          return;
-        }
-
-      }*/
-      // console.log(this.iptVal);
       if (this.iptVal != "") {
         this.$router
           .push({
             path: "/home",
-            query: { keyword: this.iptVal, qtype: this.$refs.form_select.value }
+            query: { keyword: this.iptVal, qtype: this.searchType }
           })
           .catch(err => {
             return err;
@@ -573,9 +448,6 @@ export default {
           console.log(error);
         });
     },
-    // --------------------------------------------------危险提示--------------------------------------------------
-    //                                   此函数因为直接操纵dom可能导致网站受到攻击!
-    // --------------------------------------------------危险提示--------------------------------------------------
     // 消息补全框的方法
     querySearchAsync(queryString, cb) {
       // 这里的get(0)是将jq对象转换为原生js对象
@@ -770,36 +642,14 @@ export default {
       });
     },
     handleSelect2(item) {
-      /*var LangList = [
-        { id: 1, lang: "CHS" },
-        { id: 2, lang: "CHT" },
-        { id: 5, lang: "ENG" },
-        { id: 10, lang: "JPN" }
-      ];
-      var langs = item.langs;
-      //匹配当前语言的ID
-      var CurrLangID = LangList.find(x => {
-        return x.lang == this.$i18n.locale;
-      });
-      CurrLangID = CurrLangID ? CurrLangID.id : 1;
-
-      //匹配对应ID的内容
-      var CurrLangWord = langs.find(x => {
-        return x.l == CurrLangID;
-      });
-      if (!CurrLangWord) {
-        for (var i = 0; i < level.length; i++) {
-          CurrLangWord = langs.find(x => {
-            return x.l == level[i];
-          });
-          if (CurrLangWord) break;
-        }
-      }*/
       // 切割字符串，并在中间加入搜索到的标签拼接成新的输入框的内容
       var iptVal1 = this.iptVal3.slice(0, this.startlocation);
       var iptVal2 = this.iptVal3.slice(this.endlocation);
       var iptVal =
-        iptVal1 + (item.tag||this.ConvertLangRes(item.langs, false)) + " " + iptVal2;
+        iptVal1 +
+        (item.tag || this.ConvertLangRes(item.langs, false)) +
+        " " +
+        iptVal2;
       this.iptVal = iptVal;
       // 光标设置焦点事件
       var endlocation = $("#ipt").focus();
@@ -815,11 +665,6 @@ export default {
   watch: {
     iptVal2() {
       this.iptVal = this.iptVal2;
-    },
-    locale(val) {
-      //this.$root.$i18n.locale = val;
-      localStorage.setItem("lang", val);
-      location.reload();
     }
   },
   components: { TextComplete }
@@ -827,162 +672,82 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "../static/css/common.css";
-.nav_left {
-  width: 50% !important;
-}
-.nav_right {
-  width: 50%;
-  ul {
-    display: inline-block;
-    width: 100%;
-    height: 78px;
-    display: flex;
-    li {
-      width: 60%;
-      display: flex;
-      margin-right: 10px;
-      .form_select {
-        width: 120px;
-        height: 20px;
-        padding-left: 5px;
-        text-rendering: auto;
-        color: black;
-        letter-spacing: normal;
-        word-spacing: normal;
-        display: inline-block;
-        box-sizing: border-box;
-        align-items: center;
-        white-space: pre;
-        background-color: white;
-        cursor: pointer;
-        outline: none;
-        border-style: solid;
-        border-color: white;
-        position: relative;
-        top: 50%;
-        margin-right: 2%;
-        transform: translateY(-50%);
-        /*        right: 74px;*/
-        transition: all 0.6s ease;
-        &:hover {
-          outline: none;
-          border-style: solid;
-          border-color: #d1d1d1;
-          box-shadow: 0px 0px 10px 5px white, 0px 0px 10px dodgerblue,
-            0px 0px 20px dodgerblue;
-          color: dodgerblue;
-        }
-      }
-      #search-bar-query {
-        width: 200px;
-        height: 38px;
-        outline: none;
-        border: none;
-        position: relative;
-        /*        right: 74px;*/
-        top: 50%;
-        transform: translateY(-50%);
-        transition: all 0.6s ease;
-      }
-      #search-bar-submit {
-        display: block;
-        background: #c5464a;
-        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff,
-          0 0 40px #c5464a, 0 0 70px #c5464a, 0 0 80px #c5464a,
-          0 0 100px #c5464a, 0 0 150px #c5464a;
-        width: 74px;
-        color: white;
-        height: 38px;
-        outline: none;
-        border: none;
-        cursor: pointer;
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-        transition: all 0.6s ease;
-        &:hover {
-          background-color: royalblue;
-          text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff,
-            0 0 40px #228dff, 0 0 70px #228dff, 0 0 80px #228dff,
-            0 0 100px #228dff, 0 0 150px #228dff;
-        }
-      }
-    }
-    .loginUser {
-      width: 50%;
-      display: flex;
-      align-items: center;
-    }
-    .userHome {
-      max-width: 40%;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-    }
-    .loginUser-userAvatar {
-      margin-right: 10px;
-      flex-shrink: 0;
-    }
-    .loginUser-login {
-      margin-right: 10px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      flex-shrink: 1;
-      font-size: 20px;
-    }
-    .loginUser-message {
-      white-space: nowrap;
-      flex-shrink: 1;
-      font-size: 20px;
-    }
-    .loginUser-signup {
-      margin-left: 10px;
-      white-space: nowrap;
-      flex-shrink: 1;
-      font-size: 20px;
-    }
-  }
-}
 .top-navbar {
-  margin: 0 auto;
-  height: 80px;
-  width: calc(100% - 0px);
-  display: flex !important;
+  height: 60px;
+  padding: 10px;
+  width: calc(100% - 20px);
+  display: flex;
+  display: -webkit-flex;
   align-items: center;
+  justify-content: space-between;
   overflow: hidden;
   position: relative;
-  background-color: #fff;
+  background-color: rgb(255, 255, 255);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
 }
-
-.top-navbar li a {
-  text-decoration: none;
-  color: #761226;
-  transition: all 0.4s ease;
-}
-
-.top-navbar a:hover {
-  color: #ff88a0;
-}
-
-.nav_left {
-  width: 50%;
-  text-align: left;
-}
-.nav_left ul {
+.iconAndTitle {
   display: flex;
-  flex-wrap: nowrap;
+  display: -webkit-flex;
+  align-items: center;
+}
+.patchyvideo-icon {
+  height: 30px;
+}
+.patchyvideo-title {
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+.nav_left {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.navItem {
+  margin: 10px;
+  font-size: 20px;
+}
+.navItem a {
+  color: rgb(46, 46, 46);
+}
+.navItem a:hover {
+  color: rgb(255, 166, 251);
 }
 
-.nav_left li {
-  height: 70px;
-  line-height: 70px;
-  display: inline-block;
-  margin-left: 3%;
-  text-align: center;
-  font-size: 19px;
+.search-bar-query .el-select {
+  width: 110px;
+}
+
+.loginUser {
+  width: 50%;
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+}
+.userHome {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+}
+.loginUser-userAvatar {
+  margin: 5px;
+}
+.loginUser-login {
+  margin: 5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 20px;
+}
+.loginUser-message {
+  margin: 5px;
+  white-space: nowrap;
+  font-size: 20px;
+}
+.loginUser-signup {
+  margin: 5px;
+  white-space: nowrap;
+  font-size: 20px;
 }
 
 .adviceList {
@@ -1030,17 +795,5 @@ export default {
 }
 .Soundtrack {
   color: #ff7792;
-}
-@media only screen and (max-width: 1555px) {
-
-  .nav_left li a{
-   font-size: 15px;
-  }
-}
-/* 使用css3 媒体查询功能进行的排版调整 */
-@media only screen and (max-width: 1156px) {
-  .nav_left li {
-    margin-left: 20px;
-  }
 }
 </style>
