@@ -186,7 +186,7 @@ export default {
         date2str(time) {
             var upload_time = new Date(time);
             // 设置为东八区的时间
-            upload_time.setTime(upload_time.getTime() + 1000 * 3600 * 8);
+            upload_time.setTime(upload_time.getTime());
             var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
             var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
             var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)

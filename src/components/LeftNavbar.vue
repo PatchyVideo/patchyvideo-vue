@@ -211,11 +211,15 @@
               <div class="tag-div">
                 <!-- 存在标签颜色 -->
                 <div v-if="colorTagList.indexOf(val)!=-1">
-                  <p v-bind:class="val" :ref="val">{{ key.replace(/_/g," ") }}</p>
+                  <p
+                    v-bind:class="val"
+                    :ref="val"
+                    @click="gotoHome(key)"
+                  >{{ key.replace(/_/g," ") }}</p>
                 </div>
                 <!-- 其他情况 -->
                 <div v-else>
-                  <p>{{ key.replace(/_/g," ") }}</p>
+                  <p @click="gotoHome(key)">{{ key.replace(/_/g," ") }}</p>
                 </div>
               </div>
             </div>
@@ -229,11 +233,11 @@
             <!-- 根据tag名称自动渲染tag颜色 -->
             <!-- 存在标签颜色 -->
             <div v-if="colorTagList.indexOf(val)!=-1">
-              <p v-bind:class="val">{{ val }}</p>
+              <p v-bind:class="val" @click="gotoHome(key)">{{ val }}</p>
             </div>
             <!-- 其他情况 -->
             <div v-else>
-              <p>{{ val }}</p>
+              <p @click="gotoHome(key)">{{ val }}</p>
             </div>
           </div>
         </li>
@@ -254,7 +258,7 @@
                 <!-- 存在标签颜色 -->
                 <div v-if="colorTagList.indexOf(val)!=-1">
                   <div class="tag-div">
-                    <p v-bind:class="val" :ref="val">
+                    <p v-bind:class="val" :ref="val" @click="gotoHome(key)">
                       <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
                     </p>
                   </div>
@@ -267,7 +271,7 @@
                 </div>
                 <!-- 其他情况 -->
                 <div v-else>
-                  <p>
+                  <p @click="gotoHome(key)">
                     <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
                   </p>
                 </div>
