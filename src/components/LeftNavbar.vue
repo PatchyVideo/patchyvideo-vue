@@ -244,7 +244,7 @@
       </ul>
       <!-- 在Detail页面渲染的侧导航条内容 -->
       <ul v-if="$route.path === '/video'">
-        <li class="tag belong-to-detail" v-for="(key, val) in msg" :key="val">
+        <li class="belong-to-detail" v-for="(key, val) in msg" :key="val">
           <h3>{{ tranTagCategories(val) }}</h3>
           <!-- 根据tag名称自动渲染tag颜色 -->
           <div class="tag-ul">
