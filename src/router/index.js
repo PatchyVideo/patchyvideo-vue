@@ -30,21 +30,34 @@ const test = () => import("../views/About.vue");
 
 Vue.use(VueRouter);
 Vue.use(ElementUI);
-
+var doorObj = document.getElementById("door");
+var irikuchiObj = document.getElementsByClassName("irikuchi")[0];
 var loading;
 function startLoading() {
+  if(irikuchiObj){
+    doorObj.classList.remove("kieru");
+    irikuchiObj.style.display ="block";
+  }
   //使用Element loading-start 方法
-  loading = Loading.service({
+ /* loading = Loading.service({
     lock: true,
     text: "少女祈祷中...."
     //customClass: 'eloading'
     //background: 'rgba(0, 0, 0, 0.7)'
   });
-  return loading;
+  return loading;*/
 }
 function endLoading() {
   //使用Element loading-close 方法
-  loading.close();
+  if(irikuchiObj){
+    irikuchiObj.classList.add("kieru");
+   setTimeout(e=>{
+     irikuchiObj.style.display ="none";
+   },500)
+/*    document.body.removeChild(irikuchiObj );*/
+  }
+/*
+  loading.close();*/
 }
 
 //整活页面

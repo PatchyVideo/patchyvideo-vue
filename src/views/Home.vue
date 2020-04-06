@@ -52,7 +52,6 @@
 <template>
   <div>
     <topnavbar />
-
     <!-- home页面的正文 -->
     <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
       <el-tab-pane :label="labelInfo[0]" name="first"  >
@@ -90,6 +89,7 @@
       };
     },
     created() {
+
       if(this.$store.state.homeVideoDisplayStatus===0){
         this.flag =false;
       }else if(this.$store.state.homeVideoDisplayStatus===1){
