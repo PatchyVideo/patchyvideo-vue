@@ -1,6 +1,22 @@
 
 <template>
     <div class="bang" v-loading="loading">
+     <div style="height: 35px;">
+         <transition name="anime-left">
+             <div  v-show="this.loading===false" style="height: 35px;">
+                 <el-select id="select-order" v-model="couponSelected">
+                     <el-option
+                             style="text-align: center;"
+                             v-for="item in options"
+                             :key="item.value"
+                             :label="item.label"
+                             :value="item.value"
+                     ></el-option>
+                 </el-select>
+             </div>
+         </transition>
+     </div>
+
         <div v-for="(item, i) in ranking" v-bind:key="i">
          <div class="list-item"  :class="{top: i===0,second:i===1,three:i===2}">
              <h1 class="rank">
@@ -36,8 +52,15 @@ export default {
     data() {
         this.$i18n.locale = localStorage.getItem("lang");
         return {
+            options: [
+                { value: 24 * 7*52*10, label: "至今为止" },
+                { value: 24 * 30, label: "过去一个月" },
+                { value: 24 * 7, label: "过去一周" },
+                { value: 24 * 1, label: "过去一天" }
+            ],
+            couponSelected:"",
             loading: true,
-            timeSpan: 24 * 7,// 过去一周
+            timeSpan: 24 * 7*52*10,// 过去一周
             displaySize: 30, // 显示前30个
             ranking: []
         }
@@ -46,6 +69,7 @@ export default {
 
     },
     created() {
+        this.couponSelected = this.options[0].value;
         this.loadData();
     },
 
@@ -54,28 +78,36 @@ export default {
                 return "be/images/userphotos/" + i;
 
         },
-
-
         loadData() {
             this.loading = true;
             this.axios({
                 method: "post",
                 url: "/be/ranking/tag_contributor.do",
                 data: {
-                    hrs: this.timeSpan,
+                    hrs: this.couponSelected,
                     size: this.displaySize
                 }
             }).then(result => {
-                console.log(result);
                 var data = result.data.data;
                 this.ranking = data;
                 this.loading = false;
             });
         }
+    },
+    watch:{
+        couponSelected(val) {//排序更改时，重新请求数据
+            this.loading = true;
+            this.loadData();
+        },
     }
 }
 </script>
 <style  scoped lang="less">
+    /deep/ .el-select{
+        input{
+            text-align: center;
+        }
+    }
     .top{
         text-shadow: 0 0 10px #fff,
         0 0 20px #fff,

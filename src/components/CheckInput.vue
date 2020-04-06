@@ -200,7 +200,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .adviceList {
   /* 针对webkit内核（如Safari）进行的调整 */
   display: -webkit-flex;

@@ -199,68 +199,81 @@
       </div>
 
       <!-- 在Home页面渲染的侧导航条内容 -->
-      <ul v-if="$route.path === '/home'&&(this.name==='main')">
-        <li class="tag belong-to-home" v-for="(val, key) in msg" :key="key">
-          <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
-          <!-- 根据tag名称自动渲染tag颜色 -->
-          <p
-            v-bind:class="{
-              Copyright: val == 'Copyright',
-              Language: val == 'Language',
-              Character: val == 'Character',
-              Author: val == 'Author',
-              General: val == 'General',
-              Meta: val == 'Meta',
-              Soundtrack:val == 'Soundtrack'
-            }"
-            @click="gotoHome(key)"
-          >{{ key.replace(/_/g," ") }}</p>
+      <ul v-if="$route.path === '/home'&&(this.name==='main')" class="tag-ul">
+        <li v-for="(val, key) in msg" :key="key">
+          <el-tooltip effect="light" :content="key.replace(/_/g,' ')" placement="left">
+            <div class="tag belong-to-home">
+              <div class="tag-div">
+                <!-- 根据tag名称自动渲染tag颜色 -->
+                <p
+                  v-bind:class="{
+                    Copyright: val == 'Copyright',
+                    Language: val == 'Language',
+                    Character: val == 'Character',
+                    Author: val == 'Author',
+                    General: val == 'General',
+                    Meta: val == 'Meta',
+                    Soundtrack:val == 'Soundtrack'
+                  }"
+                  @click="gotoHome(key)"
+                >{{ key.replace(/_/g," ") }}</p>
+              </div>
+            </div>
+          </el-tooltip>
         </li>
       </ul>
-      <ul v-if="$route.path === '/home'&&(this.name==='sub')">
+      <ul v-if="$route.path === '/home'&&(this.name==='sub')" class="tag-ul">
         <li class="tag belong-to-home" v-for="(val, key) in msg" :key="key">
-          <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
-          <!-- 根据tag名称自动渲染tag颜色 -->
-          <p
-            v-bind:class="{
-              Copyright: val == 'Copyright',
-              Language: val == 'Language',
-              Character: val == 'Character',
-              Author: val == 'Author',
-              General: val == 'General',
-              Meta: val == 'Meta',
-              Soundtrack:val == 'Soundtrack'
-            }"
-            @click="gotoHome(val)"
-          >{{ val}}</p>
+          <div class="tag-div">
+            <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
+            <!-- 根据tag名称自动渲染tag颜色 -->
+            <p
+              v-bind:class="{
+                Copyright: val == 'Copyright',
+                Language: val == 'Language',
+                Character: val == 'Character',
+                Author: val == 'Author',
+                General: val == 'General',
+                Meta: val == 'Meta',
+                Soundtrack:val == 'Soundtrack'
+              }"
+              @click="gotoHome(val)"
+            >{{ val}}</p>
+          </div>
         </li>
       </ul>
       <!-- 在Detail页面渲染的侧导航条内容 -->
       <ul v-if="$route.path === '/video'">
-        <li class="tag belong-to-detail" v-for="(key, val) in msg" :key="val">
+        <li class="belong-to-detail" v-for="(key, val) in msg" :key="val">
           <h3>{{ tranTagCategories(val) }}</h3>
           <!-- 根据tag名称自动渲染tag颜色 -->
-          <p
-            v-for="item in key"
-            :key="item"
-            v-bind:class="{
-              Copyright: val == 'Copyright',
-              Language: val == 'Language',
-              Character: val == 'Character',
-              Author: val == 'Author',
-              General: val == 'General',
-              Meta: val == 'Meta',
-              Soundtrack:val == 'Soundtrack'
-            }"
-          >
-            <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
-            <el-button
-              v-if="val == 'Author'"
-              size="mini"
-              style="margin-left:5px;"
-              @click="openAuthorData(item)"
-            >详情</el-button>
-          </p>
+          <div class="tag-ul">
+            <div v-for="item in key" :key="item">
+              <el-tooltip effect="light" :content="item.replace(/_/g,' ')" placement="left">
+                <div class="tag-div">
+                  <p
+                    v-bind:class="{
+                  Copyright: val == 'Copyright',
+                  Language: val == 'Language',
+                  Character: val == 'Character',
+                  Author: val == 'Author',
+                  General: val == 'General',
+                  Meta: val == 'Meta',
+                  Soundtrack:val == 'Soundtrack'
+                }"
+                  >
+                    <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
+                    <el-button
+                      v-if="val == 'Author'"
+                      size="mini"
+                      style="margin-left:5px;"
+                      @click="openAuthorData(item)"
+                    >详情</el-button>
+                  </p>
+                </div>
+              </el-tooltip>
+            </div>
+          </div>
         </li>
       </ul>
     </div>
@@ -463,6 +476,7 @@ export default {
   color: #000;
   line-height: 1.2em;
   margin-top: 10px;
+  margin-bottom: 10px;
 }
 .left_list li p {
   line-height: 30px;
@@ -487,8 +501,25 @@ export default {
 .titleTag p:hover {
   color: #c539c5;
 }
+.tag {
+  display: inline-block;
+}
+.tag-div {
+  padding: 0 12px;
+  border-radius: 100px;
+  border: 1px solid #a4a4a4;
+  margin: 0 10px 8px 0;
+  /* 使文字变为最多显示1行，多余的使用省略号代替 */
+  display: -webkit-inline-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tag-div:hover {
+  border-color: #ff88a0;
+}
 .editTagButton {
-  width: 50%;
   text-align: left;
   display: inline-block;
 }

@@ -87,40 +87,42 @@
         <!-- 播放列表正文 -->
         <ul>
           <li class="list-item" v-for="(item) in listvideo" :key="item._id.$oid">
-            <router-link
-              target="_blank"
-              :to="{ path: '/video', query: { id: item._id.$oid } }"
-              tag="a"
-            >
-              <div class="video-thumbnail">
-                <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
-                <div class="Imgcover"></div>
-              </div>
-            </router-link>
+            <div class="video-item">
+              <router-link
+                target="_blank"
+                :to="{ path: '/video', query: { id: item._id.$oid } }"
+                tag="a"
+              >
+                <div class="video-thumbnail">
+                  <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
+                  <div class="Imgcover"></div>
+                </div>
+              </router-link>
 
-            <div class="video-detail">
-              <h4>
-                <router-link
-                  target="_blank"
-                  :to="{ path: '/video', query: { id: item._id.$oid } }"
-                  tag="a"
-                >{{ item.item.title }}</router-link>
-              </h4>
-              <p>{{ item.item.desc }}</p>
-            <span class="rating">{{(item.total_rating/item.total_rating_user)||0}} </span>
-            <span class="updatetime">{{toGMT(item.item.upload_time.$date)}}</span>
-              <div>
-                <img
-                  :src="require('../../static/img/' + item.item.site + '.png')"
-                  width="16px"
-                  style="margin-right:2px"
-                />
-                <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
-                <i
-                  @click="copyVideoLink(item.item.url)"
-                  class="fa fa-copy fa-lg"
-                  style="margin-left:2px"
-                ></i>
+              <div class="video-detail">
+                <div class="title-div">
+                  <img
+                    :src="require('../../static/img/' + item.item.site + '.png')"
+                    width="16px"
+                    style="margin-right:2px;display:inline;"
+                  />
+                  <h4>
+                    <router-link
+                      target="_blank"
+                      :to="{ path: '/video', query: { id: item._id.$oid } }"
+                      tag="a"
+                    >{{ item.item.title }}</router-link>
+                  </h4>
+                </div>
+                <p>{{ item.item.desc }}</p>
+                <div class="link-div">
+                  <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
+                  <i
+                    @click="copyVideoLink(item.item.url)"
+                    class="fa fa-copy fa-lg"
+                    style="margin-left:2px"
+                  ></i>
+                </div>
               </div>
             </div>
           </li>
@@ -569,20 +571,22 @@ export default {
   text-align: center;
 }
 
-.video-detail > h4 {
+.video-detail > .title-div {
   /* 使文字变为最多显示1行，多余的使用省略号代替 */
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.video-detail > .title-div > h4 {
+  display: inline;
 }
 .video-detail > p {
   font-size: 1rem;
   line-height: 1.1rem;
   white-space: pre-wrap;
   overflow: hidden;
-  height: 4.15rem;
+  height: 4.2rem;
+  padding-top: 5px;
   /* 使文字变为最多显示4行，多余的使用省略号代替 */
   display: -webkit-box;
   -webkit-line-clamp: 4;
@@ -590,7 +594,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.video-detail > div {
+.video-detail > .link-div {
   position: absolute;
   bottom: 0px;
   left: 220px;
@@ -607,14 +611,28 @@ export default {
 }
 
 .video-thumbnail {
+  padding-left: 2px;
   margin-right: 20px;
   float: left;
   position: relative;
   z-index: 1;
 }
+.video-thumbnail img{
+  border-radius: 4px;
+}
+
+.video-item {
+  padding-top: 2px;
+  padding-bottom: 2px;
+/*  border: 1px solid #e5e9ef;
+    &:hover{
+        border: 1px solid #ffffff;
+    }*/
+}
 
 .list-item {
-  padding-bottom: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .fa-copy:hover {

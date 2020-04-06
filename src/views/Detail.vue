@@ -47,7 +47,7 @@
   "sync_replica_label":"同步副本标签",
   "sync_replica_label_from":"从此副本同步标签",
   "playlist":"播放列表",
-  "management":"管理",
+  "management":"视频等级管理",
   "official":"原始发布",
   "official_repost":"官方再发布",
   "authorized_translation":"授权翻译",
@@ -78,7 +78,7 @@
   "sync_replica_label":"Synchronize copies tags",
   "sync_replica_label_from":"Sync tags from this video",
   "playlist":"Playlists",
-  "management":"Management",
+  "management":"Video Level Management",
   "other":"Other",
   "official": "Original",
   "official_repost": "Official Repost",
@@ -111,7 +111,7 @@
   "sync_replica_label":"同步副本標簽",
   "sync_replica_label_from":"從此副本同步標簽",
   "playlist":"播放列表",
-  "management":"管理",
+  "management":"視頻等級管理",
   "official":"原始發布",
   "official_repost":"官方再發布",
   "authorized_translation":"授權翻譯",
@@ -140,7 +140,7 @@
     <el-dialog :title="$t('management')" :visible.sync="managementBox" width="30%">
       <div style="width:80%;margin:0 auto">
         <el-select v-model="theVideoRank" placeholder="请修改视频的等级" style="width:100%">
-          <el-option v-for="item in videoRanks" :key="item" :label="item" :value="item"></el-option>
+          <el-option v-for="(val,key) in videoRanks" :key="key" :label="key" :value="val">{{key}}</el-option>
         </el-select>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -250,7 +250,7 @@
           <h4 class="video_link">
             <a :href="myVideoData.video.item.url">{{ myVideoData.video.item.url }}</a>
             <!-- 一键复制的小图标 -->
-            <i @click="copyVideoLink(myVideoData.video.item.url)" class="fa fa-copy fa-1x"></i>
+            <i @click="copyVideoLink(myVideoData.video.item.url)" class="fa fa-copy fa-1x" style="margin-left:4px;"></i>
           </h4>
           <!-- 视频上传时间（？） -->
           <h5 style="text-align: center;">{{ videodate }}</h5>
@@ -346,11 +346,7 @@
                 style="margin-right:2px"
               />
               <!-- 将页面参数刷新并重载页面，其中@click.native应该是router-link为了阻止a标签的默认跳转事件 -->
-              <router-link
-                :to="{ path: '/video', query: { id: item._id.$oid } }"
-                tag="a"
-                @click.native="reload"
-              >{{ item.item.title }}</router-link>
+              <a @click="shiftID(item._id.$oid)">{{ item.item.title }}</a>
               <el-button
                 type="text"
                 @click="synctags(item._id.$oid)"
@@ -395,25 +391,17 @@
             </p>
           </div>
           <ul v-for="item in myVideoData.playlists" :key="item._id.$oid">
-            <!-- 将页面参数刷新并重载页面，其中@click.native应该是router-link为了阻止a标签的默认跳转事件 -->
-            <router-link
-              v-if="item.prev != ''"
-              :to="{ path: '/video', query: { id: item.prev } }"
-              tag="a"
-              @click.native="reload"
-            >【{{$t("previous_article")}}】</router-link>
+            <a v-if="item.prev != ''" @click="shiftID(item.prev)">【{{$t("previous_article")}}】</a>
             <span v-else>【{{$t("no_previous_article")}}】</span>
             <router-link
               :to="{ path: '/listdetail', query: { id: item._id.$oid } }"
               tag="a"
             >{{ item.title.english }}</router-link>
-            <router-link
+            <a
               v-if="item.next != ''"
-              :to="{ path: '/video', query: { id: item.next } }"
-              tag="a"
-              @click.native="reload"
+              @click="shiftID(item.next)"
               style="float:right"
-            >【{{$t("next_article")}}】</router-link>
+            >【{{$t("next_article")}}】</a>
             <span v-else style="float:right">【{{$t("no_next_article")}}】</span>
           </ul>
         </div>
@@ -516,7 +504,12 @@ export default {
       // 本页面的视频的等级
       theVideoRank: 3,
       // 视频的等级（0~3，其中3为所有人可见）
-      videoRanks: [0, 1, 2, 3],
+      videoRanks: {
+        仅管理员可见: 0,
+        登录用户可见: 1,
+        发布者和管理员可见: 2,
+        所有人可见: 3
+      },
       // 本页面的视频的发布类型
       RepostType: "",
       // 视频的发布类型
@@ -808,6 +801,12 @@ export default {
           this.urlifyDesc();
           // 加载结束,加载动画消失
 
+          // 回到顶部
+          if ($("html").scrollTop()) {
+            //动画效果
+            $("html").animate({ scrollTop: 0 }, 100);
+          }
+
           if (this.myVideoData.video.item.site == "ipfs") {
             this.isIpfs = true;
             this.ipfsURL = this.myVideoData.video.item.url.slice(5);
@@ -909,9 +908,9 @@ export default {
         }
       });
     },
-    // 刷新页面
-    reload: function() {
-      this.$router.go(0);
+    // 切换视频ID
+    shiftID(id) {
+      this.$router.push({ path: "/video", query: { id: id } });
     },
     // 匹配视频简介中的URL的规则
     buildUrlMatchers() {
@@ -1174,6 +1173,9 @@ export default {
     }
   },
   watch: {
+    $route(newV, oldV) {
+      this.searchVideo();
+    },
     newListDialog() {
       if (!this.newListDialog) this.getMyList();
     }
