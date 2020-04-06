@@ -336,7 +336,7 @@
                   <!-- 楼中楼右半部分 -->
                   <div class="commentContent" style="margin-left:40px;">
                     <div v-linkified>
-                      <router-link :to="'/users/' + item.meta.created_by.$oid" target="_blank">
+                      <router-link :to="'/users/' + reply.meta.created_by.$oid" target="_blank">
                         {{
                         commentUser(reply.meta.created_by.$oid).profile
                         .username
