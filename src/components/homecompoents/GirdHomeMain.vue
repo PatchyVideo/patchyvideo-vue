@@ -106,7 +106,7 @@
               >{{ item.item.title }}</router-link>
             </h4>
             <p :title="item.item.desc">{{ item.item.desc }}</p>
-            <span class="rating">{{item.total_rating||0}} </span>
+            <span class="rating">{{(item.total_rating/item.total_rating_user)||0}} </span>
             <span class="updatetime">{{toGMT(item.item.upload_time.$date)}}</span>
             <div>
                 <div class="link">
@@ -638,6 +638,12 @@ export default {
         display: flex;
         flex-wrap:nowrap;
         overflow: hidden;
+
+        a{
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+        }
 
     }
 }

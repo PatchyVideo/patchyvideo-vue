@@ -107,6 +107,8 @@
                 >{{ item.item.title }}</router-link>
               </h4>
               <p>{{ item.item.desc }}</p>
+            <span class="rating">{{(item.total_rating/item.total_rating_user)||0}} </span>
+            <span class="updatetime">{{toGMT(item.item.upload_time.$date)}}</span>
               <div>
                 <img
                   :src="require('../../static/img/' + item.item.site + '.png')"
