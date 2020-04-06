@@ -119,7 +119,7 @@
                     {{toGMT(item.item.upload_time.$date)}}
                 </span>
                 <span class="rating" title="评分">
-                    {{~~(item.total_rating/item.total_rating_user)||0}} 
+                    {{(item.total_rating/item.total_rating_user||0).toFixed(1)}} 
                 </span>
              
                 <div class="link-div">

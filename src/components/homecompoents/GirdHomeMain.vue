@@ -114,7 +114,9 @@
                 </h4>
               </div>
               <p :title="item.item.desc">{{ item.item.desc }}</p>
-              <span class="rating">{{~~(item.total_rating/item.total_rating_user)||0}} </span>
+              <span class="rating">                    
+                {{parseInt(item.total_rating/item.total_rating_user||0)}} 
+              </span>
               <span class="updatetime">{{toGMT(item.item.upload_time.$date)}}</span>
               <div class="link-div">
                   <div class="link">
