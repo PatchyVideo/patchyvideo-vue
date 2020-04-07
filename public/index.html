@@ -70,14 +70,14 @@
       .rect_one_one{
         bottom:-100px;
         left:0;
-        background:black;
+        background: #FF505F;
       }
       .rect_one_two{
         background:white;
       }
       .rect_two{
         border-radius:0 0 200px 200px;
-        background:black;
+        background: #FF505F;
         box-shadow: 0px 0px 10px white;
       }
       .rect_two_one{
@@ -86,7 +86,7 @@
         background:white;
       }
       .rect_two_two{
-        background:black;
+        background: #FF505F;
       }
       @keyframes rotate{
         from{
@@ -101,7 +101,7 @@
 
       .iwarei{
         position: relative;
-        transform: translateY(-100%);
+        transform: translateY(-200%);
         width: 100%;
       }
       .funny{
@@ -112,13 +112,40 @@
         color:white;
         text-shadow: 1px 1px 10px #333;
       }
-
-      @font-face{
-
-        font-family:cnfont;
-        src:url('../src/ttf/LYfont.ttf');
-
+      @-webkit-keyframes neon1 {
+        from {
+          text-shadow: 0 0 10px #fff,
+          0 0 20px  #fff,
+          0 0 30px  #fff,
+          0 0 40px  #FF505F,
+          0 0 70px  #FF505F,
+          0 0 80px  #FF505F,
+          0 0 100px #FF505F,
+          0 0 150px #FF505F;
+        }
+        to {
+          text-shadow: 0 0 5px #fff,
+          0 0 10px #fff,
+          0 0 15px #fff,
+          0 0 20px #FF505F,
+          0 0 35px #FF505F,
+          0 0 40px #FF505F,
+          0 0 50px #FF505F,
+          0 0 75px #FF505F;
+        }
       }
+
+      .iwarei h1{
+        animation: neon1 1.5s ease-in-out infinite alternate;
+        font-family: cnfont,monospace;
+        font-weight: normal;
+        margin:auto;
+        text-align:center;
+        color:white;
+        text-shadow: 1px 1px 10px #333;
+      }
+
+
     </style>
   </head>
   <body>
@@ -135,6 +162,10 @@
         <div class="dot rect_two_two"></div>
       </div>
     </div>
+  </div>
+
+  <div class="iwarei">
+  <h1>少 女 祈 禱 中</h1>
   </div>
 <!--  <div class="iwarei">
     <h1 class="funny">东方project</h1>

@@ -7,6 +7,8 @@ import VueAxios from "vue-axios";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import "font-awesome/css/font-awesome.min.css";
+//如若需要使用字体，导入该文件即可。
+/*import "./ttf/cnfont.less"*/
 /*import echarts from "echarts";*/
 import login from "./views/Login.vue";
 import $ from "jquery";
