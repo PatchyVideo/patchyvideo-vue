@@ -103,12 +103,11 @@
             <div class="video-detail">
               <div class="title-div">
                 <h4>
-                  <router-link
-                    target="_blank"
-                    :to="{ path: '/video', query: { id: item._id.$oid } }"
-                    tag="a"
-                    :title="item.item.title"
-                  >{{ item.item.title }}</router-link>
+                    <a
+                      target="_blank"
+                      :href="item.item.url"
+                      tag="a"
+                    >{{ item.item.title }}</a>
                 </h4>
               </div>
                 <p :title="toGMT(item.item.upload_time.$date)+'\n'+item.item.desc">{{ item.item.desc }}</p>

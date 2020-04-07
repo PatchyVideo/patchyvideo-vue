@@ -46,7 +46,8 @@
         :title="$t('prompt')"
         :visible.sync="dialogVisible"
         width="30%">
-        <span>{{$t("prompt_content")}}</span>
+        <span v-if="!promptContent">{{$t("prompt_content")}}</span>
+        <span v-if="promptContent">打分{{data.user_rating}}分成功！</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">{{$t("OK")}}</el-button>
             </span>
@@ -59,10 +60,10 @@
             <div class="left" @mouseover="starHover(index,0)"></div>
             <div class="right" @mouseover="starHover(index,1)"></div>
         </div>
-        <span v-if="!scoreStatus && isLogin()"><el-link type="primary" @click="submitScore">{{$t("submit")}}</el-link></span>
+        <span v-if="isLogin()"><el-link type="primary" @click="submitScore">{{$t("submit")}}</el-link></span>
         <span v-if="!isLogin()"><router-link to="/login" @click.native="login">{{$t("login")}}</router-link></span>
         <span class="aveScore">
-            {{$t("average")}}：{{(data.total_rating/data.total_user||0).toFixed(1)}}
+            {{data.user_rating}} / {{(data.total_rating/data.total_user||0).toFixed(1)}}
             <span>{{data.total_user||0}} {{$t("evaluation")}}</span>
         </span>
     </div>
@@ -83,6 +84,8 @@ export default {
         return {
             pid: this.$route.query.id,
             dialogVisible: false,
+            //提示框内容显示 0表示失败提示 1表示成功提示 
+            promptContent:0,
             enableListener: true,
             starIcon:[star_hollow,star_half,star_full],
             // 评分状态，true=已经评过
@@ -114,7 +117,7 @@ export default {
         login() {
         this.$store.commit("changeifRouter", "0");
         },
-        getMyScore(){
+        getMyScore(callBack){
             // var url = this.type="video"?"/be/rating/get_video.do":"/be/rating/get_playlist.do ";
             var data = {};
             var url = "";
@@ -142,6 +145,9 @@ export default {
                 // console.log(data);
                 
                 this.showStar(this.data.user_rating);
+                if(callBack){
+                    callBack();
+                }
             });
         },
         getTotalRating(){
@@ -182,7 +188,7 @@ export default {
         },
         // index 第几个星星， pos 0左1右
         starHover(index,pos){
-            if(this.scoreStatus) return;
+            // if(this.scoreStatus) return;
             if(!this.isLogin()) return;
             if(!this.enableListener) return;
 
@@ -207,7 +213,7 @@ export default {
             }
         },
         
-        submitScore(){
+        async submitScore(){
             var score = (this.lastStar.index-1)*2 + this.lastStar.position + 1;
             if(score<1){
                 this.dialogVisible = true;
@@ -234,7 +240,11 @@ export default {
                 this.scoreStatus = true;
                 this.enableListener=false;
                 // console.log(data);
-                this.getMyScore();
+                var that = this;
+                this.getMyScore(function(){
+                    that.promptContent = 1;
+                    that.dialogVisible = true;
+                });
                 
             });
         },
