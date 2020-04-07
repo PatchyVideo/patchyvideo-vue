@@ -233,11 +233,11 @@
             <!-- 根据tag名称自动渲染tag颜色 -->
             <!-- 存在标签颜色 -->
             <div v-if="colorTagList.indexOf(val)!=-1">
-              <p v-bind:class="val" @click="gotoHome(key)">{{ val }}</p>
+              <p v-bind:class="val" @click="gotoHome(val)">{{ val }}</p>
             </div>
             <!-- 其他情况 -->
             <div v-else>
-              <p @click="gotoHome(key)">{{ val }}</p>
+              <p @click="gotoHome(val)">{{ val }}</p>
             </div>
           </div>
         </li>
@@ -258,7 +258,7 @@
                 <!-- 存在标签颜色 -->
                 <div v-if="colorTagList.indexOf(val)!=-1">
                   <div class="tag-div">
-                    <p v-bind:class="val" :ref="val" @click="gotoHome(key)">
+                    <p v-bind:class="val" :ref="val">
                       <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
                     </p>
                   </div>
@@ -271,7 +271,7 @@
                 </div>
                 <!-- 其他情况 -->
                 <div v-else>
-                  <p @click="gotoHome(key)">
+                  <p>
                     <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
                   </p>
                 </div>

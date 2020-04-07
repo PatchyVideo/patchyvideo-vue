@@ -146,14 +146,14 @@ export default {
       // 获取前端地址
       this.axios({
         method: "get",
-        url: "https://thvideo.tv/v/fe/"
+        url: "https://thvideo.tv/v/fe/?" + new Date().getTime()
       }).then(result => {
         this.commitOfClient = result.data;
       });
       // 获取后端地址
       this.axios({
         method: "get",
-        url: "https://thvideo.tv/v/be/"
+        url: "https://thvideo.tv/v/be/?" + new Date().getTime()
       }).then(result => {
         this.commitOfServer = result.data;
       });
