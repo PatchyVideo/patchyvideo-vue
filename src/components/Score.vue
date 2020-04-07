@@ -9,7 +9,9 @@
         "login":"登录",
         "prompt":"提示",
         "OK":"确 定",
-        "prompt_content":"你还没有评分！无法提交！"
+        "prompt_content":"你还没有评分！无法提交！",
+        "success_prompt":"打分{rating}分成功！",
+        "show_my_score":"我的评分：{myScore}\n均分：{aveScore}"
 
     },
     "ENG": {
@@ -20,7 +22,9 @@
         "login":"Login",
         "prompt":"Prompt",
         "OK":"O K",
-        "prompt_content":"You have not rated yet! Unable to submit!"
+        "prompt_content":"You have not rated yet! Unable to submit!",
+        "success_prompt":"Successfully score {rating} points!",
+        "show_my_score":"My score：{myScore}\nThe average score：{aveScore}"
     },
     "CHT": {
         "score":"評分",
@@ -30,7 +34,9 @@
         "login":"登錄",
         "prompt":"提示",
         "OK":"確 定",
-        "prompt_content":"妳還沒有評分！無法提交！"
+        "prompt_content":"妳還沒有評分！無法提交！",
+        "success_prompt":"打分{rating}分成功！",
+        "show_my_score":"我的评分：{myScore}\n均分：{aveScore}"
     }
 }
 </i18n>
@@ -47,7 +53,7 @@
         :visible.sync="dialogVisible"
         width="30%">
         <span v-if="!promptContent">{{$t("prompt_content")}}</span>
-        <span v-if="promptContent">打分{{data.user_rating}}分成功！</span>
+        <span v-if="promptContent">{{$t("success_prompt",{rating:data.user_rating})}}</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">{{$t("OK")}}</el-button>
             </span>
@@ -62,7 +68,7 @@
         </div>
         <span v-if="isLogin()"><el-link type="primary" @click="submitScore">{{$t("submit")}}</el-link></span>
         <span v-if="!isLogin()"><router-link to="/login" @click.native="login">{{$t("login")}}</router-link></span>
-        <span class="aveScore">
+        <span class="aveScore" :title="$t('show_my_score',{myScore:data.user_rating,aveScore:(data.total_rating/data.total_user||0).toFixed(1)})">
             {{data.user_rating}} / {{(data.total_rating/data.total_user||0).toFixed(1)}}
             <span>{{data.total_user||0}} {{$t("evaluation")}}</span>
         </span>
