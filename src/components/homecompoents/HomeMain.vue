@@ -12,7 +12,8 @@
     "popular_tags": "热门标签",
     "search_result": "搜索结果 - {result}",
     "syntax_error": "查询语法错误！",
-    "syntax_error_not": "所输入的查询不能与NOT连用！"
+    "syntax_error_not": "所输入的查询不能与NOT连用！",
+    "see_uploaders":"查看上传者"
     },
     "ENG": {
     "page_count": "Showing {count} / {maxcount} videos",
@@ -26,7 +27,8 @@
     "popular_tags": "Popular Tags",
     "search_result": "Search - {result}",
     "syntax_error": "Syntax error in query",
-    "syntax_error_not": "NOT cannot be used here"
+    "syntax_error_not": "NOT cannot be used here",
+    "see_uploaders":"See Uploaders"
     },
     "CHT": {
     "page_count": "顯示 {count} / {maxcount} 個視頻",
@@ -40,7 +42,8 @@
     "popular_tags": "熱門標簽",
     "search_result": "搜索結果 - {result}",
     "syntax_error": "查詢語法錯誤！",
-    "syntax_error_not": "所輸入的查詢不能與NOT連用！"
+    "syntax_error_not": "所輸入的查詢不能與NOT連用！",
+    "see_uploaders":"查看上傳者"
     }
     }
 </i18n>
@@ -101,35 +104,37 @@
 
               <div class="video-detail">
                 <div class="title-div">
+                  <h4>
+                    <a
+                      target="_blank"
+                      :href="item.item.url"
+                      tag="a"
+                    >{{ item.item.title }}</a>
+                  </h4>
+                </div>
+                <p :title="toGMT(item.item.upload_time.$date)+'\n'+item.item.desc">{{ item.item.desc }}</p>
+                <span class="rating" title="评分">
+                    {{(item.total_rating/item.total_rating_user||0).toFixed(1)}} 
+                </span>
                   <img
                     :src="require('../../static/img/' + item.item.site + '.png')"
                     width="16px"
                     style="margin-right:2px;display:inline;"
                   />
-                  <h4>
-                    <router-link
-                      target="_blank"
-                      :to="{ path: '/video', query: { id: item._id.$oid } }"
-                      tag="a"
-                    >{{ item.item.title }}</router-link>
-                  </h4>
-                </div>
-                <p>{{ item.item.desc }}</p>
-                <span class="updatetime">
-                    {{toGMT(item.item.upload_time.$date)}}
-                </span>
-                <span class="rating" title="评分">
-                    {{(item.total_rating/item.total_rating_user||0).toFixed(1)}} 
-                </span>
-             
-                <div class="link-div">
+                  <router-link 
+                  class="linkToPublisher"
+                  target="_blank"
+                  :to="'/users/'+item.meta.created_by.$oid"
+                  tag="a">
+                  {{$t("see_uploaders")}}</router-link>
+<!--                 <div class="link-div">
                   <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
                   <i
                     @click="copyVideoLink(item.item.url)"
                     class="fa fa-copy fa-lg"
                     style="margin-left:2px"
                   ></i>
-                </div>
+                </div> -->
               </div>
             </div>
           </li>
@@ -618,6 +623,8 @@ export default {
   display: inline;
 }
 .video-detail > p {
+    display: block;
+    width: 80%;
   font-size: 1rem;
   line-height: 1.1rem;
   white-space: pre-wrap;
@@ -743,5 +750,7 @@ export default {
     font-size: 25px;
     font-weight: bolder;
 }
-
+.linkToPublisher{
+    font-size: 14px;
+}
 </style>
