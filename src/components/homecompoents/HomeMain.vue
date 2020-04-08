@@ -210,7 +210,7 @@ export default {
         { label: "Acfun", id: "acfun" },
         { label: "站酷", id: "zcool" },
         { label: "IPFS", id: "ipfs" },
-        { label: "weibo", id: "weibo" }
+        { label: "weibo", id: "weibo-mobile" }
       ]
     };
   },
