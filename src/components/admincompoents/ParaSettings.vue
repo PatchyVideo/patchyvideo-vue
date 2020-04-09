@@ -82,7 +82,6 @@ export default {
 		},
 		setPara(){
 			this.dialogVisible = false
-			console.log(this.data[this.targetPara]);
  			this.axios({
 				method: "post",
 				url: "/be/config/setconfig.do" ,

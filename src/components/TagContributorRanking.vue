@@ -138,7 +138,6 @@ export default {
         position: relative;
         &:hover .loginUser-userAvatar {
             cursor: pointer;
-            transform: rotateZ(360deg);
             background-color: rgba(255, 255, 255, 0.3);
         }
         .loginUser-userAvatar{

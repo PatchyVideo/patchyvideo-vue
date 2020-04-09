@@ -42,10 +42,12 @@ export default {
     transform: translate(10%,-50%);
     margin: 0px 20px !important;
   }*/
-  a {
+  a,h1{
+/*    font-family: monospace;*/
     cursor: pointer;
     transition: all 0.4s ease;
   }
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -53,7 +55,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   width: 100%;
-  min-width: 1400px;
+  min-width: 1300px;
   height: 100%;
 }
 

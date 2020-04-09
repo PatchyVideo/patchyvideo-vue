@@ -385,7 +385,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="less">
 /*  @keyframes anim-shadow {
     0%  {
       transform: rotate3d(0, 1, 0.01, 0);
@@ -520,9 +520,19 @@ export default {
   margin-top: 20px;
 }
 .d_t {
+
   width: 100%;
   margin-bottom: 0px;
-  padding-bottom: 20px;
+  padding: 20px;
+}
+/deep/.d_t button{
+  background: #409EFF;
+  border-color: #409EFF;
+  color: #FFF;
+  transition: all 0.4s ease;
+  &:hover{
+    opacity: 0.5;
+   }
 }
 .d_t:hover {
   background-color: rgba(255, 255, 255, 0.1);

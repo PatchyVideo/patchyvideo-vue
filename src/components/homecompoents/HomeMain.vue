@@ -12,7 +12,8 @@
     "popular_tags": "热门标签",
     "search_result": "搜索结果 - {result}",
     "syntax_error": "查询语法错误！",
-    "syntax_error_not": "所输入的查询不能与NOT连用！"
+    "syntax_error_not": "所输入的查询不能与NOT连用！",
+    "see_uploaders":"查看上传者"
     },
     "ENG": {
     "page_count": "Showing {count} / {maxcount} videos",
@@ -26,7 +27,8 @@
     "popular_tags": "Popular Tags",
     "search_result": "Search - {result}",
     "syntax_error": "Syntax error in query",
-    "syntax_error_not": "NOT cannot be used here"
+    "syntax_error_not": "NOT cannot be used here",
+    "see_uploaders":"See Uploaders"
     },
     "CHT": {
     "page_count": "顯示 {count} / {maxcount} 個視頻",
@@ -40,7 +42,8 @@
     "popular_tags": "熱門標簽",
     "search_result": "搜索結果 - {result}",
     "syntax_error": "查詢語法錯誤！",
-    "syntax_error_not": "所輸入的查詢不能與NOT連用！"
+    "syntax_error_not": "所輸入的查詢不能與NOT連用！",
+    "see_uploaders":"查看上傳者"
     }
     }
 </i18n>
@@ -87,46 +90,58 @@
         <!-- 播放列表正文 -->
         <ul>
           <li class="list-item" v-for="(item) in listvideo" :key="item._id.$oid">
-            <div class="video-item">
-              <router-link
-                target="_blank"
-                :to="{ path: '/video', query: { id: item._id.$oid } }"
-                tag="a"
-              >
-                <div class="video-thumbnail">
-                  <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
-                  <div class="Imgcover"></div>
-                </div>
-              </router-link>
+            <div class="video-item" >
+                        <!--          封面图片-->
+                       <router-link
+                        target="_blank"
+                        :to="{ path: '/video', query: { id: item._id.$oid } }"
+                        tag="a"
+                        style="width: 200px;height:125px;margin-right: 20px; display: inline-block"
+                      >
+                        <div class="video-thumbnail">
+                          <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
+                          <div class="Imgcover"></div>
+                        </div>
+                      </router-link>
+                        <!--          封面图片-->
 
-              <div class="video-detail">
-                <div class="title-div">
-                  <img
-                    :src="require('../../static/img/' + item.item.site + '.png')"
-                    width="16px"
-                    style="margin-right:2px;display:inline;"
-                  />
-                  <h4>
-                    <router-link
-                      target="_blank"
-                      :to="{ path: '/video', query: { id: item._id.$oid } }"
-                      tag="a"
-                    >{{ item.item.title }}</router-link>
-                  </h4>
-                </div>
-                <p>{{ item.item.desc }}</p>
-                <div class="link-div">
-                  <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
-                  <i
-                    @click="copyVideoLink(item.item.url)"
-                    class="fa fa-copy fa-lg"
-                    style="margin-left:2px"
-                  ></i>
-                </div>
-              </div>
+                       <div class="video-detail">
+                             <!--  图标和标题-->
+                             <div class="title-div">
+                                 <img
+                                    :src="require('../../static/img/' + item.item.site + '.png')"
+                                    width="16px"
+                                    style="margin-right:2px;display:inline;"
+                            />
+                               <h4>
+                                <a target="_blank" :href="item.item.url" tag="a">{{ item.item.title }}</a>
+                              </h4>
+                             </div>
+                             <!--  图标和标题-->
+                              <!--内容-->
+                                   <p
+                              :title="toGMT(item.item.upload_time.$date)+'\n'+item.item.desc"
+                            >{{ item.item.desc }}</p>
+                              <!--内容-->
+                      <!--  <router-link
+                          class="linkToPublisher"
+                          target="_blank"
+                          :to="'/users/'+item.meta.created_by.$oid"
+                          tag="a"
+                        >{{$t("see_uploaders")}}
+                        </router-link>-->
+                           <div class="time-up">{{ toGMT(item.item.upload_time.$date)+'\n' }}</div>
+                      </div>
+                       <div class="rating-box">
+                            <span
+                                    class="rating"
+                                    title="评分"
+                            >{{(item.total_rating/item.total_rating_user||0).toFixed(1)}}</span>
+                       </div>
             </div>
           </li>
         </ul>
+
 
         <!-- ElementUI自带的分页器 -->
         <el-pagination
@@ -161,7 +176,7 @@ export default {
         { value: "video_oldest", label: this.$t("oldest_video") }
       ],
       // 当前视频列表的排列顺序
-      couponSelected: "",
+      couponSelected: "latest",
       // 当前页数
       page: 1,
       // 全部分页数
@@ -197,7 +212,8 @@ export default {
         { label: "Twitter", id: "twitter" },
         { label: "Acfun", id: "acfun" },
         { label: "站酷", id: "zcool" },
-        { label: "IPFS", id: "ipfs" }
+        { label: "IPFS", id: "ipfs" },
+        { label: "weibo", id: "weibo-mobile" }
       ]
     };
   },
@@ -213,27 +229,73 @@ export default {
     // 修改网站标题
     document.title = "Patchyvideo";
 
+    this.getInfoFromUrl(this.$route);
+
     // 检验传入的数据判断是否应该为搜索页
-    if (JSON.stringify(this.$route.query) == "{}") {
+    if (!this.$route.query.keyword) {
       this.ifSearch = false;
-    } else if (JSON.stringify(this.$route.query) != "{}") {
+    } else if (this.$route.query.keyword) {
       this.searchKeyWord = this.$route.query.keyword;
       this.ifSearch = true;
       // 修改网站标题
       document.title = this.$t("search_result", { result: this.searchKeyWord });
     }
+    this.handleCurrentChange(1);
+    //如果为True说明是搜索数据导致的页数改变，并且如果当前页数是1的话，取消这一次数据请求
+    if (this.pageMark === true && this.page === 1) {
+      this.pageMark = false;
+      return;
+    }
+    if (this.ifSearch === false) {
+      this.getListVideo(this.page, this.count);
+    }
+    if (this.ifSearch === true) {
+      this.getSearchData(this.page, this.count, this.searchKeyWord);
+    }
   },
-  computed: {},
+  computed: {
+    toGMT(timeStamp) {
+      return function(timeStamp) {
+        var upload_time = new Date(timeStamp);
+        // 设置为东八区的时间
+        upload_time.setTime(upload_time.getTime() + 1000 * 3600 * 8);
+        var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
+        var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        var h = upload_time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
+        var m = upload_time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
+        var s = upload_time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+        return (
+          "视频发布于 " +
+          y +
+          "-" +
+          // 数字不足两位自动补零，下同
+          (Array(2).join(0) + M).slice(-2) +
+          "-" +
+          (Array(2).join(0) + d).slice(-2) +
+          " " +
+          (Array(2).join(0) + h).slice(-2) +
+          ":" +
+          (Array(2).join(0) + m).slice(-2) +
+          ":" +
+          (Array(2).join(0) + s).slice(-2) +
+          " GMT+8"
+        );
+      };
+    }
+  },
   mounted() {},
   updated() {},
   methods: {
     // 当前播放列表的页面切换的时候调用
     handleCurrentChange(val) {
       this.page = val;
+      this.historyPush();
     },
     // 当前页面显示视频条数切换的时候调用
     handleSizeChange(val) {
       this.count = val;
+      this.historyPush();
     },
     // 储存播放列表的信息
     listvideoToStore() {
@@ -428,13 +490,46 @@ export default {
       }
       if (this.ifSearch === false) {
         this.getListVideo(this.page, this.count);
-        return;
       }
       if (this.ifSearch === true) {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
-        return;
       }
+      this.historyPush();
       //this.getListVideo_VideoOnly(this.page, this.count);
+    },
+    historyPush() {
+      const visibleSites = btoa(JSON.stringify(this.visibleSites));
+      var query = {};
+      this.page != 1 && (query.page = this.page);
+      this.count != 20 && (query.page_count = this.count);
+      this.couponSelected != "latest" && (query.coupon = this.couponSelected);
+      this.checked && (query.showDeleted = this.checked);
+      this.visibleSites.indexOf("") == -1 &&
+        (query.visibleSites = visibleSites);
+      this.$route.query.keyword && (query.keyword = this.$route.query.keyword);
+      this.$route.query.qtype && (query.qtype = this.$route.query.qtype);
+      const urlSearchParams = new URLSearchParams();
+      for (var i in query) {
+        urlSearchParams.set(i, query[i]);
+      }
+      if (Object.keys(query).length > 0) {
+        history.pushState(
+          {},
+          "",
+          window.location.href.split("?")[0] + "?" + urlSearchParams.toString()
+        );
+      } else {
+        history.pushState({}, "", window.location.href.split("?")[0]);
+      }
+    },
+    getInfoFromUrl(route) {
+      this.couponSelected = route.query.coupon || this.couponSelected;
+      this.page = parseInt(route.query.page) || this.page;
+      this.count = parseInt(route.query.page_count || this.count);
+      this.checked = route.query.showDeleted == "true";
+      this.visibleSites = route.query.visibleSites
+        ? JSON.parse(atob(route.query.visibleSites))
+        : this.visibleSites;
     }
   },
 
@@ -485,6 +580,7 @@ export default {
       if (this.ifSearch === true) {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
       }
+      this.historyPush();
     },
     ifSearch(newV, oldV) {
       /*      this.ifQuest = false;*/
@@ -502,17 +598,17 @@ export default {
     checked() {
       if (this.ifSearch === false) {
         this.getListVideo(this.page, this.count);
-        return;
       }
       if (this.ifSearch === true) {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
-        return;
       }
+      this.historyPush();
     },
     $route(newV, oldV) {
+      this.getInfoFromUrl(newV);
       this.handleCurrentChange(1);
       //监听路由query的值，当query的值为空时，说明默认是首页，调用this.getListVideo获取首页数据并渲染。
-      if (JSON.stringify(this.$route.query) == "{}") {
+      if (!newV.query.keyword) {
         // 修改网站标题
         document.title = "Patchyvideo";
         this.ifSearch = false;
@@ -571,64 +667,97 @@ export default {
   text-align: center;
 }
 
-.video-detail > .title-div {
-  /* 使文字变为最多显示1行，多余的使用省略号代替 */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.video-item{
+    display: flex;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    &:hover {
+        /*background-color: rgba(255,255,255,0.3);*/
+        background-color: rgb(244, 244, 245);
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    }
+    width: 100%;
+    a{
+        .video-thumbnail{
+            padding-left: 2px;
+            margin-right: 20px;
+            float: left;
+            position: relative;
+            z-index: 1;
+            img{
+
+                border-radius: 4px;
+            }
+            .Imgcover{
+            }
+        }
+    }
+    .video-detail{
+        flex-grow: 1;
+        height: 125px;
+        position: relative;
+        transition: all 0.3s ease;
+
+        .title-div{
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 75%;
+            h4{
+
+                display: inline;
+            }
+            img{
+                vertical-align: bottom;
+            }
+        }
+        p{
+            display: block;
+            width: 90%;
+            font-size: 1rem;
+            line-height: 1.15rem;
+            white-space: pre-wrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            height: 72px;
+            margin-bottom: 5px;
+            padding-top: 5px;
+            /* 使文字变为最多显示4行，多余的使用省略号代替 */
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+
+        }
+        .time-up{
+
+        }
+        .linkToPublisher{
+
+        }
+    }
+    .rating-box{
+        position: relative;
+
+        .rating{
+           position: absolute;
+            bottom: 0;
+            right: 0;
+            display: inline-block;
+            height: 40px;
+            line-height: 40px;
+            color: #f8d714;
+            font-size: 25px;
+            font-weight: bolder;
+        }
+    }
 }
-.video-detail > .title-div > h4 {
-  display: inline;
-}
-.video-detail > p {
-  font-size: 1rem;
-  line-height: 1.1rem;
-  white-space: pre-wrap;
-  overflow: hidden;
-  height: 4.2rem;
-  padding-top: 5px;
-  /* 使文字变为最多显示4行，多余的使用省略号代替 */
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+
 .video-detail > .link-div {
   position: absolute;
   bottom: 0px;
   left: 220px;
 }
-.video-detail {
-  height: 125px;
-  position: relative;
-  transition: all 0.3s ease;
-  &:hover {
-    /*background-color: rgba(255,255,255,0.3);*/
-    background-color: rgb(244, 244, 245);
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  }
-}
 
-.video-thumbnail {
-  padding-left: 2px;
-  margin-right: 20px;
-  float: left;
-  position: relative;
-  z-index: 1;
-}
-.video-thumbnail img{
-  border-radius: 4px;
-}
-
-.video-item {
-  padding-top: 2px;
-  padding-bottom: 2px;
-/*  border: 1px solid #e5e9ef;
-    &:hover{
-        border: 1px solid #ffffff;
-    }*/
-}
 
 .list-item {
   padding-top: 5px;
@@ -692,5 +821,13 @@ export default {
 .blacklist_prompt {
   font-size: 14px;
   color: #606266;
+}
+.updatetime {
+  margin-top: 5px;
+  font-size: 12px;
+  color: rgb(0, 0, 0);
+}
+.linkToPublisher {
+  font-size: 14px;
 }
 </style>

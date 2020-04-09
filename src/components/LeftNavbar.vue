@@ -200,23 +200,27 @@
 
       <!-- 在Home页面渲染的侧导航条内容 -->
       <ul v-if="$route.path === '/home'&&(this.name==='main')" class="tag-ul">
-        <li v-for="(val, key) in msg" :key="key">
-          <el-tooltip effect="light" :content="key.replace(/_/g,' ')" placement="left">
+        <li class="tag" v-for="(val, key) in msg" :key="key">
+          <el-tooltip
+            :disabled="overflowed.indexOf(key)==-1"
+            effect="light"
+            :content="key.replace(/_/g,' ')"
+            placement="left"
+          >
             <div class="tag belong-to-home">
               <div class="tag-div">
-                <!-- 根据tag名称自动渲染tag颜色 -->
-                <p
-                  v-bind:class="{
-                    Copyright: val == 'Copyright',
-                    Language: val == 'Language',
-                    Character: val == 'Character',
-                    Author: val == 'Author',
-                    General: val == 'General',
-                    Meta: val == 'Meta',
-                    Soundtrack:val == 'Soundtrack'
-                  }"
-                  @click="gotoHome(key)"
-                >{{ key.replace(/_/g," ") }}</p>
+                <!-- 存在标签颜色 -->
+                <div v-if="colorTagList.indexOf(val)!=-1">
+                  <p
+                    v-bind:class="val"
+                    :ref="val"
+                    @click="gotoHome(key)"
+                  >{{ key.replace(/_/g," ") }}</p>
+                </div>
+                <!-- 其他情况 -->
+                <div v-else>
+                  <p @click="gotoHome(key)">{{ key.replace(/_/g," ") }}</p>
+                </div>
               </div>
             </div>
           </el-tooltip>
@@ -227,48 +231,59 @@
           <div class="tag-div">
             <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
             <!-- 根据tag名称自动渲染tag颜色 -->
-            <p
-              v-bind:class="{
-                Copyright: val == 'Copyright',
-                Language: val == 'Language',
-                Character: val == 'Character',
-                Author: val == 'Author',
-                General: val == 'General',
-                Meta: val == 'Meta',
-                Soundtrack:val == 'Soundtrack'
-              }"
-              @click="gotoHome(val)"
-            >{{ val}}</p>
+            <!-- 存在标签颜色 -->
+            <div v-if="colorTagList.indexOf(val)!=-1">
+              <p v-bind:class="val" @click="gotoHome(val)">{{ val }}</p>
+            </div>
+            <!-- 其他情况 -->
+            <div v-else>
+              <p @click="gotoHome(val)">{{ val }}</p>
+            </div>
           </div>
         </li>
       </ul>
       <!-- 在Detail页面渲染的侧导航条内容 -->
       <ul v-if="$route.path === '/video'">
         <li class="belong-to-detail" v-for="(key, val) in msg" :key="val">
-          <h3>{{ tranTagCategories(val) }}</h3>
+          <h3 style="display:block;">{{ tranTagCategories(val) }}</h3>
           <!-- 根据tag名称自动渲染tag颜色 -->
           <div class="tag-ul">
-            <div v-for="item in key" :key="item">
-              <el-tooltip effect="light" :content="item.replace(/_/g,' ')" placement="left">
-                <div class="tag-div">
-                  <p
-                    v-bind:class="{
-                  Copyright: val == 'Copyright',
-                  Language: val == 'Language',
-                  Character: val == 'Character',
-                  Author: val == 'Author',
-                  General: val == 'General',
-                  Meta: val == 'Meta',
-                  Soundtrack:val == 'Soundtrack'
-                }"
-                  >
+            <div :class="val!='Author'&&'tag'" v-for="item in key" :key="item">
+              <el-tooltip
+                :disabled="overflowed.indexOf(item)==-1"
+                effect="light"
+                :content="item.replace(/_/g,' ')"
+                placement="left"
+              >
+                <!-- 存在标签颜色 -->
+                <div v-if="colorTagList.indexOf(val)!=-1&&val!='Author'">
+                  <div class="tag-div">
+                    <p v-bind:class="val" :ref="val">
+                      <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
+                    </p>
+                  </div>
+                  <el-button
+                    v-if="val=='Author'"
+                    size="mini"
+                    style="margin-left:5px;"
+                    @click="openAuthorData(item)"
+                  >详情</el-button>
+                </div>
+                <div v-else-if="val=='Author'">
+                  <p v-bind:class="val" :ref="val" style="display:inline;">
                     <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
-                    <el-button
-                      v-if="val == 'Author'"
-                      size="mini"
-                      style="margin-left:5px;"
-                      @click="openAuthorData(item)"
-                    >详情</el-button>
+                  </p>
+                  <el-button
+                    v-if="val=='Author'"
+                    size="mini"
+                    style="margin-left:5px;display:inline;"
+                    @click="openAuthorData(item)"
+                  >详情</el-button>
+                </div>
+                <!-- 其他情况 -->
+                <div v-else>
+                  <p>
+                    <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
                   </p>
                 </div>
               </el-tooltip>
@@ -302,7 +317,19 @@ export default {
       // 打开的作者详情的作者的ID
       AuthorID: "ID",
       // 是否打开作者详情页面
-      showAuthorData: false
+      showAuthorData: false,
+      // Tag颜色列表
+      colorTagList: [
+        "Copyright",
+        "Language",
+        "Character",
+        "General",
+        "Meta",
+        "Soundtrack",
+        "Author"
+      ],
+      // 溢出元素表
+      overflowed: []
     };
   },
   mounted() {
@@ -313,6 +340,14 @@ export default {
     ) {
       this.isLogin = true;
     }
+    this.$nextTick(function() {
+      this.freshOverflow();
+    });
+    // 监听resize
+    var _this = this;
+    window.onresize = () => {
+      _this.freshOverflow();
+    };
   },
   methods: {
     // 点击标签显示标签的搜索结果
@@ -340,7 +375,10 @@ export default {
     },
     // 使用视频已有的标签发布视频
     postVideo() {
-      this.$router.push({ path: "/postvideo", query: { use_tags: this.pid } });
+      this.$router.push({
+        path: "/postvideo",
+        query: { use_tags: this.pid }
+      });
     },
     // 查看标签编辑历史
     show_tag_log() {
@@ -384,6 +422,50 @@ export default {
         ":" +
         (Array(2).join(0) + s).slice(-2)
       );
+    },
+    // 更新溢出项
+    freshOverflow() {
+      this.overflowed = [];
+      this.colorTagList.forEach(i => {
+        if (this.$refs[i]) {
+          this.$refs[i].forEach(i2 => {
+            if (
+              Math.floor(
+                this.getTextSize(
+                  i2.innerText,
+                  "100%",
+                  '"Avenir", Helvetica, Arial, sans-serif'
+                ).width
+              ) > i2.offsetWidth
+            ) {
+              this.overflowed.push(i2.innerText);
+            }
+          });
+        }
+      });
+    },
+    // 计算文本宽度
+    getTextSize(text, fontSize, fontFamily) {
+      var span = document.createElement("span");
+      var result = {};
+      result.width = span.offsetWidth;
+      result.height = span.offsetHeight;
+      span.style.visibility = "hidden";
+      span.style.fontSize = fontSize ? fontSize : "";
+      span.style.fontFamily = fontFamily ? fontFamily : "";
+      span.style.display = "inline-block";
+      document.body.appendChild(span);
+      if (typeof span.textContent != "undefined") {
+        span.textContent = text;
+      } else {
+        span.innerText = text;
+      }
+      result.width =
+        parseFloat(window.getComputedStyle(span).width) - result.width;
+      result.height =
+        parseFloat(window.getComputedStyle(span).height) - result.height;
+      document.body.removeChild(span);
+      return result;
     }
   },
   components: { EditTags, ShowAuthorData },
@@ -393,6 +475,12 @@ export default {
       if (this.showTagPanel == false) {
         this.$parent.searchVideo();
       }
+    },
+    // 当标签发生变动时刷新溢出属性
+    msg() {
+      this.$nextTick(function() {
+        this.freshOverflow();
+      });
     }
   },
   computed: {

@@ -2,8 +2,22 @@
 const webpack = require('webpack')
 const path = require("path");
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const utils = {
+    assetsPath: function (_path) {
+        const assetsSubDirectory = process.env.NODE_ENV === 'production'
+            // 生产环境下的 static 路径
+            ? 'static'
+            // 开发环境下的 static 路径
+            : 'static'
+
+        return path.posix.join(assetsSubDirectory, _path)
+    },
+    resolve: function(dir) {
+        return path.join(__dirname, '..', dir)
+    }
+};
+
 module.exports = {
- 
 publicPath: './',
 outputDir: 'dist',
     configureWebpack: {
@@ -15,6 +29,18 @@ outputDir: 'dist',
                 'windows.jQuery':'jquery'
             })
         ],
+        module:{
+            rules:[
+                {
+                    test:/\.(woff2?|eot|ttf|otf)(\?.*)$/,
+                    loader:'url-loader',
+                    options:{
+                        limit: 10000,
+                        name: utils.assetsPath('fonrs/[name].[hash:7].[ext]')
+                    }
+                }
+            ]
+        },
         performance: {
             hints:'warning',
             //入口起点的最大体积
