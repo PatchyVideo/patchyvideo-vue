@@ -119,15 +119,16 @@
       },
       // 切换网格/列表视图
       changeLine(){
-        this.flag = !this.flag;
+        const flag = !this.flag;
         //   1表示网格，0表示列表
-        if(this.flag===true){
+        if(flag){
           localStorage.setItem("homeVideoDisplayStatus",1);
           this.$store.commit("changeHomeVDS",1);
         }else{
           localStorage.setItem("homeVideoDisplayStatus",0);
           this.$store.commit("changeHomeVDS",0);
         }
+        location.reload();
       }
     },
     watch:{
