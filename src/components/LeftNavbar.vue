@@ -248,7 +248,7 @@
           <h3 style="display:block;">{{ tranTagCategories(val) }}</h3>
           <!-- 根据tag名称自动渲染tag颜色 -->
           <div class="tag-ul">
-            <div class="tag" v-for="item in key" :key="item">
+            <div :class="val!='Author'&&'tag'" v-for="item in key" :key="item">
               <el-tooltip
                 :disabled="overflowed.indexOf(item)==-1"
                 effect="light"
@@ -256,7 +256,7 @@
                 placement="left"
               >
                 <!-- 存在标签颜色 -->
-                <div v-if="colorTagList.indexOf(val)!=-1">
+                <div v-if="colorTagList.indexOf(val)!=-1&&val!='Author'">
                   <div class="tag-div">
                     <p v-bind:class="val" :ref="val">
                       <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
@@ -266,6 +266,17 @@
                     v-if="val=='Author'"
                     size="mini"
                     style="margin-left:5px;"
+                    @click="openAuthorData(item)"
+                  >详情</el-button>
+                </div>
+                <div v-else-if="val=='Author'">
+                  <p v-bind:class="val" :ref="val" style="display:inline;">
+                    <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
+                  </p>
+                  <el-button
+                    v-if="val=='Author'"
+                    size="mini"
+                    style="margin-left:5px;display:inline;"
                     @click="openAuthorData(item)"
                   >详情</el-button>
                 </div>
