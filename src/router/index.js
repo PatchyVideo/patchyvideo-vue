@@ -5,6 +5,7 @@ import axios from "axios";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import "../static/css/base.css";
+import { changeSiteTitle } from '../static/js/base';
 import { Loading, Message } from 'element-ui';
 import { getYiyan } from '../static/js/yiyan';
 const error = () => import("../views/404.vue");
@@ -32,32 +33,32 @@ Vue.use(VueRouter);
 Vue.use(ElementUI);
 var doorObj = document.getElementById("door");
 var irikuchiObj = document.getElementsByClassName("irikuchi")[0];
-var loading;
 function startLoading() {
-  if(irikuchiObj){
+  if (irikuchiObj) {
     doorObj.classList.remove("kieru");
-    irikuchiObj.style.display ="block";
+    irikuchiObj.style.display = "block";
   }
+  changeSiteTitle("少女祈祷中");
   //使用Element loading-start 方法
- /* loading = Loading.service({
-    lock: true,
-    text: "少女祈祷中...."
-    //customClass: 'eloading'
-    //background: 'rgba(0, 0, 0, 0.7)'
-  });
-  return loading;*/
+  /* loading = Loading.service({
+     lock: true,
+     text: "少女祈祷中...."
+     //customClass: 'eloading'
+     //background: 'rgba(0, 0, 0, 0.7)'
+   });
+   return loading;*/
 }
 function endLoading() {
   //使用Element loading-close 方法
-  if(irikuchiObj){
+  if (irikuchiObj) {
     irikuchiObj.classList.add("kieru");
-   setTimeout(e=>{
-     irikuchiObj.style.display ="none";
-   },500)
-/*    document.body.removeChild(irikuchiObj );*/
+    setTimeout(e => {
+      irikuchiObj.style.display = "none";
+    }, 500)
+    /*    document.body.removeChild(irikuchiObj );*/
   }
-/*
-  loading.close();*/
+  /*
+    loading.close();*/
 }
 
 //整活页面

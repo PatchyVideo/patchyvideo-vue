@@ -101,8 +101,9 @@
     </div>
     <!-- 最下部的网站声明 -->
     <div>
+      <p class="patchyvideo-declear yiyan" style="color:gray;" v-text="yiyan"></p>
       <p class="patchyvideo-declear">
-        © 2019-2020 PatchyVideo(Client:
+        © 2019-{{(new Date()).getFullYear()}} PatchyVideo(Client:
         <a
           :href="'https://github.com/suwadaimyojin/patchyvideo-vue/commit/'+commitOfClient"
         >{{commitOfClient2}}</a>
@@ -117,6 +118,7 @@
 </template>
 
 <script>
+import { getYiyan } from "../static/js/yiyan";
 export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -126,7 +128,9 @@ export default {
       // github上的后台commit地址
       commitOfServer: "",
       // 多语言支持
-      locale: localStorage.getItem("lang")
+      locale: localStorage.getItem("lang"),
+      // 吾有一言，请诸位静听
+      yiyan: ""
     };
   },
   computed: {
@@ -138,6 +142,10 @@ export default {
     }
   },
   created() {
+    this.yiyan = getYiyan(true);
+    setInterval(() => {
+      this.yiyan = getYiyan(true);
+    }, 10 * 1000);
     this.getCommit();
   },
   methods: {
@@ -146,14 +154,14 @@ export default {
       // 获取前端地址
       this.axios({
         method: "get",
-        url: "https://thvideo.tv/v/fe/?" + new Date().getTime()
+        url: "/v/fe/?" + new Date().getTime()
       }).then(result => {
         this.commitOfClient = result.data;
       });
       // 获取后端地址
       this.axios({
         method: "get",
-        url: "https://thvideo.tv/v/be/?" + new Date().getTime()
+        url: "/v/be/?" + new Date().getTime()
       }).then(result => {
         this.commitOfServer = result.data;
       });
@@ -210,6 +218,22 @@ export default {
   font-size: 15px;
   line-height: 25px;
 }
+.patchyvideo-declear .yiyan {
+  border-top-style: none;
+  opacity: 0; /*实先规定文字的状态是不显示的*/
+  animation: fade-in 4s ease 0s 1; /*调用名称为fade-in的动画，全程动画显示时间4S，进入方式为ease，延时0S进入，播放次数1次*/
+  -webkit-animation: fade-in 4s ease 0s 1;
+  -moz-animation: fade-in 4s ease 0s 1;
+  -o-animation: fade-in 4s ease 0s 1;
+  -ms-animation: fade-in 4s ease 0s 1;
+
+  /*规定动画的最后状态为结束状态*/
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards;
+  -o-animation-fill-mode: forwards;
+  -ms-animation-fill-mode: forwards;
+  -moz-animation-fill-mode: forwards;
+}
 .footImg {
   position: absolute;
   left: 50px;
@@ -229,5 +253,45 @@ export default {
 }
 .patchyvideo-languageSettings span:hover {
   color: #409eff;
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-ms-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-o-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>
