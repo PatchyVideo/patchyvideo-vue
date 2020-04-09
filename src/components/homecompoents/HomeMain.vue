@@ -90,54 +90,58 @@
         <!-- 播放列表正文 -->
         <ul>
           <li class="list-item" v-for="(item) in listvideo" :key="item._id.$oid">
-            <div class="video-item">
-              <router-link
-                target="_blank"
-                :to="{ path: '/video', query: { id: item._id.$oid } }"
-                tag="a"
-              >
-                <div class="video-thumbnail">
-                  <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
-                  <div class="Imgcover"></div>
-                </div>
-              </router-link>
+            <div class="video-item" >
+                        <!--          封面图片-->
+                       <router-link
+                        target="_blank"
+                        :to="{ path: '/video', query: { id: item._id.$oid } }"
+                        tag="a"
+                        style="width: 200px;height:125px;margin-right: 20px; display: inline-block"
+                      >
+                        <div class="video-thumbnail">
+                          <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
+                          <div class="Imgcover"></div>
+                        </div>
+                      </router-link>
+                        <!--          封面图片-->
 
-              <div class="video-detail">
-                <div class="title-div">
-                  <h4>
-                    <a target="_blank" :href="item.item.url" tag="a">{{ item.item.title }}</a>
-                  </h4>
-                </div>
-                <p
-                  :title="toGMT(item.item.upload_time.$date)+'\n'+item.item.desc"
-                >{{ item.item.desc }}</p>
-                <span
-                  class="rating"
-                  title="评分"
-                >{{(item.total_rating/item.total_rating_user||0).toFixed(1)}}</span>
-                <img
-                  :src="require('../../static/img/' + item.item.site + '.png')"
-                  width="16px"
-                  style="margin-right:2px;display:inline;"
-                />
-                <router-link
-                  class="linkToPublisher"
-                  target="_blank"
-                  :to="'/users/'+item.meta.created_by.$oid"
-                  tag="a"
-                >{{$t("see_uploaders")}}</router-link>
-                <!--                 <div class="link-div">
-                  <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
-                  <i
-                    @click="copyVideoLink(item.item.url)"
-                    class="fa fa-copy fa-lg"
-                    style="margin-left:2px"
-                  ></i>
-                </div>-->
-              </div>
+                       <div class="video-detail">
+                             <!--  图标和标题-->
+                             <div class="title-div">
+                                 <img
+                                    :src="require('../../static/img/' + item.item.site + '.png')"
+                                    width="16px"
+                                    style="margin-right:2px;display:inline;"
+                            />
+                               <h4>
+                                <a target="_blank" :href="item.item.url" tag="a">{{ item.item.title }}</a>
+                              </h4>
+                             </div>
+                             <!--  图标和标题-->
+                              <!--内容-->
+                                   <p
+                              :title="toGMT(item.item.upload_time.$date)+'\n'+item.item.desc"
+                            >{{ item.item.desc }}</p>
+                              <!--内容-->
+                      <!--  <router-link
+                          class="linkToPublisher"
+                          target="_blank"
+                          :to="'/users/'+item.meta.created_by.$oid"
+                          tag="a"
+                        >{{$t("see_uploaders")}}
+                        </router-link>-->
+                           <p>{{ toGMT(item.item.upload_time.$date)+'\n' }}</p>
+                      </div>
+                       <div class="rating-box">
+                            <span
+                                    class="rating"
+                                    title="评分"
+                            >{{(item.total_rating/item.total_rating_user||0).toFixed(1)}}</span>
+                       </div>
             </div>
           </li>
         </ul>
+
 
         <!-- ElementUI自带的分页器 -->
         <el-pagination
@@ -339,7 +343,8 @@ export default {
           lang: localStorage.getItem("lang")
         }
       }).then(result => {
-        this.maxcount = result.data.data.count;
+          console.log(result);
+          this.maxcount = result.data.data.count;
         //取得总页数制作分页
         this.maxpage = Math.ceil(result.data.data.count / count);
         if (this.maxpage < this.page) {
@@ -664,66 +669,95 @@ export default {
   text-align: center;
 }
 
-.video-detail > .title-div {
-  /* 使文字变为最多显示1行，多余的使用省略号代替 */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.video-item{
+    display: flex;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    &:hover {
+        /*background-color: rgba(255,255,255,0.3);*/
+        background-color: rgb(244, 244, 245);
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    }
+    width: 100%;
+    a{
+        .video-thumbnail{
+            padding-left: 2px;
+            margin-right: 20px;
+            float: left;
+            position: relative;
+            z-index: 1;
+            img{
+
+                border-radius: 4px;
+            }
+            .Imgcover{
+            }
+        }
+    }
+    .video-detail{
+        flex-grow: 1;
+        height: 125px;
+        position: relative;
+        transition: all 0.3s ease;
+
+        .title-div{
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 75%;
+            h4{
+
+                display: inline;
+            }
+            img{
+                vertical-align: bottom;
+            }
+        }
+        p{
+            display: block;
+            width: 90%;
+            font-size: 1rem;
+            line-height: 1.1rem;
+            white-space: pre-wrap;
+            overflow: hidden;
+            height: 72px;
+            margin-bottom: 5px;
+            padding-top: 5px;
+            /* 使文字变为最多显示4行，多余的使用省略号代替 */
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .linkToPublisher{
+
+        }
+    }
+    .rating-box{
+        position: relative;
+        background-color: #f64c59;
+        .rating{
+            background-color: #6d757a;
+           position: absolute;
+            bottom: 0;
+            right: 0;
+            display: inline-block;
+            height: 40px;
+            line-height: 40px;
+            color: #f8d714;
+            font-size: 25px;
+            font-weight: bolder;
+        }
+    }
 }
-.video-detail > .title-div > h4 {
-  display: inline;
-}
-.video-detail > p {
-  display: block;
-  width: 80%;
-  font-size: 1rem;
-  line-height: 1.1rem;
-  white-space: pre-wrap;
-  overflow: hidden;
-  height: 4.2rem;
-  padding-top: 5px;
-  /* 使文字变为最多显示4行，多余的使用省略号代替 */
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+
 .video-detail > .link-div {
   position: absolute;
   bottom: 0px;
   left: 220px;
 }
-.video-detail {
-  height: 125px;
-  position: relative;
-  transition: all 0.3s ease;
-  &:hover {
-    /*background-color: rgba(255,255,255,0.3);*/
-    background-color: rgb(244, 244, 245);
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  }
-}
 
-.video-thumbnail {
-  padding-left: 2px;
-  margin-right: 20px;
-  float: left;
-  position: relative;
-  z-index: 1;
-}
-.video-thumbnail img {
-  border-radius: 4px;
-}
-
-.video-item {
-  padding-top: 2px;
-  padding-bottom: 2px;
-  /*  border: 1px solid #e5e9ef;
-    &:hover{
-        border: 1px solid #ffffff;
-    }*/
-}
 
 .list-item {
   padding-top: 5px;
@@ -792,14 +826,6 @@ export default {
   margin-top: 5px;
   font-size: 12px;
   color: rgb(0, 0, 0);
-}
-.rating {
-  position: absolute;
-  right: 0;
-  bottom: 20px;
-  color: #f8d714;
-  font-size: 25px;
-  font-weight: bolder;
 }
 .linkToPublisher {
   font-size: 14px;
