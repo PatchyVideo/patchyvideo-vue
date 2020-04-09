@@ -182,7 +182,6 @@ export default {
       var upload_time = new Date(time);
       // 获得当前时区
       var currentGMT = 0 - upload_time.getTimezoneOffset() / 60;
-      console.log(GMT);
       if (GMT >= -12 && GMT <= 14) {
         // 时区差
         var GMToffset = GMT - (0 - currentGMT);

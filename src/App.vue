@@ -43,7 +43,7 @@ export default {
     margin: 0px 20px !important;
   }*/
   a,h1{
-    font-family: monospace;
+/*    font-family: monospace;*/
     cursor: pointer;
     transition: all 0.4s ease;
   }

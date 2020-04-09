@@ -90,6 +90,7 @@
         <ul>
           <li class="list-item" v-for="(item) in listvideo" :key="item._id.$oid">
             <div class="video-item">
+
               <router-link
                 target="_blank"
                 :to="{ path: '/video', query: { id: item._id.$oid } }"
@@ -102,25 +103,26 @@
               </router-link>
               <div class="video-detail">
                 <div class="title-div">
+                    <img
+                            :src="require('../../static/img/' + item.item.site + '.png')"
+                            width="16px"
+                            style="margin-right:2px;display:inline;"
+                    />
                   <h4>
-                    <a target="_blank" :href="item.item.url" tag="a">{{ item.item.title }}</a>
+                    <a target="_blank" :title="item.item.title" :href="item.item.url" tag="a">{{ item.item.title }}</a>
                   </h4>
                 </div>
                 <p
                   :title="toGMT(item.item.upload_time.$date)+'\n'+item.item.desc"
                 >{{ item.item.desc }}</p>
-                <div>
-                  <img
-                    :src="require('../../static/img/' + item.item.site + '.png')"
-                    width="16px"
-                    style="margin-right:2px;display:inline;"
-                  />
-                  <router-link
+                <div class="time-box">
+                   <p class="time-up">{{toGMT(item.item.upload_time.$date)}}</p>
+               <!--   <router-link
                     class="linkToPublisher"
                     target="_blank"
                     :to="'/users/'+item.meta.created_by.$oid"
                     tag="a"
-                  >{{$t("see_uploaders")}}</router-link>
+                  >{{$t("see_uploaders")}}</router-link>-->
                   <span class="rating">{{parseInt(item.total_rating/item.total_rating_user||0)}}</span>
                 </div>
                 <!--               <div class="link-div">
@@ -208,10 +210,12 @@ export default {
         { label: "站酷", id: "zcool" },
         { label: "IPFS", id: "ipfs" },
         { label: "weibo", id: "weibo-mobile" }
-      ]
+      ],
+       screen_width:1900
     };
   },
   created() {
+      this.screen_width = document.body.clientWidth;
     // 初始化页面名为home
     this.$store.commit("changeBgc", "home");
     // 初始化排列顺序为最新上传排序
@@ -247,22 +251,41 @@ export default {
         var h = upload_time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
         var m = upload_time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
         var s = upload_time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
-        return (
-          "视频发布于 " +
-          y +
-          "-" +
-          // 数字不足两位自动补零，下同
-          (Array(2).join(0) + M).slice(-2) +
-          "-" +
-          (Array(2).join(0) + d).slice(-2) +
-          " " +
-          (Array(2).join(0) + h).slice(-2) +
-          ":" +
-          (Array(2).join(0) + m).slice(-2) +
-          ":" +
-          (Array(2).join(0) + s).slice(-2) +
-          " GMT+8"
-        );
+
+          if(this.screen_width<1450)
+          {
+              return (
+                  "发布于 " +
+                  y +
+                  "-" +
+                  // 数字不足两位自动补零，下同
+                  (Array(2).join(0) + M).slice(-2) +
+                  "-" +
+                  (Array(2).join(0) + d).slice(-2) +
+                  " " +
+                  (Array(2).join(0) + h).slice(-2) +
+                  ":" +
+                  (Array(2).join(0) + m).slice(-2)
+
+              );
+          }else {
+              return (
+                  "视频发布于 " +
+                  y +
+                  "-" +
+                  // 数字不足两位自动补零，下同
+                  (Array(2).join(0) + M).slice(-2) +
+                  "-" +
+                  (Array(2).join(0) + d).slice(-2) +
+                  " " +
+                  (Array(2).join(0) + h).slice(-2) +
+                  ":" +
+                  (Array(2).join(0) + m).slice(-2) +
+                  ":" +
+                  (Array(2).join(0) + s).slice(-2) +
+                  " GMT+8"
+              );
+          }
       };
     }
   },
@@ -623,6 +646,34 @@ export default {
 
 
 <style lang="less" scoped>
+    .time-box{
+        height: 24px;
+        overflow: hidden;
+        display: flex;
+        .time-up{
+            flex-grow: 1;
+
+            color:  #FF505F;
+            line-height: 24px;
+            align-items: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .rating {
+            vertical-align: top;
+            line-height: 24px;
+
+    /*        position: absolute;
+            right: 4px;
+            bottom: 0px;*/
+            text-align: right;
+            color: #f8d714;
+            font-size: 24px;
+            font-weight: bolder;
+        }
+    }
+
 .tag-box {
   .el-tag {
     cursor: pointer;
@@ -666,6 +717,7 @@ export default {
   line-height: 1.1rem;
   white-space: pre-wrap;
   overflow: hidden;
+    margin-bottom: 10px;
   //   height: 4.5rem;
   /* 使文字变为最多显示4行，多余的使用省略号代替 */
   display: -webkit-box;
@@ -708,14 +760,7 @@ export default {
   width: 100%;
   bottom: 0;
 }
-.rating {
-  position: absolute;
-  right: 0;
-  bottom: -1px;
-  color: #f8d714;
-  font-size: 28px;
-  font-weight: bolder;
-}
+
 .updatetime {
   position: absolute;
   bottom: 20px;

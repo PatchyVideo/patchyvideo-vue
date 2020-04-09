@@ -130,7 +130,7 @@
                           tag="a"
                         >{{$t("see_uploaders")}}
                         </router-link>-->
-                           <p>{{ toGMT(item.item.upload_time.$date)+'\n' }}</p>
+                           <div class="time-up">{{ toGMT(item.item.upload_time.$date)+'\n' }}</div>
                       </div>
                        <div class="rating-box">
                             <span
@@ -343,7 +343,6 @@ export default {
           lang: localStorage.getItem("lang")
         }
       }).then(result => {
-          console.log(result);
           this.maxcount = result.data.data.count;
         //取得总页数制作分页
         this.maxpage = Math.ceil(result.data.data.count / count);
@@ -513,7 +512,6 @@ export default {
       for (var i in query) {
         urlSearchParams.set(i, query[i]);
       }
-      console.log(query);
       if (Object.keys(query).length > 0) {
         history.pushState(
           {},
@@ -717,8 +715,9 @@ export default {
             display: block;
             width: 90%;
             font-size: 1rem;
-            line-height: 1.1rem;
+            line-height: 1.15rem;
             white-space: pre-wrap;
+            text-overflow: ellipsis;
             overflow: hidden;
             height: 72px;
             margin-bottom: 5px;
@@ -727,8 +726,10 @@ export default {
             display: -webkit-box;
             -webkit-line-clamp: 4;
             -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
+
+        }
+        .time-up{
+
         }
         .linkToPublisher{
 
