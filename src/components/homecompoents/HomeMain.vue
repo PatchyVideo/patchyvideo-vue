@@ -736,9 +736,8 @@ export default {
     }
     .rating-box{
         position: relative;
-        background-color: #f64c59;
+
         .rating{
-            background-color: #6d757a;
            position: absolute;
             bottom: 0;
             right: 0;
