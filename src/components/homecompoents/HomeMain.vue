@@ -115,13 +115,12 @@
                   </h4>
                 </div>
                 <p>{{ item.item.desc }}</p>
-                <span class="updatetime">
-                    {{toGMT(item.item.upload_time.$date)}}
-                </span>
-                <span class="rating" title="评分">
-                    {{(item.total_rating/item.total_rating_user||0).toFixed(1)}} 
-                </span>
-             
+                <span class="updatetime">{{toGMT(item.item.upload_time.$date)}}</span>
+                <span
+                  class="rating"
+                  title="评分"
+                >{{(item.total_rating/item.total_rating_user||0).toFixed(1)}}</span>
+
                 <div class="link-div">
                   <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
                   <i
@@ -168,7 +167,7 @@ export default {
         { value: "video_oldest", label: this.$t("oldest_video") }
       ],
       // 当前视频列表的排列顺序
-      couponSelected: "",
+      couponSelected: "latest",
       // 当前页数
       page: 1,
       // 全部分页数
@@ -220,46 +219,60 @@ export default {
     // 修改网站标题
     document.title = "Patchyvideo";
 
+    this.getInfoFromUrl(this.$route);
+
     // 检验传入的数据判断是否应该为搜索页
-    if (JSON.stringify(this.$route.query) == "{}") {
+    if (!this.$route.query.keyword) {
       this.ifSearch = false;
-    } else if (JSON.stringify(this.$route.query) != "{}") {
+    } else if (this.$route.query.keyword) {
       this.searchKeyWord = this.$route.query.keyword;
       this.ifSearch = true;
       // 修改网站标题
       document.title = this.$t("search_result", { result: this.searchKeyWord });
     }
+    this.handleCurrentChange(1);
+    //如果为True说明是搜索数据导致的页数改变，并且如果当前页数是1的话，取消这一次数据请求
+    if (this.pageMark === true && this.page === 1) {
+      this.pageMark = false;
+      return;
+    }
+    if (this.ifSearch === false) {
+      this.getListVideo(this.page, this.count);
+    }
+    if (this.ifSearch === true) {
+      this.getSearchData(this.page, this.count, this.searchKeyWord);
+    }
   },
   computed: {
     toGMT(timeStamp) {
-        return function (timeStamp) {
-            var upload_time = new Date(timeStamp);
-            // 设置为东八区的时间
-            upload_time.setTime(upload_time.getTime() + 1000 * 3600 * 8);
-            var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
-            var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-            var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-            var h = upload_time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
-            var m = upload_time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
-            var s = upload_time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
-            return (
-                "视频发布于 " +
-                y +
-                "-" +
-                // 数字不足两位自动补零，下同
-                (Array(2).join(0) + M).slice(-2) +
-                "-" +
-                (Array(2).join(0) + d).slice(-2) +
-                " " +
-                (Array(2).join(0) + h).slice(-2) +
-                ":" +
-                (Array(2).join(0) + m).slice(-2) +
-                ":" +
-                (Array(2).join(0) + s).slice(-2) +
-                " GMT+8"
-            );
-        }
-    },
+      return function(timeStamp) {
+        var upload_time = new Date(timeStamp);
+        // 设置为东八区的时间
+        upload_time.setTime(upload_time.getTime() + 1000 * 3600 * 8);
+        var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
+        var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        var h = upload_time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
+        var m = upload_time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
+        var s = upload_time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+        return (
+          "视频发布于 " +
+          y +
+          "-" +
+          // 数字不足两位自动补零，下同
+          (Array(2).join(0) + M).slice(-2) +
+          "-" +
+          (Array(2).join(0) + d).slice(-2) +
+          " " +
+          (Array(2).join(0) + h).slice(-2) +
+          ":" +
+          (Array(2).join(0) + m).slice(-2) +
+          ":" +
+          (Array(2).join(0) + s).slice(-2) +
+          " GMT+8"
+        );
+      };
+    }
   },
   mounted() {},
   updated() {},
@@ -267,10 +280,12 @@ export default {
     // 当前播放列表的页面切换的时候调用
     handleCurrentChange(val) {
       this.page = val;
+      this.historyPush();
     },
     // 当前页面显示视频条数切换的时候调用
     handleSizeChange(val) {
       this.count = val;
+      this.historyPush();
     },
     // 储存播放列表的信息
     listvideoToStore() {
@@ -318,7 +333,7 @@ export default {
           lang: localStorage.getItem("lang")
         }
       }).then(result => {
-          this.maxcount = result.data.data.count;
+        this.maxcount = result.data.data.count;
         //取得总页数制作分页
         this.maxpage = Math.ceil(result.data.data.count / count);
         if (this.maxpage < this.page) {
@@ -465,13 +480,47 @@ export default {
       }
       if (this.ifSearch === false) {
         this.getListVideo(this.page, this.count);
-        return;
       }
       if (this.ifSearch === true) {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
-        return;
       }
+      this.historyPush();
       //this.getListVideo_VideoOnly(this.page, this.count);
+    },
+    historyPush() {
+      const visibleSites = btoa(JSON.stringify(this.visibleSites));
+      var query = {};
+      this.page != 1 && (query.page = this.page);
+      this.count != 20 && (query.page_count = this.count);
+      this.couponSelected != "latest" && (query.coupon = this.couponSelected);
+      this.checked && (query.showDeleted = this.checked);
+      this.visibleSites.indexOf("") == -1 &&
+        (query.visibleSites = visibleSites);
+      this.$route.query.keyword && (query.keyword = this.$route.query.keyword);
+      this.$route.query.qtype && (query.qtype = this.$route.query.qtype);
+      const urlSearchParams = new URLSearchParams();
+      for (var i in query) {
+        urlSearchParams.set(i, query[i]);
+      }
+      console.log(query);
+      if (Object.keys(query).length > 0) {
+        history.pushState(
+          {},
+          "",
+          window.location.href.split("?")[0] + "?" + urlSearchParams.toString()
+        );
+      } else {
+        history.pushState({}, "", window.location.href.split("?")[0]);
+      }
+    },
+    getInfoFromUrl(route) {
+      this.couponSelected = route.query.coupon || this.couponSelected;
+      this.page = parseInt(route.query.page) || this.page;
+      this.count = parseInt(route.query.page_count || this.count);
+      this.checked = route.query.showDeleted == "true";
+      this.visibleSites = route.query.visibleSites
+        ? JSON.parse(atob(route.query.visibleSites))
+        : this.visibleSites;
     }
   },
 
@@ -522,6 +571,7 @@ export default {
       if (this.ifSearch === true) {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
       }
+      this.historyPush();
     },
     ifSearch(newV, oldV) {
       /*      this.ifQuest = false;*/
@@ -539,17 +589,17 @@ export default {
     checked() {
       if (this.ifSearch === false) {
         this.getListVideo(this.page, this.count);
-        return;
       }
       if (this.ifSearch === true) {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
-        return;
       }
+      this.historyPush();
     },
     $route(newV, oldV) {
+      this.getInfoFromUrl(newV);
       this.handleCurrentChange(1);
       //监听路由query的值，当query的值为空时，说明默认是首页，调用this.getListVideo获取首页数据并渲染。
-      if (JSON.stringify(this.$route.query) == "{}") {
+      if (!newV.query.keyword) {
         // 修改网站标题
         document.title = "Patchyvideo";
         this.ifSearch = false;
@@ -654,14 +704,14 @@ export default {
   position: relative;
   z-index: 1;
 }
-.video-thumbnail img{
+.video-thumbnail img {
   border-radius: 4px;
 }
 
 .video-item {
   padding-top: 2px;
   padding-bottom: 2px;
-/*  border: 1px solid #e5e9ef;
+  /*  border: 1px solid #e5e9ef;
     &:hover{
         border: 1px solid #ffffff;
     }*/
@@ -730,18 +780,17 @@ export default {
   font-size: 14px;
   color: #606266;
 }
-.updatetime{
-    margin-top: 5px;
-    font-size: 12px;
-    color:rgb(0, 0, 0);
+.updatetime {
+  margin-top: 5px;
+  font-size: 12px;
+  color: rgb(0, 0, 0);
 }
-.rating{
-    position: absolute;
-    right: 0;
-    bottom: 20px;
-    color: #f8d714;
-    font-size: 25px;
-    font-weight: bolder;
+.rating {
+  position: absolute;
+  right: 0;
+  bottom: 20px;
+  color: #f8d714;
+  font-size: 25px;
+  font-weight: bolder;
 }
-
 </style>
