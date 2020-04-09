@@ -517,13 +517,22 @@ export default {
         urlSearchParams.set(i, query[i]);
       }
       if (Object.keys(query).length > 0) {
-        history.pushState(
-          {},
-          "",
+        if (
+          window.location.href !=
           window.location.href.split("?")[0] + "?" + urlSearchParams.toString()
-        );
+        ) {
+          history.pushState(
+            {},
+            "",
+            window.location.href.split("?")[0] +
+              "?" +
+              urlSearchParams.toString()
+          );
+        }
       } else {
-        history.pushState({}, "", window.location.href.split("?")[0]);
+        if (window.location.href != window.location.href.split("?")[0]) {
+          history.pushState({}, "", window.location.href.split("?")[0]);
+        }
       }
     },
     getInfoFromUrl(route) {

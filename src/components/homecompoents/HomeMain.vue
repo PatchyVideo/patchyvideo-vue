@@ -90,58 +90,57 @@
         <!-- 播放列表正文 -->
         <ul>
           <li class="list-item" v-for="(item) in listvideo" :key="item._id.$oid">
-            <div class="video-item" >
-                        <!--          封面图片-->
-                       <router-link
-                        target="_blank"
-                        :to="{ path: '/video', query: { id: item._id.$oid } }"
-                        tag="a"
-                        style="width: 200px;height:125px;margin-right: 20px; display: inline-block"
-                      >
-                        <div class="video-thumbnail">
-                          <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
-                          <div class="Imgcover"></div>
-                        </div>
-                      </router-link>
-                        <!--          封面图片-->
+            <div class="video-item">
+              <!--          封面图片-->
+              <router-link
+                target="_blank"
+                :to="{ path: '/video', query: { id: item._id.$oid } }"
+                tag="a"
+                style="width: 200px;height:125px;margin-right: 20px; display: inline-block"
+              >
+                <div class="video-thumbnail">
+                  <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
+                  <div class="Imgcover"></div>
+                </div>
+              </router-link>
+              <!--          封面图片-->
 
-                       <div class="video-detail">
-                             <!--  图标和标题-->
-                             <div class="title-div">
-                                 <img
-                                    :src="require('../../static/img/' + item.item.site + '.png')"
-                                    width="16px"
-                                    style="margin-right:2px;display:inline;"
-                            />
-                               <h4>
-                                <a target="_blank" :href="item.item.url" tag="a">{{ item.item.title }}</a>
-                              </h4>
-                             </div>
-                             <!--  图标和标题-->
-                              <!--内容-->
-                                   <p
-                              :title="toGMT(item.item.upload_time.$date)+'\n'+item.item.desc"
-                            >{{ item.item.desc }}</p>
-                              <!--内容-->
-                      <!--  <router-link
+              <div class="video-detail">
+                <!--  图标和标题-->
+                <div class="title-div">
+                  <img
+                    :src="require('../../static/img/' + item.item.site + '.png')"
+                    width="16px"
+                    style="margin-right:2px;display:inline;"
+                  />
+                  <h4>
+                    <a target="_blank" :href="item.item.url" tag="a">{{ item.item.title }}</a>
+                  </h4>
+                </div>
+                <!--  图标和标题-->
+                <!--内容-->
+                <p
+                  :title="toGMT(item.item.upload_time.$date)+'\n'+item.item.desc"
+                >{{ item.item.desc }}</p>
+                <!--内容-->
+                <!--  <router-link
                           class="linkToPublisher"
                           target="_blank"
                           :to="'/users/'+item.meta.created_by.$oid"
                           tag="a"
                         >{{$t("see_uploaders")}}
-                        </router-link>-->
-                           <div class="time-up">{{ toGMT(item.item.upload_time.$date)+'\n' }}</div>
-                      </div>
-                       <div class="rating-box">
-                            <span
-                                    class="rating"
-                                    title="评分"
-                            >{{(item.total_rating/item.total_rating_user||0).toFixed(1)}}</span>
-                       </div>
+                </router-link>-->
+                <div class="time-up">{{ toGMT(item.item.upload_time.$date)+'\n' }}</div>
+              </div>
+              <div class="rating-box">
+                <span
+                  class="rating"
+                  title="评分"
+                >{{(item.total_rating/item.total_rating_user||0).toFixed(1)}}</span>
+              </div>
             </div>
           </li>
         </ul>
-
 
         <!-- ElementUI自带的分页器 -->
         <el-pagination
@@ -343,7 +342,7 @@ export default {
           lang: localStorage.getItem("lang")
         }
       }).then(result => {
-          this.maxcount = result.data.data.count;
+        this.maxcount = result.data.data.count;
         //取得总页数制作分页
         this.maxpage = Math.ceil(result.data.data.count / count);
         if (this.maxpage < this.page) {
@@ -513,13 +512,22 @@ export default {
         urlSearchParams.set(i, query[i]);
       }
       if (Object.keys(query).length > 0) {
-        history.pushState(
-          {},
-          "",
+        if (
+          window.location.href !=
           window.location.href.split("?")[0] + "?" + urlSearchParams.toString()
-        );
+        ) {
+          history.pushState(
+            {},
+            "",
+            window.location.href.split("?")[0] +
+              "?" +
+              urlSearchParams.toString()
+          );
+        }
       } else {
-        history.pushState({}, "", window.location.href.split("?")[0]);
+        if (window.location.href != window.location.href.split("?")[0]) {
+          history.pushState({}, "", window.location.href.split("?")[0]);
+        }
       }
     },
     getInfoFromUrl(route) {
@@ -667,89 +675,84 @@ export default {
   text-align: center;
 }
 
-.video-item{
-    display: flex;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    &:hover {
-        /*background-color: rgba(255,255,255,0.3);*/
-        background-color: rgb(244, 244, 245);
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+.video-item {
+  display: flex;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  &:hover {
+    /*background-color: rgba(255,255,255,0.3);*/
+    background-color: rgb(244, 244, 245);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  }
+  width: 100%;
+  a {
+    .video-thumbnail {
+      padding-left: 2px;
+      margin-right: 20px;
+      float: left;
+      position: relative;
+      z-index: 1;
+      img {
+        border-radius: 4px;
+      }
+      .Imgcover {
+      }
     }
-    width: 100%;
-    a{
-        .video-thumbnail{
-            padding-left: 2px;
-            margin-right: 20px;
-            float: left;
-            position: relative;
-            z-index: 1;
-            img{
+  }
+  .video-detail {
+    flex-grow: 1;
+    height: 125px;
+    position: relative;
+    transition: all 0.3s ease;
 
-                border-radius: 4px;
-            }
-            .Imgcover{
-            }
-        }
+    .title-div {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 75%;
+      h4 {
+        display: inline;
+      }
+      img {
+        vertical-align: bottom;
+      }
     }
-    .video-detail{
-        flex-grow: 1;
-        height: 125px;
-        position: relative;
-        transition: all 0.3s ease;
-
-        .title-div{
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 75%;
-            h4{
-
-                display: inline;
-            }
-            img{
-                vertical-align: bottom;
-            }
-        }
-        p{
-            display: block;
-            width: 90%;
-            font-size: 1rem;
-            line-height: 1.15rem;
-            white-space: pre-wrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            height: 72px;
-            margin-bottom: 5px;
-            padding-top: 5px;
-            /* 使文字变为最多显示4行，多余的使用省略号代替 */
-            display: -webkit-box;
-            -webkit-line-clamp: 4;
-            -webkit-box-orient: vertical;
-
-        }
-        .time-up{
-
-        }
-        .linkToPublisher{
-
-        }
+    p {
+      display: block;
+      width: 90%;
+      font-size: 1rem;
+      line-height: 1.15rem;
+      white-space: pre-wrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      height: 72px;
+      margin-bottom: 5px;
+      padding-top: 5px;
+      /* 使文字变为最多显示4行，多余的使用省略号代替 */
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
     }
-    .rating-box{
-        position: relative;
-
-        .rating{
-           position: absolute;
-            bottom: 0;
-            right: 0;
-            display: inline-block;
-            height: 40px;
-            line-height: 40px;
-            color: #f8d714;
-            font-size: 25px;
-            font-weight: bolder;
-        }
+    .time-up {
     }
+    .linkToPublisher {
+    }
+  }
+  .rating-box {
+    position: relative;
+
+    .rating {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      display: inline-block;
+      height: 40px;
+      line-height: 40px;
+      color: #f8d714;
+      font-size: 25px;
+      font-weight: bolder;
+    }
+  }
 }
 
 .video-detail > .link-div {
@@ -757,7 +760,6 @@ export default {
   bottom: 0px;
   left: 220px;
 }
-
 
 .list-item {
   padding-top: 5px;
