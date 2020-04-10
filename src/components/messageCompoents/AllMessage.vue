@@ -116,12 +116,12 @@ export default {
     commentdate() {
       return function(date) {
         var upload_time = new Date(date);
-        var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
-        var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        var h = upload_time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
-        var m = upload_time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
-        var s = upload_time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+        var y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+        var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+        var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+        var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
         return (
           y +
           "-" +
@@ -187,27 +187,27 @@ export default {
     parseComment(content) {
       return ParseComment(content);
     },
-    /*parseComment(content) {
-      var match = content.match(/((?<=\[\[)[^\(\]\]]+)/g);
-      match.map((v, i) => {
-        var kv = v.split(":");
-        if (kv.length <= 1) return;
-        var action = kv[0];
-        var value = kv[1];
-        var newvalue = "";
-        switch (action) {
-          case "表情":
-            newvalue = `<img src='${ParseFace(value)}' />`;
-            break;
-          default:
-            newvalue = v;
-            break;
-        }
-        content = content.replace(`[[${v}]]`, newvalue);
-      });
-      return content;
-    },*/
-    // 跳转至视频详情/列表详情页面
+    // parseComment(content) {
+    //   var match = content.match(/((?<=\[\[)[^\(\]\]]+)/g);
+    //   match.map((v, i) => {
+    //     var kv = v.split(":");
+    //     if (kv.length <= 1) return;
+    //     var action = kv[0];
+    //     var value = kv[1];
+    //     var newvalue = "";
+    //     switch (action) {
+    //       case "表情":
+    //         newvalue = `<img src='${ParseFace(value)}' />`;
+    //         break;
+    //       default:
+    //         newvalue = v;
+    //         break;
+    //     }
+    //     content = content.replace(`[[${v}]]`, newvalue);
+    //   });
+    //   return content;
+    // },
+    // 跳转至 视频详情/列表详情 页面
     toDetail(type, id) {
       if (event.target.tagName == "IMG" || event.target.tagName == "A") return;
       if (type == "video") {

@@ -57,14 +57,14 @@ import createNewList from "../components/CreateNewList";
 import leadInExistingList from "../components/LeadInExistingList";
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
-      //默认打开的标签页
+      // 默认打开的标签页
       activeName: "first"
     };
   },
   created() {
-    // 初始化页面名为list
+    // 初始化页面名为 list
     this.$store.commit("changeBgc", "createVideoList");
     // 修改网站标题
     document.title = this.$t("title") + " - Patchyvideo";

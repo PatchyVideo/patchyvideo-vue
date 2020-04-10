@@ -66,9 +66,7 @@
         </ul>
 
         <div id="nodes">{{$t('content.init_tip')}}</div>
-        <video id="player" controls>
-          {{$t('content.err_tip')}}
-        </video>
+        <video id="player" controls>{{$t('content.err_tip')}}</video>
       </div>
     </div>
     <Footer></Footer>
@@ -101,14 +99,15 @@ export default {
     const Interval = 5 * 1000;
     ipfs.once("ready", () => {
       // console.log("ipfs node ready.");
-      this.nodeShow.innerHTML = this.$t('content.connecting_tip');
+      this.nodeShow.innerHTML = this.$t("content.connecting_tip");
       setInterval(() => {
         ipfs.swarm.peers((err, peerInfos) => {
           if (err) {
             throw err;
           }
           // console.log(peerInfos.length+" ipfs node(s) connect.");
-          this.nodeShow.innerHTML = peerInfos.length + this.$t("content.connect_success_tip");
+          this.nodeShow.innerHTML =
+            peerInfos.length + this.$t("content.connect_success_tip");
         });
       }, Interval);
       const player = document.getElementById("player");
@@ -120,8 +119,8 @@ export default {
     });
   },
   methods: {
-    //// This is a function to simplify the js
-    //// Need: Ipfs node init
+    // This is a function to simplify the js
+    // Need: Ipfs node init
     genIpfsVideo(ipfsnode, hash, element) {
       let stream;
       const VideoStream = require("videostream");

@@ -104,7 +104,7 @@ export default {
   },
   computed: {},
   mounted() {
-    // 初始化页面名为home
+    // 初始化页面名为 home
     this.$store.commit("changeBgc", "tag");
     // 修改网站标题
     document.title = this.$t("title") + " - Patchyvideo";

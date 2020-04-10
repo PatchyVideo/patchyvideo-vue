@@ -121,7 +121,7 @@
                 >{{ item.item.desc }}</p>
                 <div class="time-box">
                   <p class="time-up">{{toGMT(item.item.upload_time.$date)}}</p>
-                  <!--   <router-link
+                  <!--<router-link
                     class="linkToPublisher"
                     target="_blank"
                     :to="'/users/'+item.meta.created_by.$oid"
@@ -129,7 +129,7 @@
                   >{{$t("see_uploaders")}}</router-link>-->
                   <span class="rating">{{parseInt(item.total_rating/item.total_rating_user||0)}}</span>
                 </div>
-                <!--               <div class="link-div">
+                <!--<div class="link-div">
                   <div class="link">
                     <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
                   </div>
@@ -144,7 +144,7 @@
           </li>
         </ul>
 
-        <!-- ElementUI自带的分页器 -->
+        <!-- ElementUI 自带的分页器 -->
         <el-pagination
           background
           class="page-selector"
@@ -193,14 +193,14 @@ export default {
       listvideo: [],
       // 视频列表是否属于加载状态的判断
       loading: true,
-      //搜索关键字
+      // 搜索关键字
       searchKeyWord: "",
-      //是否渲染的是搜索的数据，默认false为主页数据
+      // 是否渲染的是搜索的数据，默认 false 为主页数据
       ifSearch: false,
       // 判断是否执行查询,有时候页面会进行多次查询浪费资源
-      /*      ifQuest: true,*/
-      //判断当前页数是不是被搜索事件改变的,即：当我跳转到其他页数，此时再搜索新的关键词，新的页数会被置为1。
-      //这时会触发page监听的事件，重新请求搜索的数据，因为根据关键词的改变也会重新请求的数据，会造成资源浪费。
+      // ifQuest: true,
+      // 判断当前页数是不是被搜索事件改变的，即：当我跳转到其他页数，此时再搜索新的关键词，新的页数会被置为 1。
+      // 这时会触发 page 监听的事件，重新请求搜索的数据，因为根据关键词的改变也会重新请求的数据，会造成资源浪费。
       pageMark: false,
       //是否显示隐藏视频
       checked: false,
@@ -220,12 +220,12 @@ export default {
   },
   created() {
     this.screen_width = document.body.clientWidth;
-    // 初始化页面名为home
+    // 初始化页面名为 home
     this.$store.commit("changeBgc", "home");
     // 初始化排列顺序为最新上传排序
     this.couponSelected = this.options[0].value;
     // 获取视频列表
-    /* this.getListVideo(this.page, this.count);*/
+    // this.getListVideo(this.page, this.count);
     // 改变侧导航条的标题
     this.$store.commit("changeLeftNavBarTitle", 2);
     // 修改网站标题
@@ -249,12 +249,12 @@ export default {
         var upload_time = new Date(timeStamp);
         // 设置为东八区的时间
         upload_time.setTime(upload_time.getTime() + 1000 * 3600 * 8);
-        var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
-        var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        var h = upload_time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
-        var m = upload_time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
-        var s = upload_time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+        var y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+        var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+        var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+        var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
 
         if (this.screen_width < 1450) {
           return (
@@ -349,7 +349,7 @@ export default {
         }
       }).then(result => {
         this.maxcount = result.data.data.count;
-        //取得总页数制作分页
+        // 取得总页数制作分页
         this.maxpage = Math.ceil(result.data.data.count / count);
         if (this.maxpage < this.page) {
           this.page = 1;
@@ -373,11 +373,11 @@ export default {
         this.tags = ntags;
         /* 处理结束 */
 
-        //this.tags = result.data.data.tags;
+        // this.tags = result.data.data.tags;
 
         this.count2 = result.data.data.videos.length;
 
-        // 加载结束,加载动画消失
+        // 加载结束，加载动画消失
         this.loading = false;
 
         // 回到顶部
@@ -421,7 +421,7 @@ export default {
       }).then(result => {
         if (result.data.status == "SUCCEED") {
           this.maxcount = result.data.data.count;
-          //取得总页数制作分页
+          // 取得总页数制作分页
           this.maxpage = Math.ceil(result.data.data.count / count);
           if (this.maxpage < this.page) {
             this.page = 1;
@@ -429,28 +429,26 @@ export default {
           this.listvideo = result.data.data.videos;
           this.tags = result.data.data.tags;
           this.count2 = result.data.data.videos.length;
-          //当前页数大于搜索Tag页数时需要重新请求正确的页数数据,现暂时无用注释掉待观察
-          if (0) {
-            // if (result.data.data.videos.length == 0) {
-            //   this.axios({
-            //     method: "post",
-            //     url: "be/queryvideo.do",
-            //     data: {
-            //       page: this.maxpage,
-            //       page_size: 20,
-            //       order: this.couponSelected,
-            //       query: str
-            //     }
-            //   }).then(res => {
-            //     this.maxcount = res.data.data.count;
-            //     //取得总页数制作分页
-            //     this.maxpage = Math.ceil(res.data.data.count / count);
-            //     this.listvideo = res.data.data.videos;
-            //     this.tags = res.data.data.tags;
-            //     this.loading = false;
-            //   });
-            // }
-          }
+          // 当前页数大于搜索Tag页数时需要重新请求正确的页数数据,现暂时无用注释掉待观察
+          // if (result.data.data.videos.length == 0) {
+          //   this.axios({
+          //     method: "post",
+          //     url: "be/queryvideo.do",
+          //     data: {
+          //       page: this.maxpage,
+          //       page_size: 20,
+          //       order: this.couponSelected,
+          //       query: str
+          //     }
+          //   }).then(res => {
+          //     this.maxcount = res.data.data.count;
+          //     //取得总页数制作分页
+          //     this.maxpage = Math.ceil(res.data.data.count / count);
+          //     this.listvideo = res.data.data.videos;
+          //     this.tags = res.data.data.tags;
+          //     this.loading = false;
+          //   });
+          // }
         } else {
           // 包含非法字符的时候
           if (result.data.data.reason == "INCORRECT_QUERY") {
@@ -471,7 +469,7 @@ export default {
 
         // 回到顶部
         if ($("html").scrollTop()) {
-          //动画效果
+          // 动画效果
           $("html").animate({ scrollTop: 0 }, 100);
         }
       });
@@ -501,7 +499,7 @@ export default {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
       }
       this.historyPush();
-      //this.getListVideo_VideoOnly(this.page, this.count);
+      // this.getListVideo_VideoOnly(this.page, this.count);
     },
     historyPush() {
       const visibleSites = btoa(JSON.stringify(this.visibleSites));
@@ -549,33 +547,27 @@ export default {
   },
   watch: {
     page(v) {
-      //如果为True说明是搜索数据导致的页数改变，并且如果当前页数是1的话，取消这一次数据请求
-      if (this.pageMark === true && this.page === 1) {
+      // 如果为 True 说明是搜索数据导致的页数改变，并且如果当前页数是 1 的话，取消这一次数据请求
+      if (this.pageMark && this.page === 1) {
         this.pageMark = false;
         return;
       }
-      if (this.ifSearch === false) {
-        this.getListVideo(this.page, this.count);
-        return;
-      }
-      if (this.ifSearch === true) {
+      if (this.ifSearch) {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
-        return;
+      } else {
+        this.getListVideo(this.page, this.count);
       }
     },
     count(v) {
-      //如果为True说明是搜索数据导致的页数改变，并且如果当前页数是1的话，取消这一次数据请求
-      if (this.pageMark === true && this.page === 1) {
+      // 如果为 True 说明是搜索数据导致的页数改变，并且如果当前页数是 1 的话，取消这一次数据请求
+      if (this.pageMark && this.page === 1) {
         this.pageMark = false;
         return;
       }
-      if (this.ifSearch === false) {
-        this.getListVideo(this.page, this.count);
-        return;
-      }
-      if (this.ifSearch === true) {
+      if (this.ifSearch) {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
-        return;
+      } else {
+        this.getListVideo(this.page, this.count);
       }
     },
     listvideo() {
@@ -583,45 +575,43 @@ export default {
     },
     couponSelected() {
       this.handleCurrentChange(1);
-      //如果为True说明是搜索数据导致的页数改变，并且如果当前页数是1的话，取消这一次数据请求
-      if (this.pageMark === true && this.page === 1) {
+      // 如果为 True 说明是搜索数据导致的页数改变，并且如果当前页数是 1 的话，取消这一次数据请求
+      if (this.pageMark && this.page === 1) {
         this.pageMark = false;
         return;
       }
-      if (this.ifSearch === false) {
-        this.getListVideo(this.page, this.count);
-      }
-      if (this.ifSearch === true) {
+      if (this.ifSearch) {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
+      } else {
+        this.getListVideo(this.page, this.count);
       }
       this.historyPush();
     },
     ifSearch(newV, oldV) {
-      /*      this.ifQuest = false;*/
+      // this.ifQuest = false;
       this.handleCurrentChange(1);
-      //是否渲染的是搜索的数据，默认false为主页数据，清空搜索关键词
+      // 是否渲染的是搜索的数据，默认 false 为主页数据，清空搜索关键词
       // if (newV === false) {
       //   this.searchKeyWord = "";
       //   this.getListVideo(this.page, this.count);
       // }
-      // //当监听到的ifSearch为true时，根据搜索的值渲染数据。
+      // //当监听到的 ifSearch 为 true 时，根据搜索的值渲染数据。
       // if (newV === true) {
       //   this.getSearchData(this.page, this.count, this.searchKeyWord);
       // }
     },
     checked() {
-      if (this.ifSearch === false) {
-        this.getListVideo(this.page, this.count);
-      }
-      if (this.ifSearch === true) {
+      if (this.ifSearch) {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
+      } else {
+        this.getListVideo(this.page, this.count);
       }
       this.historyPush();
     },
     $route(newV, oldV) {
       this.getInfoFromUrl(newV);
       this.handleCurrentChange(1);
-      //监听路由query的值，当query的值为空时，说明默认是首页，调用this.getListVideo获取首页数据并渲染。
+      // 监听路由 query 的值，当 query 的值为空时，说明默认是首页，调用 this.getListVideo 获取首页数据并渲染。
       if (!newV.query.keyword) {
         // 修改网站标题
         document.title = "Patchyvideo";
@@ -629,7 +619,7 @@ export default {
         this.getListVideo(this.page, this.count);
         return;
       }
-      //监听路由query的值，当用户连续输入的搜索值不一样时，更新搜索关键词，调用 this.getSearchData获取搜索数据并渲染。
+      // 监听路由 query 的值，当用户连续输入的搜索值不一样时，更新搜索关键词，调用 this.getSearchData 获取搜索数据并渲染。
       if (
         newV.query.keyword != oldV.query.keyword ||
         newV.query.qtype != oldV.query.qtype
@@ -640,10 +630,10 @@ export default {
         });
         this.ifSearch = true;
         this.searchKeyWord = newV.query.keyword;
-        //在我请求新的搜索数据之后，因为搜索是路由跳转所以会重置当前页面为1，页数会改变，也会触发监控页数里的函数
-        //这里做一个标记，如果是因搜索关键词而改变的页数，那么取消这一次Page页数改变而触发的请求数据事件。
-        //pageMark作为监控page中是否重新请求数据的标志。
-        if ((this.page = 1)) {
+        // 在我请求新的搜索数据之后，因为搜索是路由跳转所以会重置当前页面为 1，页数会改变，也会触发监控页数里的函数
+        // 这里做一个标记，如果是因搜索关键词而改变的页数，那么取消这一次 page 页数改变而触发的请求数据事件。
+        // pageMark 作为监控 page 中是否重新请求数据的标志。
+        if (this.page == 1) {
           this.pageMark = true;
         }
         this.getSearchData(this.page, this.count, newV.query.keyword);

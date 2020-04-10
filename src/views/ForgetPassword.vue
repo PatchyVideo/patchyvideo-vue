@@ -76,7 +76,7 @@
 <script>
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 邮件地址
       FormRef: {
@@ -85,8 +85,8 @@ export default {
       // 校验地址
       rules: {
         email: [
-          { required: true, message: this.$t('email_tip'), trigger: "blur" },
-          { type: "email", message: this.$t('err_tip'), trigger: ["blur"] }
+          { required: true, message: this.$t("email_tip"), trigger: "blur" },
+          { type: "email", message: this.$t("err_tip"), trigger: ["blur"] }
         ]
       },
       // 视频列表是否属于加载状态的判断
@@ -94,10 +94,10 @@ export default {
     };
   },
   created() {
-    // 初始化页面名为login
+    // 初始化页面名为 login
     this.$store.commit("changeBgc", "forgetPassword");
     // 修改网站标题
-    document.title = this.$t('title') + " - Patchyvideo";
+    document.title = this.$t("title") + " - Patchyvideo";
   },
   mounted() {
     console.log(
@@ -117,7 +117,7 @@ export default {
             url: "be/user/request_resetpass.do",
             data: {
               email: this.FormRef.email,
-              lang: localStorage.getItem('lang')
+              lang: localStorage.getItem("lang")
             }
           }).then(result => {
             this.loading = false;
@@ -129,7 +129,7 @@ export default {
             }
           });
         } else {
-          // 加载结束,加载动画消失
+          // 加载结束，加载动画消失
           this.loading = false;
         }
       });
@@ -155,7 +155,7 @@ export default {
 .loginPic {
   height: 100%;
   width: 100%;
-/*  background: url("../static/img/forgetPassword.png") no-repeat top center;*/
+  /* background: url("../static/img/forgetPassword.png") no-repeat top center; */
   /* background-position: 200px 0; */
   background-size: cover;
   background-attachment: fixed;

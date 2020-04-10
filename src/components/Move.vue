@@ -18,9 +18,8 @@
 
 <template>
   <div>
-    <!--  <i class="fa fa-arrow-up move-up" aria-hidden="true" @click="moveUp()"></i>
-    <i class="fa fa-arrow-down move-down" aria-hidden="true"  @click="moveDown"></i>
-    -->
+    <!--<i class="fa fa-arrow-up move-up" aria-hidden="true" @click="moveUp()"></i>
+    <i class="fa fa-arrow-down move-down" aria-hidden="true"  @click="moveDown"></i>-->
 
     <el-tooltip class="item move-up-box" effect="dark" :content="$t('move_up')" placement="top">
       <el-button>
@@ -28,7 +27,12 @@
       </el-button>
     </el-tooltip>
 
-    <el-tooltip class="item move-down-box" effect="dark" :content="$t('move_down')" placement="bottom">
+    <el-tooltip
+      class="item move-down-box"
+      effect="dark"
+      :content="$t('move_down')"
+      placement="bottom"
+    >
       <el-button>
         <i class="fa fa-arrow-down move-down" aria-hidden="true" @click="moveDown"></i>
       </el-button>
@@ -39,7 +43,7 @@
 <script>
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {};
   },
   methods: {
@@ -51,10 +55,9 @@ export default {
         data: this.msg
       }).then(res => {
         if (res.data.status == "SUCCEED") {
-          //方案一：全局刷新、会有闪屏，且所有数据重新请求，不好。
-          //this.$router.go(0);
-          //方案二:VueX来监听子组件的值。
-
+          // 方案一：全局刷新、会有闪屏，且所有数据重新请求，不好。
+          // this.$router.go(0);
+          // 方案二: VueX 来监听子组件的值。
           this.$store.commit("refreshPage");
         }
       });
@@ -67,9 +70,9 @@ export default {
         data: this.msg
       }).then(res => {
         if (res.data.status == "SUCCEED") {
-          //方案一：全局刷新、会有闪屏，且所有数据重新请求，不好。
-          //this.$router.go(0);
-          //方案二:VueX来监听子组件的值。
+          // 方案一：全局刷新、会有闪屏，且所有数据重新请求，不好。
+          // this.$router.go(0);
+          // 方案二: VueX 来监听子组件的值。
           this.$store.commit("refreshPage");
         }
       });

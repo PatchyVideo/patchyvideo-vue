@@ -43,7 +43,7 @@
   <div>
     <topnavbar />
 
-    <!-- PostVideo页面的正文 -->
+    <!-- PostVideo 页面的正文 -->
     <div class="w main-page-background-img">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick" class="topTabs">
         <el-tab-pane :label="$t('single_release')" name="first" :lazy="true">
@@ -77,7 +77,7 @@ export default {
     };
   },
   created() {
-    // 初始化页面名为list
+    // 初始化页面名为 list
     this.$store.commit("changeBgc", "postVideo");
     // 修改网站标题
     document.title = this.$t("title") + " - Patchyvideo";

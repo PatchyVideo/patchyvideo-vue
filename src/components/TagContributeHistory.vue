@@ -66,7 +66,7 @@
       </li>
     </ul>
 
-    <!-- ElementUI自带的分页器 -->
+    <!-- ElementUI 自带的分页器 -->
     <el-pagination
       background
       class="page-selector"
@@ -93,7 +93,7 @@ export default {
       page: 1,
       maxPage: 50,
       pageSize: 20,
-      GMT: 99 //99的时候为当前时区
+      GMT: 99 // 99 的时候为当前时区
     };
   },
   computed: {},
@@ -150,7 +150,7 @@ export default {
             this.loading = false;
             // 回到顶部
             if ($("html").scrollTop()) {
-              //动画效果
+              // 动画效果
               $("html").animate({ scrollTop: 0 }, 100);
             }
           })
@@ -182,7 +182,7 @@ export default {
       return btoa(str);
     },
     // 将时间戳转换为时间字符串
-    // time:时间戳 GMT:时区(数字：-12~12)
+    // time: 时间戳 GMT:时区 (数字：-12~12)
     date2str(time, GMT) {
       var upload_time = new Date(time);
       // 获得当前时区
@@ -194,12 +194,12 @@ export default {
         upload_time.setTime(upload_time.getTime() + 1000 * 3600 * GMToffset);
         currentGMT = GMT;
       }
-      var year = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
+      var year = upload_time.getFullYear(); // getFullYear 方法以四位数字返回年份
       var month = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-      var days = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-      var hours = upload_time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
-      var minutes = upload_time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
-      var seconds = upload_time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+      var days = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+      var hours = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+      var minutes = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+      var seconds = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
 
       return `${year}-${(Array(2).join(0) + month).slice(-2)}-${(
         Array(2).join(0) + days
@@ -239,7 +239,7 @@ export default {
   height: 100%;
   transition: all 0.3s ease;
   &:hover {
-    /*background-color: rgba(255,255,255,0.3);*/
+    /* background-color: rgba(255,255,255,0.3); */
     background-color: rgb(244, 244, 245);
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   }

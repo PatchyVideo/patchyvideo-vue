@@ -113,18 +113,10 @@
     <!-- 管理操作的弹出框 -->
     <el-dialog :title="$t('selectOpts')" :visible.sync="AuthOps" width="50%">
       <div v-loading="Authorizing">
-        <el-button style="width:100%;" @click="deletcomment()">
-          {{
-          $t("deletcomment")
-          }}
-        </el-button>
+        <el-button style="width:100%;" @click="deletcomment()">{{ $t("deletcomment") }}</el-button>
         <br />
         <br />
-        <el-button style="width:100%;" @click="hidecomment()">
-          {{
-          $t("hidecomment")
-          }}
-        </el-button>
+        <el-button style="width:100%;" @click="hidecomment()">{{ $t("hidecomment") }}</el-button>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="AuthOps = false">{{ $t("cancel") }}</el-button>
@@ -140,7 +132,7 @@
 
     <!-- 发表评论 -->
     <div class="comment" v-if="isLogin">
-      <!--表情区域-->
+      <!-- 表情区域 -->
       <div style="text-align: center !important;">
         <el-popover
           placement="top"
@@ -222,28 +214,20 @@
       ></el-input>
       <el-checkbox v-model="UsingEnter">{{ $t("usingEnter") }}</el-checkbox>
       <span>
-        {{$t('respect')}}
+        {{ $t('respect') }}
         <a
           href="https://patchyvideo.wiki/Comments"
           target="_blank"
           style="color:#409EFF"
-        >{{$t('commentRules')}}</a>
-        {{$t('yo')}}
+        >{{ $t('commentRules') }}</a>
+        {{ $t('yo') }}
       </span>
-      <el-button type="primary" @click="postcomment()" :loading="posting">
-        {{
-        $t("post")
-        }}
-      </el-button>
+      <el-button type="primary" @click="postcomment()" :loading="posting">{{ $t("post") }}</el-button>
     </div>
     <!-- 未登录时显示 -->
     <div v-else>
       {{ $t("joinDiscuss") }}
-      <router-link to="/login" @click.native="login">
-        {{
-        $t("login")
-        }}
-      </router-link>
+      <router-link to="/login" @click.native="login">{{ $t("login") }}</router-link>
     </div>
 
     <!-- 评论详情 -->
@@ -253,28 +237,19 @@
       <div class="commentDetail" v-if="!item.hidden && !item.deleted">
         <!-- 用户头像 -->
         <div class="avatar">
-          <el-avatar
-            :src="
-              userAvatar(commentUser(item.meta.created_by.$oid).profile.image)
-            "
-          ></el-avatar>
+          <el-avatar :src="userAvatar(commentUser(item.meta.created_by.$oid).profile.image)"></el-avatar>
         </div>
         <!-- 右半部分 -->
         <div class="commentContent">
           <div v-linkified>
-            <router-link :to="'/users/' + item.meta.created_by.$oid" target="_blank">
-              {{
-              commentUser(item.meta.created_by.$oid).profile.username
-              }}:
-            </router-link>
+            <router-link
+              :to="'/users/' + item.meta.created_by.$oid"
+              target="_blank"
+            >{{ commentUser(item.meta.created_by.$oid).profile.username }}:</router-link>
             <span v-html="parseComment(item.content)"></span>
           </div>
 
-          <span class="commentDate">
-            {{
-            commentdate(item.meta.created_at.$date)
-            }}
-          </span>
+          <span class="commentDate">{{ commentdate(item.meta.created_at.$date) }}</span>
           <el-button
             class="replycomment"
             v-if="item.children.length && !showReplies[index].show"
@@ -285,13 +260,7 @@
             class="replycomment"
             v-else-if="!replycomments[index].show && isLogin"
             type="text"
-            @click="
-              openReplyBox(
-                index,
-                commentUser(item.meta.created_by.$oid).profile.username,
-                item._id.$oid
-              )
-            "
+            @click="openReplyBox(index, commentUser(item.meta.created_by.$oid).profile.username, item._id.$oid)"
           >{{ $t("reply") }}</el-button>
           <el-button
             class="replycomment"
@@ -303,13 +272,7 @@
           <!-- 权限操作 -->
           <el-button
             class="replycomment"
-            v-if="
-              isLogin &&
-                (Authorized ||
-                  mycomment(
-                    commentUser(item.meta.created_by.$oid).profile.username
-                  ))
-            "
+            v-if="isLogin && (Authorized || mycomment(commentUser(item.meta.created_by.$oid).profile.username))"
             type="text"
             @click="Authorizecomment(item._id.$oid)"
           >{{ $t("manage") }}</el-button>
@@ -325,61 +288,37 @@
                   <!-- 楼中楼头像 -->
                   <div class="avatar" style="margin:0">
                     <el-avatar
-                      :src="
-                        userAvatar(
-                          commentUser(reply.meta.created_by.$oid).profile.image
-                        )
-                      "
+                      :src="userAvatar(commentUser(reply.meta.created_by.$oid).profile.image)"
                       size="small"
                     ></el-avatar>
                   </div>
                   <!-- 楼中楼右半部分 -->
                   <div class="commentContent" style="margin-left:40px;">
                     <div v-linkified>
-                      <router-link :to="'/users/' + reply.meta.created_by.$oid" target="_blank">
-                        {{
-                        commentUser(reply.meta.created_by.$oid).profile
-                        .username
-                        }}:
-                      </router-link>
+                      <router-link
+                        :to="'/users/' + reply.meta.created_by.$oid"
+                        target="_blank"
+                      >{{ commentUser(reply.meta.created_by.$oid).profile.username }}:</router-link>
                       <span v-if="typeof reply.reply_to !== 'undefined'">
                         {{ $t('replyPrompt') }}
                         <router-link
                           :to="'/users/' + cid_comment_map.get(reply.reply_to.$oid).meta.created_by.$oid"
                           target="_blank"
-                        >@{{commentUser(cid_comment_map.get(reply.reply_to.$oid).meta.created_by.$oid).profile.username}}</router-link>:
+                        >@{{ commentUser(cid_comment_map.get(reply.reply_to.$oid).meta.created_by.$oid).profile.username }}</router-link>:
                       </span>
                       <span v-html="parseComment(reply.content)"></span>
                     </div>
-                    <span class="commentDate">
-                      {{
-                      commentdate(reply.meta.created_at.$date)
-                      }}
-                    </span>
+                    <span class="commentDate">{{ commentdate(reply.meta.created_at.$date) }}</span>
                     <el-button
                       v-if="isLogin"
                       class="replycomment"
                       type="text"
-                      @click="
-                        openReplyBox(
-                          index,
-                          commentUser(reply.meta.created_by.$oid).profile
-                            .username,
-                          reply._id.$oid
-                        )
-                      "
+                      @click="openReplyBox(index, commentUser(reply.meta.created_by.$oid).profile.username,reply._id.$oid)"
                     >{{ $t("reply") }}</el-button>
                     <!-- 权限操作 -->
                     <el-button
                       class="replycomment"
-                      v-if="
-                        isLogin &&
-                          (Authorized ||
-                            mycomment(
-                              commentUser(reply.meta.created_by.$oid).profile
-                                .username
-                            ))
-                      "
+                      v-if="isLogin && (Authorized || mycomment(commentUser(reply.meta.created_by.$oid).profile.username))"
                       type="text"
                       @click="Authorizecomment(reply._id.$oid)"
                     >{{ $t("manage") }}</el-button>
@@ -392,11 +331,7 @@
                 >{{ $t("deletedcomment") }}</div>
                 <div style="margin-left:40px;" v-else-if="reply.hidden">
                   {{ $t("hiddencomment") }}
-                  <el-button type="text" @click="reply.hidden = false">
-                    {{
-                    $t("opencomment")
-                    }}
-                  </el-button>
+                  <el-button type="text" @click="reply.hidden = false">{{ $t("opencomment") }}</el-button>
                 </div>
               </div>
             </div>
@@ -408,7 +343,7 @@
           <el-collapse-transition>
             <div v-show="replycomments[index].show">
               <div class="replyBox">
-                <!--表情区域-->
+                <!-- 表情区域 -->
                 <el-popover
                   placement="top"
                   trigger="manual"
@@ -502,11 +437,7 @@
       <div class="deletedcomment" v-if="item.deleted">{{ $t("deletedcomment") }}</div>
       <div class="hiddencomment" v-else-if="item.hidden">
         {{ $t("hiddencomment") }}
-        <el-button type="text" @click="item.hidden = false">
-          {{
-          $t("opencomment")
-          }}
-        </el-button>
+        <el-button type="text" @click="item.hidden = false">{{ $t("opencomment") }}</el-button>
       </div>
       <el-divider></el-divider>
     </div>
@@ -533,13 +464,13 @@ export default {
       comment: "",
       // 用户输入的楼中楼的回复
       reply: "",
-      // 用户评论对象的cid
+      // 用户评论对象的 cid
       cidReplied: "",
       // 楼层评论区是否打开的数组
       replycomments: [],
       // 楼层详情是否打开的数组
       showReplies: [],
-      // 是否使用Enter键发表评论
+      // 是否使用 Enter 键发表评论
       UsingEnter: true,
       // 评论是否正在发表中
       posting: false,
@@ -551,17 +482,17 @@ export default {
       Authorized: false,
       // 管理页面的弹出框
       AuthOps: false,
-      // 被管理对象的cid
+      // 被管理对象的 cid
       AuthorizedCid: "",
       // 管理页面是否加载的标志
       Authorizing: false,
-      // face弹出标志
+      // face 弹出标志
       faceVisible: false,
-      // face数据
+      // face 数据
       faceData: [],
-      // emoji数据
+      // emoji 数据
       emojiData: [],
-      // emoji弹出标志
+      // emoji 弹出标志
       emojiVisible: false
     };
   },
@@ -590,12 +521,12 @@ export default {
     commentdate() {
       return function(date) {
         var upload_time = new Date(date);
-        var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
-        var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        var h = upload_time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
-        var m = upload_time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
-        var s = upload_time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+        var y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+        var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+        var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+        var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
         return (
           y +
           "-" +
@@ -630,7 +561,7 @@ export default {
         return name == this.$store.state.username;
       };
     },
-    // 判断请求的URL
+    // 判断请求的 URL
     requestURL() {
       if (this.$route.path === "/listdetail")
         return {
@@ -651,51 +582,50 @@ export default {
     this.isAuthorized();
   },
   methods: {
-    /*
-    getFace() {
-      //规定一排多少个
-      let array = [];
-      const MAXROW = 10;
-      //读取face数据,转换成[{"呵呵":"src"},{}]格式
-      for (let i in faceslist) {
-        let obj = {};
-        obj[i] = ParseFace(i);
-        array.push(obj);
-      }
-      //计算最后一排个数
-      var faceRow = Math.ceil(array.length / MAXROW);
-      let c = [];
-      //转换成[[{"呵呵":"src"},{}],[]]格式
-      for (let i = 0; i < faceRow; ++i) {
-        c[i] = [];
-        for (let m = i * MAXROW; m < i * MAXROW + MAXROW; ++m) {
-          c[i].push(array[m]);
-        }
-      }
-      this.faceData = c;
-    },*/
-    /*getEmoji() {
-      //规定一排多少个
-      let array = [];
-      const MAXROW = 10;
-      //读取face数据,转换成[{"呵呵":"src"},{}]格式
-      for (let i in emojislist) {
-        let obj = {};
-        obj[i] = ParseEmoji(i);
-        array.push(obj);
-      }
-      //计算最后一排个数
-      var faceRow = Math.ceil(array.length / MAXROW);
-      let c = [];
-      //转换成[[{"呵呵":"src"},{}],[]]格式
-      for (let i = 0; i < faceRow; ++i) {
-        c[i] = [];
-        for (let m = i * MAXROW; m < i * MAXROW + MAXROW; ++m) {
-          c[i].push(array[m]);
-        }
-      }
-      this.emojiData = c;
-    },*/
+    // getFace() {
+    //   // 规定一排多少个
+    //   let array = [];
+    //   const MAXROW = 10;
+    //   // 读取 face 数据,转换成 [{"呵呵":"src"},{}] 格式
+    //   for (let i in faceslist) {
+    //     let obj = {};
+    //     obj[i] = ParseFace(i);
+    //     array.push(obj);
+    //   }
+    //   // 计算最后一排个数
+    //   var faceRow = Math.ceil(array.length / MAXROW);
+    //   let c = [];
+    //   // 转换成 [[{"呵呵":"src"},{}],[]] 格式
+    //   for (let i = 0; i < faceRow; ++i) {
+    //     c[i] = [];
+    //     for (let m = i * MAXROW; m < i * MAXROW + MAXROW; ++m) {
+    //       c[i].push(array[m]);
+    //     }
+    //   }
+    //   this.faceData = c;
+    // },
+    // getEmoji() {
+    //   // 规定一排多少个
+    //   let array = [];
+    //   const MAXROW = 10;
+    //   // 读取 face 数据,转换成 [{"呵呵":"src"},{}] 格式
+    //   for (let i in emojislist) {
+    //     let obj = {};
+    //     obj[i] = ParseEmoji(i);
+    //     array.push(obj);
+    //   }
+    //   // 计算最后一排个数
+    //   var faceRow = Math.ceil(array.length / MAXROW);
+    //   let c = [];
+    //   // 转换成 [[{"呵呵":"src"},{}],[]] 格式
+    //   for (let i = 0; i < faceRow; ++i) {
+    //     c[i] = [];
+    //     for (let m = i * MAXROW; m < i * MAXROW + MAXROW; ++m) {
+    //       c[i].push(array[m]);
+    //     }
+    //   }
+    //   this.emojiData = c;
+    // },
     addFaceToComments(obj) {
       this.comment = this.comment + `[[表情:${Object.keys(obj)}]]`;
       this.faceVisible = false;
@@ -764,30 +694,30 @@ export default {
           this.loadingcomment = false;
         });
     },
-    /*parseComment(content) {
-      var match = content.match(/((?<=\[\[)[^\(\]\]]+)/g);
-      match.map((v, i) => {
-        var kv = v.split(":");
-        if (kv.length <= 1) return;
-        var action = kv[0];
-        var value = kv[1];
-        var newvalue = "";
-        switch (action) {
-          case "表情":
-            newvalue = `<img src='${ParseFace(value)}' />`;
-            break;
-          default:
-            newvalue = v;
-            break;
-        }
-        content = content.replace(`[[${v}]]`, newvalue);
-      });
-      return content;
-    },*/
+    // parseComment(content) {
+    //   var match = content.match(/((?<=\[\[)[^\(\]\]]+)/g);
+    //   match.map((v, i) => {
+    //     var kv = v.split(":");
+    //     if (kv.length <= 1) return;
+    //     var action = kv[0];
+    //     var value = kv[1];
+    //     var newvalue = "";
+    //     switch (action) {
+    //       case "表情":
+    //         newvalue = `<img src='${ParseFace(value)}' />`;
+    //         break;
+    //       default:
+    //         newvalue = v;
+    //         break;
+    //     }
+    //     content = content.replace(`[[${v}]]`, newvalue);
+    //   });
+    //   return content;
+    // },
     parseComment(content) {
       return ParseComment(content);
     },
-    // 使用Enter键发布视频
+    // 使用 Enter 键发布视频
     postcommentOnInput() {
       if (this.UsingEnter) {
         this.comment = this.comment.substr(0, this.comment.length - 1);
@@ -879,7 +809,7 @@ export default {
       this.$store.comment("changeifRouter", "0");
     },
     // 查看是否有编辑权限
-    // op可选参数：
+    // op 可选参数：
     // 评论操作：commentAdmin
     // 标签操作：tagAdmin
     // 播放列表操作：editPlaylist

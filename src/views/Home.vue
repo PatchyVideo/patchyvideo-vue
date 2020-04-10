@@ -80,7 +80,7 @@ export default {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       activeName: "first",
-      // true表示网格视图，false表示列表视图
+      // true 表示网格视图，false 表示列表视图
       flag: false,
       label: ["主页"],
       labelInfo: ["主页", "订阅"]
@@ -109,7 +109,7 @@ export default {
     // 切换网格/列表视图
     changeLine() {
       const flag = !this.flag;
-      //   1表示网格，0表示列表
+      // 1 表示网格，0 表示列表
       localStorage.setItem("homeVideoDisplayStatus", flag + 0);
       this.$store.commit("changeHomeVDS", flag + 0);
       location.reload();

@@ -10,7 +10,6 @@
     2/1/2020: v1.0.1
       1.新增创建播放列表在创建成功之后跳转到视频列表列表页面的功能
       2.提交列表新增未登录报错的情况
-    
 -->
 
 <i18n>
@@ -77,11 +76,7 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-checkbox v-model="list.private">
-          {{
-          $t("set_as_private_playlist")
-          }}
-        </el-checkbox>
+        <el-checkbox v-model="list.private">{{ $t("set_as_private_playlist") }}</el-checkbox>
         <a
           href="https://patchyvideo.wiki/Playlist"
           target="_blank"
@@ -90,7 +85,7 @@
       </el-form-item>
       <!-- 封面上传,暂时用不上 -->
       <el-form-item v-if="false">
-        <!-- <el-upload
+        <!--<el-upload
           action="https://jsonplaceholder.typicode.com/posts/"
           :before-remove="beforeRemove"
           :limit="1"
@@ -102,11 +97,7 @@
         </el-upload>-->
       </el-form-item>
       <el-form-item class="createList">
-        <el-button type="primary" @click="onSubmit" style="width:80%">
-          {{
-          $t("create_now")
-          }}
-        </el-button>
+        <el-button type="primary" @click="onSubmit" style="width:80%">{{ $t("create_now") }}</el-button>
       </el-form-item>
     </el-form>
   </div>

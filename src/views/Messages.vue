@@ -62,12 +62,12 @@ export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
-      // 显示信息类型，0代表未读消息，1代表已读消息
+      // 显示信息类型，0 代表未读消息，1 代表已读消息
       messageType: 0
     };
   },
   created() {
-    // 初始化页面名为home
+    // 初始化页面名为 home
     this.$store.commit("changeBgc", "home");
     // 修改网站标题
     document.title = "消息中心 - Patchyvideo";

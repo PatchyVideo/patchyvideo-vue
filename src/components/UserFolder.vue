@@ -1,9 +1,4 @@
-﻿
-
-
-
-
-<!--
+﻿<!--
 下次更新时取消该组件的制作
 -->
 
@@ -35,12 +30,16 @@
     <div class="bigbox standard">
       <div class="aside">
         <div class="new-create" @click="changeDoingSatate()" :class="{active:doingState}">
-
-          <a>    <i class="el-icon-goblet-square"></i>{{$t('pending_post')}}</a>
+          <a>
+            <i class="el-icon-goblet-square"></i>
+            {{$t('pending_post')}}
+          </a>
         </div>
         <div class="new-create" @click="changeFailedSatate()" :class="{active:failedState}">
-
-          <a>   <i class="el-icon-goblet-full"></i>{{$t('failed_post')}}</a>
+          <a>
+            <i class="el-icon-goblet-full"></i>
+            {{$t('failed_post')}}
+          </a>
         </div>
       </div>
       <div class="main">
@@ -96,7 +95,7 @@
 <script>
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       exception: [],
       failedData: [],
@@ -148,9 +147,9 @@ export default {
       for (let index in _that.failedData) {
         if (_that.failedData[index].ret !== undefined) {
           let array = [
-            { url: _that.failedData[index].post_param.url},
-            { time: this.formatDate(_that.failedData[index].time)},
-            { exception: JSON.stringify(_that.failedData[index].ret)}
+            { url: _that.failedData[index].post_param.url },
+            { time: this.formatDate(_that.failedData[index].time) },
+            { exception: JSON.stringify(_that.failedData[index].ret) }
           ];
           m[index] = array;
         }
@@ -163,27 +162,31 @@ export default {
         }
         array[i] = obj;
       }
-      /*    (function () {
-                      let m =  _that.failedData.map((item,index)=>{
-                          if(item.ret.result_obj.data===null){
-                              console.log(index);
-                          }
-                    /!*      console.log(item.ret.result_obj.data.exception);*!/
-                          if(JSON.stringify(item) ==="undefined"){
-                              console.log(index);
-                              /!* _that.exception.push( item.ret.result_obj.data.exception);*!/
-                          }
-                          return  [{"url":item.post_param.url},{"status":item.ret.result_obj.status},{"exception":1}]
-                        });*/
-      /*
-                    for(let i in  m){
-                        let obj={};
-                      for(let s=0;s<m[i].length;++s){
-                      Object.assign(obj,m[i][s]);
-                      }
-                        array[i]=obj;
-                    }
-                })();*/
+      // (function() {
+      //   let m = _that.failedData.map((item, index) => {
+      //     if (item.ret.result_obj.data === null) {
+      //       console.log(index);
+      //     }
+      //     /!* console.log(item.ret.result_obj.data.exception); *!/;
+      //     if (JSON.stringify(item) === "undefined") {
+      //       console.log(index);
+      //       /!* _that.exception.push( item.ret.result_obj.data.exception); *!/;
+      //     }
+      //     return [
+      //       { url: item.post_param.url },
+      //       { status: item.ret.result_obj.status },
+      //       { exception: 1 }
+      //     ];
+      //   });
+
+      //   for (let i in m) {
+      //     let obj = {};
+      //     for (let s = 0; s < m[i].length; ++s) {
+      //       Object.assign(obj, m[i][s]);
+      //     }
+      //     array[i] = obj;
+      //   }
+      // })();
       this.tableData = array;
     });
   },
@@ -210,25 +213,25 @@ export default {
     formatDate(value) {
       if (value) {
         var upload_time = new Date(value.$date);
-        var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
-        var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        var h = upload_time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
-        var m = upload_time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
-        var s = upload_time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+        var y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+        var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+        var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+        var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
         return (
-                y +
-                "-" +
-                // 数字不足两位自动补零，下同
-                (Array(2).join(0) + M).slice(-2) +
-                "-" +
-                (Array(2).join(0) + d).slice(-2) +
-                " " +
-                (Array(2).join(0) + h).slice(-2) +
-                ":" +
-                (Array(2).join(0) + m).slice(-2) +
-                ":" +
-                (Array(2).join(0) + s).slice(-2)
+          y +
+          "-" +
+          // 数字不足两位自动补零，下同
+          (Array(2).join(0) + M).slice(-2) +
+          "-" +
+          (Array(2).join(0) + d).slice(-2) +
+          " " +
+          (Array(2).join(0) + h).slice(-2) +
+          ":" +
+          (Array(2).join(0) + m).slice(-2) +
+          ":" +
+          (Array(2).join(0) + s).slice(-2)
         );
       }
     }
@@ -264,7 +267,8 @@ export default {
   position: absolute;
   z-index: 9999;
 }
-.null,.notnull{
+.null,
+.notnull {
   min-height: 700px !important;
 }
 .fav {
@@ -298,7 +302,7 @@ export default {
 }
 
 .aside {
-  /*   background-color: #D3DCE6;*/
+  /* background-color: #D3DCE6; */
   border-right: 1px solid #f4f5f7;
   box-sizing: border-box;
   color: #333;
@@ -332,14 +336,14 @@ export default {
       right: 0;
       top: 50%;
       left: 50%;
-      transform: translate(-50%,0%);
+      transform: translate(-50%, 0%);
       width: 200px;
       height: 30px;
       text-overflow: ellipsis;
       overflow: hidden;
       i {
-        /*           display:inline-block;
-                  width: 70px;*/
+        // display: inline-block;
+        // width: 70px;
         display: block;
         position: absolute;
         width: 50px;
@@ -429,7 +433,7 @@ export default {
   color: #2c3e50;
 }
 .bigbox {
-  /*   height: 1000px;*/
+  /* height: 1000px; */
   display: flex;
   background-color: white;
   opacity: 0.9;
@@ -442,7 +446,7 @@ export default {
   height: 900px;
   background: url("../static/img/imoto_left.jpg") no-repeat;
   background-size: 100% 100%;
-  /*     background-color: #D5D5D5; */
+  /* background-color: #D5D5D5; */
 }
 
 .bigbox_right {

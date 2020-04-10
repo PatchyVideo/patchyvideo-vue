@@ -135,7 +135,7 @@ export default {
     };
   },
   computed: {
-    // 视频的等级，默认为-1
+    // 视频的等级，默认为 -1
     rank() {
       if (this.$route.query.rank != undefined) {
         return this.$route.query.rank;
@@ -143,7 +143,7 @@ export default {
         return -1;
       }
     },
-    // 视频所在收藏夹的pid
+    // 视频所在收藏夹的 pid
     pid() {
       if (this.$route.query.pid != undefined) {
         return this.$route.query.pid;
@@ -174,7 +174,7 @@ export default {
     // 上传视频
     postMultiVideos() {
       this.loading = true;
-      // 分割视频URL
+      // 分割视频 URL
       var videos = this.URLs.split(/\r?\n/).filter(function(i) {
         return i;
       });
@@ -241,7 +241,7 @@ export default {
   min-height: 800px;
   overflow: hidden;
   display: flex;
-  /* 针对webkit内核（如Safari）进行的调整 */
+  /* 针对 webkit 内核（如 Safari）进行的调整 */
   display: -webkit-flex;
   margin: auto;
 }

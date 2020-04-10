@@ -145,7 +145,7 @@
 
 <template>
   <div class="content2" v-loading="loading">
-    <!-- Author页面特有的，作者详情的组件 -->
+    <!-- Author 页面特有的，作者详情的组件 -->
     <el-dialog :close-on-click-modal="false" :visible.sync="showAuthorData" width="70%">
       <ShowAuthorData ref="AuthorData" :AuthorID="AuthorID"></ShowAuthorData>
     </el-dialog>
@@ -189,14 +189,13 @@
             <div
               class="name"
               v-bind:class="{
-                          Copyright: item.cat == 2,
-                          Language: item.cat == 5,
-                          Character: item.cat == 1,
-                          Author: item.cat == 3,
-                          General: item.cat == 0,
-                          Meta: item.cat == 4,
-                          Soundtrack: item.cat == 6
-                        }"
+                Copyright: item.cat == 2,
+                Language: item.cat == 5,
+                Character: item.cat == 1,
+                Author: item.cat == 3,
+                Meta: item.cat == 4,
+                Soundtrack: item.cat == 6
+                }"
             >{{ item.tag }}</div>
             <div class="addr">{{ item.cnt }}</div>
           </div>
@@ -301,10 +300,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'CHS')"
-                  v-if="
-                    tagEdit[props.$index].languages.CHS !=
-                      tagData[props.$index].languages.CHS
-                  "
+                  v-if="tagEdit[props.$index].languages.CHS != tagData[props.$index].languages.CHS"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -327,10 +323,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'CHT')"
-                  v-if="
-                    tagEdit[props.$index].languages.CHT !=
-                      tagData[props.$index].languages.CHT
-                  "
+                  v-if="tagEdit[props.$index].languages.CHT != tagData[props.$index].languages.CHT"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -353,10 +346,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'JPN')"
-                  v-if="
-                    tagEdit[props.$index].languages.JPN !=
-                      tagData[props.$index].languages.JPN
-                  "
+                  v-if="tagEdit[props.$index].languages.JPN != tagData[props.$index].languages.JPN"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -379,10 +369,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'ENG')"
-                  v-if="
-                    tagEdit[props.$index].languages.ENG !=
-                      tagData[props.$index].languages.ENG
-                  "
+                  v-if="tagEdit[props.$index].languages.ENG != tagData[props.$index].languages.ENG"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -405,10 +392,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'KOR')"
-                  v-if="
-                    tagEdit[props.$index].languages.KOR !=
-                      tagData[props.$index].languages.KOR
-                  "
+                  v-if="tagEdit[props.$index].languages.KOR != tagData[props.$index].languages.KOR"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -431,10 +415,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'CSY')"
-                  v-if="
-                    tagEdit[props.$index].languages.CSY !=
-                      tagData[props.$index].languages.CSY
-                  "
+                  v-if="tagEdit[props.$index].languages.CSY != tagData[props.$index].languages.CSY"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -457,10 +438,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'NLD')"
-                  v-if="
-                    tagEdit[props.$index].languages.NLD !=
-                      tagData[props.$index].languages.NLD
-                  "
+                  v-if="tagEdit[props.$index].languages.NLD != tagData[props.$index].languages.NLD"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -483,10 +461,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'FRA')"
-                  v-if="
-                    tagEdit[props.$index].languages.FRA !=
-                      tagData[props.$index].languages.FRA
-                  "
+                  v-if="tagEdit[props.$index].languages.FRA != tagData[props.$index].languages.FRA"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -509,10 +484,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'DEU')"
-                  v-if="
-                    tagEdit[props.$index].languages.DEU !=
-                      tagData[props.$index].languages.DEU
-                  "
+                  v-if="tagEdit[props.$index].languages.DEU != tagData[props.$index].languages.DEU"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -535,10 +507,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'HUN')"
-                  v-if="
-                    tagEdit[props.$index].languages.HUN !=
-                      tagData[props.$index].languages.HUN
-                  "
+                  v-if="tagEdit[props.$index].languages.HUN != tagData[props.$index].languages.HUN"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -561,10 +530,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'ITA')"
-                  v-if="
-                    tagEdit[props.$index].languages.ITA !=
-                      tagData[props.$index].languages.ITA
-                  "
+                  v-if="tagEdit[props.$index].languages.ITA != tagData[props.$index].languages.ITA"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -587,10 +553,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'PLK')"
-                  v-if="
-                    tagEdit[props.$index].languages.PLK !=
-                      tagData[props.$index].languages.PLK
-                  "
+                  v-if="tagEdit[props.$index].languages.PLK != tagData[props.$index].languages.PLK"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -613,10 +576,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'PTB')"
-                  v-if="
-                    tagEdit[props.$index].languages.PTB !=
-                      tagData[props.$index].languages.PTB
-                  "
+                  v-if="tagEdit[props.$index].languages.PTB != tagData[props.$index].languages.PTB"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -639,10 +599,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'ROM')"
-                  v-if="
-                    tagEdit[props.$index].languages.ROM !=
-                      tagData[props.$index].languages.ROM
-                  "
+                  v-if="tagEdit[props.$index].languages.ROM != tagData[props.$index].languages.ROM"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -665,10 +622,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'RUS')"
-                  v-if="
-                    tagEdit[props.$index].languages.RUS !=
-                      tagData[props.$index].languages.RUS
-                  "
+                  v-if="tagEdit[props.$index].languages.RUS != tagData[props.$index].languages.RUS"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -691,10 +645,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'ESP')"
-                  v-if="
-                    tagEdit[props.$index].languages.ESP !=
-                      tagData[props.$index].languages.ESP
-                  "
+                  v-if="tagEdit[props.$index].languages.ESP != tagData[props.$index].languages.ESP"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -717,10 +668,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'TRK')"
-                  v-if="
-                    tagEdit[props.$index].languages.TRK !=
-                      tagData[props.$index].languages.TRK
-                  "
+                  v-if="tagEdit[props.$index].languages.TRK != tagData[props.$index].languages.TRK"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -743,10 +691,7 @@
                   round
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'VIN')"
-                  v-if="
-                    tagEdit[props.$index].languages.VIN !=
-                      tagData[props.$index].languages.VIN
-                  "
+                  v-if="tagEdit[props.$index].languages.VIN != tagData[props.$index].languages.VIN"
                 >{{$t('confirm')}}</el-button>
               </el-col>
             </el-row>
@@ -772,10 +717,7 @@
                   round
                   class="confirmChange"
                   @click="confirmAliasChange(props.$index, i)"
-                  v-if="
-                    tagEdit[props.$index].alias[i] !=
-                      tagData[props.$index].alias[i]
-                  "
+                  v-if="tagEdit[props.$index].alias[i] != tagData[props.$index].alias[i]"
                 >{{$t('confirm')}}</el-button>
                 <el-button
                   type="danger"
@@ -1081,7 +1023,7 @@
           </span>
         </template>
       </el-table-column>
-      <!-- 操作,选项一般隐藏 -->
+      <!-- 操作，选项一般隐藏 -->
       <el-table-column :label="$t('op')" min-width="300" fixed="right">
         <template slot-scope="scope">
           <div v-if="advancedOptions">
@@ -1104,7 +1046,7 @@
       </el-table-column>
     </el-table>
 
-    <!-- ElementUI自带的分页器 -->
+    <!-- ElementUI 自带的分页器 -->
     <el-pagination
       background
       class="page-selector"
@@ -1175,13 +1117,13 @@ export default {
       ],
       // 标签种类
       tagCategories: [],
-      // 改变标签种类的时候的标签ID
+      // 改变标签种类的时候的标签 ID
       tagIndex: "",
       // 改变标签种类的时候的标签种类
       newTagCategorie: "",
       // 标签数据(展示用)
       tagData: [],
-      // 标签数据（编辑用）：因为vue的双向绑定功能使得数据会实时变化
+      // 标签数据（编辑用）：因为 vue 的双向绑定功能使得数据会实时变化
       // 导致编辑标签时输入框被清空的时候整个标签对应语言的名字会直接消失
       tagEdit: [],
       // 标签列表的排序规则
@@ -1278,7 +1220,7 @@ export default {
 
         // 回到顶部
         if ($("html").scrollTop()) {
-          //动画效果
+          // 动画效果
           $("html").animate({ scrollTop: 0 }, 100);
         }
       });
@@ -1629,7 +1571,7 @@ export default {
     },
     // 下面是消息补全框的方法
     querySearchAsync(queryString, cb) {
-      /*   this.infoTipMark = true;*/
+      // this.infoTipMark = true;
       queryString = queryString;
       var url = "/autocomplete/?q=" + queryString;
       this.axios({
@@ -1641,7 +1583,7 @@ export default {
       });
     },
     querySearchAsync2(queryString, cb) {
-      /*   this.infoTipMark = true;*/
+      // this.infoTipMark = true;
       queryString = queryString;
       var url = "/be/autocomplete/ql?q=" + queryString;
       this.axios({
@@ -1654,9 +1596,8 @@ export default {
     },
     handleSelect(item) {
       this.newTag = item.tag;
-      /*
-      console.log("选中时的值为"+this.infoTipMark);*/
-      /*      console.log("选中");*/
+      // console.log("选中时的值为" + this.infoTipMark);
+      // console.log("选中");
     }
   },
   watch: {
