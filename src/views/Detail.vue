@@ -203,7 +203,7 @@
           </div>
         </div>
         <p v-else>您还没有视频列表！</p>
-        <!-- ElementUI自带的分页器 -->
+        <!-- ElementUI 自带的分页器 -->
         <el-pagination
           background
           class="page-selector"
@@ -217,7 +217,7 @@
       </div>
     </el-dialog>
 
-    <!-- Detail页面的正文 -->
+    <!-- Detail 页面的正文 -->
     <div class="w detail-page-background-img" v-loading="loading">
       <left_navbar :msg="myVideoData.tag_by_category"></left_navbar>
 
@@ -250,7 +250,11 @@
           <h4 class="video_link">
             <a :href="myVideoData.video.item.url">{{ myVideoData.video.item.url }}</a>
             <!-- 一键复制的小图标 -->
-            <i @click="copyVideoLink(myVideoData.video.item.url)" class="fa fa-copy fa-1x" style="margin-left:4px;"></i>
+            <i
+              @click="copyVideoLink(myVideoData.video.item.url)"
+              class="fa fa-copy fa-1x"
+              style="margin-left:4px;"
+            ></i>
           </h4>
           <!-- 视频上传时间（？） -->
           <h5 style="text-align: center;">{{ videodate }}</h5>
@@ -263,7 +267,7 @@
               allowfullscreen="true"
               style="width: 948px; height: 763px;  margin:10px auto 30px;display: block;"
             ></iframe>
-            <!-- 如果是ipfs视频直接播放视频，否则显示封面 -->
+            <!-- 如果是 ipfs 视频直接播放视频，否则显示封面 -->
             <div v-if="isIpfs" style="text-align: center;" id="nodes">{{$t('init_tip')}}</div>
             <video
               :src="myVideoData.video.item.url"
@@ -345,7 +349,7 @@
                 width="16px"
                 style="margin-right:2px"
               />
-              <!-- 将页面参数刷新并重载页面，其中@click.native应该是router-link为了阻止a标签的默认跳转事件 -->
+              <!-- 将页面参数刷新并重载页面，其中 @click.native 应该是 router-link 为了阻止 a 标签的默认跳转事件 -->
               <a @click="shiftID(item._id.$oid)">{{ item.item.title }}</a>
               <el-button
                 type="text"
@@ -417,13 +421,7 @@
         <span>确认删除？</span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="
-              dialogVisible = false;
-              breaklink();
-            "
-          >确 定</el-button>
+          <el-button type="primary" @click="dialogVisible = false; breaklink();">确 定</el-button>
         </span>
       </el-dialog>
     </div>
@@ -477,7 +475,7 @@ export default {
       myVideoList: [],
       // 我的全部视频列表（处理视频是否存在于该列表）
       allVideoList: [],
-      // 视频评论的sid
+      // 视频评论的 sid
       sid: "",
       // 视频列表的关键词
       myListQuery: "",
@@ -503,7 +501,7 @@ export default {
       loadingList: false,
       // 本页面的视频的等级
       theVideoRank: 3,
-      // 视频的等级（0~3，其中3为所有人可见）
+      // 视频的等级（0 ~ 3，其中 3 为所有人可见）
       videoRanks: {
         仅管理员可见: 0,
         登录用户可见: 1,
@@ -524,11 +522,11 @@ export default {
         { value: "translation", label: this.$t("translation") },
         { value: "repost", label: this.$t("repost") }
       ],
-      dialogVisible: false, //删除提示框
-      pid: "", //视频的id值
-      // 视频是否为ipfs视频
+      dialogVisible: false, // 删除提示框
+      pid: "", // 视频的 id 值
+      // 视频是否为 ipfs 视频
       isIpfs: false,
-      // ipfs视频的URL
+      // ipfs 视频的 URL
       ipfsURL: "",
       // 视频列表是否属于加载状态的判断
       loading: true,
@@ -536,7 +534,7 @@ export default {
       URL_MATCHERS: {},
       // 扩展成的完整地址
       URL_EXPANDERS: {},
-      // 获取到的所有视频，以页数为第一维组成二维数组(和localStorage存储一起使用，已被弃用）
+      // 获取到的所有视频，以页数为第一维组成二维数组(和 localStorage 存储一起使用，已被弃用）
       // localStorageNum: []
       iframeUrl: ""
     };
@@ -573,12 +571,12 @@ export default {
       var upload_time = new Date(this.myVideoData.video.item.upload_time.$date);
       // 设置为东八区的时间
       upload_time.setTime(upload_time.getTime() + 1000 * 3600 * 8);
-      var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
-      var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-      var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-      var h = upload_time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
-      var m = upload_time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
-      var s = upload_time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+      var y = upload_time.getFullYear(); // getFullYear 方法以四位数字返回年份
+      var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+      var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+      var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+      var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+      var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
       return (
         "视频发布于 " +
         y +
@@ -607,7 +605,7 @@ export default {
         return false;
       }
     },
-    // 获取dom
+    // 获取 dom
     nodeShow() {
       var node = document.getElementById("nodes");
       if (node) {
@@ -620,14 +618,13 @@ export default {
   created() {
     // 改变侧导航条的标题
     this.$store.commit("changeLeftNavBarTitle", 1);
-    // 删除本地储存(和localStorage存储一起使用，已被弃用）
+    // 删除本地储存(和 localStorage 存储一起使用，已被弃用）
     // window.localStorage.removeItem("loglevel:webpack-dev-server");
     this.searchVideo();
   },
   mounted() {
     this.buildUrlMatchers();
-
-    // 防止B站侦测ferrer导致视频链接跳转出现404
+    // 防止B站侦测 ferrer 导致视频链接跳转出现 404
     $("head").append('<meta name="referrer" content="never">');
   },
   methods: {
@@ -720,64 +717,61 @@ export default {
         return `https://www.acfun.cn/player/ac${regAcf.exec(str)[2]}`;
       }
       return "";
-      /*let regNico =/(https:\/\/|() /*/
-      /*
-     内嵌规则：匹配末尾的参数即可
-        let reg =  /^(https\/\/:|http:\/\/)?www.(bilibili).com\/video\/av[a-zA-Z0-9]+/
-      Bilibili:
-              <iframe src="//player.bilibili.com/player.html?aid=94314258"></iframe>
-                        https://www.bilibili.com/video/av2653648
-      Niconico:
-              <iframe src="//embed.nicovideo.jp/watch/sm27106142"> </iframe>
-                        https://www.nicovideo.jp/watch/sm36469723
-      Youtube：
-             <iframe src="https://www.youtube.com/embed/4Xq3mIsF-z4"></iframe>
-                          https://www.youtube.com/watch?v=9w3oEINp9xU
-      Acfun:
-              <iframe src="https://www.acfun.cn/player/ac13167581"></iframe>
-                            https://www.acfun.cn/v/ac13113814
-  */
+      // let regNico =/(https:\/\/|()/
+      // 内嵌规则：匹配末尾的参数即可
+      // let reg =  /^(https\/\/:|http:\/\/)?www.(bilibili).com\/video\/av[a-zA-Z0-9]+/
+      // Bilibili:
+      //   <iframe src="//player.bilibili.com/player.html?aid=94314258"></iframe>
+      //   https://www.bilibili.com/video/av2653648
+      // Niconico:
+      //   <iframe src="//embed.nicovideo.jp/watch/sm27106142"> </iframe>
+      //   https://www.nicovideo.jp/watch/sm36469723
+      // Youtube：
+      //   <iframe src="https://www.youtube.com/embed/4Xq3mIsF-z4"></iframe>
+      //   https://www.youtube.com/watch?v=9w3oEINp9xU
+      // Acfun:
+      //   <iframe src="https://www.acfun.cn/player/ac13167581"></iframe>
+      //   https://www.acfun.cn/v/ac13113814
     },
     // 查询视频详细信息
     searchVideo: function() {
       this.loading = true;
-      // vuex存储:(已被弃用)
-      while (0) {
-        // for (let j = 0; j < this.$store.state.videoObj.length; j++) {
-        //   for (let i = 0; i < this.$store.state.videoObj[j].length; ++i) {
-        //     if (this.$store.state.videoObj[j][i]._id.$oid == this.$route.query.id) {
-        //       this.myVideoData = this.$store.state.videoObj[j][i];
-        //     }
-        //   }
-        // }
-      }
+      // vuex存储: (已被弃用)
+      // for (let j = 0; j < this.$store.state.videoObj.length; j++) {
+      //   for (let i = 0; i < this.$store.state.videoObj[j].length; ++i) {
+      //     if (this.$store.state.videoObj[j][i]._id.$oid == this.$route.query.id) {
+      //       this.myVideoData = this.$store.state.videoObj[j][i];
+      //     }
+      //   }
+      // }
+
       // localStorage存储：(已被弃用)
-      while (0) {
-        // 初始化localStorageNum
-        // let maxnums = [];
-        // for (let i in Object.keys(window.localStorage)) {
-        //   maxnums.push(parseInt(Object.keys(window.localStorage)[i]));
-        // }
-        // for (let i = 0; i < Math.max(...maxnums); ++i) {
-        //   if (this.localStorageNum[i] === undefined) {
-        //     this.localStorageNum[i] = [];
-        //   }
-        // }
-        // for (let m in window.localStorage) {
-        //   if (typeof window.localStorage[m] == "string") {
-        //     this.localStorageNum[parseInt(m)] = JSON.parse(
-        //       window.localStorage[m]
-        //     );
-        //   }
-        // }
-        // // 根据传进来的视频ID寻找对应的视频详细信息
-        // for (let j = 0; j < this.localStorageNum.length; j++)
-        //   for (let i = 0; i < this.localStorageNum[j].length; ++i) {
-        //     if (this.localStorageNum[j][i]._id.$oid == this.$route.query.id) {
-        //       this.myVideoData = this.localStorageNum[j][i];
-        //     }
-        //   }
-      }
+      // 初始化localStorageNum
+      // let maxnums = [];
+      // for (let i in Object.keys(window.localStorage)) {
+      //   maxnums.push(parseInt(Object.keys(window.localStorage)[i]));
+      // }
+      // for (let i = 0; i < Math.max(...maxnums); ++i) {
+      //   if (this.localStorageNum[i] === undefined) {
+      //     this.localStorageNum[i] = [];
+      //   }
+      // }
+      // for (let m in window.localStorage) {
+      //   if (typeof window.localStorage[m] == "string") {
+      //     this.localStorageNum[parseInt(m)] = JSON.parse(
+      //       window.localStorage[m]
+      //     );
+      //   }
+      // }
+      // // 根据传进来的视频ID寻找对应的视频详细信息
+      // for (let j = 0; j < this.localStorageNum.length; j++)
+      //   for (let i = 0; i < this.localStorageNum[j].length; ++i) {
+      //     if (this.localStorageNum[j][i]._id.$oid == this.$route.query.id) {
+      //       this.myVideoData = this.localStorageNum[j][i];
+      //     }
+      //   }
+      // }
+
       // 直接向后端请求视频数据
       this.axios({
         method: "post",
@@ -795,7 +789,7 @@ export default {
           // 修改网站标题
           document.title = this.myVideoData.video.item.title;
           this.pid = this.myVideoData.video._id.$oid;
-          // 视频pid储存到vuex中
+          // 视频 pid 储存到 vuex 中
           this.$store.commit("setVideoPid", this.myVideoData.video._id.$oid);
           // 标记视频简介中的链接
           this.urlifyDesc();
@@ -803,7 +797,7 @@ export default {
 
           // 回到顶部
           if ($("html").scrollTop()) {
-            //动画效果
+            // 动画效果
             $("html").animate({ scrollTop: 0 }, 100);
           }
 
@@ -822,7 +816,7 @@ export default {
         });
     },
     refreshVideo(item) {
-      /*      console.log(item._id.$oid);*/
+      // console.log(item._id.$oid);
       this.$axios({
         method: "post",
         url: "be/videos/refresh.do",
@@ -908,11 +902,11 @@ export default {
         }
       });
     },
-    // 切换视频ID
+    // 切换视频 ID
     shiftID(id) {
       this.$router.push({ path: "/video", query: { id: id } });
     },
-    // 匹配视频简介中的URL的规则
+    // 匹配视频简介中的 URL 的规则
     buildUrlMatchers() {
       var that = this;
       this.URL_MATCHERS[
@@ -1003,7 +997,7 @@ export default {
 
       if (link_type == "video") {
         var ret = `<div class="url-tools">`;
-        // 利用name属性保存绑定的URL
+        // 利用 name 属性保存绑定的 URL
         ret += `<button name="${url}">添加副本</button>`;
         ret += `</div>`;
         return ret;
@@ -1122,7 +1116,7 @@ export default {
       });
     },
 
-    // 启动ipfs播放器
+    // 启动 ipfs 播放器
     establishIpfsPlayer() {
       const IPFS = require("ipfs");
       //// IPFS Settings ////
@@ -1148,8 +1142,8 @@ export default {
         var vs = this.genIpfsVideo(ipfs, this.ipfsURL, player);
       });
     },
-    //// This is a function to simplify the js
-    //// Need: Ipfs node init
+    // This is a function to simplify the js
+    // Need: Ipfs node init
     genIpfsVideo(ipfsnode, hash, element) {
       let stream;
       const VideoStream = require("videostream");

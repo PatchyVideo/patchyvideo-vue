@@ -54,101 +54,93 @@
     <topnavbar />
     <!-- home页面的正文 -->
     <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane :label="labelInfo[0]" name="first"  >
+      <el-tab-pane :label="labelInfo[0]" name="first">
         <i @click="changeLine" :class="{'el-icon-s-grid':flag,'el-icon-menu':!flag}"></i>
         <homemain v-if="activeName === 'first' && !flag"></homemain>
         <girdhomemain v-if="activeName === 'first' && flag"></girdhomemain>
       </el-tab-pane>
-      <el-tab-pane :label="labelInfo[1]"  name="second" v-if="isLogin()">
+      <el-tab-pane :label="labelInfo[1]" name="second" v-if="isLogin()">
         <subscribed v-if="activeName === 'second'"></subscribed>
       </el-tab-pane>
-
     </el-tabs>
     <Footer></Footer>
   </div>
 </template>
 
 <script>
-  import topnavbar from "../components/TopNavbar.vue";
-  import left_navbar from "../components/LeftNavbar.vue";
-  import subscribed from  "../components/homecompoents/Subscribed.vue";
-  import homemain from  "../components/homecompoents/HomeMain.vue";
-  import girdhomemain from  "../components/homecompoents/GirdHomeMain.vue";
-  import Footer from "../components/Footer.vue";
-  import { copyToClipboardText } from "../static/js/generic";
-  export default {
-    data() {
-      this.$i18n.locale = localStorage.getItem("lang");
-      return {
-        activeName: "first",
-        // true表示网格视图，false表示列表视图
-        flag:false,
-        label:["主页"],
-        labelInfo:["主页","订阅"]
-
-      };
+import topnavbar from "../components/TopNavbar.vue";
+import left_navbar from "../components/LeftNavbar.vue";
+import subscribed from "../components/homecompoents/Subscribed.vue";
+import homemain from "../components/homecompoents/HomeMain.vue";
+import girdhomemain from "../components/homecompoents/GirdHomeMain.vue";
+import Footer from "../components/Footer.vue";
+import { copyToClipboardText } from "../static/js/generic";
+export default {
+  data() {
+    this.$i18n.locale = localStorage.getItem("lang");
+    return {
+      activeName: "first",
+      // true 表示网格视图，false 表示列表视图
+      flag: false,
+      label: ["主页"],
+      labelInfo: ["主页", "订阅"]
+    };
+  },
+  created() {
+    switch (this.$store.state.homeVideoDisplayStatus) {
+      case 0:
+        this.flag = false;
+        break;
+      case 1:
+        this.flag = true;
+        break;
+    }
+    // this.flag = this.$store.state.homeVideoDisplayStatus;
+    // this.flag = !localStorage.getItem("homeVideoDisplayStatus");
+  },
+  computed: {},
+  mounted() {},
+  updated() {},
+  methods: {
+    isLogin() {
+      return !!this.$store.state.username;
     },
-    created() {
-
-      if(this.$store.state.homeVideoDisplayStatus===0){
-        this.flag =false;
-      }else if(this.$store.state.homeVideoDisplayStatus===1){
-        this.flag =true;
-      }
-/*      this.flag =this.$store.state.homeVideoDisplayStatus;*/
-/*        this.flag = !localStorage.getItem("homeVideoDisplayStatus");*/
-
-    },
-    computed: {},
-    mounted() {
-
-    },
-    updated() {},
-    methods:{
-      isLogin() {
-        if (
-                JSON.stringify(this.$store.state.username) !== "null" &&
-                this.$store.state.username !== ""
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-      handleClick(e){
-      },
-      // 切换网格/列表视图
-      changeLine(){
-        const flag = !this.flag;
-        //   1表示网格，0表示列表
-        if(flag){
-          localStorage.setItem("homeVideoDisplayStatus",1);
-          this.$store.commit("changeHomeVDS",1);
-        }else{
-          localStorage.setItem("homeVideoDisplayStatus",0);
-          this.$store.commit("changeHomeVDS",0);
-        }
-        location.reload();
-      }
-    },
-    watch:{
-      $route(newV, oldV) {
-        this.activeName ="first";
-      }
-    },
-    components: { left_navbar, topnavbar, Footer,subscribed,homemain,girdhomemain }
-  };
+    handleClick(e) {},
+    // 切换网格/列表视图
+    changeLine() {
+      const flag = !this.flag;
+      // 1 表示网格，0 表示列表
+      localStorage.setItem("homeVideoDisplayStatus", flag + 0);
+      this.$store.commit("changeHomeVDS", flag + 0);
+      location.reload();
+    }
+  },
+  watch: {
+    $route(newV, oldV) {
+      this.activeName = "first";
+    }
+  },
+  components: {
+    left_navbar,
+    topnavbar,
+    Footer,
+    subscribed,
+    homemain,
+    girdhomemain
+  }
+};
 </script>
 
 <style lang="less" scoped>
-  /deep/ .el-tabs__header,.is-top{
-    width: 100% !important;
-    margin: auto;
-  }
-  /deep/ .el-tabs__nav-scroll{
-    width: 80% !important;
-    margin: auto;
-  }
+/deep/ .el-tabs__header,
+.is-top {
+  width: 100% !important;
+  margin: auto;
+}
+/deep/ .el-tabs__nav-scroll {
+  width: 80% !important;
+  margin: auto;
+}
 
 .main-page-background-img {
   background-repeat: no-repeat;
@@ -161,10 +153,10 @@
   font-size: 14px;
   color: #606266;
 }
-i{
-    position: absolute;
-    font-size: 30px;
-    top: 62px;
-    right: 80px;
+i {
+  position: absolute;
+  font-size: 30px;
+  top: 62px;
+  right: 80px;
 }
 </style>

@@ -32,29 +32,29 @@
 
 <template>
   <div>
-	<topnavbar></topnavbar>
-	<el-container>
-	  <el-header>
-		Header
-		<el-tabs v-model="activeName" @tab-click="handleClick">
-		  <el-tab-pane :label="$t('user_management')" name="first">
-			<usermanagemennt></usermanagemennt>
-		  </el-tab-pane>
+    <topnavbar></topnavbar>
+    <el-container>
+      <el-header>
+        Header
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tab-pane :label="$t('user_management')" name="first">
+            <usermanagemennt></usermanagemennt>
+          </el-tab-pane>
 
-		  <!-- 日志查看 -->
-		  <el-tab-pane :label="$t('log_view')" name="second">
-			<logview></logview>
-		  </el-tab-pane>
+          <!-- 日志查看 -->
+          <el-tab-pane :label="$t('log_view')" name="second">
+            <logview></logview>
+          </el-tab-pane>
 
-		  <el-tab-pane :label="$t('para_settings')" name="third">
-			<parasettings></parasettings>
-		  </el-tab-pane>
-		  <el-tab-pane :label="$t('scripts')" name="fourth">{{$t('scripts')}}</el-tab-pane>
-		</el-tabs>
-	  </el-header>
-	  <el-main></el-main>
-	</el-container>
-	<!-- <Footer></Footer> -->
+          <el-tab-pane :label="$t('para_settings')" name="third">
+            <parasettings></parasettings>
+          </el-tab-pane>
+          <el-tab-pane :label="$t('scripts')" name="fourth">{{$t('scripts')}}</el-tab-pane>
+        </el-tabs>
+      </el-header>
+      <el-main></el-main>
+    </el-container>
+    <!-- <Footer></Footer> -->
   </div>
 </template>
 
@@ -66,30 +66,29 @@ import logview from "../components/admincompoents/LogView.vue";
 import parasettings from "../components/admincompoents/ParaSettings.vue";
 export default {
   data() {
-	this.$i18n.locale = localStorage.getItem("lang");
-	return {
-	  activeName: "second"
-	};
+    this.$i18n.locale = localStorage.getItem("lang");
+    return {
+      activeName: "second"
+    };
   },
   created() {
-	  this.isAdmin();
+    this.isAdmin();
   },
   methods: {
-	handleClick(tab, event) {
-	},
-	// 判断当前用户是不是 Admin ，不是则404
-	isAdmin(){
-		this.axios({
-			method: "post",
-			url: "/be/user/myprofile.do" ,
-			data: {}
-		}).then(ret => {
-			var status = ret.data.data.access_control.status;
-			if(status !== "admin"){
-				this.$router.push({ path: "*" });
-			}
-		})
-	}
+    handleClick(tab, event) {},
+    // 判断当前用户是不是 Admin，不是则 404
+    isAdmin() {
+      this.axios({
+        method: "post",
+        url: "/be/user/myprofile.do",
+        data: {}
+      }).then(ret => {
+        var status = ret.data.data.access_control.status;
+        if (status !== "admin") {
+          this.$router.push({ path: "*" });
+        }
+      });
+    }
   },
   components: { topnavbar, Footer, usermanagemennt, logview, parasettings }
 };

@@ -123,9 +123,9 @@ export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
-      // github上的前台commit地址
+      // github 上的前台 commit 地址
       commitOfClient: "",
-      // github上的后台commit地址
+      // github 上的后台 commit 地址
       commitOfServer: "",
       // 多语言支持
       locale: localStorage.getItem("lang"),
@@ -149,7 +149,7 @@ export default {
     this.getCommit();
   },
   methods: {
-    // 获取github上的commit地址
+    // 获取 github 上的 commit 地址
     getCommit() {
       // 获取前端地址
       this.axios({

@@ -145,7 +145,7 @@
             :value="item.value"
           ></el-option>
         </el-select>
-        <!-- Wiki链接 -->
+        <!-- Wiki 链接 -->
         <a
           href="https://patchyvideo.wiki/Upload"
           target="_blank"
@@ -160,7 +160,7 @@
     </div>
 
     <!-- 标签编辑组件 -->
-    <!--    :key="refreshMark"-->
+    <!-- :key="refreshMark"-->
     <EditTags
       ref="EditTags"
       :msg="use_tags"
@@ -178,7 +178,7 @@ export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
-      // 视频的URL(与输入框绑定)
+      // 视频的 URL (与输入框绑定)
       VideoURL: "",
       // 视频缩略图的地址,默认为加载中的图片
       thumbnail: require("../static/img/LoadingThumbnail.png"),
@@ -211,16 +211,16 @@ export default {
       ],
       // 匹配短地址，用以扩展成完整地址
       EXPANDERS: {},
-      // 匹配URL并请求视频数据
+      // 匹配 URL 并请求视频数据
       PARSERS: {},
-      //是否点击了上传视频按钮，如果点击了则置为真，使Tag组件返回Tag数据
+      //是否点击了上传视频按钮，如果点击了则置为真，使 Tag 组件返回 Tag 数据
       isReally: false,
       //重置子组件到初始状态
-      refreshMark: +new Date()
+      refreshMark: new Date()
     };
   },
   computed: {
-    // 视频的等级，默认为-1
+    // 视频的等级，默认为 -1
     rank() {
       if (this.$route.query.rank != undefined) {
         return this.$route.query.rank;
@@ -228,7 +228,7 @@ export default {
         return -1;
       }
     },
-    // 视频所在收藏夹的pid
+    // 视频所在收藏夹的 pid
     pid() {
       if (this.$route.query.pid != undefined) {
         return this.$route.query.pid;
@@ -258,8 +258,8 @@ export default {
     this.buildParsersAndExpanders();
   },
   methods: {
-    // 匹配URL的相关设置
-    // 通过URL获取视频的各种缩略图,题目和简介
+    // 匹配 URL 的相关设置
+    // 通过 URL 获取视频的各种缩略图，题目和简介
     buildParsersAndExpanders() {
       var that = this;
       // B站的匹配规则
@@ -369,45 +369,43 @@ export default {
       this.PARSERS[
         "^(https:\\/\\/(www\\.|m\\.)?youtube\\.com\\/watch\\?v=[-\\w]+|https:\\/\\/youtu\\.be\\/(watch\\?v=[-\\w]+|[-\\w]+))"
       ] = function(responseDOM, responseURL) {
-        if (0) {
-          // var vidid = "";
-          // if (responseURL.indexOf("youtube.com") >= 0) {
-          //   var idx = responseURL.lastIndexOf("=");
-          //   vidid = responseURL.substring(idx + 1, responseURL.length);
-          // } else if (responseURL.indexOf("youtu.be") >= 0) {
-          //   if (responseURL.indexOf("watch?v=") >= 0) {
-          //     var idx = responseURL.lastIndexOf("=");
-          //     vidid = responseURL.substring(idx + 1, responseURL.length);
-          //   } else {
-          //     var idx = responseURL.lastIndexOf("/");
-          //     vidid = responseURL.substring(idx + 1, responseURL.length);
-          //   }
-          // }
-          // if (isEmpty(vidid)) {
-          //   that.setVideoMetadata("", "", "");
-          //   that.ErrorFetchingVideo();
-          //   return;
-          // }
-          // thumbnailURL = "https://img.youtube.com/vi/" + vidid + "/hqdefault.jpg";
-          // info_file_link = proxyResource(
-          //   "https://www.youtube.com/get_video_info?video_id=" + vidid
-          // );
-          // $.get(info_file_link, function(data, status) {
-          //   if (status == "success") {
-          //     //let searchParams = new URLSearchParams(data);
-          //     //player_response = searchParams.get("player_response");
-          //     var player_response = getQueryVariable(data, "player_response");
-          //     var videoDetails = JSON.parse(player_response)["videoDetails"];
-          //     var title = unescape(videoDetails.title).replace(/\+/g, " ");
-          //     var desc = unescape(videoDetails.shortDescription).replace(/\+/g, " ");
-          //     that.setVideoMetadata(thumbnailURL, title, desc);
-          //   } else {
-          //     that.setVideoMetadata("", "", "");
-          //     that.ErrorFetchingVideo();
-          //     return;
-          //   }
-          // });
-        }
+        // var vidid = "";
+        // if (responseURL.indexOf("youtube.com") >= 0) {
+        //   var idx = responseURL.lastIndexOf("=");
+        //   vidid = responseURL.substring(idx + 1, responseURL.length);
+        // } else if (responseURL.indexOf("youtu.be") >= 0) {
+        //   if (responseURL.indexOf("watch?v=") >= 0) {
+        //     var idx = responseURL.lastIndexOf("=");
+        //     vidid = responseURL.substring(idx + 1, responseURL.length);
+        //   } else {
+        //     var idx = responseURL.lastIndexOf("/");
+        //     vidid = responseURL.substring(idx + 1, responseURL.length);
+        //   }
+        // }
+        // if (isEmpty(vidid)) {
+        //   that.setVideoMetadata("", "", "");
+        //   that.ErrorFetchingVideo();
+        //   return;
+        // }
+        // thumbnailURL = "https://img.youtube.com/vi/" + vidid + "/hqdefault.jpg";
+        // info_file_link = proxyResource(
+        //   "https://www.youtube.com/get_video_info?video_id=" + vidid
+        // );
+        // $.get(info_file_link, function(data, status) {
+        //   if (status == "success") {
+        //     //let searchParams = new URLSearchParams(data);
+        //     //player_response = searchParams.get("player_response");
+        //     var player_response = getQueryVariable(data, "player_response");
+        //     var videoDetails = JSON.parse(player_response)["videoDetails"];
+        //     var title = unescape(videoDetails.title).replace(/\+/g, " ");
+        //     var desc = unescape(videoDetails.shortDescription).replace(/\+/g, " ");
+        //     that.setVideoMetadata(thumbnailURL, title, desc);
+        //   } else {
+        //     that.setVideoMetadata("", "", "");
+        //     that.ErrorFetchingVideo();
+        //     return;
+        //   }
+        // });
         that
           .axios({
             method: "post",
@@ -481,7 +479,7 @@ export default {
     },
     // 自动标签功能
     autotag(utags, title = "", desc = "") {
-      /*      this.refreshMark = +new Date();*/
+      // this.refreshMark = +new Date();
       this.axios({
         method: "post",
         url: "/be/tags/autotag.do",
@@ -498,7 +496,7 @@ export default {
             // 获取到的标签与已有标签查重
             var autoTags = result.data.data.tags;
             var resultTags = this.$refs["EditTags"].tags;
-            /*   this.$refs["EditTags"].firstFlag = true;*/
+            // this.$refs["EditTags"].firstFlag = true;
             this.$refs["EditTags"].msgMark = 1;
             // 已有标签是空的情况
             if (resultTags.length == 0) {
@@ -519,24 +517,24 @@ export default {
                 }
               }
 
-              /*        let setArray = new Set(this.$refs["EditTags"].tags);
-              this.tags=Array.from(setArray);
-              console.log(Array.from(setArray));*/
+              // let setArray = new Set(this.$refs["EditTags"].tags);
+              // this.tags = Array.from(setArray);
+              // console.log(Array.from(setArray));
 
-              /*    for (var i = 0; i < autoTags.length; i++) {
-                    for (var j = 0; j < resultTags.length; j++) {
-                      if (resultTags[j] == autoTags[i]) {
-                        break;
-                      }
-                      this.$refs["EditTags"].tags.push(autoTags[i]);
-                      this.$refs["EditTags"].tagsForRec.push(autoTags[i]);
-                    }
-                  }*/
+              // for (var i = 0; i < autoTags.length; i++) {
+              //   for (var j = 0; j < resultTags.length; j++) {
+              //     if (resultTags[j] == autoTags[i]) {
+              //       break;
+              //     }
+              //     this.$refs["EditTags"].tags.push(autoTags[i]);
+              //     this.$refs["EditTags"].tagsForRec.push(autoTags[i]);
+              //   }
+              // }
             }
             this.$refs["EditTags"].getTagCategories(
               this.$refs["EditTags"].tags
-            ); //范围转换后展示原始数据
-            this.$refs["EditTags"].getRecTags(this.$refs["EditTags"].tags); //获取推荐TAG
+            ); // 范围转换后展示原始数据
+            this.$refs["EditTags"].getRecTags(this.$refs["EditTags"].tags); // 获取推荐 TAG
           }
         })
         .catch(error => {
@@ -545,7 +543,7 @@ export default {
     },
     // 获取视频详细信息
     onFetchVideo_Click() {
-      // 验证URL是否为空
+      // 验证 URL 是否为空
       if (this.VideoURL == "") {
         this.InvalidURL();
         return;
@@ -553,24 +551,24 @@ export default {
       this.loading = true;
       var url = this.VideoURL;
       var ret = this.checkURL(url);
-      // URL验证通过
+      // URL 验证通过
       if (ret[0]) {
         this.VideoURL = ret[1];
         this.fetchVideo(ret[1]);
         return;
       }
-      // URL验证未通过
+      // URL 验证未通过
       else {
         this.openfailed();
         this.loading = false;
       }
       this.loading = false;
     },
-    // URL标准化
+    // URL 标准化
     checkURL(url) {
       var pass = false;
       var new_url = "";
-      // 将URL中前后的空格去除
+      // 将 URL 中前后的空格去除
       url = url.trim();
       for (var key in this.EXPANDERS) {
         if (new RegExp(key, "i").test(url)) {
@@ -588,32 +586,32 @@ export default {
       }
       return [pass, new_url];
     },
-    // URL标准化 * 2
+    // URL 标准化 * 2
     clearURL(url) {
       var url_parsed = new URL(this.addHTTP(url));
       return (
         "https://" + url_parsed.host + url_parsed.pathname + url_parsed.search
       );
     },
-    // URL标准化 * 3
+    // URL 标准化 * 3
     addHTTP(url) {
       if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
         url = "http://" + url;
       }
       return url;
     },
-    // URL验证成功的弹出框
+    // URL 验证成功的弹出框
     openSuccessfully() {
       this.$message({
         message: this.$t("url_passed"),
         type: "success"
       });
     },
-    // URL验证失败的弹出框
+    // URL 验证失败的弹出框
     openfailed() {
       this.$message.error(this.$t("invalid_url"));
     },
-    // URL为空的弹出窗
+    // URL 为空的弹出窗
     InvalidURL() {
       this.$message.error(this.$t("enter_url"));
     },
@@ -637,7 +635,7 @@ export default {
         }
       );
     },
-    // URL代理
+    // URL 代理
     proxyResource(
       url,
       referrer = "",
@@ -654,7 +652,7 @@ export default {
       header = escape(header);
       return `/be/helper/proxy?url=${url}&header=${header}`;
     },
-    // 请求URL页面数据
+    // 请求 URL 页面数据
     downloadPage(url, success, error = null, complete = null) {
       $.ajax({
         type: "GET",
@@ -702,21 +700,15 @@ export default {
         this.InvalidURL();
         return;
       }
-      /*
-        实际开发采用方案二
-
-        方案一：
-            Tag编辑子组件内会监视这个值，当置为真时，会返回Tags数据，但是这个行动会需要消耗一定的时间，
-            导致还没有返回Tags就已经开始执行axios请求了。
-            鉴于这个消耗的时间较短，且其他解决方案不太优雅，这里选择了定时器，当点击发布视频时，等10ms后执行请求。
-
-        方案二： 为了配合左边区域tagBox的Tag标签添加成功时，能够及时显示数据，Tag编辑子组件现已修改成当用户添加或删除一个标签时，向
-            会向父组件传递对应的tags数据。
-
-        第一种方案相当于最终检验，现阶段看起来冗余、暂且注释保留
-
-      */
-      /*this.isReally = true;*/
+      // 实际开发采用方案二
+      // 方案一：
+      //     Tag编辑子组件内会监视这个值，当置为真时，会返回Tags数据，但是这个行动会需要消耗一定的时间，
+      //     导致还没有返回Tags就已经开始执行axios请求了。
+      //     鉴于这个消耗的时间较短，且其他解决方案不太优雅，这里选择了定时器，当点击发布视频时，等10ms后执行请求。
+      // 方案二： 为了配合左边区域tagBox的Tag标签添加成功时，能够及时显示数据，Tag编辑子组件现已修改成当用户添加或删除一个标签时，向
+      //     会向父组件传递对应的tags数据。
+      // 第一种方案相当于最终检验，现阶段看起来冗余、暂且注释保留
+      // this.isReally = true;
       this.loading = true;
       this.axios({
         method: "post",
@@ -748,33 +740,33 @@ export default {
         .catch(err => {
           this.loading = false;
         });
-      /*setTimeout(()=>{
-        this.axios({
-          method: "post",
-          url: "be/postvideo.do",
-          data: {
-            rank: this.rank,
-            pid: this.pid,
-            copy: this.copy,
-            url: this.VideoURL,
-            tags: this.tags
-          }
-        }).then(result => {
-          if (result.data.status == "SUCCEED") {
-            this.open4();
-          } else if (result.data.status == "FAILED") {
-            if (result.data.data.reason == "TAG_NOT_EXIST") {
-              var errorTag = result.data.data.aux;
-              this.open3(errorTag);
-            } else {
-              this.open2();
-            }
-          } else {
-            this.open5();
-          }
-          this.loading = false;
-        });
-      },10)*/
+      // setTimeout(() => {
+      //   this.axios({
+      //     method: "post",
+      //     url: "be/postvideo.do",
+      //     data: {
+      //       rank: this.rank,
+      //       pid: this.pid,
+      //       copy: this.copy,
+      //       url: this.VideoURL,
+      //       tags: this.tags
+      //     }
+      //   }).then(result => {
+      //     if (result.data.status == "SUCCEED") {
+      //       this.open4();
+      //     } else if (result.data.status == "FAILED") {
+      //       if (result.data.data.reason == "TAG_NOT_EXIST") {
+      //         var errorTag = result.data.data.aux;
+      //         this.open3(errorTag);
+      //       } else {
+      //         this.open2();
+      //       }
+      //     } else {
+      //       this.open5();
+      //     }
+      //     this.loading = false;
+      //   });
+      // }, 10);
     },
     // 各种各样的报错警告
     open2() {
@@ -813,7 +805,7 @@ export default {
   min-height: 800px;
   overflow: hidden;
   display: flex;
-  /* 针对webkit内核（如Safari）进行的调整 */
+  /* 针对 webkit 内核（如 Safari）进行的调整 */
   display: -webkit-flex;
   margin: auto;
 }

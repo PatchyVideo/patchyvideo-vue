@@ -11,10 +11,10 @@
       body {
         height: 100%;
       }
-      .kieru{
+      .kieru {
              opacity: 0!important;
       }
-      .irikuchi{
+      .irikuchi {
         top: 0;
         bottom: 0;
         left: 0;
@@ -25,10 +25,10 @@
         height: 98%;
         z-index: 10000;
         position: fixed;
-         background-color: #333;
+        background-color: #333;
         opacity: 0.5;
        }
-      .square{
+      .square {
         width:400px;height:400px;position:relative;
         transform:rotate(45deg);
         -webkit-transform:rotate(45deg);
@@ -37,21 +37,21 @@
         -webkit-animation:rotate infinite linear 2s;margin:10% auto;
         -moz-animation:rotate infinite linear 2s;margin:10% auto;
       }
-      .rect{
+      .rect {
         width:400px;
         height:200px;
         position:relative;
         border:1px #d2d2d2 solid;
         border-bottom:none;
       }
-      .inner_circle{
+      .inner_circle {
         width:200px;
         height:200px;
         border-radius:200px;
         position:absolute;
         z-index:1;
       }
-      .dot{
+      .dot {
         width:50px;
         height:50px;
         position:absolute;
@@ -62,49 +62,48 @@
         margin:auto;
         border-radius:50%;
       }
-      .rect_one{
+      .rect_one {
         border-radius:200px 200px 0 0;
         background:white;
         box-shadow: 0px 0px 10px white;
       }
-      .rect_one_one{
+      .rect_one_one {
         bottom:-100px;
         left:0;
         background: #FF505F;
       }
-      .rect_one_two{
+      .rect_one_two {
         background:white;
       }
-      .rect_two{
+      .rect_two {
         border-radius:0 0 200px 200px;
         background: #FF505F;
         box-shadow: 0px 0px 10px white;
       }
-      .rect_two_one{
+      .rect_two_one {
         bottom:100px;
         right:0;
         background:white;
       }
-      .rect_two_two{
+      .rect_two_two {
         background: #FF505F;
       }
-      @keyframes rotate{
-        from{
+      @keyframes rotate {
+        from {
           transform:rotate(0deg);
           -webkit-transform:rotate(0deg);
-
-        }to{
-
+        }
+        to {
            transform:rotate(360deg);
            -webkit-transform:rotate(360deg);
-         }}
-
-      .iwarei{
+        }
+      }
+      .iwarei {
         position: relative;
         transform: translateY(-200%);
         width: 100%;
       }
-      .funny{
+      .funny {
         font-family: cnfont;
         font-weight: normal;
         margin:auto;
@@ -134,8 +133,7 @@
           0 0 75px #FF505F;
         }
       }
-
-      .iwarei h1{
+      .iwarei h1 {
         animation: neon1 1.5s ease-in-out infinite alternate;
         font-family: cnfont,monospace;
         font-weight: normal;
@@ -144,38 +142,33 @@
         color:white;
         text-shadow: 1px 1px 10px #333;
       }
-
-
     </style>
   </head>
   <body>
-
-<div class="irikuchi" id="door">
-  <div class="square">
-    <div class="rect rect_one">
-      <div class="inner_circle rect_one_one">
-        <div class="dot rect_one_two"></div>
+    <div class="irikuchi" id="door">
+      <div class="square">
+        <div class="rect rect_one">
+          <div class="inner_circle rect_one_one">
+            <div class="dot rect_one_two"></div>
+          </div>
+        </div>
+        <div class="rect rect_two">
+          <div class="inner_circle rect_two_one">
+            <div class="dot rect_two_two"></div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="rect rect_two">
-      <div class="inner_circle rect_two_one">
-        <div class="dot rect_two_two"></div>
+      
+      <div class="iwarei">
+        <h1>少 女 祈 禱 中</h1>
       </div>
+      <!--<div class="iwarei">
+        <h1 class="funny">东方project</h1>
+        <h1 class="funny">观象法之为</h1>
+        <h1 class="funny">以体天地之撰 以通神明之德</h1>
+      </div>-->
     </div>
-  </div>
-
-  <div class="iwarei">
-  <h1>少 女 祈 禱 中</h1>
-  </div>
-<!--  <div class="iwarei">
-    <h1 class="funny">东方project</h1>
-    <h1 class="funny">观象法之为</h1>
-    <h1 class="funny">以体天地之撰 以通神明之德</h1>
-  </div>-->
-</div>
-    <div id="app">
-
-    </div>
+    <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
 </html>

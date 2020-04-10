@@ -90,60 +90,59 @@
         <!-- 播放列表正文 -->
         <ul>
           <li class="list-item" v-for="(item) in listvideo" :key="item._id.$oid">
-            <div class="video-item" >
-                        <!--          封面图片-->
-                       <router-link
-                        target="_blank"
-                        :to="{ path: '/video', query: { id: item._id.$oid } }"
-                        tag="a"
-                        style="width: 200px;height:125px;margin-right: 20px; display: inline-block"
-                      >
-                        <div class="video-thumbnail">
-                          <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
-                          <div class="Imgcover"></div>
-                        </div>
-                      </router-link>
-                        <!--          封面图片-->
+            <div class="video-item">
+              <!-- 封面图片 -->
+              <router-link
+                target="_blank"
+                :to="{ path: '/video', query: { id: item._id.$oid } }"
+                tag="a"
+                style="width: 200px;height:125px;margin-right: 20px; display: inline-block"
+              >
+                <div class="video-thumbnail">
+                  <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
+                  <div class="Imgcover"></div>
+                </div>
+              </router-link>
+              <!-- 封面图片 -->
 
-                       <div class="video-detail">
-                             <!--  图标和标题-->
-                             <div class="title-div">
-                                 <img
-                                    :src="require('../../static/img/' + item.item.site + '.png')"
-                                    width="16px"
-                                    style="margin-right:2px;display:inline;"
-                            />
-                               <h4>
-                                <a target="_blank" :href="item.item.url" tag="a">{{ item.item.title }}</a>
-                              </h4>
-                             </div>
-                             <!--  图标和标题-->
-                              <!--内容-->
-                                   <p
-                              :title="toGMT(item.item.upload_time.$date)+'\n'+item.item.desc"
-                            >{{ item.item.desc }}</p>
-                              <!--内容-->
-                      <!--  <router-link
-                          class="linkToPublisher"
-                          target="_blank"
-                          :to="'/users/'+item.meta.created_by.$oid"
-                          tag="a"
-                        >{{$t("see_uploaders")}}
-                        </router-link>-->
-                           <p>{{ toGMT(item.item.upload_time.$date)+'\n' }}</p>
-                      </div>
-                       <div class="rating-box">
-                            <span
-                                    class="rating"
-                                    title="评分"
-                            >{{(item.total_rating/item.total_rating_user||0).toFixed(1)}}</span>
-                       </div>
+              <div class="video-detail">
+                <!-- 图标和标题 -->
+                <div class="title-div">
+                  <img
+                    :src="require('../../static/img/' + item.item.site + '.png')"
+                    width="16px"
+                    style="margin-right:2px;display:inline;"
+                  />
+                  <h4>
+                    <a target="_blank" :href="item.item.url" tag="a">{{ item.item.title }}</a>
+                  </h4>
+                </div>
+                <!-- 图标和标题 -->
+                <!-- 内容 -->
+                <p
+                  :title="toGMT(item.item.upload_time.$date)+'\n'+item.item.desc"
+                >{{ item.item.desc }}</p>
+                <!-- 内容 -->
+                <!--<router-link
+                  class="linkToPublisher"
+                  target="_blank"
+                  :to="'/users/'+item.meta.created_by.$oid"
+                  tag="a"
+                >{{$t("see_uploaders")}}
+                </router-link>-->
+                <div class="time-up">{{ toGMT(item.item.upload_time.$date)+'\n' }}</div>
+              </div>
+              <div class="rating-box">
+                <span
+                  class="rating"
+                  title="评分"
+                >{{(item.total_rating/item.total_rating_user||0).toFixed(1)}}</span>
+              </div>
             </div>
           </li>
         </ul>
 
-
-        <!-- ElementUI自带的分页器 -->
+        <!-- ElementUI 自带的分页器 -->
         <el-pagination
           background
           class="page-selector"
@@ -193,16 +192,16 @@ export default {
       listvideo: [],
       // 视频列表是否属于加载状态的判断
       loading: true,
-      //搜索关键字
+      // 搜索关键字
       searchKeyWord: "",
-      //是否渲染的是搜索的数据，默认false为主页数据
+      // 是否渲染的是搜索的数据，默认 false 为主页数据
       ifSearch: false,
       // 判断是否执行查询,有时候页面会进行多次查询浪费资源
-      /*      ifQuest: true,*/
-      //判断当前页数是不是被搜索事件改变的,即：当我跳转到其他页数，此时再搜索新的关键词，新的页数会被置为1。
-      //这时会触发page监听的事件，重新请求搜索的数据，因为根据关键词的改变也会重新请求的数据，会造成资源浪费。
+      // ifQuest: true,
+      // 判断当前页数是不是被搜索事件改变的,即：当我跳转到其他页数，此时再搜索新的关键词，新的页数会被置为 1。
+      // 这时会触发 page 监听的事件，重新请求搜索的数据，因为根据关键词的改变也会重新请求的数据，会造成资源浪费。
       pageMark: false,
-      //是否显示隐藏视频
+      // 是否显示隐藏视频
       checked: false,
       visibleSites: [""],
       allSites: [
@@ -218,12 +217,12 @@ export default {
     };
   },
   created() {
-    // 初始化页面名为home
+    // 初始化页面名为 home
     this.$store.commit("changeBgc", "home");
     // 初始化排列顺序为最新上传排序
     this.couponSelected = this.options[0].value;
     // 获取视频列表
-    /* this.getListVideo(this.page, this.count);*/
+    // this.getListVideo(this.page, this.count);
     // 改变侧导航条的标题
     this.$store.commit("changeLeftNavBarTitle", 2);
     // 修改网站标题
@@ -240,17 +239,18 @@ export default {
       // 修改网站标题
       document.title = this.$t("search_result", { result: this.searchKeyWord });
     }
+
     this.handleCurrentChange(1);
-    //如果为True说明是搜索数据导致的页数改变，并且如果当前页数是1的话，取消这一次数据请求
-    if (this.pageMark === true && this.page === 1) {
+
+    // 如果为 True 说明是搜索数据导致的页数改变，并且如果当前页数是 1 的话，取消这一次数据请求
+    if (this.pageMark && this.page === 1) {
       this.pageMark = false;
       return;
     }
-    if (this.ifSearch === false) {
-      this.getListVideo(this.page, this.count);
-    }
-    if (this.ifSearch === true) {
+    if (this.ifSearch) {
       this.getSearchData(this.page, this.count, this.searchKeyWord);
+    } else {
+      this.getListVideo(this.page, this.count);
     }
   },
   computed: {
@@ -259,12 +259,12 @@ export default {
         var upload_time = new Date(timeStamp);
         // 设置为东八区的时间
         upload_time.setTime(upload_time.getTime() + 1000 * 3600 * 8);
-        var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
-        var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        var h = upload_time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
-        var m = upload_time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
-        var s = upload_time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+        var y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+        var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+        var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+        var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
         return (
           "视频发布于 " +
           y +
@@ -318,8 +318,7 @@ export default {
     },
     // 请求播放列表数据
     getListVideo: function(e, count, order) {
-      // 先使页面出于加载状态
-
+      // 先使页面处于加载状态
       this.loading = true;
       var sites = "";
       const index = this.visibleSites.indexOf("");
@@ -343,9 +342,8 @@ export default {
           lang: localStorage.getItem("lang")
         }
       }).then(result => {
-          console.log(result);
-          this.maxcount = result.data.data.count;
-        //取得总页数制作分页
+        this.maxcount = result.data.data.count;
+        // 取得总页数制作分页
         this.maxpage = Math.ceil(result.data.data.count / count);
         if (this.maxpage < this.page) {
           this.page = 1;
@@ -369,10 +367,10 @@ export default {
         this.tags = ntags;
         /* 处理结束 */
 
-        //this.tags = result.data.data.tags;
+        // this.tags = result.data.data.tags;
         this.count2 = result.data.data.videos.length;
 
-        // 加载结束,加载动画消失
+        // 加载结束，加载动画消失
         this.loading = false;
 
         // 回到顶部
@@ -385,10 +383,10 @@ export default {
     // 请求搜索结果列表
     getSearchData: function(e, count, str) {
       // 如果不需要查询则不查询直接返回
-      /*  if (!this.ifQuest) {
-                  this.ifQuest = true;
-                  return;
-                }*/
+      // if (!this.ifQuest) {
+      //   this.ifQuest = true;
+      //   return;
+      // }
       this.loading = true;
       this.$store.commit("getTopNavbarSearching", this.searchKeyWord);
       var sites = "";
@@ -416,7 +414,7 @@ export default {
       }).then(result => {
         if (result.data.status == "SUCCEED") {
           this.maxcount = result.data.data.count;
-          //取得总页数制作分页
+          // 取得总页数制作分页
           this.maxpage = Math.ceil(result.data.data.count / count);
           if (this.maxpage < this.page) {
             this.page = 1;
@@ -424,28 +422,26 @@ export default {
           this.listvideo = result.data.data.videos;
           this.tags = result.data.data.tags;
           this.count2 = result.data.data.videos.length;
-          //当前页数大于搜索Tag页数时需要重新请求正确的页数数据,现暂时无用注释掉待观察
-          if (0) {
-            // if (result.data.data.videos.length == 0) {
-            //   this.axios({
-            //     method: "post",
-            //     url: "be/queryvideo.do",
-            //     data: {
-            //       page: this.maxpage,
-            //       page_size: 20,
-            //       order: this.couponSelected,
-            //       query: str
-            //     }
-            //   }).then(res => {
-            //     this.maxcount = res.data.data.count;
-            //     //取得总页数制作分页
-            //     this.maxpage = Math.ceil(res.data.data.count / count);
-            //     this.listvideo = res.data.data.videos;
-            //     this.tags = res.data.data.tags;
-            //     this.loading = false;
-            //   });
-            // }
-          }
+          // 当前页数大于搜索 Tag 页数时需要重新请求正确的页数数据,现暂时无用注释掉待观察
+          // if (result.data.data.videos.length == 0) {
+          //   this.axios({
+          //     method: "post",
+          //     url: "be/queryvideo.do",
+          //     data: {
+          //       page: this.maxpage,
+          //       page_size: 20,
+          //       order: this.couponSelected,
+          //       query: str
+          //     }
+          //   }).then(res => {
+          //     this.maxcount = res.data.data.count;
+          //     //取得总页数制作分页
+          //     this.maxpage = Math.ceil(res.data.data.count / count);
+          //     this.listvideo = res.data.data.videos;
+          //     this.tags = res.data.data.tags;
+          //     this.loading = false;
+          //   });
+          // }
         } else {
           // 包含非法字符的时候
           if (result.data.data.reason == "INCORRECT_QUERY") {
@@ -454,7 +450,7 @@ export default {
               type: "error"
             });
           }
-          // NOT使用错误的时候
+          // NOT 使用错误的时候
           else if (result.data.data.reason == "FAILED_NOT_OP") {
             this.$message({
               message: this.$t("syntax_error_not"),
@@ -489,18 +485,20 @@ export default {
       if (this.visibleSites.length == 0) {
         this.visibleSites = [""];
       }
-      if (this.ifSearch === false) {
+
+      if (this.ifSearch) {
+        this.getSearchData(this.page, this.count, this.searchKeyWord);
+      } else {
         this.getListVideo(this.page, this.count);
       }
-      if (this.ifSearch === true) {
-        this.getSearchData(this.page, this.count, this.searchKeyWord);
-      }
+
       this.historyPush();
-      //this.getListVideo_VideoOnly(this.page, this.count);
+      // this.getListVideo_VideoOnly(this.page, this.count);
     },
     historyPush() {
       const visibleSites = btoa(JSON.stringify(this.visibleSites));
       var query = {};
+
       this.page != 1 && (query.page = this.page);
       this.count != 20 && (query.page_count = this.count);
       this.couponSelected != "latest" && (query.coupon = this.couponSelected);
@@ -509,19 +507,29 @@ export default {
         (query.visibleSites = visibleSites);
       this.$route.query.keyword && (query.keyword = this.$route.query.keyword);
       this.$route.query.qtype && (query.qtype = this.$route.query.qtype);
+
       const urlSearchParams = new URLSearchParams();
       for (var i in query) {
         urlSearchParams.set(i, query[i]);
       }
-      console.log(query);
+
       if (Object.keys(query).length > 0) {
-        history.pushState(
-          {},
-          "",
+        if (
+          window.location.href !=
           window.location.href.split("?")[0] + "?" + urlSearchParams.toString()
-        );
+        ) {
+          history.pushState(
+            {},
+            "",
+            window.location.href.split("?")[0] +
+              "?" +
+              urlSearchParams.toString()
+          );
+        }
       } else {
-        history.pushState({}, "", window.location.href.split("?")[0]);
+        if (window.location.href != window.location.href.split("?")[0]) {
+          history.pushState({}, "", window.location.href.split("?")[0]);
+        }
       }
     },
     getInfoFromUrl(route) {
@@ -537,33 +545,27 @@ export default {
 
   watch: {
     page(v) {
-      //如果为True说明是搜索数据导致的页数改变，并且如果当前页数是1的话，取消这一次数据请求
-      if (this.pageMark === true && this.page === 1) {
+      // 如果为 True 说明是搜索数据导致的页数改变，并且如果当前页数是 1 的话，取消这一次数据请求
+      if (this.pageMark && this.page === 1) {
         this.pageMark = false;
         return;
       }
-      if (this.ifSearch === false) {
-        this.getListVideo(this.page, this.count);
-        return;
-      }
-      if (this.ifSearch === true) {
+      if (this.ifSearch) {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
-        return;
+      } else {
+        this.getListVideo(this.page, this.count);
       }
     },
     count(v) {
-      //如果为True说明是搜索数据导致的页数改变，并且如果当前页数是1的话，取消这一次数据请求
-      if (this.pageMark === true && this.page === 1) {
+      // 如果为 True 说明是搜索数据导致的页数改变，并且如果当前页数是 1 的话，取消这一次数据请求
+      if (this.pageMark && this.page === 1) {
         this.pageMark = false;
         return;
       }
-      if (this.ifSearch === false) {
-        this.getListVideo(this.page, this.count);
-        return;
-      }
-      if (this.ifSearch === true) {
+      if (this.ifSearch) {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
-        return;
+      } else {
+        this.getListVideo(this.page, this.count);
       }
     },
     listvideo() {
@@ -571,45 +573,43 @@ export default {
     },
     couponSelected() {
       this.handleCurrentChange(1);
-      //如果为True说明是搜索数据导致的页数改变，并且如果当前页数是1的话，取消这一次数据请求
-      if (this.pageMark === true && this.page === 1) {
+      // 如果为 True 说明是搜索数据导致的页数改变，并且如果当前页数是 1 的话，取消这一次数据请求
+      if (this.pageMark && this.page === 1) {
         this.pageMark = false;
         return;
       }
-      if (this.ifSearch === false) {
-        this.getListVideo(this.page, this.count);
-      }
-      if (this.ifSearch === true) {
+      if (this.ifSearch) {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
+      } else {
+        this.getListVideo(this.page, this.count);
       }
       this.historyPush();
     },
     ifSearch(newV, oldV) {
-      /*      this.ifQuest = false;*/
+      // this.ifQuest = false;
       this.handleCurrentChange(1);
-      //是否渲染的是搜索的数据，默认false为主页数据，清空搜索关键词
-      /*      if (newV === false) {
-                  this.searchKeyWord = "";
-                  this.getListVideo(this.page, this.count);
-                }
-                //当监听到的ifSearch为true时，根据搜索的值渲染数据。
-                if (newV === true) {
-                  this.getSearchData(this.page, this.count, this.searchKeyWord);
-                }*/
+      // 是否渲染的是搜索的数据，默认 false 为主页数据，清空搜索关键词
+      // if (newV === false) {
+      //   this.searchKeyWord = "";
+      //   this.getListVideo(this.page, this.count);
+      // }
+      // 当监听到的 ifSearch 为 true 时，根据搜索的值渲染数据。
+      // if (newV === true) {
+      //   this.getSearchData(this.page, this.count, this.searchKeyWord);
+      // }
     },
     checked() {
-      if (this.ifSearch === false) {
-        this.getListVideo(this.page, this.count);
-      }
-      if (this.ifSearch === true) {
+      if (this.ifSearch) {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
+      } else {
+        this.getListVideo(this.page, this.count);
       }
       this.historyPush();
     },
     $route(newV, oldV) {
       this.getInfoFromUrl(newV);
       this.handleCurrentChange(1);
-      //监听路由query的值，当query的值为空时，说明默认是首页，调用this.getListVideo获取首页数据并渲染。
+      // 监听路由 query 的值，当 query 的值为空时，说明默认是首页，调用 this.getListVideo 获取首页数据并渲染。
       if (!newV.query.keyword) {
         // 修改网站标题
         document.title = "Patchyvideo";
@@ -617,8 +617,8 @@ export default {
         this.getListVideo(this.page, this.count);
         return;
       }
-      //监听路由query的值，当用户连续输入的搜索值不一样时，更新搜索关键词，调用 this.getSearchData获取搜索数据并渲染。
-      if (
+      // 监听路由 query 的值，当用户连续输入的搜索值不一样时，更新搜索关键词，调用 this.getSearchData 获取搜索数据并渲染。
+      else if (
         newV.query.keyword != oldV.query.keyword ||
         newV.query.qtype != oldV.query.qtype
       ) {
@@ -628,10 +628,10 @@ export default {
         });
         this.ifSearch = true;
         this.searchKeyWord = newV.query.keyword;
-        //在我请求新的搜索数据之后，因为搜索是路由跳转所以会重置当前页面为1，页数会改变，也会触发监控页数里的函数
-        //这里做一个标记，如果是因搜索关键词而改变的页数，那么取消这一次Page页数改变而触发的请求数据事件。
-        //pageMark作为监控page中是否重新请求数据的标志。
-        if ((this.page = 1)) {
+        // 在我请求新的搜索数据之后，因为搜索是路由跳转所以会重置当前页面为 1，页数会改变，也会触发监控页数里的函数
+        // 这里做一个标记，如果是因搜索关键词而改变的页数，那么取消这一次 Page 页数改变而触发的请求数据事件。
+        // pageMark 作为监控 page 中是否重新请求数据的标志。
+        if (this.page == 1) {
           this.pageMark = true;
         }
         this.getSearchData(this.page, this.count, newV.query.keyword);
@@ -669,86 +669,84 @@ export default {
   text-align: center;
 }
 
-.video-item{
-    display: flex;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    &:hover {
-        /*background-color: rgba(255,255,255,0.3);*/
-        background-color: rgb(244, 244, 245);
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+.video-item {
+  display: flex;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  &:hover {
+    /*background-color: rgba(255,255,255,0.3);*/
+    background-color: rgb(244, 244, 245);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  }
+  width: 100%;
+  a {
+    .video-thumbnail {
+      padding-left: 2px;
+      margin-right: 20px;
+      float: left;
+      position: relative;
+      z-index: 1;
+      img {
+        border-radius: 4px;
+      }
+      .Imgcover {
+      }
     }
-    width: 100%;
-    a{
-        .video-thumbnail{
-            padding-left: 2px;
-            margin-right: 20px;
-            float: left;
-            position: relative;
-            z-index: 1;
-            img{
+  }
+  .video-detail {
+    flex-grow: 1;
+    height: 125px;
+    position: relative;
+    transition: all 0.3s ease;
 
-                border-radius: 4px;
-            }
-            .Imgcover{
-            }
-        }
+    .title-div {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 75%;
+      h4 {
+        display: inline;
+      }
+      img {
+        vertical-align: bottom;
+      }
     }
-    .video-detail{
-        flex-grow: 1;
-        height: 125px;
-        position: relative;
-        transition: all 0.3s ease;
-
-        .title-div{
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 75%;
-            h4{
-
-                display: inline;
-            }
-            img{
-                vertical-align: bottom;
-            }
-        }
-        p{
-            display: block;
-            width: 90%;
-            font-size: 1rem;
-            line-height: 1.1rem;
-            white-space: pre-wrap;
-            overflow: hidden;
-            height: 72px;
-            margin-bottom: 5px;
-            padding-top: 5px;
-            /* 使文字变为最多显示4行，多余的使用省略号代替 */
-            display: -webkit-box;
-            -webkit-line-clamp: 4;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .linkToPublisher{
-
-        }
+    p {
+      display: block;
+      width: 90%;
+      font-size: 1rem;
+      line-height: 1.15rem;
+      white-space: pre-wrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      height: 72px;
+      margin-bottom: 5px;
+      padding-top: 5px;
+      /* 使文字变为最多显示4行，多余的使用省略号代替 */
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
     }
-    .rating-box{
-        position: relative;
-
-        .rating{
-           position: absolute;
-            bottom: 0;
-            right: 0;
-            display: inline-block;
-            height: 40px;
-            line-height: 40px;
-            color: #f8d714;
-            font-size: 25px;
-            font-weight: bolder;
-        }
+    .time-up {
     }
+    .linkToPublisher {
+    }
+  }
+  .rating-box {
+    position: relative;
+
+    .rating {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      display: inline-block;
+      height: 40px;
+      line-height: 40px;
+      color: #f8d714;
+      font-size: 25px;
+      font-weight: bolder;
+    }
+  }
 }
 
 .video-detail > .link-div {
@@ -756,7 +754,6 @@ export default {
   bottom: 0px;
   left: 220px;
 }
-
 
 .list-item {
   padding-top: 5px;

@@ -111,7 +111,7 @@
 
 <template>
   <div class="left-navbar">
-    <!-- EditTags组件-->
+    <!-- EditTags组件 -->
     <EditTags
       ref="editTag"
       :msg="pid"
@@ -248,7 +248,7 @@
           <h3 style="display:block;">{{ tranTagCategories(val) }}</h3>
           <!-- 根据tag名称自动渲染tag颜色 -->
           <div class="tag-ul">
-            <div class="tag" v-for="item in key" :key="item">
+            <div :class="val!='Author'&&'tag'" v-for="item in key" :key="item">
               <el-tooltip
                 :disabled="overflowed.indexOf(item)==-1"
                 effect="light"
@@ -256,7 +256,7 @@
                 placement="left"
               >
                 <!-- 存在标签颜色 -->
-                <div v-if="colorTagList.indexOf(val)!=-1">
+                <div v-if="colorTagList.indexOf(val)!=-1&&val!='Author'">
                   <div class="tag-div">
                     <p v-bind:class="val" :ref="val">
                       <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
@@ -266,6 +266,17 @@
                     v-if="val=='Author'"
                     size="mini"
                     style="margin-left:5px;"
+                    @click="openAuthorData(item)"
+                  >详情</el-button>
+                </div>
+                <div v-else-if="val=='Author'">
+                  <p v-bind:class="val" :ref="val" style="display:inline;">
+                    <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
+                  </p>
+                  <el-button
+                    v-if="val=='Author'"
+                    size="mini"
+                    style="margin-left:5px;display:inline;"
                     @click="openAuthorData(item)"
                   >详情</el-button>
                 </div>
@@ -293,7 +304,7 @@ export default {
     return {
       // 判断是否登录的标志
       isLogin: false,
-      // tag编辑页面是否打开
+      // tag 编辑页面是否打开
       showTagPanel: false,
       // 标签编辑历史
       tagLog: [],
@@ -303,11 +314,11 @@ export default {
       loading2: false,
       // 作者名
       Author: "",
-      // 打开的作者详情的作者的ID
+      // 打开的作者详情的作者的 ID
       AuthorID: "ID",
       // 是否打开作者详情页面
       showAuthorData: false,
-      // Tag颜色列表
+      // Tag 颜色列表
       colorTagList: [
         "Copyright",
         "Language",
@@ -353,7 +364,7 @@ export default {
     },
     // 打开Tag编辑页面
     openEditTags() {
-      /*  this.$refs.editTag.getCommonTags();*/
+      // this.$refs.editTag.getCommonTags();
       this.showTagPanel = true;
     },
     // 打开作者详情对话框
@@ -391,12 +402,12 @@ export default {
       var upload_time = new Date(date);
       // 设置为东八区的时间
       upload_time.setTime(upload_time.getTime());
-      var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
-      var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-      var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-      var h = upload_time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
-      var m = upload_time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
-      var s = upload_time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+      var y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+      var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+      var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+      var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+      var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+      var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
       return (
         y +
         "-" +
@@ -483,7 +494,7 @@ export default {
         return this.$t("tag.title2");
       }
     },
-    // 视频的pid
+    // 视频的 pid
     pid() {
       return this.$store.state.videoPid;
     },

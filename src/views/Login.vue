@@ -154,7 +154,7 @@ export default {
         login_name: "",
         login_password: ""
       },
-      // 事先向服务器请求的session值
+      // 事先向服务器请求的 session 值
       session: "",
       // 表单验证规则
       rules: {
@@ -174,7 +174,7 @@ export default {
     };
   },
   created() {
-    // 初始化页面名为login
+    // 初始化页面名为 login
     this.$store.commit("changeBgc", "login");
     // 修改网站标题
     //document.title = this.$t("login") + " - Patchyvideo";
@@ -204,7 +204,7 @@ export default {
       // 表单验证
       this.$refs.loginFormRef.validate(valid => {
         if (valid) {
-          // 验证成功，先获取session
+          // 验证成功，先获取 session
           this.axios({
             method: "post",
             url: "be/auth/get_session.do",
@@ -240,7 +240,7 @@ export default {
                       this.$store.commit("changeifTruelyLogin", 1);
                       // 加载结束,加载动画消失
                       this.loading = false;
-                      // 利用cookie储存登录状态
+                      // 利用 cookie 储存登录状态
                       this.setCookie(
                         this.loginFormRef.login_name,
                         result.data.data.image,
@@ -263,7 +263,7 @@ export default {
                           this.$router.push({ path: path });
                         }
                       }
-                      // 如果是从其他地方跳转到本界面，回到home页面
+                      // 如果是从其他地方跳转到本界面，回到 home 页面
                       else {
                         this.$store.commit("changeifRouter", "2");
                         this.$router.push({ path: "/home" });
@@ -295,12 +295,12 @@ export default {
         }
       });
     },
-    // 设置cookie
-    // 储存变量为username,userAvatar
+    // 设置 cookie
+    // 储存变量为 username, userAvatar
     setCookie(username, userAvatar, days) {
-      var date = new Date(); //获取时间
-      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); //保存的天数
-      //字符串拼接cookie
+      var date = new Date(); // 获取时间
+      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
+      // 字符串拼接 cookie
       window.document.cookie =
         "username" + ":" + username + ";path=/;expires=" + date.toUTCString();
       window.document.cookie =
@@ -320,11 +320,11 @@ export default {
   height: 100%;
   width: 100%;
   background-color: #fff;
-  /*  background: url("../static/img/login.jpg") no-repeat top center;*/
+  /* background: url("../static/img/login.jpg") no-repeat top center; */
   /* background-position: 200px 0; */
   background-size: cover;
   background-attachment: fixed;
-  /*  background-color: #646257;*/
+  /* background-color: #646257; */
 }
 .alert {
   color: red;
