@@ -144,6 +144,7 @@
 
 <script>
 import signup from "../views/SignUp";
+import { changeSiteTitle } from "../static/js/base";
 export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -176,7 +177,8 @@ export default {
     // 初始化页面名为 login
     this.$store.commit("changeBgc", "login");
     // 修改网站标题
-    document.title = this.$t("login") + " - Patchyvideo";
+    //document.title = this.$t("login") + " - Patchyvideo";
+    changeSiteTitle(this.$t("login"));
   },
   mounted() {},
   methods: {
