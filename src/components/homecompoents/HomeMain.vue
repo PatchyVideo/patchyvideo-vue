@@ -77,15 +77,15 @@
           <p v-else>{{$t('no_result')}}</p>
           <el-checkbox class="show_deleted" v-model="checked">{{$t('show_deleted')}}</el-checkbox>
           <p class="blacklist_prompt">{{$t('blacklist_prompt')}}</p>
+          <el-select id="select-order" v-model="couponSelected">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
         </div>
-        <el-select id="select-order" v-model="couponSelected">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
 
         <!-- 播放列表正文 -->
         <ul>
@@ -785,7 +785,7 @@ export default {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  width: calc(100% - 230px);
+  width: 100%;
   margin-bottom: 10px;
 }
 
@@ -793,7 +793,6 @@ export default {
   width: 200px;
   float: right;
   right: 0px;
-  transform: translate(0, -50px);
 }
 .left-navbar {
   position: relative;
@@ -811,7 +810,6 @@ export default {
   background-repeat: no-repeat;
   min-height: 800px;
   width: 85%;
-  margin-top: 20px;
 }
 
 .blacklist_prompt {
