@@ -120,7 +120,7 @@ export default {
     },
     handleSizeChange(val) {
       var page = Math.floor((this.page * this.pageSize) / val);
-      this.page = page ? page : 1;
+      this.page = page || 1;
       this.pageSize = val;
       this.loadData();
     },
@@ -148,6 +148,11 @@ export default {
             var data = result.data.data;
             this.hisList = data;
             this.loading = false;
+            // 回到顶部
+            if ($("html").scrollTop()) {
+              //动画效果
+              $("html").animate({ scrollTop: 0 }, 100);
+            }
           })
           .catch(error => {
             this.error = error.message;
@@ -176,8 +181,8 @@ export default {
     btoa(str) {
       return btoa(str);
     },
-    //将时间戳转换为时间字符串
-    //time:时间戳 GMT:时区(数字：-12~12)
+    // 将时间戳转换为时间字符串
+    // time:时间戳 GMT:时区(数字：-12~12)
     date2str(time, GMT) {
       var upload_time = new Date(time);
       // 获得当前时区
