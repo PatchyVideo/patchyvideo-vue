@@ -88,7 +88,7 @@ export default {
       // 表单验证
       this.$refs.list.validate(valid => {
         if (valid) {
-          //如果导入的视频列表已经存在
+          // 如果导入的视频列表已经存在
           if (this.exist) {
             this.axios({
               method: "post",

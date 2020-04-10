@@ -43,15 +43,15 @@
           <div
             class="name"
             v-bind:class="{
-                          Copyright: item.cat == 2,
-                          Language: item.cat == 5,
-                          Character: item.cat == 1,
-                          Author: item.cat == 3,
-                          General: item.cat == 0,
-                          Meta: item.cat == 4,
-                          Soundtrack: item.cat == 6
-                        }"
-            v-html="item.tag||ConvertLangRes(item.langs)"
+              Copyright: item.cat == 2,
+              Language: item.cat == 5,
+              Character: item.cat == 1,
+              Author: item.cat == 3,
+              General: item.cat == 0,
+              Meta: item.cat == 4,
+              Soundtrack: item.cat == 6
+              }"
+            v-html="item.tag || ConvertLangRes(item.langs)"
           ></div>
           <div class="addr">{{ item.cnt }}</div>
         </div>
@@ -94,7 +94,7 @@ export default {
       if (newValue !== oldValue) {
         this.$emit("input", this.newValue);
         if (typeof this.checkValueAsync == "function") {
-          //this.CheckAysnc(newValue);
+          // this.CheckAysnc(newValue);
         } else {
           this.Check(newValue);
         }
@@ -104,11 +104,11 @@ export default {
   methods: {
     Check(Value) {
       if (typeof this.checkValue == "undefined") {
-        this.nouse = Value != "";
-        this.$emit("update:CheckStatus", Value != "" ? 1 : -1);
+        this.nouse = Value;
+        this.$emit("update:CheckStatus", this.nouse ? 1 : -1);
       } else if (typeof this.checkValue == "string") {
         this.nouse = Value != this.checkValue;
-        this.$emit("update:CheckStatus", Value != this.checkValue ? 1 : -1);
+        this.$emit("update:CheckStatus", this.nouse ? 1 : -1);
       }
       this.nouse = false;
       this.$emit("update:CheckStatus", -1);
@@ -149,15 +149,15 @@ export default {
       var Lang = "";
       var mainLang = "";
       var subLang = "";
-      //经过一系列计算得出主副语言
+      // 经过一系列计算得出主副语言
 
-      //匹配当前语言的ID
+      // 匹配当前语言的 ID
       var CurrLangID = LangList.find(x => {
         return x.lang == this.$i18n.locale;
       });
       CurrLangID = CurrLangID ? CurrLangID.id : 1;
 
-      //匹配对应ID的内容
+      // 匹配对应 ID 的内容
       var CurrLangWord = langs.find(x => {
         return x.l == CurrLangID;
       });
@@ -172,10 +172,8 @@ export default {
       mainLang = CurrLangWord.w;
 
       if (hastran) {
-        /*
-      副语言匹配
-      优先级：日语，英语，简体中文，繁体中文
-      */
+        // 副语言匹配
+        // 优先级：日语，英语，简体中文，繁体中文
         var SubLangWord = null;
         for (var i = 0; i < level.length; i++) {
           if (level[i] == CurrLangWord.l) continue;
@@ -186,7 +184,7 @@ export default {
         }
         subLang = SubLangWord ? SubLangWord.w : mainLang;
 
-        //合成语言
+        // 合成语言
         Lang = `${mainLang.replace(/\_/g, " ")}`;
         Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(
           /\_/g,
@@ -202,7 +200,7 @@ export default {
 </script>
 <style scoped>
 .adviceList {
-  /* 针对webkit内核（如Safari）进行的调整 */
+  /* 针对 webkit 内核（如 Safari）进行的调整 */
   display: -webkit-flex;
   display: flex;
 }

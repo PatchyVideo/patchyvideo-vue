@@ -115,16 +115,18 @@
 
 <template>
   <div v-if="visible" v-loading="loading" ref="aside">
-    <el-dialog :title="$t('tip')" :visible.sync="dialogVisible" :modal-append-to-body="false" width="30%">
+    <el-dialog
+      :title="$t('tip')"
+      :visible.sync="dialogVisible"
+      :modal-append-to-body="false"
+      width="30%"
+    >
       <span>{{$t('confirm_tip')}}</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">{{$t('cancel')}}</el-button>
         <el-button
           type="primary"
-          @click="
-                dialogVisible = false;
-                deleteSelectedItems();
-            "
+          @click="dialogVisible = false; deleteSelectedItems();"
         >{{$t('ok')}}</el-button>
       </span>
     </el-dialog>
@@ -146,7 +148,12 @@
           <el-input :placeholder="$t('name')" v-model="newFolderForm.name"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="createFolder" style="width:80%" :loading="loading">{{$t('add')}}</el-button>
+          <el-button
+            type="primary"
+            @click="createFolder"
+            style="width:80%"
+            :loading="loading"
+          >{{$t('add')}}</el-button>
           <el-button
             @click="showNewFolderDialog = false"
             style="width:80%;margin-top:10px;margin-left:0px"
@@ -172,7 +179,12 @@
           <el-input :placeholder="$t('name')" v-model="renameFolderForm.name"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="renameFolder" style="width:80%" :loading="loading">{{$t('rename')}}</el-button>
+          <el-button
+            type="primary"
+            @click="renameFolder"
+            style="width:80%"
+            :loading="loading"
+          >{{$t('rename')}}</el-button>
           <el-button
             @click="showRenameFolderDialog = false"
             style="width:80%;margin-top:10px;margin-left:0px"
@@ -213,9 +225,9 @@
           @change="handleCurrentFolderPrivateViewChanged"
         ></el-switch>
         <!--<el-switch
-                v-model="priavteEdit"
-                active-text="允许他人编辑"
-                inactive-text="私人编辑">
+          v-model="priavteEdit"
+          active-text="允许他人编辑"
+          inactive-text="私人编辑">
         </el-switch>-->
       </el-aside>
       <el-main>
@@ -272,14 +284,23 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('video_num')" align="center" width="80" prop="playlist_object.videos">
+          <el-table-column
+            :label="$t('video_num')"
+            align="center"
+            width="80"
+            prop="playlist_object.videos"
+          >
             <template slot-scope="scope">
               <h3
                 v-if="typeof scope.row.playlist_object != 'undefined'"
               >{{scope.row.playlist_object.videos}}</h3>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('modif_date')" align="center" prop="playlist_object.meta.modified_at">
+          <el-table-column
+            :label="$t('modif_date')"
+            align="center"
+            prop="playlist_object.meta.modified_at"
+          >
             <template slot-scope="scope">
               <h3
                 v-if="typeof scope.row.playlist_object != 'undefined'"
@@ -296,7 +317,7 @@
 import moment from "moment";
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
       asideWidth: 200,
       loading: true,
@@ -322,7 +343,9 @@ export default {
         row: null
       },
       folderNameRules: {
-        name: [{ required: true, message: this.$t('input_name'), trigger: "blur" }]
+        name: [
+          { required: true, message: this.$t("input_name"), trigger: "blur" }
+        ]
       },
       priavteView: false,
       pid: ""
@@ -344,14 +367,14 @@ export default {
       const asideWidth = parseInt(asideObj.style.width);
       let asideBorder = parseInt(asideObj.style.width) * 0.99;
       if (Math.abs(e.offsetX - asideBorder) < 5) {
-        //判断是否满足鼠标到达边界点 允许误差5像素
+        // 判断是否满足鼠标到达边界点 允许误差 5 像素
         document.onmousemove = function(e) {
-          //按住鼠标移动时
+          // 按住鼠标移动时
           e.preventDefault(); // 移动时禁用默认事件
           // 计算移动的距离
           const l = e.clientX - disX;
           _that.asideWidth = asideWidth + l;
-          /*   asideObj.style.width = `${asideWidth+l}px`;*/
+          // asideObj.style.width = `${asideWidth+l}px`;
         };
         document.onmouseup = function(e) {
           document.onmousemove = null;
@@ -397,7 +420,7 @@ export default {
         if (result.status == "SUCCEED") {
           resolve(this.folderObjectToTreeNode(result.data.children));
         } else if (result.data.reason == "UNAUTHORISED_OPERATION") {
-          this.$message.error(this.$t('no_permissions'));
+          this.$message.error(this.$t("no_permissions"));
         }
       });
     },
@@ -425,7 +448,7 @@ export default {
             f();
           }
         } else if (result.data.reason == "UNAUTHORISED_OPERATION") {
-          this.$message.error(this.$t('no_permissions'));
+          this.$message.error(this.$t("no_permissions"));
         }
         this.loading = false;
       });
@@ -502,7 +525,10 @@ export default {
         if (result.status == "SUCCEED") {
           this.showNewFolderDialog = false;
           this.newFolderForm.name = "";
-          this.$message({ message: this.$t('create_success'), type: "success" });
+          this.$message({
+            message: this.$t("create_success"),
+            type: "success"
+          });
           this.refreshCurrentFolder();
           const curTreeNode = this.$refs.folderTree.getNode(this.currentPath);
           if (curTreeNode) {
@@ -515,9 +541,9 @@ export default {
           }
         } else {
           if (result.data.reason == "FOLDER_ALREADY_EXIST") {
-            this.$message.error(this.$t('folder_exist'));
+            this.$message.error(this.$t("folder_exist"));
           } else if (result.data.reason == "INVALID_PATH") {
-            this.$message.error(this.$t('name_limit'));
+            this.$message.error(this.$t("name_limit"));
           }
         }
         this.loading = false;
@@ -560,11 +586,11 @@ export default {
               },
               withCredentials: true
             }).then(result => {
-              this.$message.success(this.$t('del_success'));
+              this.$message.success(this.$t("del_success"));
               this.getFolder();
             });
           } else if (result.data.reason == "UNAUTHORISED_OPERATION") {
-            this.$message.error(this.$t('no_permissions'));
+            this.$message.error(this.$t("no_permissions"));
           }
           this.loading = false;
         });
@@ -586,10 +612,10 @@ export default {
         .then(result => {
           result = result.data;
           if (result.status == "SUCCEED") {
-            this.$message.success(this.$t('add_sucess'));
+            this.$message.success(this.$t("add_sucess"));
             this.getFolder();
           } else if (result.data.reason == "UNAUTHORISED_OPERATION") {
-            this.$message.error(this.$t('login_please'));
+            this.$message.error(this.$t("login_please"));
           }
           this.loading = false;
         })
@@ -629,11 +655,11 @@ export default {
             }
           });
         } else if (result.data.reason == "UNAUTHORISED_OPERATION") {
-          this.$message.error(this.$t('no_permissions'));
+          this.$message.error(this.$t("no_permissions"));
         } else if (result.data.reason == "INVALID_PATH") {
-          this.$message.error(this.$t('invalid_path_or_name'));
+          this.$message.error(this.$t("invalid_path_or_name"));
         } else if (result.data.reason == "FOLDER_ALREADY_EXIST") {
-          this.$message.error(this.$t('folder_exist'));
+          this.$message.error(this.$t("folder_exist"));
         }
         this.loading = false;
       });
@@ -654,12 +680,12 @@ export default {
     formatDate(value) {
       if (value) {
         var upload_time = new Date(value.$date);
-        var y = upload_time.getFullYear(); //getFullYear方法以四位数字返回年份
-        var M = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        var d = upload_time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        var h = upload_time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
-        var m = upload_time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
-        var s = upload_time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+        var y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+        var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+        var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+        var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
         return (
           y +
           "-" +
@@ -688,7 +714,7 @@ export default {
   display: flex;
 
   .el-col {
-    /*   width: 50%;*/
+    /* width: 50%; */
     .folder-view {
       .el-container {
         .el-aside {
@@ -703,8 +729,8 @@ export default {
           .el-switch {
             margin: 30px 0px;
           }
-          /*      width: 80px!important;*/
-          /*     width: 100%;*/
+          /* width: 80px!important; */
+          /* width: 100%; */
         }
         .el-main {
           background-color: #fff;
@@ -715,7 +741,7 @@ export default {
     }
   }
   .el-col {
-    /* width: 50%;*/
+    /* width: 50%; */
     max-height: 1000px;
     overflow: auto;
     .raw-playlist {

@@ -49,12 +49,12 @@
 
             <div class="video_lineUp" v-if="flag">
               <router-link
-                      class="list-item"
-                      target="_blank"
-                      :to="{ path: '/video', query: { id: i._id.$oid } }"
-                      tag="a"
-                      v-for="i in videoData"
-                      :key="i._id.$oid"
+                class="list-item"
+                target="_blank"
+                :to="{ path: '/video', query: { id: i._id.$oid } }"
+                tag="a"
+                v-for="i in videoData"
+                :key="i._id.$oid"
               >
                 <img :src="'/images/covers/'+i.item.cover_image" alt />
                 <h4>
@@ -64,18 +64,18 @@
             </div>
             <div class="video_straightColumn" v-if="!flag">
               <router-link
-                      class="list-item"
-                      target="_blank"
-                      :to="{ path: '/video', query: { id: i._id.$oid } }"
-                      tag="a"
-                      v-for="i in videoData"
-                      :key="i._id.$oid"
+                class="list-item"
+                target="_blank"
+                :to="{ path: '/video', query: { id: i._id.$oid } }"
+                tag="a"
+                v-for="i in videoData"
+                :key="i._id.$oid"
               >
                 <img :src="'/images/covers/'+i.item.cover_image" alt />
                 <div class="list-item_content">
                   <h4>
                     <router-link
-                            :to="{ path: '/video', query: { id: i._id.$oid } }"
+                      :to="{ path: '/video', query: { id: i._id.$oid } }"
                     >{{i.item.title}}</router-link>
                   </h4>
                   <p>{{i.item.desc}}</p>
@@ -86,16 +86,16 @@
           </div>
 
           <el-pagination
-                  background
-                  class="page-selector"
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  layout="jumper, prev, pager, next, sizes"
-                  :current-page="this.page"
-                  :total="videoCount"
-                  :page-size="20"
-                  :page-sizes="[10, 20, 30, 40]"
-                  v-if="this.videoCount!=0"
+            background
+            class="page-selector"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            layout="jumper, prev, pager, next, sizes"
+            :current-page="this.page"
+            :total="videoCount"
+            :page-size="20"
+            :page-sizes="[10, 20, 30, 40]"
+            v-if="this.videoCount!=0"
           ></el-pagination>
         </el-main>
       </el-container>
@@ -106,24 +106,24 @@
 <script>
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
-      flag: true, //视频排列顺序,默认栅格
-      TagData: [], //所有视频的TAG数据
-      videoCount: 0, //视频总数
+      flag: true, // 视频排列顺序，默认栅格
+      TagData: [], // 所有视频的 TAG 数据
+      videoCount: 0, // 视频总数
       page: 1,
       count: 20,
-      videoData: [], //视频数据
-      //绘制图表用，使用教程移至：https://www.echartsjs.com/zh/tutorial.html#
+      videoData: [], // 视频数据
+      // 绘制图表用，使用教程移至：https://www.echartsjs.com/zh/tutorial.html#
       CopyrightObj: [],
       GeneralObj: [],
       CharacterObj: [],
-/*      CopyrightObj: [],*/
+      // CopyrightObj: [],
       AuthorObj: [],
       MetaObj: [],
       LanguageObj: [],
       SoundtrackObj: [],
-      //绘制图表用，统计TAG占比
+      // 绘制图表用，统计 TAG 占比
       General_count: 0,
       Character_count: 0,
       Copyright_count: 0,
@@ -132,7 +132,7 @@ export default {
       Language_count: 0,
       SoundtrackObj_count: 0,
 
-      loading: true //读取状态
+      loading: true // 读取状态
     };
   },
   created() {
@@ -149,21 +149,20 @@ export default {
       this.count = val;
     },
     getMaxCount() {
-      //2020/2/16修改后 第一次请求请求第一页数据总数20个视频。
+      // 2020/2/16 修改后 第一次请求请求第一页数据总数 20 个视频。
       if (this.$route.params.id == "me") {
         this.axios({
           method: "post",
           url: "be/listmyvideo.do",
-          withCredentials: true, //携带cookie当配置了 withCredentials = true时，必须在后端增加 response 头信息Access-Control-Allow-Origin，且必须指定域名，而不能指定为*
+          withCredentials: true, // 携带 cookie 当配置了 withCredentials = true 时，必须在后端增加 response 头信息 Access-Control-Allow-Origin，且必须指定域名，而不能指定为*
           async: true,
           data: {
             page: 1,
             page_size: 20,
-            lang: localStorage.getItem('lang')
+            lang: localStorage.getItem("lang")
           }
         })
           .then(result => {
-
             this.TagData = result.data.data.tags;
             this.videoData = result.data.data.videos;
             this.getTagCategories();
@@ -181,11 +180,10 @@ export default {
             page: 1,
             page_size: 20,
             uid: this.$route.params.id,
-            lang: localStorage.getItem('lang')
+            lang: localStorage.getItem("lang")
           }
         })
           .then(result => {
-
             this.TagData = result.data.data.tags;
 
             this.videoData = result.data.data.videos;
@@ -202,14 +200,15 @@ export default {
         this.axios({
           method: "post",
           url: "be/listmyvideo.do",
-          withCredentials: true, //携带cookie当配置了 withCredentials = true时，必须在后端增加 response 头信息Access-Control-Allow-Origin，且必须指定域名，而不能指定为*
+          withCredentials: true, // 携带 cookie 当配置了 withCredentials = true 时，必须在后端增加 response 头信息 Access-Control-Allow-Origin，且必须指定域名，而不能指定为*
           async: true,
           data: {
             page: e,
             page_size: count,
-            lang: localStorage.getItem('lang')
+            lang: localStorage.getItem("lang")
           }
-        }).then(result => {
+        })
+          .then(result => {
             this.TagData = result.data.data.tags;
             this.videoData = result.data.data.videos;
             this.getTagCategories();
@@ -227,11 +226,10 @@ export default {
             page: e,
             page_size: count,
             uid: this.$route.params.id,
-            lang: localStorage.getItem('lang')
+            lang: localStorage.getItem("lang")
           }
         })
           .then(result => {
-
             this.TagData = result.data.data.tags;
 
             this.videoData = result.data.data.videos;
@@ -244,7 +242,7 @@ export default {
       }
     },
     getTagCategories() {
-      //绘制图表用
+      // 绘制图表用
       let AarryAll = [];
       let Aarryname = [];
       for (let i in this.TagData) {
@@ -263,13 +261,12 @@ export default {
           tags: Aarryname
         }
       }).then(result => {
-
         this.totallNum(result.data.data.categorie_map);
         this.drawLine();
       });
     },
     getcount(name) {
-      //统计计数
+      // 统计计数
       return this.TagData.filter(function(element, index, array) {
         if (element.tag == name) {
           return element.count;
@@ -285,7 +282,7 @@ export default {
       this.LanguageObj = [];
       this.SoundtrackObj = [];
 
-      //依次将接口获取的原数据按照echarts中的数据规范转换
+      // 依次将接口获取的原数据按照 echarts 中的数据规范转换
       for (let i in arr) {
         if (arr[i] == "Copyright") {
           this.Copyright_count++;
@@ -318,7 +315,7 @@ export default {
       }
       if (Object.keys(arr).length > 10) {
         for (let i in this.CopyrightObj) {
-          //东方占比太大导致图形过度密集，可去除
+          // 东方占比太大导致图形过度密集，可去除
           if (this.CopyrightObj[i].name == "东方") {
             this.CopyrightObj.splice(
               this.CopyrightObj.indexOf(this.CopyrightObj[i]),
@@ -329,7 +326,7 @@ export default {
       }
     },
     drawLine() {
-      // 基于准备好的dom，初始化echarts实例
+      // 基于准备好的 dom，初始化 echarts 实例
       // 绘制图表
       // console.log(this.$echarts);
       let myChart = this.$echarts.init(document.getElementById("myChart"));
@@ -343,42 +340,45 @@ export default {
           data: [
             {
               name: "General",
-              /*  value: this.General_count,*/
+              // value: this.General_count,
               children: this.GeneralObj
             },
             {
               name: "Character",
-              /*          value: this.Character_count,*/
+              // value: this.Character_count,
               children: this.CharacterObj
             },
             {
               name: "Copyright",
-              /*       value: this.Copyright_count,*/
+              // value: this.Copyright_count,
               children: this.CopyrightObj
             },
             {
               name: "Author",
-              /*  value: this.Author_count,*/
+              // value: this.Author_count,
               children: this.AuthorObj
             },
             {
-              name: "Meta" /*        value: this.Meta_count,*/,
-              /*        value: this.Meta_count,*/ children: this.MetaObj
+              name: "Meta",
+              // value: this.Meta_count,
+              children: this.MetaObj
             },
             {
-              name: "Language" /*        value: this.Meta_count,*/,
-              /*        value: this.Meta_count,*/ children: this.LanguageObj
+              name: "Language",
+              // value: this.Meta_count,
+              children: this.LanguageObj
             },
             {
-              name: "Soundtrack" /*        value: this.Meta_count,*/,
-              /*        value: this.Meta_count,*/ children: this.SoundtrackObj
+              name: "Soundtrack",
+              // value: this.Meta_count,
+              children: this.SoundtrackObj
             }
           ]
         }
       });
     },
     changeLine() {
-      //切换视频排列顺序
+      // 切换视频排列顺序
       this.flag = !this.flag;
     }
   },
@@ -399,83 +399,81 @@ export default {
 </script>
 
 <style  lang="less" scoped>
-  @media screen and(max-width: 1810px){
-    .video_lineUp {
-      display: flex;
-      /*    justify-content: space-around;*/
-      justify-content: flex-start;
-      flex-direction: row;
-      flex-wrap: wrap;
-      overflow: auto;
-      max-height: 700px;
+@media screen and(max-width: 1810px) {
+  .video_lineUp {
+    display: flex;
+    /* justify-content: space-around; */
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow: auto;
+    max-height: 700px;
+    box-sizing: border-box;
+    .list-item {
+      box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+      flex: 0 0 48% !important;
       box-sizing: border-box;
-      .list-item {
-        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-        flex: 0 0 48% !important;
-        box-sizing: border-box;
-        margin: 10px 5px 5px;
-        transition: all 0.3s ease;
-        img {
+      margin: 10px 5px 5px;
+      transition: all 0.3s ease;
+      img {
+        min-width: 233px;
+        min-height: 145px;
 
-          min-width: 233px;
-          min-height: 145px;
-
-          /*min-width: 233px;
-          min-height: 145px;*/
+        // min-width: 233px;
+        // min-height: 145px;
+      }
+      h4 {
+        margin: auto;
+        width: 233px;
+        height: 46px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        a {
         }
-        h4 {
-          margin: auto;
-          width: 233px;
-          height: 46px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          a{
-          }
-        }
-        &:hover {
-          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-          background-color: #f4f4f5;
-        }
+      }
+      &:hover {
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        background-color: #f4f4f5;
       }
     }
   }
-  @media screen and(max-width: 1541px){
-    .video_lineUp {
-      display: flex;
-      /*    justify-content: space-around;*/
-      justify-content: flex-start;
-      flex-direction: row;
-      flex-wrap: wrap;
-      overflow: auto;
-      max-height: 700px;
+}
+@media screen and(max-width: 1541px) {
+  .video_lineUp {
+    display: flex;
+    /* justify-content: space-around; */
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow: auto;
+    max-height: 700px;
+    box-sizing: border-box;
+    .list-item {
+      box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+      flex: 0 0 95% !important;
       box-sizing: border-box;
-      .list-item {
-        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-        flex: 0 0 95% !important;
-        box-sizing: border-box;
-        margin: 10px 5px 5px;
-        transition: all 0.3s ease;
-        img {
-
-          min-width: 233px;
-          min-height: 145px;
+      margin: 10px 5px 5px;
+      transition: all 0.3s ease;
+      img {
+        min-width: 233px;
+        min-height: 145px;
+      }
+      h4 {
+        margin: auto;
+        width: 233px;
+        height: 46px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        a {
         }
-        h4 {
-          margin: auto;
-          width: 233px;
-          height: 46px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          a{
-          }
-        }
-        &:hover {
-          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-          background-color: #f4f4f5;
-        }
+      }
+      &:hover {
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        background-color: #f4f4f5;
       }
     }
   }
+}
 .v-enter,
 .v-leave-to {
   opacity: 0;
@@ -509,7 +507,7 @@ export default {
 
   .el-main {
     width: 50%;
-/*    min-width: 800px;*/
+    /* min-width: 800px; */
     overflow: auto;
     border: 1px solid #e5e9ef;
     box-sizing: border-box;
@@ -547,7 +545,7 @@ export default {
 
   .video_lineUp {
     display: flex;
-    /*    justify-content: space-around;*/
+    /* justify-content: space-around; */
     justify-content: flex-start;
     flex-direction: row;
     flex-wrap: wrap;
@@ -561,13 +559,13 @@ export default {
       margin: 10px 5px 5px;
       transition: all 0.3s ease;
       img {
-       width: 80%;
-       height: 72%;
+        width: 80%;
+        height: 72%;
         min-width: 233px;
         min-height: 145px;
 
-        /*min-width: 233px;
-        min-height: 145px;*/
+        // min-width: 233px;
+        // min-height: 145px;
       }
       h4 {
         margin: auto;
@@ -575,7 +573,7 @@ export default {
         height: 46px;
         overflow: hidden;
         text-overflow: ellipsis;
-        a{
+        a {
         }
       }
       &:hover {
@@ -600,8 +598,8 @@ export default {
       border-bottom: 1px solid #e5e9ef;
       transition: all 0.3s ease;
       &:hover {
-        /*  background-color: #DDDDDD;
-                color: #333333*/
+        // background-color: #dddddd;
+        // color: #333333;
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         transform: translate3d(0, -2px, 0);
       }

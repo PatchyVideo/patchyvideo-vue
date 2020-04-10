@@ -64,85 +64,72 @@
 <template>
   <div class="custom-upload" v-loading="loading">
     <el-dialog
-            :title="$t('title')"
-            :visible.sync="showCropper"
-            top="6vh"
-            width="50%"
-            height="600"
-            class="cropper-dialog"
-            center
-            append-to-body
+      :title="$t('title')"
+      :visible.sync="showCropper"
+      top="6vh"
+      width="50%"
+      height="600"
+      class="cropper-dialog"
+      center
+      append-to-body
     >
       <vue-cropper
-              v-if="showCropper"
-              id="corpper"
-              ref="cropper"
-              :class="{ 'corpper-warp': showCropper }"
-              v-bind="cropper"
+        v-if="showCropper"
+        id="corpper"
+        ref="cropper"
+        :class="{ 'corpper-warp': showCropper }"
+        v-bind="cropper"
       />
       <div v-if="showCropper" class="cropper-button">
         <el-button
-                class="cancel-btn"
-                size="small"
-                @click.native="showCropper = false"
-        >{{$t('cancel')}}</el-button
-        >
-        <el-button
-                size="small"
-                type="primary"
-                :loading="loading"
-                @click="uploadCover"
-        >{{$t('ok')}}</el-button
-        >
+          class="cancel-btn"
+          size="small"
+          @click.native="showCropper = false"
+        >{{$t('cancel')}}</el-button>
+        <el-button size="small" type="primary" :loading="loading" @click="uploadCover">{{$t('ok')}}</el-button>
       </div>
     </el-dialog>
     <el-dialog
-            :modal =false
-            :title="$t('upload_userphoto')"
-            :visible.sync="dialogVisible"
-            width="40%"
-            top="30vh"
-            :before-close="handleClose">
-      <el-input v-model="imgNetUpUrl" :placeholder="$t('enter_url_prompt')" v-if="isShowNetUp" style="margin: 20px 0px 30px;"></el-input>
-      <span  class="dialog-footer" style="text-align: center;margin: 20px 0px 30px;">
-     <el-button type="primary"  @click="handleOpenFile()"  v-if="!isShowNetUp">{{$t('from_file')}}</el-button>
-     <el-button type="primary"  v-if="!isShowNetUp" @click="showNetUp(true)">{{$t('from_url')}}</el-button>
+      :modal="false"
+      :title="$t('upload_userphoto')"
+      :visible.sync="dialogVisible"
+      width="40%"
+      top="30vh"
+      :before-close="handleClose"
+    >
+      <el-input
+        v-model="imgNetUpUrl"
+        :placeholder="$t('enter_url_prompt')"
+        v-if="isShowNetUp"
+        style="margin: 20px 0px 30px;"
+      ></el-input>
+      <span class="dialog-footer" style="text-align: center;margin: 20px 0px 30px;">
+        <el-button type="primary" @click="handleOpenFile()" v-if="!isShowNetUp">{{$t('from_file')}}</el-button>
+        <el-button type="primary" v-if="!isShowNetUp" @click="showNetUp(true)">{{$t('from_url')}}</el-button>
         <el-button v-if="isShowNetUp" @click="imgNetUrlup()">{{$t('ok')}}</el-button>
-        <el-button   v-if="isShowNetUp" @click="showNetUp(false)">{{$t('cancel')}}</el-button>
-
-  </span>
+        <el-button v-if="isShowNetUp" @click="showNetUp(false)">{{$t('cancel')}}</el-button>
+      </span>
     </el-dialog>
     <form
-            action="/be/helper/upload_image.do"
-            method="post"
-            accept-charset="utf-8"
-            enctype="multipart/form-data"
-            id="form1"
-            @submit.prevent="sub"
+      action="/be/helper/upload_image.do"
+      method="post"
+      accept-charset="utf-8"
+      enctype="multipart/form-data"
+      id="form1"
+      @submit.prevent="sub"
     >
+      <input id="type" name="type" type="text" value="userphoto" v-show="false" />
       <input
-              id="type"
-              name="type"
-              type="text"
-              value="userphoto"
-              v-show="false"
+        id="file"
+        name="file"
+        type="file"
+        tag="input"
+        accept="image/*"
+        @change="onChange($event)"
+        :class="id"
+        v-show="false"
       />
-      <input
-              id="file"
-              name="file"
-              type="file"
-              tag="input"
-              accept="image/*"
-              @change="onChange($event)"
-              :class="id"
-              v-show="false"
-      />
-      <el-button
-              size="small"
-              type="primary"
-              :loading="loading"
-              @click="dialogVisible = true"
-      >
+      <el-button size="small" type="primary" :loading="loading" @click="dialogVisible = true">
         <i class="fa fa-upload" />
         {{ buttonName }}
       </el-button>
@@ -156,7 +143,7 @@
 // 上传文件组件
 import { VueCropper } from "vue-cropper";
 // 定义的接口根据自己项目更换
-/*    import { uploadImage } from '@/api/upload'*/
+// import { uploadImage } from '@/api/upload'
 import {
   isImageFile,
   isMaxFileSize,
@@ -175,12 +162,12 @@ export default {
     // 最大上传文件的大小
     maxFileSize: {
       type: Number,
-      default: 2 // （MB)
+      default: 2 // (MB)
     },
     // 按钮文字
     buttonName: {
       type: String,
-      default: 'Add Image'
+      default: "Add Image"
     },
     // 提示内容
     tips: {
@@ -205,16 +192,16 @@ export default {
     }
   },
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     return {
-      imgNetUpUrl:"",
-      id: "cropper-input-" + +new Date(),
+      imgNetUpUrl: "",
+      id: "cropper-input-" + new Date(),
       loading: false,
       showCropper: false,
-      isShowNetUp:false,
+      isShowNetUp: false,
       dialogVisible: false,
       url: "",
-      compress: 0.8, //压缩率
+      compress: 0.8, // 压缩率
       imgFile: {},
       img64: {},
       cropper: {
@@ -241,26 +228,24 @@ export default {
   methods: {
     handleClose(done) {
       done();
-      /*      this.$confirm('确认关闭？')
-                    .then(_ => {
-                      done();
-                    })
-                    .catch(_ => {});*/
+      // this.$confirm("确认关闭？")
+      //   .then(_ => {
+      //     done();
+      //   })
+      //   .catch(_ => {});
     },
-    showNetUp(b){
-
-      this.isShowNetUp =b;
-      if(b ===false){
+    showNetUp(b) {
+      this.isShowNetUp = b;
+      if (b === false) {
         this.imgNetUpUrl = "";
       }
-
     },
     sub() {
-      if(this.imgFile.lastModified===undefined){
-        this.$message.error(this.$t('no_file_prompt'));
+      if (this.imgFile.lastModified === undefined) {
+        this.$message.error(this.$t("no_file_prompt"));
         return;
       }
-      //这个司马东西还是只读不准赋值？百度半天不知道这是哪国的妖术竟然可以赋值了
+      // 这个司马东西还是只读不准赋值？百度半天不知道这是哪国的妖术竟然可以赋值了
       const data = new DataTransfer();
       data.items.add(this.imgFile);
       $("#file")[0].files = data.files;
@@ -277,66 +262,61 @@ export default {
           if (res.data.status == "SUCCEED") {
             this.file_key = res.data.data.file_key;
             this.changePhtoto(this.file_key);
-
           } else {
-            this.$message.error(this.$t('no_file_prompt'));
+            this.$message.error(this.$t("no_file_prompt"));
             this.loading = false;
           }
         })
         .catch(err => {
-          this.$message.error(this.$t('file_size_prompt'));
+          this.$message.error(this.$t("file_size_prompt"));
           this.loading = false;
         });
     },
-    changePhtoto(key){
+    changePhtoto(key) {
       this.loading = true;
       this.axios({
         method: "post",
         url: "be/user/changephoto.do",
         data: { file_key: key }
       }).then(res => {
-        /*       this.getMyData();*/
+        // this.getMyData();
         this.$emit("subUploadSucceed", this.url, true);
         var img = res.data.data;
         this.$store.commit("getUserAvatar", img);
         this.setCookie(img, 7);
         this.loading = false;
         this.$message({
-          message: this.$t('upload_succeed'),
+          message: this.$t("upload_succeed"),
           type: "success"
         });
-            this.dialogVisible = false;
-
+        this.dialogVisible = false;
       });
     },
-    imgNetUrlup(){
-
-      if(this.imgNetUpUrl.toString()===""){
-      this.$message.error(this.$t('no_url_prompt'));
-       return false;
- }
+    imgNetUrlup() {
+      if (this.imgNetUpUrl.toString() === "") {
+        this.$message.error(this.$t("no_url_prompt"));
+        return false;
+      }
       this.axios({
-        method:"post",
-        url:"/be/helper/upload_image_url.do",
-        data:{"url":this.imgNetUpUrl, "type":"userphoto"}
-      }).then(res=>{
-        if (res.data.status === "SUCCEED") {
-                this.file_key = res.data.data.file_key;
-                    this.changePhtoto(this.file_key);
-        }else {
-          if(res.data.data ==="INCORRECT_UPLOAD_TYPE"){
-            this.$message.error(this.$t('INCORRECT_UPLOAD_TYPE'))
-          }
-          else {
-            this.$message.error(this.$t('upload_failed'))
-          }
-
-        }
-
-      }).catch(err=>{
-        this.$message.error(this.$t('upload_failed'))
+        method: "post",
+        url: "/be/helper/upload_image_url.do",
+        data: { url: this.imgNetUpUrl, type: "userphoto" }
       })
-
+        .then(res => {
+          if (res.data.status === "SUCCEED") {
+            this.file_key = res.data.data.file_key;
+            this.changePhtoto(this.file_key);
+          } else {
+            if (res.data.data === "INCORRECT_UPLOAD_TYPE") {
+              this.$message.error(this.$t("INCORRECT_UPLOAD_TYPE"));
+            } else {
+              this.$message.error(this.$t("upload_failed"));
+            }
+          }
+        })
+        .catch(err => {
+          this.$message.error(this.$t("upload_failed"));
+        });
     },
     // 打开文件
     handleOpenFile() {
@@ -349,16 +329,15 @@ export default {
         },
         false
       );
-      // 点击input
+      // 点击 input
       input.click();
     },
 
-
-    // 裁剪input 监听
+    // 裁剪 input 监听
     async onChange(e) {
       const file = e.target.files[0];
       if (!file) {
-        return this.$message.error(this.$t('open_failed'));
+        return this.$message.error(this.$t("open_failed"));
       }
       // 验证文件类型
       if (!isImageFile(file)) {
@@ -369,8 +348,7 @@ export default {
         const src = await readFile(file);
         this.showCropper = true;
         this.cropper.img = src;
-      } catch (error) {
-      }
+      } catch (error) {}
     },
     dataURLtoFile(dataurl, filename) {
       var arr = dataurl.split(","),
@@ -395,8 +373,8 @@ export default {
       ctx.fillStyle = "#fff";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, width, height);
-      //进行压缩
-      let compress = this.compress || 0.8; //压缩率
+      // 进行压缩
+      let compress = this.compress || 0.8; // 压缩率
       return canvas.toDataURL("image/jpeg", compress);
     },
     // 封面上传功能
@@ -404,9 +382,9 @@ export default {
       this.$refs.cropper.getCropBlob(async imgRes => {
         try {
           // 文件大小限制
-          /*  if (!isMaxFileSize(imgRes, this.maxFileSize)) {
-                            return
-                        }*/
+          // if (!isMaxFileSize(imgRes, this.maxFileSize)) {
+          //   return;
+          // }
           //是否压缩
           let img = new Image();
           img.src = window.URL.createObjectURL(imgRes);
@@ -423,7 +401,7 @@ export default {
             this.imgFile = file;
           };
           this.loading = true;
-          /*         this.imgFile =new File([imgRes],"裁剪后的图片");*/
+          // this.imgFile = new File([imgRes],"裁剪后的图片");
           this.url = await window.URL.createObjectURL(imgRes);
           this.$emit("subUploadSucceed", this.url, false);
           this.loading = false;
@@ -436,11 +414,11 @@ export default {
         }
       });
     },
-    // 设置cookie
+    // 设置 cookie
     setCookie(username, days) {
-      var date = new Date(); //获取时间
-      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); //保存的天数
-      //字符串拼接cookie
+      var date = new Date(); // 获取时间
+      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
+      // 字符串拼接 cookie
       window.document.cookie =
         "userAvatar" + "=" + username + ";path=/;expires=" + date.toGMTString();
     }
@@ -449,9 +427,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .dialog-footer{
-   height: 50% !important;
-  }
+.dialog-footer {
+  height: 50% !important;
+}
 form {
   transform: translateY(50%);
   width: 100%;
