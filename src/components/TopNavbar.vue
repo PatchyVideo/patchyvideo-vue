@@ -192,18 +192,16 @@
 
         <!-- 登录成功后的用户界面 -->
         <div class="userHome" v-else>
-          <div @click="gotoUserPage">
-            <el-avatar fit="cover" class="loginUser-userAvatar" :size="40" :src="userAvatar"></el-avatar>
-          </div>
-          <router-link
+          <el-tooltip effect="light" :content="this.$store.state.username" placement="bottom">
+            <div @click="gotoUserPage">
+              <el-avatar fit="cover" class="loginUser-userAvatar" :size="40" :src="userAvatar"></el-avatar>
+            </div>
+          </el-tooltip>
+          <!-- <router-link
             class="loginUser-login"
             style="max-width:100px;overflow: hidden;"
             to="/users/me"
-          >
-            {{
-            this.$store.state.username
-            }}
-          </router-link>
+          >{{this.$store.state.username}}</router-link>-->
           <el-badge :value="messagesNum" :hidden="!messagesNum" class="item">
             <router-link
               target="_blank"
@@ -671,9 +669,9 @@ export default {
 
 <style scoped lang="less">
 .top-navbar {
-  height: 60px;
-  padding: 10px;
-  width: calc(100% - 20px);
+  height: 40px;
+  padding: 5px 5%;
+  width: 90%;
   display: flex;
   display: -webkit-flex;
   align-items: center;
@@ -692,7 +690,7 @@ export default {
   height: 30px;
 }
 .patchyvideo-title {
-  font-size: 25px;
+  font-size: 24px;
   font-weight: 800;
   letter-spacing: -0.5px;
 }
@@ -704,7 +702,7 @@ export default {
 }
 .navItem {
   margin: 10px;
-  font-size: 20px;
+  font-size: 18px;
 }
 .navItem a {
   color: rgb(46, 46, 46);

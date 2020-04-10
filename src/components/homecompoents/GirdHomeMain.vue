@@ -76,15 +76,15 @@
           <p v-else>{{$t('no_result')}}</p>
           <el-checkbox class="show_deleted" v-model="checked">{{$t('show_deleted')}}</el-checkbox>
           <p class="blacklist_prompt">{{$t('blacklist_prompt')}}</p>
+          <el-select id="select-order" v-model="couponSelected">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
         </div>
-        <el-select id="select-order" v-model="couponSelected">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
 
         <!-- 播放列表正文 -->
         <ul>
@@ -664,10 +664,9 @@ export default {
   .rating {
     vertical-align: top;
     line-height: 24px;
-
-    /*        position: absolute;
-            right: 4px;
-            bottom: 0px;*/
+    // position: absolute;
+    // right: 4px;
+    // bottom: 0px;
     text-align: right;
     color: #f8d714;
     font-size: 24px;
@@ -802,7 +801,7 @@ export default {
   width: 23.5%;
   margin-bottom: 15px;
   transition: all 0.3s ease;
-  /*    border: 1px solid #e5e9ef;*/
+  // border: 1px solid #e5e9ef;
   &:hover {
     background-color: rgb(244, 244, 245);
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
@@ -840,7 +839,7 @@ ul {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  width: calc(100% - 230px);
+  width: 100%;
   margin-bottom: 10px;
 }
 
@@ -848,7 +847,6 @@ ul {
   width: 200px;
   float: right;
   right: 0px;
-  transform: translate(0, -50px);
 }
 .left-navbar {
   position: relative;
@@ -866,7 +864,6 @@ ul {
   background-repeat: no-repeat;
   min-height: 800px;
   width: 85%;
-  margin-top: 20px;
 }
 
 .blacklist_prompt {

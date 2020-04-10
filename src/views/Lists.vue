@@ -83,20 +83,31 @@
       <div class="content">
         <!-- 视频列表介绍 -->
         <div class="deemo shadow">
-          <div class="d_t">
-            <!--<img src="../static/img/4.png" style="float:left" />
-            <img src="../static/img/3.png" style="float:right" />-->
+          <!-- <div class="d_t">
+            <img src="../static/img/4.png" style="float:left" />
+            <img src="../static/img/3.png" style="float:right" />
             <el-button
               type="primary"
               plain
               class="createPlayListButton"
               @click="createVideoList"
             >{{$t('create_playList')}}</el-button>
-          </div>
+          </div>-->
         </div>
 
         <div class="recommend">
+          <!-- 新建播放列表 -->
           <div id="select-order" class="head">
+            <div class="d_t">
+              <!--<img src="../static/img/4.png" style="float:left" />
+              <img src="../static/img/3.png" style="float:right" />-->
+              <el-button
+                type="primary"
+                plain
+                class="createPlayListButton"
+                @click="createVideoList"
+              >{{$t('create_playList')}}</el-button>
+            </div>
             <!-- 搜索框 -->
             <el-input
               :placeholder="$t('search.input_tip')"
@@ -510,11 +521,13 @@ export default {
   margin-top: 20px;
 }
 .d_t {
-  width: 100%;
+  display: inline-block;
+  width: 160px;
   margin-bottom: 0px;
-  padding: 20px;
+  padding: 0 20px;
 }
 /deep/.d_t button {
+  width: 100%;
   background: #409eff;
   border-color: #409eff;
   color: #fff;
