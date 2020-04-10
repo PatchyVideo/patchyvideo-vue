@@ -8,6 +8,7 @@ import "../static/css/base.css";
 import { changeSiteTitle } from '../static/js/base';
 import { Loading, Message } from 'element-ui';
 import { getYiyan } from '../static/js/yiyan';
+import $ from 'jquery';
 const error = () => import("../views/404.vue");
 const Home = () => import("../views/Home.vue");
 const detail = () => import("../views/Detail.vue");
@@ -33,12 +34,20 @@ Vue.use(VueRouter);
 Vue.use(ElementUI);
 var doorObj = document.getElementById("door");
 var irikuchiObj = document.getElementsByClassName("irikuchi")[0];
+
+var text = ["", ".", "..", "..."];
+var itext;
 function startLoading() {
   if (irikuchiObj) {
     doorObj.classList.remove("kieru");
     irikuchiObj.style.display = "block";
   }
   changeSiteTitle("少女祈祷中");
+  var index = 0;
+  itext = setInterval(() => {
+    index++;
+    changeSiteTitle(`少女祈祷中${text[(index % text.length)]}`);
+  }, 500);
   //使用Element loading-start 方法
   /* loading = Loading.service({
      lock: true,
@@ -54,7 +63,8 @@ function endLoading() {
     irikuchiObj.classList.add("kieru");
     setTimeout(e => {
       irikuchiObj.style.display = "none";
-    }, 500)
+    }, 500);
+    clearInterval(itext);
     /*    document.body.removeChild(irikuchiObj );*/
   }
   /*
@@ -64,6 +74,7 @@ function endLoading() {
 //整活页面
 var page;
 function startPage() {
+  changeSiteTitle("少女密室");
   page = Loading.service({
     lock: true,
     text: `${getYiyan()}`,

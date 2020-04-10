@@ -49,7 +49,6 @@ function getYiyan(short) {
     var yy = yiyan;
     if (short) {
         yy = yy.filter((v) => v.length <= 40);
-        console.log(yy);
     }
     var random = (Math.floor(Math.random() * 100, 2)) % yy.length;
     return yy[random];
