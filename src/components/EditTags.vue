@@ -97,20 +97,21 @@
           <div class="m_bg"></div>
           <div class="m_a activeTag">
             <ul class="Taglist" :class="v" v-for="v in this.tagCategoriesAll" :key="v">
-              <li
-                class="item"
-                v-for="(i, item) in TagCategoriesData"
-                :key="item"
-                :class="{ selected: -1 === tagsForRec.indexOf(item) }"
-                @click.stop="selected(i, item)"
-              >
-                <div v-if="i === v">
-                  <p :class="`val_` + item">{{ item }}</p>
-                  <a href="javascript:;" @click.stop="deleteObj(i, item)">
-                    <i class="el-icon-close"></i>
-                  </a>
+              <span v-for="(i, item) in TagCategoriesData" :key="item">
+                <div
+                  class="item"
+                  :class="{ selected: -1 === tagsForRec.indexOf(item) }"
+                  @click.stop="selected(i, item)"
+                  v-if="i === v"
+                >
+                  <div>
+                    <p :class="`val_` + item">{{ item }}</p>
+                    <a href="javascript:;" @click.stop="deleteObj(i, item)">
+                      <i class="el-icon-close"></i>
+                    </a>
+                  </div>
                 </div>
-              </li>
+              </span>
             </ul>
           </div>
 
@@ -870,7 +871,7 @@ div {
 
         box-sizing: border-box;
         ul {
-          li {
+          .item {
             background-color: #fff;
             display: inline-block;
             zoom: 1;

@@ -90,16 +90,12 @@
         <ul>
           <li class="list-item" v-for="(item) in listvideo" :key="item._id.$oid">
             <div class="video-item">
-              <router-link
-                target="_blank"
-                :to="{ path: '/video', query: { id: item._id.$oid } }"
-                tag="a"
-              >
+              <a target="_blank" :href="item.item.url" tag="a">
                 <div class="video-thumbnail">
                   <img :src="'/images/covers/'+item.item.cover_image" />
                   <div class="Imgcover"></div>
                 </div>
-              </router-link>
+              </a>
               <div class="video-detail">
                 <div class="title-div">
                   <img
@@ -108,12 +104,12 @@
                     style="margin-right:2px;display:inline;"
                   />
                   <h4>
-                    <a
+                    <router-link
                       target="_blank"
                       :title="item.item.title"
-                      :href="item.item.url"
+                      :to="{ path: '/video', query: { id: item._id.$oid } }"
                       tag="a"
-                    >{{ item.item.title }}</a>
+                    >{{ item.item.title }}</router-link>
                   </h4>
                 </div>
                 <p
