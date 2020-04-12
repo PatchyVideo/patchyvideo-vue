@@ -96,19 +96,20 @@
         <div class="minibox">
           <div class="m_bg"></div>
           <div class="m_a activeTag">
-            <ul class="Taglist" :class="v" v-for="v in this.tagCategoriesAll">
+            <ul class="Taglist" :class="v" v-for="v in this.tagCategoriesAll" :key="v">
               <li
                 class="item"
                 v-for="(i, item) in TagCategoriesData"
                 :key="item"
-                v-if="i === v"
                 :class="{ selected: -1 === tagsForRec.indexOf(item) }"
                 @click.stop="selected(i, item)"
               >
-                <p :class="`val_`+item">{{ item }}</p>
-                <a href="javascript:;" @click.stop="deleteObj(i, item)">
-                  <i class="el-icon-close"></i>
-                </a>
+                <div v-if="i === v">
+                  <p :class="`val_` + item">{{ item }}</p>
+                  <a href="javascript:;" @click.stop="deleteObj(i, item)">
+                    <i class="el-icon-close"></i>
+                  </a>
+                </div>
               </li>
             </ul>
           </div>
@@ -176,7 +177,7 @@
                           Meta: item.cat == 4,
                           Soundtrack: item.cat == 6
                         }"
-                        v-html="item.tag||ConvertLangRes(item.langs)"
+                        v-html="item.tag || ConvertLangRes(item.langs)"
                       ></div>
                       <div class="addr">{{ item.cnt }}</div>
                     </div>
@@ -205,7 +206,7 @@
               <span>{{$t('recommnad_tags')}}</span>
               <transition mode="out-in">
                 <ul class="recTag Taglist" v-show="recTagsWatch">
-                  <li class="item" v-for="(i, item) in recTags">
+                  <li class="item" v-for="(i, item) in recTags" :key="item">
                     <a href="javascript:;" @click="getiptVal(i, item)">
                       <p class="val_${str[i]}">{{ Object.keys(i)[0] }}</p>
                       <!--           <i class="el-icon-close"></i>-->
@@ -260,13 +261,13 @@ export default {
   },
   created() {
     var that = this;
-    //当前页面监视键盘输入
+    // 当前页面监视键盘输入
     document.onkeydown = function(e) {
-      //事件对象兼容
+      // 事件对象兼容
       let e1 =
         e || event || window.event || arguments.callee.caller.arguments[0];
-      //键盘按键判断:左箭头-37;上箭头-38；右箭头-39;下箭头-40
-      //左
+      // 键盘按键判断: 左箭头 -37; 上箭头 -38; 右箭头 -39; 下箭头 -40
+      // 左
       if (e1 && e1.keyCode == 27) {
         if (
           that.$route.path === "/video" ||
@@ -277,13 +278,13 @@ export default {
       }
     };
     if (this.msg != "") {
-      this.getCommonTags(); //防止组件更新时没有调用
+      this.getCommonTags(); // 防止组件更新时没有调用
     }
     // 判断是否为从播放列表添加的视频，如果是则获取标签
     if (this.$route.path === "/postvideo") {
       if (this.$route.query.pid) {
         this.getCommonTags2();
-      }else {
+      } else {
         this.getRecTags("");
       }
     }
@@ -311,15 +312,15 @@ export default {
     }
   },
   methods: {
-    /*   watchAutoComplete(){
-      let m  =  Array.from(document.getElementsByClassName("el-autocomplete-suggestion el-popper my-autocomplete"));
-      let  m_Mark =[];
-      for(let i =0;i<m.length;++i){
-        m_Mark[i] = m[i].style.display;
-      }
-      this.infoTipMark =m_Mark;
-      /!*  console.log(m_Mark);*!/
-    },*/
+    // watchAutoComplete(){
+    //   let m  =  Array.from(document.getElementsByClassName("el-autocomplete-suggestion el-popper my-autocomplete"));
+    //   let  m_Mark =[];
+    //   for(let i =0;i<m.length;++i){
+    //     m_Mark[i] = m[i].style.display;
+    //   }
+    //   this.infoTipMark =m_Mark;
+    //   /!* console.log(m_Mark); *!/
+    // },
     handleClose(done) {
       done();
     },
@@ -366,11 +367,11 @@ export default {
           data: { pid: this.msg, lang: localStorage.getItem("lang") }
         })
           .then(res => {
-            this.tags = res.data.data; //原始数据
-            this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); //深拷贝，推荐Tag数据用
-            this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); //得到原始Tag数据
-            this.getTagCategories(this.tags); //范围转换后展示原始数据
-            this.getRecTags(this.tags); //获取推荐TAG
+            this.tags = res.data.data; // 原始数据
+            this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); // 深拷贝，推荐 Tag 数据用
+            this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); // 得到原始 Tag 数据
+            this.getTagCategories(this.tags); // 范围转换后展示原始数据
+            this.getRecTags(this.tags); // 获取推荐 TAG
           })
           .catch(error => {});
       }
@@ -381,11 +382,11 @@ export default {
           data: { video_id: this.msg, lang: localStorage.getItem("lang") }
         })
           .then(res => {
-            this.tags = res.data.data; //原始数据
-            this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); //深拷贝，推荐Tag数据用
-            this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); //得到原始Tag数据
-            this.getTagCategories(this.tags); //范围转换后展示原始数据
-            this.getRecTags(this.tags); //获取推荐TAG
+            this.tags = res.data.data; // 原始数据
+            this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); // 深拷贝，推荐 Tag 数据用
+            this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); // 得到原始 Tag 数据
+            this.getTagCategories(this.tags); // 范围转换后展示原始数据
+            this.getRecTags(this.tags); // 获取推荐 TAG
           })
           .catch(error => {});
       }
@@ -398,11 +399,11 @@ export default {
         data: { pid: this.$route.query.pid, lang: localStorage.getItem("lang") }
       })
         .then(res => {
-          this.tags = res.data.data; //原始数据
-          this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); //深拷贝，推荐Tag数据用
-          this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); //得到原始Tag数据
-          this.getTagCategories(this.tags); //范围转换后展示原始数据
-          this.getRecTags(this.tags); //获取推荐TAG
+          this.tags = res.data.data; // 原始数据
+          this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); // 深拷贝，推荐 Tag 数据用
+          this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); // 得到原始 Tag 数据
+          this.getTagCategories(this.tags); // 范围转换后展示原始数据
+          this.getRecTags(this.tags); // 获取推荐 TAG
         })
         .catch(error => {});
     },
@@ -414,15 +415,15 @@ export default {
       })
         .then(res => {
           this.TagCategoriesData = res.data.data.categorie_map;
-          /*if(this.$route.path === "/postvideo"){
-            this.animeMark =0;
-          }*/
+          // if(this.$route.path === "/postvideo"){
+          //   this.animeMark =0;
+          // }
           if (this.firstFlag === true) {
             this.animeMark = 0;
             this.firstFlag = false;
           }
           if (this.msgMark === true) {
-            //msgMark为True证明是添加TAG
+            // msgMark 为 True 证明是添加 TAG
             this.open2();
           }
           this.msgMark = false;
@@ -441,30 +442,27 @@ export default {
           if (JSON.stringify(res.data.data.categorie_map) == "{}") {
             this.open4();
           } else if (this.tags.indexOf(this.iptVal) != -1) {
-            //存在则不允许添加
-            /*this.infoTip[1].isHidden=true;*/
+            // 存在则不允许添加
+            // this.infoTip[1].isHidden=true;
             this.iptVal = "";
             this.open3();
-            /*     setTimeout(function () {
-                            _that.infoTip[1].isHidden=false;
-                        },2000);*/
-          } else if (
-            this.tags.indexOf(this.iptVal) === -1 &&
-            this.iptVal != ""
-          ) {
-            //不存在则添加
+            // setTimeout(function() {
+            //   _that.infoTip[1].isHidden = false;
+            // }, 2000);
+          } else if (this.tags.indexOf(this.iptVal) === -1 && this.iptVal) {
+            // 不存在则添加
             this.tags.push(this.iptVal);
-            /* 如果所有的标签都没有被选中，那下次一添加的标签被选中*/
+            // 如果所有的标签都没有被选中，那下次一添加的标签被选中
             if (this.tagsForRec.length == 0) {
               this.tagsForRec.push(this.iptVal);
             }
-            /*默认添加的所有标签都被选中*/
-            /* this.tagsForRec.push(this.iptVal);*/
-            /*默认添加的所有标签不被选中*/
+            // 默认添加的所有标签都被选中
+            // this.tagsForRec.push(this.iptVal);
+            // 默认添加的所有标签不被选中
             this.msgMark = true;
             this.getTagCategories(this.tags);
             this.iptVal = "";
-            /*   this.$emit("getEditTagsData", this.tags);*/
+            // this.$emit("getEditTagsData", this.tags);
           }
           this.getRecTags(this.tagsForRec);
         })
@@ -483,9 +481,9 @@ export default {
         .then(res => {
           this.recTags = res.data.data.tags;
           this.recTagsWatch = true;
-          /* if (this.animeMark != 0) {
-            this.recTagsWatch = !this.recTagsWatch;
-          }*/
+          // if (this.animeMark != 0) {
+          //   this.recTagsWatch = !this.recTagsWatch;
+          // }
           this.animeMark++;
         })
         .catch(err => {});
@@ -507,7 +505,7 @@ export default {
       });
     },
     selected(i, item) {
-      //选中取消高亮后渲染剩余的对应推荐TAG
+      // 选中取消高亮后渲染剩余的对应推荐 TAG
       if (this.tagsForRec.indexOf(item) != -1) {
         this.tagsForRec.splice(this.tagsForRec.indexOf(item), 1);
         return;
@@ -523,21 +521,19 @@ export default {
       this.getTagCategoriesForAdd(this.iptVal);
     },
     addTag() {
-      /*
-      console.log("添加Tag之前的值——————是否鼠标点中:"+this.isInfoTipClick+"---是否键盘选中:"+this.infoTipMark);
-*/
-      /*    if(this.isInfoTipClick ===true){ //是否鼠标点中了
-        if (this.infoTipMark === true) { //是否属于键盘回车添加的Tag
-          this.infoTipMark = false;
-          this.isInfoTipClick = false;
-          return;
-        }
-      }*/
+      // console.log("添加Tag之前的值——————是否鼠标点中:"+this.isInfoTipClick+"---是否键盘选中:"+this.infoTipMark);
+      // if(this.isInfoTipClick ===true){ // 是否鼠标点中了
+      //   if (this.infoTipMark === true) { // 是否属于键盘回车添加的Tag
+      //     this.infoTipMark = false;
+      //     this.isInfoTipClick = false;
+      //     return;
+      //   }
+      // }
       if (this.isInfoTipClick === true) {
-        //是否属于鼠标点击选中的Tag
+        // 是否属于鼠标点击选中的 Tag
       } else {
         if (this.infoTipMark === true) {
-          //是否属于键盘回车选中的Tag
+          // 是否属于键盘回车选中的 Tag
           this.infoTipMark = false;
           this.isInfoTipClick = false;
           return;
@@ -547,63 +543,62 @@ export default {
       this.getTagCategoriesForAdd(this.iptVal);
       this.isInfoTipClick = false;
 
-      /*  this.watchAutoComplete();
-      {
-        let count = 0;
-        for(let i=0;i<this.infoTipMark.length;++i){
-          if( this.infoTipMark[i].toString()=="none"){
-            count++
-          }
-        }
-        if(count!=this.infoTipMark.length){
-          return;
-        }
-
-      }*/
-      //方案二,所有操作都在函数的成功和失败回调中进行，代码冗余
-      /* this.infoTip[0].isHidden = true;
-      this.getTagCategoriesForAdd(this.iptVal);*/
-      /*    方案一已废弃，
-                    console.time("start");
-                    console.log("开始计算时间");
-                    this.infoTip[0].isHidden=true;       // 第一轮Event Loop 同步任务立即执行
-                    this.getTagCategories(this.iptVal);  // 进入函数发现有promise函数初始化后排微任务
-                      let _that =this;
-                     setTimeout(function () //异步宏任务 ,先挂起,将代码移出本次执行,放入任务队列,等到下一轮Event Loop
-                     {
-                        console.log("开始执行定时器");
-
-                    if( _that.islegalIptVal=="BAD"){
-                        console.log("添加的TAG必须在现有的数据库中存在")
-                        return;
-                    }
-                    if(_that.tags.indexOf(_that.iptVal)===-1){
-                        //Tag是否合法未作检测，无接口
-                        _that.tags.push(_that.iptVal);
-                        _that.getTagCategories(_that.tags);
-                        return ;
-                    }
-                    if(_that.tags.indexOf(_that.iptVal)!=-1){
-                        console.log("true");
-                        _that.infoTip[1].isHidden=true;
-                        setTimeout(function () {
-                            _that.infoTip[1].isHidden=false;
-                        },2000);
-                        return;
-                    }
-
-
-                },600);
-                     console.log("end");//同步任务立即执行，执行完后开始执行 this.getTagCategories()函数中微任务
-                      // 第一轮 Event Loop 结束 开始第二轮执行setTimeout*/
+      // this.watchAutoComplete();
+      // {
+      //   let count = 0;
+      //   for(let i=0;i<this.infoTipMark.length;++i){
+      //     if( this.infoTipMark[i].toString()=="none"){
+      //       count++
+      //     }
+      //   }
+      //   if(count!=this.infoTipMark.length){
+      //     return;
+      //   }
+      // }
+      // 方案二,所有操作都在函数的成功和失败回调中进行，代码冗余
+      // this.infoTip[0].isHidden = true;
+      // this.getTagCategoriesForAdd(this.iptVal);
+      // 方案一已废弃，
+      // console.time("start");
+      // console.log("开始计算时间");
+      // this.infoTip[0].isHidden = true; // 第一轮 Event Loop 同步任务立即执行
+      // this.getTagCategories(this.iptVal); // 进入函数发现有 promise 函数初始化后排微任务
+      // let _that = this;
+      // setTimeout(
+      //   function() // 异步宏任务 ,先挂起,将代码移出本次执行,放入任务队列,等到下一轮Event Loop
+      //   {
+      //     console.log("开始执行定时器");
+      //     if (_that.islegalIptVal == "BAD") {
+      //       console.log("添加的TAG必须在现有的数据库中存在");
+      //       return;
+      //     }
+      //     if (_that.tags.indexOf(_that.iptVal) === -1) {
+      //       // Tag是否合法未作检测，无接口
+      //       _that.tags.push(_that.iptVal);
+      //       _that.getTagCategories(_that.tags);
+      //       return;
+      //     }
+      //     if (_that.tags.indexOf(_that.iptVal) != -1) {
+      //       console.log("true");
+      //       _that.infoTip[1].isHidden = true;
+      //       setTimeout(function() {
+      //         _that.infoTip[1].isHidden = false;
+      //       }, 2000);
+      //       return;
+      //     }
+      //   },
+      //   600
+      // );
+      // console.log("end"); // 同步任务立即执行，执行完后开始执行 this.getTagCategories() 函数中微任务
+      // 第一轮 Event Loop 结束 开始第二轮执行 setTimeout
     },
     saveTag() {
       if (/*this.msg===""*/ this.$route.path === "/postvideo") {
-        //如果没有pid,则处在提交视频界面，返回给父组件tags
+        // 如果没有 pid,则处在提交视频界面，返回给父组件 tags
         this.$emit("getEditTagsData", this.tags);
-        /*          this.closeTagPanel();*/
+        // this.closeTagPanel();
       }
-      //如果有pid按照正常路线走
+      // 如果有 pid 按照正常路线走
       // 提交视频的标签
       else if (this.$route.path === "/video") {
         this.axios({
@@ -633,8 +628,8 @@ export default {
       }
     },
     infoTipEvent(event) {
-      /*      this.isInfoTipClick = true;*/
-      //添加TAG行为消息提示
+      // this.isInfoTipClick = true;
+      // 添加 TAG 行为消息提示
       if (event == true) {
         this.infoTip[0].isHidden = true;
         return;
@@ -656,15 +651,15 @@ export default {
       var Lang = "";
       var mainLang = "";
       var subLang = "";
-      //经过一系列计算得出主副语言
+      // 经过一系列计算得出主副语言
 
-      //匹配当前语言的ID
+      // 匹配当前语言的 ID
       var CurrLangID = LangList.find(x => {
         return x.lang == this.$i18n.locale;
       });
       CurrLangID = CurrLangID ? CurrLangID.id : 1;
 
-      //匹配对应ID的内容
+      //匹配对应 ID 的内容
       var CurrLangWord = langs.find(x => {
         return x.l == CurrLangID;
       });
@@ -679,10 +674,8 @@ export default {
       mainLang = CurrLangWord.w;
 
       if (hastran) {
-        /*
-      副语言匹配
-      优先级：日语，英语，简体中文，繁体中文
-      */
+        // 副语言匹配
+        // 优先级：日语，英语，简体中文，繁体中文
         var SubLangWord = null;
         for (var i = 0; i < level.length; i++) {
           if (level[i] == CurrLangWord.l) continue;
@@ -693,7 +686,7 @@ export default {
         }
         subLang = SubLangWord ? SubLangWord.w : mainLang;
 
-        //合成语言
+        // 合成语言
         Lang = `${mainLang.replace(/\_/g, " ")}`;
         Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(
           /\_/g,
@@ -706,7 +699,7 @@ export default {
     },
     // 下面是消息补全框的方法
     querySearchAsync(queryString, cb) {
-      /*   this.infoTipMark = true;*/
+      // this.infoTipMark = true;
       var url = "/autocomplete/?q=" + queryString;
       this.axios({
         method: "get",
@@ -717,7 +710,7 @@ export default {
       });
     },
     querySearchAsync2(queryString, cb) {
-      /*   this.infoTipMark = true;*/
+      // this.infoTipMark = true;
       var url = "/be/autocomplete/ql?q=" + queryString;
       this.axios({
         method: "get",
@@ -730,16 +723,14 @@ export default {
     handleSelect(item) {
       this.iptVal = item.tag;
       this.infoTipMark = true;
-      /*
-      console.log("选中时的值为"+this.infoTipMark);*/
-      /*      console.log("选中");*/
+      // console.log("选中时的值为" + this.infoTipMark);
+      // console.log("选中");
     },
     handleSelect2(item) {
       this.iptVal = this.ConvertLangRes(item.langs, false);
       this.infoTipMark = true;
-      /*
-      console.log("选中时的值为"+this.infoTipMark);*/
-      /*      console.log("选中");*/
+      // console.log("选中时的值为" + this.infoTipMark);
+      // console.log("选中");
     }
     // 消息提示
   },
@@ -751,11 +742,11 @@ export default {
       if (JSON.stringify(oldVal) != "[]" || this.animeMark != 0) {
         this.recTagsWatch = false;
         this.getRecTags(newVal);
-        /*   let _that =this;
-                     setTimeout(function () {
-                       _that.recTagsWatch=!_that.recTagsWatch;
-                       _that.getRecTags(newVal);
-                     },300);*/
+        // let _that = this;
+        // setTimeout(function() {
+        //   _that.recTagsWatch = !_that.recTagsWatch;
+        //   _that.getRecTags(newVal);
+        // }, 300);
       }
     },
     msg() {
@@ -765,7 +756,7 @@ export default {
     },
     really(v) {
       if (v === true) {
-        /*     this.$emit("getEditTagsData", this.tags);*/
+        // this.$emit("getEditTagsData", this.tags);
       }
     }
   },

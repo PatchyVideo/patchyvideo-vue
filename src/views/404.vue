@@ -42,7 +42,7 @@ export default {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       fits: ["fill", "contain", "cover", "none", "scale-down"],
-      url: "http://localhost:888/images/covers/"
+      url: "/images/covers/"
     };
   },
   created() {},

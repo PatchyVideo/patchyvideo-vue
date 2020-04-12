@@ -153,7 +153,7 @@
         <a @click="playErxiaojie()">最终鬼畜二小姐</a>
         <p />
         <h1>{{$t('content.image_test')}}</h1>
-        <!-- TODO: 也可采用数据库检索hash值 -->
+        <!-- TODO: 也可采用数据库检索 hash 值 -->
         <img src="https://ipfs.globalupload.io/QmQH2mFR9mwv5PM1toYech1uXSr5k8Tdu2qQ6XEaVy9QtL" />
         <p />
         <img src="https://ipfs.globalupload.io/QmRnp2Fz84MDRNLriRAD5cKMGwaGRcX21i5iRXTUdPTsiS" />
@@ -173,7 +173,7 @@ import Footer from "../components/Footer.vue";
 export default {
   data() {
     return {
-      buttonInnerHTML: this.$t('content.video_test.video_switch_test_tip'),
+      buttonInnerHTML: this.$t("content.video_test.video_switch_test_tip"),
       badapple:
         "https://ipfs.globalupload.io/QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh",
       lanlanlu:
@@ -191,7 +191,7 @@ export default {
   },
   created() {
     // player.autoplay = "true"
-    // 初始化页面名为fantasy
+    // 初始化页面名为 fantasy
     this.$store.commit("changeBgc", "fantasy");
     // 修改网站标题
     document.title = "幻想之物 - Patchyvideo";
@@ -200,7 +200,7 @@ export default {
     changeSrc() {
       this.count++;
       if (this.count == 1) {
-        this.buttonInnerHTML = this.$t('content.video_test.click_tip');
+        this.buttonInnerHTML = this.$t("content.video_test.click_tip");
       } else if (this.count == 10) {
         alert("have fun!");
       } else {
@@ -226,7 +226,7 @@ export default {
   text-align: left;
 }
 .main-page-background-img {
-/*  background-image: url("./../static/img/imoto3.jpg");*/
+  /* background-image: url("./../static/img/imoto3.jpg");*/
   background-repeat: no-repeat;
   min-height: 800px;
   width: 85%;

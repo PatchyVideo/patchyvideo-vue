@@ -148,7 +148,7 @@
               @subUploadSucceed="getShopImages"
             />
           </div>
-          <!--         <form
+          <!--<form
             action="/be/helper/upload_image.do"
             method="post"
             accept-charset="utf-8"
@@ -197,8 +197,8 @@
         <div class="psd">
           <div class="desc_name">{{$t('change_pass')}}</div>
           <div class="psd-form">
-            <!--  <input type="password" placeholder="Old Password">
-                        <input type="password" placeholder="New Password">
+            <!--<input type="password" placeholder="Old Password">
+            <input type="password" placeholder="New Password">
             <input type="password" placeholder="Repeat New Password">-->
             <el-form
               :model="ruleForm"
@@ -224,12 +224,16 @@
             </el-form>
           </div>
 
-          <!--          <button>保存</button>-->
+          <!-- <button>保存</button> -->
         </div>
         <div class="email">
           <div class="email-info">{{$t('bind_mail')}}</div>
 
-          <el-input :placeholder="$t('enter_email')" prefix-icon="el-icon-message" v-model="myEmail"></el-input>
+          <el-input
+            :placeholder="$t('enter_email')"
+            prefix-icon="el-icon-message"
+            v-model="myEmail"
+          ></el-input>
           <button @click="bindEmail()">{{$t('bind')}}</button>
           <p style="margin-top: 20px" v-if="myData.email!==''">已绑定邮箱:{{myData.email}}</p>
         </div>
@@ -257,28 +261,28 @@
 import AppCropper from "@/components/Cropper";
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     var validateOldPass = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error(this.$t('enter_old_pass')));
+        return callback(new Error(this.$t("enter_old_pass")));
       }
       if (JSON.stringify(value).length < 8) {
-        return callback(new Error(this.$t('pass_short')));
+        return callback(new Error(this.$t("pass_short")));
       }
       if (JSON.stringify(value).length > 64) {
-        return callback(new Error(this.$t('pass_long')));
+        return callback(new Error(this.$t("pass_long")));
       }
       callback();
     };
     var validatePass = (rule, value, callback) => {
       if (value === "") {
-        callback(new Error(this.$t('enter_new_pass')));
+        callback(new Error(this.$t("enter_new_pass")));
       } else {
         if (JSON.stringify(value).length < 10) {
-          return callback(new Error(this.$t('pass_short')));
+          return callback(new Error(this.$t("pass_short")));
         }
         if (JSON.stringify(value).length > 66) {
-          return callback(new Error(this.$t('pass_long')));
+          return callback(new Error(this.$t("pass_long")));
         } else if (this.ruleForm.checkPass !== "") {
           this.$refs.ruleForm.validateField("checkPass");
         }
@@ -287,9 +291,9 @@ export default {
     };
     var validatePass2 = (rule, value, callback) => {
       if (value === "") {
-        callback(new Error(this.$t('enter_new_pass_again')));
+        callback(new Error(this.$t("enter_new_pass_again")));
       } else if (value !== this.ruleForm.pass) {
-        callback(new Error(this.$t('pass_mismatch')));
+        callback(new Error(this.$t("pass_mismatch")));
       } else {
         callback();
       }
@@ -311,7 +315,7 @@ export default {
         image: "null",
         username: "null",
         desc: "null",
-        email:"null"
+        email: "null"
       },
       userData: {
         desc: "null",
@@ -345,41 +349,41 @@ export default {
     faceMouseOver(b) {
       this.mounseMark = b;
     },
-    /*    sub() {
-      this.loading = true;
-      var formObj = new FormData(document.getElementById("form1"));
-      this.axios({
-        method: "post",
-        url: "be/helper/upload_image.do",
-        data: formObj,
-        processData: false,
-        contentType: false
-      })
-        .then(res => {
-          if (res.data.status == "SUCCEED") {
-            this.file_key = res.data.data.file_key;
-            this.axios({
-              method: "post",
-              url: "be/user/changephoto.do",
-              data: { file_key: this.file_key }
-            }).then(res => {
-              this.getMyData();
-              this.loading = false;
-              this.$message({
-                message: "上传成功！",
-                type: "success"
-              });
-            });
-          } else {
-            this.$message.error("请选择要上传的头像!");
-            this.loading = false;
-          }
-        })
-        .catch(err => {
-          this.$message.error("上传头像图片大小不能超过 2MB!");
-          this.loading = false;
-        });
-    },*/
+    // sub() {
+    //   this.loading = true;
+    //   var formObj = new FormData(document.getElementById("form1"));
+    //   this.axios({
+    //     method: "post",
+    //     url: "be/helper/upload_image.do",
+    //     data: formObj,
+    //     processData: false,
+    //     contentType: false
+    //   })
+    //     .then(res => {
+    //       if (res.data.status == "SUCCEED") {
+    //         this.file_key = res.data.data.file_key;
+    //         this.axios({
+    //           method: "post",
+    //           url: "be/user/changephoto.do",
+    //           data: { file_key: this.file_key }
+    //         }).then(res => {
+    //           this.getMyData();
+    //           this.loading = false;
+    //           this.$message({
+    //             message: "上传成功！",
+    //             type: "success"
+    //           });
+    //         });
+    //       } else {
+    //         this.$message.error("请选择要上传的头像!");
+    //         this.loading = false;
+    //       }
+    //     })
+    //     .catch(err => {
+    //       this.$message.error("上传头像图片大小不能超过 2MB!");
+    //       this.loading = false;
+    //     });
+    // },
     bindEmail() {
       this.axios({
         method: "post",
@@ -388,12 +392,12 @@ export default {
       }).then(res => {
         if (res.data.status === "FAILED") {
           this.$message({
-            message: this.$t('invalid_email'),
+            message: this.$t("invalid_email"),
             type: "warning"
           });
         } else {
           this.$message({
-            message: this.$t('bind_succeed'),
+            message: this.$t("bind_succeed"),
             type: "success"
           });
         }
@@ -402,14 +406,14 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          /* this.$message({
-                            message: '提交成功！',
-                            type: 'success'
-                        });*/
+          // this.$message({
+          //   message: "提交成功！",
+          //   type: "success"
+          // });
           this.changePass();
         } else {
           this.$message({
-            message: this.$t('check_form'),
+            message: this.$t("check_form"),
             type: "warning"
           });
           return false;
@@ -424,14 +428,14 @@ export default {
     },
     open2() {
       this.$message({
-        message: this.$t('update_succeed'),
+        message: this.$t("update_succeed"),
         type: "success"
       });
     },
 
     open3() {
       this.$message({
-        message: this.$t('check_form'),
+        message: this.$t("check_form"),
         type: "warning"
       });
     },
@@ -441,8 +445,8 @@ export default {
     },
     getMyData() {
       this.loading = true;
-      //现有的登录机制存在问题，
-      //可能本地判断已登录实际并没有登录而进入了user界面，这时没有数据渲染，需要让他跳回登录界面
+      // 现有的登录机制存在问题，
+      // 可能本地判断已登录实际并没有登录而进入了 user 界面，这时没有数据渲染，需要让他跳回登录界面
       this.axios({
         method: "post",
         url: "/be/user/myprofile.do",
@@ -451,8 +455,8 @@ export default {
       })
         .then(res => {
           if (res.data.status == "ERROR") {
-            //火狐浏览器有BUG 暂时先这样跳，等cookie登陆做完后再在user页面判断。
-            /* this.$router.push("/login");*/
+            // 火狐浏览器有 BUG 暂时先这样跳，等 cookie 登陆做完后再在 user 页面判断。
+            // this.$router.push("/login");
           }
           if (res.data.status == "SUCCEED") {
             this.myData = res.data.data.profile;
@@ -474,7 +478,7 @@ export default {
     changeDesc() {
       if (this.myData.desc.length > 2000) {
         this.$message({
-          message: this.$t('desc_long'),
+          message: this.$t("desc_long"),
           type: "warning"
         });
         return;
@@ -501,16 +505,16 @@ export default {
         if (res.data.status === "FAILED") {
           if (res.data.data.reason === "USER_ALREADY_EXIST") {
             this.$message({
-              message: this.$t('user_exist'),
+              message: this.$t("user_exist"),
               type: "warning"
             });
           } else if (res.data.data.reason === "NAME_LENGTH") {
             this.$message({
-              message: this.$t('user_length'),
+              message: this.$t("user_length"),
               type: "warning"
             });
           } else {
-            this.$message.error(this.$t('update_failed'));
+            this.$message.error(this.$t("update_failed"));
           }
         }
         if (res.data.status === "SUCCEED") {
@@ -525,7 +529,7 @@ export default {
     islSetUserName(b) {
       this.isNameEdit = b;
       this.$forceUpdate();
-      /*   this.isNameEdit ===b;*/
+      // this.isNameEdit === b;
     },
     changePass() {
       this.axios({
@@ -537,7 +541,7 @@ export default {
         }
       }).then(res => {
         if (res.data.status == "FAILED") {
-          this.$message.error(this.$t('wrong_pass'));
+          this.$message.error(this.$t("wrong_pass"));
         } else {
           this.open2();
         }
@@ -550,8 +554,8 @@ export default {
         this.getMyData();
       }
     },
-    $route(n){
-      if(n.fullPath==="/users/me"){
+    $route(n) {
+      if (n.fullPath === "/users/me") {
         this.getMyData();
       }
     }
@@ -561,9 +565,9 @@ export default {
 </script>
 
 <style scoped lang="less">
-  .el-form-item{
-    margin-bottom: 20px !important;
-  }
+.el-form-item {
+  margin-bottom: 20px !important;
+}
 .wave {
   position: absolute;
   transform: translate(-18%, -18%);
@@ -622,7 +626,7 @@ export default {
 }
 
 .wave.solid .circle:first-child {
-  /*   animation: circle-opacity 2s;*/
+  /* animation: circle-opacity 2s; */
 }
 
 .wave.solid.danger {
@@ -676,9 +680,9 @@ export default {
     width: 256px;
     height: 256px;
     transform: scale(1.1);
-    /*     position: absolute;*/
-    /*       top: 50%;*/
-    /*    left: 50%;*/
+    /* position: absolute; */
+    /* top: 50%; */
+    /* left: 50%; */
     transition: all 0.3s ease;
     &:hover {
       transform: scale(1);
@@ -686,7 +690,7 @@ export default {
   }
 }
 .bg {
-  /*  background: url("../static/img/imoto_left.jpg") no-repeat;*/
+  /* background: url("../static/img/imoto_left.jpg") no-repeat; */
   background-size: 100% 100%;
 }
 
@@ -718,7 +722,7 @@ export default {
     transition: all 0.3s ease;
     box-shadow: 0px 0px 1px 1px #fbfcfd;
 
-    /*transform: translate(-50%,-50%);*/
+    /* transform: translate(-50%,-50%); */
     &:hover {
       transform: scale(1.1);
     }
@@ -727,9 +731,9 @@ export default {
       width: 256px;
       height: 256px;
       transform: scale(1.1);
-      /*     position: absolute;*/
-      /*       top: 50%;*/
-      /*    left: 50%;*/
+      /* position: absolute; */
+      /* top: 50%; */
+      /* left: 50%; */
       transition: all 0.3s ease;
       &:hover {
         transform: scale(1);
@@ -760,9 +764,9 @@ export default {
   width: 50%;
   max-width: 800px;
   height: 900px;
-  /*      background: url("../static/img/imoto_left.jpg") no-repeat;
-        background-size: 100% 100%;*/
-  /*     background-color: #D5D5D5; */
+  // background: url("../static/img/imoto_left.jpg") no-repeat;
+  // background-size: 100% 100%;
+  // background-color: #d5d5d5;
 }
 
 .bigbox_right {

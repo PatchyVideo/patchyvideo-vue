@@ -78,25 +78,36 @@
   <div>
     <topnavbar />
 
-    <!-- list页面的正文 -->
+    <!-- list 页面的正文 -->
     <div class="w main-page-background-img" v-loading="loading">
       <div class="content">
         <!-- 视频列表介绍 -->
         <div class="deemo shadow">
-          <div class="d_t">
-            <!-- <img src="../static/img/4.png" style="float:left" />
-            <img src="../static/img/3.png" style="float:right" />-->
+          <!-- <div class="d_t">
+            <img src="../static/img/4.png" style="float:left" />
+            <img src="../static/img/3.png" style="float:right" />
             <el-button
               type="primary"
               plain
               class="createPlayListButton"
               @click="createVideoList"
             >{{$t('create_playList')}}</el-button>
-          </div>
+          </div>-->
         </div>
 
         <div class="recommend">
+          <!-- 新建播放列表 -->
           <div id="select-order" class="head">
+            <div class="d_t">
+              <!--<img src="../static/img/4.png" style="float:left" />
+              <img src="../static/img/3.png" style="float:right" />-->
+              <el-button
+                type="primary"
+                plain
+                class="createPlayListButton"
+                @click="createVideoList"
+              >{{$t('create_playList')}}</el-button>
+            </div>
             <!-- 搜索框 -->
             <el-input
               :placeholder="$t('search.input_tip')"
@@ -136,9 +147,7 @@
                     tag="a"
                   >{{ item.title.english }}</router-link>
                 </h2>
-                <h5
-                  style="float: right;"
-                >{{$t('statistics', {count: item.videos})}}</h5>
+                <h5 style="float: right;">{{$t('statistics', {count: item.videos})}}</h5>
               </div>
               <!-- 视频列表详情 -->
               <div class="re_video">
@@ -161,7 +170,7 @@
           </div>
         </div>
 
-        <!-- ElementUI自带的分页器 -->
+        <!-- ElementUI 自带的分页器 -->
         <el-pagination
           background
           class="page-selector"
@@ -212,7 +221,7 @@ export default {
     };
   },
   created() {
-    // 初始化页面名为list
+    // 初始化页面名为 list
     this.$store.commit("changeBgc", "list");
     // 初始化排列顺序为最新上传排序
     this.couponSelected = this.options[0].value;
@@ -221,7 +230,7 @@ export default {
     document.title = this.$t("title") + " - Patchyvideo";
   },
   methods: {
-    // 格式化URL
+    // 格式化 URL
     checkURL() {
       // 获取视频列表页数
       if (!this.$route.query.page) {
@@ -386,110 +395,102 @@ export default {
 </script>
 
 <style scoped lang="less">
-/*  @keyframes anim-shadow {
-    0%  {
-      transform: rotate3d(0, 1, 0.01, 0);
-      background-color: #fff;
-    }
-    3%{
-      filter: blur(1px);
+// @keyframes anim-shadow {
+//   0% {
+//     transform: rotate3d(0, 1, 0.01, 0);
+//     background-color: #fff;
+//   }
+//   3% {
+//     filter: blur(1px);
+//     background: linear-gradient(to right bottom, transparent, #fff, #eff8fe);
+//   }
+//   5% {
+//     filter: blur(0px);
+//     background: linear-gradient(to right bottom, transparent, #fff, #def1fe);
+//   }
+//   8% {
+//     filter: saturate(10%);
+//     background: linear-gradient(to right bottom, transparent, #fff, #ceeafd);
+//   }
+//   10% {
+//     filter: saturate(0%);
+//     background: linear-gradient(to right bottom, transparent, #fff, #bde3fd);
+//   }
+//   15% {
+//     filter: hue-rotate(1deg);
+//     background: linear-gradient(to right bottom, transparent, #fff, #addcfc);
+//   }
+//   17% {
+//     filter: hue-rotate(30deg);
+//   }
+//   20% {
+//     filter: hue-rotate(60deg);
+//     filter: brightness(0.4);
+//     background: linear-gradient(to right bottom, transparent, #fff, #9dd5fc);
+//   }
+//   23% {
+//     filter: hue-rotate(90deg);
+//   }
+//   25% {
+//     filter: hue-rotate(120deg);
+//     filter: saturate(30%);
+//     transform: rotate3d(0, 1, 0.01, 10deg);
+//   }
+//   28% {
+//     filter: hue-rotate(150deg);
+//   }
+//   31% {
+//     filter: hue-rotate(180deg);
+//   }
+//   50% {
+//     transform: rotate3d(0, 1, 0.01, 10deg);
+//   }
 
-      background:linear-gradient(to right bottom,transparent,#fff,#EFF8FE);
-
-    }
-    5%{
-      filter: blur(0px);
-
- !*     background:linear-gradient(to right bottom,transparent,#fff,#DEF1FE);*!
-    }
-    8%{
-      filter: saturate(10%);
-  !*    background:linear-gradient(to right bottom,transparent,#fff,#CEEAFD)*!
-    }
-    10%{
-      filter: saturate(0%);
-    !*  background:linear-gradient(to right bottom,transparent,#fff,#BDE3FD);*!
-    }
-    15%{
-      filter: hue-rotate(1deg);
-      !*background:linear-gradient(to right bottom,transparent,#fff,#ADDCFC)*!
-
-    }
-    17%{
-      filter: hue-rotate(30deg);
-    }
-    20%{
-      filter: hue-rotate(60deg);
-   !*   filter: brightness(0.4);*!
-!*      background:linear-gradient(to right bottom,transparent,#fff,#9DD5FC);*!
-    }
-    23%{
-      filter: hue-rotate(90deg);
-    }
-    25%{
-      filter: hue-rotate(120deg);
-      !*filter: saturate(30%);*!
-      transform: rotate3d(0, 1, 0.01, 10deg);
-
-    }
-    28%{
-      filter: hue-rotate(150deg);
-    }
-    31%{
-      filter: hue-rotate(180deg);
-    }
-    50%{
-
-
-      transform: rotate3d(0, 1, 0.01, 10deg);
-    }
-
-    75%{
-
-      transform: rotate3d(0, 1, 0.01, -10deg);
-    }
-    80%{
-      filter: hue-rotate(180deg);
-!*      background:linear-gradient(to right bottom,transparent,#fff,#9DD5FC);*!
-    }
-    85%{
-
-
-    !*  background:linear-gradient(to right bottom,transparent,#fff,#ADDCFC)*!
-
-    }
-    90%{
-
-!*      background:linear-gradient(to right bottom,transparent,#fff,#BDE3FD);*!
-    }
-    92%{
-!*      background:linear-gradient(to right bottom,transparent,#fff,#CEEAFD)*!
-    }
-    95%{
-
-!*      background:linear-gradient(to right bottom,transparent,#fff,#DEF1FE);*!
-    }
-    97%{ filter: saturate(0);
-      background:linear-gradient(to right bottom,transparent,#fff,#EFF8FE);
-
-    }
-    100% {
-      transform: rotate3d(0, 1, 0.1, 0deg);
-      background-color: #fff;
-     !* background: repeating-linear-gradient(to bottom, #fff 0%, #fff 10%, #000 10%);*!
-    }
-  }*/
+//   75% {
+//     transform: rotate3d(0, 1, 0.01, -10deg);
+//   }
+//   80% {
+//     filter: hue-rotate(180deg);
+//     background: linear-gradient(to right bottom, transparent, #fff, #9dd5fc);
+//   }
+//   85% {
+//     background: linear-gradient(to right bottom, transparent, #fff, #addcfc);
+//   }
+//   90% {
+//     background: linear-gradient(to right bottom, transparent, #fff, #bde3fd);
+//   }
+//   92% {
+//     background: linear-gradient(to right bottom, transparent, #fff, #ceeafd);
+//   }
+//   95% {
+//     background: linear-gradient(to right bottom, transparent, #fff, #def1fe);
+//   }
+//   97% {
+//     filter: saturate(0);
+//     background: linear-gradient(to right bottom, transparent, #fff, #eff8fe);
+//   }
+//   100% {
+//     transform: rotate3d(0, 1, 0.1, 0deg);
+//     background-color: #fff;
+//     background: repeating-linear-gradient(
+//       to bottom,
+//       #fff 0%,
+//       #fff 10%,
+//       #000 10%
+//     );
+//   }
+// }
 .shadow {
   box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
   border-radius: 20px;
 }
 
 .shadow:hover {
-  /*  animation-name:anim-shadow;
-    animation-iteration-count:infinite;
-    animation-direction:alternate;
-    animation-fill-mode:forwards;
-    animation-duration:5000ms;*/
+  // animation-name: anim-shadow;
+  // animation-iteration-count: infinite;
+  // animation-direction: alternate;
+  // animation-fill-mode: forwards;
+  // animation-duration: 5000ms;
 }
 .recommend {
   display: flex;
@@ -513,26 +514,27 @@ export default {
   float: right;
 }
 .main-page-background-img {
-  /*  background-image: url("./../static/img/imoto3.jpg");*/
+  /* background-image: url("./../static/img/imoto3.jpg"); */
   background-repeat: no-repeat;
   min-height: 800px;
   width: 85%;
   margin-top: 20px;
 }
 .d_t {
-
-  width: 100%;
+  display: inline-block;
+  width: 160px;
   margin-bottom: 0px;
-  padding: 20px;
+  padding: 0 20px;
 }
-/deep/.d_t button{
-  background: #409EFF;
-  border-color: #409EFF;
-  color: #FFF;
+/deep/.d_t button {
+  width: 100%;
+  background: #409eff;
+  border-color: #409eff;
+  color: #fff;
   transition: all 0.4s ease;
-  &:hover{
+  &:hover {
     opacity: 0.5;
-   }
+  }
 }
 .d_t:hover {
   background-color: rgba(255, 255, 255, 0.1);
@@ -628,7 +630,7 @@ export default {
 .re_video_desc p {
   font-size: 1.2rem;
   text-align: center;
-  /* 使文字变为最多显示4行，多余的使用省略号代替 */
+  /* 使文字变为最多显示 4 行，多余的使用省略号代替 */
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;

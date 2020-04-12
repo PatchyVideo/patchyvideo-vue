@@ -319,7 +319,7 @@ export default {
       // 搜索框的内容，不知道为什么在自动补全之后会被清空
       iptVal: "",
       // 搜索框的内容，在自动补全的时候作为备份使用，防止搜索框内容被清空
-      // ps：iptVal2在计算属性里，所以请勿随便更改变量名
+      // ps：iptVal2 在计算属性里，所以请勿随便更改变量名
       iptVal3: "",
       // 进行搜索的时候关键字的开头位置(起始位置)
       startlocation: 0,
@@ -396,8 +396,8 @@ export default {
     ) {
       this.isLogin = true;
       if (this.$route.path != "/messages") this.getUnreadCount();
-      // 每2min查询一次未读消息
-      // 注意,这里的this.getUnreadCount不能加括号!
+      // 每 2min 查询一次未读消息
+      // 注意，这里的 this.getUnreadCount 不能加括号!
       this.queryMessages = setInterval(this.getUnreadCount, 120000);
     }
     this.iptVal = this.iptVal2;
@@ -405,15 +405,15 @@ export default {
   mounted() {},
   updated() {},
   methods: {
-    /*  watchAutoComplete(){
-      let m  =  Array.from(document.getElementsByClassName("el-autocomplete-suggestion el-popper"));
-      let  m_Mark =[];
-      for(let i =0;i<m.length;++i){
-        m_Mark[i] = m[i].style.display;
-      }
-      this.infoTipMark =m_Mark;
-      console.log(m_Mark);
-    },*/
+    // watchAutoComplete(){
+    //   let m  =  Array.from(document.getElementsByClassName("el-autocomplete-suggestion el-popper"));
+    //   let  m_Mark =[];
+    //   for(let i =0;i<m.length;++i){
+    //     m_Mark[i] = m[i].style.display;
+    //   }
+    //   this.infoTipMark =m_Mark;
+    //   console.log(m_Mark);
+    // },
     // 测试用户的登录状态
     checkUser() {
       this.axios({
@@ -429,13 +429,13 @@ export default {
           }).then(result => {
             this.open(this.$t("user.login_expire_prompt"));
             this.isLogin = false;
-            // 清除所有session值(退出登录)
+            // 清除所有 session 值(退出登录)
             sessionStorage.clear();
             // 清除用户名
             this.$store.commit("clearUserName");
             // 清除本地数据
             localStorage.setItem("username", "");
-            // 清除cookie
+            // 清除 cookie
             this.clearCookie();
             // 改变用户登录状态
             this.$store.commit("changeifTruelyLogin", "2");
@@ -458,13 +458,13 @@ export default {
         data: {}
       }).then(result => {
         this.isLogin = false;
-        // 清除所有session值(退出登录)
+        // 清除所有 session 值(退出登录)
         sessionStorage.clear();
         // 清除用户名
         this.$store.commit("clearUserName");
         // 清除本地数据
         localStorage.setItem("username", "");
-        // 清除cookie
+        // 清除 cookie
         this.clearCookie();
         // 刷新界面
         location.reload();
@@ -478,26 +478,25 @@ export default {
     },
     // 点击搜索按钮使home页面显示搜索结果
     gotoHome() {
-      /*      console.log(this.infoTipMark);*/
-      /*   this.watchAutoComplete();*/
-      //如果回车搜索之前有选中建议框的数据，则取消这次搜索
+      // console.log(this.infoTipMark);
+      // this.watchAutoComplete();
+      // 如果回车搜索之前有选中建议框的数据，则取消这次搜索
       if (this.infoTipMark === true) {
         this.infoTipMark = false;
         return;
       }
 
-      /* {
-        let count = 0;
-        for(let i=0;i<this.infoTipMark.length;++i){
-          if( this.infoTipMark[i].toString()=="none"){
-            count++
-          }
-        }
-        if(count!=this.infoTipMark.length){
-          return;
-        }
-
-      }*/
+      // {
+      //   let count = 0;
+      //   for(let i=0;i<this.infoTipMark.length;++i){
+      //     if( this.infoTipMark[i].toString()=="none"){
+      //       count++
+      //     }
+      //   }
+      //   if(count!=this.infoTipMark.length){
+      //     return;
+      //   }
+      // }
       // console.log(this.iptVal);
       if (this.iptVal != "") {
         this.$router
@@ -509,7 +508,7 @@ export default {
             return err;
           });
       } else {
-        // 对于在home页面时无参数搜索的兼容
+        // 对于在 home 页面时无参数搜索的兼容
         if (JSON.stringify(this.$route.query) == "{}") return;
         this.$router.push({ path: "/home" });
       }
@@ -517,37 +516,37 @@ export default {
     // 清除搜索结果
     cleanIptV() {
       this.$store.commit("getTopNavbarSearching", "");
-      /*    this.reload();*/
+      // this.reload();
     },
-    //清除cookie
+    //清除 cookie
     clearCookie: function() {
       this.setCookie("", -1);
       this.setCookie("session", -1);
       this.setCookie("userAvatar", -1);
     },
-    // 设置cookie
-    // 储存变量为username
+    // 设置 cookie
+    // 储存变量为 username
     setCookie(username, days) {
-      var date = new Date(); //获取时间
-      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); //保存的天数
+      var date = new Date(); // 获取时间
+      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
       //字符串拼接cookie
       window.document.cookie =
         "username" + ":" + username + ";path=/;expires=" + date.toGMTString();
       window.document.cookie =
         "userAvatar" + "=" + username + ";path=/;expires=" + date.toGMTString();
     },
-    // 获取cookie
+    // 获取 cookie
     getCookie: function() {
       if (document.cookie.length > 0) {
         var arr = document.cookie.split("; ");
         for (var i = 0; i < arr.length; i++) {
           var arr3 = arr[i].split("=");
-          //判断查找相对应的值
+          // 判断查找相对应的值
           if (arr3[0] == "userAvatar") {
             this.$store.commit("getUserAvatar", arr3[1]);
           }
           var arr2 = arr[i].split(":");
-          //判断查找相对应的值
+          // 判断查找相对应的值
           if (arr2[0] == "username") {
             if (arr2[1] != "") {
               this.isLogin = true;
@@ -579,8 +578,8 @@ export default {
     // --------------------------------------------------危险提示--------------------------------------------------
     // 消息补全框的方法
     querySearchAsync(queryString, cb) {
-      // 这里的get(0)是将jq对象转换为原生js对象
-      // selectionStart是获取光标当前位置
+      // 这里的 get(0) 是将 jq 对象转换为原生 js 对象
+      // selectionStart 是获取光标当前位置
       var endlocation = $("#ipt").get(0).selectionStart;
       // 切割输入框内的字符串，切割下光标左面的字符串
       var query = queryString.slice(0, endlocation);
@@ -596,7 +595,7 @@ export default {
 
       // 备份参数防止出现玄学问题
       var query2 = query;
-      // 搜索是否包含sites变量的关键字
+      // 搜索是否包含 sites 变量的关键字
       var results = this.sites.filter(this.createFilter(query2));
 
       // 对输入框现在的数据进行备份
@@ -618,8 +617,8 @@ export default {
       });
     },
     querySearchAsync2(queryString, cb) {
-      // 这里的get(0)是将jq对象转换为原生js对象
-      // selectionStart是获取光标当前位置
+      // 这里的 get(0) 是将 jq 对象转换为原生 js 对象
+      // selectionStart 是获取光标当前位置
       var endlocation = $("#ipt").get(0).selectionStart;
       // 切割输入框内的字符串，切割下光标左面的字符串
       var query = queryString.slice(0, endlocation);
@@ -635,7 +634,7 @@ export default {
 
       // 备份参数防止出现玄学问题
       var query2 = query;
-      // 搜索是否包含sites变量的关键字
+      // 搜索是否包含 sites 变量的关键字
       var results = this.sites.filter(this.createFilter(query2));
 
       // 对输入框现在的数据进行备份
@@ -673,7 +672,7 @@ export default {
           text.charAt(i) == "\v" ||
           text.charAt(i) == "\f" ||
           text.charAt(i) == "\r" ||
-          // 把括号转化成ascII码判断,否则谜之报错
+          // 把括号转化成 ascii 码判断,否则谜之报错
           text.charAt(i).charCodeAt() == 41
         ) {
           return i + 1;
@@ -708,13 +707,13 @@ export default {
       var subLang = "";
       //经过一系列计算得出主副语言
 
-      //匹配当前语言的ID
+      //匹配当前语言的 ID
       var CurrLangID = LangList.find(x => {
         return x.lang == this.$i18n.locale;
       });
       CurrLangID = CurrLangID ? CurrLangID.id : 1;
 
-      //匹配对应ID的内容
+      //匹配对应 ID 的内容
       var CurrLangWord = langs.find(x => {
         return x.l == CurrLangID;
       });
@@ -729,10 +728,8 @@ export default {
       mainLang = CurrLangWord.w;
 
       if (hastran) {
-        /*
-      副语言匹配
-      优先级：日语，英语，简体中文，繁体中文
-      */
+        // 副语言匹配
+        // 优先级：日语，英语，简体中文，繁体中文
         var SubLangWord = null;
         for (var i = 0; i < level.length; i++) {
           if (level[i] == CurrLangWord.l) continue;
@@ -743,7 +740,7 @@ export default {
         }
         subLang = SubLangWord ? SubLangWord.w : mainLang;
 
-        //合成语言
+        // 合成语言
         Lang = `${mainLang.replace(/\_/g, " ")}`;
         Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(
           /\_/g,
@@ -771,31 +768,31 @@ export default {
       });
     },
     handleSelect2(item) {
-      /*var LangList = [
-        { id: 1, lang: "CHS" },
-        { id: 2, lang: "CHT" },
-        { id: 5, lang: "ENG" },
-        { id: 10, lang: "JPN" }
-      ];
-      var langs = item.langs;
-      //匹配当前语言的ID
-      var CurrLangID = LangList.find(x => {
-        return x.lang == this.$i18n.locale;
-      });
-      CurrLangID = CurrLangID ? CurrLangID.id : 1;
+      // var LangList = [
+      //   { id: 1, lang: "CHS" },
+      //   { id: 2, lang: "CHT" },
+      //   { id: 5, lang: "ENG" },
+      //   { id: 10, lang: "JPN" }
+      // ];
+      // var langs = item.langs;
+      // // 匹配当前语言的 ID
+      // var CurrLangID = LangList.find(x => {
+      //   return x.lang == this.$i18n.locale;
+      // });
+      // CurrLangID = CurrLangID ? CurrLangID.id : 1;
 
-      //匹配对应ID的内容
-      var CurrLangWord = langs.find(x => {
-        return x.l == CurrLangID;
-      });
-      if (!CurrLangWord) {
-        for (var i = 0; i < level.length; i++) {
-          CurrLangWord = langs.find(x => {
-            return x.l == level[i];
-          });
-          if (CurrLangWord) break;
-        }
-      }*/
+      // // 匹配对应 ID 的内容
+      // var CurrLangWord = langs.find(x => {
+      //   return x.l == CurrLangID;
+      // });
+      // if (!CurrLangWord) {
+      //   for (var i = 0; i < level.length; i++) {
+      //     CurrLangWord = langs.find(x => {
+      //       return x.l == level[i];
+      //     });
+      //     if (CurrLangWord) break;
+      //   }
+      // }
       // 切割字符串，并在中间加入搜索到的标签拼接成新的输入框的内容
       var iptVal1 = this.iptVal3.slice(0, this.startlocation);
       var iptVal2 = this.iptVal3.slice(this.endlocation);
@@ -821,7 +818,7 @@ export default {
       this.iptVal = this.iptVal2;
     },
     locale(val) {
-      //this.$root.$i18n.locale = val;
+      // this.$root.$i18n.locale = val;
       localStorage.setItem("lang", val);
       location.reload();
     }
@@ -867,7 +864,7 @@ export default {
         top: 50%;
         margin-right: 2%;
         transform: translateY(-50%);
-        /*        right: 74px;*/
+        /* right: 74px; */
         transition: all 0.6s ease;
         &:hover {
           outline: none;
@@ -884,7 +881,7 @@ export default {
         outline: none;
         border: none;
         position: relative;
-        /*        right: 74px;*/
+        /* right: 74px; */
         top: 50%;
         transform: translateY(-50%);
         transition: all 0.6s ease;
@@ -990,7 +987,7 @@ export default {
 }
 
 .adviceList {
-  /* 针对webkit内核（如Safari）进行的调整 */
+  /* 针对 webkit 内核（如 Safari）进行的调整 */
   display: -webkit-flex;
   display: flex;
 }
@@ -1013,7 +1010,7 @@ export default {
   color: #b4b4b4;
   text-align: right;
 }
-/* 针对tag类别调整颜色 */
+/* 针对 tag 类别调整颜色 */
 .Copyright {
   color: #a0a;
 }
@@ -1040,7 +1037,7 @@ export default {
     font-size: 15px;
   }
 }
-/* 使用css3 媒体查询功能进行的排版调整 */
+/* 使用 css3 媒体查询功能进行的排版调整 */
 @media only screen and (max-width: 1156px) {
   .nav_left li {
     margin-left: 20px;

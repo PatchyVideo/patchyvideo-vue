@@ -55,6 +55,13 @@ outputDir: 'dist',
     },
     devServer: {
         proxy: {
+            '/v/': {
+                target: "https://thvideo.tv/v/",
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/v/': ''
+                }
+            },
             '/be/': {
                 target: "https://thvideo.tv/be/",
                 changeOrigin: true,

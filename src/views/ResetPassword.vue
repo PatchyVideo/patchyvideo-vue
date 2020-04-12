@@ -97,10 +97,10 @@
 <script>
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     var validatePass2 = (rule, value, callback) => {
       if (value !== this.FormRef.password1) {
-        callback(new Error(this.$t('err_tip')));
+        callback(new Error(this.$t("err_tip")));
       } else {
         callback();
       }
@@ -114,13 +114,17 @@ export default {
       // 校验密码
       rules: {
         password1: [
-          { required: true, message: this.$t('input_psd'), trigger: "blur" },
-          { min: 6, max: 64, message: this.$t('psd_limit'), trigger: "blur" }
+          { required: true, message: this.$t("input_psd"), trigger: "blur" },
+          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" }
         ],
         password2: [
-          { required: true, message: this.$t('repeat_input_tip'), trigger: "blur" },
+          {
+            required: true,
+            message: this.$t("repeat_input_tip"),
+            trigger: "blur"
+          },
           { validator: validatePass2, trigger: "blur" },
-          { min: 6, max: 64, message: this.$t('psd_limit'), trigger: "blur" }
+          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" }
         ]
       },
       // 视频列表是否属于加载状态的判断
@@ -137,10 +141,10 @@ export default {
     }
   },
   created() {
-    // 初始化页面名为login
+    // 初始化页面名为 login
     this.$store.commit("changeBgc", "resetPassword");
     // 修改网站标题
-    document.title = this.$t('reset_psd') + " - Patchyvideo";
+    document.title = this.$t("reset_psd") + " - Patchyvideo";
   },
   mounted() {
     console.log(
@@ -179,13 +183,13 @@ export default {
     },
     open() {
       this.$message({
-        message: this.$t('fail_msg'),
+        message: this.$t("fail_msg"),
         type: "error"
       });
     },
     open2() {
       this.$message({
-        message: this.$t('success_msg'),
+        message: this.$t("success_msg"),
         type: "success"
       });
     }
@@ -198,7 +202,7 @@ export default {
 .loginPic {
   height: 100%;
   width: 100%;
-/*  background: url("../static/img/resetPassword.jpg") no-repeat top center;*/
+  /* background: url("../static/img/resetPassword.jpg") no-repeat top center; */
   background-position: 0 -38px;
   background-size: cover;
   background-attachment: fixed;

@@ -133,7 +133,7 @@
   <div class="listDetail">
     <topnavbar />
 
-    <!-- EditTags组件-->
+    <!-- EditTags 组件-->
     <EditTags
       ref="editTag"
       :msg="temporaryValForVLP"
@@ -192,10 +192,7 @@
         <el-button @click="dialogVisible = false">{{$t('delete_dialog.btn_cancel')}}</el-button>
         <el-button
           type="primary"
-          @click="
-            dialogVisible = false;
-            deleteVideoList();
-          "
+          @click="dialogVisible = false; deleteVideoList();"
         >{{$t('delete_dialog.btn_ok')}}</el-button>
       </span>
     </el-dialog>
@@ -206,18 +203,18 @@
         <!-- 视频列表介绍 -->
         <div class="deemo shadow">
           <div class="d_t">
-            <!--           <img src="../static/img/5.png" style="float:left;margin-top:50px;" />
+            <!--<img src="../static/img/5.png" style="float:left;margin-top:50px;" />
             <img src="../static/img/1.png" style="float:right;margin-top:50px;" />-->
             <h2>{{ videolistName }}</h2>
             <img :src="'/images/covers/' + videolistDetail.playlist.cover" style="min-height:200px" />
             <p>{{ videolistDesc }}</p>
           </div>
-          <!-- 打开Tag编辑页面 -->
+          <!-- 打开 Tag 编辑页面 -->
           <div v-if="editable" class="edit_box">
             <el-button type="success" @click="addVideo">{{$t('btn_group.add_video')}}</el-button>
             <el-button type="success" @click="addFromList">{{$t('btn_group.import_from_other')}}</el-button>
 
-            <!--注意！此处的样式修改在App.vue的全局样式中-->
+            <!-- 注意！此处的样式修改在 App.vue 的全局样式中 -->
             <el-popover style="margin: 0px 10px;" width="100%" trigger="click">
               <ListFolderView
                 ref="listFolder"
@@ -262,11 +259,10 @@
               >{{$t('btn_group.add_favorite')}}</el-button>
             </el-popover>
           </div>
-            <!-- 评分区 -->
-            <div>
-                <Score type="playlist"></Score>
-            </div>
-
+          <!-- 评分区 -->
+          <div>
+            <Score type="playlist"></Score>
+          </div>
         </div>
 
         <!-- 视频列表 -->
@@ -338,7 +334,7 @@
           </div>
         </div>
 
-        <!-- ElementUI自带的分页器 -->
+        <!-- ElementUI 自带的分页器 -->
         <el-pagination
           background
           class="page-selector"
@@ -409,11 +405,11 @@ export default {
       count: 20,
       // 视频的全部数量
       maxcount: 0,
-      // 列表评论的sid
+      // 列表评论的 sid
       sid: "",
-      // 传入Tags组件视频页的ID
+      // 传入 Tags 组件视频页的 ID
       videolistPid: "",
-      //传入Tags组件视频页的ID临时变量
+      //传入 Tags 组件视频页的 ID 临时变量
       temporaryValForVLP: "",
       // 视频列表是否属于加载状态的判断
       loading: true,
@@ -464,7 +460,7 @@ export default {
       };
       return obj;
     },
-    //获取移动组件所需要的数据
+    // 获取移动组件所需要的数据
     PlaylistItemOp(e, i) {
       let obj = {
         //移动组件所需要的数据
@@ -497,7 +493,7 @@ export default {
         .then(result => {
           // 请求失败的情况
           if (result.data.status == "FAILED") {
-            // 列表不存在的情况,跳转到404页面
+            // 列表不存在的情况，跳转到 404 页面
             if (result.data.data.reason == "PLAYLIST_NOT_EXIST") {
               this.$router.push({ path: "*" });
             }
@@ -533,12 +529,12 @@ export default {
             this.playlist_metadata.private = result.data.data.playlist.private;
           });
 
-          // 加载结束,加载动画消失
+          // 加载结束，加载动画消失
           this.loading = false;
 
           // 回到顶部
           if ($("html").scrollTop()) {
-            //动画效果
+            // 动画效果
             $("html").animate({ scrollTop: 0 }, 100);
           }
         })
@@ -621,11 +617,11 @@ export default {
         this.$router.push({ path: "/lists" });
       });
     },
-    // 打开Tag编辑页面
+    // 打开 Tag 编辑页面
     openEditTags: function() {
       this.temporaryValForVLP = this.videolistPid;
       this.showTagPanel = true;
-      /*    this.$refs.editTag.getCommonTags();*/
+      // this.$refs.editTag.getCommonTags();
     },
     openListFolder() {
       this.showListFolder = true;
@@ -690,13 +686,13 @@ export default {
 }
 .re_video {
   display: flex;
-  /*  justify-content: center;*/
+  /* justify-content: center; */
   align-items: center;
   .edit {
     width: 150px;
     display: flex;
     #edit_first {
-      //h1
+      // h1
       font-size: 30px;
       min-width: 90px;
       color: rgb(98, 169, 231);
@@ -709,7 +705,7 @@ export default {
       flex-shrink: 0;
     }
     #edit_second {
-      //icon
+      // icon
       /deep/ .move-down-box {
         transform: translateX(-10px);
       }
@@ -732,11 +728,11 @@ export default {
         /deep/ .move-up {
           font-size: 40px;
           height: 40px;
-          /* margin-bottom: 50px;*/
+          /* margin-bottom: 50px; */
           color: #808080;
           transition: all 0.4s ease;
-          /*       position: absolute;
-            top: -20px;*/
+          // position: absolute;
+          // top: -20px;
           &:hover {
             color: white;
             text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff,
@@ -748,8 +744,8 @@ export default {
             color: #808080;
             transition: all 0.4s ease;
 
-            /*          position: absolute;
-                        bottom: 0px;*/
+            // position: absolute;
+            // bottom: 0px;
           }
         }
         /deep/ .move-down {
@@ -764,8 +760,8 @@ export default {
               0 0 40px #228dff;
           }
 
-          /*          position: absolute;
-                        bottom: 0px;*/
+          // position: absolute;
+          // bottom: 0px;
         }
       }
     }
@@ -839,7 +835,7 @@ export default {
 }
 
 .EditTagsButton {
-  /*    width: 70%;*/
+  /* width: 70%; */
   margin-bottom: 20px;
 }
 
@@ -889,7 +885,7 @@ export default {
   white-space: pre-wrap;
   margin-top: 10px;
   margin-bottom: 10px;
-  /* 使文字变为最多显示4行，多余的使用省略号代替 */
+  /* 使文字变为最多显示 4 行，多余的使用省略号代替 */
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;

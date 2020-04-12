@@ -147,7 +147,11 @@
             prefix-icon="el-icon-message"
           ></el-input>
         </el-form-item>
-        <p id="status" style="text-align: center;" v-bind:class="{alert:status!=$t('ready')}">{{ status }}</p>
+        <p
+          id="status"
+          style="text-align: center;"
+          v-bind:class="{alert:status!=$t('ready')}"
+        >{{ status }}</p>
       </el-form>
 
       <!-- 注册按钮 -->
@@ -162,7 +166,7 @@
 import login from "../views/Login.vue";
 export default {
   data() {
-    this.$i18n.locale = localStorage.getItem('lang');
+    this.$i18n.locale = localStorage.getItem("lang");
     // 校验用户名是否已经存在
     var checkUsername = (rule, value, callback) => {
       this.axios({
@@ -173,7 +177,7 @@ export default {
         }
       }).then(result => {
         if (result.data.data == true) {
-          callback(new Error(this.$t('account_limit')));
+          callback(new Error(this.$t("account_limit")));
         } else {
           callback();
         }
@@ -195,26 +199,35 @@ export default {
         signup_password2: "",
         signup_email: ""
       },
-      // 事先向服务器请求的session值
+      // 事先向服务器请求的 session 值
       session: "",
       rules: {
         signup_username: [
-          { required: true, message: this.$t('input_account'), trigger: "blur" },
+          {
+            required: true,
+            message: this.$t("input_account"),
+            trigger: "blur"
+          },
           { validator: checkUsername, trigger: "blur" },
-          { min: 2, max: 32, message: this.$t('account_limit'), trigger: "blur" }
+          {
+            min: 2,
+            max: 32,
+            message: this.$t("account_limit"),
+            trigger: "blur"
+          }
         ],
         signup_password1: [
-          { required: true, message: this.$t('input_psd'), trigger: "blur" },
-          { min: 6, max: 64, message: this.$t('psd_limit'), trigger: "blur" }
+          { required: true, message: this.$t("input_psd"), trigger: "blur" },
+          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" }
         ],
         signup_password2: [
           { required: true, message: "请重复密码", trigger: "blur" },
           { validator: validatePass2, trigger: "blur" },
-          { min: 6, max: 64, message: this.$t('psd_limit'), trigger: "blur" }
+          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" }
         ],
         signup_email: [
-          { required: false, message: this.$t('input_email'), trigger: "blur" },
-          { type: "email", message:  this.$t('email_limit'), trigger: ["blur"] }
+          { required: false, message: this.$t("input_email"), trigger: "blur" },
+          { type: "email", message: this.$t("email_limit"), trigger: ["blur"] }
         ]
       },
       // 登录状态
@@ -224,29 +237,29 @@ export default {
     };
   },
   created() {
-    // 初始化页面名为signup
+    // 初始化页面名为 signup
     this.$store.commit("changeBgc", "signup");
     // 修改网站标题
-    document.title = this.$t('signup') + " - Patchyvideo";
+    document.title = this.$t("signup") + " - Patchyvideo";
   },
   methods: {
     open2() {
       this.$message({
-        message: this.$t('signup_success'),
+        message: this.$t("signup_success"),
         type: "success"
       });
     },
 
     open3() {
       this.$message({
-        message: this.$t('username_exist'),
+        message: this.$t("username_exist"),
         type: "warning"
       });
     },
 
     open4() {
       this.$message({
-        message: this.$t('unknown_err'),
+        message: this.$t("unknown_err"),
         type: "warning"
       });
     },
@@ -259,7 +272,7 @@ export default {
       // 表单验证
       this.$refs.signupFormRef.validate(valid => {
         if (valid) {
-          // 验证成功，先获取session
+          // 验证成功，先获取 session
           this.axios({
             method: "post",
             url: "be/auth/get_session.do",
@@ -299,12 +312,12 @@ export default {
                   this.loading = false;
                 }
               } else {
-                this.status = this.$t('net_err');
+                this.status = this.$t("net_err");
               }
             });
           });
         } else {
-          this.status = this.$t('format_err');
+          this.status = this.$t("format_err");
           // 加载结束,加载动画消失
           this.loading = false;
           return false;
@@ -320,7 +333,7 @@ export default {
 .signupPic {
   height: 100%;
   width: 100%;
-/*  background: url("../static/img/sign_up.jpg") no-repeat top center;*/
+  /* background: url("../static/img/sign_up.jpg") no-repeat top center; */
   /* background-position: 200px 0; */
   background-size: cover;
   background-attachment: fixed;

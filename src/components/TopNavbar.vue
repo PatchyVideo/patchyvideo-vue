@@ -192,18 +192,16 @@
 
         <!-- 登录成功后的用户界面 -->
         <div class="userHome" v-else>
-          <div @click="gotoUserPage">
-            <el-avatar fit="cover" class="loginUser-userAvatar" :size="40" :src="userAvatar"></el-avatar>
-          </div>
-          <router-link
+          <el-tooltip effect="light" :content="this.$store.state.username" placement="bottom">
+            <div @click="gotoUserPage">
+              <el-avatar fit="cover" class="loginUser-userAvatar" :size="40" :src="userAvatar"></el-avatar>
+            </div>
+          </el-tooltip>
+          <!-- <router-link
             class="loginUser-login"
             style="max-width:100px;overflow: hidden;"
             to="/users/me"
-          >
-            {{
-            this.$store.state.username
-            }}
-          </router-link>
+          >{{this.$store.state.username}}</router-link>-->
           <el-badge :value="messagesNum" :hidden="!messagesNum" class="item">
             <router-link
               target="_blank"
@@ -348,13 +346,13 @@ export default {
         data: {}
       }).then(result => {
         this.isLogin = false;
-        // 清除所有session值(退出登录)
+        // 清除所有 session 值(退出登录)
         sessionStorage.clear();
         // 清除用户名
         this.$store.commit("clearUserName");
         // 清除本地数据
         localStorage.setItem("username", "");
-        // 清除cookie
+        // 清除 cookie
         this.clearCookie();
         // 刷新界面
         location.reload();
@@ -366,7 +364,7 @@ export default {
     gotoUserPage() {
       this.$router.push({ path: "/users/me" });
     },
-    // 点击搜索按钮使home页面显示搜索结果
+    // 点击搜索按钮使 home 页面显示搜索结果
     gotoHome() {
       //如果回车搜索之前有选中建议框的数据，则取消这次搜索
       if (this.infoTipMark === true) {
@@ -383,7 +381,7 @@ export default {
             return err;
           });
       } else {
-        // 对于在home页面时无参数搜索的兼容
+        // 对于在 home 页面时无参数搜索的兼容
         if (JSON.stringify(this.$route.query) == "{}") return;
         this.$router.push({ path: "/home" });
       }
@@ -391,37 +389,37 @@ export default {
     // 清除搜索结果
     cleanIptV() {
       this.$store.commit("getTopNavbarSearching", "");
-      /*    this.reload();*/
+      // this.reload();
     },
-    //清除cookie
+    //清除 cookie
     clearCookie: function() {
       this.setCookie("", -1);
       this.setCookie("session", -1);
       this.setCookie("userAvatar", -1);
     },
-    // 设置cookie
-    // 储存变量为username
+    // 设置 cookie
+    // 储存变量为 username
     setCookie(username, days) {
-      var date = new Date(); //获取时间
-      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); //保存的天数
-      //字符串拼接cookie
+      var date = new Date(); // 获取时间
+      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
+      // 字符串拼接 cookie
       window.document.cookie =
         "username" + ":" + username + ";path=/;expires=" + date.toGMTString();
       window.document.cookie =
         "userAvatar" + "=" + username + ";path=/;expires=" + date.toGMTString();
     },
-    // 获取cookie
+    // 获取 cookie
     getCookie: function() {
       if (document.cookie.length > 0) {
         var arr = document.cookie.split("; ");
         for (var i = 0; i < arr.length; i++) {
           var arr3 = arr[i].split("=");
-          //判断查找相对应的值
+          // 判断查找相对应的值
           if (arr3[0] == "userAvatar") {
             this.$store.commit("getUserAvatar", arr3[1]);
           }
           var arr2 = arr[i].split(":");
-          //判断查找相对应的值
+          // 判断查找相对应的值
           if (arr2[0] == "username") {
             if (arr2[1] != "") {
               this.isLogin = true;
@@ -450,8 +448,8 @@ export default {
     },
     // 消息补全框的方法
     querySearchAsync(queryString, cb) {
-      // 这里的get(0)是将jq对象转换为原生js对象
-      // selectionStart是获取光标当前位置
+      // 这里的 get(0) 是将 jq 对象转换为原生 js 对象
+      // selectionStart 是获取光标当前位置
       var endlocation = $("#ipt").get(0).selectionStart;
       // 切割输入框内的字符串，切割下光标左面的字符串
       var query = queryString.slice(0, endlocation);
@@ -467,7 +465,7 @@ export default {
 
       // 备份参数防止出现玄学问题
       var query2 = query;
-      // 搜索是否包含sites变量的关键字
+      // 搜索是否包含 sites 变量的关键字
       var results = this.sites.filter(this.createFilter(query2));
 
       // 对输入框现在的数据进行备份
@@ -489,8 +487,8 @@ export default {
       });
     },
     querySearchAsync2(queryString, cb) {
-      // 这里的get(0)是将jq对象转换为原生js对象
-      // selectionStart是获取光标当前位置
+      // 这里的 get(0) 是将 jq 对象转换为原生 js 对象
+      // selectionStart 是获取光标当前位置
       var endlocation = $("#ipt").get(0).selectionStart;
       // 切割输入框内的字符串，切割下光标左面的字符串
       var query = queryString.slice(0, endlocation);
@@ -506,7 +504,7 @@ export default {
 
       // 备份参数防止出现玄学问题
       var query2 = query;
-      // 搜索是否包含sites变量的关键字
+      // 搜索是否包含 sites 变量的关键字
       var results = this.sites.filter(this.createFilter(query2));
 
       // 对输入框现在的数据进行备份
@@ -577,15 +575,15 @@ export default {
       var Lang = "";
       var mainLang = "";
       var subLang = "";
-      //经过一系列计算得出主副语言
+      // 经过一系列计算得出主副语言
 
-      //匹配当前语言的ID
+      // 匹配当前语言的 ID
       var CurrLangID = LangList.find(x => {
         return x.lang == this.$i18n.locale;
       });
       CurrLangID = CurrLangID ? CurrLangID.id : 1;
 
-      //匹配对应ID的内容
+      // 匹配对应 ID 的内容
       var CurrLangWord = langs.find(x => {
         return x.l == CurrLangID;
       });
@@ -600,10 +598,8 @@ export default {
       mainLang = CurrLangWord.w;
 
       if (hastran) {
-        /*
-      副语言匹配
-      优先级：日语，英语，简体中文，繁体中文
-      */
+        // 副语言匹配
+        // 优先级：日语，英语，简体中文，繁体中文
         var SubLangWord = null;
         for (var i = 0; i < level.length; i++) {
           if (level[i] == CurrLangWord.l) continue;
@@ -614,7 +610,7 @@ export default {
         }
         subLang = SubLangWord ? SubLangWord.w : mainLang;
 
-        //合成语言
+        // 合成语言
         Lang = `${mainLang.replace(/\_/g, " ")}`;
         Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(
           /\_/g,
@@ -673,9 +669,9 @@ export default {
 
 <style scoped lang="less">
 .top-navbar {
-  height: 60px;
-  padding: 10px;
-  width: calc(100% - 20px);
+  height: 40px;
+  padding: 5px 5%;
+  width: 90%;
   display: flex;
   display: -webkit-flex;
   align-items: center;
@@ -694,7 +690,7 @@ export default {
   height: 30px;
 }
 .patchyvideo-title {
-  font-size: 25px;
+  font-size: 24px;
   font-weight: 800;
   letter-spacing: -0.5px;
 }
@@ -706,7 +702,7 @@ export default {
 }
 .navItem {
   margin: 10px;
-  font-size: 20px;
+  font-size: 18px;
 }
 .navItem a {
   color: rgb(46, 46, 46);
