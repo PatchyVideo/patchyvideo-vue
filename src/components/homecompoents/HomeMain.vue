@@ -92,9 +92,9 @@
           <li class="list-item" v-for="(item) in listvideo" :key="item._id.$oid">
             <div class="video-item">
               <!-- 封面图片 -->
-              <router-link
+              <a
                 target="_blank"
-                :to="{ path: '/video', query: { id: item._id.$oid } }"
+                :href="item.item.url"
                 tag="a"
                 style="width: 200px;height:125px;margin-right: 20px; display: inline-block"
               >
@@ -102,7 +102,7 @@
                   <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
                   <div class="Imgcover"></div>
                 </div>
-              </router-link>
+              </a>
               <!-- 封面图片 -->
 
               <div class="video-detail">
@@ -114,7 +114,11 @@
                     style="margin-right:2px;display:inline;"
                   />
                   <h4>
-                    <a target="_blank" :href="item.item.url" tag="a">{{ item.item.title }}</a>
+                    <router-link
+                      target="_blank"
+                      :to="{ path: '/video', query: { id: item._id.$oid } }"
+                      tag="a"
+                    >{{ item.item.title }}</router-link>
                   </h4>
                 </div>
                 <!-- 图标和标题 -->
