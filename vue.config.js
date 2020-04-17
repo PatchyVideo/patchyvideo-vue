@@ -82,6 +82,30 @@ outputDir: 'dist',
                 pathRewrite: {
                     '^/autocomplete/': ''
                 }
+            },
+            '/proxy/bili/x/player/videoshot': {
+              target: 'https://api.bilibili.com/x/player/videoshot',
+              changeOrigin: true,
+              headers: {
+                host: 'api.bilibili.com',
+                origin: 'https://t.bilibili.com',
+                referer: 'https://t.bilibili.com/'
+              },
+              pathRewrite: {
+                '^/proxy/bili/x/player/videoshot': ''
+              }
+            },
+            '/proxy/bili/cover/bfs/videoshot/': {
+              target: 'http://i0.hdslb.com/bfs/videoshot/',
+              changeOrigin: true,
+              headers: {
+                host: 'i0.hdslb.com',
+                origin: 'https://t.bilibili.com',
+                referer: 'https://t.bilibili.com/'
+              },
+              pathRewrite: {
+                '^/proxy/bili/cover/bfs/videoshot/': ''
+              }
             }
         }
 
