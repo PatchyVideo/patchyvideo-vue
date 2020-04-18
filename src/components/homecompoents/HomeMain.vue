@@ -99,8 +99,15 @@
                 style="width: 200px;height:125px;margin-right: 20px; display: inline-block"
               >
                 <div class="video-thumbnail">
-                  <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
-                  <div class="Imgcover"></div>
+                  <bilibili-cover
+                    v-if="item.item.site === 'bilibili'"
+                    :aid="parseInt(item.item.unique_id.replace('bilibili:av', ''))"
+                    :cover-image="item.item.cover_image"
+                  ></bilibili-cover>
+                  <div v-else>
+                    <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
+                    <div class="Imgcover"></div>
+                  </div>
                 </div>
               </a>
               <!-- 封面图片 -->
@@ -165,6 +172,7 @@
 
 <script>
 import left_navbar from "../../components/LeftNavbar.vue";
+import bilibiliCover from './BilibiliCover.vue';
 
 import { copyToClipboardText } from "../../static/js/generic";
 export default {
@@ -643,7 +651,7 @@ export default {
       }
     }
   },
-  components: { left_navbar }
+  components: { left_navbar, bilibiliCover }
 };
 </script>
 
