@@ -33,28 +33,36 @@
 <template>
   <div>
     <topnavbar></topnavbar>
-    <el-container>
-      <el-header>
-        Header
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane :label="$t('user_management')" name="first">
-            <usermanagemennt></usermanagemennt>
-          </el-tab-pane>
 
-          <!-- 日志查看 -->
-          <el-tab-pane :label="$t('log_view')" name="second">
-            <logview></logview>
-          </el-tab-pane>
+    <!-- 管理员身份验证界面 -->
+    <div
+      v-if="!admin"
+      v-loading="!admin"
+      class="adminloading"
+      element-loading-text="少女祈祷中"
+      element-loading-spinner="el-icon-loading"
+    ></div>
 
-          <el-tab-pane :label="$t('para_settings')" name="third">
-            <parasettings></parasettings>
-          </el-tab-pane>
-          <el-tab-pane :label="$t('scripts')" name="fourth">{{$t('scripts')}}</el-tab-pane>
-        </el-tabs>
-      </el-header>
-      <el-main></el-main>
-    </el-container>
-    <!-- <Footer></Footer> -->
+    <el-tabs v-else v-model="activeName" @tab-click="handleClick">
+      <!-- 用户管理 -->
+      <el-tab-pane :label="$t('user_management')" name="first">
+        <usermanagemennt></usermanagemennt>
+      </el-tab-pane>
+
+      <!-- 日志查看 -->
+      <el-tab-pane :label="$t('log_view')" name="second">
+        <logview></logview>
+      </el-tab-pane>
+
+      <!-- 网站参数设置 -->
+      <el-tab-pane :label="$t('para_settings')" name="third">
+        <parasettings></parasettings>
+      </el-tab-pane>
+
+      <!-- 网站脚本 -->
+      <el-tab-pane :label="$t('scripts')" name="fourth">{{$t('scripts')}}</el-tab-pane>
+    </el-tabs>
+    <Footer></Footer>
   </div>
 </template>
 
@@ -68,7 +76,8 @@ export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
-      activeName: "second"
+      activeName: "second",
+      admin: false
     };
   },
   created() {
@@ -86,6 +95,8 @@ export default {
         var status = ret.data.data.access_control.status;
         if (status !== "admin") {
           this.$router.push({ path: "*" });
+        } else {
+          this.admin = true;
         }
       });
     }
@@ -95,19 +106,13 @@ export default {
 </script>
 
 <style scoped>
-.el-header,
-.el-footer {
-  background-color: #b3c0d1;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
+.adminloading {
+  width: 80%;
+  min-height: 600px;
+  margin: 0 auto;
+  margin-top: 20px;
 }
-.el-main {
-  background-color: #e9eef3;
-  color: #333;
-  text-align: center;
-  line-height: 160px;
-}
+
 .el-tabs {
   width: 80%;
   margin: auto;
