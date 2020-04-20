@@ -14,7 +14,8 @@
 </i18n>
 
 <template>
-  <div>
+  <div v-loading="loading">
+    <!-- 编辑用户权限的对话框 -->
     <el-dialog :title="'编辑用户: ' + editUser.username" :visible.sync="dialogVisible" width="30%">
       <div class="usermanagement-form">
         <el-row>
@@ -59,25 +60,22 @@
     <h1>{{$t('title')}}</h1>
     <!-- 表单 -->
     <div class="usermanagement-form">
-      关键词
       <el-input
-        placeholder="请输入关键词"
+        placeholder="搜索用户名..."
         v-model="usermanagement.keyword"
-        @keyup.enter.native="getUserList()"
+        @keyup.enter.native="getUserList(true)"
         clearable
       >
-        <i slot="prefix" class="el-input__icon el-icon-search"></i>
+        <el-select v-model="usermanagement.order" class="select" slot="prepend">
+          <el-option
+            v-for="item in usermanagement.form.options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+        <el-button slot="append" icon="el-icon-search" @click="getUserList(true)">查找</el-button>
       </el-input>
-
-      <el-select v-model="usermanagement.order" class="select">
-        <el-option
-          v-for="item in usermanagement.form.options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <el-button type="primary" @click="getUserList">查找</el-button>
     </div>
 
     <el-table :data="usermanagement.data.users" style="width: 100%">
@@ -85,7 +83,7 @@
         <template slot-scope="props">
           <el-form label-position="left" class="demo-table-expand">
             <el-form-item label="头像">
-              <img :src="'be/images/userphotos/'+props.row.profile.image" alt style="height:50px;" />
+              <el-avatar :size="30" :src="'be/images/userphotos/'+props.row.profile.image"></el-avatar>
             </el-form-item>
             <el-form-item label="描述">
               <span>{{ props.row.profile.desc }}</span>
@@ -113,8 +111,14 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column prop="_id.$oid" width="220" label="I D"></el-table-column>
-      <el-table-column prop="profile.username" label="用戶名" width="200"></el-table-column>
+      <el-table-column label="用戶名" width="200">
+        <template slot-scope="scope">
+          <router-link
+            :to="'/users/' +scope.row._id.$oid"
+            target="_blank"
+          >{{scope.row.profile.username}}</router-link>
+        </template>
+      </el-table-column>
       <el-table-column prop="access_control.status" label="访问等级" width="200"></el-table-column>
       <el-table-column prop="access_control.access_mode" label="访问模式" width="200"></el-table-column>
       <el-table-column prop="access_control.allowed_ops" label="允许的操作" width="200"></el-table-column>
@@ -131,7 +135,7 @@
       @current-change="handleCurrentChange"
       :current-page="curPageNum"
       layout="pager"
-      :total.sync="usermanagement.data.count"
+      :page-count.sync="usermanagement.data.page_count"
     ></el-pagination>
   </div>
 </template>
@@ -153,7 +157,7 @@ export default {
         // 关键词
         keyword: "",
         //每页的 log 条目数量
-        size: 10,
+        size: 20,
         // 排序方式
         order: "latest",
         data: [],
@@ -177,14 +181,12 @@ export default {
         access_mode: "blacklist",
         allowed_ops: [],
         denied_ops: []
-      }
+      },
+      // 加载状态
+      loading: false
     };
   },
-  watch: {
-    curPageNum() {
-      this.getUserList();
-    }
-  },
+  watch: {},
   created() {
     this.couponSelected = this.options[0].value;
     this.usermanagement.form.timeRange = [
@@ -194,6 +196,7 @@ export default {
       ),
       this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date())
     ];
+    this.getUserList();
   },
   methods: {
     /**
@@ -258,8 +261,6 @@ export default {
         var user = this.usermanagement.data.users[this.editUserIndex];
         var data = ret.data.data;
         user.access_control[attr] = this.editUser[attr];
-        // console.log(reqRouter,paraName);
-        // console.log(ret,attr);
       });
     },
     /*
@@ -298,7 +299,11 @@ export default {
         this.curPageNum = prePageNum;
       }
     },
-    getUserList() {
+    getUserList(clearall = false) {
+      this.loading = true;
+      if (clearall) {
+        this.curPageNum = 1;
+      }
       this.axios({
         method: "post",
         url: "/be/user/list_users.do",
@@ -308,10 +313,20 @@ export default {
           query: this.usermanagement.keyword,
           order: this.usermanagement.order
         }
-      }).then(ret => {
-        var data = ret.data.data;
-        this.usermanagement.data = data;
-      });
+      })
+        .then(ret => {
+          var data = ret.data.data;
+          this.usermanagement.data = data;
+          this.loading = false;
+          // 回到顶部
+          if ($("html").scrollTop()) {
+            //动画效果
+            $("html").animate({ scrollTop: 0 }, 100);
+          }
+        })
+        .catch(err => {
+          this.loading = false;
+        });
     },
     /**
      *格式化日期
@@ -352,10 +367,15 @@ export default {
 </script>
 
 <style scoped>
-.el-input {
-  width: 25%;
+.usermanagement-form {
+  text-align: right;
 }
-
+.el-input {
+  width: 500px;
+}
+.select {
+  width: 130px;
+}
 .demo-table-expand {
   font-size: 0;
 }

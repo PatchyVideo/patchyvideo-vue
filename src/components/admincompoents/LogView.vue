@@ -70,12 +70,94 @@
 
     <!-- 表格 -->
     <el-table :data="log.data" border style="width: 100%">
-      <el-table-column prop="time.$date" label="日期" sortable :formatter="formatterDate" width="180"></el-table-column>
-      <el-table-column prop="_id.$oid" label="ID" width="300"></el-table-column>
-      <el-table-column prop="level" label="level" min-width="80"></el-table-column>
-      <el-table-column prop="ip" label="ip" width="300"></el-table-column>
-      <el-table-column prop="endpoint" label="endpoint" width="300"></el-table-column>
-      <el-table-column prop="path" label="path" width="300"></el-table-column>
+      <!-- 展开项 -->
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <p>日志详情：</p>
+          <!-- IP属性，MSG独有 -->
+          <div v-if="props.row.ip" class="detailItems">
+            <span>
+              <strong>IP:</strong>
+              {{ props.row.ip }}
+            </span>
+          </div>
+          <!-- args属性，MSG独有 -->
+          <div v-if="props.row.args" class="detailItems">
+            <span>
+              <strong>args:</strong>
+            </span>
+            <span v-if="!props.row.args.length">NULL</span>
+            <span v-for="(item, index) in props.row.args" :key="index">{{ item }}</span>
+          </div>
+          <!-- endpoint属性，MSG独有 -->
+          <div v-if="props.row.endpoint" class="detailItems">
+            <span>
+              <strong>endpoint:</strong>
+            </span>
+            <span v-if="!props.row.endpoint.length">NULL</span>
+            <span v-for="(item, index) in props.row.endpoint" :key="index">{{ item }}</span>
+          </div>
+          <!-- path属性，MSG独有 -->
+          <div v-if="props.row.path" class="detailItems">
+            <span>
+              <strong>path:</strong>
+            </span>
+            <span v-if="!props.row.path.length">NULL</span>
+            <span>{{ props.row.path }}</span>
+          </div>
+          <!-- user属性，WARN，SEC，ERR持有，但现阶段只能返回用户ID -->
+          <div v-if="props.row.user" class="detailItems">
+            <span>
+              <strong>userID:</strong>
+              <router-link
+                :to="'/users/' + props.row.user.$oid"
+                target="_blank"
+              >{{ props.row.user.$oid }}</router-link>
+            </span>
+          </div>
+          <!-- obj属性，显示为json数据 -->
+          <div v-if="props.row.obj" class="detailItems">
+            <p>
+              <strong>obj:</strong>
+            </p>
+            <pre class="objCode">{{props.row.obj}}</pre>
+          </div>
+          <!-- subevents属性，显示为json数据 -->
+          <div v-if="props.row.subevents.length" class="detailItems">
+            <p>
+              <strong>subevents:</strong>
+            </p>
+            <pre class="objCode">{{props.row.subevents}}</pre>
+          </div>
+        </template>
+      </el-table-column>
+      <!-- 日期 -->
+      <el-table-column prop="time.$date" label="日期" :formatter="formatterDate" width="180"></el-table-column>
+      <!-- Level -->
+      <el-table-column label="level" width="100">
+        <template slot-scope="scope">
+          <span v-bind:class="scope.row.level">{{scope.row.level}}</span>
+        </template>
+      </el-table-column>
+      <!-- subevents，由于版面关系只渲染“有”，并用黄色标记 -->
+      <el-table-column label="subevents" width="120">
+        <template slot-scope="scope">
+          <span
+            v-bind:class="{WARN:scope.row.subevents.length}"
+          >{{scope.row.subevents.length?"YES":" "}}</span>
+        </template>
+      </el-table-column>
+      <!-- op -->
+      <el-table-column prop="op" label="op" width="180"></el-table-column>
+      <!-- obj -->
+      <el-table-column label="obj">
+        <template slot-scope="scope">
+          <span v-for="(val,key,index) in scope.row.obj" :key="index">
+            <strong>{{ key }}</strong>
+            : {{ val }};
+          </span>
+        </template>
+      </el-table-column>
     </el-table>
 
     <!-- 分页器 -->
@@ -155,7 +237,6 @@ export default {
         .then(ret => {
           this.log.data = ret.data.data;
           this.loading = false;
-          // return ret.data.data.video;
         })
         .catch(err => {
           this.loading = false;
@@ -240,5 +321,22 @@ export default {
 .opts {
   width: 300px;
   margin: 0 5px 0 0;
+}
+.detailItems {
+  margin: 5px 0 5px 0;
+}
+.objCode {
+  display: inline-block;
+  margin: 5px 0 5px 0;
+  padding: 7px;
+  background-color: #606266;
+  color: #ffffff;
+  border-radius: 4px;
+}
+.WARN {
+  color: #e6a23c;
+}
+.ERR {
+  color: #f56c6c;
 }
 </style>
