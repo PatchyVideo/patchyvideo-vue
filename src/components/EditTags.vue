@@ -817,7 +817,6 @@ div {
 }
 .selected {
   background-color: rgba(200, 200, 200, 0.5) !important;
-  color: white !important;
 }
 div {
   #tag {
