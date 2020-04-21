@@ -9,12 +9,12 @@
 export default {
   provide() {
     return {
-      reload: this.reload
+      reload: this.reload,
     };
   },
   data() {
     return {
-      isRouterAlive: true
+      isRouterAlive: true,
     };
   },
   methods: {
@@ -23,28 +23,15 @@ export default {
       this.$nextTick(function() {
         this.isRouterAlive = true;
       });
-    }
+    },
   },
-  components: {}
+  components: {},
 };
 </script>
 
 <style>
-/* .el-popover {
-  width: 70%;
-  max-width: 70%;
-  max-height: 90%;
-  min-height: 50%;
-  overflow: auto;
-  position: absolute;
-  top: 50% !important;
-
-  transform: translate(10%, -50%);
-  margin: 0px 20px !important;
-} */
 a,
 h1 {
-  /* font-family: monospace; */
   cursor: pointer;
   transition: all 0.4s ease;
 }

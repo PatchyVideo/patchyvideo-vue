@@ -30,17 +30,9 @@ Vue.directive("linkified", linkify);
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;
 
-// Vue.config.keyCodes.Left_Arrow = 37;
-// Vue.config.keyCodes.Right_Arrow = 39;
-// Vue.config.keyCodes.Up_Arrow = 38;
-// Vue.config.keyCodes.Dw_Arrow = 40;
-// keyCode 37 = Left
-// keyCode 38 = Up
-// keyCode 39 = Right
-// keyCode 40 = Down
 const i18n = new VueI18n({
   locale: "CHS", // set locale
-  fallbackLocale: "ENG"
+  fallbackLocale: "ENG",
 });
 
 // 导入神秘的 css
@@ -55,7 +47,7 @@ const localMap = {
   "zh-cn": "CHS",
   "zh-tw": "CHT",
   "zh-hk": "CHT",
-  ja: "JPN"
+  ja: "JPN",
 };
 
 console.log("巴瓦鲁魔法服务器启动！");
@@ -79,5 +71,5 @@ var vm = new Vue({
   i18n,
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount("#app");
