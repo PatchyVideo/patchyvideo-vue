@@ -58,9 +58,6 @@
       <el-tab-pane :label="$t('para_settings')" name="third" :lazy="true">
         <parasettings></parasettings>
       </el-tab-pane>
-
-      <!-- 网站脚本 -->
-      <el-tab-pane :label="$t('scripts')" name="fourth" :lazy="true">{{$t('scripts')}}</el-tab-pane>
     </el-tabs>
     <Footer></Footer>
   </div>
