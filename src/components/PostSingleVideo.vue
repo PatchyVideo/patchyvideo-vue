@@ -264,7 +264,7 @@ export default {
       var that = this;
       // B站的匹配规则
       this.PARSERS[
-        "^(https:\\/\\/|http:\\/\\/)?(www\\.)?(bilibili\\.com\\/video\\/([aA][vV][\\d]+|BV[a-zA-Z0-9]+)|b23\\.tv\\/([aA][vV][\\d]+|BV[a-zA-Z0-9]+))"
+        "^(https:\\/\\/|http:\\/\\/)?(www\\.|m\\.)?(bilibili\\.com\\/video\\/([aA][vV][\\d]+|BV[a-zA-Z0-9]+)|b23\\.tv\\/([aA][vV][\\d]+|BV[a-zA-Z0-9]+))"
       ] = function(responseDOM, responseURL) {
         var err = responseDOM.find("div.error-body");
         if (err.length > 0) {
@@ -295,7 +295,7 @@ export default {
       };
       // A站的匹配规则
       this.PARSERS[
-        "^(https:\\/\\/|http:\\/\\/)?(www\\.)?acfun\\.cn\\/v\\/[aA][cC][\\d]+"
+        "^(https:\\/\\/|http:\\/\\/)?(www\\.|m\\.)?acfun\\.cn\\/v\\/[aA][cC][\\d]+"
       ] = function(responseDOM, responseURL) {
         var err = responseDOM.find("div.error-body");
         if (err.length > 0) {
@@ -328,7 +328,7 @@ export default {
       };
       // N站的匹配规则
       this.PARSERS[
-        "^(https:\\/\\/|http:\\/\\/)?(www\\.)?(nicovideo\\.jp\\/watch\\/(s|n)m[\\d]+|nico\\.ms\\/(s|n)m[\\d]+)"
+        "^(https:\\/\\/|http:\\/\\/)?(www\\.|sp\\.|m\\.)?(nicovideo\\.jp\\/watch\\/(s|n)m[\\d]+|nico\\.ms\\/(s|n)m[\\d]+)"
       ] = function(responseDOM, responseURL) {
         // TODO: handle error
         var thumbnailURL = responseDOM
