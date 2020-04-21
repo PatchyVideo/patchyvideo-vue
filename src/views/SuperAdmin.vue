@@ -45,22 +45,22 @@
 
     <el-tabs v-else v-model="activeName" @tab-click="handleClick">
       <!-- 用户管理 -->
-      <el-tab-pane :label="$t('user_management')" name="first">
+      <el-tab-pane :label="$t('user_management')" name="first" :lazy="true">
         <usermanagemennt></usermanagemennt>
       </el-tab-pane>
 
       <!-- 日志查看 -->
-      <el-tab-pane :label="$t('log_view')" name="second">
+      <el-tab-pane :label="$t('log_view')" name="second" :lazy="true">
         <logview></logview>
       </el-tab-pane>
 
       <!-- 网站参数设置 -->
-      <el-tab-pane :label="$t('para_settings')" name="third">
+      <el-tab-pane :label="$t('para_settings')" name="third" :lazy="true">
         <parasettings></parasettings>
       </el-tab-pane>
 
       <!-- 网站脚本 -->
-      <el-tab-pane :label="$t('scripts')" name="fourth">{{$t('scripts')}}</el-tab-pane>
+      <el-tab-pane :label="$t('scripts')" name="fourth" :lazy="true">{{$t('scripts')}}</el-tab-pane>
     </el-tabs>
     <Footer></Footer>
   </div>
