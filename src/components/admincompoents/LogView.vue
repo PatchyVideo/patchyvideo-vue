@@ -186,7 +186,7 @@ export default {
         form: {
           name: "",
           types: ["viewlogs.do", "viewlogs_aggregated.do"],
-          type: "2",
+          type: "1",
           timeRange: [],
           options: [
             { value: "latest", label: "时间正序" },
