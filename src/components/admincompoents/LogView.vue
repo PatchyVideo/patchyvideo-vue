@@ -123,7 +123,7 @@
             <pre class="objCode">{{props.row.obj}}</pre>
           </div>
           <!-- subevents属性，显示为json数据 -->
-          <div v-if="props.row.subevents.length" class="detailItems">
+          <div v-if="props.row.subevents?props.row.subevents.length:0" class="detailItems">
             <p>
               <strong>subevents:</strong>
             </p>
@@ -143,8 +143,8 @@
       <el-table-column label="subevents" width="120">
         <template slot-scope="scope">
           <span
-            v-bind:class="{WARN:scope.row.subevents.length}"
-          >{{scope.row.subevents.length?"YES":" "}}</span>
+            v-bind:class="{WARN:scope.row.subevents?scope.row.subevents.length:0}"
+          >{{scope.row.subevents?scope.row.subevents.length:0?"YES":" "}}</span>
         </template>
       </el-table-column>
       <!-- op -->
