@@ -95,8 +95,6 @@ export default {
         this.flag = true;
         break;
     }
-    // this.flag = this.$store.state.homeVideoDisplayStatus;
-    // this.flag = !localStorage.getItem("homeVideoDisplayStatus");
   },
   computed: {},
   mounted() {},
