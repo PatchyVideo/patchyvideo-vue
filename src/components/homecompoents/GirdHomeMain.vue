@@ -298,11 +298,6 @@ export default {
       this.count = val;
       this.historyPush();
     },
-    // 储存播放列表的信息
-    listvideoToStore() {
-      this.$store.commit("getwhichPage", this.page);
-      this.$store.commit("getVideoObj", this.listvideo);
-    },
     // 复制视频连接
     // -------------------------危险提示-------------------------
     //          此函数因为直接操纵dom可能导致网站受到攻击!
@@ -350,7 +345,6 @@ export default {
         if (this.maxpage < this.page) {
           this.page = 1;
         }
-        this.$store.commit("getMaxPage", this.maxpage);
         this.listvideo = result.data.data.videos;
 
         /* 排序处理 */
@@ -565,9 +559,6 @@ export default {
       } else {
         this.getListVideo(this.page, this.count);
       }
-    },
-    listvideo() {
-      this.listvideoToStore();
     },
     couponSelected() {
       this.handleCurrentChange(1);

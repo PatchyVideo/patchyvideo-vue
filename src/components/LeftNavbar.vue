@@ -215,11 +215,15 @@
                     v-bind:class="val"
                     :ref="val"
                     @click="gotoHome(key)"
+                    @click.middle="gotoHome(key, true)"
                   >{{ key.replace(/_/g," ") }}</p>
                 </div>
                 <!-- 其他情况 -->
                 <div v-else>
-                  <p @click="gotoHome(key)">{{ key.replace(/_/g," ") }}</p>
+                  <p
+                    @click="gotoHome(key)"
+                    @click.middle="gotoHome(key, true)"
+                  >{{ key.replace(/_/g," ") }}</p>
                 </div>
               </div>
             </div>
@@ -233,11 +237,15 @@
             <!-- 根据tag名称自动渲染tag颜色 -->
             <!-- 存在标签颜色 -->
             <div v-if="colorTagList.indexOf(val)!=-1">
-              <p v-bind:class="val" @click="gotoHome(val)">{{ val }}</p>
+              <p
+                v-bind:class="val"
+                @click="gotoHome(val)"
+                @click.middle="gotoHome(val, true)"
+              >{{ val }}</p>
             </div>
             <!-- 其他情况 -->
             <div v-else>
-              <p @click="gotoHome(val)">{{ val }}</p>
+              <p @click="gotoHome(val)" @click.middle="gotoHome(val, true)">{{ val }}</p>
             </div>
           </div>
         </li>
@@ -259,7 +267,10 @@
                 <div v-if="colorTagList.indexOf(val)!=-1&&val!='Author'">
                   <div class="tag-div">
                     <p v-bind:class="val" :ref="val">
-                      <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
+                      <span
+                        @click.left="gotoHome(item)"
+                        @click.middle="gotoHome(item, true)"
+                      >{{ item.replace(/_/g," ") }}</span>
                     </p>
                   </div>
                   <el-button
@@ -283,7 +294,10 @@
                 <!-- 其他情况 -->
                 <div v-else>
                   <p>
-                    <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
+                    <span
+                      @click.left="gotoHome(item)"
+                      @click.middle="gotoHome(item, true)"
+                    >{{ item.replace(/_/g," ") }}</span>
                   </p>
                 </div>
               </el-tooltip>
@@ -351,13 +365,23 @@ export default {
   },
   methods: {
     // 点击标签显示标签的搜索结果
-    gotoHome(key) {
+    gotoHome(key, _blank = false) {
       if (key != "") {
-        this.$router
-          .push({ path: "/home", query: { keyword: key } })
-          .catch(err => {
-            return err;
+        var routerPath = this.$router.resolve({
+          path: "/home",
+          query: { keyword: key }
+        });
+        console.log(_blank);
+        if (_blank) {
+          window.open(routerPath.href, "_blank");
+          console.log("hi");
+        } else {
+          console.log("ha");
+          this.$router.push({
+            path: "/home",
+            query: { keyword: key }
           });
+        }
       } else {
         this.$router.push({ path: "/home" });
       }

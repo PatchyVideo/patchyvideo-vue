@@ -356,7 +356,6 @@ export default {
           this.maxcount = result.data.data.total;
           // 取得总页数制作分页
           this.maxpage = Math.ceil(result.data.data.total / count);
-          this.$store.commit("getMaxPage", this.maxpage);
           // this.listvideo = result.data.data.videos;
           this.tags = result.data.data.related_tags;
           this.count2 = result.data.data.videos.length;
