@@ -704,7 +704,6 @@ export default {
       let regYtb = /(https:\/\/|http:\/\/)www.youtube.com\/watch\?v=(\S+)/;
       let regAcf = /(https:\/\/|http:\/\/)www.acfun.cn\/v\/ac(\S+)/;
       if (regBili.exec(str) !== null) {
-        console.log(regBili.exec(str));
         return `//player.bilibili.com/player.html?aid=${
           regBili.exec(str)[2]
         }&cid=${cid}`;

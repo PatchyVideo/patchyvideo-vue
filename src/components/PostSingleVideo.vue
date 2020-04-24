@@ -577,7 +577,6 @@ export default {
         }
       }
       url = this.clearURL(url);
-      console.log(url);
       for (var key in this.PARSERS) {
         if (new RegExp(key, "i").test(url)) {
           pass = true;
