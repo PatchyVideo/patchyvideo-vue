@@ -618,8 +618,6 @@ export default {
   created() {
     // 改变侧导航条的标题
     this.$store.commit("changeLeftNavBarTitle", 1);
-    // 删除本地储存(和 localStorage 存储一起使用，已被弃用）
-    // window.localStorage.removeItem("loglevel:webpack-dev-server");
     this.searchVideo();
   },
   mounted() {
@@ -698,14 +696,18 @@ export default {
         }
       );
     },
-    regToIframe(url) {
+    // 设置内嵌播放链接
+    regToIframe(url, cid = "") {
       let str = url;
-      let regBili = /(https:\/\/|http:\/\/)www.bilibili.com\/video\/av(\S+)/;
+      let regBili = /(https:\/\/|http:\/\/)www.bilibili.com\/video\/av(\S+)\?p=(\S+)/;
       let regNico = /(https:\/\/|http:\/\/)www.nicovideo.jp\/watch\/sm(\S+)/;
       let regYtb = /(https:\/\/|http:\/\/)www.youtube.com\/watch\?v=(\S+)/;
       let regAcf = /(https:\/\/|http:\/\/)www.acfun.cn\/v\/ac(\S+)/;
       if (regBili.exec(str) !== null) {
-        return `//player.bilibili.com/player.html?aid=${regBili.exec(str)[2]}`;
+        console.log(regBili.exec(str));
+        return `//player.bilibili.com/player.html?aid=${
+          regBili.exec(str)[2]
+        }&cid=${cid}`;
       }
       if (regNico.exec(str) !== null) {
         return `//embed.nicovideo.jp/watch/sm${regNico.exec(str)[2]}`;
@@ -717,62 +719,11 @@ export default {
         return `https://www.acfun.cn/player/ac${regAcf.exec(str)[2]}`;
       }
       return "";
-      // let regNico =/(https:\/\/|()/
-      // 内嵌规则：匹配末尾的参数即可
-      // let reg =  /^(https\/\/:|http:\/\/)?www.(bilibili).com\/video\/av[a-zA-Z0-9]+/
-      // Bilibili:
-      //   <iframe src="//player.bilibili.com/player.html?aid=94314258"></iframe>
-      //   https://www.bilibili.com/video/av2653648
-      // Niconico:
-      //   <iframe src="//embed.nicovideo.jp/watch/sm27106142"> </iframe>
-      //   https://www.nicovideo.jp/watch/sm36469723
-      // Youtube：
-      //   <iframe src="https://www.youtube.com/embed/4Xq3mIsF-z4"></iframe>
-      //   https://www.youtube.com/watch?v=9w3oEINp9xU
-      // Acfun:
-      //   <iframe src="https://www.acfun.cn/player/ac13167581"></iframe>
-      //   https://www.acfun.cn/v/ac13113814
     },
     // 查询视频详细信息
-    searchVideo: function() {
+    searchVideo() {
       this.loading = true;
-      // vuex存储: (已被弃用)
-      // for (let j = 0; j < this.$store.state.videoObj.length; j++) {
-      //   for (let i = 0; i < this.$store.state.videoObj[j].length; ++i) {
-      //     if (this.$store.state.videoObj[j][i]._id.$oid == this.$route.query.id) {
-      //       this.myVideoData = this.$store.state.videoObj[j][i];
-      //     }
-      //   }
-      // }
 
-      // localStorage存储：(已被弃用)
-      // 初始化localStorageNum
-      // let maxnums = [];
-      // for (let i in Object.keys(window.localStorage)) {
-      //   maxnums.push(parseInt(Object.keys(window.localStorage)[i]));
-      // }
-      // for (let i = 0; i < Math.max(...maxnums); ++i) {
-      //   if (this.localStorageNum[i] === undefined) {
-      //     this.localStorageNum[i] = [];
-      //   }
-      // }
-      // for (let m in window.localStorage) {
-      //   if (typeof window.localStorage[m] == "string") {
-      //     this.localStorageNum[parseInt(m)] = JSON.parse(
-      //       window.localStorage[m]
-      //     );
-      //   }
-      // }
-      // // 根据传进来的视频ID寻找对应的视频详细信息
-      // for (let j = 0; j < this.localStorageNum.length; j++)
-      //   for (let i = 0; i < this.localStorageNum[j].length; ++i) {
-      //     if (this.localStorageNum[j][i]._id.$oid == this.$route.query.id) {
-      //       this.myVideoData = this.localStorageNum[j][i];
-      //     }
-      //   }
-      // }
-
-      // 直接向后端请求视频数据
       this.axios({
         method: "post",
         url: "be/getvideo.do",
@@ -780,7 +731,10 @@ export default {
       })
         .then(result => {
           this.myVideoData = result.data.data;
-          this.iframeUrl = this.regToIframe(this.myVideoData.video.item.url);
+          this.iframeUrl = this.regToIframe(
+            this.myVideoData.video.item.url,
+            this.myVideoData.video.item.cid || ""
+          );
           this.theVideoRank = result.data.data.video.clearence;
           if (result.data.data.video.comment_thread) {
             this.sid = result.data.data.video.comment_thread.$oid;
@@ -815,8 +769,8 @@ export default {
           this.$router.push({ path: "/404" });
         });
     },
+    // 刷新视频信息
     refreshVideo(item) {
-      // console.log(item._id.$oid);
       this.$axios({
         method: "post",
         url: "be/videos/refresh.do",
@@ -1024,7 +978,6 @@ export default {
           // this.searchVideo();
           // 不知道为什么只能通过刷新才能显示副本
           this.$router.go(0);
-          // this.openHTML("/video", url);
         } else if (result.data.status == "FAILED") {
           this.open4("副本添加失败！");
         } else if (result.data.status == "ERROR") {
