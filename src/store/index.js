@@ -10,8 +10,6 @@ export default new Vuex.Store({
     username: "",
     // 用户头像
     userAvatar: "default",
-    // 视频详情页面里视频的 pid
-    videoPid: "",
     // 侧导航条(LeftNavBar.vue)的标题
     // 按照以下定义：1 表示“标签”，2 表示“热门标签”，3 表示“相关标签”
     leftNavBarTitle: 1,
@@ -52,9 +50,6 @@ export default new Vuex.Store({
     },
     changeLeftNavBarTitle(state, e) {
       state.leftNavBarTitle = e;
-    },
-    setVideoPid(state, e) {
-      state.videoPid = e;
     },
     getTopNavbarSearching(state, e) {
       state.TopNavbarSearching = e;
