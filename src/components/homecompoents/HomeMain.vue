@@ -135,8 +135,8 @@
                 <!-- 图标和标题 -->
                 <!-- 内容 -->
                 <p
-                  :title="toGMT(item.item.upload_time.$date)+'\n'+item.item.desc"
-                >{{ item.item.desc }}</p>
+                  :title="toGMT(item.item.upload_time.$date)+'\n'+(item.item.desc||'此视频没有简介哦')"
+                >{{ getDesc(item.item.desc) }}</p>
                 <!-- 内容 -->
                 <!--<router-link
                   class="linkToPublisher"
@@ -550,6 +550,18 @@ export default {
       this.visibleSites = route.query.visibleSites
         ? JSON.parse(atob(route.query.visibleSites))
         : this.visibleSites;
+    },
+    getDesc(desc) {
+      if (desc) {
+        let d = desc
+        d = d.replace(/(?:[-—=+~]{4,}([^-—=+~\s]+))?(?:[-—=+~]{4,})(?:$|(?=[^-—=+~>》→]))/g, '$1') // 删除分割线
+        d = d.replace(/(?:[-—=+~]+)(?=[-—=+~]{4}[>》→])/, '') // 缩短长箭头
+        d = d.replace(/[↑↓]/g, '') // 删除上下指向
+        d = d.replace(/\s(?=\s)/g, '') // 删除连续空格
+        return d
+      } else {
+        return '此视频没有简介哦'
+      }
     }
   },
 
