@@ -302,7 +302,9 @@
         </div>
 
         <!-- B站分P视频区 -->
-        <PartsOfVideo></PartsOfVideo>
+        <div>
+          <!-- <PartsOfVideo v-if="myVideoData.video.item.site=='bilibili'" :aid="aid"></PartsOfVideo> -->
+        </div>
 
         <!-- 副本列表 -->
         <div class="Copies_blibili">
@@ -473,10 +475,14 @@ export default {
             // 视频的链接
             url: "",
             //视频封面
-            cover_image: ""
+            cover_image: "",
+            // 视频所属的网站
+            site: "bilibili"
           }
         }
       },
+      // (如果是B站视频的话)视频的av号
+      aid: "",
       // 我的视频列表
       myVideoList: [],
       // 我的全部视频列表（处理视频是否存在于该列表）
@@ -710,9 +716,10 @@ export default {
       let regYtb = /(https:\/\/|http:\/\/)www.youtube.com\/watch\?v=(\S+)/;
       let regAcf = /(https:\/\/|http:\/\/)www.acfun.cn\/v\/ac(\S+)/;
       if (regBili.exec(str) !== null) {
+        this.aid = regBili.exec(str)[2];
         return `//player.bilibili.com/player.html?aid=${
           regBili.exec(str)[2]
-        }&cid=${cid}`;
+        }&cid=${cid}&page=${regBili.exec(str)[3]}`;
       }
       if (regNico.exec(str) !== null) {
         return `//embed.nicovideo.jp/watch/sm${regNico.exec(str)[2]}`;
@@ -1183,12 +1190,9 @@ export default {
   top: 0px;
   left: 0px;
 }
-.re_top,
-.new_top {
+.re_top {
   padding-bottom: 10px;
   border-bottom: 3px solid red;
-}
-.re_top {
   text-align: center;
   display: flex;
   display: -webkit-flex;
