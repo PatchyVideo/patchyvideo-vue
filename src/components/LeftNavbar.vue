@@ -273,16 +273,13 @@
                       >{{ item.replace(/_/g," ") }}</span>
                     </p>
                   </div>
-                  <el-button
-                    v-if="val=='Author'"
-                    size="mini"
-                    style="margin-left:5px;"
-                    @click="openAuthorData(item)"
-                  >详情</el-button>
                 </div>
                 <div v-else-if="val=='Author'">
                   <p v-bind:class="val" :ref="val" style="display:inline;">
-                    <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
+                    <span
+                      @click.left="gotoHome(item)"
+                      @click.middle="gotoHome(item, true)"
+                    >{{ item.replace(/_/g," ") }}</span>
                   </p>
                   <el-button
                     v-if="val=='Author'"
