@@ -102,6 +102,18 @@ const routes = [
     path: "/test", // 测试用页面
     component: () => import("../views/About.vue"),
   },
+  {
+    path: "/forum",
+    component: () => import("../views/Forum.vue"),
+  },
+  {
+    path: "/forum/:fid",
+    component: () => import("../views/ForumDetail.vue"),
+  },
+  {
+    path: "/forum/:fid/post/:tid",
+    component: () => import("../views/ThreadDetail.vue"),
+  },
 ];
 
 const router = new VueRouter({
