@@ -368,12 +368,9 @@ export default {
           path: "/home",
           query: { keyword: key }
         });
-        console.log(_blank);
         if (_blank) {
           window.open(routerPath.href, "_blank");
-          console.log("hi");
         } else {
-          console.log("ha");
           this.$router.push({
             path: "/home",
             query: { keyword: key }
