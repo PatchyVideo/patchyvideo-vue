@@ -303,7 +303,7 @@
 
         <!-- B站分P视频区 -->
         <div>
-          <!-- <PartsOfVideo v-if="myVideoData.video.item.site=='bilibili'" :aid="aid"></PartsOfVideo> -->
+          <PagesOfVideo v-if="myVideoData.video.item.site=='bilibili'" :aid="aid"></PagesOfVideo>
         </div>
 
         <!-- 副本列表 -->
@@ -444,7 +444,7 @@ import Footer from "../components/Footer.vue";
 import Comments from "../components/comments.vue";
 import Score from "../components/Score.vue";
 import createNewList from "../components/CreateNewList.vue";
-import PartsOfVideo from "../components/VideoCompoents/PartsOfVideo.vue";
+import PagesOfVideo from "../components/VideoCompoents/PagesOfVideo.vue";
 import { copyToClipboardText } from "../static/js/generic";
 export default {
   data() {
@@ -1151,7 +1151,7 @@ export default {
     Comments,
     Score,
     createNewList,
-    PartsOfVideo
+    PagesOfVideo
   }
 };
 </script>
