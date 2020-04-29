@@ -13,7 +13,7 @@ import "font-awesome/css/font-awesome.min.css";
 import login from "./views/Login.vue";
 import $ from "jquery";
 import linkify from "vue-linkify";
-import shadow from 'vue-shadow-dom'
+import shadow from "./plugins/shadow.js";
 
 import echarts from "echarts/lib/echarts";
 import "echarts/lib/chart/sunburst";
@@ -27,7 +27,7 @@ Vue.use(VueAxios, axios);
 Vue.use(ElementUI);
 Vue.use(VueCropper);
 Vue.use(VueI18n);
-Vue.use(shadow)
+Vue.use(shadow);
 Vue.directive("linkified", linkify);
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;
