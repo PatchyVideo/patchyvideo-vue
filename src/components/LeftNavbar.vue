@@ -364,11 +364,11 @@ export default {
     // 点击标签显示标签的搜索结果
     gotoHome(key, _blank = false) {
       if (key != "") {
-        var routerPath = this.$router.resolve({
-          path: "/home",
-          query: { keyword: key }
-        });
         if (_blank) {
+          var routerPath = this.$router.resolve({
+            path: "/home",
+            query: { keyword: key }
+          });
           window.open(routerPath.href, "_blank");
         } else {
           this.$router.push({
