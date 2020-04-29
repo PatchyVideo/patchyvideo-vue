@@ -438,6 +438,10 @@ import Comments from "../components/comments.vue";
 import Score from "../components/Score.vue";
 import createNewList from "../components/CreateNewList";
 import { copyToClipboardText } from "../static/js/generic";
+
+import IPFS from "ipfs";
+import VideoStream from "videostream";
+
 export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -1070,7 +1074,6 @@ export default {
 
     // 启动 ipfs 播放器
     establishIpfsPlayer() {
-      const IPFS = import("ipfs");
       //// IPFS Settings ////
       const ipfs = new IPFS({
         repo: "/ipfs"
@@ -1098,7 +1101,6 @@ export default {
     // Need: Ipfs node init
     genIpfsVideo(ipfsnode, hash, element) {
       let stream;
-      const VideoStream = require("videostream");
 
       const exampleFile = {
         createReadStream(opts) {

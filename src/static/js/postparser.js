@@ -1,22 +1,24 @@
 // parsers
 // HTML
-// const htmle = require("html-entities").XmlEntities;
+// const htmle = import("html-entities").XmlEntities;
 // const parserHTML = new htmle();
 // markdown
-const MarkdownIt = require("markdown-it");
-const parserMarkdownPlugins = {
-  sub: require("markdown-it-sub"),
-  sup: require("markdown-it-sup"),
-  footnote: require("markdown-it-footnote"),
-  deflist: require("markdown-it-deflist"),
-  abbr: require("markdown-it-abbr"),
-  container: require("markdown-it-container"),
-  ins: require("markdown-it-ins"),
-  mark: require("markdown-it-mark"),
-};
-const hljs = require("highlight.js");
+import MarkdownIt from "markdown-it";
+async function parserMarkdownPlugins() {
+  return {
+    sub: await import("markdown-it-sub"),
+    sup: await import("markdown-it-sup"),
+    footnote: await import("markdown-it-footnote"),
+    deflist: await import("markdown-it-deflist"),
+    abbr: await import("markdown-it-abbr"),
+    container: await import("markdown-it-container"),
+    ins: await import("markdown-it-ins"),
+    mark: await import("markdown-it-mark"),
+  };
+}
+import hljs from "highlight.js";
 // utils
-const { ParseFace, ParseEmoji } = require("./comment");
+import { ParseFace, ParseEmoji } from "./comment";
 
 function parse(text) {
   const head = text.match(/^\[\[((?:[\w-]+:"[^"]+" *)*)\]\]\s*/); // 匹配全局属性
@@ -309,9 +311,10 @@ function parser(type, dataList, text) {
         },
       });
       if (dataList["markdown-plugin"]) {
+        const plugins = parserMarkdownPlugins();
         dataList["markdown-plugin"].split(" ").forEach((value) => {
-          if (parserMarkdownPlugins[value])
-            parserMarkdown = parserMarkdown.use(parserMarkdownPlugins[value]);
+          if (plugins[value])
+            parserMarkdown = parserMarkdown.use(plugins[value]);
         });
       }
       let b = text

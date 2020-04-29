@@ -15,9 +15,9 @@ import $ from "jquery";
 import linkify from "vue-linkify";
 import shadow from 'vue-shadow-dom'
 
-let echarts = require("echarts/lib/echarts");
-require("echarts/lib/chart/sunburst");
-require("echarts/lib/component/legend");
+import echarts from "echarts/lib/echarts";
+import "echarts/lib/chart/sunburst";
+import "echarts/lib/component/legend";
 // 以上三个包为按需导入的图表必须项
 
 import { VueCropper } from "vue-cropper";
