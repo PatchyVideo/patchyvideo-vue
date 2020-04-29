@@ -1070,7 +1070,7 @@ export default {
 
     // 启动 ipfs 播放器
     establishIpfsPlayer() {
-      const IPFS = require("ipfs");
+      const IPFS = import("ipfs");
       //// IPFS Settings ////
       const ipfs = new IPFS({
         repo: "/ipfs"

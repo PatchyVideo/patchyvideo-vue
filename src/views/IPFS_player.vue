@@ -90,7 +90,7 @@ export default {
     document.title = this.$t("title") + " - Patchyvideo";
   },
   mounted() {
-    const IPFS = require("ipfs");
+    const IPFS = import("ipfs");
     //// IPFS Settings ////
     const ipfs = new IPFS({
       repo: "/ipfs"

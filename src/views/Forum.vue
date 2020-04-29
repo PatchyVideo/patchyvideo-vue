@@ -7,6 +7,20 @@
         <el-alert type="info">
           <div style="color:black">
             <h2>欢迎来到 PatchyVideo 讨论版</h2>
+            <p>
+              最后更新时间：2020/4/27<br />
+              讨论版仍在最初测试阶段，有很多功能可能不够完善，仅供测试。<br />
+              <!-- 讨论版发帖支持使用 markdown
+              解析，在内容最前加入[[parser:"markdown"]]即可<br />
+              如需区域使用 markdown 请这样书写：[[chunk
+              parser:"markdown"]]内容[[/chunk]]<br />
+              如需使用额外 markdown 内容请加入 markdown-plugin
+              属性，如：[[parser:"markdown" markdown-plugin:"subscript
+              superscript"]]<br />
+              注意：讨论版的 markdown 解析器并<strong>不</strong>支持嵌入 html
+              代码<br /> -->
+              如有任何意见可尝试在反馈版提出。
+            </p>
           </div>
         </el-alert>
       </div>
@@ -49,7 +63,7 @@ export default {
       forumList: [
         {
           id: "5e8fce11beb63ebb98f8b50c",
-          name: "意见与反馈",
+          name: "意见反馈",
           desc: "在这里反馈在帕琪站遇到的问题~"
         }
       ]

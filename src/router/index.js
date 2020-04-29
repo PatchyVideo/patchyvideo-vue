@@ -2,8 +2,6 @@
 import VueRouter from "vue-router";
 import store from "../store/index.js";
 import axios from "axios";
-import ElementUI from "element-ui";
-import "element-ui/lib/theme-chalk/index.css";
 import "../static/css/base.css";
 import { changeSiteTitle } from "../static/js/base";
 import { Loading, Message } from "element-ui";
@@ -121,8 +119,6 @@ const router = new VueRouter({
   // base: process.env.BASE_URL,
   routes,
 });
-
-Vue.use(ElementUI);
 
 var doorObj = document.getElementById("door");
 var irikuchiObj = document.getElementsByClassName("irikuchi")[0];

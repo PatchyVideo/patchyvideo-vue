@@ -6,8 +6,11 @@
       <div>
         <el-alert type="info">
           <div style="color:black;font-size:1.2em">
-            <h3>意见与反馈</h3>
-            <span>在这里反馈在帕琪站遇到的问题~</span>
+            <h3>意见反馈</h3>
+            <p>
+              在这里反馈在帕琪站遇到的问题~<br />
+              建议将问题详细描述并尽量附带截图或日志。
+            </p>
           </div>
         </el-alert>
       </div>
@@ -55,7 +58,7 @@
             <div v-else>Loading...</div>
           </template>
         </el-table-column>
-        <el-table-column prop="address" label="跟帖" width="60">
+        <el-table-column prop="address" label="跟贴" width="60">
           <template slot-scope="thread">
             <div>
               <b>{{ thread.row.thread_obj[0].count }}</b>
