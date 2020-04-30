@@ -22,8 +22,7 @@ const parserMarkdownPlugins = {
   ins: MarkdownPluginIns,
   mark: MarkdownPluginMark,
 };
-}
-import hljs from "highlight.js";
+import hljs from './hljs';
 // utils
 import { ParseFace, ParseEmoji } from "./comment";
 

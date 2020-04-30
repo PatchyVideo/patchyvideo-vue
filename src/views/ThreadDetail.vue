@@ -65,10 +65,9 @@
                     回复
                   </div>
                   <div v-if="!comment.row.hidden" v-shadow>
-                    <div
-                      v-html="parse(comment.row.content)"
-                      style="all:initial;font-size:0.9em"
-                    ></div>
+                    <thread-comment
+                      :html="parse(comment.row.content)"
+                    ></thread-comment>
                   </div>
                   <div v-else>
                     此回复因离题或语言过激被折叠
@@ -152,10 +151,10 @@
                             回复
                           </div>
                           <div v-if="!comment.row.hidden" v-shadow>
-                            <div
-                              v-html="parse(comment.row.content)"
-                              style="all:initial;font-size:0.8em"
-                            ></div>
+                            <thread-comment
+                              :html="parse(comment.row.content)"
+                              :fontsize="0.8"
+                            ></thread-comment>
                           </div>
                           <div v-else-if="comment.row.hidden">
                             此回复因离题或语言过激被折叠
@@ -232,10 +231,9 @@
                       }}</span
                     >
                     <div v-shadow>
-                      <div
-                        v-html="parse(comment.row.content)"
-                        style="all:initial;font-size:0.8em"
-                      ></div>
+                      <thread-comment
+                        :html="parse(comment.row.content)"
+                      ></thread-comment>
                     </div>
                   </div>
                 </template>
@@ -300,6 +298,7 @@
 <script>
 import topNavbar from "../components/TopNavbar.vue";
 import cfooter from "../components/Footer.vue";
+import ThreadComment from "../components/ThreadComment.vue";
 
 import { changeSiteTitle } from "../static/js/base";
 import { parse } from "../static/js/postparser";
@@ -307,7 +306,8 @@ import { parse } from "../static/js/postparser";
 export default {
   components: {
     topNavbar,
-    cfooter
+    cfooter,
+    ThreadComment
   },
   data() {
     return {
@@ -355,7 +355,7 @@ export default {
             _id: { $oid: "5ea505d8158a8745f2761268" },
             thread: { $oid: "5ea505d8158a8745f2761263" },
             content:
-              '[[parser:"markdown" markdown-plugin:"sup"]]### markdown^test^\n- list\n- list\n- list',
+              '[[parser:"markdown" markdown-plugin:"sup"]]### markdown^test^\n\n- list\n- list\n- list\n\njavascript highlight test:\n\n``` javascript\nfunction test(){\n  console.log("highlight test")\n}\n```',
             hidden: false,
             deleted: false,
             upvotes: 0,
