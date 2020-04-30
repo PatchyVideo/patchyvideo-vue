@@ -20,7 +20,7 @@
     "font-awesome": "^4.7.0",
     "ipfs": "^0.40.0",
     "ipfs-vue": "^0.35.0-rc.6",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jquery-textcomplete": "^1.8.5",
     "moment": "^2.24.0",
     "textcomplete": "^0.18.1",
