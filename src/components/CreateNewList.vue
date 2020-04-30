@@ -171,27 +171,31 @@ export default {
               cover: this.list.cover,
               private: this.list.private
             }
-          }).then(result => {
-            // 提交失败的情况
-            if (result.data.status == "FAILED") {
+          })
+            .then(result => {
+              // 提交失败的情况
+              if (result.data.status == "FAILED") {
+                this.open(this.$t("create_failed"));
+              }
+              // 出现错误的情况
+              else if (result.data.status == "ERROR") {
+                this.$store.commit("changeifRouter", "0");
+                this.open(this.$t("not_login"));
+              }
+              // 提交成功
+              else {
+                this.open2(this.$t("create_succeed"));
+                this.list.title = "";
+                this.list.desc = "";
+                this.list.cover = "";
+                this.list.private = false;
+                if (this.needGo) this.$router.push({ path: "/lists" });
+                else this.$emit("closeMe", true);
+              }
+            })
+            .catch(err => {
               this.open(this.$t("create_failed"));
-            }
-            // 出现错误的情况
-            else if (result.data.status == "ERROR") {
-              this.$store.commit("changeifRouter", "0");
-              this.open(this.$t("not_login"));
-            }
-            // 提交成功
-            else {
-              this.open2(this.$t("create_succeed"));
-              this.list.title = "";
-              this.list.desc = "";
-              this.list.cover = "";
-              this.list.private = false;
-              if (this.needGo) this.$router.push({ path: "/lists" });
-              else this.$emit("closeMe", true);
-            }
-          });
+            });
           this.loading = false;
         } else {
           // 加载结束,加载动画消失
