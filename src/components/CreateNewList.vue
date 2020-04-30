@@ -160,9 +160,9 @@ export default {
       // 先使页面出于加载状态
       this.loading = true;
       // 表单验证
-      this.$refs.list.validate(valid => {
+      this.$refs.list.validate(async valid => {
         if (valid) {
-          this.axios({
+          await this.axios({
             method: "post",
             url: "be/lists/new.do",
             data: {
@@ -172,7 +172,6 @@ export default {
               private: this.list.private
             }
           }).then(result => {
-            this.loading = false;
             // 提交失败的情况
             if (result.data.status == "FAILED") {
               this.open(this.$t("create_failed"));
@@ -193,6 +192,7 @@ export default {
               else this.$emit("closeMe", true);
             }
           });
+          this.loading = false;
         } else {
           // 加载结束,加载动画消失
           this.loading = false;
