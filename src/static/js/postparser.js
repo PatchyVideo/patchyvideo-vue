@@ -4,17 +4,24 @@
 // const parserHTML = new htmle();
 // markdown
 import MarkdownIt from "markdown-it";
-async function parserMarkdownPlugins() {
-  return {
-    sub: await import("markdown-it-sub"),
-    sup: await import("markdown-it-sup"),
-    footnote: await import("markdown-it-footnote"),
-    deflist: await import("markdown-it-deflist"),
-    abbr: await import("markdown-it-abbr"),
-    container: await import("markdown-it-container"),
-    ins: await import("markdown-it-ins"),
-    mark: await import("markdown-it-mark"),
-  };
+import MarkdownPluginSub from "markdown-it-sub";
+import MarkdownPluginSup from "markdown-it-sup";
+import MarkdownPluginFootnote from "markdown-it-footnote";
+import MarkdownPluginDeflist from "markdown-it-deflist";
+import MarkdownPluginAbbr from "markdown-it-abbr";
+import MarkdownPluginContainer from "markdown-it-container";
+import MarkdownPluginIns from "markdown-it-ins";
+import MarkdownPluginMark from "markdown-it-mark";
+const parserMarkdownPlugins = {
+  sub: MarkdownPluginSub,
+  sup: MarkdownPluginSup,
+  footnote: MarkdownPluginFootnote,
+  deflist: MarkdownPluginDeflist,
+  abbr: MarkdownPluginAbbr,
+  container: MarkdownPluginContainer,
+  ins: MarkdownPluginIns,
+  mark: MarkdownPluginMark,
+};
 }
 import hljs from "highlight.js";
 // utils
@@ -311,10 +318,9 @@ function parser(type, dataList, text) {
         },
       });
       if (dataList["markdown-plugin"]) {
-        const plugins = parserMarkdownPlugins();
         dataList["markdown-plugin"].split(" ").forEach((value) => {
-          if (plugins[value])
-            parserMarkdown = parserMarkdown.use(plugins[value]);
+          if (parserMarkdownPlugins[value])
+            parserMarkdown = parserMarkdown.use(parserMarkdownPlugins[value]);
         });
       }
       let b = text
