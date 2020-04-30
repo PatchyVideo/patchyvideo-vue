@@ -152,7 +152,6 @@ export default {
         }
       })
         .then(res => {
-          console.log(res);
           if (res.data.status == "SUCCEED") {
             // 因为pagesDetailOfThisPage是计算属性不能直接修改，这里直接修改pagesDetail
             this.pagesDetail = this.pagesDetail.map((item, index) => {
