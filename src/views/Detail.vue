@@ -354,10 +354,17 @@
               <img
                 :src="require('../static/img/' + item.item.site + '.png')"
                 width="16px"
-                style="margin-right:2px"
+                style="margin-right:2px;vertical-align: middle;"
               />
               <!-- 将页面参数刷新并重载页面，其中 @click.native 应该是 router-link 为了阻止 a 标签的默认跳转事件 -->
-              <a @click="shiftID(item._id.$oid)">{{ item.item.title }}</a>
+              <a
+                v-bind:class="{shortTitleForPageVideos: item.item.part_name,}"
+                @click="shiftID(item._id.$oid)"
+              >{{ item.item.title }}</a>
+              <span
+                v-if="item.item.part_name"
+                class="shortTitleForTitleOfPageVideos"
+              >P{{item.item.url.slice(item.item.url.indexOf("=") + 1, item.item.url.length)}}:{{item.item.part_name}}</span>
               <el-button
                 type="text"
                 @click="synctags(item._id.$oid)"
@@ -1165,6 +1172,24 @@ export default {
 .Copies_blibili ul a {
   cursor: pointer;
   text-align: center;
+}
+.shortTitleForPageVideos {
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 450px;
+  overflow: hidden;
+}
+.shortTitleForTitleOfPageVideos {
+  display: inline-block;
+  vertical-align: middle;
+  color: #606266;
+  font-size: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 400px;
+  overflow: hidden;
 }
 .Playlists {
   display: block;
