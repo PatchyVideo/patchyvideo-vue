@@ -129,7 +129,10 @@
                     :to="'/users/'+item.meta.created_by.$oid"
                     tag="a"
                   >{{$t("see_uploaders")}}</router-link>-->
-                  <span class="rating">{{parseInt(item.total_rating/item.total_rating_user||0)}}</span>
+                  <span
+                    class="rating"
+                    v-show="item.total_rating"
+                  >{{parseInt(item.total_rating/item.total_rating_user||0)}}</span>
                 </div>
                 <!--<div class="link-div">
                   <div class="link">
