@@ -114,7 +114,7 @@
 
 
 <template>
-  <div v-if="visible" v-loading="loading" ref="aside">
+  <div v-show="visible" v-loading="loading" ref="aside">
     <el-dialog
       :title="$t('tip')"
       :visible.sync="dialogVisible"
@@ -314,7 +314,7 @@
 </template>
 
 <script>
-import moment from "moment";
+// import moment from "moment";
 export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -673,7 +673,7 @@ export default {
   props: {
     visible: {
       type: Boolean,
-      defulet: false
+      default: false
     }
   },
   filters: {

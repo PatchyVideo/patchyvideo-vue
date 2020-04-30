@@ -1,5 +1,3 @@
-import Vue from "vue";
-
 function makeShadow(el) {
   makeAbstractShadow(el, el.childNodes);
 }
@@ -19,7 +17,7 @@ function data() {
   };
 }
 
-const ShadowRoot = Vue.extend({
+const ShadowRoot = {
   render(h) {
     return h(this.tag, {}, [
       this.pstatic
@@ -67,7 +65,7 @@ const ShadowRoot = Vue.extend({
       makeShadow(this.$el);
     }
   },
-});
+};
 
 function install(vue) {
   vue.component("shadow-root", ShadowRoot);

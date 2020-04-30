@@ -10,8 +10,8 @@ import "font-awesome/css/font-awesome.min.css";
 // 如若需要使用字体，导入该文件即可。
 // import "./ttf/cnfont.less"
 // import echarts from "echarts";
-import login from "./views/Login.vue";
-import $ from "jquery";
+// import login from "./views/Login.vue";
+// import $ from "jquery";
 import linkify from "vue-linkify";
 import shadow from "./plugins/shadow.js";
 

@@ -6,7 +6,7 @@ import "../static/css/base.css";
 import { changeSiteTitle } from "../static/js/base";
 import { Loading, Message } from "element-ui";
 import { getYiyan } from "../static/js/yiyan";
-import $ from "jquery";
+// import $ from "jquery";
 
 Vue.use(VueRouter);
 

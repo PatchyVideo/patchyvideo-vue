@@ -25,8 +25,7 @@ outputDir: 'dist',
             new BundleAnalyzerPlugin(),
             new webpack.ProvidePlugin({
                 jQuery: 'jquery',
-                $: 'jquery',
-                'windows.jQuery':'jquery'
+                $: 'jquery'
             })
         ],
         module:{

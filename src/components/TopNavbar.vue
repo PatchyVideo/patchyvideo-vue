@@ -224,7 +224,7 @@
 </template>
 
 <script>
-import TextComplete from "v-textcomplete";
+// import TextComplete from "v-textcomplete";
 export default {
   inject: ["reload"],
   data() {
@@ -666,7 +666,9 @@ export default {
       this.iptVal = this.iptVal2;
     }
   },
-  components: { TextComplete }
+  components: {
+    // TextComplete
+  }
 };
 </script>
 
