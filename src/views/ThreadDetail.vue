@@ -174,7 +174,7 @@
           </el-table>
           <el-dialog
             :title="
-              '发表回复 > ' + (replyT.type == 'thread' ? '主贴' : '楼中楼')
+              (replyT.type == 'thread' ? '主贴' : '楼中楼') + ' > 发表回复'
             "
             :visible.sync="replyT.visible"
           >
@@ -264,15 +264,162 @@
                       ><span v-else>Loading...</span></strong
                     >&emsp;&emsp;回复：</span
                   >
+                  <el-form :model="replyF" @submit.native.prevent>
+                    <el-input
+                      type="textarea"
+                      v-model="replyF.comment"
+                      required
+                    ></el-input>
+                  </el-form>
                 </template>
               </el-table-column>
             </el-table>
             <div slot="footer" class="dialog-footer">
-              <el-button @click="replyT.visible = false">取消</el-button>
-              <el-button type="primary" @click="replyT.visible = false"
-                >发表</el-button
-              >
+              <span style="color:gray">注：建议先预览再发贴，提前发现问题</span>&emsp;
+              <el-button @click="replyF.show = true">预览</el-button>
+              <el-button type="primary" @click="reply()">发表</el-button>
             </div>
+          </el-dialog>
+          <el-dialog
+            v-if="replyF.show"
+            :title="
+              (replyT.type == 'thread' ? '主贴' : '楼中楼') + ' > 预览回复'
+            "
+            :visible.sync="replyF.show"
+          >
+            <el-table
+              :data="[replyT.comment]"
+              :show-header="false"
+              empty-text="少女祈祷中..."
+              style="width: 100%"
+            >
+              <el-table-column label="作者" width="54">
+                <template slot-scope="comment" style="vertical-align: top;">
+                  <div
+                    v-if="commentAuthorsInfo[comment.row.meta.created_by.$oid]"
+                  >
+                    <router-link
+                      :to="'/users/' + comment.row.meta.created_by.$oid"
+                      target="_blank"
+                      :title="
+                        commentAuthorsInfo[comment.row.meta.created_by.$oid]
+                          .profile.username
+                      "
+                    >
+                      <el-avatar
+                        size="large"
+                        :src="
+                          'be/images/userphotos/' +
+                            commentAuthorsInfo[comment.row.meta.created_by.$oid]
+                              .profile.image
+                        "
+                      ></el-avatar
+                    ></router-link>
+                  </div>
+                  <div v-else>Loading...</div>
+                </template>
+              </el-table-column>
+              <el-table-column label="帖子内容">
+                <template slot-scope="comment">
+                  <div v-if="comment.row.deleted"></div>
+                  <div v-else>
+                    <span class="mb-3" style="color:gray"
+                      ><strong
+                        ><span
+                          v-if="
+                            commentAuthorsInfo[comment.row.meta.created_by.$oid]
+                          "
+                          >{{
+                            commentAuthorsInfo[comment.row.meta.created_by.$oid]
+                              .profile.username
+                          }}</span
+                        ><span v-else>Loading...</span></strong
+                      >&emsp;&emsp;<i class="el-icon-date"></i>&thinsp;{{
+                        time(comment.row.meta.created_at.$date)
+                      }}</span
+                    >
+                    <div v-shadow>
+                      <thread-comment
+                        :html="parse(comment.row.content)"
+                      ></thread-comment>
+                    </div>
+                    <el-table
+                      v-if="replyT.type != 'thread'"
+                      :data="[{ user }]"
+                      :show-header="false"
+                      empty-text="少女祈祷中..."
+                      style="width: 100%"
+                    >
+                      <el-table-column label="作者" width="54">
+                        <template
+                          slot-scope="data"
+                          style="vertical-align: top;"
+                        >
+                          <el-avatar
+                            size="large"
+                            :src="data.row.user.avatar"
+                          ></el-avatar>
+                        </template>
+                      </el-table-column>
+                      <el-table-column label="帖子内容">
+                        <template slot-scope="data">
+                          <span class="mb-3" style="color:gray"
+                            ><strong
+                              ><span v-if="data.row.user.username">{{
+                                data.row.user.username
+                              }}</span
+                              ><span v-else>Loading...</span></strong
+                            >&emsp;&emsp;<i class="el-icon-date"></i>&thinsp;{{
+                              time(+new Date())
+                            }}</span
+                          >
+                          <div v-shadow>
+                            <thread-comment
+                              :html="parse(replyF.comment)"
+                            ></thread-comment>
+                          </div>
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-table
+              v-if="replyT.type == 'thread'"
+              :data="[{ user }]"
+              :show-header="false"
+              empty-text="少女祈祷中..."
+              style="width: 100%"
+            >
+              <el-table-column label="作者" width="54">
+                <template slot-scope="data" style="vertical-align: top;">
+                  <el-avatar
+                    size="large"
+                    :src="data.row.user.avatar"
+                  ></el-avatar>
+                </template>
+              </el-table-column>
+              <el-table-column label="帖子内容">
+                <template slot-scope="data">
+                  <span class="mb-3" style="color:gray"
+                    ><strong
+                      ><span v-if="data.row.user.username">{{
+                        data.row.user.username
+                      }}</span
+                      ><span v-else>Loading...</span></strong
+                    >&emsp;&emsp;<i class="el-icon-date"></i>&thinsp;{{
+                      time(+new Date())
+                    }}</span
+                  >
+                  <div v-shadow>
+                    <thread-comment
+                      :html="parse(replyF.comment)"
+                    ></thread-comment>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
           </el-dialog>
         </el-col>
         <el-col
@@ -316,9 +463,14 @@ export default {
       commentAuthorsInfo: {},
       replyT: {
         visible: false,
+        conform: "",
         type: "",
         id: "",
         comment: {}
+      },
+      replyF: {
+        show: false,
+        comment: ""
       }
     };
   },
@@ -452,7 +604,30 @@ export default {
       }
     },
     reply2(type, id, comment) {
-      this.replyT = { visible: true, type, id, comment };
+      if (type == this.replyT.type && id == this.replyT.id) {
+        this.$set(this.replyT, "visible", true);
+        return;
+      }
+      if (this.replyF.comment != "") {
+        this.$confirm("此操作将清空您已存的编辑，确定要继续吗？", "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            this.replyT = { visible: true, type, id, comment };
+            this.replyF = { show: false, comment: "" };
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "回复已取消"
+            });
+          });
+      } else {
+        this.replyT = { visible: true, type, id, comment };
+        this.replyF = { show: false, comment: "" };
+      }
     }
   }
 };

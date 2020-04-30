@@ -1,7 +1,7 @@
 // parsers
 // HTML
-// const htmle = import("html-entities").XmlEntities;
-// const parserHTML = new htmle();
+import { XmlEntities as htmle } from "html-entities";
+const parserHTML = new htmle();
 // markdown
 import MarkdownIt from "markdown-it";
 import MarkdownPluginSub from "markdown-it-sub";
@@ -22,13 +22,13 @@ const parserMarkdownPlugins = {
   ins: MarkdownPluginIns,
   mark: MarkdownPluginMark,
 };
-import hljs from './hljs';
+import hljs from "./hljs";
 // utils
 import { ParseFace, ParseEmoji } from "./comment";
 
 function parse(text) {
   const head = text.match(/^\[\[((?:[\w-]+:"[^"]+" *)*)\]\]\s*/); // 匹配全局属性
-  let renderText = text;
+  let renderText = text.replace(/\[\[\{[\w]+\}\]\]/g, ""); // 过滤渲染属性
   if (head) {
     // 渲染全局属性
     const data = getData(" " + head[1]);
@@ -52,28 +52,86 @@ function parse(text) {
   }
   let t = renderText.text;
   renderText = "";
-  while (t.match(/\[\[\{renderd\}\]\]/)) {
-    t = t.match(/^([\S\s]*?)\n?\[\[\{renderd\}\]\]([\S\s]*)/);
-    renderText += t[1].replace(/\n/g, "<br />\n");
+  console.log(t);
+  t = t
+    .replace(
+      /\<(h[1-6]|strong|em|s|u)\>[\S\s]*?\<\/\1\>/g,
+      (match, p1, offset, string) => {
+        return tohtml(match);
+      }
+    )
+    .replace(
+      /\<script[^\>]*?\>\n?([\S\s]*?)\n?\<\/script\>/g,
+      (match, p1, offset, string) => {
+        return (
+          '[[{renderd}]]<pre><code class="language-javascript">' +
+          hljs.highlight("javascript", p1).value +
+          "</code></pre>[[{/renderd}]]"
+        );
+      }
+    )
+    .replace(
+      /\<style[^\>]*?\>\n?([\S\s]*?)\n?\<\/style\>/g,
+      (match, p1, offset, string) => {
+        return (
+          '[[{renderd}]]<pre><code class="language-css">' +
+          hljs.highlight("css", p1).value +
+          "</code></pre>[[{/renderd}]]"
+        );
+      }
+    )
+    .replace(/\n?\[\[\{renderd\}\]\]/g, "[[{html}]]")
+    .replace(/\[\[\{\/renderd\}\]\]\n?/g, "[[{/html}]]");
+  console.log(t);
+  while (t.match(/\[\[\{html\}\]\]/)) {
+    t = t.match(/^([\S\s]*?)\[\[\{html\}\]\]([\S\s]*)/);
+    renderText += parserHTML.encode(t[1]).replace(/\n/g, "\n<br />");
     while (
-      t[2].match(/\[\[\{renderd\}\]\]/) &&
-      t[2].match(/\[\[\{\/renderd\}\]\]/).index >
-        t[2].match(/\[\[\{renderd\}\]\]/).index
+      t[2].match(/\[\[\{html\}\]\]/) &&
+      t[2].match(/\[\[\{\/html\}\]\]/).index >
+        t[2].match(/\[\[\{html\}\]\]/).index
     ) {
-      t[2] = t[2].replace(
-        /\[\[\{renderd\}\]\]([\S\s]*?)\[\[\{\/renderd\}\]\]/,
-        "$1"
-      );
+      t[2] = t[2].replace(/\[\[\{html\}\]\]([\S\s]*?)\[\[\{\/html\}\]\]/, "$1");
     }
-    t = t[2].match(/([\S\s]*?)\[\[\{\/renderd\}\]\]\n?([\S\s]*)/);
+    t = t[2].match(/([\S\s]*?)\[\[\{\/html\}\]\]([\S\s]*)/);
     renderText += t[1];
     t = t[2];
   }
-  renderText += t.replace(/\n/g, "<br />\n");
+  renderText += parserHTML.encode(t).replace(/\n/g, "\n<br />");
   renderText = renderText
     .replace(/&(amp;)*_dl;/g, "[[")
     .replace(/&(amp;)*_dr;/g, "]]"); // 转义
   return renderText;
+}
+
+function tohtml(str) {
+  let f = str.match(/([\S\s]*?)\<(strong|em|s|u)\>([\S\s]*?)\<\/\2\>([\S\s]*)/);
+  if (f)
+    return (
+      f[1] +
+      "[[{html}]]<" +
+      f[2] +
+      ">[[{/html}]]" +
+      tohtml(f[3]) +
+      "[[{html}]]</" +
+      f[2] +
+      ">[[{/html}]]" +
+      tohtml(f[4])
+    );
+  f = str.match(/([\S\s]*?)\<(h[1-6])\>([\S\s]*?)\<\/\2\>([\S\s]*)/);
+  if (f)
+    return (
+      f[1] +
+      "[[{renderd}]]<" +
+      f[2] +
+      ">[[{/renderd}]]" +
+      tohtml(f[3]) +
+      "[[{renderd}]]</" +
+      f[2] +
+      ">[[{/renderd}]]" +
+      tohtml(f[4])
+    );
+  return str;
 }
 
 function parserChunk(text, stack, aindex) {
@@ -98,7 +156,7 @@ function parserChunk(text, stack, aindex) {
   // }
   const stackC = stack.push({
     type: chunkT[1],
-    index: aindex + chunkT.index - 1,
+    index: aindex + chunkT.index,
     indexT: aindex + chunkT.index + chunkSize,
     data: data || {},
   });
@@ -141,10 +199,10 @@ function parserChunk(text, stack, aindex) {
     const t = parserChunk(
       textE.text.slice(chunkE.index + chunkE[0].length),
       stack,
-      aindex + chunkT.index + chunkSize + textE.l + chunkE[0].length
+      aindex + chunkT.index + chunkSize + textE.l + chunkE[0].length - 1
     );
     return {
-      l: chunkT.index + chunkSize + textE.l + chunkE[0].length + t.l,
+      l: chunkT.index + chunkSize + textE.l + chunkE[0].length + t.l - 1,
       text: text + t.text,
     };
   }
@@ -157,10 +215,10 @@ function parserChunk(text, stack, aindex) {
   const t = parserChunk(
     textE.text.slice(chunkE.index + chunkE[0].length),
     stack,
-    aindex + chunkT.index + chunkSize + textE.l + chunkE[0].length
+    aindex + chunkT.index + chunkSize + textE.l + chunkE[0].length - 1
   );
   return {
-    l: chunkT.index + chunkSize + textE.l + chunkE[0].length + t.l,
+    l: chunkT.index + chunkSize + textE.l + chunkE[0].length + t.l - 1,
     text: textB + t.text,
   };
 }
@@ -187,7 +245,7 @@ function readError(e, text) {
   msg += "Line " + p.l + ":\n  " + texta[p.l] + "\n";
   for (let t = 0; t < p.r; t++) msg += " ";
   msg += "->|";
-  for (let t = 0; t < sc.indexT - sc.index - 3; t++) msg += "-";
+  for (let t = 0; t < sc.indexT - sc.index - 2; t++) msg += "-";
   msg += "|<-\n";
   // 输出堆栈
   // msg += "[[{STACK}]]\n";
@@ -257,8 +315,16 @@ function queryData(type, data, text, stack) {
     }
     case "strong":
     case "em":
-    case "s": {
-      text = "<" + type + ">" + text + "</" + type + ">";
+    case "s":
+    case "u": {
+      text =
+        "[[{html}]]<" +
+        type +
+        ">[[{/html}]]" +
+        text +
+        "[[{html}]]</" +
+        type +
+        ">[[{/html}]]";
       b = true;
       break;
     }
@@ -271,9 +337,9 @@ function queryData(type, data, text, stack) {
       text =
         "[[{renderd}]]\n<" +
         type +
-        ">" +
+        ">[[{/renderd}]]" +
         text +
-        "</" +
+        "[[{renderd}]]</" +
         type +
         ">\n[[{/renderd}]]";
       b = true;
@@ -281,14 +347,19 @@ function queryData(type, data, text, stack) {
     }
     case "link": {
       if (!data.href) break;
-      text = '<a href="' + data.href + '">' + text + "</a>";
+      text =
+        '[[{html}]]<a href="' +
+        data.href +
+        '">[[{/html}]]' +
+        text +
+        "[[{html}]]</a>[[{/html}]]";
       b = true;
       break;
     }
     case "face": {
       const face = ParseFace(data.name);
       text = face
-        ? `[[{renderd}]]\n<img src='${face}' />\n[[{/renderd}]]`
+        ? `[[{html}]]\n<img src='${face}' />\n[[{/html}]]`
         : data.name;
       b = true;
       break;
