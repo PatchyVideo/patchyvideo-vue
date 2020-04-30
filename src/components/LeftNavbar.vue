@@ -273,16 +273,13 @@
                       >{{ item.replace(/_/g," ") }}</span>
                     </p>
                   </div>
-                  <el-button
-                    v-if="val=='Author'"
-                    size="mini"
-                    style="margin-left:5px;"
-                    @click="openAuthorData(item)"
-                  >详情</el-button>
                 </div>
                 <div v-else-if="val=='Author'">
                   <p v-bind:class="val" :ref="val" style="display:inline;">
-                    <span @click="gotoHome(item)">{{ item.replace(/_/g," ") }}</span>
+                    <span
+                      @click.left="gotoHome(item)"
+                      @click.middle="gotoHome(item, true)"
+                    >{{ item.replace(/_/g," ") }}</span>
                   </p>
                   <el-button
                     v-if="val=='Author'"
@@ -367,16 +364,13 @@ export default {
     // 点击标签显示标签的搜索结果
     gotoHome(key, _blank = false) {
       if (key != "") {
-        var routerPath = this.$router.resolve({
-          path: "/home",
-          query: { keyword: key }
-        });
-        console.log(_blank);
         if (_blank) {
+          var routerPath = this.$router.resolve({
+            path: "/home",
+            query: { keyword: key }
+          });
           window.open(routerPath.href, "_blank");
-          console.log("hi");
         } else {
-          console.log("ha");
           this.$router.push({
             path: "/home",
             query: { keyword: key }

@@ -114,10 +114,9 @@
                   </div>
                 </div>
               </a>
-              <!-- 封面图片 -->
 
               <div class="video-detail">
-                <!-- 图标和标题 -->
+                <!-- 图标和标题，以及分P -->
                 <div class="title-div">
                   <img
                     :src="require('../../static/img/' + item.item.site + '.png')"
@@ -131,13 +130,17 @@
                       tag="a"
                     >{{ item.item.title }}</router-link>
                   </h4>
+                  <h5 v-if="item.item.part_name">
+                    <strong>P{{pageOfVideo(item.item.url)}}:{{ item.item.part_name }}</strong>
+                  </h5>
                 </div>
                 <!-- 图标和标题 -->
                 <!-- 内容 -->
                 <p
+                  v-bind:class="{shortDescForPageVideos: item.item.part_name,}"
                   :title="toGMT(item.item.upload_time.$date)+'\n'+(item.item.desc||'此视频没有简介哦')"
                 >{{ getDesc(item.item.desc) }}</p>
-                <!-- 内容 -->
+                <!-- 作者信息 -->
                 <!--<router-link
                   class="linkToPublisher"
                   target="_blank"
@@ -151,6 +154,7 @@
                 <span
                   class="rating"
                   title="评分"
+                  v-show="item.total_rating"
                 >{{(item.total_rating/item.total_rating_user||0).toFixed(1)}}</span>
               </div>
             </div>
@@ -297,6 +301,12 @@ export default {
           (Array(2).join(0) + s).slice(-2) +
           " GMT+8"
         );
+      };
+    },
+    // B站分P视频的哪一P
+    pageOfVideo() {
+      return url => {
+        return url.slice(url.indexOf("=") + 1, url.length);
       };
     }
   },
@@ -553,14 +563,17 @@ export default {
     },
     getDesc(desc) {
       if (desc) {
-        let d = desc
-        d = d.replace(/(?:[-—=+~]{4,}([^-—=+~\s]+))?(?:[-—=+~]{4,})(?:$|(?=[^-—=+~>》→]))/g, '$1') // 删除分割线
-        d = d.replace(/(?:[-—=+~]+)(?=[-—=+~]{4}[>》→])/, '') // 缩短长箭头
-        d = d.replace(/[↑↓]/g, '') // 删除上下指向
-        d = d.replace(/\s(?=\s)/g, '') // 删除连续空格
-        return d
+        let d = desc;
+        d = d.replace(
+          /(?:[-—=+~]{4,}([^-—=+~\s]+))?(?:[-—=+~]{4,})(?:$|(?=[^-—=+~>》→]))/g,
+          "$1"
+        ); // 删除分割线
+        d = d.replace(/(?:[-—=+~]+)(?=[-—=+~]{4}[>》→])/, ""); // 缩短长箭头
+        d = d.replace(/[↑↓]/g, ""); // 删除上下指向
+        d = d.replace(/\s(?=\s)/g, ""); // 删除连续空格
+        return d;
       } else {
-        return '此视频没有简介哦'
+        return "此视频没有简介哦";
       }
     }
   },
@@ -729,16 +742,21 @@ export default {
       img {
         vertical-align: bottom;
       }
+      h5 {
+        margin-left: 20px;
+        color: #606266;
+      }
     }
     p {
       display: block;
+      color: #606266;
       width: 90%;
       font-size: 1rem;
       line-height: 1.15rem;
       white-space: pre-wrap;
       text-overflow: ellipsis;
       overflow: hidden;
-      height: 72px;
+      height: 70px;
       margin-bottom: 5px;
       padding-top: 5px;
       /* 使文字变为最多显示4行，多余的使用省略号代替 */
@@ -842,5 +860,13 @@ export default {
 }
 .linkToPublisher {
   font-size: 14px;
+}
+// 为了兼容B站分P功能做出动态绑定的css，因为优先级的关系只能大量使用!important
+.shortDescForPageVideos {
+  height: 52px !important;
+  /* 使文字变为最多显示4行，多余的使用省略号代替 */
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3 !important;
+  -webkit-box-orient: vertical !important;
 }
 </style>

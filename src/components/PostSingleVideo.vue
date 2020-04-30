@@ -256,6 +256,13 @@ export default {
   created() {},
   mounted() {
     this.buildParsersAndExpanders();
+    // 如果是从视频详情转来的发布分p索引的情况，获取视频URL
+    // ×而且此时必定会同时传入视频的分类
+    if (this.$route.query.url != undefined) {
+      this.VideoURL = this.$route.query.url;
+      this.RepostType = this.$route.query.type;
+      this.onFetchVideo_Click();
+    }
   },
   methods: {
     // 匹配 URL 的相关设置
@@ -725,6 +732,8 @@ export default {
         .then(result => {
           if (result.data.status == "SUCCEED") {
             this.open4();
+            this.show = false;
+            this.VideoURL = "";
           } else if (result.data.status == "FAILED") {
             if (result.data.data.reason == "TAG_NOT_EXIST") {
               var errorTag = result.data.data.aux;
