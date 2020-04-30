@@ -111,6 +111,12 @@
                       tag="a"
                     >{{ item.item.title }}</router-link>
                   </h4>
+                  <h5
+                    v-if="item.item.part_name"
+                    :title="'P'+pageOfVideo(item.item.url)+':'+item.item.part_name"
+                  >
+                    <strong>P{{pageOfVideo(item.item.url)}}:{{ item.item.part_name }}</strong>
+                  </h5>
                 </div>
                 <p
                   :title="toGMT(item.item.upload_time.$date)+'\n'+(item.item.desc||'此视频没有简介哦')"
@@ -284,6 +290,12 @@ export default {
             " GMT+8"
           );
         }
+      };
+    },
+    // B站分P视频的哪一P
+    pageOfVideo() {
+      return url => {
+        return url.slice(url.indexOf("=") + 1, url.length);
       };
     }
   },
@@ -536,14 +548,17 @@ export default {
     },
     getDesc(desc) {
       if (desc) {
-        let d = desc
-        d = d.replace(/(?:[-—=+~]{4,}([^-—=+~\s]+))?(?:[-—=+~]{4,})(?:$|(?=[^-—=+~>》→]))/g, '$1') // 删除分割线
-        d = d.replace(/(?:[-—=+~]+)(?=[-—=+~]{4}[>》→])/, '') // 缩短长箭头
-        d = d.replace(/[↑↓]/g, '') // 删除上下指向
-        d = d.replace(/\s(?=\s)/g, '') // 删除连续空格
-        return d
+        let d = desc;
+        d = d.replace(
+          /(?:[-—=+~]{4,}([^-—=+~\s]+))?(?:[-—=+~]{4,})(?:$|(?=[^-—=+~>》→]))/g,
+          "$1"
+        ); // 删除分割线
+        d = d.replace(/(?:[-—=+~]+)(?=[-—=+~]{4}[>》→])/, ""); // 缩短长箭头
+        d = d.replace(/[↑↓]/g, ""); // 删除上下指向
+        d = d.replace(/\s(?=\s)/g, ""); // 删除连续空格
+        return d;
       } else {
-        return '此视频没有简介哦'
+        return "此视频没有简介哦";
       }
     }
   },
@@ -711,7 +726,14 @@ export default {
 .video-detail > .title-div > h4 {
   display: inline;
 }
+.video-detail > .title-div > h5 {
+  color: #606266;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .video-detail > p {
+  color: #606266;
   font-size: 1rem;
   line-height: 1.1rem;
   white-space: pre-wrap;
