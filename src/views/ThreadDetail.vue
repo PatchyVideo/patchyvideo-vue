@@ -343,7 +343,13 @@ export default {
         if (result.data.status == "SUCCEED") {
           this.title = result.data.data.title;
           result.data.data.comments.forEach(value => {
-            if (!value.deleted) this.commentList.push(value);
+            if (value.deleted) return;
+            let c = JSON.parse(JSON.stringify(value));
+            c.children = [];
+            for (const h of value.children) {
+              if (!h.deleted) c.children.push(h);
+            }
+            this.commentList.push(c);
           });
           this.commentList.push({
             _id: { $oid: "5ea505d8158a8745f2761268" },
