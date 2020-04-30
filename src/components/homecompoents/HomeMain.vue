@@ -303,6 +303,7 @@ export default {
         );
       };
     },
+    // B站分P视频的哪一P
     pageOfVideo() {
       return url => {
         return url.slice(url.indexOf("=") + 1, url.length);
