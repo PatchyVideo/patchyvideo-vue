@@ -6,264 +6,43 @@
       <el-row>
         <el-col :span="18">
           <h2>意见反馈 > {{ title || "Loading..." }}</h2>
-          <el-table
-            :data="commentList"
-            :show-header="false"
-            empty-text="少女祈祷中..."
-            style="width: 100%"
-          >
-            <el-table-column label="作者" width="54">
-              <template slot-scope="comment" style="vertical-align: top;">
-                <div
-                  v-if="commentAuthorsInfo[comment.row.meta.created_by.$oid]"
-                >
-                  <router-link
-                    :to="'/users/' + comment.row.meta.created_by.$oid"
-                    target="_blank"
-                    :title="
-                      commentAuthorsInfo[comment.row.meta.created_by.$oid]
-                        .profile.username
-                    "
-                  >
-                    <el-avatar
-                      size="large"
-                      :src="
-                        'be/images/userphotos/' +
-                          commentAuthorsInfo[comment.row.meta.created_by.$oid]
-                            .profile.image
-                      "
-                    ></el-avatar
-                  ></router-link>
-                </div>
-                <div v-else>Loading...</div>
-              </template>
-            </el-table-column>
-            <el-table-column label="帖子内容">
-              <template slot-scope="comment">
-                <div v-if="comment.row.deleted"></div>
-                <div>
-                  <span class="mb-3" style="color:gray"
-                    ><strong
-                      ><span
-                        v-if="
-                          commentAuthorsInfo[comment.row.meta.created_by.$oid]
-                        "
-                        >{{
-                          commentAuthorsInfo[comment.row.meta.created_by.$oid]
-                            .profile.username
-                        }}</span
-                      ><span v-else>Loading...</span></strong
-                    >&emsp;&emsp;<i class="el-icon-date"></i>&thinsp;{{
-                      time(comment.row.meta.created_at.$date)
-                    }}</span
-                  >
-                  <div
-                    v-if="!comment.row.hidden"
-                    style="float:right"
-                    @click="reply2('user', comment.row._id.$oid, comment.row)"
-                  >
-                    回复
-                  </div>
-                  <div v-if="!comment.row.hidden" v-shadow>
-                    <thread-comment
-                      :html="parse(comment.row.content)"
-                    ></thread-comment>
-                  </div>
-                  <div v-else>
-                    此回复因离题或语言过激被折叠
-                    <span
-                      style="color:#409eff"
-                      @click="comment.row.hidden = false"
-                      >显示</span
-                    >
-                  </div>
-                  <el-table
-                    v-if="
-                      comment.row.children && comment.row.children.length > 0
-                    "
-                    :data="comment.row.children"
-                    :show-header="false"
-                    empty-text="少女祈祷中..."
-                    style="width: 100%"
-                  >
-                    <el-table-column label="作者" width="54">
-                      <template
-                        slot-scope="comment"
-                        style="vertical-align: top;"
-                      >
-                        <div
-                          v-if="
-                            commentAuthorsInfo[comment.row.meta.created_by.$oid]
-                          "
-                        >
-                          <router-link
-                            :to="'/users/' + comment.row.meta.created_by.$oid"
-                            target="_blank"
-                            :title="
-                              commentAuthorsInfo[
-                                comment.row.meta.created_by.$oid
-                              ].profile.username
-                            "
-                          >
-                            <el-avatar
-                              size="large"
-                              :src="
-                                'be/images/userphotos/' +
-                                  commentAuthorsInfo[
-                                    comment.row.meta.created_by.$oid
-                                  ].profile.image
-                              "
-                            ></el-avatar
-                          ></router-link>
-                        </div>
-                        <div v-else>Loading...</div>
-                      </template>
-                    </el-table-column>
-                    <el-table-column label="帖子内容">
-                      <template slot-scope="comment">
-                        <div v-if="comment.row.deleted"></div>
-                        <div v-else>
-                          <span class="mb-3" style="color:gray"
-                            ><strong
-                              ><span
-                                v-if="
-                                  commentAuthorsInfo[
-                                    comment.row.meta.created_by.$oid
-                                  ]
-                                "
-                                >{{
-                                  commentAuthorsInfo[
-                                    comment.row.meta.created_by.$oid
-                                  ].profile.username
-                                }}</span
-                              ><span v-else>Loading...</span></strong
-                            >&emsp;&emsp;<i class="el-icon-date"></i>&thinsp;{{
-                              time(comment.row.meta.created_at.$date)
-                            }}</span
-                          >
-                          <div
-                            v-if="!comment.row.hidden"
-                            style="float:right;margin-right:-10px"
-                            @click="
-                              reply2('user', comment.row._id.$oid, comment.row)
-                            "
-                          >
-                            回复
-                          </div>
-                          <div v-if="!comment.row.hidden" v-shadow>
-                            <thread-comment
-                              :html="parse(comment.row.content)"
-                              :fontsize="0.8"
-                            ></thread-comment>
-                          </div>
-                          <div v-else-if="comment.row.hidden">
-                            此回复因离题或语言过激被折叠
-                            <span
-                              style="color:#409eff"
-                              @click="comment.row.hidden = false"
-                              >显示</span
-                            >
-                          </div>
-                        </div>
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
+          <div class="t"></div>
+          <div v-for="(comment, index) in commentList" :key="index">
+            <thread-comment-box
+              :comment="comment"
+              :commentAuthorsInfo="commentAuthorsInfo"
+              @reply2="reply2"
+            ></thread-comment-box>
+          </div>
           <el-dialog
             :title="
               (replyT.type == 'thread' ? '主贴' : '楼中楼') + ' > 发表回复'
             "
             :visible.sync="replyT.visible"
           >
-            <el-table
+            <thread-comment-box
               v-if="replyT.comment"
-              :data="[replyT.comment]"
-              :show-header="false"
-              empty-text="少女祈祷中..."
-              style="width: 100%"
+              :pre="true"
+              :comment="replyT.comment"
+              :commentAuthorsInfo="commentAuthorsInfo"
+            ></thread-comment-box>
+            <div
+              style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;"
             >
-              <el-table-column label="作者" width="54">
-                <template slot-scope="comment" style="vertical-align: top;">
-                  <div
-                    v-if="commentAuthorsInfo[comment.row.meta.created_by.$oid]"
-                  >
-                    <router-link
-                      :to="'/users/' + comment.row.meta.created_by.$oid"
-                      target="_blank"
-                      :title="
-                        commentAuthorsInfo[comment.row.meta.created_by.$oid]
-                          .profile.username
-                      "
+              <div class="left-avatar">
+                <el-avatar size="large" :src="user.avatar"></el-avatar>
+              </div>
+              <div class="comment-box">
+                <div class="title-div">
+                  <p class="title">
+                    <span v-if="user.username">{{ user.username }}</span
+                    ><span v-else>Loading...</span>&nbsp;<span
+                      style="color: gray;"
+                      >回复：</span
                     >
-                      <el-avatar
-                        size="large"
-                        :src="
-                          'be/images/userphotos/' +
-                            commentAuthorsInfo[comment.row.meta.created_by.$oid]
-                              .profile.image
-                        "
-                      ></el-avatar
-                    ></router-link>
-                  </div>
-                  <div v-else>Loading...</div>
-                </template>
-              </el-table-column>
-              <el-table-column label="帖子内容">
-                <template slot-scope="comment">
-                  <div v-if="comment.row.deleted"></div>
-                  <div v-else>
-                    <span class="mb-3" style="color:gray"
-                      ><strong
-                        ><span
-                          v-if="
-                            commentAuthorsInfo[comment.row.meta.created_by.$oid]
-                          "
-                          >{{
-                            commentAuthorsInfo[comment.row.meta.created_by.$oid]
-                              .profile.username
-                          }}</span
-                        ><span v-else>Loading...</span></strong
-                      >&emsp;&emsp;<i class="el-icon-date"></i>&thinsp;{{
-                        time(comment.row.meta.created_at.$date)
-                      }}</span
-                    >
-                    <div v-shadow>
-                      <thread-comment
-                        :html="parse(comment.row.content)"
-                      ></thread-comment>
-                    </div>
-                  </div>
-                </template>
-              </el-table-column>
-            </el-table>
-            <el-table
-              v-if="replyT.comment"
-              :data="[{ user }]"
-              :show-header="false"
-              empty-text="少女祈祷中..."
-              style="width: 100%"
-            >
-              <el-table-column label="作者" width="54">
-                <template slot-scope="data" style="vertical-align: top;">
-                  <el-avatar
-                    size="large"
-                    :src="data.row.user.avatar"
-                  ></el-avatar>
-                </template>
-              </el-table-column>
-              <el-table-column label="帖子内容">
-                <template slot-scope="data">
-                  <span class="mb-3" style="color:gray"
-                    ><strong
-                      ><span v-if="data.row.user.username">{{
-                        data.row.user.username
-                      }}</span
-                      ><span v-else>Loading...</span></strong
-                    >&emsp;&emsp;回复：</span
-                  >
+                  </p>
+                </div>
+                <div class="comment-div" style="padding: 15px;">
                   <el-form :model="replyF" @submit.native.prevent>
                     <el-input
                       type="textarea"
@@ -271,11 +50,12 @@
                       required
                     ></el-input>
                   </el-form>
-                </template>
-              </el-table-column>
-            </el-table>
+                </div>
+              </div>
+            </div>
             <div slot="footer" class="dialog-footer">
-              <span style="color:gray">注：建议先预览再发贴，提前发现问题</span>&emsp;
+              <span style="color:gray">注：建议先预览再发贴，提前发现问题</span
+              >&emsp;
               <el-button @click="replyF.show = true">预览</el-button>
               <el-button type="primary" @click="reply()">发表</el-button>
             </div>
@@ -287,139 +67,50 @@
             "
             :visible.sync="replyF.show"
           >
-            <el-table
-              :data="[replyT.comment]"
-              :show-header="false"
-              empty-text="少女祈祷中..."
-              style="width: 100%"
-            >
-              <el-table-column label="作者" width="54">
-                <template slot-scope="comment" style="vertical-align: top;">
-                  <div
-                    v-if="commentAuthorsInfo[comment.row.meta.created_by.$oid]"
-                  >
-                    <router-link
-                      :to="'/users/' + comment.row.meta.created_by.$oid"
-                      target="_blank"
-                      :title="
-                        commentAuthorsInfo[comment.row.meta.created_by.$oid]
-                          .profile.username
-                      "
-                    >
-                      <el-avatar
-                        size="large"
-                        :src="
-                          'be/images/userphotos/' +
-                            commentAuthorsInfo[comment.row.meta.created_by.$oid]
-                              .profile.image
-                        "
-                      ></el-avatar
-                    ></router-link>
-                  </div>
-                  <div v-else>Loading...</div>
-                </template>
-              </el-table-column>
-              <el-table-column label="帖子内容">
-                <template slot-scope="comment">
-                  <div v-if="comment.row.deleted"></div>
-                  <div v-else>
-                    <span class="mb-3" style="color:gray"
-                      ><strong
-                        ><span
-                          v-if="
-                            commentAuthorsInfo[comment.row.meta.created_by.$oid]
-                          "
-                          >{{
-                            commentAuthorsInfo[comment.row.meta.created_by.$oid]
-                              .profile.username
-                          }}</span
-                        ><span v-else>Loading...</span></strong
-                      >&emsp;&emsp;<i class="el-icon-date"></i>&thinsp;{{
-                        time(comment.row.meta.created_at.$date)
-                      }}</span
-                    >
-                    <div v-shadow>
-                      <thread-comment
-                        :html="parse(comment.row.content)"
-                      ></thread-comment>
-                    </div>
-                    <el-table
-                      v-if="replyT.type != 'thread'"
-                      :data="[{ user }]"
-                      :show-header="false"
-                      empty-text="少女祈祷中..."
-                      style="width: 100%"
-                    >
-                      <el-table-column label="作者" width="54">
-                        <template
-                          slot-scope="data"
-                          style="vertical-align: top;"
-                        >
-                          <el-avatar
-                            size="large"
-                            :src="data.row.user.avatar"
-                          ></el-avatar>
-                        </template>
-                      </el-table-column>
-                      <el-table-column label="帖子内容">
-                        <template slot-scope="data">
-                          <span class="mb-3" style="color:gray"
-                            ><strong
-                              ><span v-if="data.row.user.username">{{
-                                data.row.user.username
-                              }}</span
-                              ><span v-else>Loading...</span></strong
-                            >&emsp;&emsp;<i class="el-icon-date"></i>&thinsp;{{
-                              time(+new Date())
-                            }}</span
-                          >
-                          <div v-shadow>
-                            <thread-comment
-                              :html="parse(replyF.comment)"
-                            ></thread-comment>
-                          </div>
-                        </template>
-                      </el-table-column>
-                    </el-table>
-                  </div>
-                </template>
-              </el-table-column>
-            </el-table>
-            <el-table
+            <thread-comment-box
+              v-if="replyT.comment"
+              :pre="true"
+              :comment="replyT.comment"
+              :adcomment="
+                replyT.type != 'thread'
+                  ? {
+                      username: user.username,
+                      avatar: user.avatar,
+                      comment: replyF.comment,
+                      date: +new Date()
+                    }
+                  : null
+              "
+              :commentAuthorsInfo="commentAuthorsInfo"
+            ></thread-comment-box>
+            <div
               v-if="replyT.type == 'thread'"
-              :data="[{ user }]"
-              :show-header="false"
-              empty-text="少女祈祷中..."
-              style="width: 100%"
+              style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;"
             >
-              <el-table-column label="作者" width="54">
-                <template slot-scope="data" style="vertical-align: top;">
-                  <el-avatar
-                    size="large"
-                    :src="data.row.user.avatar"
-                  ></el-avatar>
-                </template>
-              </el-table-column>
-              <el-table-column label="帖子内容">
-                <template slot-scope="data">
-                  <span class="mb-3" style="color:gray"
-                    ><strong
-                      ><span v-if="data.row.user.username">{{
-                        data.row.user.username
+              <div class="left-avatar">
+                <el-avatar size="large" :src="user.avatar"></el-avatar>
+              </div>
+              <div class="comment-box">
+                <div class="title-div">
+                  <p class="title">
+                    <span>{{ user.username || "Loading" }}</span
+                    >&nbsp;<span style="color: gray;"
+                      ><i class="el-icon-date"></i>&thinsp;{{
+                        time(+new Date())
                       }}</span
-                      ><span v-else>Loading...</span></strong
-                    >&emsp;&emsp;<i class="el-icon-date"></i>&thinsp;{{
-                      time(+new Date())
-                    }}</span
-                  >
+                    >
+                  </p>
+                </div>
+                <div class="comment-div" style="padding: 15px;">
                   <div v-shadow>
                     <thread-comment
                       :html="parse(replyF.comment)"
+                      :size="0.9"
                     ></thread-comment>
                   </div>
-                </template>
-              </el-table-column>
-            </el-table>
+                </div>
+              </div>
+            </div>
           </el-dialog>
         </el-col>
         <el-col
@@ -445,6 +136,7 @@
 <script>
 import topNavbar from "../components/TopNavbar.vue";
 import cfooter from "../components/Footer.vue";
+import ThreadCommentBox from "../components/ThreadCommentBox.vue";
 import ThreadComment from "../components/ThreadComment.vue";
 
 import { changeSiteTitle } from "../static/js/base";
@@ -454,7 +146,8 @@ export default {
   components: {
     topNavbar,
     cfooter,
-    ThreadComment
+    ThreadComment,
+    ThreadCommentBox
   },
   data() {
     return {
@@ -656,5 +349,60 @@ export default {
 }
 .mb-1 {
   margin-bottom: 0.25em;
+}
+.t {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e1e4e8;
+}
+.left-avatar {
+  position: absolute;
+  left: 16px;
+}
+.title {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  color: #586069;
+  flex: 1 1 auto;
+}
+.title-div {
+  background-color: #f6f8fa;
+  border-bottom: 1px solid #d1d5da;
+  padding-right: 16px;
+  padding-left: 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.comment-box {
+  position: relative;
+}
+.comment-box:after,
+.comment-box:before {
+  position: absolute;
+  top: 11px;
+  right: 100%;
+  left: -16px;
+  display: block;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  content: " ";
+  border-color: transparent;
+  border-style: solid solid outset;
+}
+.comment-box:before {
+  border-width: 8px;
+  border-right-color: #d1d5da;
+}
+.comment-box:after {
+  margin-top: 1px;
+  margin-left: 2px;
+  border-width: 7px;
+  border-right-color: #f6f8fa;
+}
+.comment-div {
+  overflow: visible;
+  font-size: 14px;
 }
 </style>
