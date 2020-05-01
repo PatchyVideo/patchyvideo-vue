@@ -359,7 +359,7 @@ function queryData(type, data, text, stack) {
     case "face": {
       const face = ParseFace(data.name);
       text = face
-        ? `[[{html}]]\n<img src='${face}' />\n[[{/html}]]`
+        ? `[[{html}]]<img src='${face}' />[[{/html}]]`
         : data.name;
       b = true;
       break;
@@ -368,6 +368,17 @@ function queryData(type, data, text, stack) {
       const emoji = ParseEmoji(data.name);
       text = emoji ? emoji : data.name;
       b = true;
+      break;
+    }
+    case "img": {
+      if (data.src) {
+        text =
+          `[[{html}]]<img src="${data.src}"` +
+          (data.width && ` width="${data.width}"`) +
+          (data.height && ` height="${data.height}"`) +
+          `/>[[{/html}]]`;
+        b = true;
+      }
       break;
     }
   }
