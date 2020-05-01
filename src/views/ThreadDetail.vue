@@ -179,101 +179,105 @@ export default {
     }
   },
   mounted() {
-    this.axios({
-      method: "post",
-      url: "/be/forums/view_thread.do",
-      data: { forum_tid: this.$route.params.tid }
-    })
-      .then(result => {
-        if (result.data.status == "SUCCEED") {
-          this.title = result.data.data.title;
-          result.data.data.comments.forEach(value => {
-            if (value.deleted) return;
-            let c = JSON.parse(JSON.stringify(value));
-            c.children = [];
-            for (const h of value.children) {
-              if (!h.deleted) c.children.push(h);
-            }
-            this.commentList.push(c);
-          });
-          this.commentList.push({
-            _id: { $oid: "5ea505d8158a8745f2761268" },
-            thread: { $oid: "5ea505d8158a8745f2761263" },
-            content:
-              '[[parser:"markdown" markdown-plugin:"sup"]]### markdown^test^\n\n- list\n- list\n- list\n\njavascript highlight test:\n\n``` javascript\nfunction test(){\n  console.log("highlight test")\n}\n```',
-            hidden: false,
-            deleted: false,
-            upvotes: 0,
-            downvotes: 0,
-            meta: {
-              created_by: { $oid: "5e8945197d85e28e616a06bd" },
-              created_at: { $date: 1587873400000 },
-              modified_by: { $oid: "5e8945197d85e28e616a06bd" },
-              modified_at: { $date: 1587873400000 }
-            },
-            children: [
-              {
-                _id: { $oid: "5ea505d8158a8745f2761268" },
-                thread: { $oid: "5ea505d8158a8745f2761263" },
-                content: '[[parser:"markdown"]]### L2',
-                hidden: false,
-                deleted: false,
-                upvotes: 0,
-                downvotes: 0,
-                meta: {
-                  created_by: { $oid: "5e8945197d85e28e616a06bd" },
-                  created_at: { $date: 1587873400000 },
-                  modified_by: { $oid: "5e8945197d85e28e616a06bd" },
-                  modified_at: { $date: 1587873400000 }
-                }
-              }
-            ]
-          });
-          this.commentList.push({
-            _id: { $oid: "5ea505d8158a8745f2761268" },
-            thread: { $oid: "5ea505d8158a8745f2761263" },
-            content: "hidden",
-            hidden: true,
-            deleted: false,
-            upvotes: 0,
-            downvotes: 0,
-            meta: {
-              created_by: { $oid: "5e8945197d85e28e616a06bd" },
-              created_at: { $date: 1587873400000 },
-              modified_by: { $oid: "5e8945197d85e28e616a06bd" },
-              modified_at: { $date: 1587873400000 }
-            },
-            children: []
-          });
-          this.commentList.push({
-            _id: { $oid: "5ea505d8158a8745f2761268" },
-            thread: { $oid: "5ea505d8158a8745f2761263" },
-            content:
-              '[[chunk parser:"markdown"]]\n# Markdown\nwww\n[[/chunk]]\n[[chunk]][[h1]][[h1]]A Error.[[/h1]][[/chunk]]',
-            hidden: false,
-            deleted: false,
-            upvotes: 0,
-            downvotes: 0,
-            meta: {
-              created_by: { $oid: "5e8945197d85e28e616a06bd" },
-              created_at: { $date: 1587873400000 },
-              modified_by: { $oid: "5e8945197d85e28e616a06bd" },
-              modified_at: { $date: 1587873400000 }
-            },
-            children: []
-          });
-          result.data.data.users.forEach(data => {
-            this.$set(this.commentAuthorsInfo, data._id.$oid, data);
-          });
-          changeSiteTitle(this.title + " - 讨论版");
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        // this.$router.push({ path: "/404" });
-      });
+    this.fetchData();
   },
   methods: {
+    fetchData() {
+      this.axios({
+        method: "post",
+        url: "/be/forums/view_thread.do",
+        data: { forum_tid: this.$route.params.tid }
+      })
+        .then(result => {
+          if (result.data.status == "SUCCEED") {
+            this.title = result.data.data.title;
+            result.data.data.comments.forEach(value => {
+              if (value.deleted) return;
+              let c = JSON.parse(JSON.stringify(value));
+              c.children = [];
+              for (const h of value.children) {
+                if (!h.deleted) c.children.push(h);
+              }
+              this.commentList.push(c);
+            });
+            // test code
+            // this.commentList.push({
+            //   _id: { $oid: "5ea505d8158a8745f2761268" },
+            //   thread: { $oid: "5ea505d8158a8745f2761263" },
+            //   content:
+            //     '[[parser:"markdown" markdown-plugin:"sup"]]### markdown^test^\n\n- list\n- list\n- list\n\njavascript highlight test:\n\n``` javascript\nfunction test(){\n  console.log("highlight test")\n}\n```',
+            //   hidden: false,
+            //   deleted: false,
+            //   upvotes: 0,
+            //   downvotes: 0,
+            //   meta: {
+            //     created_by: { $oid: "5e8945197d85e28e616a06bd" },
+            //     created_at: { $date: 1587873400000 },
+            //     modified_by: { $oid: "5e8945197d85e28e616a06bd" },
+            //     modified_at: { $date: 1587873400000 }
+            //   },
+            //   children: [
+            //     {
+            //       _id: { $oid: "5ea505d8158a8745f2761268" },
+            //       thread: { $oid: "5ea505d8158a8745f2761263" },
+            //       content: '[[parser:"markdown"]]### L2',
+            //       hidden: false,
+            //       deleted: false,
+            //       upvotes: 0,
+            //       downvotes: 0,
+            //       meta: {
+            //         created_by: { $oid: "5e8945197d85e28e616a06bd" },
+            //         created_at: { $date: 1587873400000 },
+            //         modified_by: { $oid: "5e8945197d85e28e616a06bd" },
+            //         modified_at: { $date: 1587873400000 }
+            //       }
+            //     }
+            //   ]
+            // });
+            // this.commentList.push({
+            //   _id: { $oid: "5ea505d8158a8745f2761268" },
+            //   thread: { $oid: "5ea505d8158a8745f2761263" },
+            //   content: "hidden",
+            //   hidden: true,
+            //   deleted: false,
+            //   upvotes: 0,
+            //   downvotes: 0,
+            //   meta: {
+            //     created_by: { $oid: "5e8945197d85e28e616a06bd" },
+            //     created_at: { $date: 1587873400000 },
+            //     modified_by: { $oid: "5e8945197d85e28e616a06bd" },
+            //     modified_at: { $date: 1587873400000 }
+            //   },
+            //   children: []
+            // });
+            // this.commentList.push({
+            //   _id: { $oid: "5ea505d8158a8745f2761268" },
+            //   thread: { $oid: "5ea505d8158a8745f2761263" },
+            //   content:
+            //     '[[chunk parser:"markdown"]]\n# Markdown\nwww\n[[/chunk]]\n[[chunk]][[h1]][[h1]]A Error.[[/h1]][[/chunk]]',
+            //   hidden: false,
+            //   deleted: false,
+            //   upvotes: 0,
+            //   downvotes: 0,
+            //   meta: {
+            //     created_by: { $oid: "5e8945197d85e28e616a06bd" },
+            //     created_at: { $date: 1587873400000 },
+            //     modified_by: { $oid: "5e8945197d85e28e616a06bd" },
+            //     modified_at: { $date: 1587873400000 }
+            //   },
+            //   children: []
+            // });
+            result.data.data.users.forEach(data => {
+              this.$set(this.commentAuthorsInfo, data._id.$oid, data);
+            });
+            changeSiteTitle(this.title + " - 讨论版");
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          // this.$router.push({ path: "/404" });
+        });
+    },
     time(t) {
       function i2(i) {
         return (Array(2).join(0) + i).slice(-2);
@@ -320,6 +324,57 @@ export default {
       } else {
         this.replyT = { visible: true, type, id, comment };
         this.replyF = { show: false, comment: "" };
+      }
+    },
+    reply() {
+      try {
+        switch (this.replyT.type) {
+          case "thread": {
+            this.axios({
+              method: "post",
+              url: "/be/forums/add_to_thread.do",
+              data: {
+                forum_id: this.$route.params.tid,
+                text: this.replyF.comment
+              }
+            }).then(result => {
+              if (result.data.status == "SUCCEED") {
+                this.$message({
+                  type: "info",
+                  message: "发表成功！"
+                });
+                this.fetchData();
+              } else {
+                throw result.data.status;
+              }
+            });
+          }
+          case "user": {
+            this.axios({
+              method: "post",
+              url: "/be/forums/reply.do",
+              data: {
+                reply_to: this.replyT.id,
+                text: this.replyF.comment
+              }
+            }).then(result => {
+              if (result.data.status == "SUCCEED") {
+                this.$message({
+                  type: "info",
+                  message: "发表成功！"
+                });
+                this.fetchData();
+              } else {
+                throw result.data.status;
+              }
+            });
+          }
+        }
+      } catch (error) {
+        this.$message({
+          type: "error",
+          message: "发帖失败：" + e.message
+        });
       }
     }
   }

@@ -9,7 +9,8 @@
             <h3>意见反馈</h3>
             <p>
               在这里反馈在帕琪站遇到的问题~<br />
-              建议将问题详细描述并尽量附带截图或日志。
+              建议将问题详细描述并尽量附带截图或日志。<br />
+              （截图可以使用 img标签 + 图床，日志请尽量使用 pastebin）
             </p>
           </div>
         </el-alert>
@@ -94,7 +95,11 @@
         <h2 style="display:inline-flex;color: #2c3e50;">
           意见反馈 >
         </h2>
-        <el-form :model="postF" @submit.native.prevent style="display:inline-flex">
+        <el-form
+          :model="postF"
+          @submit.native.prevent
+          style="display:inline-flex"
+        >
           <el-input
             v-model="postF.title"
             style="width:320px"
@@ -140,7 +145,9 @@
         title="意见反馈 > 预览帖子"
         :visible.sync="postF.show"
       >
-        <h2 style="color: #2c3e50;">意见反馈 > {{ postF.title || "Loading..." }}</h2>
+        <h2 style="color: #2c3e50;">
+          意见反馈 > {{ postF.title || "Loading..." }}
+        </h2>
         <div class="t"></div>
         <div
           style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;"
@@ -272,6 +279,40 @@ export default {
     },
     post2() {
       this.$set(this.postT, "visible", true);
+    },
+    post() {
+      this.axios({
+        method: "post",
+        url: "/be/forums/post_thread.do",
+        data: {
+          forum_id: this.$route.params.fid,
+          title: this.postF.title,
+          text: this.postF.comment
+        }
+      })
+        .then(result => {
+          if (result.data.status == "SUCCEED") {
+            this.$message({
+              type: "info",
+              message: "发帖成功！正在跳转~"
+            });
+            this.$router.push({
+              path:
+                "/forum/" +
+                this.$route.params.fid +
+                "/post/" +
+                result.data.data.thread_id
+            });
+          } else {
+            throw result.data.status;
+          }
+        })
+        .catch(error => {
+          this.$message({
+            type: "error",
+            message: "发帖失败：" + e.message
+          });
+        });
     },
     time(t) {
       function i2(i) {
