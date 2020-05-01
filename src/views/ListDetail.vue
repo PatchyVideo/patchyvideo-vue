@@ -213,8 +213,6 @@
           <div v-if="editable" class="edit_box">
             <el-button type="success" @click="addVideo">{{$t('btn_group.add_video')}}</el-button>
             <el-button type="success" @click="addFromList">{{$t('btn_group.import_from_other')}}</el-button>
-
-            <!-- 注意！此处的样式修改在 App.vue 的全局样式中 -->
             <el-popover style="margin: 0px 10px;" width="100%" trigger="click">
               <ListFolderView
                 ref="listFolder"
@@ -307,6 +305,9 @@
                     tag="a"
                   >{{ item.item.title }}</router-link>
                 </h3>
+                <h4
+                  v-if="item.item.part_name"
+                >P{{item.item.url.slice(item.item.url.indexOf("=") + 1, item.item.url.length)}}:{{ item.item.part_name }}</h4>
                 <p>{{ item.item.desc }}</p>
                 <div>
                   <img
@@ -440,7 +441,6 @@ export default {
       showListFolder: false
     };
   },
-  computed: {},
   mounted() {
     // 查看是否登录
     if (
@@ -481,7 +481,7 @@ export default {
       this.count = val;
     },
     // 请求单个播放列表详细数据
-    getVideoList: function(e, count) {
+    getVideoList(e, count) {
       // 先使页面出于加载状态
       this.loading = true;
 
@@ -879,6 +879,7 @@ export default {
   position: relative;
 }
 .re_video_desc p {
+  color: #606266;
   font-size: 1rem;
   line-height: 1.1rem;
   height: 4.3rem;

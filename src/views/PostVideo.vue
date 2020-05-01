@@ -102,7 +102,6 @@ export default {
   text-align: left;
 }
 .main-page-background-img {
-  /* background-image: url("./../static/img/imoto3.jpg"); */
   background-repeat: no-repeat;
   min-height: 800px;
   width: 100%;

@@ -261,13 +261,14 @@
 
           <!-- 视频详细信息 -->
           <div class="re_video">
+            <!-- B站，A站，n站和油管显示内嵌视频播放 -->
             <iframe
               :src="iframeUrl"
               v-if="this.iframeUrl!==''"
               allowfullscreen="true"
               style="width: 948px; height: 763px;  margin:10px auto 30px;display: block;"
             ></iframe>
-            <!-- 如果是 ipfs 视频直接播放视频，否则显示封面 -->
+            <!-- 如果是 ipfs 视频则播放视频 -->
             <div v-if="isIpfs" style="text-align: center;" id="nodes">{{$t('init_tip')}}</div>
             <video
               :src="myVideoData.video.item.url"
@@ -278,6 +279,7 @@
               v-if="isIpfs"
               style="position: relative;left: 50%;transform: translateX(-50%);"
             ></video>
+            <!-- 其他情况显示缩略图 -->
             <img
               v-if="this.iframeUrl===''&&!isIpfs"
               :src="'/images/covers/' + myVideoData.video.item.cover_image"
@@ -297,6 +299,11 @@
         <!-- 评分区 -->
         <div>
           <Score type="video"></Score>
+        </div>
+
+        <!-- B站分P视频区 -->
+        <div>
+          <PagesOfVideo v-if="myVideoData.video.item.site=='bilibili'" :aid="aid"></PagesOfVideo>
         </div>
 
         <!-- 副本列表 -->
@@ -347,10 +354,17 @@
               <img
                 :src="require('../static/img/' + item.item.site + '.png')"
                 width="16px"
-                style="margin-right:2px"
+                style="margin-right:2px;vertical-align: middle;"
               />
               <!-- 将页面参数刷新并重载页面，其中 @click.native 应该是 router-link 为了阻止 a 标签的默认跳转事件 -->
-              <a @click="shiftID(item._id.$oid)">{{ item.item.title }}</a>
+              <a
+                v-bind:class="{shortTitleForPageVideos: item.item.part_name,}"
+                @click="shiftID(item._id.$oid)"
+              >{{ item.item.title }}</a>
+              <span
+                v-if="item.item.part_name"
+                class="shortTitleForTitleOfPageVideos"
+              >P{{item.item.url.slice(item.item.url.indexOf("=") + 1, item.item.url.length)}}:{{item.item.part_name}}</span>
               <el-button
                 type="text"
                 @click="synctags(item._id.$oid)"
@@ -436,7 +450,8 @@ import left_navbar from "../components/LeftNavbar.vue";
 import Footer from "../components/Footer.vue";
 import Comments from "../components/comments.vue";
 import Score from "../components/Score.vue";
-import createNewList from "../components/CreateNewList";
+import createNewList from "../components/CreateNewList.vue";
+import PagesOfVideo from "../components/VideoCompoents/PagesOfVideo.vue";
 import { copyToClipboardText } from "../static/js/generic";
 
 import IPFS from "ipfs";
@@ -471,10 +486,14 @@ export default {
             // 视频的链接
             url: "",
             //视频封面
-            cover_image: ""
+            cover_image: "",
+            // 视频所属的网站
+            site: "bilibili"
           }
         }
       },
+      // (如果是B站视频的话)视频的av号
+      aid: "",
       // 我的视频列表
       myVideoList: [],
       // 我的全部视频列表（处理视频是否存在于该列表）
@@ -708,9 +727,10 @@ export default {
       let regYtb = /(https:\/\/|http:\/\/)www.youtube.com\/watch\?v=(\S+)/;
       let regAcf = /(https:\/\/|http:\/\/)www.acfun.cn\/v\/ac(\S+)/;
       if (regBili.exec(str) !== null) {
+        this.aid = regBili.exec(str)[2];
         return `//player.bilibili.com/player.html?aid=${
           regBili.exec(str)[2]
-        }&cid=${cid}`;
+        }&cid=${cid}&page=${regBili.exec(str)[3]}`;
       }
       if (regNico.exec(str) !== null) {
         return `//embed.nicovideo.jp/watch/sm${regNico.exec(str)[2]}`;
@@ -724,53 +744,59 @@ export default {
       return "";
     },
     // 查询视频详细信息
-    searchVideo() {
+    async searchVideo() {
       this.loading = true;
 
-      this.axios({
-        method: "post",
-        url: "be/getvideo.do",
-        data: { vid: this.$route.query.id, lang: localStorage.getItem("lang") }
-      })
-        .then(result => {
-          this.myVideoData = result.data.data;
-          this.iframeUrl = this.regToIframe(
-            this.myVideoData.video.item.url,
-            this.myVideoData.video.item.cid || ""
-          );
-          this.theVideoRank = result.data.data.video.clearence;
-          if (result.data.data.video.comment_thread) {
-            this.sid = result.data.data.video.comment_thread.$oid;
+      const detail = (async () => {
+        await this.axios({
+          method: "post",
+          url: "be/getvideo.do",
+          data: {
+            vid: this.$route.query.id,
+            lang: localStorage.getItem("lang")
           }
-
-          // 修改网站标题
-          document.title = this.myVideoData.video.item.title;
-          this.pid = this.myVideoData.video._id.$oid;
-          // 视频 pid 储存到 vuex 中
-          this.$store.commit("setVideoPid", this.myVideoData.video._id.$oid);
-          // 标记视频简介中的链接
-          this.urlifyDesc();
-          // 加载结束,加载动画消失
-
-          // 回到顶部
-          if ($("html").scrollTop()) {
-            // 动画效果
-            $("html").animate({ scrollTop: 0 }, 100);
-          }
-
-          if (this.myVideoData.video.item.site == "ipfs") {
-            this.isIpfs = true;
-            this.ipfsURL = this.myVideoData.video.item.url.slice(5);
-            this.establishIpfsPlayer();
-          } else {
-            this.isIpfs = false;
-          }
-          this.loading = false;
-          this.whoami();
         })
-        .catch(error => {
-          this.$router.push({ path: "/404" });
-        });
+          .then(result => {
+            this.myVideoData = result.data.data;
+            this.iframeUrl = this.regToIframe(
+              this.myVideoData.video.item.url,
+              this.myVideoData.video.item.cid || ""
+            );
+            this.theVideoRank = result.data.data.video.clearence;
+            if (result.data.data.video.comment_thread) {
+              this.sid = result.data.data.video.comment_thread.$oid;
+            }
+
+            // 修改网站标题
+            document.title = this.myVideoData.video.item.title;
+            this.pid = this.myVideoData.video._id.$oid;
+            // 标记视频简介中的链接
+            this.urlifyDesc();
+            // 加载结束,加载动画消失
+
+            // 回到顶部
+            if ($("html").scrollTop()) {
+              // 动画效果
+              $("html").animate({ scrollTop: 0 }, 100);
+            }
+
+            if (this.myVideoData.video.item.site == "ipfs") {
+              this.isIpfs = true;
+              this.ipfsURL = this.myVideoData.video.item.url.slice(5);
+              this.establishIpfsPlayer();
+            } else {
+              this.isIpfs = false;
+            }
+          })
+          .catch(error => {
+            this.$router.push({ path: "/404" });
+          });
+        return true;
+      })();
+      const identity = this.whoami();
+      await detail;
+      await identity;
+      this.loading = !(detail && identity);
     },
     // 刷新视频信息
     refreshVideo(item) {
@@ -798,9 +824,8 @@ export default {
       });
     },
     // 获取用户权限信息
-    whoami() {
-      this.loading = true;
-      this.axios({
+    async whoami() {
+      await this.axios({
         method: "post",
         url: "be/user/whoami",
         data: {}
@@ -810,8 +835,8 @@ export default {
         } else {
           this.isAdmin = false;
         }
-        this.loading = false;
       });
+      return true;
     },
     // 管理视频（现在的功能是编辑视频权限）
     manageVideo() {
@@ -1128,7 +1153,15 @@ export default {
       if (!this.newListDialog) this.getMyList();
     }
   },
-  components: { left_navbar, topnavbar, Footer, Comments, Score, createNewList }
+  components: {
+    left_navbar,
+    topnavbar,
+    Footer,
+    Comments,
+    Score,
+    createNewList,
+    PagesOfVideo
+  }
 };
 </script>
 
@@ -1141,6 +1174,24 @@ export default {
 .Copies_blibili ul a {
   cursor: pointer;
   text-align: center;
+}
+.shortTitleForPageVideos {
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 450px;
+  overflow: hidden;
+}
+.shortTitleForTitleOfPageVideos {
+  display: inline-block;
+  vertical-align: middle;
+  color: #606266;
+  font-size: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 400px;
+  overflow: hidden;
 }
 .Playlists {
   display: block;
@@ -1166,12 +1217,9 @@ export default {
   top: 0px;
   left: 0px;
 }
-.re_top,
-.new_top {
+.re_top {
   padding-bottom: 10px;
   border-bottom: 3px solid red;
-}
-.re_top {
   text-align: center;
   display: flex;
   display: -webkit-flex;
