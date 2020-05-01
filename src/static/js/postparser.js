@@ -52,7 +52,6 @@ function parse(text) {
   }
   let t = renderText.text;
   renderText = "";
-  console.log(t);
   t = t
     .replace(
       /\<(h[1-6]|strong|em|s|u)\>[\S\s]*?\<\/\1\>/g,
@@ -82,7 +81,6 @@ function parse(text) {
     )
     .replace(/\n?\[\[\{renderd\}\]\]/g, "[[{html}]]")
     .replace(/\[\[\{\/renderd\}\]\]\n?/g, "[[{/html}]]");
-  console.log(t);
   while (t.match(/\[\[\{html\}\]\]/)) {
     t = t.match(/^([\S\s]*?)\[\[\{html\}\]\]([\S\s]*)/);
     renderText += parserHTML.encode(t[1]).replace(/\n/g, "\n<br />");
