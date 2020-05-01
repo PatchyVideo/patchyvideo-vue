@@ -190,6 +190,8 @@ export default {
       })
         .then(result => {
           if (result.data.status == "SUCCEED") {
+            this.commentList = [];
+            this.commentAuthorsInfo = {};
             this.title = result.data.data.title;
             result.data.data.comments.forEach(value => {
               if (value.deleted) return;
@@ -334,20 +336,25 @@ export default {
               method: "post",
               url: "/be/forums/add_to_thread.do",
               data: {
-                forum_id: this.$route.params.tid,
+                forum_tid: this.$route.params.tid,
                 text: this.replyF.comment
               }
-            }).then(result => {
-              if (result.data.status == "SUCCEED") {
-                this.$message({
-                  type: "info",
-                  message: "发表成功！"
-                });
-                this.fetchData();
-              } else {
-                throw result.data.status;
-              }
-            });
+            })
+              .then(result => {
+                if (result.data.status == "SUCCEED") {
+                  this.$message({
+                    type: "info",
+                    message: "发表成功！"
+                  });
+                  this.fetchData();
+                } else {
+                  throw result.data.status;
+                }
+              })
+              .catch(e => {
+                throw e;
+              });
+            break;
           }
           case "user": {
             this.axios({
@@ -357,17 +364,22 @@ export default {
                 reply_to: this.replyT.id,
                 text: this.replyF.comment
               }
-            }).then(result => {
-              if (result.data.status == "SUCCEED") {
-                this.$message({
-                  type: "info",
-                  message: "发表成功！"
-                });
-                this.fetchData();
-              } else {
-                throw result.data.status;
-              }
-            });
+            })
+              .then(result => {
+                if (result.data.status == "SUCCEED") {
+                  this.$message({
+                    type: "info",
+                    message: "发表成功！"
+                  });
+                  this.fetchData();
+                } else {
+                  throw result.data.status;
+                }
+              })
+              .catch(e => {
+                throw e;
+              });
+            break;
           }
         }
       } catch (error) {

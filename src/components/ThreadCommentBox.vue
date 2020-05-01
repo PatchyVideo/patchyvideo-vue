@@ -18,7 +18,10 @@
       >
         <el-avatar
           size="large"
-          src="/be/images/userphotos/2d9bda6265314577bc7753590d68dfa459460b16986799b0.png"
+          :src="
+            'be/images/userphotos/' +
+              commentAuthorsInfo[comment.meta.created_by.$oid].profile.image
+          "
         ></el-avatar>
       </router-link>
       <el-avatar
