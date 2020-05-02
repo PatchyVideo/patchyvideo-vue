@@ -133,6 +133,22 @@ function tohtml(str) {
 }
 
 function parserChunk(text, stack, aindex) {
+  const chunkLT = text.match(/\[\[(\w+)((?: +[\w-]+:"[^"]+")*) \/\]\]/);
+  if (chunkLT) {
+    const t = parserChunk(
+      text.slice(chunkLT.index + chunkLT[0].length),
+      stack,
+      aindex + chunkLT.index + chunkLT[0].length
+    );
+    const content = queryData(chunkLT[1], getData(chunkLT[2]), "", stack);
+    if (content.b) {
+      text = text.replace(chunkLT[0], content.text);
+    }
+    return {
+      l: chunkLT.index + chunkLT[0].length + t.l - 1,
+      text: text + t.text,
+    };
+  }
   // [[chunk parser:"markdown" markdown-plugin:"subscript superscript"]]www[[/chunk]]
   const chunkT = text.match(/\[\[(\w+)((?: +[\w-]+:"[^"]+")*)\]\]\s*/);
   // chunkT = {
@@ -356,9 +372,7 @@ function queryData(type, data, text, stack) {
     }
     case "face": {
       const face = ParseFace(data.name);
-      text = face
-        ? `[[{html}]]<img src='${face}' />[[{/html}]]`
-        : data.name;
+      text = face ? `[[{html}]]<img src='${face}' />[[{/html}]]` : data.name;
       b = true;
       break;
     }
@@ -387,6 +401,7 @@ function parser(type, dataList, text) {
   switch (type) {
     case "markdown":
       let parserMarkdown = new MarkdownIt({
+        breaks: true,
         highlight: function(str, lang) {
           if (lang && hljs.getLanguage(lang)) {
             try {
