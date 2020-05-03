@@ -553,6 +553,7 @@ export default {
               message: "提交成功！"
             });
             this.fetchData();
+            this.$set(this.editF, "visible", false);
           } else {
             throw result.data.status;
           }
@@ -693,6 +694,7 @@ export default {
                     message: "发表成功！"
                   });
                   this.fetchData();
+                  this.$set(this.replyT, "visible", false);
                 } else {
                   throw result.data.status;
                 }
@@ -718,6 +720,7 @@ export default {
                     message: "发表成功！"
                   });
                   this.fetchData();
+                  this.$set(this.replyT, "visible", false);
                 } else {
                   throw result.data.status;
                 }
