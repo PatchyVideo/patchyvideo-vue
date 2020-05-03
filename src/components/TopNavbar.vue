@@ -134,6 +134,9 @@
           <router-link to="/edittag">{{$t('navbar.edittag')}}</router-link>
         </div>
         <div class="navItem">
+          <router-link to="/forum">讨论版</router-link>
+        </div>
+        <div class="navItem">
           <router-link to="/logscontributes">历史和贡献</router-link>
         </div>
       </div>
@@ -221,7 +224,7 @@
 </template>
 
 <script>
-import TextComplete from "v-textcomplete";
+// import TextComplete from "v-textcomplete";
 export default {
   inject: ["reload"],
   data() {
@@ -663,7 +666,9 @@ export default {
       this.iptVal = this.iptVal2;
     }
   },
-  components: { TextComplete }
+  components: {
+    // TextComplete
+  }
 };
 </script>
 

@@ -163,7 +163,7 @@
 </template>
 
 <script>
-import login from "../views/Login.vue";
+// import login from "../views/Login.vue";
 export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -325,7 +325,9 @@ export default {
       });
     }
   },
-  components: { login }
+  components: {
+    // login
+  }
 };
 </script>
 

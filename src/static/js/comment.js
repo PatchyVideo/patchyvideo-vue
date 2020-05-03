@@ -1,3 +1,6 @@
+import { XmlEntities as htmle } from "html-entities";
+const parserHTML = new htmle();
+
 var faceslist = {
     呵呵: "paopao/i_f01.gif",
     哈哈: "paopao/i_f02.gif",
@@ -193,7 +196,8 @@ function getEmoji() {
     return c;
 }
 
-function ParseComment(content) {
+function ParseCommentT(content) {
+    content = content.replace(/\[\[\{[\w]+\}\]\]/g, ""); // 过滤渲染属性
     //var match = content.match(/((?<=\[\[)[^\(\]\]]+)/g);
     var match = content.match(/\[\[[^\[\]]*\]\]/g);
     if (match) {
@@ -207,7 +211,7 @@ function ParseComment(content) {
             switch (action) {
                 case "表情":
                     var face = ParseFace(value);
-                    newvalue = (face) ? `<img src='${face}' />` : v;
+                    newvalue = (face) ? `[[{html}]]<img src='${face}' />[[{/html}]]` : v;
                     break;
                 case "emoji":
                     var emoji = ParseEmoji(value);
@@ -221,6 +225,39 @@ function ParseComment(content) {
         });
     }
     return content;
+}
+
+function en(con) {
+    let t = con
+    con = ""
+    while (t.match(/\[\[\{html\}\]\]/)) {
+        t = t.match(/^([\S\s]*?)\[\[\{html\}\]\]([\S\s]*)/);
+        con += parserHTML.encode(t[1]);
+        while (
+            t[2].match(/\[\[\{html\}\]\]/) &&
+            t[2].match(/\[\[\{\/html\}\]\]/).index >
+                t[2].match(/\[\[\{html\}\]\]/).index
+        ) {
+            t[2] = t[2].replace(/\[\[\{html\}\]\]([\S\s]*?)\[\[\{\/html\}\]\]/, "$1");
+        }
+        t = t[2].match(/([\S\s]*?)\[\[\{\/html\}\]\]([\S\s]*)/);
+        con += t[1];
+        t = t[2];
+    }
+    con += parserHTML.encode(t);
+    return con
+}
+
+function une(con) {
+    return con.replace(/\[\[\{[\w]+\}\]\]/g, ""); // 过滤渲染属性
+}
+
+function ParseComment(con, un = false) {
+    if (un) {
+        return une(ParseCommentT(con));
+    } else {
+        return en(ParseCommentT(con))
+    }
 }
 
 export { ParseFace, ParseEmoji, ParseComment, getFace, getEmoji };

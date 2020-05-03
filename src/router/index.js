@@ -2,13 +2,11 @@
 import VueRouter from "vue-router";
 import store from "../store/index.js";
 import axios from "axios";
-import ElementUI from "element-ui";
-import "element-ui/lib/theme-chalk/index.css";
 import "../static/css/base.css";
 import { changeSiteTitle } from "../static/js/base";
 import { Loading, Message } from "element-ui";
 import { getYiyan } from "../static/js/yiyan";
-import $ from "jquery";
+// import $ from "jquery";
 
 Vue.use(VueRouter);
 
@@ -102,6 +100,18 @@ const routes = [
     path: "/test", // 测试用页面
     component: () => import("../views/About.vue"),
   },
+  {
+    path: "/forum",
+    component: () => import("../views/Forum.vue"),
+  },
+  {
+    path: "/forum/:fid",
+    component: () => import("../views/ForumDetail.vue"),
+  },
+  {
+    path: "/forum/:fid/post/:tid",
+    component: () => import("../views/ThreadDetail.vue"),
+  },
 ];
 
 const router = new VueRouter({
@@ -109,8 +119,6 @@ const router = new VueRouter({
   // base: process.env.BASE_URL,
   routes,
 });
-
-Vue.use(ElementUI);
 
 var doorObj = document.getElementById("door");
 var irikuchiObj = document.getElementsByClassName("irikuchi")[0];
