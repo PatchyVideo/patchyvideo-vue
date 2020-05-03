@@ -363,7 +363,6 @@ export default {
               cl.shift();
             }
             this.commentList = [...this.commentList, ...pincl, ...cl];
-            console.log(this.commentList);
             // test code
             // this.commentList.push({
             //   _id: { $oid: "5ea505d8158a8745f2761268" },
