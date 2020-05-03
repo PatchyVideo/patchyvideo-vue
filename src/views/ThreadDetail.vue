@@ -65,7 +65,12 @@
                   >注：建议先预览再发帖，提前发现问题</span
                 >&emsp;
                 <el-button @click="replyF.show = true">预览</el-button>
-                <el-button type="primary" @click="reply()">发表</el-button>
+                <el-button
+                  type="primary"
+                  @click="reply()"
+                  :disabled="processing"
+                  >发表</el-button
+                >
               </div>
             </el-dialog>
             <el-dialog
@@ -168,7 +173,9 @@
                   >注：建议先预览再发帖，提前发现问题</span
                 >&emsp;
                 <el-button @click="editF.show = true">预览</el-button>
-                <el-button type="primary" @click="edit()">提交</el-button>
+                <el-button type="primary" @click="edit()" :disabled="processing"
+                  >提交</el-button
+                >
               </div>
             </el-dialog>
             <el-dialog
@@ -276,6 +283,7 @@ export default {
     return {
       title: "",
       pinned: false,
+      processing: false,
       commentList: [],
       commentAuthorsInfo: {},
       replyT: {
@@ -538,6 +546,7 @@ export default {
         });
         return;
       }
+      this.processing = true;
       this.axios({
         method: "post",
         url: "/be/comments/edit.do",
@@ -554,6 +563,7 @@ export default {
             });
             this.fetchData();
             this.$set(this.editF, "visible", false);
+            this.processing = false;
           } else {
             throw result.data.status;
           }
@@ -683,6 +693,7 @@ export default {
         });
         return;
       }
+      this.processing = true;
       try {
         switch (this.replyT.type) {
           case "thread": {
@@ -702,6 +713,7 @@ export default {
                   });
                   this.fetchData();
                   this.$set(this.replyT, "visible", false);
+                  this.processing = false;
                 } else {
                   throw result.data.status;
                 }
@@ -728,6 +740,7 @@ export default {
                   });
                   this.fetchData();
                   this.$set(this.replyT, "visible", false);
+                  this.processing = false;
                 } else {
                   throw result.data.status;
                 }
