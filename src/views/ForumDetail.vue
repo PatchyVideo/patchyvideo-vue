@@ -65,7 +65,7 @@
             <div v-else>Loading...</div>
           </template>
         </el-table-column>
-        <el-table-column prop="address" label="跟贴" width="60">
+        <el-table-column prop="address" label="跟帖" width="60">
           <template slot-scope="thread">
             <div>
               <b>{{ thread.row.thread_obj[0].count }}</b>
@@ -144,7 +144,7 @@
           </div>
         </div>
         <div slot="footer" class="dialog-footer">
-          <span style="color:gray">注：建议先预览再发贴，提前发现问题</span
+          <span style="color:gray">注：建议先预览再发帖，提前发现问题</span
           >&emsp;
           <el-button @click="postF.show = true">预览</el-button>
           <el-button type="primary" @click="post()">发表</el-button>
@@ -281,7 +281,7 @@ export default {
                 this.$set(this.threadAuthorsInfo, data._id.$oid, data);
               });
             });
-            changeSiteTitle("意见与反馈 - 讨论版");
+            changeSiteTitle("意见与反馈 - 讨论板");
           }
         })
         .catch(error => {

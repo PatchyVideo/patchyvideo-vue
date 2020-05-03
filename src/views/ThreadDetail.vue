@@ -23,7 +23,7 @@
           <div>
             <el-dialog
               :title="
-                (replyT.type == 'thread' ? '主贴' : '楼中楼') + ' > 发表回复'
+                (replyT.type == 'thread' ? '主帖' : '楼中楼') + ' > 发表回复'
               "
               :visible.sync="replyT.visible"
             >
@@ -62,7 +62,7 @@
               </div>
               <div slot="footer" class="dialog-footer">
                 <span style="color:gray"
-                  >注：建议先预览再发贴，提前发现问题</span
+                  >注：建议先预览再发帖，提前发现问题</span
                 >&emsp;
                 <el-button @click="replyF.show = true">预览</el-button>
                 <el-button type="primary" @click="reply()">发表</el-button>
@@ -71,7 +71,7 @@
             <el-dialog
               v-if="replyF.show"
               :title="
-                (replyT.type == 'thread' ? '主贴' : '楼中楼') + ' > 预览回复'
+                (replyT.type == 'thread' ? '主帖' : '楼中楼') + ' > 预览回复'
               "
               :visible.sync="replyF.show"
             >
@@ -165,7 +165,7 @@
               </div>
               <div slot="footer" class="dialog-footer">
                 <span style="color:gray"
-                  >注：建议先预览再发贴，提前发现问题</span
+                  >注：建议先预览再发帖，提前发现问题</span
                 >&emsp;
                 <el-button @click="editF.show = true">预览</el-button>
                 <el-button type="primary" @click="edit()">提交</el-button>
@@ -226,7 +226,7 @@
           :span="6"
           style="text-align:center;position:fixed;top:90px;max-width:277.5px;margin-left:832.5px"
         >
-          贴子共有{{ commentList ? commentList.length : 0 }}个回复<br />
+          帖子共有{{ commentList ? commentList.length : 0 }}个回复<br />
           <el-button
             type="primary"
             size="small"
@@ -426,7 +426,7 @@ export default {
             result.data.data.users.forEach(data => {
               this.$set(this.commentAuthorsInfo, data._id.$oid, data);
             });
-            changeSiteTitle(this.title + " - 讨论版");
+            changeSiteTitle(this.title + " - 讨论板");
           }
         })
         .catch(error => {
@@ -731,7 +731,7 @@ export default {
       } catch (error) {
         this.$message({
           type: "error",
-          message: "发帖失败：" + e.message
+          message: "发表失败：" + e.message
         });
       }
     }

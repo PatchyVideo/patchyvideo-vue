@@ -6,11 +6,14 @@
       <div>
         <el-alert type="info">
           <div style="color:black">
-            <h2>欢迎来到 PatchyVideo 讨论版</h2>
+            <h2>欢迎来到 PatchyVideo 讨论板</h2>
             <p>
-              最后更新时间：2020/5/1<br />
-              讨论版仍在最初测试阶段，有很多功能可能不够完善，仅供测试。<br />
-              如有任何意见可尝试在反馈版提出。
+              最后更新时间：2020/5/3<br />
+              讨论板仍在最初测试阶段，有很多功能可能不够完善，仅供测试。<br />
+              语法介绍：<a href="https://patchyvideo.wiki/Forum"
+                >https://patchyvideo.wiki/Forum</a
+              ><br />
+              如有任何意见可尝试在反馈板提出。
             </p>
           </div>
         </el-alert>
@@ -61,7 +64,7 @@ export default {
     };
   },
   mounted() {
-    changeSiteTitle("讨论版");
+    changeSiteTitle("讨论板");
   }
 };
 </script>
