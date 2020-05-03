@@ -676,6 +676,13 @@ export default {
       }
     },
     reply() {
+      if (this.replyF.comment.replace(/[\s]/g, "") == "") {
+        this.$message({
+          type: "info",
+          message: "填写下发布的内容吧！"
+        });
+        return;
+      }
       try {
         switch (this.replyT.type) {
           case "thread": {
