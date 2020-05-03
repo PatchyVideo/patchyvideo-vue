@@ -234,27 +234,29 @@
           style="text-align:center;position:fixed;top:90px;max-width:277.5px;margin-left:832.5px"
         >
           帖子共有{{ commentList ? commentList.length : 0 }}个回复<br />
-          <el-button
-            type="primary"
-            size="small"
-            plain
-            @click="reply2('thread', $route.params.tid, commentList[0])"
-            >发表回复</el-button
-          >
-          <el-button
-            type="primary"
-            size="small"
-            plain
-            @click="pint2($route.params.tid)"
-            >置顶帖子</el-button
-          >
-          <el-button
-            type="danger"
-            size="small"
-            plain
-            @click="delt2($route.params.tid)"
-            >删除帖子</el-button
-          ></el-col
+          <span v-if="user.username">
+            <el-button
+              type="primary"
+              size="small"
+              plain
+              @click="reply2('thread', $route.params.tid, commentList[0])"
+              >发表回复</el-button
+            >
+            <el-button
+              type="primary"
+              size="small"
+              plain
+              @click="pint2($route.params.tid)"
+              >置顶帖子</el-button
+            >
+            <el-button
+              type="danger"
+              size="small"
+              plain
+              @click="delt2($route.params.tid)"
+              >删除帖子</el-button
+            >
+          </span></el-col
         ></el-row
       >
     </div>
@@ -596,7 +598,7 @@ export default {
                 });
                 this.fetchData();
               } else {
-                throw result.data.status;
+                throw result.data.data;
               }
             })
             .catch(e => {
@@ -641,7 +643,7 @@ export default {
                   path: "/forum/" + this.$route.params.fid
                 });
               } else {
-                throw result.data.status;
+                throw result.data.data;
               }
             })
             .catch(e => {
@@ -714,7 +716,7 @@ export default {
                   this.$set(this.replyT, "visible", false);
                   this.processing = false;
                 } else {
-                  throw result.data.status;
+                  throw result.data.data;
                 }
               })
               .catch(e => {
@@ -741,7 +743,7 @@ export default {
                   this.$set(this.replyT, "visible", false);
                   this.processing = false;
                 } else {
-                  throw result.data.status;
+                  throw result.data.data;
                 }
               })
               .catch(e => {

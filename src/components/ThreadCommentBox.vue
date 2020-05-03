@@ -47,7 +47,10 @@
             comment.edited ? "已编辑" : ""
           }}</span>
         </p>
-        <div v-if="!comment.hidden" class="comment-bar">
+        <div
+          v-if="!comment.hidden && this.$store.state.username"
+          class="comment-bar"
+        >
           <i
             class="comment-bar-item pv-icon-pin"
             @click="pin2(comment._id.$oid, comment.pinned)"
@@ -73,6 +76,12 @@
           <i
             class="comment-bar-item pv-icon-reply"
             @click="reply2('user', comment._id.$oid, comment)"
+          ></i>
+        </div>
+        <div v-else class="comment-bar">
+          <i
+            class="comment-bar-item pv-icon-pin"
+            :style="comment.pinned ? '' : 'transform: rotate(45deg);'"
           ></i>
         </div>
       </div>
