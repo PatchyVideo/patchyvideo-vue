@@ -550,7 +550,7 @@ export default {
       this.processing = true;
       this.axios({
         method: "post",
-        url: "/be/comments/edit.do",
+        url: "/be/comments/edit_unfiltered.do",
         data: {
           cid: this.editF.id,
           text: this.editF.comment
@@ -700,7 +700,7 @@ export default {
           case "thread": {
             this.axios({
               method: "post",
-              url: "/be/forums/add_to_thread.do",
+              url: "/be/forums/add_to_thread_unfiltered.do",
               data: {
                 forum_tid: this.$route.params.tid,
                 text: this.replyF.comment
@@ -727,7 +727,7 @@ export default {
           case "user": {
             this.axios({
               method: "post",
-              url: "/be/forums/reply.do",
+              url: "/be/forums/reply_unfiltered.do",
               data: {
                 reply_to: this.replyT.id,
                 text: this.replyF.comment

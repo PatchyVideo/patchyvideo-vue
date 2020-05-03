@@ -295,7 +295,7 @@ export default {
     post() {
       this.axios({
         method: "post",
-        url: "/be/forums/post_thread.do",
+        url: "/be/forums/post_thread_unfiltered.do",
         data: {
           forum_id: this.$route.params.fid,
           title: this.postF.title,
