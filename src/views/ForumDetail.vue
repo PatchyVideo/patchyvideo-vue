@@ -16,7 +16,11 @@
         </el-alert>
       </div>
       <!-- 帖子表 -->
-      <el-table :data="threadList" :empty-text="emptyText" style="width: 100%">
+      <el-table
+        :data="[...threadPinned, ...threadList]"
+        :empty-text="emptyText"
+        style="width: 100%"
+      >
         <el-table-column label="帖子">
           <template slot-scope="thread">
             <div>
@@ -24,7 +28,13 @@
                 :to="
                   '/forum/5e8fce11beb63ebb98f8b50c/post/' + thread.row._id.$oid
                 "
-                ><h3 class="mb-1">{{ thread.row.title }}</h3></router-link
+                ><h3 class="mb-1">
+                  <i
+                    v-if="thread.row.pinned"
+                    class="comment-bar-item pv-icon-pin"
+                  ></i
+                  >{{ thread.row.title }}
+                </h3></router-link
               >
               <p>帖子还没有预览哦~</p>
             </div>
@@ -201,6 +211,7 @@ export default {
     return {
       emptyText: "少女祈祷中...",
       threadList: [],
+      threadPinned: [],
       threadAuthorsInfo: {},
       page: 1,
       pageSize: 20,
@@ -253,6 +264,7 @@ export default {
       })
         .then(result => {
           if (result.data.status == "SUCCEED") {
+            this.threadPinned = result.data.data.threads_pinned;
             this.threadList = result.data.data.threads;
             const threadAuthorUIDs = [];
             result.data.data.threads.forEach(data => {
@@ -341,6 +353,7 @@ export default {
 </script>
 
 <style scoped>
+@import "../static/img/svg/style.css";
 .content {
   text-align: left;
   max-width: 1110px;

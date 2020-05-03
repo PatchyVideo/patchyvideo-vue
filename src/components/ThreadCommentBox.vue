@@ -33,22 +33,48 @@
     <div class="comment-box">
       <div class="title-div">
         <p class="title">
-          <span v-if="commentAuthorsInfo[comment.meta.created_by.$oid]">{{
-            commentAuthorsInfo[comment.meta.created_by.$oid].profile.username
+          <span>{{
+            commentAuthorsInfo[comment.meta.created_by.$oid]
+              ? commentAuthorsInfo[comment.meta.created_by.$oid].profile
+                  .username
+              : "loading..."
           }}</span
-          ><span v-else>Loading...</span>&nbsp;<span style="color: gray;"
+          >&nbsp;<span style="color: gray;"
             ><i class="el-icon-date"></i>&thinsp;{{
               time(comment.meta.created_at.$date)
             }}</span
-          >
+          >&nbsp;<span style="color: gray;">{{
+            comment.edited ? "已编辑" : ""
+          }}</span>
         </p>
-        <p
-          v-if="!comment.hidden"
-          style="float:right"
-          @click="reply2('user', comment._id.$oid, comment)"
-        >
-          回复
-        </p>
+        <div v-if="!comment.hidden" class="comment-bar">
+          <i
+            class="comment-bar-item pv-icon-pin"
+            @click="pin2(comment._id.$oid, comment.pinned)"
+            :style="comment.pinned ? '' : 'transform: rotate(45deg);'"
+          ></i>
+          &nbsp;
+          <i
+            class="comment-bar-item el-icon-edit"
+            @click="
+              edit2(
+                comment._id.$oid,
+                comment.content,
+                comment.meta.created_by.$oid
+              )
+            "
+          ></i>
+          &nbsp;
+          <i
+            class="comment-bar-item el-icon-delete"
+            @click="del2(comment._id.$oid)"
+          ></i>
+          &nbsp;
+          <i
+            class="comment-bar-item pv-icon-reply"
+            @click="reply2('user', comment._id.$oid, comment)"
+          ></i>
+        </div>
       </div>
       <div
         class="comment-div"
@@ -71,6 +97,9 @@
             :mini="true"
             :comment="commentC"
             :commentAuthorsInfo="commentAuthorsInfo"
+            @pin2="pin2"
+            @edit2="edit2"
+            @del2="del2"
             @reply2="reply2"
           ></thread-comment-box>
         </div>
@@ -152,6 +181,15 @@ export default {
         time.getSeconds()
       )}`;
     },
+    pin2(id, pinned) {
+      this.$emit("pin2", id, pinned);
+    },
+    edit2(id, comment, uid) {
+      this.$emit("edit2", id, comment, uid);
+    },
+    del2(id) {
+      this.$emit("del2", id);
+    },
     reply2(type, id, comment) {
       this.$emit("reply2", type, id, comment);
     },
@@ -171,6 +209,7 @@ export default {
 </script>
 
 <style scoped>
+@import "../static/img/svg/style.css";
 .left-avatar {
   position: absolute;
   left: 16px;
@@ -220,5 +259,12 @@ export default {
 .comment-div {
   overflow: visible;
   font-size: 14px;
+}
+.comment-bar {
+  float: right;
+  cursor: default;
+}
+.comment-bar-item {
+  cursor: pointer;
 }
 </style>
