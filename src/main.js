@@ -10,13 +10,14 @@ import "font-awesome/css/font-awesome.min.css";
 // 如若需要使用字体，导入该文件即可。
 // import "./ttf/cnfont.less"
 // import echarts from "echarts";
-import login from "./views/Login.vue";
-import $ from "jquery";
+// import login from "./views/Login.vue";
+// import $ from "jquery";
 import linkify from "vue-linkify";
+import shadow from "./plugins/shadow.js";
 
-let echarts = require("echarts/lib/echarts");
-require("echarts/lib/chart/sunburst");
-require("echarts/lib/component/legend");
+import echarts from "echarts/lib/echarts";
+import "echarts/lib/chart/sunburst";
+import "echarts/lib/component/legend";
 // 以上三个包为按需导入的图表必须项
 
 import { VueCropper } from "vue-cropper";
@@ -26,6 +27,7 @@ Vue.use(VueAxios, axios);
 Vue.use(ElementUI);
 Vue.use(VueCropper);
 Vue.use(VueI18n);
+Vue.use(shadow);
 Vue.directive("linkified", linkify);
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;

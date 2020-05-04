@@ -143,7 +143,7 @@
 </template>
 
 <script>
-import signup from "../views/SignUp";
+// import signup from "../views/SignUp";
 import { changeSiteTitle } from "../static/js/base";
 export default {
   data() {
@@ -311,7 +311,9 @@ export default {
         date.toUTCString();
     }
   },
-  components: { signup }
+  components: {
+    // signup
+  }
 };
 </script>
 

@@ -76,6 +76,10 @@
 <script>
 import topnavbar from "../components/TopNavbar.vue";
 import Footer from "../components/Footer.vue";
+
+import IPFS from "ipfs";
+import VideoStream from "videostream";
+
 export default {
   data() {
     return {};
@@ -90,7 +94,6 @@ export default {
     document.title = this.$t("title") + " - Patchyvideo";
   },
   mounted() {
-    const IPFS = require("ipfs");
     //// IPFS Settings ////
     const ipfs = new IPFS({
       repo: "/ipfs"
@@ -123,7 +126,6 @@ export default {
     // Need: Ipfs node init
     genIpfsVideo(ipfsnode, hash, element) {
       let stream;
-      const VideoStream = require("videostream");
 
       const exampleFile = {
         createReadStream(opts) {
