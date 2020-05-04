@@ -121,57 +121,75 @@
     ></EditTags>
 
     <!-- 作者详情组件 -->
-    <el-dialog :close-on-click-modal="false" :visible.sync="showAuthorData" width="70%">
+    <el-dialog
+      :close-on-click-modal="false"
+      :visible.sync="showAuthorData"
+      width="70%"
+    >
       <ShowAuthorData ref="AuthorData" :AuthorID="AuthorID"></ShowAuthorData>
     </el-dialog>
 
     <!-- 显示标签组件的对话框 -->
-    <el-dialog :title="$t('tag_history.prompt')" :visible.sync="dialogVisible" width="70%">
+    <el-dialog
+      :title="$t('tag_history.prompt')"
+      :visible.sync="dialogVisible"
+      width="70%"
+    >
       <div v-loading="loading2">
         <el-collapse>
           <el-collapse-item
-            v-for="(item,index) in tagLog"
+            v-for="(item, index) in tagLog"
             :key="index"
             :title="tagLogDate(item.time.$date)"
           >
             <div>
               <div v-if="item.add.length">
-                <span
-                  style="margin-right:10px;margin-top:3px;color:#67C23A"
-                >{{$t('tag_history.add')}}</span>
+                <span style="margin-right:10px;margin-top:3px;color:#67C23A">{{
+                  $t("tag_history.add")
+                }}</span>
                 <el-tag
                   type="success"
                   v-for="tag in item.add"
                   style="margin-right:5px;margin-top:3px"
                   :key="tag"
-                >{{tag}}</el-tag>
+                  >{{ tag }}</el-tag
+                >
                 <br />
               </div>
 
               <div v-if="item.del.length">
-                <span
-                  style="margin-right:10px;margin-top:3px;color:#F56C6C"
-                >{{$t('tag_history.del')}}</span>
+                <span style="margin-right:10px;margin-top:3px;color:#F56C6C">{{
+                  $t("tag_history.del")
+                }}</span>
                 <el-tag
                   type="danger"
                   v-for="tag in item.del"
                   style="margin-right:5px;margin-top:3px"
                   :key="tag"
-                >{{tag}}</el-tag>
+                  >{{ tag }}</el-tag
+                >
                 <br />
               </div>
               <div v-if="item.user_obj.length" style="margin-top:5px">
-                <span v-for="user in item.user_obj" :key="user.profile.username" class="editer">
+                <span
+                  v-for="user in item.user_obj"
+                  :key="user.profile.username"
+                  class="editer"
+                >
                   <el-avatar
                     fit="cover"
                     class="loginUser-userAvatar"
                     :size="20"
-                    :src="'be/images/userphotos/'+user.profile.image"
+                    :src="'be/images/userphotos/' + user.profile.image"
                   ></el-avatar>
-                  <router-link :to="'/users/'+user._id.$oid">{{ user.profile.username }}</router-link>
+                  <router-link :to="'/users/' + user._id.$oid">{{
+                    user.profile.username
+                  }}</router-link>
                 </span>
               </div>
-              <span v-if="item.del.length==0 && item.add.length==0">{{$t('tag_history.empty')}}</span>
+              <span v-if="item.del.length == 0 && item.add.length == 0">{{
+                $t("tag_history.empty")
+              }}</span>
             </div>
           </el-collapse-item>
         </el-collapse>
@@ -189,63 +207,73 @@
             size="mini"
             @click="openEditTags"
             :disabled="showTagPanel"
-          >{{$t('tag.edit')}}</el-button>
+            >{{ $t("tag.edit") }}</el-button
+          >
         </div>
         <p
           v-if="$route.path === '/video' && isLogin == true"
           @click="postVideo"
-        >{{$t('tag.video_action')}}</p>
-        <p v-if="$route.path === '/video'" @click="show_tag_log">{{$t('tag.prompt_action')}}</p>
+        >
+          {{ $t("tag.video_action") }}
+        </p>
+        <p v-if="$route.path === '/video'" @click="show_tag_log">
+          {{ $t("tag.prompt_action") }}
+        </p>
       </div>
 
       <!-- 在Home页面渲染的侧导航条内容 -->
-      <ul v-if="$route.path === '/home'&&(this.name==='main')" class="tag-ul">
+      <ul v-if="$route.path === '/home' && this.name === 'main'" class="tag-ul">
         <li class="tag" v-for="(val, key) in msg" :key="key">
           <el-tooltip
-            :disabled="overflowed.indexOf(key)==-1"
+            :disabled="overflowed.indexOf(key) == -1"
             effect="light"
-            :content="key.replace(/_/g,' ')"
+            :content="key.replace(/_/g, ' ')"
             placement="left"
           >
             <div class="tag belong-to-home">
               <div class="tag-div">
                 <!-- 存在标签颜色 -->
-                <div v-if="colorTagList.indexOf(val)!=-1">
+                <div v-if="colorTagList.indexOf(val) != -1">
                   <p
                     v-bind:class="val"
                     :ref="val"
                     @click="gotoHome(key)"
                     @click.middle="gotoHome(key, true)"
-                  >{{ key.replace(/_/g," ") }}</p>
+                  >
+                    {{ key.replace(/_/g, " ") }}
+                  </p>
                 </div>
                 <!-- 其他情况 -->
                 <div v-else>
-                  <p
-                    @click="gotoHome(key)"
-                    @click.middle="gotoHome(key, true)"
-                  >{{ key.replace(/_/g," ") }}</p>
+                  <p @click="gotoHome(key)" @click.middle="gotoHome(key, true)">
+                    {{ key.replace(/_/g, " ") }}
+                  </p>
                 </div>
               </div>
             </div>
           </el-tooltip>
         </li>
       </ul>
-      <ul v-if="$route.path === '/home'&&(this.name==='sub')" class="tag-ul">
+      <ul v-if="$route.path === '/home' && this.name === 'sub'" class="tag-ul">
         <li class="tag belong-to-home" v-for="(val, key) in msg" :key="key">
           <div class="tag-div">
             <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
             <!-- 根据tag名称自动渲染tag颜色 -->
             <!-- 存在标签颜色 -->
-            <div v-if="colorTagList.indexOf(val)!=-1">
+            <div v-if="colorTagList.indexOf(val) != -1">
               <p
                 v-bind:class="val"
                 @click="gotoHome(val)"
                 @click.middle="gotoHome(val, true)"
-              >{{ val }}</p>
+              >
+                {{ val }}
+              </p>
             </div>
             <!-- 其他情况 -->
             <div v-else>
-              <p @click="gotoHome(val)" @click.middle="gotoHome(val, true)">{{ val }}</p>
+              <p @click="gotoHome(val)" @click.middle="gotoHome(val, true)">
+                {{ val }}
+              </p>
             </div>
           </div>
         </li>
@@ -256,37 +284,44 @@
           <h3 style="display:block;">{{ tranTagCategories(val) }}</h3>
           <!-- 根据tag名称自动渲染tag颜色 -->
           <div class="tag-ul">
-            <div :class="val!='Author'&&'tag'" v-for="item in key" :key="item">
+            <div
+              :class="val != 'Author' && 'tag'"
+              v-for="item in key"
+              :key="item"
+            >
               <el-tooltip
-                :disabled="overflowed.indexOf(item)==-1"
+                :disabled="overflowed.indexOf(item) == -1"
                 effect="light"
-                :content="item.replace(/_/g,' ')"
+                :content="item.replace(/_/g, ' ')"
                 placement="left"
               >
                 <!-- 存在标签颜色 -->
-                <div v-if="colorTagList.indexOf(val)!=-1&&val!='Author'">
+                <div v-if="colorTagList.indexOf(val) != -1 && val != 'Author'">
                   <div class="tag-div">
                     <p v-bind:class="val" :ref="val">
                       <span
                         @click.left="gotoHome(item)"
                         @click.middle="gotoHome(item, true)"
-                      >{{ item.replace(/_/g," ") }}</span>
+                        >{{ item.replace(/_/g, " ") }}</span
+                      >
                     </p>
                   </div>
                 </div>
-                <div v-else-if="val=='Author'">
+                <div v-else-if="val == 'Author'">
                   <p v-bind:class="val" :ref="val" style="display:inline;">
                     <span
                       @click.left="gotoHome(item)"
                       @click.middle="gotoHome(item, true)"
-                    >{{ item.replace(/_/g," ") }}</span>
+                      >{{ item.replace(/_/g, " ") }}</span
+                    >
                   </p>
                   <el-button
-                    v-if="val=='Author'"
+                    v-if="val == 'Author'"
                     size="mini"
                     style="margin-left:5px;display:inline;"
                     @click="openAuthorData(item)"
-                  >详情</el-button>
+                    >详情</el-button
+                  >
                 </div>
                 <!-- 其他情况 -->
                 <div v-else>
@@ -294,7 +329,8 @@
                     <span
                       @click.left="gotoHome(item)"
                       @click.middle="gotoHome(item, true)"
-                    >{{ item.replace(/_/g," ") }}</span>
+                      >{{ item.replace(/_/g, " ") }}</span
+                    >
                   </p>
                 </div>
               </el-tooltip>
@@ -309,7 +345,9 @@
 <script>
 import ShowAuthorData from "../components/ShowAuthorData.vue";
 import EditTags from "../components/EditTags";
+import pvTag from "../components/GeneralComponents/pv-tag.vue";
 export default {
+  components: { EditTags, ShowAuthorData, pvTag },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -337,10 +375,10 @@ export default {
         "General",
         "Meta",
         "Soundtrack",
-        "Author"
+        "Author",
       ],
       // 溢出元素表
-      overflowed: []
+      overflowed: [],
     };
   },
   mounted() {
@@ -367,13 +405,13 @@ export default {
         if (_blank) {
           var routerPath = this.$router.resolve({
             path: "/home",
-            query: { keyword: key }
+            query: { keyword: key },
           });
           window.open(routerPath.href, "_blank");
         } else {
           this.$router.push({
             path: "/home",
-            query: { keyword: key }
+            query: { keyword: key },
           });
         }
       } else {
@@ -395,7 +433,7 @@ export default {
     postVideo() {
       this.$router.push({
         path: "/postvideo",
-        query: { use_tags: this.pid }
+        query: { use_tags: this.pid },
       });
     },
     // 查看标签编辑历史
@@ -405,13 +443,13 @@ export default {
       this.axios({
         method: "post",
         url: "/be/video/tag_log.do",
-        data: { vid: this.pid, lang: localStorage.getItem("lang") }
+        data: { vid: this.pid, lang: localStorage.getItem("lang") },
       })
-        .then(res => {
+        .then((res) => {
           this.tagLog = res.data.data;
           this.loading2 = false;
         })
-        .catch(res => {
+        .catch((res) => {
           this.loading2 = false;
         });
     },
@@ -444,9 +482,9 @@ export default {
     // 更新溢出项
     freshOverflow() {
       this.overflowed = [];
-      this.colorTagList.forEach(i => {
+      this.colorTagList.forEach((i) => {
         if (this.$refs[i]) {
-          this.$refs[i].forEach(i2 => {
+          this.$refs[i].forEach((i2) => {
             if (
               Math.floor(
                 this.getTextSize(
@@ -484,9 +522,8 @@ export default {
         parseFloat(window.getComputedStyle(span).height) - result.height;
       document.body.removeChild(span);
       return result;
-    }
+    },
   },
-  components: { EditTags, ShowAuthorData },
   watch: {
     // 如果标签编辑界面被关闭，则重新请求页面数据
     showTagPanel() {
@@ -499,7 +536,7 @@ export default {
       this.$nextTick(function() {
         this.freshOverflow();
       });
-    }
+    },
   },
   computed: {
     // 导航条的标题
@@ -514,7 +551,7 @@ export default {
     },
     // 视频的 pid
     pid() {
-      return this.$store.state.videoPid;
+      return this.$route.query.id || "";
     },
     // 翻译标签名
     tranTagCategories() {
@@ -526,13 +563,13 @@ export default {
           Author: this.$t("Author"),
           Meta: this.$t("Meta"),
           Language: this.$t("Language"),
-          Soundtrack: this.$t("Soundtrack")
+          Soundtrack: this.$t("Soundtrack"),
         };
         return map[name];
       };
-    }
+    },
   },
-  props: ["msg", "name"]
+  props: ["msg", "name"],
 };
 </script>
 
