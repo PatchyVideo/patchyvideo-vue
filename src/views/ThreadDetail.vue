@@ -6,7 +6,8 @@
       <el-row>
         <el-col :span="18">
           <h2>
-            意见反馈 > <i v-if="pinned" class="comment-bar-item pv-icon-pin"></i
+            {{ Finfo[fid].title || "神秘板块" }} >
+            <i v-if="pinned" class="comment-bar-item pv-icon-pin"></i
             >{{ title || "Loading..." }}
           </h2>
           <div class="t"></div>
@@ -283,6 +284,11 @@ export default {
   },
   data() {
     return {
+      Finfo: {
+        "5e8fce11beb63ebb98f8b50c": {
+          title: "意见反馈"
+        }
+      },
       title: "",
       pinned: false,
       processing: false,
@@ -311,6 +317,9 @@ export default {
     };
   },
   computed: {
+    fid() {
+      return this.$route.params.fid;
+    },
     user() {
       return {
         username: this.$store.state.username,

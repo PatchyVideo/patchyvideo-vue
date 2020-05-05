@@ -6,11 +6,9 @@
       <div>
         <el-alert type="info">
           <div style="color:black;font-size:1.2em">
-            <h3>意见反馈</h3>
-            <p>
-              在这里反馈在帕琪站遇到的问题~<br />
-              建议将问题详细描述并尽量附带截图或日志。<br />
-              （截图可以使用 img标签 + 图床，日志请尽量使用 pastebin）
+            <h3>{{ Finfo[fid].title || "神秘板块" }}</h3>
+            <p style="white-space: pre-wrap;">
+              {{ Finfo[fid].desc || "板块还没有简介哦~" }}
             </p>
           </div>
         </el-alert>
@@ -101,9 +99,12 @@
           >发表新帖</el-button
         >
       </div>
-      <el-dialog title="意见反馈 > 发表新帖" :visible.sync="postT.visible">
+      <el-dialog
+        :title="(Finfo[fid].title || '神秘板块') + ' > 发表新帖'"
+        :visible.sync="postT.visible"
+      >
         <h2 style="display:inline-flex;color: #2c3e50;">
-          意见反馈 >
+          {{ Finfo[fid].title || "神秘板块" }} >
         </h2>
         <el-form
           :model="postF"
@@ -152,11 +153,12 @@
       </el-dialog>
       <el-dialog
         v-if="postF.show"
-        title="意见反馈 > 预览帖子"
+        :title="(Finfo[fid].title || '神秘板块') + ' > 预览帖子'"
         :visible.sync="postF.show"
       >
         <h2 style="color: #2c3e50;">
-          意见反馈 > {{ postF.title || "Loading..." }}
+          {{ Finfo[fid].title || "神秘板块" }} >
+          {{ postF.title || "Loading..." }}
         </h2>
         <div class="t"></div>
         <div
@@ -209,6 +211,13 @@ export default {
   },
   data() {
     return {
+      Finfo: {
+        "5e8fce11beb63ebb98f8b50c": {
+          title: "意见反馈",
+          desc:
+            "在这里反馈在帕琪站遇到的问题~\n建议将问题详细描述并尽量附带截图或日志。\n（截图可以使用 img标签 + 图床，日志请尽量使用 pastebin）"
+        }
+      },
       emptyText: "少女祈祷中...",
       threadList: [],
       threadPinned: [],
@@ -227,6 +236,9 @@ export default {
     };
   },
   computed: {
+    fid() {
+      return this.$route.params.fid;
+    },
     user() {
       return {
         username: this.$store.state.username,
