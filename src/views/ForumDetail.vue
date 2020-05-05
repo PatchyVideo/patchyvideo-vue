@@ -319,7 +319,7 @@ export default {
             throw result.data.status;
           }
         })
-        .catch(error => {
+        .catch(e => {
           this.$message({
             type: "error",
             message: "发帖失败：" + e.message

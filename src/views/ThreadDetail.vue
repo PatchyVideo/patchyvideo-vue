@@ -569,7 +569,7 @@ export default {
             throw result.data.status;
           }
         })
-        .catch(error => {
+        .catch(e => {
           this.$message({
             type: "error",
             message: "提交失败：" + e.message
@@ -752,7 +752,7 @@ export default {
             break;
           }
         }
-      } catch (error) {
+      } catch (e) {
         this.$message({
           type: "error",
           message: "发表失败：" + e.message
