@@ -21,6 +21,14 @@ const utils = {
 module.exports = {
   publicPath: "./",
   outputDir: "dist",
+  // ESLint规则
+  lintOnSave: process.env.NODE_ENV !== "production", // 生产环境下启用
+  devServer: {
+    overlay: {
+      warnings: true,
+      errors: true,
+    },
+  },
   configureWebpack: {
     plugins: [
       new BundleAnalyzerPlugin(),
