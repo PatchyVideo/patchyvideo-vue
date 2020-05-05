@@ -305,7 +305,7 @@ export default {
         .then(result => {
           if (result.data.status == "SUCCEED") {
             this.$message({
-              type: "info",
+              type: "success",
               message: "发帖成功！正在跳转~"
             });
             this.$router.push({

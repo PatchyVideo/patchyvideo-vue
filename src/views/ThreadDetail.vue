@@ -477,7 +477,7 @@ export default {
         .then(result => {
           if (result.data.status == "SUCCEED") {
             this.$message({
-              type: "info",
+              type: "success",
               message: (pinned ? "取消" : "") + "置顶成功！"
             });
             this.fetchData();
@@ -504,7 +504,7 @@ export default {
         .then(result => {
           if (result.data.status == "SUCCEED") {
             this.$message({
-              type: "info",
+              type: "success",
               message: (this.pinned ? "取消" : "") + "置顶成功！"
             });
             this.fetchData();
@@ -559,7 +559,7 @@ export default {
         .then(result => {
           if (result.data.status == "SUCCEED") {
             this.$message({
-              type: "info",
+              type: "success",
               message: "提交成功！"
             });
             this.fetchData();
@@ -593,7 +593,7 @@ export default {
             .then(result => {
               if (result.data.status == "SUCCEED") {
                 this.$message({
-                  type: "info",
+                  type: "success",
                   message: "删除成功！"
                 });
                 this.fetchData();
@@ -636,7 +636,7 @@ export default {
             .then(result => {
               if (result.data.status == "SUCCEED") {
                 this.$message({
-                  type: "info",
+                  type: "success",
                   message: "删除成功！"
                 });
                 this.$router.push({
@@ -709,7 +709,7 @@ export default {
               .then(result => {
                 if (result.data.status == "SUCCEED") {
                   this.$message({
-                    type: "info",
+                    type: "success",
                     message: "发表成功！"
                   });
                   this.fetchData();
@@ -736,7 +736,7 @@ export default {
               .then(result => {
                 if (result.data.status == "SUCCEED") {
                   this.$message({
-                    type: "info",
+                    type: "success",
                     message: "发表成功！"
                   });
                   this.fetchData();
