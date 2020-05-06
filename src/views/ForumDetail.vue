@@ -67,6 +67,15 @@
           </template>
         </el-table-column>
       </el-table>
+      <div
+        v-if="threadList.length != threadResult.length"
+        style="text-align:center;color:gray"
+      >
+        本页含有{{ threadResult.length - threadList.length }}个隐藏贴
+        <span @click="threadList = threadResult" style="color:#409eff"
+          >显示</span
+        >
+      </div>
       <div style="text-align:center;margin-top:4px">
         <el-button
           type="primary"
@@ -216,6 +225,7 @@ export default {
       },
       emptyText: "少女祈祷中...",
       threadList: [],
+      threadResult: [],
       threadAuthorsInfo: {},
       page: 1,
       pageSize: 20,
@@ -272,11 +282,14 @@ export default {
         .then(result => {
           if (result.data.status == "SUCCEED") {
             this.threadList = [];
+            this.threadResult = [];
             result.data.data.threads_pinned.forEach(value => {
-              if (!value.deleted) this.threadList.push(value);
+              if (!value.deleted && !value.hidden) this.threadList.push(value);
+              if (!value.deleted) this.threadResult.push(value);
             });
             result.data.data.threads.forEach(value => {
-              if (!value.deleted) this.threadList.push(value);
+              if (!value.deleted && !value.hidden) this.threadList.push(value);
+              if (!value.deleted) this.threadResult.push(value);
             });
             const threadAuthorUIDs = [];
             result.data.data.threads.forEach(data => {
