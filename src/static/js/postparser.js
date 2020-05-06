@@ -33,6 +33,9 @@ function parse(text) {
     // 渲染全局属性
     const data = getData(" " + head[1]);
     renderText = text.slice(head[0].length);
+    if (data.origin == "true") {
+      return renderText;
+    }
     renderText = queryData("document", data, renderText);
     if (data.parser) {
       // 已指定解析器则直接返回解析器的解析
