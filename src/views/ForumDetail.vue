@@ -14,11 +14,7 @@
         </el-alert>
       </div>
       <!-- 帖子表 -->
-      <el-table
-        :data="[...threadPinned, ...threadList]"
-        :empty-text="emptyText"
-        style="width: 100%"
-      >
+      <el-table :data="threadList" :empty-text="emptyText" style="width: 100%">
         <el-table-column label="帖子">
           <template slot-scope="thread">
             <div>
@@ -220,7 +216,6 @@ export default {
       },
       emptyText: "少女祈祷中...",
       threadList: [],
-      threadPinned: [],
       threadAuthorsInfo: {},
       page: 1,
       pageSize: 20,
@@ -276,8 +271,13 @@ export default {
       })
         .then(result => {
           if (result.data.status == "SUCCEED") {
-            this.threadPinned = result.data.data.threads_pinned;
-            this.threadList = result.data.data.threads;
+            this.threadList = [];
+            result.data.data.threads_pinned.forEach(value => {
+              if (!value.deleted) this.threadList.push(value);
+            });
+            result.data.data.threads.forEach(value => {
+              if (!value.deleted) this.threadList.push(value);
+            });
             const threadAuthorUIDs = [];
             result.data.data.threads.forEach(data => {
               threadAuthorUIDs.push(data.thread_obj[0].owner.$oid);
