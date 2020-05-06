@@ -15,6 +15,8 @@
             <thread-comment-box
               :comment="comment"
               :commentAuthorsInfo="commentAuthorsInfo"
+              :userId="userInfo.id"
+              :own="userInfo.isAdmin"
               @pin2="pin2"
               @edit2="edit2"
               @del2="del2"
@@ -294,6 +296,10 @@ export default {
       processing: false,
       commentList: [],
       commentAuthorsInfo: {},
+      userInfo: {
+        id: "",
+        isAdmin: false
+      },
       replyT: {
         visible: false,
         conform: "",
@@ -331,9 +337,27 @@ export default {
     }
   },
   mounted() {
+    this.fetchUserData();
     this.fetchData();
   },
   methods: {
+    fetchUserData() {
+      this.axios({
+        method: "post",
+        url: "/be/user/myprofile.do",
+        data: {},
+        withCredentials: true
+      })
+        .then(result => {
+          if (result.data.status == "SUCCEED") {
+            this.userInfo = {
+              id: result.data.data._id.$oid,
+              isAdmin: result.data.data.access_control.status == "admin"
+            };
+          }
+        })
+        .catch(e => {});
+    },
     fetchData() {
       this.axios({
         method: "post",

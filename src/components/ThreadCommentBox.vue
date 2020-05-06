@@ -48,12 +48,14 @@
           }}</span>
         </p>
         <div
-          v-if="!comment.hidden && this.$store.state.username"
+          v-if="
+            !comment.hidden && (own || comment.meta.created_by.$oid == userId)
+          "
           class="comment-bar"
         >
           <i
             class="comment-bar-item pv-icon-pin"
-            @click="pin2(comment._id.$oid, comment.pinned)"
+            @click="own && pin2(comment._id.$oid, comment.pinned)"
             :style="comment.pinned ? '' : 'transform: rotate(45deg);'"
           ></i>
           &nbsp;
@@ -71,6 +73,17 @@
           <i
             class="comment-bar-item el-icon-delete"
             @click="del2(comment._id.$oid)"
+          ></i>
+          &nbsp;
+          <i
+            class="comment-bar-item pv-icon-reply"
+            @click="reply2('user', comment._id.$oid, comment)"
+          ></i>
+        </div>
+        <div v-else-if="userId" class="comment-bar">
+          <i
+            class="comment-bar-item pv-icon-pin"
+            :style="comment.pinned ? '' : 'transform: rotate(45deg);'"
           ></i>
           &nbsp;
           <i
@@ -106,6 +119,8 @@
             :mini="true"
             :comment="commentC"
             :commentAuthorsInfo="commentAuthorsInfo"
+            :userId="userId"
+            :own="own || comment.meta.created_by.$oid == userId"
             @pin2="pin2"
             @edit2="edit2"
             @del2="del2"
@@ -164,6 +179,14 @@ export default {
     commentAuthorsInfo: {
       type: Object,
       default: {}
+    },
+    userId: {
+      type: String,
+      default: ""
+    },
+    own: {
+      type: Boolean,
+      default: false
     },
     mini: {
       type: Boolean,
