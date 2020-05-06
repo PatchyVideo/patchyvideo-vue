@@ -6,7 +6,7 @@
       <el-row>
         <el-col :span="18">
           <h2>
-            {{ Finfo[fid].title || "神秘板块" }} >
+            <span v-if="fid">{{ Finfo[fid].title || "神秘板块" }}&nbsp;>&nbsp;</span>
             <i v-if="pinned" class="comment-bar-item pv-icon-pin"></i
             >{{ title || "Loading..." }}
           </h2>
@@ -678,7 +678,7 @@ export default {
                   message: "删除成功！"
                 });
                 this.$router.push({
-                  path: "/forum/" + this.$route.params.fid
+                  path: "/forum/" + (this.fid || "")
                 });
               } else {
                 throw result.data.data;

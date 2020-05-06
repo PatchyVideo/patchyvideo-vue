@@ -112,6 +112,10 @@ const routes = [
     path: "/forum/:fid/post/:tid",
     component: () => import("../views/ThreadDetail.vue"),
   },
+  {
+    path: "/fpost/:tid",
+    component: () => import("../views/ThreadDetail.vue"),
+  },
 ];
 
 const router = new VueRouter({
