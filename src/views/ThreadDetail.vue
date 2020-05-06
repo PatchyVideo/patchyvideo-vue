@@ -533,7 +533,7 @@ export default {
     pint2(id) {
       this.axios({
         method: "post",
-        url: "/be/comments/pin.do",
+        url: "/be/forums/pin_thread.do",
         data: {
           forum_tid: id,
           pinned: !this.pinned
