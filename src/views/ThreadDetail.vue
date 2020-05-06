@@ -236,7 +236,11 @@
           :span="6"
           style="text-align:center;position:fixed;top:90px;max-width:277.5px;margin-left:832.5px"
         >
-          帖子共有{{ commentList ? commentList.length : 0 }}个回复<br />
+          {{
+            (commentList.length || 0) != 0
+              ? "帖子共有" + commentList.length + "个回复"
+              : "帖子看起来很冷清呢"
+          }}<br />
           <span v-if="user.username">
             <el-button
               type="primary"
@@ -366,6 +370,7 @@ export default {
       })
         .then(result => {
           if (result.data.status == "SUCCEED") {
+            if (result.data.data.comments == []) return;
             this.commentList = [];
             this.commentAuthorsInfo = {};
             this.title = result.data.data.title;
