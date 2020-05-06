@@ -68,9 +68,20 @@
       "eslint:recommended",
       "@vue/prettier"
     ],
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "semi": true,
+          "singleQuote": false,
+          "printWidth": 160,
+          "tabWidth": 2,
+          "useTabs": false
+        }
+      ]
+    },
     "parserOptions": {
       "parser": "babel-eslint"
-    },
-    "rules": {}
+    }
   }
 }
