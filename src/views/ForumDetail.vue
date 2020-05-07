@@ -306,7 +306,9 @@ export default {
                 this.$set(this.threadAuthorsInfo, data._id.$oid, data);
               });
             });
-            changeSiteTitle("意见与反馈 - 讨论板");
+            changeSiteTitle(
+              (this.Finfo[this.fid].title || "神秘板块") + " - 讨论板"
+            );
           }
         })
         .catch(error => {
