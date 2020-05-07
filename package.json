@@ -70,7 +70,7 @@
     ],
     "rules": {
       "prettier/prettier": [
-        "error",
+        "warn",
         {
           "semi": true,
           "singleQuote": false,
