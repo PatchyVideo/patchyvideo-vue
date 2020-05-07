@@ -34,7 +34,7 @@ function parse(text) {
     const data = getData(" " + head[1]);
     renderText = text.slice(head[0].length);
     if (data.origin == "true") {
-      return renderText;
+      return parserHTML.encode(renderText).replace(/\n/g, "\n<br />");
     }
     renderText = queryData("document", data, renderText);
     if (data.parser) {
