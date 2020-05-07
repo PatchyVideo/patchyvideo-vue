@@ -1,5 +1,4 @@
-﻿
-<!--
+﻿<!--
     页面：paychyvideo的个人收藏夹页面
     功能：展示用户创建的所有收藏夹信息
     更新日志：
@@ -38,45 +37,34 @@
 
 <template>
   <div v-loading="loading">
-    <div class="data_null standard" v-if="firstmaxcount==0">
-      <p>{{$t('no_data')}}</p>
+    <div class="data_null standard" v-if="firstmaxcount == 0">
+      <p>{{ $t("no_data") }}</p>
     </div>
-    <div class="bigbox standard" v-if="firstmaxcount!=0">
+    <div class="bigbox standard" v-if="firstmaxcount != 0">
       <div class="ky-wrap">
         <el-select id="select-order" v-model="couponSelected">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
+          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
-        <el-input
-          :placeholder="$t('search')"
-          v-model="listSearch"
-          clearable
-          class="inputbox"
-          @keyup.enter.native="searchList()"
-        >
+        <el-input :placeholder="$t('search')" v-model="listSearch" clearable class="inputbox" @keyup.enter.native="searchList()">
           <el-button slot="append" icon="el-icon-search" @click="searchList()">搜索</el-button>
         </el-input>
       </div>
 
       <div class="fav">
-        <p class="nodata" v-if="myListVideoData.length===0">{{$t('no_data')}}</p>
+        <p class="nodata" v-if="myListVideoData.length === 0">{{ $t("no_data") }}</p>
         <router-link
           target="_blank"
-          :to="{ path: '/listdetail', query: { id: i._id.$oid} }"
+          :to="{ path: '/listdetail', query: { id: i._id.$oid } }"
           class="list-item"
           v-for="i in myListVideoData"
           :key="i._id.$oid"
           tag="a"
         >
-          <img :src="'/images/covers/'+i.cover" alt />
-          <p>{{i.desc.english}}</p>
-          <h3>{{i.title.english}}</h3>
+          <img :src="'/images/covers/' + i.cover" alt />
+          <p>{{ i.desc.english }}</p>
+          <h3>{{ i.title.english }}</h3>
           <div>
-            <span>videos:{{i.videos}}</span>
+            <span>videos:{{ i.videos }}</span>
             <!--<span>views:{{i.views}}</span>-->
           </div>
         </router-link>

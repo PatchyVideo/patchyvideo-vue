@@ -47,15 +47,13 @@
       1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
 -->
 
-
-
 <template>
   <div>
     <topnavbar />
     <!-- home页面的正文 -->
     <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
       <el-tab-pane :label="labelInfo[0]" name="first">
-        <i @click="changeLine" :class="{'el-icon-s-grid':flag,'el-icon-menu':!flag}"></i>
+        <i @click="changeLine" :class="{ 'el-icon-s-grid': flag, 'el-icon-menu': !flag }"></i>
         <homemain v-if="activeName === 'first' && !flag"></homemain>
         <girdhomemain v-if="activeName === 'first' && flag"></girdhomemain>
       </el-tab-pane>

@@ -1,4 +1,3 @@
-
 <i18n>
 {
     "CHS": {
@@ -52,19 +51,15 @@
 <template>
   <div>
     <div class="tag-box">
-      <el-tag
-        @click="(e) => onSitesChange()"
-        style="margin: 0 5px"
-        key
-        :type="visibleSites.includes('') ? '' : 'info'"
-      >全部</el-tag>
+      <el-tag @click="e => onSitesChange()" style="margin: 0 5px" key :type="visibleSites.includes('') ? '' : 'info'">全部</el-tag>
       <el-tag
         v-for="item in allSites"
         :key="item.id"
         style="margin: 0 5px"
-        @click="(e) => onSitesChange(item.id)"
+        @click="e => onSitesChange(item.id)"
         :type="visibleSites.includes(item.id) ? '' : 'info'"
-      >{{item.label}}</el-tag>
+        >{{ item.label }}</el-tag
+      >
     </div>
     <div class="w main-page-background-img" v-loading="loading">
       <left-navbar :msg="tags" :name="'main'"></left-navbar>
@@ -72,67 +67,47 @@
       <div class="content">
         <!-- 播放列表的抬头 -->
         <div class="video-list-header">
-          <p v-if="maxcount">{{$t('page_count', {count: count2, maxcount: maxcount})}}</p>
-          <p v-else>{{$t('no_result')}}</p>
-          <el-checkbox class="show_deleted" v-model="checked">{{$t('show_deleted')}}</el-checkbox>
-          <p class="blacklist_prompt">{{$t('blacklist_prompt')}}</p>
+          <p v-if="maxcount">{{ $t("page_count", { count: count2, maxcount: maxcount }) }}</p>
+          <p v-else>{{ $t("no_result") }}</p>
+          <el-checkbox class="show_deleted" v-model="checked">{{ $t("show_deleted") }}</el-checkbox>
+          <p class="blacklist_prompt">{{ $t("blacklist_prompt") }}</p>
           <el-select id="select-order" v-model="couponSelected">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </div>
 
         <!-- 播放列表正文 -->
         <ul>
-          <li class="list-item" v-for="(item) in listvideo" :key="item._id.$oid">
+          <li class="list-item" v-for="item in listvideo" :key="item._id.$oid">
             <div class="video-item">
               <a target="_blank" :href="item.item.url" tag="a">
                 <div class="video-thumbnail">
-                  <img :src="'/images/covers/'+item.item.cover_image" />
+                  <img :src="'/images/covers/' + item.item.cover_image" />
                   <div class="Imgcover"></div>
                 </div>
               </a>
               <div class="video-detail">
                 <div class="title-div">
-                  <img
-                    :src="require('../../static/img/' + item.item.site + '.png')"
-                    width="16px"
-                    style="margin-right:2px;display:inline;"
-                  />
+                  <img :src="require('../../static/img/' + item.item.site + '.png')" width="16px" style="margin-right:2px;display:inline;" />
                   <h4>
-                    <router-link
-                      target="_blank"
-                      :title="item.item.title"
-                      :to="{ path: '/video', query: { id: item._id.$oid } }"
-                      tag="a"
-                    >{{ item.item.title }}</router-link>
+                    <router-link target="_blank" :title="item.item.title" :to="{ path: '/video', query: { id: item._id.$oid } }" tag="a">{{
+                      item.item.title
+                    }}</router-link>
                   </h4>
-                  <h5
-                    v-if="item.item.part_name"
-                    :title="'P'+pageOfVideo(item.item.url)+':'+item.item.part_name"
-                  >
-                    <strong>P{{pageOfVideo(item.item.url)}}:{{ item.item.part_name }}</strong>
+                  <h5 v-if="item.item.part_name" :title="'P' + pageOfVideo(item.item.url) + ':' + item.item.part_name">
+                    <strong>P{{ pageOfVideo(item.item.url) }}:{{ item.item.part_name }}</strong>
                   </h5>
                 </div>
-                <p
-                  :title="toGMT(item.item.upload_time.$date)+'\n'+(item.item.desc||'此视频没有简介哦')"
-                >{{ getDesc(item.item.desc) }}</p>
+                <p :title="toGMT(item.item.upload_time.$date) + '\n' + (item.item.desc || '此视频没有简介哦')">{{ getDesc(item.item.desc) }}</p>
                 <div class="time-box">
-                  <p class="time-up">{{toGMT(item.item.upload_time.$date)}}</p>
+                  <p class="time-up">{{ toGMT(item.item.upload_time.$date) }}</p>
                   <!--<router-link
                     class="linkToPublisher"
                     target="_blank"
                     :to="'/users/'+item.meta.created_by.$oid"
                     tag="a"
                   >{{$t("see_uploaders")}}</router-link>-->
-                  <span
-                    class="rating"
-                    v-show="item.total_rating"
-                  >{{parseInt(item.total_rating/item.total_rating_user||0)}}</span>
+                  <span class="rating" v-show="item.total_rating">{{ parseInt(item.total_rating / item.total_rating_user || 0) }}</span>
                 </div>
                 <!--<div class="link-div">
                   <div class="link">
@@ -319,13 +294,9 @@ export default {
     // -------------------------危险提示-------------------------
     // 此外，此函数在其他页面也有调用，在优化的时候请注意其他页面的同步
     copyVideoLink: function(url) {
-      this.$alert(
-        "视频链接复制" + (copyToClipboardText(url) ? "成功！" : "失败！"),
-        "分享链接",
-        {
-          confirmButtonText: "确定"
-        }
-      );
+      this.$alert("视频链接复制" + (copyToClipboardText(url) ? "成功！" : "失败！"), "分享链接", {
+        confirmButtonText: "确定"
+      });
     },
     // 请求播放列表数据
     getListVideo: function(e, count, order) {
@@ -513,8 +484,7 @@ export default {
       this.count != 20 && (query.page_count = this.count);
       this.couponSelected != "latest" && (query.coupon = this.couponSelected);
       this.checked && (query.showDeleted = this.checked);
-      this.visibleSites.indexOf("") == -1 &&
-        (query.visibleSites = visibleSites);
+      this.visibleSites.indexOf("") == -1 && (query.visibleSites = visibleSites);
       this.$route.query.keyword && (query.keyword = this.$route.query.keyword);
       this.$route.query.qtype && (query.qtype = this.$route.query.qtype);
       const urlSearchParams = new URLSearchParams();
@@ -522,17 +492,8 @@ export default {
         urlSearchParams.set(i, query[i]);
       }
       if (Object.keys(query).length > 0) {
-        if (
-          window.location.href !=
-          window.location.href.split("?")[0] + "?" + urlSearchParams.toString()
-        ) {
-          history.pushState(
-            {},
-            "",
-            window.location.href.split("?")[0] +
-              "?" +
-              urlSearchParams.toString()
-          );
+        if (window.location.href != window.location.href.split("?")[0] + "?" + urlSearchParams.toString()) {
+          history.pushState({}, "", window.location.href.split("?")[0] + "?" + urlSearchParams.toString());
         }
       } else {
         if (window.location.href != window.location.href.split("?")[0]) {
@@ -545,17 +506,12 @@ export default {
       this.page = parseInt(route.query.page) || this.page;
       this.count = parseInt(route.query.page_count || this.count);
       this.checked = route.query.showDeleted == "true";
-      this.visibleSites = route.query.visibleSites
-        ? JSON.parse(atob(route.query.visibleSites))
-        : this.visibleSites;
+      this.visibleSites = route.query.visibleSites ? JSON.parse(atob(route.query.visibleSites)) : this.visibleSites;
     },
     getDesc(desc) {
       if (desc) {
         let d = desc;
-        d = d.replace(
-          /(?:[-—=+~]{4,}([^-—=+~\s]+))?(?:[-—=+~]{4,})(?:$|(?=[^-—=+~>》→]))/g,
-          "$1"
-        ); // 删除分割线
+        d = d.replace(/(?:[-—=+~]{4,}([^-—=+~\s]+))?(?:[-—=+~]{4,})(?:$|(?=[^-—=+~>》→]))/g, "$1"); // 删除分割线
         d = d.replace(/(?:[-—=+~]+)(?=[-—=+~]{4}[>》→])/, ""); // 缩短长箭头
         d = d.replace(/[↑↓]/g, ""); // 删除上下指向
         d = d.replace(/\s(?=\s)/g, ""); // 删除连续空格
@@ -637,10 +593,7 @@ export default {
         return;
       }
       // 监听路由 query 的值，当用户连续输入的搜索值不一样时，更新搜索关键词，调用 this.getSearchData 获取搜索数据并渲染。
-      if (
-        newV.query.keyword != oldV.query.keyword ||
-        newV.query.qtype != oldV.query.qtype
-      ) {
+      if (newV.query.keyword != oldV.query.keyword || newV.query.qtype != oldV.query.qtype) {
         // 修改网站标题
         document.title = this.$t("search_result", {
           result: newV.query.keyword
@@ -661,7 +614,6 @@ export default {
   components: { leftNavbar }
 };
 </script>
-
 
 <style lang="less" scoped>
 .time-box {

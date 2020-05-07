@@ -72,8 +72,6 @@
 }
 </i18n>
 
-
-
 <template>
   <div>
     <topnavbar />
@@ -101,58 +99,32 @@
             <div class="d_t">
               <!--<img src="../static/img/4.png" style="float:left" />
               <img src="../static/img/3.png" style="float:right" />-->
-              <el-button
-                type="primary"
-                plain
-                class="createPlayListButton"
-                @click="createVideoList"
-              >{{$t('create_playList')}}</el-button>
+              <el-button type="primary" plain class="createPlayListButton" @click="createVideoList">{{ $t("create_playList") }}</el-button>
             </div>
             <!-- 搜索框 -->
-            <el-input
-              :placeholder="$t('search.input_tip')"
-              v-model="listSearch"
-              clearable
-              class="inputbox"
-              @keyup.enter.native="goToSearch()"
-            >
-              <el-button
-                slot="append"
-                icon="el-icon-search"
-                @click="goToSearch()"
-              >{{$t('search.btn')}}</el-button>
+            <el-input :placeholder="$t('search.input_tip')" v-model="listSearch" clearable class="inputbox" @keyup.enter.native="goToSearch()">
+              <el-button slot="append" icon="el-icon-search" @click="goToSearch()">{{ $t("search.btn") }}</el-button>
             </el-input>
             <!-- 排序选择框 -->
             <el-select v-model="couponSelected" @change="handleCouponChange" class="select">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="$t('search.downlist.' + item.value)"
-                :value="item.value"
-              ></el-option>
+              <el-option v-for="item in options" :key="item.value" :label="$t('search.downlist.' + item.value)" :value="item.value"></el-option>
             </el-select>
           </div>
           <!-- 视频列表列表 -->
           <div class="videolistlist">
-            <p
-              v-if="videolist.length==0"
-              style="display:inline-block;margin:0 auto;margin-top:10px;"
-            >{{$t('err_tip')}}</p>
+            <p v-if="videolist.length == 0" style="display:inline-block;margin:0 auto;margin-top:10px;">{{ $t("err_tip") }}</p>
             <div class="minbox shadow" v-for="item in videolist" :key="item._id.$oid">
               <!-- 视频列表标题 -->
               <div class="re_top">
                 <h2>
-                  <router-link
-                    :to="{ path: '/listdetail', query: { id: item._id.$oid } }"
-                    tag="a"
-                  >{{ item.title.english }}</router-link>
+                  <router-link :to="{ path: '/listdetail', query: { id: item._id.$oid } }" tag="a">{{ item.title.english }}</router-link>
                 </h2>
-                <h5 style="float: right;">{{$t('statistics', {count: item.videos})}}</h5>
+                <h5 style="float: right;">{{ $t("statistics", { count: item.videos }) }}</h5>
               </div>
               <!-- 视频列表详情 -->
               <div class="re_video">
                 <div class="re_video_img">
-                  <el-image :src="'/images/covers/'+item.cover" fit="contain"></el-image>
+                  <el-image :src="'/images/covers/' + item.cover" fit="contain"></el-image>
                 </div>
                 <div class="re_video_desc">
                   <p>
@@ -161,10 +133,8 @@
                 </div>
               </div>
               <p class="minbox_creater">
-                {{$t('author')}}
-                <router-link
-                  :to="'/users/'+item.user_detail._id.$oid"
-                >{{ item.user_detail.profile.username }}</router-link>
+                {{ $t("author") }}
+                <router-link :to="'/users/' + item.user_detail._id.$oid">{{ item.user_detail.profile.username }}</router-link>
               </p>
             </div>
           </div>

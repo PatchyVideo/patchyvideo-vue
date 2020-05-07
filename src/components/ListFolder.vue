@@ -1,4 +1,3 @@
-
 <!--
     页面：paychyvideo的播放列表目录页面
     功能：展示用户创建的播放列表目录
@@ -118,22 +117,20 @@
 }
 </i18n>
 
-
 <template>
   <div v-loading="loading" ref="aside">
-    <el-dialog
-      :title="$t('tip')"
-      :visible.sync="dialogVisible"
-      :modal-append-to-body="false"
-      width="30%"
-    >
-      <span>{{$t('confirm_tip')}}</span>
+    <el-dialog :title="$t('tip')" :visible.sync="dialogVisible" :modal-append-to-body="false" width="30%">
+      <span>{{ $t("confirm_tip") }}</span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{$t('cancel')}}</el-button>
+        <el-button @click="dialogVisible = false">{{ $t("cancel") }}</el-button>
         <el-button
           type="primary"
-          @click="dialogVisible = false; deleteSelectedItems();"
-        >{{$t('ok')}}</el-button>
+          @click="
+            dialogVisible = false;
+            deleteSelectedItems();
+          "
+          >{{ $t("ok") }}</el-button
+        >
       </span>
     </el-dialog>
     <el-dialog
@@ -144,26 +141,13 @@
       :close-on-click-modal="true"
       :modal-append-to-body="false"
     >
-      <el-form
-        ref="createNewFolderForm"
-        label-width="auto"
-        :rules="folderNameRules"
-        :model="newFolderForm"
-      >
+      <el-form ref="createNewFolderForm" label-width="auto" :rules="folderNameRules" :model="newFolderForm">
         <el-form-item :label="$t('name')" prop="name">
           <el-input :placeholder="$t('name')" v-model="newFolderForm.name"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button
-            type="primary"
-            @click="createFolder"
-            style="width:80%"
-            :loading="loading"
-          >{{$t('add')}}</el-button>
-          <el-button
-            @click="showNewFolderDialog = false"
-            style="width:80%;margin-top:10px;margin-left:0px"
-          >{{$t('cancel')}}</el-button>
+          <el-button type="primary" @click="createFolder" style="width:80%" :loading="loading">{{ $t("add") }}</el-button>
+          <el-button @click="showNewFolderDialog = false" style="width:80%;margin-top:10px;margin-left:0px">{{ $t("cancel") }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -175,47 +159,29 @@
       :close-on-click-modal="true"
       :modal-append-to-body="false"
     >
-      <el-form
-        ref="refRenameFolderForm"
-        label-width="auto"
-        :rules="folderNameRules"
-        :model="renameFolderForm"
-      >
+      <el-form ref="refRenameFolderForm" label-width="auto" :rules="folderNameRules" :model="renameFolderForm">
         <el-form-item :label="$t('name')" prop="name">
           <el-input :placeholder="$t('name')" v-model="renameFolderForm.name"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button
-            type="primary"
-            @click="renameFolder"
-            style="width:80%"
-            :loading="loading"
-          >{{$t('rename')}}</el-button>
-          <el-button
-            @click="showRenameFolderDialog = false"
-            style="width:80%;margin-top:10px;margin-left:0px"
-          >{{$t('cancel')}}</el-button>
+          <el-button type="primary" @click="renameFolder" style="width:80%" :loading="loading">{{ $t("rename") }}</el-button>
+          <el-button @click="showRenameFolderDialog = false" style="width:80%;margin-top:10px;margin-left:0px">{{ $t("cancel") }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
     <!--   <i @click="copyPathLink" class="fa fa-copy fa-1x" style="margin-right: 6px; cursor: pointer;"></i>-->
-    <el-button @click="copyPathLink">{{$t('copy_folder_addr')}}</el-button>
+    <el-button @click="copyPathLink">{{ $t("copy_folder_addr") }}</el-button>
     <el-breadcrumb separator="/">
       <el-breadcrumb-item v-for="i in toNavigablePath()" :key="i.dst">
-        <a @click="navigateTo(i.dst)" style="font-size: 21px">{{i.name}}</a>
+        <a @click="navigateTo(i.dst)" style="font-size: 21px">{{ i.name }}</a>
       </el-breadcrumb-item>
     </el-breadcrumb>
-    <el-row v-if="this.$route.params.id!='me'">
+    <el-row v-if="this.$route.params.id != 'me'">
       <el-col style="width: 100%">
         <div class="folder-view">
           <el-container>
-            <el-aside
-              :style="{width:this.asideWidth + 'px', position:'relative', cursor:'e-resize'}"
-            >
-              <div
-                class="asaide-shelter"
-                style="position: absolute;width: 99%;height: 100%;cursor: default"
-              ></div>
+            <el-aside :style="{ width: this.asideWidth + 'px', position: 'relative', cursor: 'e-resize' }">
+              <div class="asaide-shelter" style="position: absolute;width: 99%;height: 100%;cursor: default"></div>
               <el-tree
                 ref="folderTree"
                 node-key="path"
@@ -234,12 +200,7 @@
               </el-switch>-->
             </el-aside>
             <el-main>
-              <el-table
-                ref="currentFolderTable"
-                :data="currentFolderChildrens"
-                style="width: 100%"
-                @selection-change="handleCurrentFolderTableSelectionChange"
-              >
+              <el-table ref="currentFolderTable" :data="currentFolderChildrens" style="width: 100%" @selection-change="handleCurrentFolderTableSelectionChange">
                 <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column :label="$t('cover')" width="180" height="100">
                   <template slot-scope="scope">
@@ -252,62 +213,36 @@
                     <img v-else src="/images/folder.png" width="160px" height="100px" />
                   </template>
                 </el-table-column>
-                <el-table-column
-                  :label="$t('title')"
-                  width="500"
-                  align="center"
-                  sortable
-                  prop="name"
-                >
+                <el-table-column :label="$t('title')" width="500" align="center" sortable prop="name">
                   <template slot-scope="scope">
                     <router-link
                       v-if="typeof scope.row.playlist_object != 'undefined'"
                       target="_blank"
-                      :to="{ path: '/listdetail', query: { id: scope.row.playlist_object._id.$oid} }"
+                      :to="{ path: '/listdetail', query: { id: scope.row.playlist_object._id.$oid } }"
                       :key="scope.row.playlist_object._id.$oid"
                       tag="a"
                     >
-                      <h4>{{scope.row.playlist_object.title.english}}</h4>
-                      <p
-                        style="width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 50px;"
-                      >{{scope.row.playlist_object.desc.english}}</p>
+                      <h4>{{ scope.row.playlist_object.title.english }}</h4>
+                      <p style="width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 50px;">
+                        {{ scope.row.playlist_object.desc.english }}
+                      </p>
                     </router-link>
                     <div v-else>
                       <el-button type="text" @click="navigateTo(scope.row.path)">
-                        <h3>{{scope.row.name}}</h3>
+                        <h3>{{ scope.row.name }}</h3>
                       </el-button>
-                      <el-button
-                        v-if="loggedIn && editable"
-                        type="primary"
-                        round
-                        @click="showRenameFolderDialogFunc(scope.row)"
-                      >{{$t('rename')}}</el-button>
+                      <el-button v-if="loggedIn && editable" type="primary" round @click="showRenameFolderDialogFunc(scope.row)">{{ $t("rename") }}</el-button>
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  :label="$t('video_num')"
-                  width="200"
-                  align="center"
-                  prop="playlist_object.videos"
-                  sortable
-                >
+                <el-table-column :label="$t('video_num')" width="200" align="center" prop="playlist_object.videos" sortable>
                   <template slot-scope="scope">
-                    <h3
-                      v-if="typeof scope.row.playlist_object != 'undefined'"
-                    >{{scope.row.playlist_object.videos}}</h3>
+                    <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{ scope.row.playlist_object.videos }}</h3>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  :label="$t('modif_date')"
-                  align="center"
-                  prop="playlist_object.meta.modified_at"
-                  sortable
-                >
+                <el-table-column :label="$t('modif_date')" align="center" prop="playlist_object.meta.modified_at" sortable>
                   <template slot-scope="scope">
-                    <h3
-                      v-if="typeof scope.row.playlist_object != 'undefined'"
-                    >{{scope.row.playlist_object.meta.modified_at | formatDate}}</h3>
+                    <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{ scope.row.playlist_object.meta.modified_at | formatDate }}</h3>
                   </template>
                 </el-table-column>
               </el-table>
@@ -316,15 +251,12 @@
         </div>
       </el-col>
     </el-row>
-    <el-row v-if="this.$route.params.id=='me'">
+    <el-row v-if="this.$route.params.id == 'me'">
       <el-col style="width: 60%">
         <div class="folder-view">
           <el-container>
-            <el-aside :style="{width:this.asideWidth+'px', position:'relative',cursor: 'e-resize'}">
-              <div
-                class="asaide-shelter"
-                style="position: absolute;width: 97%;height: 100%;cursor: default"
-              ></div>
+            <el-aside :style="{ width: this.asideWidth + 'px', position: 'relative', cursor: 'e-resize' }">
+              <div class="asaide-shelter" style="position: absolute;width: 97%;height: 100%;cursor: default"></div>
               <el-tree
                 ref="folderTree"
                 node-key="path"
@@ -350,31 +282,16 @@
               </el-switch>-->
             </el-aside>
             <el-main>
-              <el-button
-                v-if="loggedIn && editable"
-                @click="showNewFolderDialog = true"
-              >{{$t('new_folder')}}</el-button>
-              <el-button
-                v-if="loggedIn && editable"
-                @click="dialogVisible = true"
-                type="danger"
-                :disabled="this.currentSelectedItems == 0"
-              >{{$t('del_select')}}</el-button>
-              <el-button
-                round
-                @click="addToCurrectFolder"
-                :disabled="this.currentSelectedPlaylists.length == 0"
-              >{{$t('add_2_cur_dir')}}</el-button>
+              <el-button v-if="loggedIn && editable" @click="showNewFolderDialog = true">{{ $t("new_folder") }}</el-button>
+              <el-button v-if="loggedIn && editable" @click="dialogVisible = true" type="danger" :disabled="this.currentSelectedItems == 0">{{
+                $t("del_select")
+              }}</el-button>
+              <el-button round @click="addToCurrectFolder" :disabled="this.currentSelectedPlaylists.length == 0">{{ $t("add_2_cur_dir") }}</el-button>
 
               <!--<div v-if="loggedIn && editable" class="operations">
                 <el-button type="primary" round @click="addToCurrectFolder" :disabled="this.currentSelectedPlaylists.length == 0">添加至当前目录</el-button>
               </div>-->
-              <el-table
-                ref="currentFolderTable"
-                :data="currentFolderChildrens"
-                style="width: 100%"
-                @selection-change="handleCurrentFolderTableSelectionChange"
-              >
+              <el-table ref="currentFolderTable" :data="currentFolderChildrens" style="width: 100%" @selection-change="handleCurrentFolderTableSelectionChange">
                 <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column :label="$t('cover')" width="180" height="100" align="center">
                   <template slot-scope="scope">
@@ -387,62 +304,36 @@
                     <img v-else src="/images/folder.png" width="160px" height="100px" />
                   </template>
                 </el-table-column>
-                <el-table-column
-                  :label="$t('title')"
-                  width="200"
-                  align="center"
-                  sortable
-                  prop="name"
-                >
+                <el-table-column :label="$t('title')" width="200" align="center" sortable prop="name">
                   <template slot-scope="scope">
                     <router-link
                       v-if="typeof scope.row.playlist_object != 'undefined'"
                       target="_blank"
-                      :to="{ path: '/listdetail', query: { id: scope.row.playlist_object._id.$oid} }"
+                      :to="{ path: '/listdetail', query: { id: scope.row.playlist_object._id.$oid } }"
                       :key="scope.row.playlist_object._id.$oid"
                       tag="a"
                     >
-                      <h4>{{scope.row.playlist_object.title.english}}</h4>
-                      <p
-                        style="width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 50px;"
-                      >{{scope.row.playlist_object.desc.english}}</p>
+                      <h4>{{ scope.row.playlist_object.title.english }}</h4>
+                      <p style="width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 50px;">
+                        {{ scope.row.playlist_object.desc.english }}
+                      </p>
                     </router-link>
                     <div v-else>
                       <el-button type="text" @click="navigateTo(scope.row.path)">
-                        <h3>{{scope.row.name}}</h3>
+                        <h3>{{ scope.row.name }}</h3>
                       </el-button>
-                      <el-button
-                        v-if="loggedIn && editable"
-                        type="primary"
-                        round
-                        @click="showRenameFolderDialogFunc(scope.row)"
-                      >{{$t('rename')}}</el-button>
+                      <el-button v-if="loggedIn && editable" type="primary" round @click="showRenameFolderDialogFunc(scope.row)">{{ $t("rename") }}</el-button>
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  :label="$t('video_num')"
-                  align="center"
-                  width="100"
-                  prop="playlist_object.videos"
-                  sortable
-                >
+                <el-table-column :label="$t('video_num')" align="center" width="100" prop="playlist_object.videos" sortable>
                   <template slot-scope="scope">
-                    <h3
-                      v-if="typeof scope.row.playlist_object != 'undefined'"
-                    >{{scope.row.playlist_object.videos}}</h3>
+                    <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{ scope.row.playlist_object.videos }}</h3>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  :label="$t('modif_date')"
-                  align="center"
-                  prop="playlist_object.meta.modified_at"
-                  sortable
-                >
+                <el-table-column :label="$t('modif_date')" align="center" prop="playlist_object.meta.modified_at" sortable>
                   <template slot-scope="scope">
-                    <h3
-                      v-if="typeof scope.row.playlist_object != 'undefined'"
-                    >{{scope.row.playlist_object.meta.modified_at | formatDate}}</h3>
+                    <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{ scope.row.playlist_object.meta.modified_at | formatDate }}</h3>
                   </template>
                 </el-table-column>
               </el-table>
@@ -461,32 +352,14 @@
               class="inputbox"
               @keyup.enter.native="loadCurrentPlaylists()"
             >
-              <el-button
-                slot="append"
-                icon="el-icon-search"
-                @click="loadCurrentPlaylists()"
-              >{{$t('search')}}</el-button>
+              <el-button slot="append" icon="el-icon-search" @click="loadCurrentPlaylists()">{{ $t("search") }}</el-button>
             </el-input>
             <el-select v-model="currentPlaylistOrder" class="select">
-              <el-option
-                v-for="item in playlistOrderOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
+              <el-option v-for="item in playlistOrderOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
           </div>
-          <el-switch
-            v-model="showMyPlaylistsOnly"
-            :active-text="$t('my_playlist')"
-            :inactive-text="$t('all')"
-          ></el-switch>
-          <el-table
-            ref="rawPlaylists"
-            :data="currentPlaylists"
-            style="width: 100%"
-            @selection-change="handlePlaylistTableSelectionChange"
-          >
+          <el-switch v-model="showMyPlaylistsOnly" :active-text="$t('my_playlist')" :inactive-text="$t('all')"></el-switch>
+          <el-table ref="rawPlaylists" :data="currentPlaylists" style="width: 100%" @selection-change="handlePlaylistTableSelectionChange">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column :label="$t('cover')" width="180" height="100" align="center">
               <template slot-scope="scope">
@@ -495,39 +368,20 @@
             </el-table-column>
             <el-table-column :label="$t('title')" width="150" align="center" sortable prop="name">
               <template slot-scope="scope">
-                <router-link
-                  target="_blank"
-                  :to="{ path: '/listdetail', query: { id: scope.row._id.$oid} }"
-                  :key="scope.row._id.$oid"
-                  tag="a"
-                >
-                  <h4>{{scope.row.title.english}}</h4>
-                  <p
-                    style="width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 50px;"
-                  >{{scope.row.desc.english}}</p>
+                <router-link target="_blank" :to="{ path: '/listdetail', query: { id: scope.row._id.$oid } }" :key="scope.row._id.$oid" tag="a">
+                  <h4>{{ scope.row.title.english }}</h4>
+                  <p style="width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 50px;">{{ scope.row.desc.english }}</p>
                 </router-link>
               </template>
             </el-table-column>
-            <el-table-column
-              :label="$t('video_num')"
-              width="100"
-              align="center"
-              prop="playlist_object.videos"
-              sortable
-            >
+            <el-table-column :label="$t('video_num')" width="100" align="center" prop="playlist_object.videos" sortable>
               <template slot-scope="scope">
-                <h3>{{scope.row.videos}}</h3>
+                <h3>{{ scope.row.videos }}</h3>
               </template>
             </el-table-column>
-            <el-table-column
-              :label="$t('modif_date')"
-              width="110"
-              align="center"
-              prop="playlist_object.meta.modified_at"
-              sortable
-            >
+            <el-table-column :label="$t('modif_date')" width="110" align="center" prop="playlist_object.meta.modified_at" sortable>
               <template slot-scope="scope">
-                <h3>{{scope.row.meta.modified_at | formatDate}}</h3>
+                <h3>{{ scope.row.meta.modified_at | formatDate }}</h3>
               </template>
             </el-table-column>
           </el-table>
@@ -578,9 +432,7 @@ export default {
         row: null
       },
       folderNameRules: {
-        name: [
-          { required: true, message: this.$t("input_name"), trigger: "blur" }
-        ]
+        name: [{ required: true, message: this.$t("input_name"), trigger: "blur" }]
       },
       priavteView: false,
 
@@ -601,9 +453,7 @@ export default {
     };
   },
   created() {
-    this.loggedIn =
-      JSON.stringify(this.$store.state.username) != "null" &&
-      this.$store.state.username != "";
+    this.loggedIn = JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "";
     this.user_id = this.$route.params.id;
     this.editable = this.user_id == "me";
     if ("path" in this.$route.query) this.currentPath = this.$route.query.path;
@@ -813,13 +663,11 @@ export default {
       if (this.currentSelectedItems) {
         var pathsToDelete = [];
         this.currentSelectedItems.forEach(obj => {
-          if (typeof obj.playlist_object == "undefined")
-            pathsToDelete.push(obj.path);
+          if (typeof obj.playlist_object == "undefined") pathsToDelete.push(obj.path);
         });
         var pidsToDelete = [];
         this.currentSelectedItems.forEach(obj => {
-          if (typeof obj.playlist_object !== "undefined")
-            pidsToDelete.push(obj.playlist_object._id.$oid);
+          if (typeof obj.playlist_object !== "undefined") pidsToDelete.push(obj.playlist_object._id.$oid);
         });
         this.axios({
           method: "post",
@@ -969,9 +817,7 @@ export default {
           this.showRenameFolderDialog = false;
           this.getFolder(() => {
             var renamedTreeNode = this.$refs.folderTree.getNode(row.path);
-            var parentTreeNode = this.$refs.folderTree.getNode(
-              this.currentPath
-            );
+            var parentTreeNode = this.$refs.folderTree.getNode(this.currentPath);
             if (renamedTreeNode) {
               this.$refs.folderTree.remove(renamedTreeNode);
               parentTreeNode.data.children.push({

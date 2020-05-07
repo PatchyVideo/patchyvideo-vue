@@ -52,7 +52,6 @@
 }
 </i18n>
 
-
 <template>
   <div>
     <topnavbar />
@@ -61,20 +60,10 @@
       <div class="content" v-loading="loading">
         <!-- 每个标签种类的表单 -->
         <el-tabs type="border-card" v-model="activeName">
-          <el-tab-pane
-            :lazy="true"
-            v-for="(item, i) in tagCategories"
-            :key="item"
-            :label="$t('tag_categories.' + item)"
-            :name="i.toString()"
-          >
+          <el-tab-pane :lazy="true" v-for="(item, i) in tagCategories" :key="item" :label="$t('tag_categories.' + item)" :name="i.toString()">
             <tagDetail :tagCategorie="item"></tagDetail>
           </el-tab-pane>
-          <el-tab-pane
-            :lazy="true"
-            :label="$t('search_tag')"
-            :name="(tagCategories.length+1).toString()"
-          >
+          <el-tab-pane :lazy="true" :label="$t('search_tag')" :name="(tagCategories.length + 1).toString()">
             <searchTag></searchTag>
           </el-tab-pane>
         </el-tabs>

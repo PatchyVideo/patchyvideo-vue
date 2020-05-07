@@ -20,7 +20,7 @@ const parserMarkdownPlugins = {
   abbr: MarkdownPluginAbbr,
   container: MarkdownPluginContainer,
   ins: MarkdownPluginIns,
-  mark: MarkdownPluginMark,
+  mark: MarkdownPluginMark
 };
 import hljs from "./hljs";
 // utils
@@ -53,42 +53,21 @@ function parse(text) {
   let t = renderText.text;
   renderText = "";
   t = t
-    .replace(
-      /\<(h[1-6]|strong|em|s|u)\>[\S\s]*?\<\/\1\>/g,
-      (match, p1, offset, string) => {
-        return tohtml(match);
-      }
-    )
-    .replace(
-      /\<script[^\>]*?\>\n?([\S\s]*?)\n?\<\/script\>/g,
-      (match, p1, offset, string) => {
-        return (
-          '[[{renderd}]]<pre><code class="language-javascript">' +
-          hljs.highlight("javascript", p1).value +
-          "</code></pre>[[{/renderd}]]"
-        );
-      }
-    )
-    .replace(
-      /\<style[^\>]*?\>\n?([\S\s]*?)\n?\<\/style\>/g,
-      (match, p1, offset, string) => {
-        return (
-          '[[{renderd}]]<pre><code class="language-css">' +
-          hljs.highlight("css", p1).value +
-          "</code></pre>[[{/renderd}]]"
-        );
-      }
-    )
+    .replace(/<(h[1-6]|strong|em|s|u)>[\S\s]*?<\/\1>/g, match => {
+      return tohtml(match);
+    })
+    .replace(/<script[^>]*?>\n?([\S\s]*?)\n?<\/script>/g, (__, p1) => {
+      return '[[{renderd}]]<pre><code class="language-javascript">' + hljs.highlight("javascript", p1).value + "</code></pre>[[{/renderd}]]";
+    })
+    .replace(/<style[^>]*?>\n?([\S\s]*?)\n?<\/style>/g, (__, p1) => {
+      return '[[{renderd}]]<pre><code class="language-css">' + hljs.highlight("css", p1).value + "</code></pre>[[{/renderd}]]";
+    })
     .replace(/\n?\[\[\{renderd\}\]\]/g, "[[{html}]]")
     .replace(/\[\[\{\/renderd\}\]\]\n?/g, "[[{/html}]]");
   while (t.match(/\[\[\{html\}\]\]/)) {
     t = t.match(/^([\S\s]*?)\[\[\{html\}\]\]([\S\s]*)/);
     renderText += parserHTML.encode(t[1]).replace(/\n/g, "\n<br />");
-    while (
-      t[2].match(/\[\[\{html\}\]\]/) &&
-      t[2].match(/\[\[\{\/html\}\]\]/).index >
-        t[2].match(/\[\[\{html\}\]\]/).index
-    ) {
+    while (t[2].match(/\[\[\{html\}\]\]/) && t[2].match(/\[\[\{\/html\}\]\]/).index > t[2].match(/\[\[\{html\}\]\]/).index) {
       t[2] = t[2].replace(/\[\[\{html\}\]\]([\S\s]*?)\[\[\{\/html\}\]\]/, "$1");
     }
     t = t[2].match(/([\S\s]*?)\[\[\{\/html\}\]\]([\S\s]*)/);
@@ -96,57 +75,29 @@ function parse(text) {
     t = t[2];
   }
   renderText += parserHTML.encode(t).replace(/\n/g, "\n<br />");
-  renderText = renderText
-    .replace(/&(amp;)*_dl;/g, "[[")
-    .replace(/&(amp;)*_dr;/g, "]]"); // 转义
+  renderText = renderText.replace(/&(amp;)*_dl;/g, "[[").replace(/&(amp;)*_dr;/g, "]]"); // 转义
   return renderText;
 }
 
 function tohtml(str) {
-  let f = str.match(/([\S\s]*?)\<(strong|em|s|u)\>([\S\s]*?)\<\/\2\>([\S\s]*)/);
-  if (f)
-    return (
-      f[1] +
-      "[[{html}]]<" +
-      f[2] +
-      ">[[{/html}]]" +
-      tohtml(f[3]) +
-      "[[{html}]]</" +
-      f[2] +
-      ">[[{/html}]]" +
-      tohtml(f[4])
-    );
-  f = str.match(/([\S\s]*?)\<(h[1-6])\>([\S\s]*?)\<\/\2\>([\S\s]*)/);
-  if (f)
-    return (
-      f[1] +
-      "[[{renderd}]]<" +
-      f[2] +
-      ">[[{/renderd}]]" +
-      tohtml(f[3]) +
-      "[[{renderd}]]</" +
-      f[2] +
-      ">[[{/renderd}]]" +
-      tohtml(f[4])
-    );
+  let f = str.match(/([\S\s]*?)<(strong|em|s|u)>([\S\s]*?)<\/\2>([\S\s]*)/);
+  if (f) return f[1] + "[[{html}]]<" + f[2] + ">[[{/html}]]" + tohtml(f[3]) + "[[{html}]]</" + f[2] + ">[[{/html}]]" + tohtml(f[4]);
+  f = str.match(/([\S\s]*?)<(h[1-6])>([\S\s]*?)<\/\2>([\S\s]*)/);
+  if (f) return f[1] + "[[{renderd}]]<" + f[2] + ">[[{/renderd}]]" + tohtml(f[3]) + "[[{renderd}]]</" + f[2] + ">[[{/renderd}]]" + tohtml(f[4]);
   return str;
 }
 
 function parserChunk(text, stack, aindex) {
   const chunkLT = text.match(/\[\[(\w+)((?: +[\w-]+:"[^"]+")*) \/\]\]/);
   if (chunkLT) {
-    const t = parserChunk(
-      text.slice(chunkLT.index + chunkLT[0].length),
-      stack,
-      aindex + chunkLT.index + chunkLT[0].length
-    );
+    const t = parserChunk(text.slice(chunkLT.index + chunkLT[0].length), stack, aindex + chunkLT.index + chunkLT[0].length);
     const content = queryData(chunkLT[1], getData(chunkLT[2]), "", stack);
     if (content.b) {
       text = text.replace(chunkLT[0], content.text);
     }
     return {
       l: chunkLT.index + chunkLT[0].length + t.l - 1,
-      text: text + t.text,
+      text: text + t.text
     };
   }
   // [[chunk parser:"markdown" markdown-plugin:"subscript superscript"]]www[[/chunk]]
@@ -172,7 +123,7 @@ function parserChunk(text, stack, aindex) {
     type: chunkT[1],
     index: aindex + chunkT.index,
     indexT: aindex + chunkT.index + chunkSize,
-    data: data || {},
+    data: data || {}
   });
 
   const chunkLE = text.match(/\[\[\/(\w+)\]\]/);
@@ -192,9 +143,7 @@ function parserChunk(text, stack, aindex) {
   const textE = parserChunk(textT, stack, aindex + chunkT.index + chunkSize);
   if (stackC != stack.length) throw genError("Unexpected end of chunk.", stack);
   // will return with 'www[[/chunk]]' because of no chunks inside
-  const chunkE = textE.text.match(
-    RegExp("\\s*\\[\\[\\/(" + chunkT[1] + ")\\]\\]")
-  );
+  const chunkE = textE.text.match(RegExp("\\s*\\[\\[\\/(" + chunkT[1] + ")\\]\\]"));
   // 3
   // www[[/chunk]]
   //    ^
@@ -206,18 +155,11 @@ function parserChunk(text, stack, aindex) {
   content = queryData(chunkT[1], data, content, stack);
   if (!content.b) {
     stack.pop();
-    text =
-      text.slice(0, chunkT.index + chunkSize) +
-      textE.text.slice(0, chunkE.index) +
-      chunkE[0];
-    const t = parserChunk(
-      textE.text.slice(chunkE.index + chunkE[0].length),
-      stack,
-      aindex + chunkT.index + chunkSize + textE.l + chunkE[0].length - 1
-    );
+    text = text.slice(0, chunkT.index + chunkSize) + textE.text.slice(0, chunkE.index) + chunkE[0];
+    const t = parserChunk(textE.text.slice(chunkE.index + chunkE[0].length), stack, aindex + chunkT.index + chunkSize + textE.l + chunkE[0].length - 1);
     return {
       l: chunkT.index + chunkSize + textE.l + chunkE[0].length + t.l - 1,
-      text: text + t.text,
+      text: text + t.text
     };
   }
   // <p>www</p>\n
@@ -226,14 +168,10 @@ function parserChunk(text, stack, aindex) {
   textB += content.text;
   // <p>www</p>\n
   stack.pop();
-  const t = parserChunk(
-    textE.text.slice(chunkE.index + chunkE[0].length),
-    stack,
-    aindex + chunkT.index + chunkSize + textE.l + chunkE[0].length - 1
-  );
+  const t = parserChunk(textE.text.slice(chunkE.index + chunkE[0].length), stack, aindex + chunkT.index + chunkSize + textE.l + chunkE[0].length - 1);
   return {
     l: chunkT.index + chunkSize + textE.l + chunkE[0].length + t.l - 1,
-    text: textB + t.text,
+    text: textB + t.text
   };
 }
 
@@ -290,7 +228,7 @@ function getTextPosition(index, text) {
 function getData(text) {
   const data = [...text.matchAll(/([\w-]+):"([^"]+)"/g)];
   const b = {};
-  data.forEach((value) => {
+  data.forEach(value => {
     b[value[1]] = value[2];
   });
   return b;
@@ -305,12 +243,7 @@ function queryData(type, data, text, stack) {
     case "chunk": {
       let parsed = false;
       for (let i in stack) {
-        if (
-          stack.type == "chunk" &&
-          stack.data &&
-          stack.data.parser &&
-          stack.data.parser !== "default"
-        ) {
+        if (i.type == "chunk" && i.data && i.data.parser && i.data.parser !== "default") {
           parsed = true;
           b = true;
           break;
@@ -331,14 +264,7 @@ function queryData(type, data, text, stack) {
     case "em":
     case "s":
     case "u": {
-      text =
-        "[[{html}]]<" +
-        type +
-        ">[[{/html}]]" +
-        text +
-        "[[{html}]]</" +
-        type +
-        ">[[{/html}]]";
+      text = "[[{html}]]<" + type + ">[[{/html}]]" + text + "[[{html}]]</" + type + ">[[{/html}]]";
       b = true;
       break;
     }
@@ -348,25 +274,13 @@ function queryData(type, data, text, stack) {
     case "h4":
     case "h5":
     case "h6": {
-      text =
-        "[[{renderd}]]\n<" +
-        type +
-        ">[[{/renderd}]]" +
-        text +
-        "[[{renderd}]]</" +
-        type +
-        ">\n[[{/renderd}]]";
+      text = "[[{renderd}]]\n<" + type + ">[[{/renderd}]]" + text + "[[{renderd}]]</" + type + ">\n[[{/renderd}]]";
       b = true;
       break;
     }
     case "link": {
       if (!data.href) break;
-      text =
-        '[[{html}]]<a href="' +
-        data.href +
-        '">[[{/html}]]' +
-        text +
-        "[[{html}]]</a>[[{/html}]]";
+      text = '[[{html}]]<a href="' + data.href + '">[[{/html}]]' + text + "[[{html}]]</a>[[{/html}]]";
       b = true;
       break;
     }
@@ -384,11 +298,7 @@ function queryData(type, data, text, stack) {
     }
     case "img": {
       if (data.src) {
-        text =
-          `[[{html}]]<img src="${data.src}"` +
-          (data.width && ` width="${data.width}"`) +
-          (data.height && ` height="${data.height}"`) +
-          `/>[[{/html}]]`;
+        text = `[[{html}]]<img src="${data.src}"` + (data.width && ` width="${data.width}"`) + (data.height && ` height="${data.height}"`) + `/>[[{/html}]]`;
         b = true;
       }
       break;
@@ -399,33 +309,30 @@ function queryData(type, data, text, stack) {
 
 function parser(type, dataList, text) {
   switch (type) {
-    case "markdown":
+    case "markdown": {
       let parserMarkdown = new MarkdownIt({
         breaks: true,
         highlight: function(str, lang) {
           if (lang && hljs.getLanguage(lang)) {
             try {
               return hljs.highlight(lang, str).value;
-            } catch (__) {}
+            } catch (__) {
+              // if error, just run as not renderd.
+            }
           }
           return ""; // use external default escaping
-        },
+        }
       });
       if (dataList["markdown-plugin"]) {
-        dataList["markdown-plugin"].split(" ").forEach((value) => {
-          if (parserMarkdownPlugins[value])
-            parserMarkdown = parserMarkdown.use(parserMarkdownPlugins[value]);
+        dataList["markdown-plugin"].split(" ").forEach(value => {
+          if (parserMarkdownPlugins[value]) parserMarkdown = parserMarkdown.use(parserMarkdownPlugins[value]);
         });
       }
-      let b = text
-        .replace(/&(amp;)*_dl;/g, "[[")
-        .replace(/&(amp;)*_dr;/g, "]]");
+      let b = text.replace(/&(amp;)*_dl;/g, "[[").replace(/&(amp;)*_dr;/g, "]]");
       b = parserMarkdown.render(b);
-      b =
-        "[[{renderd}]]" +
-        b.replace(/\[\[\[/g, "&_dl;").replace(/\]\]/g, "&_dr;") +
-        "[[{/renderd}]]";
+      b = "[[{renderd}]]" + b.replace(/\[\[\[/g, "&_dl;").replace(/\]\]/g, "&_dr;") + "[[{/renderd}]]";
       return b;
+    }
   }
 }
 

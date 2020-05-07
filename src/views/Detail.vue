@@ -140,7 +140,7 @@
     <el-dialog :title="$t('management')" :visible.sync="managementBox" width="30%">
       <div style="width:80%;margin:0 auto">
         <el-select v-model="theVideoRank" placeholder="请修改视频的等级" style="width:100%">
-          <el-option v-for="(val,key) in videoRanks" :key="key" :label="key" :value="val">{{key}}</el-option>
+          <el-option v-for="(val, key) in videoRanks" :key="key" :label="key" :value="val">{{ key }}</el-option>
         </el-select>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -152,17 +152,8 @@
     <!-- 更改视频级别的弹出框 -->
     <el-dialog title="修改视频发布类型" :visible.sync="changeRepostType" width="30%">
       <div style="width:80%;margin:0 auto">
-        <el-select
-          v-model="RepostType"
-          :placeholder="$t('infotip.release_type')"
-          style="width:100%"
-        >
-          <el-option
-            v-for="item in RepostTypes"
-            :key="item.label"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
+        <el-select v-model="RepostType" :placeholder="$t('infotip.release_type')" style="width:100%">
+          <el-option v-for="item in RepostTypes" :key="item.label" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -176,7 +167,11 @@
       <!-- 新建列表的嵌套弹出框 -->
       <el-dialog width="60%" title="新建列表:" :visible.sync="newListDialog" append-to-body>
         <createNewList
-          @closeMe="$event => {this.newListDialog = false}"
+          @closeMe="
+            $event => {
+              this.newListDialog = false;
+            }
+          "
           :needGo="!newListDialog"
           style="margin:0 auto"
         ></createNewList>
@@ -190,12 +185,7 @@
           <el-button slot="append" icon="el-icon-search" @click="getMyList()"></el-button>
         </el-input>
         <div v-if="myVideoList.length" class="myVideoList">
-          <div
-            v-for="(item, index) in myVideoList"
-            :key="index"
-            class="myVideoListItem"
-            @click="addToThisList(item._id.$oid)"
-          >
+          <div v-for="(item, index) in myVideoList" :key="index" class="myVideoListItem" @click="addToThisList(item._id.$oid)">
             <h2>{{ item.title.english }}</h2>
             <h3 style="display:inline-block;color:#909399" v-if="item.private">[私密]</h3>
             <h3 style="display:inline-block;color:#E6A23C" v-if="item.exist">[已有此视频]</h3>
@@ -213,7 +203,7 @@
           :total="maxcount"
           :page-size="10"
         ></el-pagination>
-        <el-button class="createNewList" @click="newListDialog=true" type="primary">新建列表</el-button>
+        <el-button class="createNewList" @click="newListDialog = true" type="primary">新建列表</el-button>
       </div>
     </el-dialog>
 
@@ -225,36 +215,21 @@
         <!-- 推荐视频栏开始  -->
         <div class="recommend">
           <h4 style="color:#606266">
-            {{videoType}}:
-            <el-button v-if="isLogin" type="text" @click="changeRepostType = true">{{$t('modify')}}</el-button>
-            <i
-              v-if="isAdmin"
-              class="el-icon-refresh"
-              @click="refreshVideo(myVideoData)"
-              style="float:right"
-            ></i>
+            {{ videoType }}:
+            <el-button v-if="isLogin" type="text" @click="changeRepostType = true">{{ $t("modify") }}</el-button>
+            <i v-if="isAdmin" class="el-icon-refresh" @click="refreshVideo(myVideoData)" style="float:right"></i>
           </h4>
           <div class="re_top">
             <h2>{{ myVideoData.video.item.title }}</h2>
             <div style="margin-left:5px;">
-              <el-button
-                v-if="isLogin"
-                icon="el-icon-star-off"
-                type="primary"
-                round
-                @click="openMyList"
-              >{{$t('favorite')}}</el-button>
-              <el-button v-if="isAdmin" @click="managementBox = true">{{$t("management")}}</el-button>
+              <el-button v-if="isLogin" icon="el-icon-star-off" type="primary" round @click="openMyList">{{ $t("favorite") }}</el-button>
+              <el-button v-if="isAdmin" @click="managementBox = true">{{ $t("management") }}</el-button>
             </div>
           </div>
           <h4 class="video_link">
             <a :href="myVideoData.video.item.url">{{ myVideoData.video.item.url }}</a>
             <!-- 一键复制的小图标 -->
-            <i
-              @click="copyVideoLink(myVideoData.video.item.url)"
-              class="fa fa-copy fa-1x"
-              style="margin-left:4px;"
-            ></i>
+            <i @click="copyVideoLink(myVideoData.video.item.url)" class="fa fa-copy fa-1x" style="margin-left:4px;"></i>
           </h4>
           <!-- 视频上传时间（？） -->
           <h5 style="text-align: center;">{{ videodate }}</h5>
@@ -264,12 +239,12 @@
             <!-- B站，A站，n站和油管显示内嵌视频播放 -->
             <iframe
               :src="iframeUrl"
-              v-if="this.iframeUrl!==''"
+              v-if="this.iframeUrl !== ''"
               allowfullscreen="true"
               style="width: 948px; height: 763px;  margin:10px auto 30px;display: block;"
             ></iframe>
             <!-- 如果是 ipfs 视频则播放视频 -->
-            <div v-if="isIpfs" style="text-align: center;" id="nodes">{{$t('init_tip')}}</div>
+            <div v-if="isIpfs" style="text-align: center;" id="nodes">{{ $t("init_tip") }}</div>
             <video
               :src="myVideoData.video.item.url"
               id="player"
@@ -280,19 +255,8 @@
               style="position: relative;left: 50%;transform: translateX(-50%);"
             ></video>
             <!-- 其他情况显示缩略图 -->
-            <img
-              v-if="this.iframeUrl===''&&!isIpfs"
-              :src="'/images/covers/' + myVideoData.video.item.cover_image"
-              width="320px"
-              height="200px"
-            />
-            <p
-              class="videoDesc"
-              @click="postAsCopy($event)"
-              style="word-break: break-all;"
-              v-html="myVideoData.video.item.desc"
-              v-linkified
-            ></p>
+            <img v-if="this.iframeUrl === '' && !isIpfs" :src="'/images/covers/' + myVideoData.video.item.cover_image" width="320px" height="200px" />
+            <p class="videoDesc" @click="postAsCopy($event)" style="word-break: break-all;" v-html="myVideoData.video.item.desc" v-linkified></p>
           </div>
         </div>
 
@@ -303,74 +267,46 @@
 
         <!-- B站分P视频区 -->
         <div>
-          <PagesOfVideo v-if="myVideoData.video.item.site=='bilibili'" :aid="aid"></PagesOfVideo>
+          <PagesOfVideo v-if="myVideoData.video.item.site == 'bilibili'" :aid="aid"></PagesOfVideo>
         </div>
 
         <!-- 副本列表 -->
         <div class="Copies_blibili">
           <div class="new_top">
-            <h2>{{$t("copy")}}</h2>
+            <h2>{{ $t("copy") }}</h2>
             <p v-if="myVideoData.copies == ''">
-              {{$t("infotip.nocopies")}}
-              <router-link
-                :to="{ path: './postvideo', query: { copy: this.pid } }"
-                tag="a"
-                v-if="isLogin == true"
-              >
-                <el-button type="text">[ {{$t("add_copy")}}]</el-button>
+              {{ $t("infotip.nocopies") }}
+              <router-link :to="{ path: './postvideo', query: { copy: this.pid } }" tag="a" v-if="isLogin == true">
+                <el-button type="text">[ {{ $t("add_copy") }}]</el-button>
               </router-link>
             </p>
             <p v-else>
               此视频有{{ myVideoData.copies.length }}个副本
-              <router-link
-                :to="{ path: './postvideo', query: { copy: this.pid } }"
-                tag="a"
-                v-if="isLogin == true"
-              >
-                <el-button type="text">[{{$t("add_copy")}}]</el-button>
+              <router-link :to="{ path: './postvideo', query: { copy: this.pid } }" tag="a" v-if="isLogin == true">
+                <el-button type="text">[{{ $t("add_copy") }}]</el-button>
               </router-link>
-              <el-button
-                type="text"
-                @click="dialogVisible = true"
-                v-if="isLogin == true"
-              >[{{$t("del_copy")}}]</el-button>
-              <el-button
-                type="text"
-                @click="broadcastTags()"
-                v-if="isLogin == true"
-                style="margin-left:0px"
-              >[{{$t("sync_replica_label")}}]</el-button>
+              <el-button type="text" @click="dialogVisible = true" v-if="isLogin == true">[{{ $t("del_copy") }}]</el-button>
+              <el-button type="text" @click="broadcastTags()" v-if="isLogin == true" style="margin-left:0px">[{{ $t("sync_replica_label") }}]</el-button>
             </p>
           </div>
           <div v-for="(value, key, index) in myVideoData.copies_by_repost_type" :key="index">
-            <h3 v-if="key =='official'">{{$t('official')}}</h3>
-            <h3 v-if="key =='official_repost'">{{$t('official_repost')}}</h3>
-            <h3 v-if="key =='authorized_translation'">{{$t('authorized_translation')}}</h3>
-            <h3 v-if="key =='authorized_repost'">{{$t('authorized_repost')}}</h3>
-            <h3 v-if="key =='translation'">{{$t('translation')}}</h3>
-            <h3 v-if="key =='repost'">{{$t('repost')}}</h3>
-            <h3 v-if="key =='unknown'">{{$t('unknown')}}</h3>
+            <h3 v-if="key == 'official'">{{ $t("official") }}</h3>
+            <h3 v-if="key == 'official_repost'">{{ $t("official_repost") }}</h3>
+            <h3 v-if="key == 'authorized_translation'">{{ $t("authorized_translation") }}</h3>
+            <h3 v-if="key == 'authorized_repost'">{{ $t("authorized_repost") }}</h3>
+            <h3 v-if="key == 'translation'">{{ $t("translation") }}</h3>
+            <h3 v-if="key == 'repost'">{{ $t("repost") }}</h3>
+            <h3 v-if="key == 'unknown'">{{ $t("unknown") }}</h3>
             <ul v-for="item in value" :key="item._id.$oid" class="copies">
-              <img
-                :src="require('../static/img/' + item.item.site + '.png')"
-                width="16px"
-                style="margin-right:2px;vertical-align: middle;"
-              />
+              <img :src="require('../static/img/' + item.item.site + '.png')" width="16px" style="margin-right:2px;vertical-align: middle;" />
               <!-- 将页面参数刷新并重载页面，其中 @click.native 应该是 router-link 为了阻止 a 标签的默认跳转事件 -->
-              <a
-                v-bind:class="{shortTitleForPageVideos: item.item.part_name,}"
-                @click="shiftID(item._id.$oid)"
-              >{{ item.item.title }}</a>
-              <span
-                v-if="item.item.part_name"
-                class="shortTitleForTitleOfPageVideos"
-              >P{{item.item.url.slice(item.item.url.indexOf("=") + 1, item.item.url.length)}}:{{item.item.part_name}}</span>
-              <el-button
-                type="text"
-                @click="synctags(item._id.$oid)"
-                v-if="isLogin == true"
-                style="margin-left:10px"
-              >[{{$t("sync_replica_label_from")}}]</el-button>
+              <a v-bind:class="{ shortTitleForPageVideos: item.item.part_name }" @click="shiftID(item._id.$oid)">{{ item.item.title }}</a>
+              <span v-if="item.item.part_name" class="shortTitleForTitleOfPageVideos"
+                >P{{ item.item.url.slice(item.item.url.indexOf("=") + 1, item.item.url.length) }}:{{ item.item.part_name }}</span
+              >
+              <el-button type="text" @click="synctags(item._id.$oid)" v-if="isLogin == true" style="margin-left:10px"
+                >[{{ $t("sync_replica_label_from") }}]</el-button
+              >
             </ul>
           </div>
         </div>
@@ -378,18 +314,15 @@
         <!-- 播放列表 -->
         <div class="Playlists">
           <div class="new_top">
-            <h2>{{$t("playlist")}}</h2>
+            <h2>{{ $t("playlist") }}</h2>
             <p v-if="myVideoData.playlists == ''">
-              {{$t("infotip.noplaylist")}}
+              {{ $t("infotip.noplaylist") }}
               <el-dropdown v-if="isLogin == true" @command="handleCommand">
                 <span class="el-dropdown-link">
                   <i class="el-icon-more"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item
-                    command="a"
-                    @click="newFromSingleVideo()"
-                  >【{{$t("infotip.create_playlist")}}】</el-dropdown-item>
+                  <el-dropdown-item command="a" @click="newFromSingleVideo()">【{{ $t("infotip.create_playlist") }}】</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </p>
@@ -400,27 +333,17 @@
                   <i class="el-icon-more"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item
-                    command="a"
-                    @click="newFromSingleVideo()"
-                  >【{{$t("infotip.create_playlist")}}】</el-dropdown-item>
+                  <el-dropdown-item command="a" @click="newFromSingleVideo()">【{{ $t("infotip.create_playlist") }}】</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </p>
           </div>
           <ul v-for="item in myVideoData.playlists" :key="item._id.$oid">
-            <a v-if="item.prev != ''" @click="shiftID(item.prev)">【{{$t("previous_article")}}】</a>
-            <span v-else>【{{$t("no_previous_article")}}】</span>
-            <router-link
-              :to="{ path: '/listdetail', query: { id: item._id.$oid } }"
-              tag="a"
-            >{{ item.title.english }}</router-link>
-            <a
-              v-if="item.next != ''"
-              @click="shiftID(item.next)"
-              style="float:right"
-            >【{{$t("next_article")}}】</a>
-            <span v-else style="float:right">【{{$t("no_next_article")}}】</span>
+            <a v-if="item.prev != ''" @click="shiftID(item.prev)">【{{ $t("previous_article") }}】</a>
+            <span v-else>【{{ $t("no_previous_article") }}】</span>
+            <router-link :to="{ path: '/listdetail', query: { id: item._id.$oid } }" tag="a">{{ item.title.english }}</router-link>
+            <a v-if="item.next != ''" @click="shiftID(item.next)" style="float:right">【{{ $t("next_article") }}】</a>
+            <span v-else style="float:right">【{{ $t("no_next_article") }}】</span>
           </ul>
         </div>
 
@@ -435,7 +358,14 @@
         <span>确认删除？</span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogVisible = false; breaklink();">确 定</el-button>
+          <el-button
+            type="primary"
+            @click="
+              dialogVisible = false;
+              breaklink();
+            "
+            >确 定</el-button
+          >
         </span>
       </el-dialog>
     </div>
@@ -619,10 +549,7 @@ export default {
     },
     // 判断是否登录的标志
     isLogin() {
-      if (
-        JSON.stringify(this.$store.state.username) != "null" &&
-        this.$store.state.username != ""
-      ) {
+      if (JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "") {
         return true;
       } else {
         return false;
@@ -711,13 +638,9 @@ export default {
     },
     // 复制视频连接
     copyVideoLink: function(url) {
-      this.$alert(
-        "视频链接复制" + (copyToClipboardText(url) ? "成功！" : "失败！"),
-        "分享链接",
-        {
-          confirmButtonText: "确定"
-        }
-      );
+      this.$alert("视频链接复制" + (copyToClipboardText(url) ? "成功！" : "失败！"), "分享链接", {
+        confirmButtonText: "确定"
+      });
     },
     // 设置内嵌播放链接
     regToIframe(url, cid = "") {
@@ -728,9 +651,7 @@ export default {
       let regAcf = /(https:\/\/|http:\/\/)www.acfun.cn\/v\/ac(\S+)/;
       if (regBili.exec(str) !== null) {
         this.aid = regBili.exec(str)[2];
-        return `//player.bilibili.com/player.html?aid=${
-          regBili.exec(str)[2]
-        }&cid=${cid}&page=${regBili.exec(str)[3]}`;
+        return `//player.bilibili.com/player.html?aid=${regBili.exec(str)[2]}&cid=${cid}&page=${regBili.exec(str)[3]}`;
       }
       if (regNico.exec(str) !== null) {
         return `//embed.nicovideo.jp/watch/sm${regNico.exec(str)[2]}`;
@@ -758,10 +679,7 @@ export default {
         })
           .then(result => {
             this.myVideoData = result.data.data;
-            this.iframeUrl = this.regToIframe(
-              this.myVideoData.video.item.url,
-              this.myVideoData.video.item.cid || ""
-            );
+            this.iframeUrl = this.regToIframe(this.myVideoData.video.item.url, this.myVideoData.video.item.cid || "");
             this.theVideoRank = result.data.data.video.clearence;
             if (result.data.data.video.comment_thread) {
               this.sid = result.data.data.video.comment_thread.$oid;
@@ -891,19 +809,13 @@ export default {
     // 匹配视频简介中的 URL 的规则
     buildUrlMatchers() {
       var that = this;
-      this.URL_MATCHERS[
-        "(https:\\/\\/|http:\\/\\/)?(www\\.)?bilibili\\.com\\/video\\/([aA][vV][\\d]+|BV[a-zA-Z0-9]+)+"
-      ] = function(match) {
+      this.URL_MATCHERS["(https:\\/\\/|http:\\/\\/)?(www\\.)?bilibili\\.com\\/video\\/([aA][vV][\\d]+|BV[a-zA-Z0-9]+)+"] = function(match) {
         return [match, "video"];
       };
-      this.URL_MATCHERS[
-        "(https:\\/\\/|http:\\/\\/)?(www\\.)?acfun\\.cn\\/v\\/ac[\\d]+"
-      ] = function(match) {
+      this.URL_MATCHERS["(https:\\/\\/|http:\\/\\/)?(www\\.)?acfun\\.cn\\/v\\/ac[\\d]+"] = function(match) {
         return [match, "video"];
       };
-      this.URL_MATCHERS[
-        "(https:\\/\\/|http:\\/\\/)?(www\\.)?nicovideo\\.jp\\/watch\\/(s|n)m[\\d]+"
-      ] = function(match) {
+      this.URL_MATCHERS["(https:\\/\\/|http:\\/\\/)?(www\\.)?nicovideo\\.jp\\/watch\\/(s|n)m[\\d]+"] = function(match) {
         return [match, "video"];
       };
       this.URL_MATCHERS[
@@ -911,9 +823,7 @@ export default {
       ] = function(match) {
         return [match, "video"];
       };
-      this.URL_MATCHERS[
-        "(https:\\/\\/)?(www\\.|mobile\\.)?twitter\\.com\\/[\\w]+\\/status\\/[\\d]+"
-      ] = function(match) {
+      this.URL_MATCHERS["(https:\\/\\/)?(www\\.|mobile\\.)?twitter\\.com\\/[\\w]+\\/status\\/[\\d]+"] = function(match) {
         return [match, "video"];
       };
       this.URL_MATCHERS["ac[\\d]+"] = function(short_link) {
@@ -929,10 +839,7 @@ export default {
         return ["https://www.nicovideo.jp/watch/" + short_link, "video"];
       };
       this.URL_MATCHERS["youtube-[-\\w]+"] = function(short_link) {
-        return [
-          "https://www.youtube.com/watch?v=" + short_link.substring(8),
-          "video"
-        ];
+        return ["https://www.youtube.com/watch?v=" + short_link.substring(8), "video"];
       };
       this.URL_MATCHERS["mylist\\/[\\d]+"] = function(short_link) {
         return ["https://www.nicovideo.jp/" + short_link, "playlist"];
@@ -955,17 +862,11 @@ export default {
       combined_matcher += ")";
       var combined_matcher_regex = new RegExp(combined_matcher, "ig");
       var is_logged_in = this.isLogin;
-      var desc_urlified = desc_text.replace(combined_matcher_regex, function(
-        url
-      ) {
+      var desc_urlified = desc_text.replace(combined_matcher_regex, function(url) {
         for (var key in that.URL_MATCHERS) {
           if (new RegExp(key, "i").test(url)) {
             const [expanded_url, link_type] = that.URL_MATCHERS[key](url);
-            return `<div class="video-link-div"><a href="${expanded_url}">${url}</a>${that.buildUrlTools(
-              is_logged_in,
-              expanded_url,
-              link_type
-            )}</div>`;
+            return `<div class="video-link-div"><a href="${expanded_url}">${url}</a>${that.buildUrlTools(is_logged_in, expanded_url, link_type)}</div>`;
           }
         }
       });
@@ -1114,8 +1015,7 @@ export default {
               throw err;
             }
             // console.log(peerInfos.length+" ipfs node(s) connect.");
-            this.nodeShow.innerHTML =
-              peerInfos.length + this.$t("connect_success_tip");
+            this.nodeShow.innerHTML = peerInfos.length + this.$t("connect_success_tip");
           });
         }, Interval);
         const player = document.getElementById("player");

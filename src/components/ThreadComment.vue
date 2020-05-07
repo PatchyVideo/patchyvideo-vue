@@ -1,9 +1,6 @@
 <template>
   <div ref="sdiv">
-    <div
-      v-html="html"
-      :style="'all:initial;font-size:' + fontsize + 'rem;'"
-    ></div>
+    <div v-html="html" :style="'all:initial;font-size:' + fontsize + 'rem;'"></div>
   </div>
 </template>
 

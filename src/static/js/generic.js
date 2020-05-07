@@ -41,14 +41,9 @@ function gotoPage(page) {
   form.submit();
 }
 
-function proxyResource(
-  url,
-  referrer = "",
-  user_agent = "Mozilla/5.0 (X11; Ubuntu; Linu…) Gecko/20100101 Firefox/65.0"
-) {
+function proxyResource(url, referrer = "", user_agent = "Mozilla/5.0 (X11; Ubuntu; Linu…) Gecko/20100101 Firefox/65.0") {
   url = encodeURI(url);
-  if (referrer)
-    header = JSON.stringify({ Referer: referrer, "User-Agent": user_agent });
+  if (referrer) header = JSON.stringify({ Referer: referrer, "User-Agent": user_agent });
   else header = JSON.stringify({ "User-Agent": user_agent });
   header = encodeURI(header);
   return `/proxy?url=${url}&header=${header}`;
@@ -73,9 +68,7 @@ function getQueryVariable(query, variable) {
 function getUrlVars() {
   var vars = [],
     hash;
-  var hashes = window.location.href
-    .slice(window.location.href.indexOf("?") + 1)
-    .split("&");
+  var hashes = window.location.href.slice(window.location.href.indexOf("?") + 1).split("&");
   for (var i = 0; i < hashes.length; i++) {
     hash = hashes[i].split("=");
     vars.push(hash[0]);
@@ -102,7 +95,7 @@ function copyToClipboard(obj) {
   document.body.appendChild(el);
   el.select();
   el.setSelectionRange(0, 99999);
-  var res=document.execCommand("copy");
+  var res = document.execCommand("copy");
   document.body.removeChild(el);
   return res;
 }
@@ -113,7 +106,7 @@ function copyToClipboardText(txt) {
   document.body.appendChild(el);
   el.select();
   el.setSelectionRange(0, 99999);
-  var res=document.execCommand("copy");
+  var res = document.execCommand("copy");
   document.body.removeChild(el);
   return res;
 }

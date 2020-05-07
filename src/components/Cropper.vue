@@ -63,72 +63,25 @@
 
 <template>
   <div class="custom-upload" v-loading="loading">
-    <el-dialog
-      :title="$t('title')"
-      :visible.sync="showCropper"
-      top="6vh"
-      width="50%"
-      height="600"
-      class="cropper-dialog"
-      center
-      append-to-body
-    >
-      <vue-cropper
-        v-if="showCropper"
-        id="corpper"
-        ref="cropper"
-        :class="{ 'corpper-warp': showCropper }"
-        v-bind="cropper"
-      />
+    <el-dialog :title="$t('title')" :visible.sync="showCropper" top="6vh" width="50%" height="600" class="cropper-dialog" center append-to-body>
+      <vue-cropper v-if="showCropper" id="corpper" ref="cropper" :class="{ 'corpper-warp': showCropper }" v-bind="cropper" />
       <div v-if="showCropper" class="cropper-button">
-        <el-button
-          class="cancel-btn"
-          size="small"
-          @click.native="showCropper = false"
-        >{{$t('cancel')}}</el-button>
-        <el-button size="small" type="primary" :loading="loading" @click="uploadCover">{{$t('ok')}}</el-button>
+        <el-button class="cancel-btn" size="small" @click.native="showCropper = false">{{ $t("cancel") }}</el-button>
+        <el-button size="small" type="primary" :loading="loading" @click="uploadCover">{{ $t("ok") }}</el-button>
       </div>
     </el-dialog>
-    <el-dialog
-      :modal="false"
-      :title="$t('upload_userphoto')"
-      :visible.sync="dialogVisible"
-      width="40%"
-      top="30vh"
-      :before-close="handleClose"
-    >
-      <el-input
-        v-model="imgNetUpUrl"
-        :placeholder="$t('enter_url_prompt')"
-        v-if="isShowNetUp"
-        style="margin: 20px 0px 30px;"
-      ></el-input>
+    <el-dialog :modal="false" :title="$t('upload_userphoto')" :visible.sync="dialogVisible" width="40%" top="30vh" :before-close="handleClose">
+      <el-input v-model="imgNetUpUrl" :placeholder="$t('enter_url_prompt')" v-if="isShowNetUp" style="margin: 20px 0px 30px;"></el-input>
       <span class="dialog-footer" style="text-align: center;margin: 20px 0px 30px;">
-        <el-button type="primary" @click="handleOpenFile()" v-if="!isShowNetUp">{{$t('from_file')}}</el-button>
-        <el-button type="primary" v-if="!isShowNetUp" @click="showNetUp(true)">{{$t('from_url')}}</el-button>
-        <el-button v-if="isShowNetUp" @click="imgNetUrlup()">{{$t('ok')}}</el-button>
-        <el-button v-if="isShowNetUp" @click="showNetUp(false)">{{$t('cancel')}}</el-button>
+        <el-button type="primary" @click="handleOpenFile()" v-if="!isShowNetUp">{{ $t("from_file") }}</el-button>
+        <el-button type="primary" v-if="!isShowNetUp" @click="showNetUp(true)">{{ $t("from_url") }}</el-button>
+        <el-button v-if="isShowNetUp" @click="imgNetUrlup()">{{ $t("ok") }}</el-button>
+        <el-button v-if="isShowNetUp" @click="showNetUp(false)">{{ $t("cancel") }}</el-button>
       </span>
     </el-dialog>
-    <form
-      action="/be/helper/upload_image.do"
-      method="post"
-      accept-charset="utf-8"
-      enctype="multipart/form-data"
-      id="form1"
-      @submit.prevent="sub"
-    >
+    <form action="/be/helper/upload_image.do" method="post" accept-charset="utf-8" enctype="multipart/form-data" id="form1" @submit.prevent="sub">
       <input id="type" name="type" type="text" value="userphoto" v-show="false" />
-      <input
-        id="file"
-        name="file"
-        type="file"
-        tag="input"
-        accept="image/*"
-        @change="onChange($event)"
-        :class="id"
-        v-show="false"
-      />
+      <input id="file" name="file" type="file" tag="input" accept="image/*" @change="onChange($event)" :class="id" v-show="false" />
       <el-button size="small" type="primary" :loading="loading" @click="dialogVisible = true">
         <i class="fa fa-upload" />
         {{ buttonName }}
@@ -144,12 +97,7 @@
 import { VueCropper } from "vue-cropper";
 // 定义的接口根据自己项目更换
 // import { uploadImage } from '@/api/upload'
-import {
-  isImageFile,
-  isMaxFileSize,
-  readFile,
-  loadImage
-} from "../static/js/upload.js"; // 见下文
+import { isImageFile, isMaxFileSize, readFile, loadImage } from "../static/js/upload.js"; // 见下文
 export default {
   components: {
     VueCropper,
@@ -391,13 +339,7 @@ export default {
           img.onload = () => {
             let _data = this.onImgCompression(img);
             let file = this.dataURLtoFile(_data, "压缩后的图片");
-            console.log(
-              "图片大小-压缩过:",
-              (file.size / 1024).toFixed(2),
-              "kb，",
-              "压缩率：",
-              this.compress
-            );
+            console.log("图片大小-压缩过:", (file.size / 1024).toFixed(2), "kb，", "压缩率：", this.compress);
             this.imgFile = file;
           };
           this.loading = true;
@@ -419,8 +361,7 @@ export default {
       var date = new Date(); // 获取时间
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
       // 字符串拼接 cookie
-      window.document.cookie =
-        "userAvatar" + "=" + username + ";path=/;expires=" + date.toGMTString();
+      window.document.cookie = "userAvatar" + "=" + username + ";path=/;expires=" + date.toGMTString();
     }
   }
 };

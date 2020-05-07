@@ -4,22 +4,13 @@ module.exports = {
     commonjs: true,
     es6: true,
     jquery: true,
-    node: true,
+    node: true
   },
   extends: ["plugin:vue/essential", "eslint:recommended", "@vue/prettier"],
   parserOptions: {
-    parser: "babel-eslint",
+    parser: "babel-eslint"
   },
   rules: {
-    "prettier/prettier": [
-      "warn",
-      {
-        semi: true,
-        singleQuote: false,
-        printWidth: 160,
-        tabWidth: 2,
-        useTabs: false,
-      },
-    ],
-  },
+    "prettier/prettier": "warn"
+  }
 };

@@ -5,10 +5,7 @@
     <div class="content mt-4">
       <el-row>
         <el-col :span="18">
-          <h2>
-            意见反馈 > <i v-if="pinned" class="comment-bar-item pv-icon-pin"></i
-            >{{ title || "Loading..." }}
-          </h2>
+          <h2>意见反馈 > <i v-if="pinned" class="comment-bar-item pv-icon-pin"></i>{{ title || "Loading..." }}</h2>
           <div class="t"></div>
           <div v-for="(comment, index) in commentList" :key="index">
             <thread-comment-box
@@ -21,21 +18,9 @@
             ></thread-comment-box>
           </div>
           <div>
-            <el-dialog
-              :title="
-                (replyT.type == 'thread' ? '主帖' : '楼中楼') + ' > 发表回复'
-              "
-              :visible.sync="replyT.visible"
-            >
-              <thread-comment-box
-                v-if="replyT.comment"
-                :pre="true"
-                :comment="replyT.comment"
-                :commentAuthorsInfo="commentAuthorsInfo"
-              ></thread-comment-box>
-              <div
-                style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;"
-              >
+            <el-dialog :title="(replyT.type == 'thread' ? '主帖' : '楼中楼') + ' > 发表回复'" :visible.sync="replyT.visible">
+              <thread-comment-box v-if="replyT.comment" :pre="true" :comment="replyT.comment" :commentAuthorsInfo="commentAuthorsInfo"></thread-comment-box>
+              <div style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;">
                 <div class="left-avatar">
                   <el-avatar size="large" :src="user.avatar"></el-avatar>
                 </div>
@@ -43,43 +28,23 @@
                   <div class="title-div">
                     <p class="title">
                       <span v-if="user.username">{{ user.username }}</span
-                      ><span v-else>Loading...</span>&nbsp;<span
-                        style="color: gray;"
-                        >回复：</span
-                      >
+                      ><span v-else>Loading...</span>&nbsp;<span style="color: gray;">回复：</span>
                     </p>
                   </div>
                   <div class="comment-div" style="padding: 15px;">
                     <el-form :model="replyF" @submit.native.prevent>
-                      <el-input
-                        type="textarea"
-                        v-model="replyF.comment"
-                        required
-                      ></el-input>
+                      <el-input type="textarea" v-model="replyF.comment" required></el-input>
                     </el-form>
                   </div>
                 </div>
               </div>
               <div slot="footer" class="dialog-footer">
-                <span style="color:gray"
-                  >注：建议先预览再发帖，提前发现问题</span
-                >&emsp;
+                <span style="color:gray">注：建议先预览再发帖，提前发现问题</span>&emsp;
                 <el-button @click="replyF.show = true">预览</el-button>
-                <el-button
-                  type="primary"
-                  @click="reply()"
-                  :disabled="processing"
-                  >发表</el-button
-                >
+                <el-button type="primary" @click="reply()" :disabled="processing">发表</el-button>
               </div>
             </el-dialog>
-            <el-dialog
-              v-if="replyF.show"
-              :title="
-                (replyT.type == 'thread' ? '主帖' : '楼中楼') + ' > 预览回复'
-              "
-              :visible.sync="replyF.show"
-            >
+            <el-dialog v-if="replyF.show" :title="(replyT.type == 'thread' ? '主帖' : '楼中楼') + ' > 预览回复'" :visible.sync="replyF.show">
               <thread-comment-box
                 v-if="replyT.comment"
                 :pre="true"
@@ -96,10 +61,7 @@
                 "
                 :commentAuthorsInfo="commentAuthorsInfo"
               ></thread-comment-box>
-              <div
-                v-if="replyT.type == 'thread'"
-                style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;"
-              >
+              <div v-if="replyT.type == 'thread'" style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;">
                 <div class="left-avatar">
                   <el-avatar size="large" :src="user.avatar"></el-avatar>
                 </div>
@@ -107,19 +69,12 @@
                   <div class="title-div">
                     <p class="title">
                       <span>{{ user.username || "Loading" }}</span
-                      >&nbsp;<span style="color: gray;"
-                        ><i class="el-icon-date"></i>&thinsp;{{
-                          time(+new Date())
-                        }}</span
-                      >
+                      >&nbsp;<span style="color: gray;"><i class="el-icon-date"></i>&thinsp;{{ time(+new Date()) }}</span>
                     </p>
                   </div>
                   <div class="comment-div" style="padding: 15px;">
                     <div v-shadow>
-                      <thread-comment
-                        :html="parse(replyF.comment)"
-                        :size="0.9"
-                      ></thread-comment>
+                      <thread-comment :html="parse(replyF.comment)" :size="0.9"></thread-comment>
                     </div>
                   </div>
                 </div>
@@ -128,100 +83,56 @@
           </div>
           <div>
             <el-dialog title="编辑回复" :visible.sync="editF.visible">
-              <div
-                style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;"
-              >
+              <div style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;">
                 <div class="left-avatar">
                   <el-avatar
                     v-if="commentAuthorsInfo[editF.uid]"
                     size="large"
-                    :src="
-                      'be/images/userphotos/' +
-                        commentAuthorsInfo[editF.uid].profile.image
-                    "
+                    :src="'be/images/userphotos/' + commentAuthorsInfo[editF.uid].profile.image"
                   ></el-avatar>
-                  <el-avatar
-                    v-else
-                    size="large"
-                    :src="require('../static/img/defaultAvatar.jpg')"
-                  ></el-avatar>
+                  <el-avatar v-else size="large" :src="require('../static/img/defaultAvatar.jpg')"></el-avatar>
                 </div>
                 <div class="comment-box">
                   <div class="title-div">
                     <p class="title">
-                      <span>{{
-                        commentAuthorsInfo[editF.uid]
-                          ? commentAuthorsInfo[editF.uid].profile.username
-                          : "loading..."
-                      }}</span
+                      <span>{{ commentAuthorsInfo[editF.uid] ? commentAuthorsInfo[editF.uid].profile.username : "loading..." }}</span
                       >&nbsp;<span style="color: gray;">编辑：</span>
                     </p>
                   </div>
                   <div class="comment-div" style="padding: 15px;">
                     <el-form :model="editF" @submit.native.prevent>
-                      <el-input
-                        type="textarea"
-                        v-model="editF.comment"
-                        required
-                      ></el-input>
+                      <el-input type="textarea" v-model="editF.comment" required></el-input>
                     </el-form>
                   </div>
                 </div>
               </div>
               <div slot="footer" class="dialog-footer">
-                <span style="color:gray"
-                  >注：建议先预览再发帖，提前发现问题</span
-                >&emsp;
+                <span style="color:gray">注：建议先预览再发帖，提前发现问题</span>&emsp;
                 <el-button @click="editF.show = true">预览</el-button>
-                <el-button type="primary" @click="edit()" :disabled="processing"
-                  >提交</el-button
-                >
+                <el-button type="primary" @click="edit()" :disabled="processing">提交</el-button>
               </div>
             </el-dialog>
-            <el-dialog
-              v-if="editF.show"
-              title="预览回复"
-              :visible.sync="editF.show"
-            >
-              <div
-                style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;"
-              >
+            <el-dialog v-if="editF.show" title="预览回复" :visible.sync="editF.show">
+              <div style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;">
                 <div class="left-avatar">
                   <el-avatar
                     v-if="commentAuthorsInfo[editF.uid]"
                     size="large"
-                    :src="
-                      'be/images/userphotos/' +
-                        commentAuthorsInfo[editF.uid].profile.image
-                    "
+                    :src="'be/images/userphotos/' + commentAuthorsInfo[editF.uid].profile.image"
                   ></el-avatar>
-                  <el-avatar
-                    v-else
-                    size="large"
-                    :src="require('../static/img/defaultAvatar.jpg')"
-                  ></el-avatar>
+                  <el-avatar v-else size="large" :src="require('../static/img/defaultAvatar.jpg')"></el-avatar>
                 </div>
                 <div class="comment-box">
                   <div class="title-div">
                     <p class="title">
-                      <span>{{
-                        commentAuthorsInfo[editF.uid]
-                          ? commentAuthorsInfo[editF.uid].profile.username
-                          : "loading..."
-                      }}</span
-                      >&nbsp;<span style="color: gray;"
-                        ><i class="el-icon-date"></i>&thinsp;{{
-                          time(+new Date())
-                        }}</span
+                      <span>{{ commentAuthorsInfo[editF.uid] ? commentAuthorsInfo[editF.uid].profile.username : "loading..." }}</span
+                      >&nbsp;<span style="color: gray;"><i class="el-icon-date"></i>&thinsp;{{ time(+new Date()) }}</span
                       >&nbsp;<span style="color: gray;">已编辑</span>
                     </p>
                   </div>
                   <div class="comment-div" style="padding: 15px;">
                     <div v-shadow>
-                      <thread-comment
-                        :html="parse(editF.comment)"
-                        :size="0.9"
-                      ></thread-comment>
+                      <thread-comment :html="parse(editF.comment)" :size="0.9"></thread-comment>
                     </div>
                   </div>
                 </div>
@@ -229,33 +140,12 @@
             </el-dialog>
           </div>
         </el-col>
-        <el-col
-          :span="6"
-          style="text-align:center;position:fixed;top:90px;max-width:277.5px;margin-left:832.5px"
-        >
+        <el-col :span="6" style="text-align:center;position:fixed;top:90px;max-width:277.5px;margin-left:832.5px">
           帖子共有{{ commentList ? commentList.length : 0 }}个回复<br />
           <span v-if="user.username">
-            <el-button
-              type="primary"
-              size="small"
-              plain
-              @click="reply2('thread', $route.params.tid, commentList[0])"
-              >发表回复</el-button
-            >
-            <el-button
-              type="primary"
-              size="small"
-              plain
-              @click="pint2($route.params.tid)"
-              >置顶帖子</el-button
-            >
-            <el-button
-              type="danger"
-              size="small"
-              plain
-              @click="delt2($route.params.tid)"
-              >删除帖子</el-button
-            >
+            <el-button type="primary" size="small" plain @click="reply2('thread', $route.params.tid, commentList[0])">发表回复</el-button>
+            <el-button type="primary" size="small" plain @click="pint2($route.params.tid)">置顶帖子</el-button>
+            <el-button type="danger" size="small" plain @click="delt2($route.params.tid)">删除帖子</el-button>
           </span></el-col
         ></el-row
       >
@@ -314,10 +204,7 @@ export default {
     user() {
       return {
         username: this.$store.state.username,
-        avatar:
-          this.$store.state.userAvatar == "default"
-            ? require("../static/img/defaultAvatar.jpg")
-            : "be/images/userphotos/" + this.$store.state.userAvatar
+        avatar: this.$store.state.userAvatar == "default" ? require("../static/img/defaultAvatar.jpg") : "be/images/userphotos/" + this.$store.state.userAvatar
       };
     }
   },
@@ -448,21 +335,13 @@ export default {
         return (Array(2).join(0) + i).slice(-2);
       }
       const time = new Date(t);
-      return `${time.getFullYear()}-${i2(time.getMonth() + 1)}-${i2(
-        time.getDate()
-      )} ${i2(time.getHours())}:${i2(time.getMinutes())}:${i2(
-        time.getSeconds()
-      )}`;
+      return `${time.getFullYear()}-${i2(time.getMonth() + 1)}-${i2(time.getDate())} ${i2(time.getHours())}:${i2(time.getMinutes())}:${i2(time.getSeconds())}`;
     },
     parse(c) {
       try {
         return parse(c);
       } catch (e) {
-        return (
-          '<div style="font-family:Consolas">Error: ' +
-          e.message.replace(/ /g, "&nbsp;").replace(/\n/g, "<br />") +
-          "</div>"
-        );
+        return '<div style="font-family:Consolas">Error: ' + e.message.replace(/ /g, "&nbsp;").replace(/\n/g, "<br />") + "</div>";
       }
     },
     pin2(id, pinned) {
@@ -616,15 +495,11 @@ export default {
         });
     },
     delt2(id) {
-      this.$confirm(
-        "此操作将删除帖子的所有内容，真的确定要继续吗？\n请三思！",
-        "警告",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }
-      )
+      this.$confirm("此操作将删除帖子的所有内容，真的确定要继续吗？\n请三思！", "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
         .then(() => {
           this.axios({
             method: "post",

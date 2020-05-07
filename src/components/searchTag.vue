@@ -166,42 +166,23 @@
 
     <!-- 标签列表的抬头 -->
     <div class="video-list-header">
-      <p v-if="maxcount">{{$t('tag_count_prompt', {count2: count2, maxcount: maxcount})}}</p>
-      <p v-else>{{$t('no_tag_found')}}</p>
+      <p v-if="maxcount">{{ $t("tag_count_prompt", { count2: count2, maxcount: maxcount }) }}</p>
+      <p v-else>{{ $t("no_tag_found") }}</p>
       <el-select id="select-order" v-model="couponSelected" class="video-list-header-el-select">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
+        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
     </div>
     <!-- 合并标签按钮 -->
     <div class="video-list-header">
-      <el-button
-        @click="onMergeTagButtonClicked"
-        :disabled="mergeDst == -1 || mergeSrc == -1"
-        class="video-list-header-el-select"
-      >合并标签</el-button>
+      <el-button @click="onMergeTagButtonClicked" :disabled="mergeDst == -1 || mergeSrc == -1" class="video-list-header-el-select">合并标签</el-button>
     </div>
     <!-- 添加标签列表 -->
     <div class="addTag">
-      <el-input
-        v-model="searchTag"
-        :placeholder="$t('tag_prompt')"
-        class="addTag-input"
-        @keyup.enter.native="requestSearchedTags()"
-      ></el-input>
-      <el-select
-        v-model="searchCategory"
-        :placeholder="$t('category_prompt')"
-        size="small"
-        class="addTag-select"
-      >
+      <el-input v-model="searchTag" :placeholder="$t('tag_prompt')" class="addTag-input" @keyup.enter.native="requestSearchedTags()"></el-input>
+      <el-select v-model="searchCategory" :placeholder="$t('category_prompt')" size="small" class="addTag-select">
         <el-option v-for="item in tagCategories3" :key="item" :label="item" :value="item"></el-option>
       </el-select>
-      <el-button type="info" @click="requestSearchedTags()">{{$t('search')}}</el-button>
+      <el-button type="info" @click="requestSearchedTags()">{{ $t("search") }}</el-button>
     </div>
     <!-- 表格正文 -->
     <el-table :data="tagData" style="width: 100%">
@@ -209,45 +190,20 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <!-- 显示作者信息的按钮 -->
-          <el-button
-            class="showAuthorData"
-            v-if="props.row.category == 'Author'"
-            @click="openAuthorData(props.row.id)"
-          >{{$t('author_detial')}}</el-button>
+          <el-button class="showAuthorData" v-if="props.row.category == 'Author'" @click="openAuthorData(props.row.id)">{{ $t("author_detial") }}</el-button>
           <!-- 为现有标签添加新的语言 -->
           <div class="languageSuppot">
             <el-row>
               <el-col :span="3">
-                <el-select
-                  v-model="newTagLanguage"
-                  :placeholder="$t('select_language')"
-                  size="mini"
-                  style="width:95%"
-                >
-                  <el-option
-                    v-for="item in languagesList2(props.row.languages)"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item"
-                  ></el-option>
+                <el-select v-model="newTagLanguage" :placeholder="$t('select_language')" size="mini" style="width:95%">
+                  <el-option v-for="item in languagesList2(props.row.languages)" :key="item.value" :label="item.label" :value="item"></el-option>
                 </el-select>
               </el-col>
               <el-col :span="4">
-                <el-input
-                  v-model="new_Tag"
-                  size="small"
-                  style="width:100%"
-                  @keyup.enter.native="addTagLanguage(props.$index)"
-                ></el-input>
+                <el-input v-model="new_Tag" size="small" style="width:100%" @keyup.enter.native="addTagLanguage(props.$index)"></el-input>
               </el-col>
               <el-col :span="4">
-                <el-button
-                  type="primary"
-                  size="mini"
-                  round
-                  class="confirmChange"
-                  @click="addTagLanguage(props.$index)"
-                >{{$t('add')}}</el-button>
+                <el-button type="primary" size="mini" round class="confirmChange" @click="addTagLanguage(props.$index)">{{ $t("add") }}</el-button>
               </el-col>
             </el-row>
           </div>
@@ -273,7 +229,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'CHS')"
                   v-if="tagEdit[props.$index].languages.CHS != tagData[props.$index].languages.CHS"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.CHT">
@@ -296,7 +253,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'CHT')"
                   v-if="tagEdit[props.$index].languages.CHT != tagData[props.$index].languages.CHT"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.JPN">
@@ -319,7 +277,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'JPN')"
                   v-if="tagEdit[props.$index].languages.JPN != tagData[props.$index].languages.JPN"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.ENG">
@@ -342,7 +301,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'ENG')"
                   v-if="tagEdit[props.$index].languages.ENG != tagData[props.$index].languages.ENG"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.KOR">
@@ -365,7 +325,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'KOR')"
                   v-if="tagEdit[props.$index].languages.KOR != tagData[props.$index].languages.KOR"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.CSY">
@@ -388,7 +349,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'CSY')"
                   v-if="tagEdit[props.$index].languages.CSY != tagData[props.$index].languages.CSY"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.NLD">
@@ -411,7 +373,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'NLD')"
                   v-if="tagEdit[props.$index].languages.NLD != tagData[props.$index].languages.NLD"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.FRA">
@@ -434,7 +397,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'FRA')"
                   v-if="tagEdit[props.$index].languages.FRA != tagData[props.$index].languages.FRA"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.DEU">
@@ -457,7 +421,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'DEU')"
                   v-if="tagEdit[props.$index].languages.DEU != tagData[props.$index].languages.DEU"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.HUN">
@@ -480,7 +445,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'HUN')"
                   v-if="tagEdit[props.$index].languages.HUN != tagData[props.$index].languages.HUN"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.ITA">
@@ -503,7 +469,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'ITA')"
                   v-if="tagEdit[props.$index].languages.ITA != tagData[props.$index].languages.ITA"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.PLK">
@@ -526,7 +493,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'PLK')"
                   v-if="tagEdit[props.$index].languages.PLK != tagData[props.$index].languages.PLK"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.PTB">
@@ -549,7 +517,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'PTB')"
                   v-if="tagEdit[props.$index].languages.PTB != tagData[props.$index].languages.PTB"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.ROM">
@@ -572,7 +541,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'ROM')"
                   v-if="tagEdit[props.$index].languages.ROM != tagData[props.$index].languages.ROM"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.RUS">
@@ -595,7 +565,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'RUS')"
                   v-if="tagEdit[props.$index].languages.RUS != tagData[props.$index].languages.RUS"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.ESP">
@@ -618,7 +589,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'ESP')"
                   v-if="tagEdit[props.$index].languages.ESP != tagData[props.$index].languages.ESP"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.TRK">
@@ -641,7 +613,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'TRK')"
                   v-if="tagEdit[props.$index].languages.TRK != tagData[props.$index].languages.TRK"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
             <el-row v-if="props.row.languages.VIN">
@@ -664,7 +637,8 @@
                   class="confirmChange"
                   @click="confirmChange(props.$index, 'VIN')"
                   v-if="tagEdit[props.$index].languages.VIN != tagData[props.$index].languages.VIN"
-                >{{$t('confirm')}}</el-button>
+                  >{{ $t("confirm") }}</el-button
+                >
               </el-col>
             </el-row>
           </div>
@@ -689,16 +663,10 @@
                   round
                   class="confirmChange"
                   @click="confirmAliasChange(props.$index, i)"
-                  v-if="tagEdit[props.$index].alias[i] != tagData[props.$index].alias[i]
-                  "
-                >{{$t('confirm')}}</el-button>
-                <el-button
-                  type="danger"
-                  size="mini"
-                  round
-                  class="confirmChange"
-                  @click="confirmAliasRemove(props.$index, i)"
-                >{{$t('del')}}</el-button>
+                  v-if="tagEdit[props.$index].alias[i] != tagData[props.$index].alias[i]"
+                  >{{ $t("confirm") }}</el-button
+                >
+                <el-button type="danger" size="mini" round class="confirmChange" @click="confirmAliasRemove(props.$index, i)">{{ $t("del") }}</el-button>
               </el-col>
             </el-row>
           </div>
@@ -718,7 +686,9 @@
               General: scope.row.category == 'General',
               Meta: scope.row.category == 'Meta'
             }"
-          >{{ scope.row.category }}</div>
+          >
+            {{ scope.row.category }}
+          </div>
         </template>
       </el-table-column>
       <el-table-column :label="$t('tag')" min-width="550">
@@ -738,7 +708,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.CHS)"
-            >{{ scope.row.languages.CHS.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.CHS.replace(/\_/g, " ") }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.CHT">
             繁體中文:
@@ -754,7 +725,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.CHT)"
-            >{{ scope.row.languages.CHT.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.CHT.replace(/\_/g, " ") }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.JPN">
             日本語:
@@ -770,7 +742,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.JPN)"
-            >{{ scope.row.languages.JPN.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.JPN.replace(/\_/g, " ") }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ENG">
             English:
@@ -786,7 +759,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.ENG)"
-            >{{ scope.row.languages.ENG.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.ENG.replace(/\_/g, " ") }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.KOR">
             한국어:
@@ -802,7 +776,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.KOR)"
-            >{{ scope.row.languages.KOR.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.KOR.replace(/\_/g, " ") }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.CSY">
             čeština:
@@ -818,7 +793,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.CSY)"
-            >{{ scope.row.languages.CSY.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.CSY.replace(/\_/g, " ") }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.NLD">
             Nederlands:
@@ -834,7 +810,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.NLD)"
-            >{{ scope.row.languages.NLD.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.NLD.replace(/\_/g, " ") }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.FRA">
             français:
@@ -850,7 +827,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.FRA)"
-            >{{ scope.row.languages.FRA.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.FRA.replace(/\_/g, " ") }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.DEU">
             Deutsch:
@@ -866,7 +844,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.DEU)"
-            >{{ scope.row.languages.DEU.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.DEU.replace(/\_/g, " ") }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.HUN">
             magyar nyelv:
@@ -882,7 +861,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.HUN)"
-            >{{ scope.row.languages.HUN.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.HUN.replace(/\_/g, " ") }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ITA">
             italiano:
@@ -898,7 +878,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.ITA)"
-            >{{ scope.row.languages.ITA.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.ITA.replace(/\_/g, " ") }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.PLK">
             polski:
@@ -914,7 +895,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.PLK)"
-            >{{ scope.row.languages.PLK.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.PLK.replace(/\_/g, " ") }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.PTB">
             português:
@@ -930,7 +912,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.PTB)"
-            >{{ scope.row.languages.PTB.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.PTB.replace(/\_/g, " ") }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ROM">
             limba română:
@@ -946,7 +929,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.ROM)"
-            >{{ scope.row.languages.ROM.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.ROM.replace(/\_/g, " ") }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.RUS">
             русский язык:
@@ -962,7 +946,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.RUS)"
-            >{{ scope.row.languages.RUS.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.RUS.replace(/\_/g, " ") }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.ESP">
             español:
@@ -978,7 +963,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.ESP)"
-            >{{ scope.row.languages.ESP.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.ESP.replace(/\_/g, " ") }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.TRK">
             Türk dili:
@@ -994,7 +980,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.TRK)"
-            >{{ scope.row.languages.TRK.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.TRK.replace(/\_/g, " ") }}</span
+            >
           </span>
           <span class="tagLabel" v-if="scope.row.languages.VIN">
             Tiếng Việt:
@@ -1010,7 +997,8 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(scope.row.languages.VIN)"
-            >{{ scope.row.languages.VIN.replace(/\_/g, " ") }}</span>
+              >{{ scope.row.languages.VIN.replace(/\_/g, " ") }}</span
+            >
           </span>
           <!-- 标签别名 -->
           <span class="tagLabel" v-for="item in scope.row.alias" :key="item">
@@ -1027,24 +1015,16 @@
                 Meta: scope.row.category == 'Meta'
               }"
               @click="gotoHome(item)"
-            >{{ item.replace(/\_/g, " ") }}</span>
+              >{{ item.replace(/\_/g, " ") }}</span
+            >
           </span>
         </template>
       </el-table-column>
       <!-- 合并标签选项 -->
       <el-table-column prop label="合并选项" min-width="130">
         <template slot-scope="scope">
-          <el-select
-            @change="(arg1) => onMergeOptionChanged(scope.row, scope.$index, arg1)"
-            v-model="mergeArray[scope.$index]"
-            placeholder="-"
-          >
-            <el-option
-              v-for="item in mergeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
+          <el-select @change="arg1 => onMergeOptionChanged(scope.row, scope.$index, arg1)" v-model="mergeArray[scope.$index]" placeholder="-">
+            <el-option v-for="item in mergeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </template>
       </el-table-column>
@@ -1052,20 +1032,11 @@
       <el-table-column :label="$t('op')" min-width="200" fixed="right">
         <template slot-scope="scope">
           <div v-if="advancedOptions" class="tabs-op">
-            <el-button type="danger" round @click="removeTag(scope.$index)">{{$t('delete_tag')}}</el-button>
-            <el-button
-              type="primary"
-              round
-              @click="openDialog(scope.$index)"
-            >{{$t('change_category')}}</el-button>
+            <el-button type="danger" round @click="removeTag(scope.$index)">{{ $t("delete_tag") }}</el-button>
+            <el-button type="primary" round @click="openDialog(scope.$index)">{{ $t("change_category") }}</el-button>
           </div>
           <div v-else>
-            <el-button
-              type="danger"
-              round
-              @click="advancedOptions = true"
-              style="margin-left:40px"
-            >{{$t('show_advance')}}</el-button>
+            <el-button type="danger" round @click="advancedOptions = true" style="margin-left:40px">{{ $t("show_advance") }}</el-button>
           </div>
         </template>
       </el-table-column>
@@ -1088,17 +1059,13 @@
     <!-- 更改分类的弹出框 -->
     <el-dialog :title="$t('prompt')" :visible.sync="dialogVisible" width="20%">
       <div style="width:80%;margin:0 auto">
-        <el-select
-          v-model="newTagCategorie"
-          :placeholder="$t('select_categoty')"
-          style="width:100%"
-        >
+        <el-select v-model="newTagCategorie" :placeholder="$t('select_categoty')" style="width:100%">
           <el-option v-for="item in tagCategories2" :key="item" :label="item" :value="item"></el-option>
         </el-select>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{$t('cancel')}}</el-button>
-        <el-button type="primary" @click="renameAlias()">{{$t('confirm2')}}</el-button>
+        <el-button @click="dialogVisible = false">{{ $t("cancel") }}</el-button>
+        <el-button type="primary" @click="renameAlias()">{{ $t("confirm2") }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -1279,11 +1246,9 @@ export default {
     // 标签点击搜索功能
     gotoHome(key) {
       if (key != "") {
-        this.$router
-          .push({ path: "/home", query: { keyword: key } })
-          .catch(err => {
-            return err;
-          });
+        this.$router.push({ path: "/home", query: { keyword: key } }).catch(err => {
+          return err;
+        });
       } else {
         this.$router.push({ path: "/home" });
       }

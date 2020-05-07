@@ -17,7 +17,6 @@
 }
 </i18n>
 
-
 <template>
   <div class="PagesOfVideo">
     <!-- 确认是否发布分P的对话框 -->
@@ -32,12 +31,12 @@
     <!-- 正文 -->
     <div class="new_top">
       <h2 style="text-align: center;">视频选集</h2>
-      <p v-if="videoPages>1">本视频有{{videoPages}}个分P</p>
+      <p v-if="videoPages > 1">本视频有{{ videoPages }}个分P</p>
       <p v-else>本视频没有分P</p>
     </div>
     <div
       class="PagesDetail"
-      v-if="videoPages!=1"
+      v-if="videoPages != 1"
       v-loading="loading"
       element-loading-text="加载分P中"
       element-loading-spinner="el-icon-loading"
@@ -45,14 +44,22 @@
     >
       <div
         class="PageItems"
-        v-for="(item,index) in pagesDetailOfThisPage"
+        v-for="(item, index) in pagesDetailOfThisPage"
         :key="index"
-        v-bind:class="{PageItemsActive: item.id == $route.query.id,}"
-        @click="(()=>{if(!item.loading)pageOpts(item.page-1)})"
-        @click.middle="(()=>{if(!item.loading)pageOpts(item.page-1,true)})"
+        v-bind:class="{ PageItemsActive: item.id == $route.query.id }"
+        @click="
+          () => {
+            if (!item.loading) pageOpts(item.page - 1);
+          }
+        "
+        @click.middle="
+          () => {
+            if (!item.loading) pageOpts(item.page - 1, true);
+          }
+        "
       >
         <span>P{{ item.page }}&nbsp;</span>
-        <span class="PageName">{{item.part||""}}&nbsp;</span>
+        <span class="PageName">{{ item.part || "" }}&nbsp;</span>
         <span v-if="item.loading" style="color:#909399">
           获取索引状态中
           <i class="el-icon-loading"></i>
@@ -111,10 +118,7 @@ export default {
   computed: {
     // 分P信息详情（当前页）
     pagesDetailOfThisPage() {
-      return this.pagesDetail.slice(
-        (this.currentPage - 1) * this.pageCount,
-        Math.min(this.videoPages, this.currentPage * this.pageCount)
-      );
+      return this.pagesDetail.slice((this.currentPage - 1) * this.pageCount, Math.min(this.videoPages, this.currentPage * this.pageCount));
     }
   },
   created() {},
@@ -155,20 +159,10 @@ export default {
           if (res.data.status == "SUCCEED") {
             // 因为pagesDetailOfThisPage是计算属性不能直接修改，这里直接修改pagesDetail
             this.pagesDetail = this.pagesDetail.map((item, index) => {
-              if (
-                index >= (this.currentPage - 1) * this.pageCount &&
-                index <
-                  Math.min(this.videoPages, this.currentPage * this.pageCount)
-              ) {
-                if (
-                  res.data.data[index - (this.currentPage - 1) * this.pageCount]
-                    .exist
-                ) {
+              if (index >= (this.currentPage - 1) * this.pageCount && index < Math.min(this.videoPages, this.currentPage * this.pageCount)) {
+                if (res.data.data[index - (this.currentPage - 1) * this.pageCount].exist) {
                   item.isPosted = true;
-                  item.id =
-                    res.data.data[
-                      index - (this.currentPage - 1) * this.pageCount
-                    ].id.$oid;
+                  item.id = res.data.data[index - (this.currentPage - 1) * this.pageCount].id.$oid;
                 } else {
                   item.isPosted = false;
                 }
@@ -177,11 +171,7 @@ export default {
             });
           } else {
             this.pagesDetail = this.pagesDetail.map((item, index) => {
-              if (
-                index >= (this.currentPage - 1) * this.pageCount &&
-                index <
-                  Math.min(this.videoPages, this.currentPage * this.pageCount)
-              ) {
+              if (index >= (this.currentPage - 1) * this.pageCount && index < Math.min(this.videoPages, this.currentPage * this.pageCount)) {
                 item.isPosted = false;
               }
               return item;
@@ -191,21 +181,14 @@ export default {
         .catch(err => {
           console.log(err);
           this.pagesDetail = this.pagesDetail.map((item, index) => {
-            if (
-              index >= (this.currentPage - 1) * this.pageCount &&
-              index <
-                Math.min(this.videoPages, this.currentPage * this.pageCount)
-            ) {
+            if (index >= (this.currentPage - 1) * this.pageCount && index < Math.min(this.videoPages, this.currentPage * this.pageCount)) {
               item.isPosted = false;
             }
             return item;
           });
         });
       this.pagesDetail = this.pagesDetail.map((item, index) => {
-        if (
-          index >= (this.currentPage - 1) * this.pageCount &&
-          index < Math.min(this.videoPages, this.currentPage * this.pageCount)
-        ) {
+        if (index >= (this.currentPage - 1) * this.pageCount && index < Math.min(this.videoPages, this.currentPage * this.pageCount)) {
           item.loading = false;
         }
         return item;

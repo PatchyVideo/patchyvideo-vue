@@ -1,4 +1,3 @@
-
 <!--
 黑名单组件
 -->
@@ -50,38 +49,30 @@
 <template>
   <div class="black-list" v-loading="loading">
     <el-radio-group v-model="radio" ref="radiog">
-      <el-card class="box-card" :class="{select:radio!==3}" @click.native="selectDiv(3)">
+      <el-card class="box-card" :class="{ select: radio !== 3 }" @click.native="selectDiv(3)">
         <div slot="header" class="clearfix">
           <el-radio :label="3">
-            <span :class="{white:radio!==3}">{{$t('default_blacklist')}}</span>
+            <span :class="{ white: radio !== 3 }">{{ $t("default_blacklist") }}</span>
           </el-radio>
         </div>
-        <div v-for="(v) in this.defaultBlackData" :key="v" class="text item">
-          <el-tag>{{v}}</el-tag>
+        <div v-for="v in this.defaultBlackData" :key="v" class="text item">
+          <el-tag>{{ v }}</el-tag>
         </div>
 
-        <el-button
-          style=" padding: 3px 0;color: #f64c59;"
-          type="text"
-          @click.native="changeBlackList('default')"
-        >{{$t('use')}}</el-button>
+        <el-button style=" padding: 3px 0;color: #f64c59;" type="text" @click.native="changeBlackList('default')">{{ $t("use") }}</el-button>
       </el-card>
 
-      <el-card class="box-card" :class="{select:radio!==6}" @click.native="selectDiv(6)">
+      <el-card class="box-card" :class="{ select: radio !== 6 }" @click.native="selectDiv(6)">
         <div slot="header" class="clearfix">
           <el-radio :label="6">
-            <span :class="{white:radio!==6}">{{$t('custom_blacklist')}}</span>
+            <span :class="{ white: radio !== 6 }">{{ $t("custom_blacklist") }}</span>
           </el-radio>
         </div>
-        <div
-          class="text item"
-          :class="{white:radio!==6}"
-          v-if="!textareaVisble && !inputVisible && !dynamicTags.length"
-        >
-          <h4>{{$t('blacklist_empty_prompt')}}</h4>
+        <div class="text item" :class="{ white: radio !== 6 }" v-if="!textareaVisble && !inputVisible && !dynamicTags.length">
+          <h4>{{ $t("blacklist_empty_prompt") }}</h4>
         </div>
         <div :key="tag" v-for="tag in dynamicTags" class="text item">
-          <el-tag closable :disable-transitions="false" @close="handleClose(tag)">{{tag}}</el-tag>
+          <el-tag closable :disable-transitions="false" @close="handleClose(tag)">{{ tag }}</el-tag>
         </div>
         <el-autocomplete
           id="ipt"
@@ -103,15 +94,17 @@
               <div
                 class="name"
                 v-bind:class="{
-                    Copyright: item.cat === 2,
-                    Language: item.cat === 5,
-                    Character: item.cat === 1,
-                    Author: item.cat === 3,
-                    General: item.cat === 0,
-                    Meta: item.cat === 4,
-                    Soundtrack: item.cat === 6
-                    }"
-              >{{ item.tag }}</div>
+                  Copyright: item.cat === 2,
+                  Language: item.cat === 5,
+                  Character: item.cat === 1,
+                  Author: item.cat === 3,
+                  General: item.cat === 0,
+                  Meta: item.cat === 4,
+                  Soundtrack: item.cat === 6
+                }"
+              >
+                {{ item.tag }}
+              </div>
               <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
             </div>
           </template>
@@ -131,41 +124,25 @@
           type="textarea"
           ref="saveTagTextArea"
           @blur="handleTextAreaConfirm"
-          :autosize="{ minRows: 8}"
+          :autosize="{ minRows: 8 }"
           :placeholder="$t('blacklist_enter_prompt')"
           v-model="textareaValue"
           style="margin: 20px 0px;"
         ></el-input>
 
         <div style="display:flex;">
-          <el-button
-            v-if="!inputVisible && !textareaVisble"
-            class="button-new-tag"
-            type="primary"
-            size="small"
-            @click="showInput"
-          >{{$t('add_blacklist')}}</el-button>
-          <el-button
-            v-if="dynamicTags.length"
-            class="button-new-tag"
-            type="danger"
-            size="small"
-            @click="removeBlackDataAll"
-          >{{$t('remove_all_blacklist')}}</el-button>
-          <el-button
-            v-if="!textareaVisble && !inputVisible"
-            class="button-new-tag"
-            type="primary"
-            size="small"
-            @click="showTextarea"
-          >{{$t('load_blacklist')}}</el-button>
+          <el-button v-if="!inputVisible && !textareaVisble" class="button-new-tag" type="primary" size="small" @click="showInput">{{
+            $t("add_blacklist")
+          }}</el-button>
+          <el-button v-if="dynamicTags.length" class="button-new-tag" type="danger" size="small" @click="removeBlackDataAll">{{
+            $t("remove_all_blacklist")
+          }}</el-button>
+          <el-button v-if="!textareaVisble && !inputVisible" class="button-new-tag" type="primary" size="small" @click="showTextarea">{{
+            $t("load_blacklist")
+          }}</el-button>
         </div>
 
-        <el-button
-          style="padding:3px 0;color:#f64c59;"
-          type="text"
-          @click.native="changeBlackList(dynamicTags)"
-        >{{$t('use')}}</el-button>
+        <el-button style="padding:3px 0;color:#f64c59;" type="text" @click.native="changeBlackList(dynamicTags)">{{ $t("use") }}</el-button>
       </el-card>
     </el-radio-group>
   </div>
@@ -266,10 +243,7 @@ export default {
             this.textareaVisble = false;
             return;
           }
-          if (
-            JSON.stringify(res.data.data.categorie_map) === "{}" &&
-            textareaValue.length !== 0
-          ) {
+          if (JSON.stringify(res.data.data.categorie_map) === "{}" && textareaValue.length !== 0) {
             this.$message.error(this.$t("tag_notexist_prompt"));
             this.inputValue = "";
             return;
@@ -329,20 +303,13 @@ export default {
         data: { lang: localStorage.getItem("lang") }
       }).then(res => {
         this.blackData = res.data.data;
-        if (
-          res.data.data === "default" ||
-          JSON.stringify(this.defaultBlackData) ===
-            JSON.stringify(this.blackData)
-        ) {
+        if (res.data.data === "default" || JSON.stringify(this.defaultBlackData) === JSON.stringify(this.blackData)) {
           this.dynamicTags = [];
           this.radio = 3;
           this.loading = false;
           return;
         }
-        if (
-          JSON.stringify(this.defaultBlackData) !==
-          JSON.stringify(this.blackData)
-        ) {
+        if (JSON.stringify(this.defaultBlackData) !== JSON.stringify(this.blackData)) {
           this.radio = 6;
         }
         this.dynamicTags = this.blackData;

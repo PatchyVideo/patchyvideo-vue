@@ -24,14 +24,14 @@
 <template>
   <div class="bigbox">
     <div class="doing">
-      <h3>{{$t('pending_post')}}</h3>
-      <p>{{$t('no_pending')}}</p>
+      <h3>{{ $t("pending_post") }}</h3>
+      <p>{{ $t("no_pending") }}</p>
     </div>
     <div class="failed">
-      <h3>{{$t('failed_post')}}</h3>
-      <p>{{$t('total_count', {count: failedData.count})}}</p>
-      <p v-for="(item) in failedData.posts" :key="item._id.$oid">
-        <a :href="item.post_param.url">{{item.post_param.url}}</a>
+      <h3>{{ $t("failed_post") }}</h3>
+      <p>{{ $t("total_count", { count: failedData.count }) }}</p>
+      <p v-for="item in failedData.posts" :key="item._id.$oid">
+        <a :href="item.post_param.url">{{ item.post_param.url }}</a>
       </p>
     </div>
   </div>
@@ -42,12 +42,7 @@ export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
-      failedData: [
-        { count: "null" },
-        { page: "null" },
-        { page_count: "null" },
-        { posts: "null" }
-      ]
+      failedData: [{ count: "null" }, { page: "null" }, { page_count: "null" }, { posts: "null" }]
     };
   },
   created() {

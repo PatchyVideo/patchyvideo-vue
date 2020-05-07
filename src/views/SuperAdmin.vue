@@ -29,19 +29,12 @@
 }
 </i18n>
 
-
 <template>
   <div>
     <topnavbar></topnavbar>
 
     <!-- 管理员身份验证界面 -->
-    <div
-      v-if="!admin"
-      v-loading="!admin"
-      class="adminloading"
-      element-loading-text="少女祈祷中"
-      element-loading-spinner="el-icon-loading"
-    ></div>
+    <div v-if="!admin" v-loading="!admin" class="adminloading" element-loading-text="少女祈祷中" element-loading-spinner="el-icon-loading"></div>
 
     <el-tabs v-else v-model="activeName" @tab-click="handleClick">
       <!-- 用户管理 -->

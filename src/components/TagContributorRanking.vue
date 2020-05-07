@@ -1,44 +1,28 @@
-
 <template>
   <div class="bang" v-loading="loading">
     <div style="height: 35px;">
       <transition name="anime-left">
-        <div v-show="this.loading===false" style="height: 35px;">
+        <div v-show="this.loading === false" style="height: 35px;">
           <el-select id="select-order" v-model="couponSelected">
-            <el-option
-              style="text-align: center;"
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
+            <el-option style="text-align: center;" v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </div>
       </transition>
     </div>
 
     <div v-for="(item, i) in ranking" v-bind:key="i">
-      <div class="list-item" :class="{top: i===0,second:i===1,three:i===2}">
-        <h1 class="rank">{{i + 1}}</h1>
+      <div class="list-item" :class="{ top: i === 0, second: i === 1, three: i === 2 }">
+        <h1 class="rank">{{ i + 1 }}</h1>
 
-        <router-link :to="'/users/'+item._id.$oid" class="u-img">
+        <router-link :to="'/users/' + item._id.$oid" class="u-img">
           <div class="Imgcover"></div>
-          <el-avatar
-            fit="cover"
-            class="loginUser-userAvatar"
-            :size="40"
-            :src="userAvatar(item.user_obj.profile.image)"
-          ></el-avatar>
+          <el-avatar fit="cover" class="loginUser-userAvatar" :size="40" :src="userAvatar(item.user_obj.profile.image)"></el-avatar>
         </router-link>
-        <router-link
-          :to="'/users/'+item._id.$oid"
-          class="u-name"
-          tag="h1"
-        >{{item.user_obj.profile.username}}</router-link>
+        <router-link :to="'/users/' + item._id.$oid" class="u-name" tag="h1">{{ item.user_obj.profile.username }}</router-link>
         <p class="u-desc">
-          <span>{{item.user_obj.profile.desc}}</span>
+          <span>{{ item.user_obj.profile.desc }}</span>
         </p>
-        <h1 class="count">编辑次数：{{item.count}}</h1>
+        <h1 class="count">编辑次数：{{ item.count }}</h1>
       </div>
 
       <el-divider></el-divider>
@@ -99,7 +83,7 @@ export default {
   }
 };
 </script>
-<style  scoped lang="less">
+<style scoped lang="less">
 /deep/ .el-select {
   input {
     text-align: center;
@@ -214,4 +198,3 @@ export default {
   }
 }
 </style>
-

@@ -29,28 +29,23 @@
   <div>
     <div class="bigbox standard">
       <div class="aside">
-        <div class="new-create" @click="changeDoingSatate()" :class="{active:doingState}">
+        <div class="new-create" @click="changeDoingSatate()" :class="{ active: doingState }">
           <a>
             <i class="el-icon-goblet-square"></i>
-            {{$t('pending_post')}}
+            {{ $t("pending_post") }}
           </a>
         </div>
-        <div class="new-create" @click="changeFailedSatate()" :class="{active:failedState}">
+        <div class="new-create" @click="changeFailedSatate()" :class="{ active: failedState }">
           <a>
             <i class="el-icon-goblet-full"></i>
-            {{$t('failed_post')}}
+            {{ $t("failed_post") }}
           </a>
         </div>
       </div>
       <div class="main">
         <div class="fav null" v-if="doingState">
           <div class="add-list">
-            <el-table
-              ref="singleTable"
-              :data="tableData2"
-              highlight-current-row
-              @current-change="handleCurrentChange"
-            >
+            <el-table ref="singleTable" :data="tableData2" highlight-current-row @current-change="handleCurrentChange">
               <el-table-column type="index" width="50"></el-table-column>
               <el-table-column property="url" label="URL" align="center"></el-table-column>
               <el-table-column property="tags" label="TAGS" align="center"></el-table-column>
@@ -68,12 +63,7 @@
               :inactive-text="$t('show_all')"
             ></el-switch>
             <transition mode="out-in">
-              <el-table
-                :data="tableData"
-                style="width: 100%"
-                :row-class-name="tableRowClassName"
-                v-show="value"
-              >
+              <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName" v-show="value">
                 <el-table-column prop="url" label="URL" align="center"></el-table-column>
                 <el-table-column prop="time" label="TIME" align="center"></el-table-column>
               </el-table>
@@ -126,9 +116,7 @@ export default {
       for (let i in obj) {
         array.push({
           url: obj[i].url,
-          tags: JSON.parse(
-            JSON.stringify(obj[i].tags).replace(/(\",)+/g, '、",')
-          )
+          tags: JSON.parse(JSON.stringify(obj[i].tags).replace(/(\",)+/g, '、",'))
         });
       }
       this.tableData2 = array;

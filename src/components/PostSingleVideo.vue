@@ -105,32 +105,22 @@
   <div class="postBox" v-loading="loading">
     <div class="content">
       <!-- 视频输入框 -->
-      <el-input
-        v-model="VideoURL"
-        @keyup.enter.native="onFetchVideo_Click"
-        :placeholder="$t('video_url')"
-      >
-        <el-button slot="append" @click="onFetchVideo_Click">{{$t('get_info')}}</el-button>
+      <el-input v-model="VideoURL" @keyup.enter.native="onFetchVideo_Click" :placeholder="$t('video_url')">
+        <el-button slot="append" @click="onFetchVideo_Click">{{ $t("get_info") }}</el-button>
       </el-input>
       <!-- 视频URL验证成功的时候出现的内容 -->
       <el-collapse-transition>
         <!-- 视频详情 -->
         <div class="videoDetail" v-show="show">
           <img :src="thumbnail" />
-          <h2>{{title}}</h2>
-          <p style="word-break: break-all;">{{desc}}</p>
+          <h2>{{ title }}</h2>
+          <p style="word-break: break-all;">{{ desc }}</p>
           <!-- 标签编辑 -->
           <div class="tagsEdit" v-if="false">
-            <h3>{{$t('tag')}}</h3>
+            <h3>{{ $t("tag") }}</h3>
             <div class="tagBox">
-              <p v-if="tags==''">{{$t('no_tag')}}</p>
-              <el-tag
-                effect="dark"
-                v-else
-                v-for="item in tags"
-                :key="item"
-                style="margin-left:5px;margin-right:5px;margin-top:5px"
-              >{{item}}</el-tag>
+              <p v-if="tags == ''">{{ $t("no_tag") }}</p>
+              <el-tag effect="dark" v-else v-for="item in tags" :key="item" style="margin-left:5px;margin-right:5px;margin-top:5px">{{ item }}</el-tag>
             </div>
           </div>
         </div>
@@ -138,37 +128,23 @@
       <!-- 发布类型 -->
       <div class="RepostType">
         <el-select v-model="RepostType" :placeholder="$t('choose_repost_type')" style="width:30%">
-          <el-option
-            v-for="item in RepostTypes"
-            :key="item.label"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
+          <el-option v-for="item in RepostTypes" :key="item.label" :label="item.label" :value="item.value"></el-option>
         </el-select>
         <!-- Wiki 链接 -->
-        <a
-          href="https://patchyvideo.wiki/Upload"
-          target="_blank"
-          style="color:#409EFF;float:right;margin-right:100px;margin-top:10px;"
-        >{{$t('PostRules')}}</a>
+        <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color:#409EFF;float:right;margin-right:100px;margin-top:10px;">{{
+          $t("PostRules")
+        }}</a>
       </div>
       <!-- 视频上传 -->
       <el-button class="postButton" type="primary" @click="postSingleVideo">
-        {{$t('post_video')}}
+        {{ $t("post_video") }}
         <i class="el-icon-upload el-icon--right"></i>
       </el-button>
     </div>
 
     <!-- 标签编辑组件 -->
     <!-- :key="refreshMark"-->
-    <EditTags
-      ref="EditTags"
-      :msg="use_tags"
-      :really="isReally"
-      :visible.sync="showTagPanel"
-      @getEditTagsData="TagShow"
-      class="EditTags"
-    ></EditTags>
+    <EditTags ref="EditTags" :msg="use_tags" :really="isReally" :visible.sync="showTagPanel" @getEditTagsData="TagShow" class="EditTags"></EditTags>
   </div>
 </template>
 
@@ -279,9 +255,7 @@ export default {
           that.ErrorFetchingVideo();
           return;
         }
-        var thumbnailURL = responseDOM
-          .filter('meta[itemprop="thumbnailUrl"]')
-          .attr("content");
+        var thumbnailURL = responseDOM.filter('meta[itemprop="thumbnailUrl"]').attr("content");
         var title = responseDOM.find("h1.video-title").attr("title");
         var desc = responseDOM.find("div.info.open").text();
         var utags = responseDOM
@@ -295,15 +269,11 @@ export default {
         that.autotag(utags, title, desc);
         that.setVideoMetadata(thumbnailURL, title, desc);
       };
-      this.EXPANDERS["^([aA][vV][\\d]+|BV[a-zA-Z0-9]+)"] = function(
-        short_link
-      ) {
+      this.EXPANDERS["^([aA][vV][\\d]+|BV[a-zA-Z0-9]+)"] = function(short_link) {
         return "https://www.bilibili.com/video/" + short_link;
       };
       // A站的匹配规则
-      this.PARSERS[
-        "^(https:\\/\\/|http:\\/\\/)?(www\\.|m\\.)?acfun\\.cn\\/v\\/[aA][cC][\\d]+"
-      ] = function(responseDOM, responseURL) {
+      this.PARSERS["^(https:\\/\\/|http:\\/\\/)?(www\\.|m\\.)?acfun\\.cn\\/v\\/[aA][cC][\\d]+"] = function(responseDOM, responseURL) {
         var err = responseDOM.find("div.error-body");
         if (err.length > 0) {
           that.setVideoMetadata("", "", "");
@@ -312,9 +282,7 @@ export default {
         }
         var thumbnailURL = "";
         var title = responseDOM.find("h1.title").text();
-        var desc = responseDOM
-          .filter('div[class="description-container"]')
-          .text();
+        var desc = responseDOM.filter('div[class="description-container"]').text();
         if (desc == null) {
           desc = responseDOM.find('div[class="J_description"]').text();
         }
@@ -334,27 +302,20 @@ export default {
         return "https://www.acfun.cn/v/" + short_link;
       };
       // N站的匹配规则
-      this.PARSERS[
-        "^(https:\\/\\/|http:\\/\\/)?(www\\.|sp\\.|m\\.)?(nicovideo\\.jp\\/watch\\/(s|n)m[\\d]+|nico\\.ms\\/(s|n)m[\\d]+)"
-      ] = function(responseDOM, responseURL) {
+      this.PARSERS["^(https:\\/\\/|http:\\/\\/)?(www\\.|sp\\.|m\\.)?(nicovideo\\.jp\\/watch\\/(s|n)m[\\d]+|nico\\.ms\\/(s|n)m[\\d]+)"] = function(
+        responseDOM,
+        responseURL
+      ) {
         // TODO: handle error
-        var thumbnailURL = responseDOM
-          .filter('meta[itemprop="thumbnailUrl"]')
-          .attr("content");
+        var thumbnailURL = responseDOM.filter('meta[itemprop="thumbnailUrl"]').attr("content");
         if (thumbnailURL == null) {
-          thumbnailURL = responseDOM
-            .filter('meta[name="thumbnail"]')
-            .attr("content");
+          thumbnailURL = responseDOM.filter('meta[name="thumbnail"]').attr("content");
         }
         var title = responseDOM.filter('meta[itemprop="name"]').attr("content");
         if (title == null) {
-          title = responseDOM
-            .filter('meta[property="og:title"]')
-            .attr("content");
+          title = responseDOM.filter('meta[property="og:title"]').attr("content");
         }
-        var desc = responseDOM
-          .filter('meta[itemprop="description"]')
-          .attr("content");
+        var desc = responseDOM.filter('meta[itemprop="description"]').attr("content");
         if (desc == null) {
           desc = responseDOM.filter('meta[name="description"]').attr("content");
         }
@@ -373,9 +334,10 @@ export default {
         return "https://www.nicovideo.jp/watch/" + short_link;
       };
       // YouTube的匹配规则
-      this.PARSERS[
-        "^(https:\\/\\/(www\\.|m\\.)?youtube\\.com\\/watch\\?v=[-\\w]+|https:\\/\\/youtu\\.be\\/(watch\\?v=[-\\w]+|[-\\w]+))"
-      ] = function(responseDOM, responseURL) {
+      this.PARSERS["^(https:\\/\\/(www\\.|m\\.)?youtube\\.com\\/watch\\?v=[-\\w]+|https:\\/\\/youtu\\.be\\/(watch\\?v=[-\\w]+|[-\\w]+))"] = function(
+        responseDOM,
+        responseURL
+      ) {
         // var vidid = "";
         // if (responseURL.indexOf("youtube.com") >= 0) {
         //   var idx = responseURL.lastIndexOf("=");
@@ -423,11 +385,7 @@ export default {
           })
           .then(result => {
             var data = result.data;
-            that.setVideoMetadata(
-              data.data.thumbnailURL,
-              data.data.title,
-              data.data.desc
-            );
+            that.setVideoMetadata(data.data.thumbnailURL, data.data.title, data.data.desc);
             that.autotag(data.data.utags, data.data.title, data.data.desc);
           })
           .catch(error => {
@@ -436,9 +394,7 @@ export default {
           });
       };
       // 推特的匹配规则
-      this.PARSERS[
-        "^(https:\\/\\/)?(www\\.|mobile\\.)?twitter\\.com\\/[\\w]+\\/status\\/[\\d]+"
-      ] = function(responseDOM, responseURL) {
+      this.PARSERS["^(https:\\/\\/)?(www\\.|mobile\\.)?twitter\\.com\\/[\\w]+\\/status\\/[\\d]+"] = function(responseDOM, responseURL) {
         that
           .axios({
             method: "post",
@@ -449,11 +405,7 @@ export default {
           })
           .then(result => {
             var data = result.data;
-            that.setVideoMetadata(
-              data.data.thumbnailURL,
-              data.data.title,
-              data.data.desc
-            );
+            that.setVideoMetadata(data.data.thumbnailURL, data.data.title, data.data.desc);
             that.autotag([], data.data.title, data.data.desc);
           })
           .catch(error => {
@@ -462,9 +414,7 @@ export default {
           });
       };
       // 站酷的匹配规则
-      this.PARSERS[
-        "https://www.zcool.com.cn/work/[0-9a-zA-Z=]*.html"
-      ] = function(responseDOM, responseURL) {
+      this.PARSERS["https://www.zcool.com.cn/work/[0-9a-zA-Z=]*.html"] = function(responseDOM, responseURL) {
         var err = responseDOM.find("div.error-body");
         if (err.length > 0) {
           that.setVideoMetadata("", "", "");
@@ -508,9 +458,7 @@ export default {
             // 已有标签是空的情况
             if (resultTags.length == 0) {
               this.$refs["EditTags"].tags = autoTags;
-              this.$refs["EditTags"].tagsForRec = JSON.parse(
-                JSON.stringify(this.$refs["EditTags"].tags)
-              );
+              this.$refs["EditTags"].tagsForRec = JSON.parse(JSON.stringify(this.$refs["EditTags"].tags));
             }
             // 非空的情况
             else {
@@ -538,9 +486,7 @@ export default {
               //   }
               // }
             }
-            this.$refs["EditTags"].getTagCategories(
-              this.$refs["EditTags"].tags
-            ); // 范围转换后展示原始数据
+            this.$refs["EditTags"].getTagCategories(this.$refs["EditTags"].tags); // 范围转换后展示原始数据
             this.$refs["EditTags"].getRecTags(this.$refs["EditTags"].tags); // 获取推荐 TAG
           }
         })
@@ -596,9 +542,7 @@ export default {
     // URL 标准化 * 2
     clearURL(url) {
       var url_parsed = new URL(this.addHTTP(url));
-      return (
-        "https://" + url_parsed.host + url_parsed.pathname + url_parsed.search
-      );
+      return "https://" + url_parsed.host + url_parsed.pathname + url_parsed.search;
     },
     // URL 标准化 * 3
     addHTTP(url) {

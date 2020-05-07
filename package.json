@@ -56,32 +56,5 @@
     "prettier": "^1.19.1",
     "vue-template-compiler": "^2.6.11",
     "vueg": "^1.4.5"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "jquery": true,
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended",
-      "@vue/prettier"
-    ],
-    "rules": {
-      "prettier/prettier": [
-        "warn",
-        {
-          "semi": true,
-          "singleQuote": false,
-          "printWidth": 160,
-          "tabWidth": 2,
-          "useTabs": false
-        }
-      ]
-    },
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
   }
 }
