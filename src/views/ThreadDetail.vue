@@ -6,7 +6,9 @@
       <el-row>
         <el-col :span="18">
           <h2>
-            <span v-if="fid">{{ Finfo[fid].title || "神秘板块" }}&nbsp;>&nbsp;</span>
+            <span v-if="fid"
+              >{{ Finfo[fid].title || "神秘板块" }}&nbsp;>&nbsp;</span
+            >
             <i v-if="pinned" class="comment-bar-item pv-icon-pin"></i
             >{{ title || "Loading..." }}
           </h2>
@@ -14,9 +16,11 @@
           <div v-for="(comment, index) in commentList" :key="index">
             <thread-comment-box
               :comment="comment"
+              :index="comment._id.$oid"
               :commentAuthorsInfo="commentAuthorsInfo"
               :userId="userInfo.id"
               :own="userInfo.isAdmin"
+              @position="position"
               @pin2="pin2"
               @edit2="edit2"
               @del2="del2"
@@ -480,6 +484,13 @@ export default {
           console.error(error);
           // this.$router.push({ path: "/404" });
         });
+    },
+    position(el) {
+      const rect = el.getBoundingClientRect();
+      const top = window.pageYOffset + rect.top - 10;
+      setTimeout(() => {
+        window.scrollTo({ behavior: "smooth", top });
+      }, 200);
     },
     time(t) {
       function i2(i) {
