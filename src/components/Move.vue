@@ -1,4 +1,3 @@
-
 <i18n>
 {
   "CHS": {
@@ -27,12 +26,7 @@
       </el-button>
     </el-tooltip>
 
-    <el-tooltip
-      class="item move-down-box"
-      effect="dark"
-      :content="$t('move_down')"
-      placement="bottom"
-    >
+    <el-tooltip class="item move-down-box" effect="dark" :content="$t('move_down')" placement="bottom">
       <el-button>
         <i class="fa fa-arrow-down move-down" aria-hidden="true" @click="moveDown"></i>
       </el-button>

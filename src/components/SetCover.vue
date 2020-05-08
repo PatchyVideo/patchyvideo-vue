@@ -14,12 +14,7 @@
 
 <template>
   <div>
-    <el-tooltip
-      class="item"
-      effect="dark"
-      :content="$t('set_as_playlist_cover')"
-      placement="top-end"
-    >
+    <el-tooltip class="item" effect="dark" :content="$t('set_as_playlist_cover')" placement="top-end">
       <i class="fa fa-picture-o" aria-hidden="true" @click="setCover()"></i>
     </el-tooltip>
   </div>
@@ -52,5 +47,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

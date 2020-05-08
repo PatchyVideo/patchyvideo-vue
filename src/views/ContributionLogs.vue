@@ -11,8 +11,6 @@
       1. 
 -->
 
-
-
 <template>
   <div>
     <topnavbar />

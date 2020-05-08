@@ -91,7 +91,6 @@ Vue.prototype.$echarts = echarts;
 }
 </i18n>
 
-
 <template>
   <div>
     <topnavbar></topnavbar>
@@ -113,54 +112,26 @@ Vue.prototype.$echarts = echarts;
       <!-- 个人界面 -->
 
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane
-          :label="(labelInfo.length==info[0].length)?$t('me.tab1'):$t('outer_user.tab1')"
-          name="first"
-          v-if="labelInfo.length>=1"
-        >
+        <el-tab-pane :label="labelInfo.length == info[0].length ? $t('me.tab1') : $t('outer_user.tab1')" name="first" v-if="labelInfo.length >= 1">
           <userprofile></userprofile>
         </el-tab-pane>
-        <el-tab-pane
-          :label="(labelInfo.length==info[0].length)?$t('me.tab2'):$t('outer_user.tab2')"
-          name="second"
-          v-if="labelInfo.length>=2"
-        >
-          <usercontribute v-if="this.activeName==='second'"></usercontribute>
+        <el-tab-pane :label="labelInfo.length == info[0].length ? $t('me.tab2') : $t('outer_user.tab2')" name="second" v-if="labelInfo.length >= 2">
+          <usercontribute v-if="this.activeName === 'second'"></usercontribute>
         </el-tab-pane>
-        <el-tab-pane
-          :label="(labelInfo.length==info[0].length)?$t('me.tab3'):$t('outer_user.tab3')"
-          name="third"
-          v-if="labelInfo.length>=3"
-        >
-          <listfolder v-if="this.activeName==='third'"></listfolder>
+        <el-tab-pane :label="labelInfo.length == info[0].length ? $t('me.tab3') : $t('outer_user.tab3')" name="third" v-if="labelInfo.length >= 3">
+          <listfolder v-if="this.activeName === 'third'"></listfolder>
         </el-tab-pane>
-        <el-tab-pane
-          :label="(labelInfo.length==info[0].length)?$t('me.tab4'):$t('outer_user.tab4')"
-          name="four"
-          v-if="labelInfo.length>=4"
-        >
-          <userfavorites v-if="this.activeName==='four'"></userfavorites>
+        <el-tab-pane :label="labelInfo.length == info[0].length ? $t('me.tab4') : $t('outer_user.tab4')" name="four" v-if="labelInfo.length >= 4">
+          <userfavorites v-if="this.activeName === 'four'"></userfavorites>
         </el-tab-pane>
-        <el-tab-pane
-          :label="(labelInfo.length==info[0].length)?$t('me.tab5'):$t('outer_user.tab5')"
-          name="fifth"
-          v-if="labelInfo.length>=5"
-        >
-          <userfolder v-if="this.activeName==='fifth'"></userfolder>
+        <el-tab-pane :label="labelInfo.length == info[0].length ? $t('me.tab5') : $t('outer_user.tab5')" name="fifth" v-if="labelInfo.length >= 5">
+          <userfolder v-if="this.activeName === 'fifth'"></userfolder>
         </el-tab-pane>
-        <el-tab-pane
-          :label="(labelInfo.length==info[0].length)?$t('me.tab6'):$t('outer_user.tab6')"
-          name="six"
-          v-if="labelInfo.length>=6"
-        >
-          <blacklist v-if="this.activeName==='six'"></blacklist>
+        <el-tab-pane :label="labelInfo.length == info[0].length ? $t('me.tab6') : $t('outer_user.tab6')" name="six" v-if="labelInfo.length >= 6">
+          <blacklist v-if="this.activeName === 'six'"></blacklist>
         </el-tab-pane>
-        <el-tab-pane
-          :label="(labelInfo.length==info[0].length)?$t('me.tab7'):$t('outer_user.tab7')"
-          name="seven"
-          v-if="labelInfo.length>=7"
-        >
-          <usersub v-if="this.activeName==='seven'"></usersub>
+        <el-tab-pane :label="labelInfo.length == info[0].length ? $t('me.tab7') : $t('outer_user.tab7')" name="seven" v-if="labelInfo.length >= 7">
+          <usersub v-if="this.activeName === 'seven'"></usersub>
         </el-tab-pane>
         <!--<el-tab-pane label="文件管理" name="five">
           <userfolder></userfolder>
@@ -195,26 +166,10 @@ export default {
       activeIndex2: "1",
       activeName: "first",
       info: [
-        [
-          "我的信息",
-          "我贡献的索引",
-          "我的文件夹",
-          "我的收藏",
-          "索引状态",
-          "订阅",
-          "黑名单"
-        ],
+        ["我的信息", "我贡献的索引", "我的文件夹", "我的收藏", "索引状态", "订阅", "黑名单"],
         ["用户信息", "他贡献的索引", "他的文件夹", "他的收藏"]
       ],
-      labelInfo: [
-        "我的信息",
-        "我贡献的索引",
-        "文件夹",
-        "我的收藏",
-        "索引状态",
-        "订阅",
-        "黑名单"
-      ]
+      labelInfo: ["我的信息", "我贡献的索引", "文件夹", "我的收藏", "索引状态", "订阅", "黑名单"]
     };
   },
   created() {
@@ -281,7 +236,7 @@ export default {
 };
 </script>
 
-<style scoped >
+<style scoped>
 .w {
   display: block;
 }

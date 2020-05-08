@@ -1,57 +1,38 @@
-
 <template>
   <div class="bang" v-loading="loading">
     <h2 v-if="this.error">网络受到了异常波动！魔法代码：{{ btoa(this.error) }}</h2>
 
     <ul>
       <li v-for="(item, index) in hisList" v-bind:key="index">
-        <div v-if="item.add.length>0||item.del.length>0">
+        <div v-if="item.add.length > 0 || item.del.length > 0">
           <div class="list-item">
             <div class="video-thumbnail">
-              <img
-                :src="'/images/covers/'+item.video_obj[0].item.cover_image"
-                width="200px"
-                height="125px"
-              />
+              <img :src="'/images/covers/' + item.video_obj[0].item.cover_image" width="200px" height="125px" />
               <div class="Imgcover"></div>
             </div>
             <div class="video-title">
               <h4>
-                <img
-                  :src="require('../static/img/' + item.video_obj[0].item.site + '.png')"
-                  width="16px"
-                  style="margin-right:2px;display:inline;"
-                />
-                <router-link
-                  target="_blank"
-                  :to="{ path: '/video', query: { id: item.vid.$oid } }"
-                  tag="a"
-                >{{ item.video_obj[0].item.title }}</router-link>
+                <img :src="require('../static/img/' + item.video_obj[0].item.site + '.png')" width="16px" style="margin-right:2px;display:inline;" />
+                <router-link target="_blank" :to="{ path: '/video', query: { id: item.vid.$oid } }" tag="a">{{ item.video_obj[0].item.title }}</router-link>
               </h4>
             </div>
             <div>
               <p>
                 编辑者：
-                <router-link :to="'/users/'+item.user_obj[0]._id.$oid">
-                  <img
-                    :src="'be/images/userphotos/'+item.user_obj[0].profile.image"
-                    alt="头像"
-                    width="24px"
-                    height="24px"
-                    class="u-img"
-                  />
+                <router-link :to="'/users/' + item.user_obj[0]._id.$oid">
+                  <img :src="'be/images/userphotos/' + item.user_obj[0].profile.image" alt="头像" width="24px" height="24px" class="u-img" />
                   {{ item.user_obj[0].profile.username }}
                 </router-link>
-                &nbsp;编辑时间：{{ date2str(item.time.$date,GMT) }}
+                &nbsp;编辑时间：{{ date2str(item.time.$date, GMT) }}
               </p>
               <div class="titleTag">
-                <div v-if="item.add.length>0" class="tag">
+                <div v-if="item.add.length > 0" class="tag">
                   添加：
                   <div class="tag-div tag-add" v-for="(val, key) in item.add" :key="key">
                     <p @click="gotoHome(val)">{{ val }}</p>
                   </div>
                 </div>
-                <div v-if="item.del.length>0" class="tag">
+                <div v-if="item.del.length > 0" class="tag">
                   删除：
                   <div class="tag-div tag-del" v-for="(val, key) in item.del" :key="key">
                     <p @click="gotoHome(val)">{{ val }}</p>
@@ -105,11 +86,9 @@ export default {
     // 点击标签显示标签的搜索结果
     gotoHome(key) {
       if (key != "") {
-        this.$router
-          .push({ path: "/home", query: { keyword: key } })
-          .catch(err => {
-            return err;
-          });
+        this.$router.push({ path: "/home", query: { keyword: key } }).catch(err => {
+          return err;
+        });
       } else {
         this.$router.push({ path: "/home" });
       }
@@ -201,18 +180,14 @@ export default {
       var minutes = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
       var seconds = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
 
-      return `${year}-${(Array(2).join(0) + month).slice(-2)}-${(
-        Array(2).join(0) + days
-      ).slice(-2)} ${(Array(2).join(0) + hours).slice(-2)}:${(
+      return `${year}-${(Array(2).join(0) + month).slice(-2)}-${(Array(2).join(0) + days).slice(-2)} ${(Array(2).join(0) + hours).slice(-2)}:${(
         Array(2).join(0) + minutes
-      ).slice(-2)}:${(Array(2).join(0) + seconds).slice(-2)} (GMT${
-        currentGMT >= 0 ? "+" : ""
-      }${currentGMT})`;
+      ).slice(-2)}:${(Array(2).join(0) + seconds).slice(-2)} (GMT${currentGMT >= 0 ? "+" : ""}${currentGMT})`;
     }
   }
 };
 </script>
-<style  scoped lang="less">
+<style scoped lang="less">
 /deep/ .el-select {
   input {
     text-align: center;
@@ -311,4 +286,3 @@ export default {
   border-color: #ff88a0;
 }
 </style>
-

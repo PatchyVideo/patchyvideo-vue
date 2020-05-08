@@ -1,4 +1,3 @@
-
 <i18n>
     {
     "CHS": {
@@ -37,19 +36,15 @@
     <!-- <topnavbar /> -->
     <!-- home页面的正文 -->
     <div class="tag-box">
-      <el-tag
-        @click="(e) => onSubsChange()"
-        style="margin: 0 5px"
-        key
-        :type="visibleSubs.includes('') ? '' : 'info'"
-      >全部</el-tag>
+      <el-tag @click="e => onSubsChange()" style="margin: 0 5px" key :type="visibleSubs.includes('') ? '' : 'info'">全部</el-tag>
       <el-tag
         v-for="item in allSubs"
         :key="item._id.$oid"
         style="margin: 0 5px"
-        @click="(e) => onSubsChange(item._id.$oid)"
+        @click="e => onSubsChange(item._id.$oid)"
         :type="visibleSubs.includes(item._id.$oid) ? '' : 'info'"
-      >{{item.name || item.qs}}</el-tag>
+        >{{ item.name || item.qs }}</el-tag
+      >
     </div>
     <div class="w main-page-background-img" v-loading="loading">
       <left_navbar :msg="tags" :name="'sub'"></left_navbar>
@@ -57,64 +52,40 @@
       <div class="content">
         <!-- 播放列表的抬头 -->
         <div class="video-list-header">
-          <p v-if="maxcount">{{$t('page_count', {count: count2, maxcount: maxcount})}}</p>
-          <p v-else>{{$t('no_result')}}</p>
-          <el-checkbox class="show_deleted" v-model="checked">{{$t('show_deleted')}}</el-checkbox>
-          <p class="blacklist_prompt">{{$t('blacklist_prompt')}}</p>
+          <p v-if="maxcount">{{ $t("page_count", { count: count2, maxcount: maxcount }) }}</p>
+          <p v-else>{{ $t("no_result") }}</p>
+          <el-checkbox class="show_deleted" v-model="checked">{{ $t("show_deleted") }}</el-checkbox>
+          <p class="blacklist_prompt">{{ $t("blacklist_prompt") }}</p>
         </div>
         <el-select id="select-order" v-model="couponSelected">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
+          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
 
         <!-- 播放列表正文 -->
         <ul>
-          <li class="list-item" v-for="(item) in listvideo" :key="item._id.$oid">
+          <li class="list-item" v-for="item in listvideo" :key="item._id.$oid">
             <div class="video-item">
-              <router-link
-                target="_blank"
-                :to="{ path: '/video', query: { id: item._id.$oid } }"
-                tag="a"
-              >
+              <router-link target="_blank" :to="{ path: '/video', query: { id: item._id.$oid } }" tag="a">
                 <div class="video-thumbnail">
-                  <img :src="'/images/covers/'+item.item.cover_image" width="200px" height="125px" />
+                  <img :src="'/images/covers/' + item.item.cover_image" width="200px" height="125px" />
                   <div class="Imgcover"></div>
                 </div>
               </router-link>
 
               <div class="video-detail">
-                <img
-                  :src="require('../../static/img/' + item.item.site + '.png')"
-                  width="16px"
-                  style="margin-right:2px;display:inline;"
-                />
+                <img :src="require('../../static/img/' + item.item.site + '.png')" width="16px" style="margin-right:2px;display:inline;" />
                 <h4 style="display:inline;">
-                  <router-link
-                    target="_blank"
-                    :to="{ path: '/video', query: { id: item._id.$oid } }"
-                    tag="a"
-                  >{{ item.item.title }}</router-link>
+                  <router-link target="_blank" :to="{ path: '/video', query: { id: item._id.$oid } }" tag="a">{{ item.item.title }}</router-link>
                 </h4>
                 <p>{{ item.item.desc }}</p>
                 <div>
-                  <a target="_blank" :href="item.item.url">{{item.item.url}}</a>
-                  <i
-                    @click="copyVideoLink(item.item.url)"
-                    class="fa fa-copy fa-lg"
-                    style="margin-left:2px"
-                  ></i>
+                  <a target="_blank" :href="item.item.url">{{ item.item.url }}</a>
+                  <i @click="copyVideoLink(item.item.url)" class="fa fa-copy fa-lg" style="margin-left:2px"></i>
                 </div>
               </div>
-            </div>订阅来源：
-            <el-tag
-              v-for="i in item.sat_objs"
-              :key="'s' + item._id.$oid"
-              style="margin: 0 5px"
-            >{{i.name || i.qs}}</el-tag>
+            </div>
+            订阅来源：
+            <el-tag v-for="i in item.sat_objs" :key="'s' + item._id.$oid" style="margin: 0 5px">{{ i.name || i.qs }}</el-tag>
           </li>
         </ul>
 
@@ -242,10 +213,7 @@ export default {
           (typeof condition == "object" && "$date" in condition)
         ) {
           // tags: 1
-          if (
-            typeof this.get_obj(obj, key) == "object" &&
-            Array.isArray(this.get_obj(obj, key))
-          ) {
+          if (typeof this.get_obj(obj, key) == "object" && Array.isArray(this.get_obj(obj, key))) {
             // array
             return this.get_obj(obj, key).includes(condition);
           } else {
@@ -343,14 +311,10 @@ export default {
         .then(result => {
           // let a = result.data.data.videos[0];
           // console.log(a);
-          this.listvideo = this.match_video_query(
-            result.data.data.videos,
-            result.data.data.objs
-          );
+          this.listvideo = this.match_video_query(result.data.data.videos, result.data.data.objs);
           this.allSubs = {};
           for (var i = 0; i < result.data.data.objs.length; ++i) {
-            this.allSubs[result.data.data.objs[i]._id.$oid] =
-              result.data.data.objs[i];
+            this.allSubs[result.data.data.objs[i]._id.$oid] = result.data.data.objs[i];
           }
 
           this.maxcount = result.data.data.total;
@@ -397,10 +361,7 @@ export default {
         .then(result => {
           // let a = result.data.data.videos[0];
           // console.log(a);
-          this.listvideo = this.match_video_query(
-            result.data.data.videos,
-            result.data.data.objs
-          );
+          this.listvideo = this.match_video_query(result.data.data.videos, result.data.data.objs);
 
           this.maxcount = result.data.data.total;
           // 取得总页数制作分页
@@ -515,10 +476,7 @@ export default {
         return;
       }
       // 监听路由 query 的值，当用户连续输入的搜索值不一样时，更新搜索关键词，调用 this.getSearchData 获取搜索数据并渲染。
-      if (
-        newV.query.keyword !== oldV.query.keyword ||
-        newV.query.qtype !== oldV.query.qtype
-      ) {
+      if (newV.query.keyword !== oldV.query.keyword || newV.query.qtype !== oldV.query.qtype) {
         // 修改网站标题
         document.title = this.$t("search_result", {
           result: newV.query.keyword

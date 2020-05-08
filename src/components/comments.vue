@@ -134,72 +134,51 @@
     <div class="comment" v-if="isLogin">
       <!-- 表情区域 -->
       <div style="text-align: center !important;">
-        <el-popover
-          placement="top"
-          trigger="manual"
-          content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
-          v-model="faceVisible"
-        >
-          <table
-            cellpadding="1"
-            cellspacing="1"
-            align="center"
-            border="1"
-            bordercolor="#e3e3e3"
-            style="border-collapse:collapse;"
-          >
-            <tr v-for="(p,i) in faceData" :key="i">
-              <td v-for="(m,n) in p" :key="n" border="1" style="border-collapse:collapse;">
-                <a @click="addFaceToComments(m)" v-for="(z,x) in m" :key="z">
+        <el-popover placement="top" trigger="manual" content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。" v-model="faceVisible">
+          <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse:collapse;">
+            <tr v-for="(p, i) in faceData" :key="i">
+              <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse:collapse;">
+                <a @click="addFaceToComments(m)" v-for="(z, x) in m" :key="z">
                   <img :src="z" :alt="x" :title="x" />
                 </a>
               </td>
             </tr>
           </table>
+
           <el-button
             class="face"
             type="success"
             icon="el-icon-magic-stick"
             slot="reference"
             style="width: 100px"
-            @click="faceVisible = !faceVisible;emojiVisible=false;"
-          >表情</el-button>
-        </el-popover>
-        <el-popover
-          placement="top"
-          trigger="manual"
-          content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
-          v-model="emojiVisible"
-        >
-          <table
-            cellpadding="1"
-            cellspacing="1"
-            align="center"
-            border="1"
-            bordercolor="#e3e3e3"
-            style="border-collapse:collapse;"
+            @click="
+              faceVisible = !faceVisible;
+              emojiVisible = false;
+            "
+            >表情</el-button
           >
-            <tr v-for="(p,i) in emojiData" :key="i">
-              <td v-for="(m,n) in p" :key="n" border="1" style="border-collapse:collapse;">
-                <a
-                  @click="addEmojiToComments(m)"
-                  class="emoji"
-                  v-for="(z,x) in m"
-                  :key="x"
-                  v-text="z"
-                  :title="x"
-                ></a>
+        </el-popover>
+        <el-popover placement="top" trigger="manual" content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。" v-model="emojiVisible">
+          <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse:collapse;">
+            <tr v-for="(p, i) in emojiData" :key="i">
+              <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse:collapse;">
+                <a @click="addEmojiToComments(m)" class="emoji" v-for="(z, x) in m" :key="x" v-text="z" :title="x"></a>
               </td>
             </tr>
           </table>
+
           <el-button
             class="face"
             type="success"
             icon="el-icon-magic-stick"
             slot="reference"
             style="width: 100px"
-            @click="emojiVisible = !emojiVisible;faceVisible=false;"
-          >Emoji</el-button>
+            @click="
+              emojiVisible = !emojiVisible;
+              faceVisible = false;
+            "
+            >Emoji</el-button
+          >
         </el-popover>
       </div>
 
@@ -214,13 +193,9 @@
       ></el-input>
       <el-checkbox v-model="UsingEnter">{{ $t("usingEnter") }}</el-checkbox>
       <span>
-        {{ $t('respect') }}
-        <a
-          href="https://patchyvideo.wiki/Comments"
-          target="_blank"
-          style="color:#409EFF"
-        >{{ $t('commentRules') }}</a>
-        {{ $t('yo') }}
+        {{ $t("respect") }}
+        <a href="https://patchyvideo.wiki/Comments" target="_blank" style="color:#409EFF">{{ $t("commentRules") }}</a>
+        {{ $t("yo") }}
       </span>
       <el-button type="primary" @click="postcomment()" :loading="posting">{{ $t("post") }}</el-button>
     </div>
@@ -242,32 +217,24 @@
         <!-- 右半部分 -->
         <div class="commentContent">
           <div v-linkified>
-            <router-link
-              :to="'/users/' + item.meta.created_by.$oid"
-              target="_blank"
-            >{{ commentUser(item.meta.created_by.$oid).profile.username }}:</router-link>
+            <router-link :to="'/users/' + item.meta.created_by.$oid" target="_blank"
+              >{{ commentUser(item.meta.created_by.$oid).profile.username }}:</router-link
+            >
             <span v-html="parseComment(item.content)"></span>
           </div>
 
           <span class="commentDate">{{ commentdate(item.meta.created_at.$date) }}</span>
-          <el-button
-            class="replycomment"
-            v-if="item.children.length && !showReplies[index].show"
-            type="text"
-            @click="showReplies[index].show = true"
-          >{{ $t("showRplies", { length: item.children.length }) }}</el-button>
+          <el-button class="replycomment" v-if="item.children.length && !showReplies[index].show" type="text" @click="showReplies[index].show = true">{{
+            $t("showRplies", { length: item.children.length })
+          }}</el-button>
           <el-button
             class="replycomment"
             v-else-if="!replycomments[index].show && isLogin"
             type="text"
             @click="openReplyBox(index, commentUser(item.meta.created_by.$oid).profile.username, item._id.$oid)"
-          >{{ $t("reply") }}</el-button>
-          <el-button
-            class="replycomment"
-            v-else-if="isLogin"
-            type="text"
-            @click="replycomments[index].show = false"
-          >{{ $t("hideReply") }}</el-button>
+            >{{ $t("reply") }}</el-button
+          >
+          <el-button class="replycomment" v-else-if="isLogin" type="text" @click="replycomments[index].show = false">{{ $t("hideReply") }}</el-button>
 
           <!-- 权限操作 -->
           <el-button
@@ -275,7 +242,8 @@
             v-if="isLogin && (Authorized || mycomment(commentUser(item.meta.created_by.$oid).profile.username))"
             type="text"
             @click="Authorizecomment(item._id.$oid)"
-          >{{ $t("manage") }}</el-button>
+            >{{ $t("manage") }}</el-button
+          >
         </div>
 
         <!-- 楼中楼 -->
@@ -287,24 +255,19 @@
                 <div v-if="!reply.hidden && !reply.deleted">
                   <!-- 楼中楼头像 -->
                   <div class="avatar" style="margin:0">
-                    <el-avatar
-                      :src="userAvatar(commentUser(reply.meta.created_by.$oid).profile.image)"
-                      size="small"
-                    ></el-avatar>
+                    <el-avatar :src="userAvatar(commentUser(reply.meta.created_by.$oid).profile.image)" size="small"></el-avatar>
                   </div>
                   <!-- 楼中楼右半部分 -->
                   <div class="commentContent" style="margin-left:40px;">
                     <div v-linkified>
-                      <router-link
-                        :to="'/users/' + reply.meta.created_by.$oid"
-                        target="_blank"
-                      >{{ commentUser(reply.meta.created_by.$oid).profile.username }}:</router-link>
+                      <router-link :to="'/users/' + reply.meta.created_by.$oid" target="_blank"
+                        >{{ commentUser(reply.meta.created_by.$oid).profile.username }}:</router-link
+                      >
                       <span v-if="typeof reply.reply_to !== 'undefined'">
-                        {{ $t('replyPrompt') }}
-                        <router-link
-                          :to="'/users/' + cid_comment_map.get(reply.reply_to.$oid).meta.created_by.$oid"
-                          target="_blank"
-                        >@{{ commentUser(cid_comment_map.get(reply.reply_to.$oid).meta.created_by.$oid).profile.username }}</router-link>:
+                        {{ $t("replyPrompt") }}
+                        <router-link :to="'/users/' + cid_comment_map.get(reply.reply_to.$oid).meta.created_by.$oid" target="_blank"
+                          >@{{ commentUser(cid_comment_map.get(reply.reply_to.$oid).meta.created_by.$oid).profile.username }}</router-link
+                        >:
                       </span>
                       <span v-html="parseComment(reply.content)"></span>
                     </div>
@@ -313,22 +276,21 @@
                       v-if="isLogin"
                       class="replycomment"
                       type="text"
-                      @click="openReplyBox(index, commentUser(reply.meta.created_by.$oid).profile.username,reply._id.$oid)"
-                    >{{ $t("reply") }}</el-button>
+                      @click="openReplyBox(index, commentUser(reply.meta.created_by.$oid).profile.username, reply._id.$oid)"
+                      >{{ $t("reply") }}</el-button
+                    >
                     <!-- 权限操作 -->
                     <el-button
                       class="replycomment"
                       v-if="isLogin && (Authorized || mycomment(commentUser(reply.meta.created_by.$oid).profile.username))"
                       type="text"
                       @click="Authorizecomment(reply._id.$oid)"
-                    >{{ $t("manage") }}</el-button>
+                      >{{ $t("manage") }}</el-button
+                    >
                   </div>
                 </div>
                 <!-- 被隐藏的时候的渲染 -->
-                <div
-                  style="margin-left:40px;margin-bottom:10px"
-                  v-if="reply.deleted"
-                >{{ $t("deletedcomment") }}</div>
+                <div style="margin-left:40px;margin-bottom:10px" v-if="reply.deleted">{{ $t("deletedcomment") }}</div>
                 <div style="margin-left:40px;" v-else-if="reply.hidden">
                   {{ $t("hiddencomment") }}
                   <el-button type="text" @click="reply.hidden = false">{{ $t("opencomment") }}</el-button>
@@ -350,30 +312,28 @@
                   content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
                   v-model="replycomments[index].face"
                 >
-                  <table
-                    cellpadding="1"
-                    cellspacing="1"
-                    align="center"
-                    border="1"
-                    bordercolor="#e3e3e3"
-                    style="border-collapse:collapse;"
-                  >
-                    <tr v-for="(p,i) in faceData" :key="i">
-                      <td v-for="(m,n) in p" :key="n" border="1" style="border-collapse:collapse;">
-                        <a @click="addFaceToReply(m,index)" v-for="(z,x) in m" :key="x">
+                  <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse:collapse;">
+                    <tr v-for="(p, i) in faceData" :key="i">
+                      <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse:collapse;">
+                        <a @click="addFaceToReply(m, index)" v-for="(z, x) in m" :key="x">
                           <img :src="z" :alt="x" :title="x" />
                         </a>
                       </td>
                     </tr>
                   </table>
+
                   <el-button
                     class="face"
                     type="success"
                     icon="el-icon-magic-stick"
                     slot="reference"
                     style="width: 100px"
-                    @click="replycomments[index].face = !replycomments[index].face;replycomments[index].emoji=false;"
-                  >表情</el-button>
+                    @click="
+                      replycomments[index].face = !replycomments[index].face;
+                      replycomments[index].emoji = false;
+                    "
+                    >表情</el-button
+                  >
                 </el-popover>
                 <el-popover
                   placement="top"
@@ -381,35 +341,26 @@
                   content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
                   v-model="replycomments[index].emoji"
                 >
-                  <table
-                    cellpadding="1"
-                    cellspacing="1"
-                    align="center"
-                    border="1"
-                    bordercolor="#e3e3e3"
-                    style="border-collapse:collapse;"
-                  >
-                    <tr v-for="(p,i) in emojiData" :key="i">
-                      <td v-for="(m,n) in p" :key="n" border="1" style="border-collapse:collapse;">
-                        <a
-                          @click="addEmojiToReply(m,index)"
-                          class="emoji"
-                          v-for="(z,x) in m"
-                          :key="x"
-                          v-text="z"
-                          :title="x"
-                        ></a>
+                  <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse:collapse;">
+                    <tr v-for="(p, i) in emojiData" :key="i">
+                      <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse:collapse;">
+                        <a @click="addEmojiToReply(m, index)" class="emoji" v-for="(z, x) in m" :key="x" v-text="z" :title="x"></a>
                       </td>
                     </tr>
                   </table>
+
                   <el-button
                     class="face"
                     type="success"
                     icon="el-icon-magic-stick"
                     slot="reference"
                     style="width: 100px"
-                    @click="replycomments[index].emoji = !replycomments[index].emoji;replycomments[index].face=false;"
-                  >Emoji</el-button>
+                    @click="
+                      replycomments[index].emoji = !replycomments[index].emoji;
+                      replycomments[index].face = false;
+                    "
+                    >Emoji</el-button
+                  >
                 </el-popover>
                 <el-input
                   type="textarea"
@@ -420,14 +371,7 @@
                   show-word-limit
                   @keyup.enter.native="postReply(index)"
                 ></el-input>
-                <el-button
-                  style="margin:5px"
-                  type="primary"
-                  size="mini"
-                  round
-                  @click="postReply(index)"
-                  :loading="replying"
-                >{{ $t("post") }}</el-button>
+                <el-button style="margin:5px" type="primary" size="mini" round @click="postReply(index)" :loading="replying">{{ $t("post") }}</el-button>
               </div>
             </div>
           </el-collapse-transition>
@@ -545,10 +489,7 @@ export default {
     },
     // 判断是否登录
     isLogin() {
-      if (
-        JSON.stringify(this.$store.state.username) != "null" &&
-        this.$store.state.username != ""
-      ) {
+      if (JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "") {
         return true;
       } else {
         return false;
@@ -662,10 +603,7 @@ export default {
             //console.log(this.allcomments[i]);
             for (var j = 0; j < this.allcomments[i].children.length; ++j) {
               //console.log(this.allcomments[i].children[j]._id.$oid);
-              this.cid_comment_map.set(
-                this.allcomments[i].children[j]._id.$oid,
-                this.allcomments[i].children[j]
-              );
+              this.cid_comment_map.set(this.allcomments[i].children[j]._id.$oid, this.allcomments[i].children[j]);
             }
           }
 

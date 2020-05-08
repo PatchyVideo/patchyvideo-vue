@@ -128,33 +128,19 @@
 }
 </i18n>
 
-
 <template>
   <div class="listDetail">
     <topnavbar />
 
     <!-- EditTags 组件-->
-    <EditTags
-      ref="editTag"
-      :msg="temporaryValForVLP"
-      :visible.sync="showTagPanel"
-      v-if="showTagPanel"
-    ></EditTags>
+    <EditTags ref="editTag" :msg="temporaryValForVLP" :visible.sync="showTagPanel" v-if="showTagPanel"></EditTags>
 
     <!-- 编辑视频列表时的对话框 -->
-    <el-dialog
-      :title="$t('edit_list_info_dialog.title')"
-      :visible.sync="openListEdit"
-      width="40%"
-      :close-on-click-modal="false"
-    >
+    <el-dialog :title="$t('edit_list_info_dialog.title')" :visible.sync="openListEdit" width="40%" :close-on-click-modal="false">
       <el-form ref="list" :model="playlist_metadata" label-width="auto" :rules="rules">
         <!-- 标题 -->
         <el-form-item prop="title">
-          <el-input
-            v-model="playlist_metadata.title"
-            :placeholder="$t('edit_list_info_dialog.list_title_tip')"
-          ></el-input>
+          <el-input v-model="playlist_metadata.title" :placeholder="$t('edit_list_info_dialog.list_title_tip')"></el-input>
         </el-form-item>
         <!-- 简介 -->
         <el-form-item prop="desc">
@@ -166,34 +152,28 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-checkbox
-            v-model="playlist_metadata.private"
-          >{{$t('edit_list_info_dialog.set_private_list')}}</el-checkbox>
+          <el-checkbox v-model="playlist_metadata.private">{{ $t("edit_list_info_dialog.set_private_list") }}</el-checkbox>
         </el-form-item>
         <el-form-item class="createList">
-          <el-button
-            type="primary"
-            @click="onSubmit"
-            style="width:80%"
-            :loading="loading"
-          >{{$t('edit_list_info_dialog.btn_ok')}}</el-button>
-          <el-button
-            @click="openListEdit = false"
-            style="width:80%;margin-top:10px;margin-left:0px"
-          >{{$t('edit_list_info_dialog.btn_cancel')}}</el-button>
+          <el-button type="primary" @click="onSubmit" style="width:80%" :loading="loading">{{ $t("edit_list_info_dialog.btn_ok") }}</el-button>
+          <el-button @click="openListEdit = false" style="width:80%;margin-top:10px;margin-left:0px">{{ $t("edit_list_info_dialog.btn_cancel") }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
 
     <!-- 删除列表时的确认框 -->
     <el-dialog :title="$t('delete_dialog.title')" :visible.sync="dialogVisible" width="30%">
-      <span>{{$t('delete_dialog.content')}}</span>
+      <span>{{ $t("delete_dialog.content") }}</span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{$t('delete_dialog.btn_cancel')}}</el-button>
+        <el-button @click="dialogVisible = false">{{ $t("delete_dialog.btn_cancel") }}</el-button>
         <el-button
           type="primary"
-          @click="dialogVisible = false; deleteVideoList();"
-        >{{$t('delete_dialog.btn_ok')}}</el-button>
+          @click="
+            dialogVisible = false;
+            deleteVideoList();
+          "
+          >{{ $t("delete_dialog.btn_ok") }}</el-button
+        >
       </span>
     </el-dialog>
 
@@ -211,50 +191,25 @@
           </div>
           <!-- 打开 Tag 编辑页面 -->
           <div v-if="editable" class="edit_box">
-            <el-button type="success" @click="addVideo">{{$t('btn_group.add_video')}}</el-button>
-            <el-button type="success" @click="addFromList">{{$t('btn_group.import_from_other')}}</el-button>
+            <el-button type="success" @click="addVideo">{{ $t("btn_group.add_video") }}</el-button>
+            <el-button type="success" @click="addFromList">{{ $t("btn_group.import_from_other") }}</el-button>
             <el-popover style="margin: 0px 10px;" width="100%" trigger="click">
-              <ListFolderView
-                ref="listFolder"
-                :msg="temporaryValForVLP"
-                :visible.sync="showListFolder"
-                v-if="isLogin"
-              ></ListFolderView>
-              <el-button
-                type="primary"
-                @click="openListFolder"
-                class="EditTagsButton"
-                slot="reference"
-              >{{$t('btn_group.add_favorite')}}</el-button>
+              <ListFolderView ref="listFolder" :msg="temporaryValForVLP" :visible.sync="showListFolder" v-if="isLogin"></ListFolderView>
+              <el-button type="primary" @click="openListFolder" class="EditTagsButton" slot="reference">{{ $t("btn_group.add_favorite") }}</el-button>
             </el-popover>
 
-            <el-button type="info" @click="openListEdit = true">{{$t('btn_group.edit_list_info')}}</el-button>
+            <el-button type="info" @click="openListEdit = true">{{ $t("btn_group.edit_list_info") }}</el-button>
 
-            <el-button
-              type="primary"
-              @click="openEditTags"
-              class="EditTagsButton"
-              :disabled="showTagPanel"
-            >{{$t('btn_group.edit_common_tags')}}</el-button>
+            <el-button type="primary" @click="openEditTags" class="EditTagsButton" :disabled="showTagPanel">{{ $t("btn_group.edit_common_tags") }}</el-button>
 
-            <el-button type="warning" @click="inverse()">{{$t('btn_group.reverse_list')}}</el-button>
-            <el-button type="danger" @click="dialogVisible = true">{{$t('btn_group.delete')}}</el-button>
+            <el-button type="warning" @click="inverse()">{{ $t("btn_group.reverse_list") }}</el-button>
+            <el-button type="danger" @click="dialogVisible = true">{{ $t("btn_group.delete") }}</el-button>
           </div>
           <!-- 没有编辑权限的时候只提供加入收藏功能 -->
           <div v-else>
             <el-popover v-if="isLogin" style="margin: 0px 10px;" width="100%" trigger="click">
-              <ListFolderView
-                ref="listFolder"
-                :msg="temporaryValForVLP"
-                :visible.sync="showListFolder"
-                v-if="isLogin"
-              ></ListFolderView>
-              <el-button
-                type="primary"
-                @click="openListFolder"
-                class="EditTagsButton"
-                slot="reference"
-              >{{$t('btn_group.add_favorite')}}</el-button>
+              <ListFolderView ref="listFolder" :msg="temporaryValForVLP" :visible.sync="showListFolder" v-if="isLogin"></ListFolderView>
+              <el-button type="primary" @click="openListFolder" class="EditTagsButton" slot="reference">{{ $t("btn_group.add_favorite") }}</el-button>
             </el-popover>
           </div>
           <!-- 评分区 -->
@@ -280,13 +235,7 @@
 
               <img class="re_video_img" :src="'/images/covers/' + item.item.cover_image" />
               <div class="re_video_desc">
-                <el-tooltip
-                  v-if="editable"
-                  class="item"
-                  effect="dark"
-                  :content="$t('btn_group.add_video')"
-                  placement="top"
-                >
+                <el-tooltip v-if="editable" class="item" effect="dark" :content="$t('btn_group.add_video')" placement="top">
                   <router-link
                     :to="{
                       path: './postvideo',
@@ -299,32 +248,16 @@
                 </el-tooltip>
 
                 <h3>
-                  <router-link
-                    target="_blank"
-                    :to="{ path: '/video', query: { id: item._id.$oid } }"
-                    tag="a"
-                  >{{ item.item.title }}</router-link>
+                  <router-link target="_blank" :to="{ path: '/video', query: { id: item._id.$oid } }" tag="a">{{ item.item.title }}</router-link>
                 </h3>
-                <h4
-                  v-if="item.item.part_name"
-                >P{{item.item.url.slice(item.item.url.indexOf("=") + 1, item.item.url.length)}}:{{ item.item.part_name }}</h4>
+                <h4 v-if="item.item.part_name">P{{ item.item.url.slice(item.item.url.indexOf("=") + 1, item.item.url.length) }}:{{ item.item.part_name }}</h4>
                 <p>{{ item.item.desc }}</p>
                 <div>
-                  <img
-                    :src="require('../static/img/' + item.item.site + '.png')"
-                    width="16px"
-                    style="margin-right:2px"
-                  />
+                  <img :src="require('../static/img/' + item.item.site + '.png')" width="16px" style="margin-right:2px" />
                   <a :href="item.item.url">
-                    {{
-                    item.item.url
-                    }}
+                    {{ item.item.url }}
                   </a>
-                  <i
-                    @click="copyVideoLink(item.item.url)"
-                    class="fa fa-copy fa-lg"
-                    style="margin-left:2px"
-                  ></i>
+                  <i @click="copyVideoLink(item.item.url)" class="fa fa-copy fa-lg" style="margin-left:2px"></i>
                 </div>
               </div>
               <div v-if="editable" class="item_end">
@@ -443,10 +376,7 @@ export default {
   },
   mounted() {
     // 查看是否登录
-    if (
-      JSON.stringify(this.$store.state.username) != "null" &&
-      this.$store.state.username != ""
-    ) {
+    if (JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "") {
       this.isLogin = true;
     }
     this.getVideoList(this.page, this.count);
@@ -522,10 +452,8 @@ export default {
               pid: this.videolistPid
             }
           }).then(result => {
-            this.playlist_metadata.title =
-              result.data.data.playlist.title.english;
-            this.playlist_metadata.desc =
-              result.data.data.playlist.desc.english;
+            this.playlist_metadata.title = result.data.data.playlist.title.english;
+            this.playlist_metadata.desc = result.data.data.playlist.desc.english;
             this.playlist_metadata.private = result.data.data.playlist.private;
           });
 
@@ -544,13 +472,9 @@ export default {
     },
     // 复制视频连接
     copyVideoLink: function(url) {
-      this.$alert(
-        "视频链接复制" + (copyToClipboardText(url) ? "成功！" : "失败！"),
-        "分享链接",
-        {
-          confirmButtonText: "确定"
-        }
-      );
+      this.$alert("视频链接复制" + (copyToClipboardText(url) ? "成功！" : "失败！"), "分享链接", {
+        confirmButtonText: "确定"
+      });
     },
     // 添加视频
     addVideo() {
@@ -735,8 +659,7 @@ export default {
           // top: -20px;
           &:hover {
             color: white;
-            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff,
-              0 0 40px #228dff;
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff, 0 0 40px #228dff;
           }
           /deep/ .move-down {
             font-size: 40px;
@@ -756,8 +679,7 @@ export default {
 
           &:hover {
             color: white;
-            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff,
-              0 0 40px #228dff;
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff, 0 0 40px #228dff;
           }
 
           // position: absolute;
@@ -781,8 +703,7 @@ export default {
       &:hover {
         transition: all 0.4s ease;
         color: white;
-        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff,
-          0 0 40px #228dff;
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff, 0 0 40px #228dff;
       }
     }
   }
@@ -794,8 +715,7 @@ export default {
     &:hover {
       transition: all 0.4s ease;
       color: white;
-      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff,
-        0 0 40px #228dff;
+      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #228dff, 0 0 40px #228dff;
     }
   }
 }

@@ -12,19 +12,19 @@
 </i18n>
 <template>
   <div v-loading="loading">
-    <h1>{{$t('log_view')}}</h1>
+    <h1>{{ $t("log_view") }}</h1>
 
     <!-- 表单 -->
     <div class="log-form">
       <!-- 日志类型 -->
-      <span>{{$t('log_type')}}</span>
+      <span>{{ $t("log_type") }}</span>
       <el-select v-model="log.form.type" placeholder="请选择日志类型">
         <el-option label="原始日志" value="1"></el-option>
         <el-option label="整合后的日志" value="2"></el-option>
       </el-select>
 
       <!-- 时间范围 -->
-      <span>{{$t('log_time_range')}}</span>
+      <span>{{ $t("log_time_range") }}</span>
       <el-date-picker
         v-model="log.form.timeRange"
         type="datetimerange"
@@ -36,12 +36,7 @@
 
       <!-- 时间顺序 -->
       <el-select v-model="log.order" class="select">
-        <el-option
-          v-for="item in log.form.options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
+        <el-option v-for="item in log.form.options" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
       <!-- 操作名 -->
       <el-input class="opts" placeholder="操作名(可选)" v-model="log.form.op" clearable></el-input>
@@ -53,18 +48,15 @@
       <!-- level查看 -->
       <div class="tag-box">
         <span>level：</span>
-        <el-tag
-          @click="(e) => onLevelsChange()"
-          style="margin: 0 5px;cursor: pointer;"
-          :type="log.form.visibleLevels.includes('') ? '' : 'info'"
-        >全部</el-tag>
+        <el-tag @click="e => onLevelsChange()" style="margin: 0 5px;cursor: pointer;" :type="log.form.visibleLevels.includes('') ? '' : 'info'">全部</el-tag>
         <el-tag
           v-for="item in log.form.allLevels"
           :key="item"
           style="margin: 0 5px;cursor: pointer;"
-          @click="(e) => onLevelsChange(item)"
+          @click="e => onLevelsChange(item)"
           :type="log.form.visibleLevels.includes(item) ? '' : 'info'"
-        >{{item}}</el-tag>
+          >{{ item }}</el-tag
+        >
       </div>
     </div>
 
@@ -109,10 +101,7 @@
           <div v-if="props.row.user" class="detailItems">
             <span>
               <strong>userID:</strong>
-              <router-link
-                :to="'/users/' + props.row.user.$oid"
-                target="_blank"
-              >{{ props.row.user.$oid }}</router-link>
+              <router-link :to="'/users/' + props.row.user.$oid" target="_blank">{{ props.row.user.$oid }}</router-link>
             </span>
           </div>
           <!-- obj属性，显示为json数据 -->
@@ -120,14 +109,14 @@
             <p>
               <strong>obj:</strong>
             </p>
-            <pre class="objCode">{{props.row.obj}}</pre>
+            <pre class="objCode">{{ props.row.obj }}</pre>
           </div>
           <!-- subevents属性，显示为json数据 -->
-          <div v-if="props.row.subevents?props.row.subevents.length:0" class="detailItems">
+          <div v-if="props.row.subevents ? props.row.subevents.length : 0" class="detailItems">
             <p>
               <strong>subevents:</strong>
             </p>
-            <pre class="objCode">{{props.row.subevents}}</pre>
+            <pre class="objCode">{{ props.row.subevents }}</pre>
           </div>
         </template>
       </el-table-column>
@@ -136,15 +125,15 @@
       <!-- Level -->
       <el-table-column label="level" width="100">
         <template slot-scope="scope">
-          <span v-bind:class="scope.row.level">{{scope.row.level}}</span>
+          <span v-bind:class="scope.row.level">{{ scope.row.level }}</span>
         </template>
       </el-table-column>
       <!-- subevents，由于版面关系只渲染“有”，并用黄色标记 -->
       <el-table-column label="subevents" width="120">
         <template slot-scope="scope">
-          <span
-            v-bind:class="{WARN:scope.row.subevents?scope.row.subevents.length:0}"
-          >{{scope.row.subevents?scope.row.subevents.length:0?"YES":" "}}</span>
+          <span v-bind:class="{ WARN: scope.row.subevents ? scope.row.subevents.length : 0 }">{{
+            scope.row.subevents ? scope.row.subevents.length : 0 ? "YES" : " "
+          }}</span>
         </template>
       </el-table-column>
       <!-- op -->
@@ -152,7 +141,7 @@
       <!-- obj -->
       <el-table-column label="obj">
         <template slot-scope="scope">
-          <span v-for="(val,key,index) in scope.row.obj" :key="index">
+          <span v-for="(val, key, index) in scope.row.obj" :key="index">
             <strong>{{ key }}</strong>
             : {{ val }};
           </span>
@@ -161,12 +150,7 @@
     </el-table>
 
     <!-- 分页器 -->
-    <el-pagination
-      background
-      @current-change="handleCurrentChange"
-      layout="prev, pager, next"
-      :page-count="100"
-    ></el-pagination>
+    <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :page-count="100"></el-pagination>
   </div>
 </template>
 
@@ -206,10 +190,7 @@ export default {
   created() {
     // 初始化时间域为打开此页面的前七天到打开页面的时间
     this.log.form.timeRange = [
-      this.dateFormat(
-        "yyyy-MM-dd HH:mm:ss",
-        new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
-      ),
+      this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)),
       this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date())
     ];
     this.getLog();
@@ -228,10 +209,7 @@ export default {
           date_to: this.toUTCTime(this.log.form.timeRange[1]) + " GMT+8",
           order: this.log.order,
           op: this.log.form.op,
-          levels:
-            JSON.stringify(this.log.form.visibleLevels) == '[""]'
-              ? ["SEC", "MSG", "WARN", "ERR"]
-              : this.log.form.visibleLevels
+          levels: JSON.stringify(this.log.form.visibleLevels) == '[""]' ? ["SEC", "MSG", "WARN", "ERR"] : this.log.form.visibleLevels
         }
       })
         .then(ret => {
@@ -260,10 +238,7 @@ export default {
       for (let k in opt) {
         ret = new RegExp("(" + k + ")").exec(fmt);
         if (ret) {
-          fmt = fmt.replace(
-            ret[1],
-            ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, "0")
-          );
+          fmt = fmt.replace(ret[1], ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, "0"));
         }
       }
       return fmt;
