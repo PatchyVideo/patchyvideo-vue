@@ -5,12 +5,19 @@
     <div class="content mt-4">
       <el-row>
         <el-col :span="18">
-          <h2>意见反馈 > <i v-if="pinned" class="comment-bar-item pv-icon-pin"></i>{{ title || "Loading..." }}</h2>
+          <h2>
+            <span v-if="fid">{{ Finfo[fid].title || "神秘板块" }}&nbsp;>&nbsp;</span>
+            <i v-if="pinned" class="comment-bar-item pv-icon-pin"></i>{{ title || "Loading..." }}
+          </h2>
           <div class="t"></div>
           <div v-for="(comment, index) in commentList" :key="index">
             <thread-comment-box
               :comment="comment"
+              :index="comment._id.$oid"
               :commentAuthorsInfo="commentAuthorsInfo"
+              :userId="userInfo.id"
+              :own="userInfo.isAdmin"
+              @position="position"
               @pin2="pin2"
               @edit2="edit2"
               @del2="del2"
@@ -141,7 +148,7 @@
           </div>
         </el-col>
         <el-col :span="6" style="text-align:center;position:fixed;top:90px;max-width:277.5px;margin-left:832.5px">
-          帖子共有{{ commentList ? commentList.length : 0 }}个回复<br />
+          {{ (commentList.length || 0) != 0 ? "帖子共有" + commentList.length + "个回复" : "帖子看起来很冷清呢" }}<br />
           <span v-if="user.username">
             <el-button type="primary" size="small" plain @click="reply2('thread', $route.params.tid, commentList[0])">发表回复</el-button>
             <el-button type="primary" size="small" plain @click="pint2($route.params.tid)">置顶帖子</el-button>
@@ -173,11 +180,20 @@ export default {
   },
   data() {
     return {
+      Finfo: {
+        "5e8fce11beb63ebb98f8b50c": {
+          title: "意见反馈"
+        }
+      },
       title: "",
       pinned: false,
       processing: false,
       commentList: [],
       commentAuthorsInfo: {},
+      userInfo: {
+        id: "",
+        isAdmin: false
+      },
       replyT: {
         visible: false,
         conform: "",
@@ -201,6 +217,9 @@ export default {
     };
   },
   computed: {
+    fid() {
+      return this.$route.params.fid;
+    },
     user() {
       return {
         username: this.$store.state.username,
@@ -209,9 +228,27 @@ export default {
     }
   },
   mounted() {
+    this.fetchUserData();
     this.fetchData();
   },
   methods: {
+    fetchUserData() {
+      this.axios({
+        method: "post",
+        url: "/be/user/myprofile.do",
+        data: {},
+        withCredentials: true
+      })
+        .then(result => {
+          if (result.data.status == "SUCCEED") {
+            this.userInfo = {
+              id: result.data.data._id.$oid,
+              isAdmin: result.data.data.access_control.status == "admin"
+            };
+          }
+        })
+        .catch(e => {});
+    },
     fetchData() {
       this.axios({
         method: "post",
@@ -220,6 +257,7 @@ export default {
       })
         .then(result => {
           if (result.data.status == "SUCCEED") {
+            if (result.data.data.comments == []) return;
             this.commentList = [];
             this.commentAuthorsInfo = {};
             this.title = result.data.data.title;
@@ -330,6 +368,13 @@ export default {
           // this.$router.push({ path: "/404" });
         });
     },
+    position(el) {
+      const rect = el.getBoundingClientRect();
+      const top = window.pageYOffset + rect.top - 10;
+      setTimeout(() => {
+        window.scrollTo({ behavior: "smooth", top });
+      }, 200);
+    },
     time(t) {
       function i2(i) {
         return (Array(2).join(0) + i).slice(-2);
@@ -356,7 +401,7 @@ export default {
         .then(result => {
           if (result.data.status == "SUCCEED") {
             this.$message({
-              type: "info",
+              type: "success",
               message: (pinned ? "取消" : "") + "置顶成功！"
             });
             this.fetchData();
@@ -374,7 +419,7 @@ export default {
     pint2(id) {
       this.axios({
         method: "post",
-        url: "/be/comments/pin.do",
+        url: "/be/forums/pin_thread.do",
         data: {
           forum_tid: id,
           pinned: !this.pinned
@@ -383,7 +428,7 @@ export default {
         .then(result => {
           if (result.data.status == "SUCCEED") {
             this.$message({
-              type: "info",
+              type: "success",
               message: (this.pinned ? "取消" : "") + "置顶成功！"
             });
             this.fetchData();
@@ -438,7 +483,7 @@ export default {
         .then(result => {
           if (result.data.status == "SUCCEED") {
             this.$message({
-              type: "info",
+              type: "success",
               message: "提交成功！"
             });
             this.fetchData();
@@ -448,7 +493,7 @@ export default {
             throw result.data.status;
           }
         })
-        .catch(error => {
+        .catch(e => {
           this.$message({
             type: "error",
             message: "提交失败：" + e.message
@@ -472,7 +517,7 @@ export default {
             .then(result => {
               if (result.data.status == "SUCCEED") {
                 this.$message({
-                  type: "info",
+                  type: "success",
                   message: "删除成功！"
                 });
                 this.fetchData();
@@ -511,11 +556,11 @@ export default {
             .then(result => {
               if (result.data.status == "SUCCEED") {
                 this.$message({
-                  type: "info",
+                  type: "success",
                   message: "删除成功！"
                 });
                 this.$router.push({
-                  path: "/forum/" + this.$route.params.fid
+                  path: "/forum/" + (this.fid || "")
                 });
               } else {
                 throw result.data.data;
@@ -584,7 +629,7 @@ export default {
               .then(result => {
                 if (result.data.status == "SUCCEED") {
                   this.$message({
-                    type: "info",
+                    type: "success",
                     message: "发表成功！"
                   });
                   this.fetchData();
@@ -611,7 +656,7 @@ export default {
               .then(result => {
                 if (result.data.status == "SUCCEED") {
                   this.$message({
-                    type: "info",
+                    type: "success",
                     message: "发表成功！"
                   });
                   this.fetchData();
@@ -627,7 +672,7 @@ export default {
             break;
           }
         }
-      } catch (error) {
+      } catch (e) {
         this.$message({
           type: "error",
           message: "发表失败：" + e.message

@@ -92,6 +92,7 @@ function clearURL(url) {
 function copyToClipboard(obj) {
   const el = document.createElement("textarea");
   el.value = obj.text();
+  el.setAttribute("readonly", "readonly");
   document.body.appendChild(el);
   el.select();
   el.setSelectionRange(0, 99999);
@@ -103,6 +104,7 @@ function copyToClipboard(obj) {
 function copyToClipboardText(txt) {
   const el = document.createElement("textarea");
   el.value = txt;
+  el.setAttribute("readonly", "readonly");
   document.body.appendChild(el);
   el.select();
   el.setSelectionRange(0, 99999);
