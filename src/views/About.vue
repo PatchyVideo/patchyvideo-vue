@@ -12,7 +12,6 @@
 }
 </i18n>
 
-
 <template>
   <div></div>
 </template>
@@ -30,5 +29,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

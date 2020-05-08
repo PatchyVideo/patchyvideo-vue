@@ -14,10 +14,10 @@
     <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
       <span>
         你确定要修改参数
-        <strong>{{targetPara}}</strong> 为：
+        <strong>{{ targetPara }}</strong> 为：
       </span>
       <br />
-      <code>{{data[targetPara]}}</code>
+      <code>{{ data[targetPara] }}</code>
       <br />
       <span>吗？</span>
       <span slot="footer" class="dialog-footer">
@@ -27,22 +27,24 @@
     </el-dialog>
 
     <h1>
-      {{$t('para_settings')}}
+      {{ $t("para_settings") }}
       <a class="el-icon-refresh" @click="getPara()"></a>
     </h1>
 
-    <el-switch
-      v-model="isEdit"
-      active-text="编辑"
-      inactive-text="查看"
-      active-color="#13ce66"
-      inactive-color="#ff4949"
-    ></el-switch>
+    <el-switch v-model="isEdit" active-text="编辑" inactive-text="查看" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
     <div v-loading="loading">
       <el-form ref="form" :model="data" label-width="60px" :disabled="!isEdit">
         <el-form-item :label="index" v-for="(item, index) in data" :key="index">
           <el-input style="width:600px" :placeholder="item" v-model="data[index]"></el-input>
-          <el-button type="primary" v-if="isEdit" @click="dialogVisible=true;targetPara=index">更新</el-button>
+          <el-button
+            type="primary"
+            v-if="isEdit"
+            @click="
+              dialogVisible = true;
+              targetPara = index;
+            "
+            >更新</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -110,5 +112,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

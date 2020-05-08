@@ -29,12 +29,7 @@
           <i slot="suffix" class="el-input__icon el-icon-loading" style="color:#E6A23C;"></i>
         </template>
         <template v-else>
-          <i
-            slot="suffix"
-            class="el-input__icon el-icon-success"
-            style="color:#67C23A;"
-            v-if="nouse"
-          ></i>
+          <i slot="suffix" class="el-input__icon el-icon-success" style="color:#67C23A;" v-if="nouse"></i>
           <i slot="suffix" class="el-input__icon el-icon-error" style="color:#F56C6C;" v-else></i>
         </template>
       </template>
@@ -50,7 +45,7 @@
               General: item.cat == 0,
               Meta: item.cat == 4,
               Soundtrack: item.cat == 6
-              }"
+            }"
             v-html="item.tag || ConvertLangRes(item.langs)"
           ></div>
           <div class="addr">{{ item.cnt }}</div>
@@ -186,10 +181,7 @@ export default {
 
         // 合成语言
         Lang = `${mainLang.replace(/\_/g, " ")}`;
-        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(
-          /\_/g,
-          " "
-        )}</span>`;
+        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/\_/g, " ")}</span>`;
       } else {
         Lang = mainLang;
       }

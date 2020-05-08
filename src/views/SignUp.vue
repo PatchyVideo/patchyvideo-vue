@@ -83,7 +83,6 @@
 }
 </i18n>
 
-
 <template>
   <div class="signupPic">
     <!-- 注册框正文 -->
@@ -93,19 +92,13 @@
         <router-link to="home">PatchyVideo</router-link>
       </h1>
       <div class="top in">
-        <router-link to="/login">{{$t('login')}}</router-link>
+        <router-link to="/login">{{ $t("login") }}</router-link>
         <b>·</b>
-        <router-link to="/signup">{{$t('signup')}}</router-link>
+        <router-link to="/signup">{{ $t("signup") }}</router-link>
       </div>
 
       <!-- 输入账号和密码的框 -->
-      <el-form
-        ref="signupFormRef"
-        :model="signupFormRef"
-        class="middle in central-form"
-        status-icon
-        :rules="rules"
-      >
+      <el-form ref="signupFormRef" :model="signupFormRef" class="middle in central-form" status-icon :rules="rules">
         <el-form-item prop="signup_username" class="signupInput">
           <el-input
             id="username"
@@ -147,16 +140,12 @@
             prefix-icon="el-icon-message"
           ></el-input>
         </el-form-item>
-        <p
-          id="status"
-          style="text-align: center;"
-          v-bind:class="{alert:status!=$t('ready')}"
-        >{{ status }}</p>
+        <p id="status" style="text-align: center;" v-bind:class="{ alert: status != $t('ready') }">{{ status }}</p>
       </el-form>
 
       <!-- 注册按钮 -->
       <div class="bottom in">
-        <div class="login in" @click="signup">{{$t('signup')}}</div>
+        <div class="login in" @click="signup">{{ $t("signup") }}</div>
       </div>
     </div>
   </div>

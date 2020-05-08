@@ -1,4 +1,3 @@
-
 <i18n>
 {
     "CHS": {
@@ -41,47 +40,37 @@
 }
 </i18n>
 
-
 <template>
   <div style="position:relative">
     <!-- 没有评分就提交（分数 < 1）时  弹出框 -->
 
     <el-dialog :title="$t('prompt')" :visible.sync="dialogVisible" width="30%">
-      <span v-if="!promptContent">{{$t("prompt_content")}}</span>
-      <span v-if="promptContent">{{$t("success_prompt",{rating:data.user_rating})}}</span>
+      <span v-if="!promptContent">{{ $t("prompt_content") }}</span>
+      <span v-if="promptContent">{{ $t("success_prompt", { rating: data.user_rating }) }}</span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{$t("OK")}}</el-button>
+        <el-button @click="dialogVisible = false">{{ $t("OK") }}</el-button>
       </span>
     </el-dialog>
 
     <!-- 主题 -->
-    <span>{{$t("score")}}</span>
-    <div
-      class="star"
-      v-for="index in [1,2,3,4,5]"
-      :key="index"
-      @click="enableListener = !enableListener"
-    >
-      <img :src="(index<=lastStar.index)?starIcon[2]:starIcon[0]" />
-      <div class="left" @mouseover="starHover(index,0)"></div>
-      <div class="right" @mouseover="starHover(index,1)"></div>
+    <span>{{ $t("score") }}</span>
+    <div class="star" v-for="index in [1, 2, 3, 4, 5]" :key="index" @click="enableListener = !enableListener">
+      <img :src="index <= lastStar.index ? starIcon[2] : starIcon[0]" />
+      <div class="left" @mouseover="starHover(index, 0)"></div>
+      <div class="right" @mouseover="starHover(index, 1)"></div>
     </div>
     <span v-if="isLogin()">
-      <el-link type="primary" @click="submitScore">{{$t("submit")}}</el-link>
+      <el-link type="primary" @click="submitScore">{{ $t("submit") }}</el-link>
     </span>
     <span v-if="!isLogin()">
-      <router-link to="/login" @click.native="login">{{$t("login")}}</router-link>
+      <router-link to="/login" @click.native="login">{{ $t("login") }}</router-link>
     </span>
-    <span
-      class="aveScore"
-      :title="$t('show_my_score',{myScore:data.user_rating,aveScore:(data.total_rating/data.total_user||0).toFixed(1)})"
-    >
-      {{data.user_rating}} / {{(data.total_rating/data.total_user||0).toFixed(1)}}
-      <span>{{data.total_user||0}} {{$t("evaluation")}}</span>
+    <span class="aveScore" :title="$t('show_my_score', { myScore: data.user_rating, aveScore: (data.total_rating / data.total_user || 0).toFixed(1) })">
+      {{ data.user_rating }} / {{ (data.total_rating / data.total_user || 0).toFixed(1) }}
+      <span>{{ data.total_user || 0 }} {{ $t("evaluation") }}</span>
     </span>
   </div>
 </template>
-
 
 <script>
 import star_hollow from "../static/img/star_hollow.png";
@@ -258,10 +247,7 @@ export default {
     },
     // 判断是否登录的标志
     isLogin() {
-      if (
-        JSON.stringify(this.$store.state.username) != "null" &&
-        this.$store.state.username != ""
-      ) {
+      if (JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "") {
         return true;
       } else {
         return false;

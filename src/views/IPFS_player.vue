@@ -56,17 +56,17 @@
     <topnavbar />
     <div class="w main-page-background-img">
       <div class="content">
-        <h1>{{$t('content.title')}}</h1>
+        <h1>{{ $t("content.title") }}</h1>
         <h2>TODO:</h2>
         <ul>
-          <li>"/ipfs/av....." {{$t('content.TODO1')}}</li>
-          <li>{{$t('content.TODO2')}}</li>
-          <li>{{$t('content.TODO3')}}</li>
+          <li>"/ipfs/av....." {{ $t("content.TODO1") }}</li>
+          <li>{{ $t("content.TODO2") }}</li>
+          <li>{{ $t("content.TODO3") }}</li>
           <li>—— liuAbin</li>
         </ul>
 
-        <div id="nodes">{{$t('content.init_tip')}}</div>
-        <video id="player" controls>{{$t('content.err_tip')}}</video>
+        <div id="nodes">{{ $t("content.init_tip") }}</div>
+        <video id="player" controls>{{ $t("content.err_tip") }}</video>
       </div>
     </div>
     <Footer></Footer>
@@ -109,16 +109,11 @@ export default {
             throw err;
           }
           // console.log(peerInfos.length+" ipfs node(s) connect.");
-          this.nodeShow.innerHTML =
-            peerInfos.length + this.$t("content.connect_success_tip");
+          this.nodeShow.innerHTML = peerInfos.length + this.$t("content.connect_success_tip");
         });
       }, Interval);
       const player = document.getElementById("player");
-      var vs = this.genIpfsVideo(
-        ipfs,
-        "QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh",
-        player
-      );
+      var vs = this.genIpfsVideo(ipfs, "QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh", player);
     });
   },
   methods: {

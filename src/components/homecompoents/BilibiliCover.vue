@@ -14,20 +14,8 @@
     "
     @mousemove="onMouseMove"
   >
-    <div
-      v-if="hover && loadStatus && !error"
-      style="width:200px;height:125px;overflow:hidden"
-    >
-      <div
-        class="progress-bar"
-        :style="
-          'height:' +
-            prh +
-            'px;border-width: ' +
-            Math.floor((prh - 2) / 2) +
-            'px 8px;'
-        "
-      >
+    <div v-if="hover && loadStatus && !error" style="width:200px;height:125px;overflow:hidden">
+      <div class="progress-bar" :style="'height:' + prh + 'px;border-width: ' + Math.floor((prh - 2) / 2) + 'px 8px;'">
         <span ref="pspan" :style="'width:' + progress + '%'"></span>
       </div>
       <div
@@ -53,20 +41,9 @@
     <div
       v-else-if="hover && !loadStatus"
       v-loading="true"
-      :style="
-        'width:200px;height:125px;background:url(/images/covers/' +
-          coverImage +
-          ') center center no-repeat;background-size:100% 100%'
-      "
+      :style="'width:200px;height:125px;background:url(/images/covers/' + coverImage + ') center center no-repeat;background-size:100% 100%'"
     ></div>
-    <div
-      v-else
-      :style="
-        'width:200px;height:125px;background:url(/images/covers/' +
-          coverImage +
-          ') center center no-repeat;background-size:100% 100%'
-      "
-    ></div>
+    <div v-else :style="'width:200px;height:125px;background:url(/images/covers/' + coverImage + ') center center no-repeat;background-size:100% 100%'"></div>
   </div>
 </template>
 

@@ -35,16 +35,16 @@
     <div class="bigbox standard" v-loading="loading">
       <el-container>
         <el-aside>
-          <p v-if="this.videoCount==0" class="nulldata-left">{{$t('no_data')}}</p>
+          <p v-if="this.videoCount == 0" class="nulldata-left">{{ $t("no_data") }}</p>
           <canvas id="myChart" width="800" height="800"></canvas>
         </el-aside>
         <el-main>
-          <p v-if="this.videoCount==0" class="nulldata-right">{{$t('no_data')}}</p>
-          <div class="minibox" v-if="this.videoCount!=0">
+          <p v-if="this.videoCount == 0" class="nulldata-right">{{ $t("no_data") }}</p>
+          <div class="minibox" v-if="this.videoCount != 0">
             <div class="minibox_top">
-              <h3>{{$t('video_list')}}</h3>
-              <span>{{$t('video_count', {videoCount: videoCount})}}</span>
-              <i @click="changeLine" :class="{'el-icon-s-grid':flag,'el-icon-menu':!flag}"></i>
+              <h3>{{ $t("video_list") }}</h3>
+              <span>{{ $t("video_count", { videoCount: videoCount }) }}</span>
+              <i @click="changeLine" :class="{ 'el-icon-s-grid': flag, 'el-icon-menu': !flag }"></i>
             </div>
 
             <div class="video_lineUp" v-if="flag">
@@ -56,9 +56,9 @@
                 v-for="i in videoData"
                 :key="i._id.$oid"
               >
-                <img :src="'/images/covers/'+i.item.cover_image" alt />
+                <img :src="'/images/covers/' + i.item.cover_image" alt />
                 <h4>
-                  <router-link :to="{ path: '/video', query: { id: i._id.$oid } }">{{i.item.title}}</router-link>
+                  <router-link :to="{ path: '/video', query: { id: i._id.$oid } }">{{ i.item.title }}</router-link>
                 </h4>
               </router-link>
             </div>
@@ -71,15 +71,13 @@
                 v-for="i in videoData"
                 :key="i._id.$oid"
               >
-                <img :src="'/images/covers/'+i.item.cover_image" alt />
+                <img :src="'/images/covers/' + i.item.cover_image" alt />
                 <div class="list-item_content">
                   <h4>
-                    <router-link
-                      :to="{ path: '/video', query: { id: i._id.$oid } }"
-                    >{{i.item.title}}</router-link>
+                    <router-link :to="{ path: '/video', query: { id: i._id.$oid } }">{{ i.item.title }}</router-link>
                   </h4>
-                  <p>{{i.item.desc}}</p>
-                  <a :href="i.item.url">{{i.item.url}}</a>
+                  <p>{{ i.item.desc }}</p>
+                  <a :href="i.item.url">{{ i.item.url }}</a>
                 </div>
               </router-link>
             </div>
@@ -95,7 +93,7 @@
             :total="videoCount"
             :page-size="20"
             :page-sizes="[10, 20, 30, 40]"
-            v-if="this.videoCount!=0"
+            v-if="this.videoCount != 0"
           ></el-pagination>
         </el-main>
       </el-container>
@@ -317,10 +315,7 @@ export default {
         for (let i in this.CopyrightObj) {
           // 东方占比太大导致图形过度密集，可去除
           if (this.CopyrightObj[i].name == "东方") {
-            this.CopyrightObj.splice(
-              this.CopyrightObj.indexOf(this.CopyrightObj[i]),
-              1
-            );
+            this.CopyrightObj.splice(this.CopyrightObj.indexOf(this.CopyrightObj[i]), 1);
           }
         }
       }
@@ -398,7 +393,7 @@ export default {
 };
 </script>
 
-<style  lang="less" scoped>
+<style lang="less" scoped>
 @media screen and(max-width: 1810px) {
   .video_lineUp {
     display: flex;

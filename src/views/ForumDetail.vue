@@ -6,35 +6,20 @@
       <div>
         <el-alert type="info">
           <div style="color:black;font-size:1.2em">
-            <h3>意见反馈</h3>
-            <p>
-              在这里反馈在帕琪站遇到的问题~<br />
-              建议将问题详细描述并尽量附带截图或日志。<br />
-              （截图可以使用 img标签 + 图床，日志请尽量使用 pastebin）
+            <h3>{{ Finfo[fid].title || "神秘板块" }}</h3>
+            <p style="white-space: pre-wrap;">
+              {{ Finfo[fid].desc || "板块还没有简介哦~" }}
             </p>
           </div>
         </el-alert>
       </div>
       <!-- 帖子表 -->
-      <el-table
-        :data="[...threadPinned, ...threadList]"
-        :empty-text="emptyText"
-        style="width: 100%"
-      >
+      <el-table :data="threadList" :empty-text="emptyText" style="width: 100%">
         <el-table-column label="帖子">
           <template slot-scope="thread">
             <div>
-              <router-link
-                :to="
-                  '/forum/5e8fce11beb63ebb98f8b50c/post/' + thread.row._id.$oid
-                "
-                ><h3 class="mb-1">
-                  <i
-                    v-if="thread.row.pinned"
-                    class="comment-bar-item pv-icon-pin"
-                  ></i
-                  >{{ thread.row.title }}
-                </h3></router-link
+              <router-link :to="'/forum/5e8fce11beb63ebb98f8b50c/post/' + thread.row._id.$oid"
+                ><h3 class="mb-1"><i v-if="thread.row.pinned" class="comment-bar-item pv-icon-pin"></i>{{ thread.row.title }}</h3></router-link
               >
               <p>帖子还没有预览哦~</p>
             </div>
@@ -46,18 +31,11 @@
               <router-link
                 :to="'/users/' + thread.row.thread_obj[0].owner.$oid"
                 target="_blank"
-                :title="
-                  threadAuthorsInfo[thread.row.thread_obj[0].owner.$oid].profile
-                    .username
-                "
+                :title="threadAuthorsInfo[thread.row.thread_obj[0].owner.$oid].profile.username"
               >
                 <el-avatar
                   size="small"
-                  :src="
-                    'be/images/userphotos/' +
-                      threadAuthorsInfo[thread.row.thread_obj[0].owner.$oid]
-                        .profile.image
-                  "
+                  :src="'be/images/userphotos/' + threadAuthorsInfo[thread.row.thread_obj[0].owner.$oid].profile.image"
                   class="vertical-align:middle"
                 ></el-avatar>
               </router-link>
@@ -73,15 +51,12 @@
           </template>
         </el-table-column>
       </el-table>
+      <div v-if="threadList.length != threadResult.length" style="text-align:center;color:gray">
+        本页含有{{ threadResult.length - threadList.length }}个隐藏贴
+        <span @click="threadList = threadResult" style="color:#409eff">显示</span>
+      </div>
       <div style="text-align:center;margin-top:4px">
-        <el-button
-          type="primary"
-          size="small"
-          plain
-          style="display:inline-flex;vertical-align:middle;"
-          disabled
-          >暂无功能</el-button
-        >
+        <el-button type="primary" size="small" plain style="display:inline-flex;vertical-align:middle;" disabled>暂无功能</el-button>
         <el-pagination
           background
           layout="jumper, prev, pager, next, sizes"
@@ -92,34 +67,15 @@
           class="page-selector"
           style="display:inline-flex;vertical-align:middle;"
         ></el-pagination>
-        <el-button
-          type="primary"
-          size="small"
-          plain
-          style="display:inline-flex;vertical-align:middle;"
-          @click="post2"
-          >发表新帖</el-button
-        >
+        <el-button type="primary" size="small" plain style="display:inline-flex;vertical-align:middle;" @click="post2">发表新帖</el-button>
       </div>
-      <el-dialog title="意见反馈 > 发表新帖" :visible.sync="postT.visible">
-        <h2 style="display:inline-flex;color: #2c3e50;">
-          意见反馈 >
-        </h2>
-        <el-form
-          :model="postF"
-          @submit.native.prevent
-          style="display:inline-flex"
-        >
-          <el-input
-            v-model="postF.title"
-            style="width:320px"
-            placeholder="在这里填写标题~"
-          ></el-input
+      <el-dialog :title="(Finfo[fid].title || '神秘板块') + ' > 发表新帖'" :visible.sync="postT.visible">
+        <h2 style="display:inline-flex;color: #2c3e50;">{{ Finfo[fid].title || "神秘板块" }} ></h2>
+        <el-form :model="postF" @submit.native.prevent style="display:inline-flex">
+          <el-input v-model="postF.title" style="width:320px" placeholder="在这里填写标题~"></el-input
         ></el-form>
         <div class="t"></div>
-        <div
-          style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;"
-        >
+        <div style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;">
           <div class="left-avatar">
             <el-avatar size="large" :src="user.avatar"></el-avatar>
           </div>
@@ -127,41 +83,29 @@
             <div class="title-div">
               <p class="title">
                 <span v-if="user.username">{{ user.username }}</span
-                ><span v-else>Loading...</span>&nbsp;<span style="color: gray;"
-                  >来说点什么吧</span
-                >
+                ><span v-else>Loading...</span>&nbsp;<span style="color: gray;">来说点什么吧</span>
               </p>
             </div>
             <div class="comment-div" style="padding: 15px;">
               <el-form :model="postF" @submit.native.prevent>
-                <el-input
-                  type="textarea"
-                  v-model="postF.comment"
-                  required
-                ></el-input>
+                <el-input type="textarea" v-model="postF.comment" required></el-input>
               </el-form>
             </div>
           </div>
         </div>
         <div slot="footer" class="dialog-footer">
-          <span style="color:gray">注：建议先预览再发帖，提前发现问题</span
-          >&emsp;
+          <span style="color:gray">注：建议先预览再发帖，提前发现问题</span>&emsp;
           <el-button @click="postF.show = true">预览</el-button>
           <el-button type="primary" @click="post()">发表</el-button>
         </div>
       </el-dialog>
-      <el-dialog
-        v-if="postF.show"
-        title="意见反馈 > 预览帖子"
-        :visible.sync="postF.show"
-      >
+      <el-dialog v-if="postF.show" :title="(Finfo[fid].title || '神秘板块') + ' > 预览帖子'" :visible.sync="postF.show">
         <h2 style="color: #2c3e50;">
-          意见反馈 > {{ postF.title || "Loading..." }}
+          {{ Finfo[fid].title || "神秘板块" }} >
+          {{ postF.title || "Loading..." }}
         </h2>
         <div class="t"></div>
-        <div
-          style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;"
-        >
+        <div style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;">
           <div class="left-avatar">
             <el-avatar size="large" :src="user.avatar"></el-avatar>
           </div>
@@ -169,19 +113,12 @@
             <div class="title-div">
               <p class="title">
                 <span>{{ user.username || "Loading" }}</span
-                >&nbsp;<span style="color: gray;"
-                  ><i class="el-icon-date"></i>&thinsp;{{
-                    time(+new Date())
-                  }}</span
-                >
+                >&nbsp;<span style="color: gray;"><i class="el-icon-date"></i>&thinsp;{{ time(+new Date()) }}</span>
               </p>
             </div>
             <div class="comment-div" style="padding: 15px;">
               <div v-shadow>
-                <thread-comment
-                  :html="parse(postF.comment)"
-                  :size="0.9"
-                ></thread-comment>
+                <thread-comment :html="parse(postF.comment)" :size="0.9"></thread-comment>
               </div>
             </div>
           </div>
@@ -209,9 +146,15 @@ export default {
   },
   data() {
     return {
+      Finfo: {
+        "5e8fce11beb63ebb98f8b50c": {
+          title: "意见反馈",
+          desc: "在这里反馈在帕琪站遇到的问题~\n建议将问题详细描述并尽量附带截图或日志。\n（截图可以使用 img标签 + 图床，日志请尽量使用 pastebin）"
+        }
+      },
       emptyText: "少女祈祷中...",
       threadList: [],
-      threadPinned: [],
+      threadResult: [],
       threadAuthorsInfo: {},
       page: 1,
       pageSize: 20,
@@ -227,13 +170,13 @@ export default {
     };
   },
   computed: {
+    fid() {
+      return this.$route.params.fid;
+    },
     user() {
       return {
         username: this.$store.state.username,
-        avatar:
-          this.$store.state.userAvatar == "default"
-            ? require("../static/img/defaultAvatar.jpg")
-            : "be/images/userphotos/" + this.$store.state.userAvatar
+        avatar: this.$store.state.userAvatar == "default" ? require("../static/img/defaultAvatar.jpg") : "be/images/userphotos/" + this.$store.state.userAvatar
       };
     },
     maxcount() {
@@ -241,10 +184,10 @@ export default {
     }
   },
   watch: {
-    page(newV, oldV) {
+    page() {
       this.fetchData();
     },
-    pageSize(newV, oldV) {
+    pageSize() {
       this.fetchData();
     }
   },
@@ -264,8 +207,16 @@ export default {
       })
         .then(result => {
           if (result.data.status == "SUCCEED") {
-            this.threadPinned = result.data.data.threads_pinned;
-            this.threadList = result.data.data.threads;
+            this.threadList = [];
+            this.threadResult = [];
+            result.data.data.threads_pinned.forEach(value => {
+              if (!value.deleted && !value.hidden) this.threadList.push(value);
+              if (!value.deleted) this.threadResult.push(value);
+            });
+            result.data.data.threads.forEach(value => {
+              if (!value.deleted && !value.hidden) this.threadList.push(value);
+              if (!value.deleted) this.threadResult.push(value);
+            });
             const threadAuthorUIDs = [];
             result.data.data.threads.forEach(data => {
               threadAuthorUIDs.push(data.thread_obj[0].owner.$oid);
@@ -281,7 +232,7 @@ export default {
                 this.$set(this.threadAuthorsInfo, data._id.$oid, data);
               });
             });
-            changeSiteTitle("意见与反馈 - 讨论板");
+            changeSiteTitle((this.Finfo[this.fid].title || "神秘板块") + " - 讨论板");
           }
         })
         .catch(error => {
@@ -305,21 +256,17 @@ export default {
         .then(result => {
           if (result.data.status == "SUCCEED") {
             this.$message({
-              type: "info",
+              type: "success",
               message: "发帖成功！正在跳转~"
             });
             this.$router.push({
-              path:
-                "/forum/" +
-                this.$route.params.fid +
-                "/post/" +
-                result.data.data.thread_id
+              path: "/forum/" + this.$route.params.fid + "/post/" + result.data.data.thread_id
             });
           } else {
             throw result.data.status;
           }
         })
-        .catch(error => {
+        .catch(e => {
           this.$message({
             type: "error",
             message: "发帖失败：" + e.message
@@ -331,21 +278,13 @@ export default {
         return (Array(2).join(0) + i).slice(-2);
       }
       const time = new Date(t);
-      return `${time.getFullYear()}-${i2(time.getMonth() + 1)}-${i2(
-        time.getDate()
-      )} ${i2(time.getHours())}:${i2(time.getMinutes())}:${i2(
-        time.getSeconds()
-      )}`;
+      return `${time.getFullYear()}-${i2(time.getMonth() + 1)}-${i2(time.getDate())} ${i2(time.getHours())}:${i2(time.getMinutes())}:${i2(time.getSeconds())}`;
     },
     parse(c) {
       try {
         return parse(c);
       } catch (e) {
-        return (
-          '<div style="font-family:Consolas">Error: ' +
-          e.message.replace(/ /g, "&nbsp;").replace(/\n/g, "<br />") +
-          "</div>"
-        );
+        return '<div style="font-family:Consolas">Error: ' + e.message.replace(/ /g, "&nbsp;").replace(/\n/g, "<br />") + "</div>";
       }
     }
   }

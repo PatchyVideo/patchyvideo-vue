@@ -17,25 +17,15 @@
 
 <template>
   <div class="tag">
-    <el-tooltip effect="light" :content="tipText.replace(/_/g,' ')" placement="left">
+    <el-tooltip effect="light" :content="tipText.replace(/_/g, ' ')" placement="left">
       <div class="tag-div">
         <!-- 存在标签颜色 -->
-        <div v-if="colorTagList.indexOf(type)!=-1">
-          <p
-            class="tag-text"
-            v-bind:class="type"
-            :ref="tipText"
-            @click="gotoHome(tipText)"
-            @click.middle="gotoHome(tipText, true)"
-          >{{ tipText }}</p>
+        <div v-if="colorTagList.indexOf(type) != -1">
+          <p class="tag-text" v-bind:class="type" :ref="tipText" @click="gotoHome(tipText)" @click.middle="gotoHome(tipText, true)">{{ tipText }}</p>
         </div>
         <!-- 其他情况 -->
         <div v-else>
-          <p
-            class="tag-text"
-            @click="gotoHome(tipText)"
-            @click.middle="gotoHome(tipText, true)"
-          >{{ tipText }}</p>
+          <p class="tag-text" @click="gotoHome(tipText)" @click.middle="gotoHome(tipText, true)">{{ tipText }}</p>
         </div>
       </div>
     </el-tooltip>
@@ -65,15 +55,7 @@ export default {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       // Tag 颜色列表
-      colorTagList: [
-        "Copyright",
-        "Language",
-        "Character",
-        "General",
-        "Meta",
-        "Soundtrack",
-        "Author"
-      ]
+      colorTagList: ["Copyright", "Language", "Character", "General", "Meta", "Soundtrack", "Author"]
     };
   },
   created() {},

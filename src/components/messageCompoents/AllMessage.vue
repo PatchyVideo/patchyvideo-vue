@@ -28,34 +28,23 @@
 }
 </i18n>
 
-
 <template>
   <div class="unreadMsg">
     <div class="unreadMsg-title">{{ $t("allMsg") }}</div>
     <div class="unreadMsg-detail" v-loading="loading">
-      <div v-if="loading||!allMsg.length" style="min-height:400px">{{ $t("noMsg") }}</div>
+      <div v-if="loading || !allMsg.length" style="min-height:400px">{{ $t("noMsg") }}</div>
       <!-- 所有消息列表 -->
       <div v-else>
-        <div
-          v-for="(item, index) in allMsg"
-          :key="index"
-          class="replyDetail"
-          @click="toDetail(item.replied_type, item.replied_obj.$oid)"
-        >
+        <div v-for="(item, index) in allMsg" :key="index" class="replyDetail" @click="toDetail(item.replied_type, item.replied_obj.$oid)">
           <!-- 用户头像 -->
           <div class="avatar">
-            <el-avatar
-              :src="userAvatar(commentUser(item.replied_by.$oid).profile.image)"
-              :size="50"
-            ></el-avatar>
+            <el-avatar :src="userAvatar(commentUser(item.replied_by.$oid).profile.image)" :size="50"></el-avatar>
           </div>
           <!-- 右半部分 -->
           <div class="commentContent">
             <div style="font-size:15px">
               <router-link :to="'/users/' + item.replied_by.$oid" target="_blank">
-                {{
-                commentUser(item.replied_by.$oid).profile.username
-                }}
+                {{ commentUser(item.replied_by.$oid).profile.username }}
               </router-link>
               {{ $t("replyTo") }}
             </div>
@@ -64,9 +53,7 @@
             </div>
 
             <span class="commentDate">
-              {{
-              commentdate(item.time.$date)
-              }}
+              {{ commentdate(item.time.$date) }}
             </span>
           </div>
         </div>

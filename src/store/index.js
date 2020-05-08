@@ -25,9 +25,7 @@ export default new Vuex.Store({
     // 0 为未验证，1 为验证登录，2 为验证未登录
     ifTruelyLogin: 0,
     refreshCount: 0,
-    homeVideoDisplayStatus: localStorage.getItem("homeVideoDisplayStatus")
-      ? Number(localStorage.getItem("homeVideoDisplayStatus"))
-      : 0,
+    homeVideoDisplayStatus: localStorage.getItem("homeVideoDisplayStatus") ? Number(localStorage.getItem("homeVideoDisplayStatus")) : 0
   },
   mutations: {
     changeHomeVDS(state, e) {
@@ -65,8 +63,8 @@ export default new Vuex.Store({
     },
     changeifTruelyLogin(state, e) {
       state.ifTruelyLogin = e;
-    },
+    }
   },
   actions: {},
-  modules: {},
+  modules: {}
 });

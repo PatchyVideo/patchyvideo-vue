@@ -12,7 +12,6 @@
       1.IPFS视频的URL校验有待进一步优化
 -->
 
-
 <i18n>
 {
     "CHS":{
@@ -109,12 +108,7 @@
         </el-form-item>
         <!-- 视频简介 -->
         <el-form-item prop="desc">
-          <el-input
-            type="textarea"
-            :autosize="{ minRows: 6}"
-            :placeholder="$t('introductory_video')"
-            v-model="list.desc"
-          ></el-input>
+          <el-input type="textarea" :autosize="{ minRows: 6 }" :placeholder="$t('introductory_video')" v-model="list.desc"></el-input>
         </el-form-item>
         <!-- 上传视频封面 -->
         <el-form-item ref="videoCover" prop="cover" style="text-align: left;">
@@ -127,44 +121,35 @@
             :file-list="list.cover"
             :data="coverData"
           >
-            <el-button size type="primary" style="margin-right:10px;">{{$t('upload_cover')}}</el-button>
-            <span slot="tip" style="color:red" v-if="noCover">{{$t('upload_no_cover')}}</span>
-            <div slot="tip" class="el-upload__tip">{{$t('upload_limit')}}</div>
+            <el-button size type="primary" style="margin-right:10px;">{{ $t("upload_cover") }}</el-button>
+            <span slot="tip" style="color:red" v-if="noCover">{{ $t("upload_no_cover") }}</span>
+            <div slot="tip" class="el-upload__tip">{{ $t("upload_limit") }}</div>
           </el-upload>
         </el-form-item>
         <!-- 标签编辑，暂时隐藏 -->
         <el-form-item v-if="false">
           <div class="tagsEdit">
-            <h3>{{$t('label')}}</h3>
+            <h3>{{ $t("label") }}</h3>
             <div class="tagBox">
-              <p v-if="tags==''" style="margin-bottom:10px;">{{$t('no_label')}}</p>
-              <el-tag effect="dark" v-else v-for="item in tags" :key="item">{{item}}</el-tag>
+              <p v-if="tags == ''" style="margin-bottom:10px;">{{ $t("no_label") }}</p>
+              <el-tag effect="dark" v-else v-for="item in tags" :key="item">{{ item }}</el-tag>
             </div>
           </div>
         </el-form-item>
         <el-form-item>
           <!-- Wiki链接 -->
-          <a
-            href="https://patchyvideo.wiki/Upload"
-            target="_blank"
-            style="color:#409EFF;float:right;font-size:17px;"
-          >{{$t('HowToPost')}}</a>
+          <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color:#409EFF;float:right;font-size:17px;">{{ $t("HowToPost") }}</a>
         </el-form-item>
         <!-- 上传视频的按钮 -->
         <el-form-item style="text-align: center;">
           <el-button class="postButton" type="primary" @click="postMultiVideos">
-            {{$t('post_video')}}
+            {{ $t("post_video") }}
             <i class="el-icon-upload el-icon--right"></i>
           </el-button>
         </el-form-item>
       </el-form>
     </div>
-    <EditTags
-      :msg="noData"
-      :visible.sync="showTagPanel"
-      @getEditTagsData="TagShow"
-      class="EditTags"
-    ></EditTags>
+    <EditTags :msg="noData" :visible.sync="showTagPanel" @getEditTagsData="TagShow" class="EditTags"></EditTags>
   </div>
 </template>
 

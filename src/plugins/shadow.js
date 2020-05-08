@@ -13,45 +13,39 @@ function makeAbstractShadow(rootEl, childNodes) {
 function data() {
   return {
     pabstract: false,
-    pstatic: false,
+    pstatic: false
   };
 }
 
 const ShadowRoot = {
   render(h) {
     return h(this.tag, {}, [
-      this.pstatic
-        ? this.$slots.default
-        : h(
-            this.slotTag,
-            { attrs: { id: this.slotId }, class: this.slotClass },
-            [this.$slots.default]
-          ),
+      this.pstatic ? this.$slots.default : h(this.slotTag, { attrs: { id: this.slotId }, class: this.slotClass }, [this.$slots.default])
     ]);
   },
   props: {
     abstract: {
       type: Boolean,
-      default: false,
+      default: false
     },
     static: {
       type: Boolean,
-      default: false,
+      default: false
     },
     tag: {
       type: String,
-      default: "div",
+      default: "div"
     },
     slotTag: {
       type: String,
-      default: "div",
+      default: "div"
     },
     slotClass: {
-      type: String,
+      type: String
     },
     slotId: {
-      type: String,
-    },
+      type: String
+    }
   },
   data,
   beforeMount() {
@@ -64,7 +58,7 @@ const ShadowRoot = {
     } else {
       makeShadow(this.$el);
     }
-  },
+  }
 };
 
 function install(vue) {
@@ -73,7 +67,7 @@ function install(vue) {
   vue.directive("shadow", {
     bind(el) {
       makeShadow(el);
-    },
+    }
   });
 }
 

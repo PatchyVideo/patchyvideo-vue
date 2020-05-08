@@ -35,17 +35,11 @@
           {{ $t("MsgCenter") }}
         </div>
         <ul class="messageNav-list">
-          <li
-            v-bind:class="{ messageNavListActive: messageType == 0 }"
-            @click="messageType = 0"
-          >
+          <li v-bind:class="{ messageNavListActive: messageType == 0 }" @click="messageType = 0">
             <i class="el-icon-star-on"></i>
             {{ $t("UnreadMsg") }}
           </li>
-          <li
-            v-bind:class="{ messageNavListActive: messageType == 1 }"
-            @click="messageType = 1"
-          >
+          <li v-bind:class="{ messageNavListActive: messageType == 1 }" @click="messageType = 1">
             <i class="el-icon-star-on"></i>
             {{ $t("AllMsg") }}
           </li>
@@ -69,7 +63,7 @@ export default {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 显示信息类型，0 代表未读消息，1 代表已读消息
-      messageType: 0,
+      messageType: 0
     };
   },
   created() {
@@ -79,7 +73,7 @@ export default {
     document.title = "消息中心 - Patchyvideo";
   },
   methods: {},
-  components: { topnavbar, unreadMsg, allMsg },
+  components: { topnavbar, unreadMsg, allMsg }
 };
 </script>
 

@@ -57,22 +57,12 @@
       </span>
     </el-dialog>
 
-    <h1>{{$t('title')}}</h1>
+    <h1>{{ $t("title") }}</h1>
     <!-- 表单 -->
     <div class="usermanagement-form">
-      <el-input
-        placeholder="搜索用户名..."
-        v-model="usermanagement.keyword"
-        @keyup.enter.native="getUserList(true)"
-        clearable
-      >
+      <el-input placeholder="搜索用户名..." v-model="usermanagement.keyword" @keyup.enter.native="getUserList(true)" clearable>
         <el-select v-model="usermanagement.order" class="select" slot="prepend">
-          <el-option
-            v-for="item in usermanagement.form.options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
+          <el-option v-for="item in usermanagement.form.options" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
         <el-button slot="append" icon="el-icon-search" @click="getUserList(true)">查找</el-button>
       </el-input>
@@ -83,7 +73,7 @@
         <template slot-scope="props">
           <el-form label-position="left" class="demo-table-expand">
             <el-form-item label="头像">
-              <el-avatar :size="30" :src="'be/images/userphotos/'+props.row.profile.image"></el-avatar>
+              <el-avatar :size="30" :src="'be/images/userphotos/' + props.row.profile.image"></el-avatar>
             </el-form-item>
             <el-form-item label="描述">
               <span>{{ props.row.profile.desc }}</span>
@@ -92,31 +82,23 @@
               <span>{{ props.row.profile.email }}</span>
             </el-form-item>
             <el-form-item label="创建日期">
-              <span>{{ dateFormat("yyyy-MM-dd HH:mm:ss", new Date(props.row.meta.created_at.$date))}}</span>
+              <span>{{ dateFormat("yyyy-MM-dd HH:mm:ss", new Date(props.row.meta.created_at.$date)) }}</span>
             </el-form-item>
             <el-form-item label="pubkey">
-              <span>{{ '"' + props.row.profile.pubkey + '"'}}</span>
+              <span>{{ '"' + props.row.profile.pubkey + '"' }}</span>
             </el-form-item>
             <el-form-item label="blacklist设置">
-              <span>{{props.row.settings.blacklist}}</span>
+              <span>{{ props.row.settings.blacklist }}</span>
             </el-form-item>
             <el-form-item label="UID">
-              <el-link
-                type="primary"
-                target="_blank"
-                :href="'#/users/'+props.row._id.$oid"
-                title="查看空间"
-              >{{props.row._id.$oid}}</el-link>
+              <el-link type="primary" target="_blank" :href="'#/users/' + props.row._id.$oid" title="查看空间">{{ props.row._id.$oid }}</el-link>
             </el-form-item>
           </el-form>
         </template>
       </el-table-column>
       <el-table-column label="用戶名" width="200">
         <template slot-scope="scope">
-          <router-link
-            :to="'/users/' +scope.row._id.$oid"
-            target="_blank"
-          >{{scope.row.profile.username}}</router-link>
+          <router-link :to="'/users/' + scope.row._id.$oid" target="_blank">{{ scope.row.profile.username }}</router-link>
         </template>
       </el-table-column>
       <el-table-column prop="access_control.status" label="访问等级" width="200"></el-table-column>
@@ -190,10 +172,7 @@ export default {
   created() {
     this.couponSelected = this.options[0].value;
     this.usermanagement.form.timeRange = [
-      this.dateFormat(
-        "yyyy-MM-dd HH:mm:ss",
-        new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
-      ),
+      this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date(new Date().getTime() - 24 * 60 * 60 * 1000)),
       this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date())
     ];
     this.getUserList();
@@ -214,26 +193,10 @@ export default {
      * 更新用户数据
      */
     async updateUserData() {
-      await this.updateUserAttr(
-        "status",
-        "/be/user/admin/updaterole.do",
-        "role"
-      );
-      await this.updateUserAttr(
-        "access_mode",
-        "/be/user/admin/updatemode.do",
-        "mode"
-      );
-      await this.updateUserAttr(
-        "allowed_ops",
-        "/be/user/admin/update_allowedops.do",
-        "ops"
-      );
-      await this.updateUserAttr(
-        "denied_ops",
-        "/be/user/admin/update_deniedops.do",
-        "ops"
-      );
+      await this.updateUserAttr("status", "/be/user/admin/updaterole.do", "role");
+      await this.updateUserAttr("access_mode", "/be/user/admin/updatemode.do", "mode");
+      await this.updateUserAttr("allowed_ops", "/be/user/admin/update_allowedops.do", "ops");
+      await this.updateUserAttr("denied_ops", "/be/user/admin/update_deniedops.do", "ops");
       await this.getUserList();
     },
     /*
@@ -241,10 +204,7 @@ export default {
      */
     attrIsModify(attr) {
       var user = this.usermanagement.data.users[this.editUserIndex];
-      return (
-        this.editUser[attr] != "undefined" &&
-        this.editUser[attr] != user.access_control[attr]
-      );
+      return this.editUser[attr] != "undefined" && this.editUser[attr] != user.access_control[attr];
     },
     /**
      * 处理更新用户数据的单个请求
@@ -345,10 +305,7 @@ export default {
       for (let k in opt) {
         ret = new RegExp("(" + k + ")").exec(fmt);
         if (ret) {
-          fmt = fmt.replace(
-            ret[1],
-            ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, "0")
-          );
+          fmt = fmt.replace(ret[1], ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, "0"));
         }
       }
       return fmt;
