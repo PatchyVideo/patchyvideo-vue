@@ -47,7 +47,7 @@
         <router-link to="/home">PatchyVideo</router-link>
       </h1>
       <div class="top in">
-        <h3 style="color:#909399">{{$t('reset_psd')}}</h3>
+        <h3 style="color:#909399">{{ $t("reset_psd") }}</h3>
       </div>
 
       <el-form ref="FormRef" :model="FormRef" class="middle in" :rules="rules">
@@ -67,7 +67,7 @@
 
       <!-- 登录按钮 -->
       <div class="bottom in">
-        <div @click="resetpass()" class="login in">{{$t('button')}}</div>
+        <div @click="resetpass()" class="login in">{{ $t("button") }}</div>
       </div>
     </div>
   </div>
@@ -100,9 +100,7 @@ export default {
     document.title = this.$t("title") + " - Patchyvideo";
   },
   mounted() {
-    console.log(
-      "背景图片p站ID：66686322，如有侵权请联系本站开发者（本站账号：admin）删除"
-    );
+    console.log("背景图片p站ID：66686322，如有侵权请联系本站开发者（本站账号：admin）删除");
   },
   methods: {
     // 发送邮件

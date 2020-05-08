@@ -9,12 +9,12 @@
 export default {
   provide() {
     return {
-      reload: this.reload,
+      reload: this.reload
     };
   },
   data() {
     return {
-      isRouterAlive: true,
+      isRouterAlive: true
     };
   },
   methods: {
@@ -23,9 +23,9 @@ export default {
       this.$nextTick(function() {
         this.isRouterAlive = true;
       });
-    },
+    }
   },
-  components: {},
+  components: {}
 };
 </script>
 

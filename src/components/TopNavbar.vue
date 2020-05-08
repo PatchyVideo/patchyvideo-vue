@@ -99,17 +99,11 @@
 <template>
   <div>
     <!-- 退出登录的弹出框 -->
-    <el-dialog
-      :title="$t('prompt.msg')"
-      :modal-append-to-body="false"
-      :visible.sync="dialogVisible"
-      width="30%"
-      v-loading="loading"
-    >
-      <p>{{$t('user.logout_prompt')}}</p>
+    <el-dialog :title="$t('prompt.msg')" :modal-append-to-body="false" :visible.sync="dialogVisible" width="30%" v-loading="loading">
+      <p>{{ $t("user.logout_prompt") }}</p>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{$t('prompt.cancel')}}</el-button>
-        <el-button type="primary" @click="cleanLocalStorage">{{$t('prompt.ok')}}</el-button>
+        <el-button @click="dialogVisible = false">{{ $t("prompt.cancel") }}</el-button>
+        <el-button type="primary" @click="cleanLocalStorage">{{ $t("prompt.ok") }}</el-button>
       </span>
     </el-dialog>
     <div class="top-navbar">
@@ -122,16 +116,16 @@
       <!-- 左面的四个页面链接 -->
       <div class="nav_left">
         <div class="navItem">
-          <router-link to="/home" @click.native="cleanIptV">{{$t('navbar.index')}}</router-link>
+          <router-link to="/home" @click.native="cleanIptV">{{ $t("navbar.index") }}</router-link>
         </div>
         <div class="navItem">
-          <router-link to="/lists">{{$t('navbar.playlist')}}</router-link>
+          <router-link to="/lists">{{ $t("navbar.playlist") }}</router-link>
         </div>
         <div class="navItem">
-          <router-link to="/postvideo">{{$t('navbar.postvideo')}}</router-link>
+          <router-link to="/postvideo">{{ $t("navbar.postvideo") }}</router-link>
         </div>
         <div class="navItem">
-          <router-link to="/edittag">{{$t('navbar.edittag')}}</router-link>
+          <router-link to="/edittag">{{ $t("navbar.edittag") }}</router-link>
         </div>
         <div class="navItem">
           <router-link to="/forum">讨论版</router-link>
@@ -164,15 +158,15 @@
               <div
                 class="name"
                 v-bind:class="{
-                      Copyright: item.cat == 2,
-                      Language: item.cat == 5,
-                      Character: item.cat == 1,
-                      Author: item.cat == 3,
-                      General: item.cat == 0,
-                      Meta: item.cat == 4,
-                      Soundtrack: item.cat == 6
-                    }"
-                v-html="item.tag||ConvertLangRes(item.langs)"
+                  Copyright: item.cat == 2,
+                  Language: item.cat == 5,
+                  Character: item.cat == 1,
+                  Author: item.cat == 3,
+                  General: item.cat == 0,
+                  Meta: item.cat == 4,
+                  Soundtrack: item.cat == 6
+                }"
+                v-html="item.tag || ConvertLangRes(item.langs)"
               ></div>
               <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
             </div>
@@ -185,12 +179,8 @@
       <div>
         <!-- 登录和注册按钮 -->
         <div class="loginUser" v-if="!isLogin">
-          <router-link
-            to="/login"
-            class="loginUser-login"
-            @click.native="login"
-          >{{$t('user.login')}}</router-link>
-          <router-link to="/signup" class="loginUser-signup">{{$t('user.signup')}}</router-link>
+          <router-link to="/login" class="loginUser-login" @click.native="login">{{ $t("user.login") }}</router-link>
+          <router-link to="/signup" class="loginUser-signup">{{ $t("user.signup") }}</router-link>
         </div>
 
         <!-- 登录成功后的用户界面 -->
@@ -206,17 +196,9 @@
             to="/users/me"
           >{{this.$store.state.username}}</router-link>-->
           <el-badge :value="messagesNum" :hidden="!messagesNum" class="item">
-            <router-link
-              target="_blank"
-              class="loginUser-message"
-              to="/messages"
-            >{{$t('user.message')}}</router-link>
+            <router-link target="_blank" class="loginUser-message" to="/messages">{{ $t("user.message") }}</router-link>
           </el-badge>
-          <a
-            class="loginUser-signup"
-            @click="dialogVisible = true"
-            style="cursor:pointer"
-          >{{$t('user.logout')}}</a>
+          <a class="loginUser-signup" @click="dialogVisible = true" style="cursor:pointer">{{ $t("user.logout") }}</a>
         </div>
       </div>
     </div>
@@ -290,10 +272,7 @@ export default {
     }
     this.getCookie();
     // 查看是否登录
-    if (
-      JSON.stringify(this.$store.state.username) != "null" &&
-      this.$store.state.username != ""
-    ) {
+    if (JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "") {
       this.isLogin = true;
       if (this.$route.path != "/messages") this.getUnreadCount();
       // 每2min查询一次未读消息
@@ -406,10 +385,8 @@ export default {
       var date = new Date(); // 获取时间
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
       // 字符串拼接 cookie
-      window.document.cookie =
-        "username" + ":" + username + ";path=/;expires=" + date.toGMTString();
-      window.document.cookie =
-        "userAvatar" + "=" + username + ";path=/;expires=" + date.toGMTString();
+      window.document.cookie = "username" + ":" + username + ";path=/;expires=" + date.toGMTString();
+      window.document.cookie = "userAvatar" + "=" + username + ";path=/;expires=" + date.toGMTString();
     },
     // 获取 cookie
     getCookie: function() {
@@ -615,10 +592,7 @@ export default {
 
         // 合成语言
         Lang = `${mainLang.replace(/\_/g, " ")}`;
-        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(
-          /\_/g,
-          " "
-        )}</span>`;
+        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/\_/g, " ")}</span>`;
       } else {
         Lang = mainLang;
       }
@@ -644,11 +618,7 @@ export default {
       // 切割字符串，并在中间加入搜索到的标签拼接成新的输入框的内容
       var iptVal1 = this.iptVal3.slice(0, this.startlocation);
       var iptVal2 = this.iptVal3.slice(this.endlocation);
-      var iptVal =
-        iptVal1 +
-        (item.tag || this.ConvertLangRes(item.langs, false)) +
-        " " +
-        iptVal2;
+      var iptVal = iptVal1 + (item.tag || this.ConvertLangRes(item.langs, false)) + " " + iptVal2;
       this.iptVal = iptVal;
       // 光标设置焦点事件
       var endlocation = $("#ipt").focus();

@@ -86,7 +86,6 @@
 }
 </i18n>
 
-
 <template>
   <div class="loginPic">
     <!-- 登录框正文 -->
@@ -96,9 +95,9 @@
         <router-link to="/home">PatchyVideo</router-link>
       </h1>
       <div class="top in">
-        <router-link to="/login">{{$t('login')}}</router-link>
+        <router-link to="/login">{{ $t("login") }}</router-link>
         <b>·</b>
-        <router-link to="/signup">{{$t('signup')}}</router-link>
+        <router-link to="/signup">{{ $t("signup") }}</router-link>
       </div>
 
       <!-- 输入账号和密码的框 -->
@@ -125,18 +124,14 @@
           ></el-input>
         </el-form-item>
         <p style="text-align: left;margin-top:30px">
-          <router-link to="/forgetPassword" class="forgetPassword">{{$t('forget_psd')}}</router-link>
+          <router-link to="/forgetPassword" class="forgetPassword">{{ $t("forget_psd") }}</router-link>
         </p>
-        <p
-          id="status"
-          style="text-align: center;"
-          v-bind:class="{alert:status!=$t('status')}"
-        >{{ status }}</p>
+        <p id="status" style="text-align: center;" v-bind:class="{ alert: status != $t('status') }">{{ status }}</p>
       </el-form>
 
       <!-- 登录按钮 -->
       <div class="bottom in">
-        <div @click="login" class="login in">{{$t('login')}}</div>
+        <div @click="login" class="login in">{{ $t("login") }}</div>
       </div>
     </div>
   </div>
@@ -229,23 +224,13 @@ export default {
                   if (result.status == 200) {
                     if (result.data.status == "SUCCEED") {
                       this.open2();
-                      this.$store.commit(
-                        "getUserName",
-                        this.loginFormRef.login_name
-                      );
-                      this.$store.commit(
-                        "getUserAvatar",
-                        result.data.data.image
-                      );
+                      this.$store.commit("getUserName", this.loginFormRef.login_name);
+                      this.$store.commit("getUserAvatar", result.data.data.image);
                       this.$store.commit("changeifTruelyLogin", 1);
                       // 加载结束,加载动画消失
                       this.loading = false;
                       // 利用 cookie 储存登录状态
-                      this.setCookie(
-                        this.loginFormRef.login_name,
-                        result.data.data.image,
-                        7
-                      );
+                      this.setCookie(this.loginFormRef.login_name, result.data.data.image, 7);
                       // 如果是从登录按钮跳转到本界面，回到上一个页面
                       if (this.$store.state.ifRouter == 0) {
                         this.$store.commit("changeifRouter", "2");
@@ -301,14 +286,8 @@ export default {
       var date = new Date(); // 获取时间
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
       // 字符串拼接 cookie
-      window.document.cookie =
-        "username" + ":" + username + ";path=/;expires=" + date.toUTCString();
-      window.document.cookie =
-        "userAvatar" +
-        "=" +
-        userAvatar +
-        ";path=/;expires=" +
-        date.toUTCString();
+      window.document.cookie = "username" + ":" + username + ";path=/;expires=" + date.toUTCString();
+      window.document.cookie = "userAvatar" + "=" + userAvatar + ";path=/;expires=" + date.toUTCString();
     }
   },
   components: {

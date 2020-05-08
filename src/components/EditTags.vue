@@ -79,17 +79,20 @@
         :modal-append-to-body="false"
         :before-close="handleClose"
       >
-        <span style="font-size:19px;color: #5e6d82;">{{$t('issave')}}</span>
+        <span style="font-size:19px;color: #5e6d82;">{{ $t("issave") }}</span>
         <p></p>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="closeTagPanel(true)">{{$t('cancel')}}</el-button>
-          <el-button type="primary" @click="saveTag()">{{$t('save')}}</el-button>
+          <el-button @click="closeTagPanel(true)">{{ $t("cancel") }}</el-button>
+          <el-button type="primary" @click="saveTag()">{{ $t("save") }}</el-button>
         </span>
       </el-dialog>
       <div id="tag">
         <a
           href="javascript:;"
-          @click="dialogVisible = true;closeTagPanel(JSON.stringify(tagsOrigin)===JSON.stringify(tags))"
+          @click="
+            dialogVisible = true;
+            closeTagPanel(JSON.stringify(tagsOrigin) === JSON.stringify(tags));
+          "
         >
           <i class="el-icon-close" id="close" v-if="this.$route.path != '/postvideo'"></i>
         </a>
@@ -98,12 +101,7 @@
           <div class="m_a activeTag">
             <ul class="Taglist" :class="v" v-for="v in this.tagCategoriesAll" :key="v">
               <span v-for="(i, item) in TagCategoriesData" :key="item">
-                <div
-                  class="item"
-                  :class="{ selected: -1 === tagsForRec.indexOf(item) }"
-                  @click.stop="selected(i, item)"
-                  v-if="i === v"
-                >
+                <div class="item" :class="{ selected: -1 === tagsForRec.indexOf(item) }" @click.stop="selected(i, item)" v-if="i === v">
                   <div>
                     <p :class="`val_` + item">{{ item }}</p>
                     <a href="javascript:;" @click.stop="deleteObj(i, item)">
@@ -189,22 +187,13 @@
                 </a>
               </div>
             </div>
-            <span
-              class="tag_title infoTip_1"
-              :class="{ hidden: infoTip[0].isHidden }"
-            >{{$t('edit_common_tags')}}</span>
-            <span
-              class="tag_title infoTip_2"
-              :class="{ show: infoTip[1].isHidden }"
-            >{{$t('tag_already_exist')}}</span>
-            <span
-              class="tag_title infoTip_3"
-              :class="{ show: infoTip[2].isHidden }"
-            >{{$t('tag_not_exist')}}</span>
+            <span class="tag_title infoTip_1" :class="{ hidden: infoTip[0].isHidden }">{{ $t("edit_common_tags") }}</span>
+            <span class="tag_title infoTip_2" :class="{ show: infoTip[1].isHidden }">{{ $t("tag_already_exist") }}</span>
+            <span class="tag_title infoTip_3" :class="{ show: infoTip[2].isHidden }">{{ $t("tag_not_exist") }}</span>
           </div>
           <div class="m_c">
             <div>
-              <span>{{$t('recommnad_tags')}}</span>
+              <span>{{ $t("recommnad_tags") }}</span>
               <transition mode="out-in">
                 <ul class="recTag Taglist" v-show="recTagsWatch">
                   <li class="item" v-for="(i, item) in recTags" :key="item">
@@ -219,12 +208,7 @@
           </div>
         </div>
         <a href="javascript:;">
-          <a
-            id="save"
-            v-if="this.$route.path != '/postvideo'"
-            @click="saveTag()"
-            style="font-size: 28px"
-          >{{$t('save')}}</a>
+          <a id="save" v-if="this.$route.path != '/postvideo'" @click="saveTag()" style="font-size: 28px">{{ $t("save") }}</a>
         </a>
       </div>
     </div>
@@ -265,15 +249,11 @@ export default {
     // 当前页面监视键盘输入
     document.onkeydown = function(e) {
       // 事件对象兼容
-      let e1 =
-        e || event || window.event || arguments.callee.caller.arguments[0];
+      let e1 = e || event || window.event || arguments.callee.caller.arguments[0];
       // 键盘按键判断: 左箭头 -37; 上箭头 -38; 右箭头 -39; 下箭头 -40
       // 左
       if (e1 && e1.keyCode == 27) {
-        if (
-          that.$route.path === "/video" ||
-          that.$route.path === "/listdetail"
-        ) {
+        if (that.$route.path === "/video" || that.$route.path === "/listdetail") {
           that.closeTagPanel(true);
         }
       }
@@ -303,9 +283,7 @@ export default {
   mounted() {},
   updated() {
     let _that = this;
-    var infoTipObj = document.getElementsByClassName(
-      "el-autocomplete-suggestion"
-    );
+    var infoTipObj = document.getElementsByClassName("el-autocomplete-suggestion");
     for (let i = 0; i < infoTipObj.length; ++i) {
       infoTipObj[i].onclick = function() {
         _that.isInfoTipClick = true;
@@ -689,10 +667,7 @@ export default {
 
         // 合成语言
         Lang = `${mainLang.replace(/\_/g, " ")}`;
-        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(
-          /\_/g,
-          " "
-        )}</span>`;
+        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/\_/g, " ")}</span>`;
       } else {
         Lang = mainLang;
       }
@@ -785,8 +760,7 @@ export default {
 }
 
 * {
-  font-family: "Microsoft YaHei", "Lantinghei SC", "Open Sans", Arial,
-    "Hiragino Sans GB", "STHeiti", "WenQuanYi Micro Hei", "SimSun", sans-serif;
+  font-family: "Microsoft YaHei", "Lantinghei SC", "Open Sans", Arial, "Hiragino Sans GB", "STHeiti", "WenQuanYi Micro Hei", "SimSun", sans-serif;
 }
 
 i {
@@ -1005,8 +979,7 @@ div {
           left: 50%;
           transform: translate(-50%, -50%);
           color: white;
-          text-shadow: 0 0 10px #fff, 0 0 40px #ff7777, 0 0 70px #ff7777,
-            0 0 80px #ff7777;
+          text-shadow: 0 0 10px #fff, 0 0 40px #ff7777, 0 0 70px #ff7777, 0 0 80px #ff7777;
           transition: all 0.5s ease;
         }
         .infoTip_1 {
@@ -1014,8 +987,7 @@ div {
           color: white;
           /*   text-shadow: 0 0 10px #fff, 0 0 40px #ff7777, -1px 0 #ff7777,
             -1px 1px #ff7777;*/
-          text-shadow: 0 0 10px #fff, 0 0 40px #ff7777, 0 0 70px #ff7777,
-            0 0 80px #ff7777;
+          text-shadow: 0 0 10px #fff, 0 0 40px #ff7777, 0 0 70px #ff7777, 0 0 80px #ff7777;
 
           display: block;
         }

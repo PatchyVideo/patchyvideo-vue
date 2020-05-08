@@ -125,28 +125,23 @@
 <template>
   <div>
     <!--<el-button @click="testIpfs">dwa</el-button>-->
-    <div class="bigbox standard" v-if="this.$route.params.id=='me'" v-loading="loading">
+    <div class="bigbox standard" v-if="this.$route.params.id == 'me'" v-loading="loading">
       <div class="bigbox_left">
         <div class="left-content">
           <div class="wave ripple danger">
-            <div class="circle" :class="{animeActive1:mounseMark}"></div>
-            <div class="circle" :class="{animeActive2:mounseMark}"></div>
-            <div class="circle" :class="{animeActive3:mounseMark}"></div>
+            <div class="circle" :class="{ animeActive1: mounseMark }"></div>
+            <div class="circle" :class="{ animeActive2: mounseMark }"></div>
+            <div class="circle" :class="{ animeActive3: mounseMark }"></div>
           </div>
           <div class="face" @mouseover="faceMouseOver(true)" @mouseleave="faceMouseOver(false)">
-            <img :src="this.url" alt v-if="this.url!=''" />
-            <img :src="'be/images/userphotos/'+myData.image" alt v-if="this.url===''" />
+            <img :src="this.url" alt v-if="this.url != ''" />
+            <img :src="'be/images/userphotos/' + myData.image" alt v-if="this.url === ''" />
           </div>
 
-          <p>{{$t('cur_pic')}}</p>
-          <p>{{$t('pic_prompt')}}</p>
+          <p>{{ $t("cur_pic") }}</p>
+          <p>{{ $t("pic_prompt") }}</p>
           <div>
-            <App-cropper
-              :width="300"
-              :height="300"
-              :fixed-number="[1,1]"
-              @subUploadSucceed="getShopImages"
-            />
+            <App-cropper :width="300" :height="300" :fixed-number="[1, 1]" @subUploadSucceed="getShopImages" />
           </div>
           <!--<form
             action="/be/helper/upload_image.do"
@@ -167,47 +162,27 @@
       <div class="bigbox_right">
         <div class="desc">
           <div class="desc_name" style="display: flex;height:30px; ">
-            <p v-if="isNameEdit===false" style="margin-right: 10px">{{myData.username}}</p>
-            <i v-if="isNameEdit===false" class="el-icon-edit" @click="islSetUserName(true)"></i>
-            <el-input
-              v-if="isNameEdit===true"
-              :placeholder="$t('change_username')"
-              prefix-icon="el-icon-user"
-              v-model="myName"
-            ></el-input>
-            <el-button
-              v-if="isNameEdit===true"
-              type="primary"
-              icon="el-icon-edit"
-              :disabled="myName===''"
-              @click="setUserName"
-            >{{$t('update')}}</el-button>
-            <el-button
-              v-if="isNameEdit===true"
-              type="primary"
-              @click.native="islSetUserName(false)"
-            >{{$t('cancel')}}</el-button>
+            <p v-if="isNameEdit === false" style="margin-right: 10px">{{ myData.username }}</p>
+            <i v-if="isNameEdit === false" class="el-icon-edit" @click="islSetUserName(true)"></i>
+            <el-input v-if="isNameEdit === true" :placeholder="$t('change_username')" prefix-icon="el-icon-user" v-model="myName"></el-input>
+            <el-button v-if="isNameEdit === true" type="primary" icon="el-icon-edit" :disabled="myName === ''" @click="setUserName">{{
+              $t("update")
+            }}</el-button>
+            <el-button v-if="isNameEdit === true" type="primary" @click.native="islSetUserName(false)">{{ $t("cancel") }}</el-button>
           </div>
 
           <div class="text-form">
             <textarea name v-model="myData.desc" cols="30" rows="10"></textarea>
           </div>
-          <button @click="changeDesc()">{{$t('save')}}</button>
+          <button @click="changeDesc()">{{ $t("save") }}</button>
         </div>
         <div class="psd">
-          <div class="desc_name">{{$t('change_pass')}}</div>
+          <div class="desc_name">{{ $t("change_pass") }}</div>
           <div class="psd-form">
             <!--<input type="password" placeholder="Old Password">
             <input type="password" placeholder="New Password">
             <input type="password" placeholder="Repeat New Password">-->
-            <el-form
-              :model="ruleForm"
-              status-icon
-              :rules="rules"
-              ref="ruleForm"
-              label-width="100px"
-              class="demo-ruleForm"
-            >
+            <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <el-form-item :label="$t('old_pass')" prop="old_pass">
                 <el-input v-model.number="ruleForm.old_pass"></el-input>
               </el-form-item>
@@ -218,8 +193,8 @@
                 <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item class="post">
-                <el-button type="primary" @click="submitForm('ruleForm')">{{$t('submit')}}</el-button>
-                <el-button @click="resetForm('ruleForm')">{{$t('reset')}}</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')">{{ $t("submit") }}</el-button>
+                <el-button @click="resetForm('ruleForm')">{{ $t("reset") }}</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -227,29 +202,25 @@
           <!-- <button>保存</button> -->
         </div>
         <div class="email">
-          <div class="email-info">{{$t('bind_mail')}}</div>
+          <div class="email-info">{{ $t("bind_mail") }}</div>
 
-          <el-input
-            :placeholder="$t('enter_email')"
-            prefix-icon="el-icon-message"
-            v-model="myEmail"
-          ></el-input>
-          <button @click="bindEmail()">{{$t('bind')}}</button>
-          <p style="margin-top: 20px" v-if="myData.email!==''">已绑定邮箱:{{myData.email}}</p>
+          <el-input :placeholder="$t('enter_email')" prefix-icon="el-icon-message" v-model="myEmail"></el-input>
+          <button @click="bindEmail()">{{ $t("bind") }}</button>
+          <p style="margin-top: 20px" v-if="myData.email !== ''">已绑定邮箱:{{ myData.email }}</p>
         </div>
       </div>
     </div>
-    <div class="bigbox standard" v-if="this.$route.params.id!='me'" v-loading="loading">
-      <div class="bigbox_left" :class="{bg:this.$route.params.id!='me'}"></div>
+    <div class="bigbox standard" v-if="this.$route.params.id != 'me'" v-loading="loading">
+      <div class="bigbox_left" :class="{ bg: this.$route.params.id != 'me' }"></div>
       <div class="bigbox_right">
         <div class="face2">
           <div class="pulse"></div>
-          <img :src="'be/images/userphotos/'+userData.image" alt />
+          <img :src="'be/images/userphotos/' + userData.image" alt />
         </div>
         <div class="desc">
-          <div class="desc_name">{{userData.username}}</div>
+          <div class="desc_name">{{ userData.username }}</div>
           <div class="text-form">
-            <textarea name id cols="30" rows="10" disabled="disabled">{{userData.desc}}</textarea>
+            <textarea name id cols="30" rows="10" disabled="disabled">{{ userData.desc }}</textarea>
           </div>
         </div>
       </div>

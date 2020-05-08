@@ -23,13 +23,12 @@
 }
 </i18n>
 
-
 <template>
   <div>
     <div class="errorPage">
       <h1>
-        {{$t('errmsg')}}
-        <router-link to="/home">{{$t('click2home')}}</router-link>
+        {{ $t("errmsg") }}
+        <router-link to="/home">{{ $t("click2home") }}</router-link>
       </h1>
       <el-image style="width: 50%;" :src="url" :fit="fits[0]"></el-image>
     </div>

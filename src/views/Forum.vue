@@ -10,20 +10,14 @@
             <p>
               最后更新时间：2020/5/7 (0.2.1-alpha.16)<br />
               讨论板仍在最初测试阶段，有很多功能可能不够完善，仅供测试。<br />
-              语法介绍：<a href="https://patchyvideo.wiki/Forum"
-                >https://patchyvideo.wiki/Forum</a
-              ><br />
+              语法介绍：<a href="https://patchyvideo.wiki/Forum">https://patchyvideo.wiki/Forum</a><br />
               如有任何意见可尝试在反馈板提出。
             </p>
           </div>
         </el-alert>
       </div>
       <!-- 板块表 -->
-      <el-table
-        :data="forumList"
-        empty-text="少女祈祷中..."
-        style="width: 100%"
-      >
+      <el-table :data="forumList" empty-text="少女祈祷中..." style="width: 100%">
         <el-table-column label="板块">
           <template slot-scope="forum">
             <div>

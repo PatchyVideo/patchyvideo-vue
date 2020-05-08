@@ -1,4 +1,3 @@
-
 <i18n>
     {
     "CHS": {
@@ -17,24 +16,16 @@
         <el-collapse-item title="已订阅的文本" name="1" style="text-align: center">
           <div v-for="i in this.subDataTextNameData" :key="i">
             <div class="sub-text">
-              <h4>{{i}}</h4>
+              <h4>{{ i }}</h4>
               <div>
-                <el-tag
-                  type="danger"
-                  class="text-data"
-                  v-for="(m) in subQtMap(i,'text')"
-                  :key="m._id.$oid"
-                >
+                <el-tag type="danger" class="text-data" v-for="m in subQtMap(i, 'text')" :key="m._id.$oid">
                   <transition mode="out-in">
-                    <div v-if="m.iptVisble!==true">
-                      <span
-                        @keyup.enter="subUpDate(m,$event,'text')"
-                        contenteditable="true"
-                      >{{m.qs}}</span>
+                    <div v-if="m.iptVisble !== true">
+                      <span @keyup.enter="subUpDate(m, $event, 'text')" contenteditable="true">{{ m.qs }}</span>
                       <!--<i class="el-icon-edit"  @click="showIpt(m,index)"></i>-->
                       <i class="el-icon-delete" @click="subDel(m)"></i>
                     </div>
-                    <div class="text-ipt" v-if="m.iptVisble===true" style="display: flex;">
+                    <div class="text-ipt" v-if="m.iptVisble === true" style="display: flex;">
                       <el-input v-model="m.iptValue"></el-input>
                       <el-button @click="subUpDate(m)">确认</el-button>
                       <el-button @click="handleSubIptConfirm(m)">取消</el-button>
@@ -55,18 +46,18 @@
           </transition>-->
         </el-collapse-item>
         <el-collapse-item title="已订阅的标签/文本" name="2">
-          <div v-for=" i  in this.subDataTagsNameData" :key="i" style="margin-bottom: 20px">
+          <div v-for="i in this.subDataTagsNameData" :key="i" style="margin-bottom: 20px">
             <div class="sub-tags">
-              <h4>{{i}}</h4>
+              <h4>{{ i }}</h4>
               <div>
-                <el-tag class="tags-data" v-for="(m) in subQtMap(i,'tag')" :key="m._id.$oid">
+                <el-tag class="tags-data" v-for="m in subQtMap(i, 'tag')" :key="m._id.$oid">
                   <transition mode="out-in">
-                    <div v-if="m.iptVisble!==true">
-                      <span @keyup.enter="subUpDate(m,$event,'tag')" contenteditable="true">{{m.qs}}</span>
+                    <div v-if="m.iptVisble !== true">
+                      <span @keyup.enter="subUpDate(m, $event, 'tag')" contenteditable="true">{{ m.qs }}</span>
                       <!--<i class="el-icon-edit"  @click="showIpt(m,index)"></i>-->
                       <i class="el-icon-delete" @click="subDel(m)"></i>
                     </div>
-                    <div class="tags-ipt" v-if="m.iptVisble===true" style="display: flex;">
+                    <div class="tags-ipt" v-if="m.iptVisble === true" style="display: flex;">
                       <el-input v-model="m.iptValue"></el-input>
                       <el-button @click="subUpDate(m)">确认</el-button>
                       <el-button @click="handleSubIptConfirm(m)">取消</el-button>
@@ -88,12 +79,7 @@
 
           <div class="sub-main">
             <el-select id="select-order" v-model="couponSelected">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
             <el-autocomplete
               id="saveTagInput"
@@ -110,16 +96,18 @@
                   <div
                     class="name"
                     v-bind:class="{
-                        Copyright: item.cat === 2,
-                        Language: item.cat === 5,
-                        Character: item.cat === 1,
-                        Author: item.cat === 3,
-                        General: item.cat === 0,
-                        Meta: item.cat === 4,
-                        Soundtrack: item.cat === 6
-                        }"
-                    v-html="item.tag||ConvertLangRes(item.langs)"
-                  >{{ item.tag }}</div>
+                      Copyright: item.cat === 2,
+                      Language: item.cat === 5,
+                      Character: item.cat === 1,
+                      Author: item.cat === 3,
+                      General: item.cat === 0,
+                      Meta: item.cat === 4,
+                      Soundtrack: item.cat === 6
+                    }"
+                    v-html="item.tag || ConvertLangRes(item.langs)"
+                  >
+                    {{ item.tag }}
+                  </div>
                   <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
                 </div>
               </template>
@@ -127,22 +115,12 @@
           </div>
 
           <div class="sub-action">
-            <el-button
-              @click.native="subAdd(subTagsIptValue,subTagsIptName,'tag')"
-              type="primary"
-            >添加标签订阅</el-button>
-            <el-button @click.native="subAddIptVisible=false" style="margin: 0">取消</el-button>
+            <el-button @click.native="subAdd(subTagsIptValue, subTagsIptName, 'tag')" type="primary">添加标签订阅</el-button>
+            <el-button @click.native="subAddIptVisible = false" style="margin: 0">取消</el-button>
           </div>
         </div>
 
-        <el-button
-          v-else
-          class="button-new-tag"
-          size="small"
-          type="primary"
-          @click="showAddInput"
-          style="width: 20%;"
-        >+ 添加订阅</el-button>
+        <el-button v-else class="button-new-tag" size="small" type="primary" @click="showAddInput" style="width: 20%;">+ 添加订阅</el-button>
       </transition>
     </el-card>
   </div>
@@ -283,10 +261,7 @@ export default {
 
         // 合成语言
         Lang = `${mainLang.replace(/\_/g, " ")}`;
-        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(
-          /\_/g,
-          " "
-        )}</span>`;
+        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/\_/g, " ")}</span>`;
       } else {
         Lang = mainLang;
       }
@@ -295,8 +270,7 @@ export default {
     handleSelect(item) {
       var iptVal1 = this.iptVal3.slice(0, this.startlocation);
       var iptVal2 = this.iptVal3.slice(this.endlocation);
-      var iptVal =
-        iptVal1 + this.ConvertLangRes(item.langs, false) + " " + iptVal2;
+      var iptVal = iptVal1 + this.ConvertLangRes(item.langs, false) + " " + iptVal2;
       this.subAddIptValue = iptVal;
       // 光标设置焦点事件
       var endlocation = $("#saveTagInput").focus();
@@ -458,15 +432,9 @@ export default {
         if (e.keyCode === "13") value = value.substring(0, value.length - 1);
         if (e.keyCode === "8") {
           if (value.length >= 2) {
-            if (
-              value.charCodeAt(value.length - 1) === 10 &&
-              value.charCodeAt(value.length - 2) === 10
-            ) {
+            if (value.charCodeAt(value.length - 1) === 10 && value.charCodeAt(value.length - 2) === 10) {
               value = value.substring(0, value.length - 1);
-            } else if (
-              value.charCodeAt(value.length - 1) === 10 &&
-              value.charCodeAt(value.length - 2) !== 10
-            ) {
+            } else if (value.charCodeAt(value.length - 1) === 10 && value.charCodeAt(value.length - 2) !== 10) {
               value = value.substring(0, value.length - 1);
             }
           }

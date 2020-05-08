@@ -4,13 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --open --port 8080",
-    "build": "vue-cli-service build"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "jquery": true
-    }
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -48,10 +43,17 @@
   "devDependencies": {
     "@kazupon/vue-i18n-loader": "^0.5.0",
     "@vue/cli-plugin-babel": "^4.3.1",
+    "@vue/cli-plugin-eslint": "^4.3.1",
     "@vue/cli-plugin-router": "^4.3.1",
     "@vue/cli-plugin-vuex": "^4.3.1",
     "@vue/cli-service": "^4.3.1",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-vue": "^7.0.0-alpha.1",
     "less-loader": "^6.0.0",
+    "prettier": "^1.19.1",
     "vue-template-compiler": "^2.6.11",
     "vueg": "^1.4.5"
   }

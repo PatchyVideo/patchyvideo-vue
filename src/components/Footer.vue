@@ -65,52 +65,46 @@
     <!-- 语言选项 -->
     <div class="patchyvideo-languageSettings">
       <p style="margin-top:10px">
-        <strong>{{$t('LanguageSettings')}}</strong>
+        <strong>{{ $t("LanguageSettings") }}</strong>
       </p>
-      <span @click="locale='CHS'">简体中文</span>
-      <span @click="locale='CHT'">繁體中文</span>
-      <span @click="locale='JPN'">日本語</span>
-      <span @click="locale='ENG'">English</span>
+      <span @click="locale = 'CHS'">简体中文</span>
+      <span @click="locale = 'CHT'">繁體中文</span>
+      <span @click="locale = 'JPN'">日本語</span>
+      <span @click="locale = 'ENG'">English</span>
     </div>
     <!-- 网站上方的链接 -->
     <div class="patchyvideo-links">
       <div class="patchyvideo-links-item">
         <p>
-          <strong>{{$t('About')}}</strong>
+          <strong>{{ $t("About") }}</strong>
         </p>
-        <a href="https://patchyvideo.wiki" target="_blank">{{$t('Wiki')}}</a>
-        <a href="https://space.bilibili.com/515657675">{{$t('OfficialAccount')}}</a>
-        <a href="https://patchyvideo.wiki/JoinUs" target="_blank">{{$t('JoinUs')}}</a>
+        <a href="https://patchyvideo.wiki" target="_blank">{{ $t("Wiki") }}</a>
+        <a href="https://space.bilibili.com/515657675">{{ $t("OfficialAccount") }}</a>
+        <a href="https://patchyvideo.wiki/JoinUs" target="_blank">{{ $t("JoinUs") }}</a>
       </div>
       <div class="patchyvideo-links-item">
         <p>
-          <strong>{{$t('AboutIPFS')}}</strong>
+          <strong>{{ $t("AboutIPFS") }}</strong>
         </p>
-        <router-link to="/ipfs">{{$t('IPFS')}}</router-link>
-        <a
-          href="https://zh.wikipedia.org/wiki/%E6%98%9F%E9%99%85%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"
-        >{{$t('WhatIsIPFS')}}</a>
+        <router-link to="/ipfs">{{ $t("IPFS") }}</router-link>
+        <a href="https://zh.wikipedia.org/wiki/%E6%98%9F%E9%99%85%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F">{{ $t("WhatIsIPFS") }}</a>
       </div>
       <div class="patchyvideo-links-item">
         <p>
-          <strong>{{$t('Codes')}}</strong>
+          <strong>{{ $t("Codes") }}</strong>
         </p>
-        <a href="https://patchyvideo.wiki/Repositories" target="_blank">{{$t('Repositories')}}</a>
-        <a href="https://github.com/zyddnys/PatchyVideo/issues" target="_blank">{{$t('bug_report')}}</a>
+        <a href="https://patchyvideo.wiki/Repositories" target="_blank">{{ $t("Repositories") }}</a>
+        <a href="https://github.com/zyddnys/PatchyVideo/issues" target="_blank">{{ $t("bug_report") }}</a>
       </div>
     </div>
     <!-- 最下部的网站声明 -->
     <div>
       <p class="patchyvideo-declear yiyan" style="color:gray;" v-text="yiyan"></p>
       <p class="patchyvideo-declear">
-        © 2019-{{(new Date()).getFullYear()}} PatchyVideo(Client:
-        <a
-          :href="'https://github.com/suwadaimyojin/patchyvideo-vue/commit/'+commitOfClient"
-        >{{commitOfClient2}}</a>
+        © 2019-{{ new Date().getFullYear() }} PatchyVideo(Client:
+        <a :href="'https://github.com/suwadaimyojin/patchyvideo-vue/commit/' + commitOfClient">{{ commitOfClient2 }}</a>
         ;Server:
-        <a
-          :href="'https://github.com/zyddnys/PatchyVideo/commit/'+commitOfServer"
-        >{{commitOfServer2}}</a>
+        <a :href="'https://github.com/zyddnys/PatchyVideo/commit/' + commitOfServer">{{ commitOfServer2 }}</a>
         ) うちょうてんネットワーク
       </p>
     </div>

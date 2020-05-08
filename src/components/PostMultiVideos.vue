@@ -64,51 +64,37 @@
   <div class="postBox" v-loading="loading">
     <div class="content">
       <!-- 输入URL的文本框 -->
-      <el-input
-        type="textarea"
-        :autosize="{ minRows: 8}"
-        :placeholder="$t('enter_url_prompt')"
-        v-model="URLs"
-      ></el-input>
+      <el-input type="textarea" :autosize="{ minRows: 8 }" :placeholder="$t('enter_url_prompt')" v-model="URLs"></el-input>
       <!-- 标签编辑 -->
       <div class="tagsEdit" v-if="false">
-        <h3>{{$t('tag')}}</h3>
+        <h3>{{ $t("tag") }}</h3>
         <div class="tagBox">
-          <p v-if="tags==''" style="margin-bottom:10px;">{{$t('no_tag')}}</p>
-          <el-tag effect="dark" v-else v-for="item in tags" :key="item">{{item}}</el-tag>
+          <p v-if="tags == ''" style="margin-bottom:10px;">{{ $t("no_tag") }}</p>
+          <el-tag effect="dark" v-else v-for="item in tags" :key="item">{{ item }}</el-tag>
         </div>
       </div>
       <!-- 高级选项 -->
       <p class="advancedOptions" @click="showAdvancedOptions">
-        {{$t('advance')}}
+        {{ $t("advance") }}
         <i class="el-icon-caret-bottom" v-if="!advancedOptions"></i>
         <i class="el-icon-caret-top" v-else></i>
         <!-- Wiki链接 -->
-        <a
-          href="https://patchyvideo.wiki/Upload"
-          target="_blank"
-          style="color:#409EFF;float:right;margin-right:100px;margin-top:0px;"
-        >{{$t('PostRules')}}</a>
+        <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color:#409EFF;float:right;margin-right:100px;margin-top:0px;">{{ $t("PostRules") }}</a>
       </p>
       <el-collapse-transition style="margin-bottom:20px">
         <div v-show="advancedOptions" class="options">
-          <el-checkbox v-model="as_copies" style="margin-top:10px">{{$t('mutually_copies')}}</el-checkbox>
+          <el-checkbox v-model="as_copies" style="margin-top:10px">{{ $t("mutually_copies") }}</el-checkbox>
         </div>
       </el-collapse-transition>
       <!-- 上传视频的按钮 -->
       <div style="text-align: center;">
         <el-button class="postButton" type="primary" @click="postMultiVideos">
-          {{$t('post_video')}}
+          {{ $t("post_video") }}
           <i class="el-icon-upload el-icon--right"></i>
         </el-button>
       </div>
     </div>
-    <EditTags
-      :msg="noData"
-      :visible.sync="showTagPanel"
-      @getEditTagsData="TagShow"
-      class="EditTags"
-    ></EditTags>
+    <EditTags :msg="noData" :visible.sync="showTagPanel" @getEditTagsData="TagShow" class="EditTags"></EditTags>
   </div>
 </template>
 
