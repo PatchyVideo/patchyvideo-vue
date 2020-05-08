@@ -766,7 +766,7 @@ export default {
     really: "",
     visible: {
       type: Boolean,
-      defulet: false
+      default: false
     }
   },
   components: {}
