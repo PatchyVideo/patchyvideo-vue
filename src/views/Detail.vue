@@ -2,36 +2,7 @@
 <!--
     页面：视频的详细信息
     功能：展示展示视频的详细信息
-    包含组件：LeftNavbar.vue、TopNavbar.vue、Foot.vue
     更新日志：
-    12/1/2019: v1.0 
-      release
-    12/14/2019: v1.0.1
-      1.实现了播放列表里链接的复制功能
-      2.对网站排版进行了部分修改
-    12/22/2019: v1.0.2
-      1.实现了网站标题和视频标题相一致的功能
-    12/26/2019：v1.1.0
-      1.使用直接向后端请求视频数据的方法重构了页面
-    12/29/2019：v1.1.1
-      1.当视频为视频列表第一个或最后一个的时候对“【前一篇】”，“【后一篇】”按钮进行优化
-      2.加入了副本链接前对应副本指向网站的小图标
-    1/20/2020：v1.1.2
-      1.新增添加副本 删除副本 由此创建播放列表功能，除了添加副本和删除副本能正常使用外，其余接口暂不支持
-    1/30/2020：v1.1.3
-      1.新增对于视频标签编辑功能的兼容
-    1/31/2020：v1.1.4
-      1.新增从单个视频创建播放列表的功能
-    2/2/2020：v1.1.5
-      1.新增管理员修改视频等级功能
-    2/4/2020：v1.1.6
-      1.视频介绍里的链接功能以及链接的副本功能完成
-      2.副本列表新增同步某一副本视频的功能
-    2/7/2020：v1.1.7
-      1.视频详情点击会出现副本添加失败的bug修复
-    ★待解决问题：
-      1.视频介绍里的链接功能弹出的按钮尚待优化
-      2.按下浏览器的后退按钮网站没有刷新数据
 -->
 <i18n>
 {
@@ -498,25 +469,20 @@ export default {
       switch (this.myVideoData.video.item.repost_type) {
         case "official":
           return this.$t("official");
-          break;
         case "official_repost":
           return this.$t("official_repost");
-          break;
         case "authorized_translation":
           return this.$t("authorized_translation");
-          break;
         case "authorized_repost":
           return this.$t("authorized_repost");
-          break;
         case "translation":
           return this.$t("translation");
-          break;
         case "repost":
           return this.$t("repost");
-          break;
         case "unknown":
           return this.$t("unknown");
-          break;
+        default:
+          return this.$t("unknown");
       }
     },
     // 视频的上传日期
@@ -597,14 +563,8 @@ export default {
     open4(message) {
       this.$message.error(message);
     },
-    openHTML(URL) {
-      var message = this.$message({
-        dangerouslyUseHTMLString: true,
-        message: "<p>创建成功！<i>点我查看</i></p>"
-      });
-    },
     // 视频存在的播放列表的下拉菜单的钩子
-    handleCommand(command) {
+    handleCommand() {
       this.newFromSingleVideo();
     },
     // 从单个视频创建播放列表
@@ -623,7 +583,7 @@ export default {
         method: "post",
         url: "be/videos/breaklink.do",
         data: { video_id: this.pid }
-      }).then(res => {
+      }).then(() => {
         this.$router.go(0);
       });
     },
@@ -632,7 +592,7 @@ export default {
         method: "post",
         url: "be/videos/broadcasttags.do",
         data: { src: this.pid }
-      }).then(res => {
+      }).then(() => {
         this.open2();
       });
     },
@@ -706,7 +666,7 @@ export default {
               this.isIpfs = false;
             }
           })
-          .catch(error => {
+          .catch(() => {
             this.$router.push({ path: "/404" });
           });
         return true;
@@ -808,7 +768,6 @@ export default {
     },
     // 匹配视频简介中的 URL 的规则
     buildUrlMatchers() {
-      var that = this;
       this.URL_MATCHERS["(https:\\/\\/|http:\\/\\/)?(www\\.)?bilibili\\.com\\/video\\/([aA][vV][\\d]+|BV[a-zA-Z0-9]+)+"] = function(match) {
         return [match, "video"];
       };
@@ -1019,7 +978,7 @@ export default {
           });
         }, Interval);
         const player = document.getElementById("player");
-        var vs = this.genIpfsVideo(ipfs, this.ipfsURL, player);
+        this.genIpfsVideo(ipfs, this.ipfsURL, player);
       });
     },
     // This is a function to simplify the js
@@ -1046,7 +1005,7 @@ export default {
     }
   },
   watch: {
-    $route(newV, oldV) {
+    $route() {
       this.searchVideo();
     },
     newListDialog() {

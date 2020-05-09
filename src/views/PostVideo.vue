@@ -45,7 +45,7 @@
 
     <!-- PostVideo 页面的正文 -->
     <div class="w main-page-background-img">
-      <el-tabs v-model="activeName" type="card" @tab-click="handleClick" class="topTabs">
+      <el-tabs v-model="activeName" type="card" class="topTabs">
         <el-tab-pane :label="$t('single_release')" name="first" :lazy="true">
           <PostSingleVideo></PostSingleVideo>
         </el-tab-pane>
@@ -83,10 +83,7 @@ export default {
     document.title = this.$t("title") + " - Patchyvideo";
   },
   mounted() {},
-  methods: {
-    // 切换标签页
-    handleClick(tab, event) {}
-  },
+  methods: {},
   components: {
     topnavbar,
     Footer,

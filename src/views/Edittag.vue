@@ -58,6 +58,7 @@
 
     <div class="tagpage">
       <div class="content" v-loading="loading">
+        {{ aqwe }}
         <!-- 每个标签种类的表单 -->
         <el-tabs type="border-card" v-model="activeName">
           <el-tab-pane :lazy="true" v-for="(item, i) in tagCategories" :key="item" :label="$t('tag_categories.' + item)" :name="i.toString()">
@@ -92,6 +93,11 @@ export default {
     };
   },
   computed: {},
+  computed: {
+    aqwe() {
+      return "asda";
+    }
+  },
   mounted() {
     // 初始化页面名为 home
     this.$store.commit("changeBgc", "tag");

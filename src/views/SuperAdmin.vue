@@ -36,7 +36,7 @@
     <!-- 管理员身份验证界面 -->
     <div v-if="!admin" v-loading="!admin" class="adminloading" element-loading-text="少女祈祷中" element-loading-spinner="el-icon-loading"></div>
 
-    <el-tabs v-else v-model="activeName" @tab-click="handleClick">
+    <el-tabs v-else v-model="activeName">
       <!-- 用户管理 -->
       <el-tab-pane :label="$t('user_management')" name="first" :lazy="true">
         <usermanagemennt></usermanagemennt>
@@ -74,7 +74,6 @@ export default {
     this.isAdmin();
   },
   methods: {
-    handleClick(tab, event) {},
     // 判断当前用户是不是 Admin，不是则 404
     isAdmin() {
       this.axios({

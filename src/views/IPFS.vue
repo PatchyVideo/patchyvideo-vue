@@ -18,7 +18,7 @@
             "l2":"为被削除的東方视频提供备份服务",
             "l3":"暂时只提供人工审核通道，有备份需求的up请移步群:757676234,私聊管理 \"IPFS归档处\"",
             "l4":"备份站使用IPFS 分布式网络播放视频，可能会出现卡顿情况",
-            "l5":"了解<a href=\"https://ipfs.io\">IPFS</a> 技术可更好地使用本站功能"
+            "l5":"了解<a href='https://ipfs.io'>IPFS</a> 技术可更好地使用本站功能"
         },
         "part2":{
             "title":"暂行标准",
@@ -49,7 +49,7 @@
             "l2":"Provide backup services for the deleted Touhou Video",
             "l3":"Only provide manual review channels for the time being，If you have backup requirements, please move to the QQgroup:757676234,Private chat with manager who named \"IPFS归档处\"",
             "l4":"Backup Station Plays Video Using IPFS Distributed Network, Stuck",
-            "l5":" Understanding <a href=\"https://ipfs.io\">IPFS</a> technology can make better use of the functions of this site "
+            "l5":" Understanding <a href='https://ipfs.io'>IPFS</a> technology can make better use of the functions of this site "
         },
         "part2":{
             "title":"Interim standard",
@@ -81,7 +81,7 @@
             "l2":"為被削除的東方視頻提供備份服務",
             "l3":"暫時只提供人工審核通道，有備份需求的up請移步群:757676234,私聊管理 \"IPFS歸檔處\"",
             "l4":"備份站使用IPFS 分布式網絡播放視頻，可能會出現卡頓情況",
-            "l5":"了解<a href=\"https://ipfs.io\">IPFS</a> 技術可更好地使用本站功能"
+            "l5":"了解<a href='https://ipfs.io'>IPFS</a> 技術可更好地使用本站功能"
         },
         "part2":{
             "title":"暫行標準",
@@ -105,46 +105,39 @@
 }
 </i18n>
 
-
 <template>
   <div>
     <topnavbar />
     <div class="w main-page-background-img">
       <div class="content">
-        <p>...{{$t('content.introduce')}}...</p>
-        <h1>{{$t('content.part1.title')}}</h1>
+        <p>...{{ $t("content.introduce") }}...</p>
+        <h1>{{ $t("content.part1.title") }}</h1>
         <ul>
-          <li>{{$t('content.part1.l1')}}</li>
-          <li>{{$t('content.part1.l2')}}</li>
-          <li>{{$t('content.part1.l3')}}</li>
-          <li>{{$t('content.part1.l4')}}</li>
+          <li>{{ $t("content.part1.l1") }}</li>
+          <li>{{ $t("content.part1.l2") }}</li>
+          <li>{{ $t("content.part1.l3") }}</li>
+          <li>{{ $t("content.part1.l4") }}</li>
           <li v-html="$t('content.part1.l5')"></li>
         </ul>
 
-        <h1>{{$t('content.part2.title')}}</h1>
+        <h1>{{ $t("content.part2.title") }}</h1>
         <ul>
-          <li>{{$t('content.part2.l1')}}</li>
-          <li>{{$t('content.part2.l2')}}</li>
-          <li>{{$t('content.part2.l3')}}</li>
-          <li>{{$t('content.part2.l4')}}</li>
-          <li>{{$t('content.part2.l5')}}</li>
+          <li>{{ $t("content.part2.l1") }}</li>
+          <li>{{ $t("content.part2.l2") }}</li>
+          <li>{{ $t("content.part2.l3") }}</li>
+          <li>{{ $t("content.part2.l4") }}</li>
+          <li>{{ $t("content.part2.l5") }}</li>
         </ul>
 
-        <h1>{{$t('content.video_test.title')}}</h1>
-        <router-link to="/ipfs/player">{{$t('content.video_test.link')}}</router-link>
-        <p>{{$t('content.video_test.player_tip')}}</p>
+        <h1>{{ $t("content.video_test.title") }}</h1>
+        <router-link to="/ipfs/player">{{ $t("content.video_test.link") }}</router-link>
+        <p>{{ $t("content.video_test.player_tip") }}</p>
         <p></p>
-        <video
-          src="https://ipfs.globalupload.io/QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh"
-          id="player"
-          controls
-          loop
-          width="50%"
-        >
-          <p>{{$t('content.video_test.err_tip')}}</p>
+        <video src="https://ipfs.globalupload.io/QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh" id="player" controls loop width="50%">
+          <p>{{ $t("content.video_test.err_tip") }}</p>
         </video>
         <p />
-        <button id="button" @click="changeSrc()">{{buttonInnerHTML}}</button>
+        <button id="button" @click="changeSrc()">{{ buttonInnerHTML }}</button>
         <p />
         <a id="badapple" @click="playBadapple()">bad apple!!</a>
         <p />
@@ -152,7 +145,7 @@
         <p />
         <a @click="playErxiaojie()">最终鬼畜二小姐</a>
         <p />
-        <h1>{{$t('content.image_test')}}</h1>
+        <h1>{{ $t("content.image_test") }}</h1>
         <!-- TODO: 也可采用数据库检索 hash 值 -->
         <img src="https://ipfs.globalupload.io/QmQH2mFR9mwv5PM1toYech1uXSr5k8Tdu2qQ6XEaVy9QtL" />
         <p />
@@ -174,12 +167,9 @@ export default {
   data() {
     return {
       buttonInnerHTML: this.$t("content.video_test.video_switch_test_tip"),
-      badapple:
-        "https://ipfs.globalupload.io/QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh",
-      lanlanlu:
-        "https://ipfs.globalupload.io/QmT2LT2D513dTe1bNuBogfDCpZakaEuPquJmozYx6X6Gmq",
-      erxiaojie:
-        "https://ipfs.globalupload.io/QmNdrzSXnYyiTJGS3tj3SswhpJLpjhmNbTLm15hWR7kLdE",
+      badapple: "https://ipfs.globalupload.io/QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh",
+      lanlanlu: "https://ipfs.globalupload.io/QmT2LT2D513dTe1bNuBogfDCpZakaEuPquJmozYx6X6Gmq",
+      erxiaojie: "https://ipfs.globalupload.io/QmNdrzSXnYyiTJGS3tj3SswhpJLpjhmNbTLm15hWR7kLdE",
       count: 0
     };
   },

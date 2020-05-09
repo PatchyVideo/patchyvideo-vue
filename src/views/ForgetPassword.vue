@@ -177,8 +177,6 @@ input:-ms-input-placeholder {
   /* Internet Explorer 10-11 */
   color: #c8c8c8;
 }
-input[type="text"] {
-}
 
 * {
   margin: 0px;
@@ -241,8 +239,6 @@ a {
 
   border: 1px solid #c8c8c8;
   background-color: hsla(0, 0%, 71%, 0.1);
-}
-.middle input:focus {
 }
 
 .login {
