@@ -85,7 +85,7 @@
               </div>
             </div>
             订阅来源：
-            <el-tag v-for="i in item.sat_objs" :key="'s' + item._id.$oid" style="margin: 0 5px">{{ i.name || i.qs }}</el-tag>
+            <el-tag v-for="i in item.sat_objs" :key="'s' + i._id.$oid" style="margin: 0 5px">{{ i.name || i.qs }}</el-tag>
           </li>
         </ul>
 
@@ -111,7 +111,7 @@
 <script>
 import left_navbar from "../../components/LeftNavbar.vue";
 
-import { copyToClipboardText } from "../../static/js/generic";
+// import { copyToClipboardText } from "../../static/js/generic";
 export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -168,7 +168,7 @@ export default {
 
     get_obj(obj, key) {
       let path = key.split(".");
-      var obj2 = obj;
+      let obj2 = obj;
       for (let i = 0; i < path.length; ++i) {
         obj2 = obj2[path[i]];
       }
@@ -181,14 +181,14 @@ export default {
 
     do_sat(obj, key = null, query_key = null, condition = {}) {
       if (query_key == "$and") {
-        var ans = true;
-        for (i = 0; i < condition.length; ++i) {
+        let ans = true;
+        for (let i = 0; i < condition.length; ++i) {
           ans &= this.do_sat(obj, key, null, condition[i]);
         }
         return ans;
       } else if (query_key == "$or") {
-        var ans = false;
-        for (i = 0; i < condition.length; ++i) {
+        let ans = false;
+        for (let i = 0; i < condition.length; ++i) {
           ans |= this.do_sat(obj, key, null, condition[i]);
         }
         return ans;
@@ -196,8 +196,8 @@ export default {
         return !this.do_sat(obj, key, null, condition);
       }
       if (key == null) {
-        var ans = true;
-        for (var child in condition) {
+        let ans = true;
+        for (let child in condition) {
           if (child.charAt(0) == "$") {
             ans &= this.do_sat(obj, null, child, condition[child]);
           } else {
@@ -217,8 +217,8 @@ export default {
             // array
             return this.get_obj(obj, key).includes(condition);
           } else {
-            var lhs = this.get_obj(obj, key);
-            var rhs = condition;
+            let lhs = this.get_obj(obj, key);
+            let rhs = condition;
             if (typeof lhs == "object" && "$date" in lhs) {
               lhs = lhs["$date"];
             }
@@ -245,21 +245,21 @@ export default {
         } else if (Array.isArray(condition)) {
           // tags: {$all: [1, 2]} or tags: {$in: [1, 2]} or tags: {$nin: [1, 2]}
           if (query_key == "$all") {
-            for (var i = 0; i < condition.length; ++i) {
+            for (let i = 0; i < condition.length; ++i) {
               if (!this.get_obj(obj, key).includes(condition[i])) {
                 return false;
               }
             }
             return true;
           } else if (query_key == "$in") {
-            for (var i = 0; i < condition.length; ++i) {
+            for (let i = 0; i < condition.length; ++i) {
               if (this.get_obj(obj, key).includes(condition[i])) {
                 return true;
               }
             }
             return false;
           } else if (query_key == "$nin") {
-            for (var i = 0; i < condition.length; ++i) {
+            for (let i = 0; i < condition.length; ++i) {
               if (this.get_obj(obj, key).includes(condition[i])) {
                 return false;
               }
@@ -268,8 +268,8 @@ export default {
           }
         } else {
           // tags: {}
-          var ans = true;
-          for (var child in condition) {
+          let ans = true;
+          for (let child in condition) {
             if (child.charAt(0) == "$") {
               ans &= this.do_sat(obj, key, child, condition[child]);
             } else {
@@ -290,7 +290,7 @@ export default {
     handleSizeChange(val) {
       this.count = val;
     },
-    getListVideo: function(e, count, order) {
+    getListVideo: function(e, count) {
       // 先使页面出于加载状态
 
       this.loading = true;
@@ -313,7 +313,7 @@ export default {
           // console.log(a);
           this.listvideo = this.match_video_query(result.data.data.videos, result.data.data.objs);
           this.allSubs = {};
-          for (var i = 0; i < result.data.data.objs.length; ++i) {
+          for (let i = 0; i < result.data.data.objs.length; ++i) {
             this.allSubs[result.data.data.objs[i]._id.$oid] = result.data.data.objs[i];
           }
 
@@ -339,7 +339,7 @@ export default {
           this.loading = false;
         });
     },
-    getListVideo_VideoOnly: function(e, count, order) {
+    getListVideo_VideoOnly: function(e, count) {
       // 只更新视频数据，不更新其他（包括订阅对象）
       // 先使页面出于加载状态
 
@@ -408,7 +408,7 @@ export default {
     }
   },
   watch: {
-    page(v) {
+    page() {
       // 如果为 True 说明是搜索数据导致的页数改变，并且如果当前页数是 1 的话，取消这一次数据请求
       if (this.pageMark && this.page === 1) {
         this.pageMark = false;
@@ -420,7 +420,7 @@ export default {
         this.getListVideo(this.page, this.count);
       }
     },
-    count(v) {
+    count() {
       // 如果为 True 说明是搜索数据导致的页数改变，并且如果当前页数是 1 的话，取消这一次数据请求
       if (this.pageMark && this.page === 1) {
         this.pageMark = false;
@@ -445,7 +445,7 @@ export default {
         this.getListVideo(this.page, this.count);
       }
     },
-    ifSearch(newV, oldV) {
+    ifSearch() {
       // this.ifQuest = false;
       this.handleCurrentChange(1);
       // 是否渲染的是搜索的数据，默认 false 为主页数据，清空搜索关键词

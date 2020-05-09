@@ -311,7 +311,7 @@ export default {
           _that.asideWidth = asideWidth + l;
           // asideObj.style.width = `${asideWidth+l}px`;
         };
-        document.onmouseup = function(e) {
+        document.onmouseup = function() {
           document.onmousemove = null;
           document.onmouseup = null;
         };
@@ -320,8 +320,8 @@ export default {
   },
   methods: {
     folderObjectToTreeNode(obj) {
-      var data = [];
-      for (var i = 0; i < obj.length; ++i) {
+      let data = [];
+      for (let i = 0; i < obj.length; ++i) {
         if (typeof obj[i].playlist_object == "undefined") {
           data.push({
             name: obj[i].name,
@@ -400,7 +400,7 @@ export default {
       this.getFolder();
     },
     toNavigablePath() {
-      var paths = this.currentPath.split("/").filter(Boolean);
+      let paths = this.currentPath.split("/").filter(Boolean);
       if (paths.length == 0) {
         return [
           {
@@ -409,15 +409,15 @@ export default {
           }
         ];
       } else {
-        var result = [];
-        var priorPath = "/";
+        let result = [];
+        let priorPath = "/";
         result.push({
           dst: priorPath,
           name: "root"
         });
-        for (var i = 0; i < paths.length; ++i) {
+        for (let i = 0; i < paths.length; ++i) {
           priorPath += paths[i] + "/";
-          var curObj = {
+          let curObj = {
             dst: priorPath,
             name: paths[i]
           };
@@ -430,7 +430,7 @@ export default {
       this.currentSelectedItems = val;
     },
 
-    handleCurrentFolderPrivateViewChanged(new_val) {
+    handleCurrentFolderPrivateViewChanged() {
       // console.log(this.currentFolderObject.privateView);
       this.axios({
         method: "post",
@@ -446,7 +446,7 @@ export default {
 
     createFolder() {
       this.loading = true;
-      var folderName = this.newFolderForm.name;
+      let folderName = this.newFolderForm.name;
       this.axios({
         method: "post",
         url: "be/folder/create",
@@ -488,11 +488,11 @@ export default {
     deleteSelectedItems() {
       this.loading = true;
       if (this.currentSelectedItems) {
-        var pathsToDelete = [];
+        let pathsToDelete = [];
         this.currentSelectedItems.forEach(obj => {
           if (typeof obj.playlist_object == "undefined") pathsToDelete.push(obj.path);
         });
-        var pidsToDelete = [];
+        let pidsToDelete = [];
         this.currentSelectedItems.forEach(obj => {
           if (typeof obj.playlist_object !== "undefined") pidsToDelete.push(obj.playlist_object._id.$oid);
         });
@@ -506,8 +506,8 @@ export default {
         }).then(result => {
           result = result.data;
           if (result.status == "SUCCEED") {
-            for (var i = 0; i < pathsToDelete.length; ++i) {
-              var node = this.$refs.folderTree.getNode(pathsToDelete[i]);
+            for (let i = 0; i < pathsToDelete.length; ++i) {
+              let node = this.$refs.folderTree.getNode(pathsToDelete[i]);
               this.$refs.folderTree.remove(node);
             }
             this.axios({
@@ -518,7 +518,7 @@ export default {
                 pids: pidsToDelete
               },
               withCredentials: true
-            }).then(result => {
+            }).then(() => {
               this.$message.success(this.$t("del_success"));
               this.getFolder();
             });
@@ -552,7 +552,7 @@ export default {
           }
           this.loading = false;
         })
-        .catch(err => {
+        .catch(() => {
           // console.log(err);
           this.loading = false;
         });
@@ -573,8 +573,8 @@ export default {
         if (result.status == "SUCCEED") {
           this.showRenameFolderDialog = false;
           this.getFolder(() => {
-            var renamedTreeNode = this.$refs.folderTree.getNode(row.path);
-            var parentTreeNode = this.$refs.folderTree.getNode(this.currentPath);
+            let renamedTreeNode = this.$refs.folderTree.getNode(row.path);
+            let parentTreeNode = this.$refs.folderTree.getNode(this.currentPath);
             if (renamedTreeNode) {
               this.$refs.folderTree.remove(renamedTreeNode);
               parentTreeNode.data.children.push({
@@ -610,13 +610,13 @@ export default {
   filters: {
     formatDate(value) {
       if (value) {
-        var upload_time = new Date(value.$date);
-        var y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
-        var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
-        var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
-        var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
+        let upload_time = new Date(value.$date);
+        let y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+        let M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        let d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        let h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+        let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+        let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
         return (
           y +
           "-" +

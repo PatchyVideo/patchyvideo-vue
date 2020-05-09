@@ -244,17 +244,17 @@ export default {
     }
   },
   computed: {
-    toGMT(timeStamp) {
+    toGMT() {
       return function(timeStamp) {
-        var upload_time = new Date(timeStamp);
+        let upload_time = new Date(timeStamp);
         // 设置为东八区的时间
         upload_time.setTime(upload_time.getTime() + 1000 * 3600 * 8);
-        var y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
-        var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
-        var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
-        var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
+        let y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+        let M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        let d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        let h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+        let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+        let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
         return (
           "视频发布于 " +
           y +
@@ -304,14 +304,14 @@ export default {
       });
     },
     // 请求播放列表数据
-    getListVideo: function(e, count, order) {
+    getListVideo: function(e, count) {
       // 先使页面处于加载状态
       this.loading = true;
-      var sites = "";
+      let sites = "";
       const index = this.visibleSites.indexOf("");
       if (index == -1) {
         // 用户选择了某几个网站
-        for (var i = 0; i < this.visibleSites.length; ++i) {
+        for (let i = 0; i < this.visibleSites.length; ++i) {
           sites += "site:" + this.visibleSites[i] + " ";
         }
         sites = "ANY(" + sites + ")";
@@ -340,10 +340,10 @@ export default {
         /* 排序处理 */
 
         // 获得热门标签
-        var tags = result.data.data.tags;
-        var tagswithcount = result.data.data.tag_pops;
+        let tags = result.data.data.tags;
+        let tagswithcount = result.data.data.tag_pops;
         // 排序热门标签
-        var ntags = {};
+        let ntags = {};
         tagswithcount = Object.keys(tagswithcount)
           .sort((a, b) => tagswithcount[b] - tagswithcount[a])
           .forEach(key => {
@@ -375,11 +375,11 @@ export default {
       // }
       this.loading = true;
       this.$store.commit("getTopNavbarSearching", this.searchKeyWord);
-      var sites = "";
+      let sites = "";
       const index = this.visibleSites.indexOf("");
       if (index == -1) {
         // 用户选择了某几个网站
-        for (var i = 0; i < this.visibleSites.length; ++i) {
+        for (let i = 0; i < this.visibleSites.length; ++i) {
           sites += "site:" + this.visibleSites[i] + " ";
         }
         sites = "ANY(" + sites + ")";
@@ -483,7 +483,7 @@ export default {
     },
     historyPush() {
       const visibleSites = btoa(JSON.stringify(this.visibleSites));
-      var query = {};
+      let query = {};
 
       this.page != 1 && (query.page = this.page);
       this.count != 20 && (query.page_count = this.count);
@@ -494,7 +494,7 @@ export default {
       this.$route.query.qtype && (query.qtype = this.$route.query.qtype);
 
       const urlSearchParams = new URLSearchParams();
-      for (var i in query) {
+      for (let i in query) {
         urlSearchParams.set(i, query[i]);
       }
 
@@ -530,7 +530,7 @@ export default {
   },
 
   watch: {
-    page(v) {
+    page() {
       // 如果为 True 说明是搜索数据导致的页数改变，并且如果当前页数是 1 的话，取消这一次数据请求
       if (this.pageMark && this.page === 1) {
         this.pageMark = false;
@@ -542,7 +542,7 @@ export default {
         this.getListVideo(this.page, this.count);
       }
     },
-    count(v) {
+    count() {
       // 如果为 True 说明是搜索数据导致的页数改变，并且如果当前页数是 1 的话，取消这一次数据请求
       if (this.pageMark && this.page === 1) {
         this.pageMark = false;
@@ -568,7 +568,7 @@ export default {
       }
       this.historyPush();
     },
-    ifSearch(newV, oldV) {
+    ifSearch() {
       // this.ifQuest = false;
       this.handleCurrentChange(1);
       // 是否渲染的是搜索的数据，默认 false 为主页数据，清空搜索关键词
@@ -669,8 +669,7 @@ export default {
       img {
         border-radius: 4px;
       }
-      .Imgcover {
-      }
+      // .Imgcover {}
     }
   }
   .video-detail {
@@ -712,10 +711,8 @@ export default {
       -webkit-line-clamp: 4;
       -webkit-box-orient: vertical;
     }
-    .time-up {
-    }
-    .linkToPublisher {
-    }
+    // .time-up {}
+    // .linkToPublisher {}
   }
   .rating-box {
     position: relative;

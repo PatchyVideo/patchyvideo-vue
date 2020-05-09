@@ -159,12 +159,12 @@ export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     // URL 校验规则
-    var validateURL = (rule, value, callback) => {
+    let validateURL = (rule, value, callback) => {
       if (!value) {
         return callback(new Error(this.$t("not_input_addr")));
       }
-      var value2 = "ipfs:" + value;
-      var ipfsURL = /^ipfs:[a-zA-Z0-9]+/;
+      let value2 = "ipfs:" + value;
+      let ipfsURL = /^ipfs:[a-zA-Z0-9]+/;
       if (!ipfsURL.test(value2)) {
         return callback(new Error(this.$t("addr_err")));
       } else {
@@ -246,13 +246,13 @@ export default {
       this.$message.warning(this.$t("upload_cover_limit"));
     },
     // 删除文件调用的函数
-    beforeRemove(file, fileList) {
+    beforeRemove() {
       // return this.$confirm(`确定移除 ${file.name}？`);
       this.list.cover = [];
     },
     // 上传文件成功之后处理数据取消上传文件的校验规则
-    uploadVideoCover(response, file, fileList) {
-      var cover = {};
+    uploadVideoCover(response, file) {
+      let cover = {};
       cover.file_key = response.data.file_key;
       cover.name = file.name;
       this.list.cover.push(cover);
@@ -287,7 +287,7 @@ export default {
               this.open4();
             } else if (result.data.status == "FAILED") {
               if (result.data.data.reason == "TAG_NOT_EXIST") {
-                var errorTag = result.data.data.aux;
+                let errorTag = result.data.data.aux;
                 this.open3(errorTag);
               } else {
                 this.open2();

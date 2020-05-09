@@ -439,16 +439,6 @@ export default {
     this.getAuthorData();
   },
   methods: {
-    // copied from LeftNavbar.vue
-    gotoHome(key) {
-      if (key != "") {
-        this.$router.push({ path: "/home", query: { keyword: key } }).catch(err => {
-          return err;
-        });
-      } else {
-        this.$router.push({ path: "/home" });
-      }
-    },
     // 标签点击搜索功能
     gotoHome(key) {
       if (key != "") {
@@ -513,11 +503,11 @@ export default {
               }
               this.loading = false;
             })
-            .catch(err => {
+            .catch(() => {
               this.loading = false;
             });
         })
-        .catch(err => {
+        .catch(() => {
           this.loading = false;
         });
     },
@@ -545,13 +535,13 @@ export default {
       this.$message.warning(this.$t("one_picture"));
     },
     // 删除文件调用的函数
-    beforeRemove(file, fileList) {
+    beforeRemove() {
       // return this.$confirm(`确定移除 ${file.name}？`);
       this.avatarKey = [];
     },
     // 上传文件成功之后处理数据取消上传文件的校验规则
-    uploadVideoCover(response, file, fileList) {
-      var cover = {};
+    uploadVideoCover(response, file) {
+      let cover = {};
       cover.file_key = response.data.file_key;
       cover.name = file.name;
       this.avatarKey.push(cover);
@@ -572,7 +562,7 @@ export default {
           this.avatarIpt = "";
           this.loading3 = false;
         })
-        .catch(err => {
+        .catch(() => {
           this.loading3 = false;
         });
     },
@@ -580,7 +570,7 @@ export default {
     submitData() {
       this.nowSubmit = true;
       this.adduserSpace();
-      var avatar_file_key = "";
+      let avatar_file_key = "";
       if (this.useFile && this.avatarKey.length) {
         avatar_file_key = this.avatarKey[0].file_key;
       } else {
@@ -604,12 +594,12 @@ export default {
               avatar_file_key: avatar_file_key
             }
           })
-            .then(result => {
+            .then(() => {
               this.open2(this.$t("update_succeed"));
               this.getAuthorData();
               this.edit = false;
             })
-            .catch(err => {
+            .catch(() => {
               this.open6();
               this.loading = false;
             });
@@ -622,7 +612,7 @@ export default {
     // 下面是消息补全框的方法
     querySearchAsync(queryString, cb) {
       // this.infoTipMark = true;
-      var url = "/autocomplete/?q=" + queryString;
+      let url = "/autocomplete/?q=" + queryString;
       this.axios({
         method: "get",
         url: url
@@ -664,7 +654,6 @@ export default {
     getTagCategoriesForAdd(str) {
       this.loading2 = true;
       let strToArray = str.split();
-      let _that = this;
       this.axios({
         method: "post",
         url: "be/tags/query_tag_categories.do ",
@@ -685,7 +674,7 @@ export default {
           }
           this.loading2 = false;
         })
-        .catch(err => {
+        .catch(() => {
           this.loading2 = true;
         });
     },

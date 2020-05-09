@@ -119,7 +119,7 @@ export default {
     handleSizeChange(val) {
       this.count = val;
     },
-    handleChange(val) {
+    handleChange() {
       // console.log(val);
     },
 
@@ -208,16 +208,16 @@ export default {
     }
   },
   watch: {
-    couponSelected(val) {
+    couponSelected() {
       // 排序更改时，重新请求数据
       this.loading = true;
       this.getVideoMaxCount();
     },
-    page(v) {
+    page() {
       this.loading = true;
       this.getVideoData(this.page, this.count);
     },
-    count(v) {
+    count() {
       this.getVideoData(this.page, this.count);
     }
   }
@@ -305,8 +305,7 @@ export default {
           transition: all 0.1s ease;
         }
       }
-      &:hover span {
-      }
+      // &:hover span {}
     }
   }
 

@@ -65,7 +65,7 @@ export default {
     gotoHome(key, _blank = false) {
       if (key != "") {
         if (_blank) {
-          var routerPath = this.$router.resolve({
+          let routerPath = this.$router.resolve({
             path: "/home",
             query: { keyword: key }
           });

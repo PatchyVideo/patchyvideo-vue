@@ -239,8 +239,8 @@ export default {
                       // 如果是从路由守卫跳转到本界面，进入下一个页面
                       else if (this.$store.state.ifRouter == 1) {
                         this.$store.commit("changeifRouter", "2");
-                        var path = this.$store.state.routerPath;
-                        var query = this.$store.state.routerparams;
+                        let path = this.$store.state.routerPath;
+                        let query = this.$store.state.routerparams;
                         // 因为发布视频有参数传入的可能,所以做特别的兼容性调整
                         if (path == "/postvideo") {
                           this.$router.push({ path: path, query: query });
@@ -283,7 +283,7 @@ export default {
     // 设置 cookie
     // 储存变量为 username, userAvatar
     setCookie(username, userAvatar, days) {
-      var date = new Date(); // 获取时间
+      let date = new Date(); // 获取时间
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
       // 字符串拼接 cookie
       window.document.cookie = "username" + ":" + username + ";path=/;expires=" + date.toUTCString();

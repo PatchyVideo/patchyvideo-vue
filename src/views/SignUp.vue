@@ -157,7 +157,7 @@ export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     // 校验用户名是否已经存在
-    var checkUsername = (rule, value, callback) => {
+    let checkUsername = (rule, value, callback) => {
       this.axios({
         method: "post",
         url: "be/user/exists.do",
@@ -173,7 +173,7 @@ export default {
       });
     };
     // 校验两次输入密码是否一致
-    var validatePass2 = (rule, value, callback) => {
+    let validatePass2 = (rule, value, callback) => {
       if (value !== this.signupFormRef.signup_password1) {
         callback(new Error(this.$t("psd_limit")));
       } else {
@@ -292,7 +292,7 @@ export default {
                 }
                 // 用户名已存在的情况
                 else {
-                  var reason = result.data.data.reason;
+                  let reason = result.data.data.reason;
                   if (reason == "USER_EXIST") {
                     this.open3();
                   } else {

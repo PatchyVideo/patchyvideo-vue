@@ -216,7 +216,7 @@ export default {
           this.log.data = ret.data.data;
           this.loading = false;
         })
-        .catch(err => {
+        .catch(() => {
           this.loading = false;
         });
     },
@@ -250,7 +250,7 @@ export default {
      * @return: UTC
      */
     toUTCTime(date) {
-      var UTC = new Date(new Date(date).getTime() - 8 * 3600 * 1000);
+      let UTC = new Date(new Date(date).getTime() - 8 * 3600 * 1000);
       return this.dateFormat("yyyy-MM-dd HH:mm:ss", UTC);
     },
     // 切换level选项时调用
@@ -286,9 +286,7 @@ export default {
 .select {
   margin: 0 5px 0 5px;
 }
-.log-form {
-  /* display: flex; */
-}
+/* .log-form {display: flex;} */
 .tag-box {
   margin: 10px 0 10px 0;
   display: inline-block;

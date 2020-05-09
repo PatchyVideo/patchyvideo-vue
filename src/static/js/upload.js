@@ -88,15 +88,11 @@ export const loadImage = src => {
  *
  */
 export const isAppropriateResolution = async (file, props) => {
-  try {
-    const { width, height } = props;
-    const base64 = await readFile(file);
-    const image = await loadImage(base64);
-    if (image.width !== width || image.height !== height) {
-      throw new Error("上传图片的分辨率必须为" + width + "*" + height);
-    }
-  } catch (error) {
-    throw error;
+  const { width, height } = props;
+  const base64 = await readFile(file);
+  const image = await loadImage(base64);
+  if (image.width !== width || image.height !== height) {
+    throw new Error("上传图片的分辨率必须为" + width + "*" + height);
   }
 };
 
@@ -108,19 +104,15 @@ export const isAppropriateResolution = async (file, props) => {
  * @throw  比例不在限定范围之内则抛出异常
  */
 export const isAppRatio = async (file, ratio) => {
-  try {
-    const [w, h] = ratio;
-    if (h === 0 || w === 0) {
-      const err = "上传图片的比例不能出现0";
-      Message.error(err);
-      throw new Error(err);
-    }
-    const base64 = await readFile(file);
-    const image = await loadImage(base64);
-    if (image.width / image.height !== w / h) {
-      throw new Error("上传图片的宽高比例必须为 " + w + " : " + h);
-    }
-  } catch (error) {
-    throw error;
+  const [w, h] = ratio;
+  if (h === 0 || w === 0) {
+    const err = "上传图片的比例不能出现0";
+    Message.error(err);
+    throw new Error(err);
+  }
+  const base64 = await readFile(file);
+  const image = await loadImage(base64);
+  if (image.width / image.height !== w / h) {
+    throw new Error("上传图片的宽高比例必须为 " + w + " : " + h);
   }
 };

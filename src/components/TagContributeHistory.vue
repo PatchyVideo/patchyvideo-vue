@@ -98,7 +98,7 @@ export default {
       this.loadData();
     },
     handleSizeChange(val) {
-      var page = Math.floor((this.page * this.pageSize) / val);
+      let page = Math.floor((this.page * this.pageSize) / val);
       this.page = page || 1;
       this.pageSize = val;
       this.loadData();
@@ -124,7 +124,7 @@ export default {
           }
         })
           .then(result => {
-            var data = result.data.data;
+            let data = result.data.data;
             this.hisList = data;
             this.loading = false;
             // 回到顶部
@@ -163,22 +163,22 @@ export default {
     // 将时间戳转换为时间字符串
     // time: 时间戳 GMT:时区 (数字：-12~12)
     date2str(time, GMT) {
-      var upload_time = new Date(time);
+      let upload_time = new Date(time);
       // 获得当前时区
-      var currentGMT = 0 - upload_time.getTimezoneOffset() / 60;
+      let currentGMT = 0 - upload_time.getTimezoneOffset() / 60;
       if (GMT >= -12 && GMT <= 14) {
         // 时区差
-        var GMToffset = GMT - (0 - currentGMT);
+        let GMToffset = GMT - (0 - currentGMT);
         // 设置为对应时区的时间
         upload_time.setTime(upload_time.getTime() + 1000 * 3600 * GMToffset);
         currentGMT = GMT;
       }
-      var year = upload_time.getFullYear(); // getFullYear 方法以四位数字返回年份
-      var month = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-      var days = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-      var hours = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
-      var minutes = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
-      var seconds = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
+      let year = upload_time.getFullYear(); // getFullYear 方法以四位数字返回年份
+      let month = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+      let days = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+      let hours = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+      let minutes = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+      let seconds = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
 
       return `${year}-${(Array(2).join(0) + month).slice(-2)}-${(Array(2).join(0) + days).slice(-2)} ${(Array(2).join(0) + hours).slice(-2)}:${(
         Array(2).join(0) + minutes

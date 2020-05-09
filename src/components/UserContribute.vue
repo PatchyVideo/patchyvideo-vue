@@ -167,7 +167,7 @@ export default {
             this.videoCount = result.data.data.count;
             this.loading = false;
           })
-          .catch(err => {});
+          .catch(() => {});
         return;
       }
       if (this.$route.params.id != "me") {
@@ -189,7 +189,7 @@ export default {
             this.videoCount = result.data.data.count;
             this.loading = false;
           })
-          .catch(err => {});
+          .catch(() => {});
         return;
       }
     },
@@ -213,7 +213,7 @@ export default {
             this.videoCount = result.data.data.count;
             this.loading = false;
           })
-          .catch(err => {});
+          .catch(() => {});
         return;
       }
       if (this.$route.params.id != "me") {
@@ -235,7 +235,7 @@ export default {
             this.videoCount = result.data.data.count;
             this.loading = false;
           })
-          .catch(err => {});
+          .catch(() => {});
         return;
       }
     },
@@ -265,7 +265,7 @@ export default {
     },
     getcount(name) {
       // 统计计数
-      return this.TagData.filter(function(element, index, array) {
+      return this.TagData.filter(element => {
         if (element.tag == name) {
           return element.count;
         }
@@ -382,11 +382,11 @@ export default {
     $route() {
       location.reload();
     },
-    page(v) {
+    page() {
       this.loading = true;
       this.getData(this.page, this.count);
     },
-    count(v) {
+    count() {
       this.getData(this.page, this.count);
     }
   }
@@ -423,8 +423,7 @@ export default {
         height: 46px;
         overflow: hidden;
         text-overflow: ellipsis;
-        a {
-        }
+        // a {}
       }
       &:hover {
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
@@ -459,8 +458,7 @@ export default {
         height: 46px;
         overflow: hidden;
         text-overflow: ellipsis;
-        a {
-        }
+        // a {}
       }
       &:hover {
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
@@ -514,8 +512,7 @@ export default {
     }
   }
 }
-#myChart {
-}
+// #myChart {}
 .minibox {
   .minibox_top {
     position: relative;
@@ -568,8 +565,7 @@ export default {
         height: 46px;
         overflow: hidden;
         text-overflow: ellipsis;
-        a {
-        }
+        // a {}
       }
       &:hover {
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);

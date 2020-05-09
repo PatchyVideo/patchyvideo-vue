@@ -64,7 +64,7 @@ console.log(
 );
 if (!localStorage.getItem("lang")) {
   // 多浏览器语言设定兼容方案
-  var lang = (navigator.language || navigator.browserLanguage).toLowerCase();
+  let lang = (navigator.language || navigator.browserLanguage).toLowerCase();
   localStorage.setItem("lang", localMap[lang] || "CHS");
 }
 i18n.locale = localStorage.getItem("lang");

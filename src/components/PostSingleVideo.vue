@@ -244,21 +244,21 @@ export default {
     // 匹配 URL 的相关设置
     // 通过 URL 获取视频的各种缩略图，题目和简介
     buildParsersAndExpanders() {
-      var that = this;
+      let that = this;
       // B站的匹配规则
       this.PARSERS[
         "^(https:\\/\\/|http:\\/\\/)?(www\\.|m\\.)?(bilibili\\.com\\/video\\/([aA][vV][\\d]+|BV[a-zA-Z0-9]+)(\\?p=[\\d]+)?|b23\\.tv\\/([aA][vV][\\d]+|BV[a-zA-Z0-9]+)(\\?p=[\\d]+)?)"
-      ] = function(responseDOM, responseURL) {
-        var err = responseDOM.find("div.error-body");
+      ] = function(responseDOM) {
+        let err = responseDOM.find("div.error-body");
         if (err.length > 0) {
           that.setVideoMetadata("", "", "");
           that.ErrorFetchingVideo();
           return;
         }
-        var thumbnailURL = responseDOM.filter('meta[itemprop="thumbnailUrl"]').attr("content");
-        var title = responseDOM.find("h1.video-title").attr("title");
-        var desc = responseDOM.find("div.info.open").text();
-        var utags = responseDOM
+        let thumbnailURL = responseDOM.filter('meta[itemprop="thumbnailUrl"]').attr("content");
+        let title = responseDOM.find("h1.video-title").attr("title");
+        let desc = responseDOM.find("div.info.open").text();
+        let utags = responseDOM
           .filter('meta[itemprop="keywords"]')
           .attr("content")
           .split(/,/)
@@ -273,21 +273,21 @@ export default {
         return "https://www.bilibili.com/video/" + short_link;
       };
       // A站的匹配规则
-      this.PARSERS["^(https:\\/\\/|http:\\/\\/)?(www\\.|m\\.)?acfun\\.cn\\/v\\/[aA][cC][\\d]+"] = function(responseDOM, responseURL) {
-        var err = responseDOM.find("div.error-body");
+      this.PARSERS["^(https:\\/\\/|http:\\/\\/)?(www\\.|m\\.)?acfun\\.cn\\/v\\/[aA][cC][\\d]+"] = function(responseDOM) {
+        let err = responseDOM.find("div.error-body");
         if (err.length > 0) {
           that.setVideoMetadata("", "", "");
           that.ErrorFetchingVideo();
           return;
         }
-        var thumbnailURL = "";
-        var title = responseDOM.find("h1.title").text();
-        var desc = responseDOM.filter('div[class="description-container"]').text();
+        let thumbnailURL = "";
+        let title = responseDOM.find("h1.title").text();
+        let desc = responseDOM.filter('div[class="description-container"]').text();
         if (desc == null) {
           desc = responseDOM.find('div[class="J_description"]').text();
         }
         desc = desc.replace(/<br\s*?\/?>/g, "\n");
-        var utags = responseDOM
+        let utags = responseDOM
           .filter('meta[name="keywords"]')
           .attr("content")
           .split(/,/)
@@ -302,29 +302,26 @@ export default {
         return "https://www.acfun.cn/v/" + short_link;
       };
       // N站的匹配规则
-      this.PARSERS["^(https:\\/\\/|http:\\/\\/)?(www\\.|sp\\.|m\\.)?(nicovideo\\.jp\\/watch\\/(s|n)m[\\d]+|nico\\.ms\\/(s|n)m[\\d]+)"] = function(
-        responseDOM,
-        responseURL
-      ) {
+      this.PARSERS["^(https:\\/\\/|http:\\/\\/)?(www\\.|sp\\.|m\\.)?(nicovideo\\.jp\\/watch\\/(s|n)m[\\d]+|nico\\.ms\\/(s|n)m[\\d]+)"] = function(responseDOM) {
         // TODO: handle error
-        var thumbnailURL = responseDOM.filter('meta[itemprop="thumbnailUrl"]').attr("content");
+        let thumbnailURL = responseDOM.filter('meta[itemprop="thumbnailUrl"]').attr("content");
         if (thumbnailURL == null) {
           thumbnailURL = responseDOM.filter('meta[name="thumbnail"]').attr("content");
         }
-        var title = responseDOM.filter('meta[itemprop="name"]').attr("content");
+        let title = responseDOM.filter('meta[itemprop="name"]').attr("content");
         if (title == null) {
           title = responseDOM.filter('meta[property="og:title"]').attr("content");
         }
-        var desc = responseDOM.filter('meta[itemprop="description"]').attr("content");
+        let desc = responseDOM.filter('meta[itemprop="description"]').attr("content");
         if (desc == null) {
           desc = responseDOM.filter('meta[name="description"]').attr("content");
         }
-        var utags = responseDOM.filter('meta[property="og:video:tag"]');
+        let utags = responseDOM.filter('meta[property="og:video:tag"]');
         if (utags == null || utags.length == 0) {
           utags = responseDOM.filter('meta[itemprop="og:video:tag"]');
         }
-        var utags_array = [];
-        for (var i = 0; i < utags.length; ++i) {
+        let utags_array = [];
+        for (let i = 0; i < utags.length; ++i) {
           utags_array.push($(utags[i]).attr("content"));
         }
         that.autotag(utags_array, title, desc);
@@ -338,16 +335,16 @@ export default {
         responseDOM,
         responseURL
       ) {
-        // var vidid = "";
+        // let vidid = "";
         // if (responseURL.indexOf("youtube.com") >= 0) {
-        //   var idx = responseURL.lastIndexOf("=");
+        //   let idx = responseURL.lastIndexOf("=");
         //   vidid = responseURL.substring(idx + 1, responseURL.length);
         // } else if (responseURL.indexOf("youtu.be") >= 0) {
         //   if (responseURL.indexOf("watch?v=") >= 0) {
-        //     var idx = responseURL.lastIndexOf("=");
+        //     let idx = responseURL.lastIndexOf("=");
         //     vidid = responseURL.substring(idx + 1, responseURL.length);
         //   } else {
-        //     var idx = responseURL.lastIndexOf("/");
+        //     let idx = responseURL.lastIndexOf("/");
         //     vidid = responseURL.substring(idx + 1, responseURL.length);
         //   }
         // }
@@ -364,10 +361,10 @@ export default {
         //   if (status == "success") {
         //     //let searchParams = new URLSearchParams(data);
         //     //player_response = searchParams.get("player_response");
-        //     var player_response = getQueryVariable(data, "player_response");
-        //     var videoDetails = JSON.parse(player_response)["videoDetails"];
-        //     var title = unescape(videoDetails.title).replace(/\+/g, " ");
-        //     var desc = unescape(videoDetails.shortDescription).replace(/\+/g, " ");
+        //     let player_response = getQueryletiable(data, "player_response");
+        //     let videoDetails = JSON.parse(player_response)["videoDetails"];
+        //     let title = unescape(videoDetails.title).replace(/\+/g, " ");
+        //     let desc = unescape(videoDetails.shortDescription).replace(/\+/g, " ");
         //     that.setVideoMetadata(thumbnailURL, title, desc);
         //   } else {
         //     that.setVideoMetadata("", "", "");
@@ -384,11 +381,11 @@ export default {
             }
           })
           .then(result => {
-            var data = result.data;
+            let data = result.data;
             that.setVideoMetadata(data.data.thumbnailURL, data.data.title, data.data.desc);
             that.autotag(data.data.utags, data.data.title, data.data.desc);
           })
-          .catch(error => {
+          .catch(() => {
             that.setVideoMetadata("", "", "");
             that.ErrorFetchingVideo();
           });
@@ -404,29 +401,29 @@ export default {
             }
           })
           .then(result => {
-            var data = result.data;
+            let data = result.data;
             that.setVideoMetadata(data.data.thumbnailURL, data.data.title, data.data.desc);
             that.autotag([], data.data.title, data.data.desc);
           })
-          .catch(error => {
+          .catch(() => {
             that.setVideoMetadata("", "", "");
             that.ErrorFetchingVideo();
           });
       };
       // 站酷的匹配规则
-      this.PARSERS["https://www.zcool.com.cn/work/[0-9a-zA-Z=]*.html"] = function(responseDOM, responseURL) {
-        var err = responseDOM.find("div.error-body");
+      this.PARSERS["https://www.zcool.com.cn/work/[0-9a-zA-Z=]*.html"] = function(responseDOM) {
+        let err = responseDOM.find("div.error-body");
         if (err.length > 0) {
           that.setVideoMetadata("", "", "");
           that.ErrorFetchingVideo();
           return;
         }
-        var title = responseDOM.find("div.details-contitle-box")[0];
+        let title = responseDOM.find("div.details-contitle-box")[0];
         title = title.getElementsByTagName("h2")[0].innerHTML;
         title = title.replace(/\s+/g, "");
-        var num = title.search("<");
+        let num = title.search("<");
         title = title.slice(0, num);
-        var desc = responseDOM.find("div.atricle-text")[0];
+        let desc = responseDOM.find("div.atricle-text")[0];
         desc = desc.getElementsByTagName("p")[0].innerHTML;
         desc = desc.replace(/\s+/g, "");
         desc = desc.replace(/<br\s*?\/?>/g, "\n");
@@ -451,8 +448,8 @@ export default {
           // 向编辑标签组件传送标签
           if (result.data.status == "SUCCEED") {
             // 获取到的标签与已有标签查重
-            var autoTags = result.data.data.tags;
-            var resultTags = this.$refs["EditTags"].tags;
+            let autoTags = result.data.data.tags;
+            let resultTags = this.$refs["EditTags"].tags;
             // this.$refs["EditTags"].firstFlag = true;
             this.$refs["EditTags"].msgMark = 1;
             // 已有标签是空的情况
@@ -476,8 +473,8 @@ export default {
               // this.tags = Array.from(setArray);
               // console.log(Array.from(setArray));
 
-              // for (var i = 0; i < autoTags.length; i++) {
-              //   for (var j = 0; j < resultTags.length; j++) {
+              // for (let i = 0; i < autoTags.length; i++) {
+              //   for (let j = 0; j < resultTags.length; j++) {
               //     if (resultTags[j] == autoTags[i]) {
               //       break;
               //     }
@@ -490,7 +487,7 @@ export default {
             this.$refs["EditTags"].getRecTags(this.$refs["EditTags"].tags); // 获取推荐 TAG
           }
         })
-        .catch(error => {
+        .catch(() => {
           // console.log(error);
         });
     },
@@ -502,8 +499,8 @@ export default {
         return;
       }
       this.loading = true;
-      var url = this.VideoURL;
-      var ret = this.checkURL(url);
+      let url = this.VideoURL;
+      let ret = this.checkURL(url);
       // URL 验证通过
       if (ret[0]) {
         this.VideoURL = ret[1];
@@ -519,18 +516,18 @@ export default {
     },
     // URL 标准化
     checkURL(url) {
-      var pass = false;
-      var new_url = "";
+      let pass = false;
+      let new_url = "";
       // 将 URL 中前后的空格去除
       url = url.trim();
-      for (var key in this.EXPANDERS) {
+      for (let key in this.EXPANDERS) {
         if (new RegExp(key, "i").test(url)) {
           url = this.EXPANDERS[key](url);
           break;
         }
       }
       url = this.clearURL(url);
-      for (var key in this.PARSERS) {
+      for (let key in this.PARSERS) {
         if (new RegExp(key, "i").test(url)) {
           pass = true;
           new_url = url.match(new RegExp(key, "i"))[0];
@@ -541,12 +538,12 @@ export default {
     },
     // URL 标准化 * 2
     clearURL(url) {
-      var url_parsed = new URL(this.addHTTP(url));
+      let url_parsed = new URL(this.addHTTP(url));
       return "https://" + url_parsed.host + url_parsed.pathname + url_parsed.search;
     },
     // URL 标准化 * 3
     addHTTP(url) {
-      if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
+      if (!/^(?:f|ht)tps?:\/\//.test(url)) {
         url = "http://" + url;
       }
       return url;
@@ -572,15 +569,15 @@ export default {
     },
     // 获取视频的详细信息
     fetchVideo(url) {
-      var proxy_url = this.proxyResource(url, "");
-      var that = this;
+      let proxy_url = this.proxyResource(url, "");
+      let that = this;
       this.downloadPage(
         proxy_url,
         function(result) {
-          var responseDOM = $(result);
+          let responseDOM = $(result);
           that.dispatchParser(url, responseDOM, url);
         },
-        function(result) {
+        function() {
           that.setVideoMetadata("", "", "");
           that.ErrorFetchingVideo();
         }
@@ -594,12 +591,15 @@ export default {
     ) {
       // 把字符串作为 URI 进行编码
       url = escape(url);
-      if (referrer)
-        var header = JSON.stringify({
+      let header;
+      if (referrer) {
+        header = JSON.stringify({
           Referer: referrer,
           "User-Agent": user_agent
         });
-      else header = JSON.stringify({ "User-Agent": user_agent });
+      } else {
+        header = JSON.stringify({ "User-Agent": user_agent });
+      }
       header = escape(header);
       return `/be/helper/proxy?url=${url}&header=${header}`;
     },
@@ -615,7 +615,7 @@ export default {
     },
     // 匹配视频数据
     dispatchParser(url, responseDOM) {
-      for (var key in this.PARSERS) {
+      for (let key in this.PARSERS) {
         if (new RegExp(key, "i").test(url)) {
           this.PARSERS[key](responseDOM, url);
         }
@@ -626,7 +626,7 @@ export default {
       if (this.isEmpty(thumbnail)) {
         this.thumbnail = require("../static/img/NoThumbnail.png");
       } else {
-        var thumbnail_url = this.proxyResource(thumbnail, "");
+        let thumbnail_url = this.proxyResource(thumbnail, "");
         this.thumbnail = thumbnail_url;
       }
       this.title = title;
@@ -680,7 +680,7 @@ export default {
             this.VideoURL = "";
           } else if (result.data.status == "FAILED") {
             if (result.data.data.reason == "TAG_NOT_EXIST") {
-              var errorTag = result.data.data.aux;
+              let errorTag = result.data.data.aux;
               this.open3(errorTag);
             } else {
               this.open2();
@@ -690,7 +690,7 @@ export default {
           }
           this.loading = false;
         })
-        .catch(err => {
+        .catch(() => {
           this.loading = false;
         });
       // setTimeout(() => {
@@ -709,7 +709,7 @@ export default {
       //       this.open4();
       //     } else if (result.data.status == "FAILED") {
       //       if (result.data.data.reason == "TAG_NOT_EXIST") {
-      //         var errorTag = result.data.data.aux;
+      //         let errorTag = result.data.data.aux;
       //         this.open3(errorTag);
       //       } else {
       //         this.open2();

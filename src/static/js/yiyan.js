@@ -46,11 +46,11 @@ const yiyan = [
 ];
 
 function getYiyan(short) {
-  var yy = yiyan;
+  let yy = yiyan;
   if (short) {
     yy = yy.filter(v => v.length <= 40);
   }
-  var random = Math.floor(Math.random() * 100, 2) % yy.length;
+  let random = Math.floor(Math.random() * 100, 2) % yy.length;
   return yy[random];
 }
 export { getYiyan };

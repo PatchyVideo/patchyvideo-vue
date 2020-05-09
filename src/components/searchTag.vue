@@ -150,7 +150,7 @@
     "rename_failed": "修改失敗，請重試！",
     "dstTag":"目标标签",
     "srcTag":"源标签",
-    "adminOnly":"只有管​​理員有權限合併標籤!",
+    "adminOnly":"只有管理員有權限合併標籤!",
     "mergeFailed":"合併失敗,請重試!",
     "mergeSuccessful":"合併成功!"
   }
@@ -1171,8 +1171,8 @@ export default {
     },
     // 重命名标签类别时的标签种类列表
     tagCategories2() {
-      var list = this.tagCategories;
-      for (var i = 0; i < list.length; i++) {
+      let list = this.tagCategories;
+      for (let i = 0; i < list.length; i++) {
         if (list[i] == this.tagCategorie) {
           list.splice(i, 1);
         }
@@ -1181,8 +1181,8 @@ export default {
     },
     // 搜索标签的时候的标签种类列表。其中 “-” 指的是所有种类
     tagCategories3() {
-      var all = "-";
-      var tagCategories = JSON.parse(JSON.stringify(this.tagCategories));
+      let all = "-";
+      let tagCategories = JSON.parse(JSON.stringify(this.tagCategories));
       tagCategories.push(all);
       return tagCategories;
     }
@@ -1200,8 +1200,8 @@ export default {
         url: "be/tags/query_categories.do",
         data: {}
       }).then(result => {
-        var categories = result.data.data.categories;
-        for (var i = 0; i < categories.length; i++) {
+        let categories = result.data.data.categories;
+        for (let i = 0; i < categories.length; i++) {
           this.tagCategories.push(categories[i].name);
         }
         this.loading = false;
@@ -1211,8 +1211,8 @@ export default {
     requestSearchedTags() {
       this.mergeSrc = -1;
       this.mergeDst = -1;
-      var query = this.searchTag;
-      var category = this.searchCategory;
+      let query = this.searchTag;
+      let category = this.searchCategory;
       // 对全部数据种类进行兼容性调整
       if (category == "-") {
         category = "";
@@ -1256,9 +1256,9 @@ export default {
     // 为现有标签添加新的语言
     addTagLanguage(index) {
       this.loading = true;
-      var tag = this.tagData[index].id;
-      var new_tag = this.new_Tag;
-      var language = this.newTagLanguage.value;
+      let tag = this.tagData[index].id;
+      let new_tag = this.new_Tag;
+      let language = this.newTagLanguage.value;
       // 校验数据
       if (language == undefined) {
         this.open2(this.$t("select_language"));
@@ -1302,10 +1302,10 @@ export default {
     // 计算该标签尚未添加的语言
     addLanguageList(list) {
       // 克隆对象，防止指针指向同一个对象之后形成双向绑定
-      var list2 = JSON.parse(JSON.stringify(this.languagesList));
-      var alias = { value: "-", label: "-" };
-      for (var key in list) {
-        for (var i = 0; i < list2.length; i++) {
+      let list2 = JSON.parse(JSON.stringify(this.languagesList));
+      let alias = { value: "-", label: "-" };
+      for (let key in list) {
+        for (let i = 0; i < list2.length; i++) {
           if (list2[i].value == key) {
             list2.splice(i, 1);
             break;
@@ -1344,7 +1344,7 @@ export default {
     },
     // 删除标签
     removeTag(index) {
-      var tag = this.tagEdit[index].id;
+      let tag = this.tagEdit[index].id;
       this.$confirm(this.$t("delete_confirm_prompt"), this.$t("prompt"), {
         confirmButtonText: this.$t("confirm"),
         cancelButtonText: this.$t("cancel2"),
@@ -1380,7 +1380,7 @@ export default {
     },
     // 删除标签别名
     confirmAliasRemove(index, i) {
-      var alias = this.tagEdit[index].alias[i];
+      let alias = this.tagEdit[index].alias[i];
       this.$confirm(this.$t("delete_alias_prompt"), this.$t("prompt"), {
         confirmButtonText: this.$t("confirm"),
         cancelButtonText: this.$t("cancel2"),
@@ -1416,8 +1416,8 @@ export default {
     // 重命名标签
     confirmChange(index, language) {
       this.loading = true;
-      var tag = this.tagData[index].languages[language];
-      var new_tag = this.tagEdit[index].languages[language].replace(/\ /g, "_");
+      let tag = this.tagData[index].languages[language];
+      let new_tag = this.tagEdit[index].languages[language].replace(/ /g, "_");
       if (new_tag == "") {
         this.open2(this.$t("tag_name_prompt"));
         this.loading = false;
@@ -1445,8 +1445,8 @@ export default {
     // 重命名标签别名
     confirmAliasChange($index, i) {
       this.loading = true;
-      var tag = this.tagData[$index].alias[i];
-      var new_tag = this.tagEdit[$index].alias[i].replace(/\ /g, "_");
+      let tag = this.tagData[$index].alias[i];
+      let new_tag = this.tagEdit[$index].alias[i].replace(/ /g, "_");
       if (new_tag == "") {
         this.open2(this.$t("tag_name_prompt"));
         this.loading = false;
@@ -1471,9 +1471,9 @@ export default {
       });
     },
     // 重命名标签类别
-    renameAlias(index) {
-      var tag = this.tagData[this.tagIndex].id;
-      var category = this.newTagCategorie;
+    renameAlias() {
+      let tag = this.tagData[this.tagIndex].id;
+      let category = this.newTagCategorie;
       if (category == "") {
         this.open2(this.$t("select_categoty"));
         return false;
@@ -1585,10 +1585,10 @@ export default {
     }
   },
   watch: {
-    page(v) {
+    page() {
       this.requestSearchedTags();
     },
-    count(v) {
+    count() {
       this.requestSearchedTags();
       this.page = 1;
     },
@@ -1628,8 +1628,7 @@ export default {
   position: absolute;
   right: 50px;
 }
-.addTag {
-}
+/* .addTag {} */
 .addTag-input {
   width: 200px;
 }

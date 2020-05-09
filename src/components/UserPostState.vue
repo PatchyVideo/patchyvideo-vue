@@ -46,11 +46,11 @@ export default {
     };
   },
   created() {
-    this.axios({
-      method: "post",
-      url: "be/posts/list_pending.do",
-      data: { page: 1, page_size: 9999 }
-    }).then(res => {});
+    // this.axios({
+    //   method: "post",
+    //   url: "be/posts/list_pending.do",
+    //   data: { page: 1, page_size: 9999 }
+    // }).then(res => {});
     this.axios({
       method: "post",
       url: "be/posts/list_failed.do",

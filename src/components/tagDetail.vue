@@ -1143,8 +1143,8 @@ export default {
     },
     // 重命名标签类别时的标签种类列表
     tagCategories2() {
-      var list = this.tagCategories;
-      for (var i = 0; i < list.length; i++) {
+      let list = this.tagCategories;
+      for (let i = 0; i < list.length; i++) {
         if (list[i] == this.tagCategorie) {
           list.splice(i, 1);
         }
@@ -1166,8 +1166,8 @@ export default {
         url: "be/tags/query_categories.do",
         data: {}
       }).then(result => {
-        var categories = result.data.data.categories;
-        for (var i = 0; i < categories.length; i++) {
+        let categories = result.data.data.categories;
+        for (let i = 0; i < categories.length; i++) {
           this.tagCategories.push(categories[i].name);
         }
         this.loading = false;
@@ -1213,9 +1213,9 @@ export default {
     // 添加标签
     addTag() {
       this.loading = true;
-      var tag = this.newTag.replace(/\ /g, "_");
-      var category = this.tagCategorie;
-      var language = this.language;
+      let tag = this.newTag.replace(/ /g, "_");
+      let category = this.tagCategorie;
+      let language = this.language;
       // 对默认选项进行兼容性调整
       if (language == "简体中文") {
         language = "CHS";
@@ -1233,12 +1233,10 @@ export default {
           this.open2(this.$t("tag_already_exist"));
           this.loading = false;
           return false;
-          break;
         case 0:
           this.open2(this.$t("tag_checking"));
           this.loading = false;
           return false;
-          break;
       }
       this.axios({
         method: "post",
@@ -1269,9 +1267,9 @@ export default {
     // 为现有标签添加新的语言
     addTagLanguage(index) {
       this.loading = true;
-      var tag = this.tagData[index].id;
-      var new_tag = this.new_Tag;
-      var language = this.newTagLanguage.value;
+      let tag = this.tagData[index].id;
+      let new_tag = this.new_Tag;
+      let language = this.newTagLanguage.value;
       // 校验数据
       if (language == undefined) {
         this.open2(this.$t("select_lang_prompt"));
@@ -1315,10 +1313,10 @@ export default {
     // 计算该标签尚未添加的语言
     addLanguageList(list) {
       // 克隆对象，防止指针指向同一个对象之后形成双向绑定
-      var list2 = JSON.parse(JSON.stringify(this.languagesList));
-      var alias = { value: "-", label: "-" };
-      for (var key in list) {
-        for (var i = 0; i < list2.length; i++) {
+      let list2 = JSON.parse(JSON.stringify(this.languagesList));
+      let alias = { value: "-", label: "-" };
+      for (let key in list) {
+        for (let i = 0; i < list2.length; i++) {
           if (list2[i].value == key) {
             list2.splice(i, 1);
             break;
@@ -1357,7 +1355,7 @@ export default {
     },
     // 删除标签
     removeTag(index) {
-      var tag = this.tagEdit[index].id;
+      let tag = this.tagEdit[index].id;
       this.$confirm(this.$t("delete_confirm_prompt"), this.$t("prompt"), {
         confirmButtonText: this.$t("ok"),
         cancelButtonText: this.$t("cancel"),
@@ -1393,7 +1391,7 @@ export default {
     },
     // 删除标签别名
     confirmAliasRemove(index, i) {
-      var alias = this.tagEdit[index].alias[i];
+      let alias = this.tagEdit[index].alias[i];
       this.$confirm(this.$t("delete_confirm_prompt"), this.$t("prompt"), {
         confirmButtonText: this.$t("ok"),
         cancelButtonText: this.$t("cancel"),
@@ -1429,8 +1427,8 @@ export default {
     // 重命名标签
     confirmChange(index, language) {
       this.loading = true;
-      var tag = this.tagData[index].languages[language];
-      var new_tag = this.tagEdit[index].languages[language].replace(/\ /g, "_");
+      let tag = this.tagData[index].languages[language];
+      let new_tag = this.tagEdit[index].languages[language].replace(/ /g, "_");
       if (new_tag == "") {
         this.open2(this.$t("enter_alias_prompt"));
         this.loading = false;
@@ -1458,8 +1456,8 @@ export default {
     // 重命名标签别名
     confirmAliasChange($index, i) {
       this.loading = true;
-      var tag = this.tagData[$index].alias[i];
-      var new_tag = this.tagEdit[$index].alias[i].replace(/\ /g, "_");
+      let tag = this.tagData[$index].alias[i];
+      let new_tag = this.tagEdit[$index].alias[i].replace(/ /g, "_");
       if (new_tag == "") {
         this.open2(this.$t("enter_alias_prompt"));
         this.loading = false;
@@ -1484,9 +1482,9 @@ export default {
       });
     },
     // 重命名标签类别
-    renameAlias(index) {
-      var tag = this.tagData[this.tagIndex].id;
-      var category = this.newTagCategorie;
+    renameAlias() {
+      let tag = this.tagData[this.tagIndex].id;
+      let category = this.newTagCategorie;
       if (category == "") {
         this.open2(this.$t("select_categoty"));
         return false;
@@ -1545,8 +1543,7 @@ export default {
     // 下面是消息补全框的方法
     querySearchAsync(queryString, cb) {
       // this.infoTipMark = true;
-      queryString = queryString;
-      var url = "/autocomplete/?q=" + queryString;
+      let url = "/autocomplete/?q=" + queryString;
       this.axios({
         method: "get",
         url: url
@@ -1557,8 +1554,7 @@ export default {
     },
     querySearchAsync2(queryString, cb) {
       // this.infoTipMark = true;
-      queryString = queryString;
-      var url = "/be/autocomplete/ql?q=" + queryString;
+      let url = "/be/autocomplete/ql?q=" + queryString;
       this.axios({
         method: "get",
         url: url
@@ -1574,10 +1570,10 @@ export default {
     }
   },
   watch: {
-    page(v) {
+    page() {
       this.requestCategorieTags();
     },
-    count(v) {
+    count() {
       this.requestCategorieTags();
       this.page = 1;
     },
@@ -1612,8 +1608,7 @@ export default {
   position: absolute;
   right: 50px;
 }
-.addTag {
-}
+/* .addTag {} */
 .addTag-input {
   width: 200px;
 }

@@ -183,11 +183,11 @@ export default {
      */
     handleOk(done) {
       this.$confirm("确认提交？")
-        .then(_ => {
+        .then(() => {
           this.dialogVisible = false;
           done();
         })
-        .catch(_ => {});
+        .catch(() => {});
     },
     /**
      * 更新用户数据
@@ -203,7 +203,7 @@ export default {
      * 提交前判断用户数据是否通过弹窗修改（由于更新接口更新的数据全是传入 access_control 下的，所以可以直接传入字符串）
      */
     attrIsModify(attr) {
-      var user = this.usermanagement.data.users[this.editUserIndex];
+      let user = this.usermanagement.data.users[this.editUserIndex];
       return this.editUser[attr] != "undefined" && this.editUser[attr] != user.access_control[attr];
     },
     /**
@@ -211,15 +211,15 @@ export default {
      */
     async updateUserAttr(attr, reqRouter, paraName) {
       if (!(await this.attrIsModify(attr))) return;
-      var paras = { uid: this.editUser.uid };
+      let paras = { uid: this.editUser.uid };
       paras[paraName] = this.editUser[attr];
       await this.axios({
         method: "post",
         url: reqRouter,
         data: paras
-      }).then(ret => {
-        var user = this.usermanagement.data.users[this.editUserIndex];
-        var data = ret.data.data;
+      }).then(() => {
+        let user = this.usermanagement.data.users[this.editUserIndex];
+        // let data = ret.data.data;
         user.access_control[attr] = this.editUser[attr];
       });
     },
@@ -227,9 +227,9 @@ export default {
      *点下编辑按钮，显示弹窗
      */
     showDialog(uid) {
-      var index = this.findEditUserIndex(uid);
+      let index = this.findEditUserIndex(uid);
       this.editUserIndex = index;
-      var user = this.usermanagement.data.users[index];
+      let user = this.usermanagement.data.users[index];
 
       this.dialogVisible = true;
       this.editUser = {
@@ -250,7 +250,7 @@ export default {
       }
     },
     handleCurrentChange(val) {
-      var prePageNum = this.curPageNum;
+      let prePageNum = this.curPageNum;
       this.curPageNum = val;
       try {
         this.getUserList();
@@ -275,7 +275,7 @@ export default {
         }
       })
         .then(ret => {
-          var data = ret.data.data;
+          let data = ret.data.data;
           this.usermanagement.data = data;
           this.loading = false;
           // 回到顶部
@@ -284,7 +284,7 @@ export default {
             $("html").animate({ scrollTop: 0 }, 100);
           }
         })
-        .catch(err => {
+        .catch(() => {
           this.loading = false;
         });
     },
@@ -316,7 +316,7 @@ export default {
      * @return: UTC
      */
     toUTCTime(date) {
-      var UTC = new Date(new Date(date).getTime() - 8 * 3600 * 1000);
+      let UTC = new Date(new Date(date).getTime() - 8 * 3600 * 1000);
       return this.dateFormat("yyyy-MM-dd HH:mm:ss", UTC);
     }
   }

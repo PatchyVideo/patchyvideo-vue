@@ -92,7 +92,6 @@ export default {
       activeName: "0"
     };
   },
-  computed: {},
   computed: {
     aqwe() {
       return "asda";
@@ -114,8 +113,8 @@ export default {
         url: "be/tags/query_categories.do",
         data: {}
       }).then(result => {
-        var categories = result.data.data.categories;
-        for (var i = 0; i < categories.length; i++) {
+        let categories = result.data.data.categories;
+        for (let i = 0; i < categories.length; i++) {
           this.tagCategories.push(categories[i].name);
         }
         this.loading = false;

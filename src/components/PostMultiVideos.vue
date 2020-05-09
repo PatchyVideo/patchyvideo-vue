@@ -161,7 +161,7 @@ export default {
     postMultiVideos() {
       this.loading = true;
       // 分割视频 URL
-      var videos = this.URLs.split(/\r?\n/).filter(function(i) {
+      let videos = this.URLs.split(/\r?\n/).filter(function(i) {
         return i;
       });
       this.axios({
@@ -180,7 +180,7 @@ export default {
           this.open4();
         } else if (result.data.status == "FAILED") {
           if (result.data.data.reason == "TAG_NOT_EXIST") {
-            var errorTag = result.data.data.aux;
+            let errorTag = result.data.data.aux;
             this.open3(errorTag);
           } else {
             this.open2();

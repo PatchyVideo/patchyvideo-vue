@@ -203,7 +203,7 @@ export default {
       }
       if (this.pagesDetail[index].isPosted) {
         if (_blank) {
-          var routerPath = this.$router.resolve({
+          let routerPath = this.$router.resolve({
             path: "/video",
             query: {
               id: this.pagesDetail[index].id
@@ -218,9 +218,9 @@ export default {
                 id: this.pagesDetail[index].id
               }
             })
-            .catch(err => {});
+            .catch(() => {});
       } else {
-        var routerPath = this.$router.resolve({
+        let routerPath = this.$router.resolve({
           path: "/postvideo",
           query: {
             use_tags: this.$route.query.id,

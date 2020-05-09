@@ -487,15 +487,15 @@ export default {
     },
     // 视频的上传日期
     videodate() {
-      var upload_time = new Date(this.myVideoData.video.item.upload_time.$date);
+      let upload_time = new Date(this.myVideoData.video.item.upload_time.$date);
       // 设置为东八区的时间
       upload_time.setTime(upload_time.getTime() + 1000 * 3600 * 8);
-      var y = upload_time.getFullYear(); // getFullYear 方法以四位数字返回年份
-      var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-      var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-      var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
-      var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
-      var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
+      let y = upload_time.getFullYear(); // getFullYear 方法以四位数字返回年份
+      let M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+      let d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+      let h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+      let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+      let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
       return (
         "视频发布于 " +
         y +
@@ -523,7 +523,7 @@ export default {
     },
     // 获取 dom
     nodeShow() {
-      var node = document.getElementById("nodes");
+      let node = document.getElementById("nodes");
       if (node) {
         return node;
       } else {
@@ -574,7 +574,7 @@ export default {
         url: "be/lists/create_from_video.do",
         data: { vid: this.pid }
       }).then(res => {
-        var videoPid = res.data.data;
+        let videoPid = res.data.data;
         this.$router.push({ path: "/listdetail", query: { id: videoPid } });
       });
     },
@@ -806,11 +806,11 @@ export default {
     },
     // 将视频简介里的连接变成链接
     urlifyDesc() {
-      var that = this;
-      var desc_text = this.myVideoData.video.item.desc;
-      var combined_matcher = "(";
-      var i = 1;
-      for (var regex in this.URL_MATCHERS) {
+      let that = this;
+      let desc_text = this.myVideoData.video.item.desc;
+      let combined_matcher = "(";
+      let i = 1;
+      for (let regex in this.URL_MATCHERS) {
         if (i == Object.keys(this.URL_MATCHERS).length) {
           combined_matcher += regex;
         } else {
@@ -819,10 +819,10 @@ export default {
         i += 1;
       }
       combined_matcher += ")";
-      var combined_matcher_regex = new RegExp(combined_matcher, "ig");
-      var is_logged_in = this.isLogin;
-      var desc_urlified = desc_text.replace(combined_matcher_regex, function(url) {
-        for (var key in that.URL_MATCHERS) {
+      let combined_matcher_regex = new RegExp(combined_matcher, "ig");
+      let is_logged_in = this.isLogin;
+      let desc_urlified = desc_text.replace(combined_matcher_regex, function(url) {
+        for (let key in that.URL_MATCHERS) {
           if (new RegExp(key, "i").test(url)) {
             const [expanded_url, link_type] = that.URL_MATCHERS[key](url);
             return `<div class="video-link-div"><a href="${expanded_url}">${url}</a>${that.buildUrlTools(is_logged_in, expanded_url, link_type)}</div>`;
@@ -838,7 +838,7 @@ export default {
       }
 
       if (link_type == "video") {
-        var ret = `<div class="url-tools">`;
+        let ret = `<div class="url-tools">`;
         // 利用 name 属性保存绑定的 URL
         ret += `<button name="${url}">添加副本</button>`;
         ret += `</div>`;
@@ -850,7 +850,7 @@ export default {
     // 将简介中的视频连接存为副本
     postAsCopy(event) {
       if (event.target.nodeName.toString() != "BUTTON") return;
-      var url = event.target.name;
+      let url = event.target.name;
       this.loading = true;
       this.axios({
         method: "post",

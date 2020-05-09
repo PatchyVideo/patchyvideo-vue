@@ -189,7 +189,7 @@ export default {
   created() {
     this.couponSelected = this.options[0].value;
     $(window).keydown(function(e) {
-      var key = window.event ? e.keyCode : e.which;
+      let key = window.event ? e.keyCode : e.which;
       // 获取用户按键，如果是回车，则不执行任何
       if (key.toString() === "13") {
         // 调用光标插入方法，在光标处插入 换行
@@ -200,7 +200,7 @@ export default {
   },
   mounted() {},
   methods: {
-    handleChange(val) {},
+    handleChange() {},
     handleSubIptConfirm(m) {
       m.iptVisble = false;
       this.$forceUpdate();
@@ -208,36 +208,36 @@ export default {
     showAddInput() {
       this.subAddIptVisible = true;
     },
-    showIpt(m, i) {
+    showIpt(m) {
       m.iptVisble = true;
       this.$forceUpdate();
     },
     ConvertLangRes(langs, hastran = true) {
       if (!langs) return;
-      var LangList = [
+      let LangList = [
         { id: 1, lang: "CHS" },
         { id: 2, lang: "CHT" },
         { id: 5, lang: "ENG" },
         { id: 10, lang: "JPN" }
       ];
-      var level = [10, 5, 1, 2];
-      var Lang = "";
-      var mainLang = "";
-      var subLang = "";
+      let level = [10, 5, 1, 2];
+      let Lang = "";
+      let mainLang = "";
+      let subLang = "";
       // 经过一系列计算得出主副语言
 
       // 匹配当前语言的 ID
-      var CurrLangID = LangList.find(x => {
+      let CurrLangID = LangList.find(x => {
         return x.lang == this.$i18n.locale;
       });
       CurrLangID = CurrLangID ? CurrLangID.id : 1;
 
       // 匹配对应 ID 的内容
-      var CurrLangWord = langs.find(x => {
+      let CurrLangWord = langs.find(x => {
         return x.l == CurrLangID;
       });
       if (!CurrLangWord) {
-        for (var i = 0; i < level.length; i++) {
+        for (let i = 0; i < level.length; i++) {
           CurrLangWord = langs.find(x => {
             return x.l == level[i];
           });
@@ -249,8 +249,8 @@ export default {
       if (hastran) {
         // 副语言匹配
         // 优先级：日语，英语，简体中文，繁体中文
-        var SubLangWord = null;
-        for (var i = 0; i < level.length; i++) {
+        let SubLangWord = null;
+        for (let i = 0; i < level.length; i++) {
           if (level[i] == CurrLangWord.l) continue;
           SubLangWord = langs.find(x => {
             return x.l == level[i];
@@ -260,24 +260,24 @@ export default {
         subLang = SubLangWord ? SubLangWord.w : mainLang;
 
         // 合成语言
-        Lang = `${mainLang.replace(/\_/g, " ")}`;
-        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/\_/g, " ")}</span>`;
+        Lang = `${mainLang.replace(/_/g, " ")}`;
+        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/_/g, " ")}</span>`;
       } else {
         Lang = mainLang;
       }
       return Lang;
     },
     handleSelect(item) {
-      var iptVal1 = this.iptVal3.slice(0, this.startlocation);
-      var iptVal2 = this.iptVal3.slice(this.endlocation);
-      var iptVal = iptVal1 + this.ConvertLangRes(item.langs, false) + " " + iptVal2;
+      let iptVal1 = this.iptVal3.slice(0, this.startlocation);
+      let iptVal2 = this.iptVal3.slice(this.endlocation);
+      let iptVal = iptVal1 + this.ConvertLangRes(item.langs, false) + " " + iptVal2;
       this.subAddIptValue = iptVal;
       // 光标设置焦点事件
-      var endlocation = $("#saveTagInput").focus();
+      $("#saveTagInput").focus();
       // this.subAddIptValue = this.ConvertLangRes(item.langs,false);
     },
     match(text) {
-      var i = text.length;
+      let i = text.length;
       while (i--) {
         if (
           text.charAt(i) === " " ||
@@ -302,18 +302,18 @@ export default {
     },
     isNull(str) {
       if (str === "") return true;
-      var regu = "^[ ]+$";
-      var re = new RegExp(regu);
+      let regu = "^[ ]+$";
+      let re = new RegExp(regu);
       return re.test(str);
     },
     querySearchAsync(queryString, cb) {
       // 这里的 get(0) 是将 jq 对象转换为原生 js 对象
       // selectionStart 是获取光标当前位置
-      var endlocation = $("#saveTagInput").get(0).selectionStart;
+      let endlocation = $("#saveTagInput").get(0).selectionStart;
       // 切割输入框内的字符串，切割下光标左面的字符串
-      var query = queryString.slice(0, endlocation);
+      let query = queryString.slice(0, endlocation);
       // 获取所需要搜索的字符串的开头在搜索框内字符串的位置
-      var startlocation = this.match(query);
+      let startlocation = this.match(query);
       // 切割下所需要查询的字符串
       query = query.slice(startlocation, endlocation);
       // 字符串为空格的话不搜索
@@ -323,15 +323,15 @@ export default {
       }
 
       // 备份参数防止出现玄学问题
-      var query2 = query;
+      // let query2 = query;
       // 搜索是否包含 sites 变量的关键字
-      var results = this.sites.filter(this.createFilter(query2));
+      // let results = this.sites.filter(this.createFilter(query2));
 
       this.iptVal3 = queryString;
       this.startlocation = startlocation;
       this.endlocation = endlocation;
 
-      var url = "/be/autocomplete/ql?q=" + query;
+      let url = "/be/autocomplete/ql?q=" + query;
       this.axios({
         method: "get",
         url: url
@@ -345,7 +345,7 @@ export default {
         return sites.tag.toLowerCase().indexOf(query.toLowerCase()) === 0;
       };
     },
-    subAdd(val, name, str) {
+    subAdd() {
       this.axios({
         method: "post",
         url: "/be/subs/add.do",
@@ -386,13 +386,13 @@ export default {
           this.loading = false;
           this.$forceUpdate();
         })
-        .catch(err => {
+        .catch(() => {
           this.loading = false;
         });
     },
     subNameMap(arr, str) {
       let nameData = new Set(
-        arr.map((item, index, array) => {
+        arr.map(item => {
           return item.name;
         })
       );
@@ -409,14 +409,14 @@ export default {
     },
     subQtMap(i, str) {
       if (str === "text") {
-        return this.subDataText.filter((item, index, array) => {
+        return this.subDataText.filter(item => {
           if (item.name === i) {
             return item;
           }
         });
       }
       if (str === "tag") {
-        return this.subDataTags.filter((item, index, array) => {
+        return this.subDataTags.filter(item => {
           if (item.name === i) {
             return item;
           }
@@ -481,7 +481,7 @@ export default {
       })
         .then(res => {
           // console.log(res.data.data);
-          this.subDataText = res.data.data.subs.filter((item, index, array) => {
+          this.subDataText = res.data.data.subs.filter(item => {
             return item.qt === "text";
           });
           // let e = [];
@@ -493,13 +493,13 @@ export default {
           // }
           // this.subDataTextIptId = e;
           this.subNameMap(this.subDataText, "text");
-          this.subDataTags = res.data.data.subs.filter((item, index, array) => {
+          this.subDataTags = res.data.data.subs.filter(item => {
             return item.qt === "tag";
           });
           this.subNameMap(this.subDataTags, "tag");
           this.loading = false;
         })
-        .catch(err => {
+        .catch(() => {
           this.loading = false;
         });
     },
@@ -508,7 +508,7 @@ export default {
         method: "post",
         url: "be/subs/tags.do",
         data: {}
-      }).then(res => {});
+      }).then(() => {});
     }
   },
   components: {}
@@ -822,9 +822,9 @@ export default {
 .Soundtrack {
   color: #ff7792;
 }
-.el-collapse {
-  /* width: 300px; */
-}
+// .el-collapse {
+//   /* width: 300px; */
+// }
 // .el-collapse {
 //   border-radius: 4px;
 //   border: 1px solid #ebeef5;

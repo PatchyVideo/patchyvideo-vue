@@ -68,14 +68,14 @@ export default {
           size: this.displaySize
         }
       }).then(result => {
-        var data = result.data.data;
+        let data = result.data.data;
         this.ranking = data;
         this.loading = false;
       });
     }
   },
   watch: {
-    couponSelected(val) {
+    couponSelected() {
       //排序更改时，重新请求数据
       this.loading = true;
       this.loadData();

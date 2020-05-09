@@ -77,7 +77,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 div {
   display: flex;
   flex-direction: column;

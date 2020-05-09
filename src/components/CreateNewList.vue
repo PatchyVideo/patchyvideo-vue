@@ -141,7 +141,7 @@ export default {
       this.$message.warning(this.$t("one_cover_prompt"));
     },
     // 删除文件之前调用的函数
-    beforeRemove(file, fileList) {
+    beforeRemove(file) {
       return this.$confirm(this.$t("delete_confirm_prompt", { name: file.name }));
     },
     // 提交视频列表
@@ -182,7 +182,7 @@ export default {
                 else this.$emit("closeMe", true);
               }
             })
-            .catch(err => {
+            .catch(() => {
               this.open(this.$t("create_failed"));
             });
           this.loading = false;

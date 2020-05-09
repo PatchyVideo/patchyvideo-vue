@@ -444,7 +444,7 @@ export default {
     // 评论的用户
     commentUser() {
       return function(id) {
-        for (var i = 0; i < this.allUsers.length; i++) {
+        for (let i = 0; i < this.allUsers.length; i++) {
           if (id == this.allUsers[i]._id.$oid) {
             return this.allUsers[i];
           }
@@ -464,13 +464,13 @@ export default {
     // 评论的日期
     commentdate() {
       return function(date) {
-        var upload_time = new Date(date);
-        var y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
-        var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
-        var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
-        var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
+        let upload_time = new Date(date);
+        let y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+        let M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        let d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        let h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+        let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+        let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
         return (
           y +
           "-" +
@@ -534,7 +534,7 @@ export default {
     //     array.push(obj);
     //   }
     //   // 计算最后一排个数
-    //   var faceRow = Math.ceil(array.length / MAXROW);
+    //   let faceRow = Math.ceil(array.length / MAXROW);
     //   let c = [];
     //   // 转换成 [[{"呵呵":"src"},{}],[]] 格式
     //   for (let i = 0; i < faceRow; ++i) {
@@ -556,7 +556,7 @@ export default {
     //     array.push(obj);
     //   }
     //   // 计算最后一排个数
-    //   var faceRow = Math.ceil(array.length / MAXROW);
+    //   let faceRow = Math.ceil(array.length / MAXROW);
     //   let c = [];
     //   // 转换成 [[{"呵呵":"src"},{}],[]] 格式
     //   for (let i = 0; i < faceRow; ++i) {
@@ -599,16 +599,16 @@ export default {
           this.allUsers = result.data.data.users;
           this.cid_comment_map = new Map();
 
-          for (var i = 0; i < this.allcomments.length; i++) {
+          for (let i = 0; i < this.allcomments.length; i++) {
             //console.log(this.allcomments[i]);
-            for (var j = 0; j < this.allcomments[i].children.length; ++j) {
+            for (let j = 0; j < this.allcomments[i].children.length; ++j) {
               //console.log(this.allcomments[i].children[j]._id.$oid);
               this.cid_comment_map.set(this.allcomments[i].children[j]._id.$oid, this.allcomments[i].children[j]);
             }
           }
 
           // 初始化评论区开启标志
-          for (var i = 0; i < this.allcomments.length; i++) {
+          for (let i = 0; i < this.allcomments.length; i++) {
             this.showReplies.push({
               show: false,
               face: false,
@@ -616,7 +616,7 @@ export default {
             });
           }
           // 初始化回复框开启标志
-          for (var i = 0; i < this.allcomments.length; i++) {
+          for (let i = 0; i < this.allcomments.length; i++) {
             this.replycomments.push({
               show: false,
               face: false,
@@ -633,13 +633,13 @@ export default {
         });
     },
     // parseComment(content) {
-    //   var match = content.match(/((?<=\[\[)[^\(\]\]]+)/g);
+    //   let match = content.match(/((?<=\[\[)[^\(\]\]]+)/g);
     //   match.map((v, i) => {
-    //     var kv = v.split(":");
+    //     let kv = v.split(":");
     //     if (kv.length <= 1) return;
-    //     var action = kv[0];
-    //     var value = kv[1];
-    //     var newvalue = "";
+    //     let action = kv[0];
+    //     let value = kv[1];
+    //     let newvalue = "";
     //     switch (action) {
     //       case "表情":
     //         newvalue = `<img src='${ParseFace(value)}' />`;
@@ -697,7 +697,7 @@ export default {
     openReplyBox(index, name, cid) {
       this.cidReplied = cid;
       this.reply = "";
-      for (var i = 0; i < this.replycomments.length; i++) {
+      for (let i = 0; i < this.replycomments.length; i++) {
         this.replycomments[i].show = false;
         this.replycomments[i].face = false;
         this.replycomments[i].emoji = false;

@@ -112,18 +112,18 @@ export default {
       if (!Value) return false;
       this.$emit("update:CheckStatus", 0);
       this.loading = true;
-      Value = Value.replace(/\ /g, "_");
+      Value = Value.replace(/ /g, "_");
       this.checkValueAsync(Value, res => {
-        var value = this.value;
-        value = value.replace(/\ /g, "_");
+        let value = this.value;
+        value = value.replace(/ /g, "_");
         if (Value != value) {
           this.$emit("update:CheckStatus", 0);
           this.loading = true;
           return false;
         }
-        var resultarr = [];
+        let resultarr = [];
         res.map(v => v.langs.map(val => resultarr.push(val.w)));
-        var result = resultarr.filter(v => v == Value);
+        let result = resultarr.filter(v => v == Value);
         this.nouse = result.length <= 0;
         this.$emit("update:CheckStatus", result.length <= 0 ? 1 : -1);
         this.loading = false;
@@ -134,30 +134,30 @@ export default {
     },
     ConvertLangRes(langs, hastran = true) {
       if (!langs) return;
-      var LangList = [
+      let LangList = [
         { id: 1, lang: "CHS" },
         { id: 2, lang: "CHT" },
         { id: 5, lang: "ENG" },
         { id: 10, lang: "JPN" }
       ];
-      var level = [10, 5, 1, 2];
-      var Lang = "";
-      var mainLang = "";
-      var subLang = "";
+      let level = [10, 5, 1, 2];
+      let Lang = "";
+      let mainLang = "";
+      let subLang = "";
       // 经过一系列计算得出主副语言
 
       // 匹配当前语言的 ID
-      var CurrLangID = LangList.find(x => {
+      let CurrLangID = LangList.find(x => {
         return x.lang == this.$i18n.locale;
       });
       CurrLangID = CurrLangID ? CurrLangID.id : 1;
 
       // 匹配对应 ID 的内容
-      var CurrLangWord = langs.find(x => {
+      let CurrLangWord = langs.find(x => {
         return x.l == CurrLangID;
       });
       if (!CurrLangWord) {
-        for (var i = 0; i < level.length; i++) {
+        for (let i = 0; i < level.length; i++) {
           CurrLangWord = langs.find(x => {
             return x.l == level[i];
           });
@@ -169,8 +169,8 @@ export default {
       if (hastran) {
         // 副语言匹配
         // 优先级：日语，英语，简体中文，繁体中文
-        var SubLangWord = null;
-        for (var i = 0; i < level.length; i++) {
+        let SubLangWord = null;
+        for (let i = 0; i < level.length; i++) {
           if (level[i] == CurrLangWord.l) continue;
           SubLangWord = langs.find(x => {
             return x.l == level[i];
@@ -180,8 +180,8 @@ export default {
         subLang = SubLangWord ? SubLangWord.w : mainLang;
 
         // 合成语言
-        Lang = `${mainLang.replace(/\_/g, " ")}`;
-        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/\_/g, " ")}</span>`;
+        Lang = `${mainLang.replace(/_/g, " ")}`;
+        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/_/g, " ")}</span>`;
       } else {
         Lang = mainLang;
       }

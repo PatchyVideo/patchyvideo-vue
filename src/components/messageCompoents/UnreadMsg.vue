@@ -80,7 +80,7 @@ export default {
     // 评论的用户
     commentUser() {
       return function(id) {
-        for (var i = 0; i < this.allUsers.length; i++) {
+        for (let i = 0; i < this.allUsers.length; i++) {
           if (id == this.allUsers[i]._id.$oid) {
             return this.allUsers[i];
           }
@@ -100,13 +100,13 @@ export default {
     // 评论的日期
     commentdate() {
       return function(date) {
-        var upload_time = new Date(date);
-        var y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
-        var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
-        var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
-        var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
+        let upload_time = new Date(date);
+        let y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+        let M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        let d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        let h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+        let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+        let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
         return (
           y +
           "-" +
@@ -140,7 +140,7 @@ export default {
         .then(result => {
           this.unreadMsg = result.data.data.notes;
           // 整理用户的ID
-          var UIDs = result.data.data.notes;
+          let UIDs = result.data.data.notes;
           UIDs = UIDs.map(data => {
             return data.replied_by.$oid;
           });
@@ -163,7 +163,7 @@ export default {
                   uids: UIDs
                 }
               })
-                .then(result => {})
+                .then(() => {})
                 .catch(error => {
                   console.log(error);
                 });

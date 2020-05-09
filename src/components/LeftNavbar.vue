@@ -250,9 +250,13 @@
 <script>
 import ShowAuthorData from "../components/ShowAuthorData.vue";
 import EditTags from "../components/EditTags";
-import pvTag from "../components/GeneralComponents/pv-tag.vue";
+// import pvTag from "../components/GeneralComponents/pv-tag.vue";
 export default {
-  components: { EditTags, ShowAuthorData, pvTag },
+  components: {
+    EditTags,
+    ShowAuthorData
+    // pvTag
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -287,7 +291,7 @@ export default {
       this.freshOverflow();
     });
     // 监听resize
-    var _this = this;
+    let _this = this;
     window.onresize = () => {
       _this.freshOverflow();
     };
@@ -297,7 +301,7 @@ export default {
     gotoHome(key, _blank = false) {
       if (key != "") {
         if (_blank) {
-          var routerPath = this.$router.resolve({
+          let routerPath = this.$router.resolve({
             path: "/home",
             query: { keyword: key }
           });
@@ -343,21 +347,21 @@ export default {
           this.tagLog = res.data.data;
           this.loading2 = false;
         })
-        .catch(res => {
+        .catch(() => {
           this.loading2 = false;
         });
     },
     // 标签的修改日期
     tagLogDate(date) {
-      var upload_time = new Date(date);
+      let upload_time = new Date(date);
       // 设置为东八区的时间
       upload_time.setTime(upload_time.getTime());
-      var y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
-      var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-      var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-      var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
-      var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
-      var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
+      let y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+      let M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+      let d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+      let h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+      let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+      let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
       return (
         y +
         "-" +
@@ -388,8 +392,8 @@ export default {
     },
     // 计算文本宽度
     getTextSize(text, fontSize, fontFamily) {
-      var span = document.createElement("span");
-      var result = {};
+      let span = document.createElement("span");
+      let result = {};
       result.width = span.offsetWidth;
       result.height = span.offsetHeight;
       span.style.visibility = "hidden";
@@ -431,6 +435,8 @@ export default {
         return this.$t("tag.title");
       } else if (this.$store.state.leftNavBarTitle == 2) {
         return this.$t("tag.title2");
+      } else {
+        return this.$t("tag.title");
       }
     },
     // 视频的 pid
@@ -440,7 +446,7 @@ export default {
     // 翻译标签名
     tranTagCategories() {
       return function(name) {
-        var map = {
+        let map = {
           General: this.$t("General"),
           Character: this.$t("Character"),
           Copyright: this.$t("Copyright"),
@@ -461,8 +467,7 @@ export default {
 .belong-to-home p {
   display: inline;
 }
-.belong-to-detail {
-}
+/* .belong-to-detail {} */
 .left_list ul li p {
   cursor: pointer;
 }

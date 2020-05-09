@@ -124,18 +124,18 @@ const router = new VueRouter({
   routes
 });
 
-var doorObj = document.getElementById("door");
-var irikuchiObj = document.getElementsByClassName("irikuchi")[0];
+let doorObj = document.getElementById("door");
+let irikuchiObj = document.getElementsByClassName("irikuchi")[0];
 
-var text = ["", ".", "..", "..."];
-var itext;
+let text = ["", ".", "..", "..."];
+let itext;
 function startLoading() {
   if (irikuchiObj) {
     doorObj.classList.remove("kieru");
     irikuchiObj.style.display = "block";
   }
   changeSiteTitle("少女祈祷中");
-  var index = 0;
+  let index = 0;
   itext = setInterval(() => {
     index++;
     changeSiteTitle(`少女祈祷中${text[index % text.length]}`);
@@ -144,7 +144,7 @@ function startLoading() {
 function endLoading() {
   if (irikuchiObj) {
     irikuchiObj.classList.add("kieru");
-    setTimeout(e => {
+    setTimeout(() => {
       irikuchiObj.style.display = "none";
     }, 500);
     clearInterval(itext);
@@ -152,7 +152,7 @@ function endLoading() {
 }
 
 //整活页面
-var page;
+let page;
 function startPage() {
   changeSiteTitle("少女密室");
   page = Loading.service({
@@ -163,6 +163,8 @@ function startPage() {
   });
 }
 
+// TODO: close loading page when server alives
+// eslint-disable-next-line no-unused-vars
 function endPage() {
   page.close();
 }
@@ -211,7 +213,7 @@ router.beforeEach((to, from, next) => {
     method: "get",
     url: "/be/alive.txt"
   })
-    .then(result => {
+    .then(() => {
       endLoading();
 
       // to 将要访问的路径
@@ -242,7 +244,7 @@ router.beforeEach((to, from, next) => {
     })
     .catch(ex => {
       endLoading();
-      var res = ex.response;
+      let res = ex.response;
       if (res) {
         if (res.status == 404) {
           return next("/404");
@@ -294,9 +296,9 @@ router.beforeEach((to, from, next) => {
 // 获取 cookie
 function getCookie() {
   if (document.cookie.length > 0) {
-    var arr = document.cookie.split("; ");
-    for (var i = 0; i < arr.length; i++) {
-      var arr2 = arr[i].split(":");
+    let arr = document.cookie.split("; ");
+    for (let i = 0; i < arr.length; i++) {
+      let arr2 = arr[i].split(":");
       // 判断查找相对应的值
       if (arr2[0] == "username") {
         if (arr2[1] != "") {

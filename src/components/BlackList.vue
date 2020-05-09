@@ -179,13 +179,13 @@ export default {
 
     showInput() {
       this.inputVisible = true;
-      this.$nextTick(_ => {
+      this.$nextTick(() => {
         this.$refs.saveTagInput.$refs.input.focus();
       });
     },
     showTextarea() {
       this.textareaVisble = true;
-      this.$nextTick(_ => {
+      this.$nextTick(() => {
         this.$refs.saveTagTextArea.$refs.textarea.focus();
       });
     },
@@ -262,7 +262,7 @@ export default {
       this.textareaValue = "";
     },
     querySearchAsync(queryString, cb) {
-      var url = "/autocomplete/?q=" + queryString;
+      let url = "/autocomplete/?q=" + queryString;
       this.axios({
         method: "get",
         url: url
@@ -322,7 +322,7 @@ export default {
         method: "post",
         url: "be/user/changeblacklist.do",
         data: { blacklist: data }
-      }).then(res => {
+      }).then(() => {
         this.$message({
           message: this.$t("update_successed"),
           type: "success"
@@ -368,8 +368,7 @@ export default {
 .el-tag {
   margin: 0px 3px;
 }
-.black-list {
-}
+// .black-list {}
 .text item {
   background-color: #99a9bf;
 }

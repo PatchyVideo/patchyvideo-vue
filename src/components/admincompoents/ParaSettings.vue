@@ -89,7 +89,7 @@ export default {
         .then(ret => {
           this.data = ret.data.data;
         })
-        .catch(err => {});
+        .catch(() => {});
       this.loading = false;
     },
     // 设置参数的值
@@ -104,8 +104,8 @@ export default {
           data: this.data[this.targetPara]
         }
       })
-        .then(ret => {})
-        .catch(err => {});
+        .then(() => {})
+        .catch(() => {});
       this.loading = false;
     }
   }

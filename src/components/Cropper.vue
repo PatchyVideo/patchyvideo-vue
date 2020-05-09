@@ -97,14 +97,14 @@
 import { VueCropper } from "vue-cropper";
 // 定义的接口根据自己项目更换
 // import { uploadImage } from '@/api/upload'
-import { isImageFile, isMaxFileSize, readFile, loadImage } from "../static/js/upload.js"; // 见下文
+import { isImageFile, readFile } from "../static/js/upload.js"; // 见下文
 export default {
   components: {
-    VueCropper,
-    isImageFile,
-    isMaxFileSize,
-    readFile,
-    loadImage
+    VueCropper
+    // isImageFile,
+    // isMaxFileSize,
+    // readFile,
+    // loadImage,
   },
   props: {
     // 最大上传文件的大小
@@ -198,7 +198,7 @@ export default {
       data.items.add(this.imgFile);
       $("#file")[0].files = data.files;
       this.loading = true;
-      var formObj = new FormData(document.getElementById("form1"));
+      let formObj = new FormData(document.getElementById("form1"));
       this.axios({
         method: "post",
         url: "be/helper/upload_image.do",
@@ -215,7 +215,7 @@ export default {
             this.loading = false;
           }
         })
-        .catch(err => {
+        .catch(() => {
           this.$message.error(this.$t("file_size_prompt"));
           this.loading = false;
         });
@@ -229,7 +229,7 @@ export default {
       }).then(res => {
         // this.getMyData();
         this.$emit("subUploadSucceed", this.url, true);
-        var img = res.data.data;
+        let img = res.data.data;
         this.$store.commit("getUserAvatar", img);
         this.setCookie(img, 7);
         this.loading = false;
@@ -262,7 +262,7 @@ export default {
             }
           }
         })
-        .catch(err => {
+        .catch(() => {
           this.$message.error(this.$t("upload_failed"));
         });
     },
@@ -296,10 +296,12 @@ export default {
         const src = await readFile(file);
         this.showCropper = true;
         this.cropper.img = src;
-      } catch (error) {}
+      } catch (error) {
+        // TODO: handle file error
+      }
     },
     dataURLtoFile(dataurl, filename) {
-      var arr = dataurl.split(","),
+      let arr = dataurl.split(","),
         mime = arr[0].match(/:(.*?);/)[1],
         bstr = atob(arr[1]),
         n = bstr.length,
@@ -312,7 +314,7 @@ export default {
     onImgCompression(img) {
       let canvas = document.createElement("canvas");
       let ctx = canvas.getContext("2d");
-      let initSize = img.src.length;
+      // let initSize = img.src.length;
       let width = img.width;
       let height = img.height;
       canvas.width = width;
@@ -358,7 +360,7 @@ export default {
     },
     // 设置 cookie
     setCookie(username, days) {
-      var date = new Date(); // 获取时间
+      let date = new Date(); // 获取时间
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
       // 字符串拼接 cookie
       window.document.cookie = "userAvatar" + "=" + username + ";path=/;expires=" + date.toGMTString();

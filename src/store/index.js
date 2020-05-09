@@ -31,7 +31,7 @@ export default new Vuex.Store({
     changeHomeVDS(state, e) {
       state.homeVideoDisplayStatus = e;
     },
-    refreshPage(state, e) {
+    refreshPage(state) {
       state.refreshCount++;
     },
     getUserName(state, e) {

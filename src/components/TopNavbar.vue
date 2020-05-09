@@ -296,7 +296,7 @@ export default {
             method: "post",
             url: "/be/logout.do",
             data: {}
-          }).then(result => {
+          }).then(() => {
             this.open(this.$t("user.login_expire_prompt"));
             this.isLogin = false;
             // 清除所有session值(退出登录)
@@ -326,7 +326,7 @@ export default {
         method: "post",
         url: "/be/logout.do",
         data: {}
-      }).then(result => {
+      }).then(() => {
         this.isLogin = false;
         // 清除所有 session 值(退出登录)
         sessionStorage.clear();
@@ -382,7 +382,7 @@ export default {
     // 设置 cookie
     // 储存变量为 username
     setCookie(username, days) {
-      var date = new Date(); // 获取时间
+      let date = new Date(); // 获取时间
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
       // 字符串拼接 cookie
       window.document.cookie = "username" + ":" + username + ";path=/;expires=" + date.toGMTString();
@@ -391,14 +391,14 @@ export default {
     // 获取 cookie
     getCookie: function() {
       if (document.cookie.length > 0) {
-        var arr = document.cookie.split("; ");
-        for (var i = 0; i < arr.length; i++) {
-          var arr3 = arr[i].split("=");
+        let arr = document.cookie.split("; ");
+        for (let i = 0; i < arr.length; i++) {
+          let arr3 = arr[i].split("=");
           // 判断查找相对应的值
           if (arr3[0] == "userAvatar") {
             this.$store.commit("getUserAvatar", arr3[1]);
           }
-          var arr2 = arr[i].split(":");
+          let arr2 = arr[i].split(":");
           // 判断查找相对应的值
           if (arr2[0] == "username") {
             if (arr2[1] != "") {
@@ -430,11 +430,11 @@ export default {
     querySearchAsync(queryString, cb) {
       // 这里的 get(0) 是将 jq 对象转换为原生 js 对象
       // selectionStart 是获取光标当前位置
-      var endlocation = $("#ipt").get(0).selectionStart;
+      let endlocation = $("#ipt").get(0).selectionStart;
       // 切割输入框内的字符串，切割下光标左面的字符串
-      var query = queryString.slice(0, endlocation);
+      let query = queryString.slice(0, endlocation);
       // 获取所需要搜索的字符串的开头在搜索框内字符串的位置
-      var startlocation = this.match(query);
+      let startlocation = this.match(query);
       // 切割下所需要查询的字符串
       query = query.slice(startlocation, endlocation);
       // 字符串为空格的话不搜索
@@ -444,16 +444,16 @@ export default {
       }
 
       // 备份参数防止出现玄学问题
-      var query2 = query;
+      let query2 = query;
       // 搜索是否包含 sites 变量的关键字
-      var results = this.sites.filter(this.createFilter(query2));
+      let results = this.sites.filter(this.createFilter(query2));
 
       // 对输入框现在的数据进行备份
       this.iptVal3 = this.iptVal;
       this.startlocation = startlocation;
       this.endlocation = endlocation;
 
-      var url = "/autocomplete/?q=" + query;
+      let url = "/autocomplete/?q=" + query;
       this.axios({
         method: "get",
         url: url
@@ -462,18 +462,18 @@ export default {
           cb([]);
           return;
         }
-        var resultList = results.concat(result.data);
+        let resultList = results.concat(result.data);
         cb(resultList);
       });
     },
     querySearchAsync2(queryString, cb) {
       // 这里的 get(0) 是将 jq 对象转换为原生 js 对象
       // selectionStart 是获取光标当前位置
-      var endlocation = $("#ipt").get(0).selectionStart;
+      let endlocation = $("#ipt").get(0).selectionStart;
       // 切割输入框内的字符串，切割下光标左面的字符串
-      var query = queryString.slice(0, endlocation);
+      let query = queryString.slice(0, endlocation);
       // 获取所需要搜索的字符串的开头在搜索框内字符串的位置
-      var startlocation = this.match(query);
+      let startlocation = this.match(query);
       // 切割下所需要查询的字符串
       query = query.slice(startlocation, endlocation);
       // 字符串为空格的话不搜索
@@ -483,16 +483,16 @@ export default {
       }
 
       // 备份参数防止出现玄学问题
-      var query2 = query;
+      let query2 = query;
       // 搜索是否包含 sites 变量的关键字
-      var results = this.sites.filter(this.createFilter(query2));
+      let results = this.sites.filter(this.createFilter(query2));
 
       // 对输入框现在的数据进行备份
       this.iptVal3 = this.iptVal;
       this.startlocation = startlocation;
       this.endlocation = endlocation;
 
-      var url = "/be/autocomplete/ql?q=" + query;
+      let url = "/be/autocomplete/ql?q=" + query;
       this.axios({
         method: "get",
         url: url
@@ -501,7 +501,7 @@ export default {
           cb([]);
           return;
         }
-        var resultList = results.concat(result.data);
+        let resultList = results.concat(result.data);
         cb(resultList);
       });
     },
@@ -513,7 +513,7 @@ export default {
     },
     // 搜索输入框内的搜索文字，返回搜索关键字所在的起始位置
     match(text) {
-      var i = text.length;
+      let i = text.length;
       while (i--) {
         if (
           text.charAt(i) == " " ||
@@ -539,36 +539,36 @@ export default {
     // 判断字符串是否全为空格
     isNull(str) {
       if (str == "") return true;
-      var regu = "^[ ]+$";
-      var re = new RegExp(regu);
+      let regu = "^[ ]+$";
+      let re = new RegExp(regu);
       return re.test(str);
     },
     ConvertLangRes(langs, hastran = true) {
       if (!langs) return;
-      var LangList = [
+      let LangList = [
         { id: 1, lang: "CHS" },
         { id: 2, lang: "CHT" },
         { id: 5, lang: "ENG" },
         { id: 10, lang: "JPN" }
       ];
-      var level = [10, 5, 1, 2];
-      var Lang = "";
-      var mainLang = "";
-      var subLang = "";
+      let level = [10, 5, 1, 2];
+      let Lang = "";
+      let mainLang = "";
+      let subLang = "";
       // 经过一系列计算得出主副语言
 
       // 匹配当前语言的 ID
-      var CurrLangID = LangList.find(x => {
+      let CurrLangID = LangList.find(x => {
         return x.lang == this.$i18n.locale;
       });
       CurrLangID = CurrLangID ? CurrLangID.id : 1;
 
       // 匹配对应 ID 的内容
-      var CurrLangWord = langs.find(x => {
+      let CurrLangWord = langs.find(x => {
         return x.l == CurrLangID;
       });
       if (!CurrLangWord) {
-        for (var i = 0; i < level.length; i++) {
+        for (let i = 0; i < level.length; i++) {
           CurrLangWord = langs.find(x => {
             return x.l == level[i];
           });
@@ -580,8 +580,8 @@ export default {
       if (hastran) {
         // 副语言匹配
         // 优先级：日语，英语，简体中文，繁体中文
-        var SubLangWord = null;
-        for (var i = 0; i < level.length; i++) {
+        let SubLangWord = null;
+        for (let i = 0; i < level.length; i++) {
           if (level[i] == CurrLangWord.l) continue;
           SubLangWord = langs.find(x => {
             return x.l == level[i];
@@ -591,8 +591,8 @@ export default {
         subLang = SubLangWord ? SubLangWord.w : mainLang;
 
         // 合成语言
-        Lang = `${mainLang.replace(/\_/g, " ")}`;
-        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/\_/g, " ")}</span>`;
+        Lang = `${mainLang.replace(/_/g, " ")}`;
+        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/_/g, " ")}</span>`;
       } else {
         Lang = mainLang;
       }
@@ -600,12 +600,12 @@ export default {
     },
     handleSelect(item) {
       // 切割字符串，并在中间加入搜索到的标签拼接成新的输入框的内容
-      var iptVal1 = this.iptVal3.slice(0, this.startlocation);
-      var iptVal2 = this.iptVal3.slice(this.endlocation);
-      var iptVal = iptVal1 + item.tag + " " + iptVal2;
+      let iptVal1 = this.iptVal3.slice(0, this.startlocation);
+      let iptVal2 = this.iptVal3.slice(this.endlocation);
+      let iptVal = iptVal1 + item.tag + " " + iptVal2;
       this.iptVal = iptVal;
       // 光标设置焦点事件
-      var endlocation = $("#ipt").focus();
+      $("#ipt").focus();
       this.infoTipMark = true;
     },
     open(message) {
@@ -616,19 +616,13 @@ export default {
     },
     handleSelect2(item) {
       // 切割字符串，并在中间加入搜索到的标签拼接成新的输入框的内容
-      var iptVal1 = this.iptVal3.slice(0, this.startlocation);
-      var iptVal2 = this.iptVal3.slice(this.endlocation);
-      var iptVal = iptVal1 + (item.tag || this.ConvertLangRes(item.langs, false)) + " " + iptVal2;
+      let iptVal1 = this.iptVal3.slice(0, this.startlocation);
+      let iptVal2 = this.iptVal3.slice(this.endlocation);
+      let iptVal = iptVal1 + (item.tag || this.ConvertLangRes(item.langs, false)) + " " + iptVal2;
       this.iptVal = iptVal;
       // 光标设置焦点事件
-      var endlocation = $("#ipt").focus();
+      $("#ipt").focus();
       this.infoTipMark = true;
-    },
-    open(message) {
-      this.$message({
-        message: message,
-        type: "error"
-      });
     }
   },
   watch: {

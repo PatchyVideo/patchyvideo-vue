@@ -78,7 +78,7 @@ import star_half from "../static/img/star_half.png";
 import star_full from "../static/img/star_full.png";
 export default {
   props: {
-    type: ""
+    type: String
   },
   data: function() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -105,10 +105,10 @@ export default {
     this.isLogin() ? this.getMyScore() : this.getTotalRating();
   },
   watch: {
-    pid: function(val) {
+    pid() {
       this.getMyScore();
     },
-    scoreStatus: function(val) {}
+    scoreStatus() {}
   },
   methods: {
     // 登录跳转
@@ -116,9 +116,9 @@ export default {
       this.$store.commit("changeifRouter", "0");
     },
     getMyScore(callBack) {
-      // var url = this.type="video"?"/be/rating/get_video.do":"/be/rating/get_playlist.do ";
-      var data = {};
-      var url = "";
+      // let url = this.type="video"?"/be/rating/get_video.do":"/be/rating/get_playlist.do ";
+      let data = {};
+      let url = "";
       if (this.type == "video") {
         url = "/be/rating/get_video.do";
         data.vid = this.pid;
@@ -131,7 +131,7 @@ export default {
         url: url,
         data: data
       }).then(res => {
-        var data = res.data;
+        let data = res.data;
         if (data.data.reason === "NOT_RATED") {
           // 没有评分过
           this.scoreStatus = false;
@@ -149,8 +149,8 @@ export default {
       });
     },
     getTotalRating() {
-      var data = {};
-      var url = "";
+      let data = {};
+      let url = "";
       if (this.type == "video") {
         url = "/be/rating/get_video_total.do ";
         data.vid = this.pid;
@@ -168,11 +168,11 @@ export default {
       });
     },
     showStar(num) {
-      var stars = document.getElementsByClassName("star");
-      for (var i = 0; i < stars.length; i++) {
-        var img = stars[i].getElementsByTagName("img")[0];
-        var index = parseInt(num / 2);
-        var pos = num % 2;
+      let stars = document.getElementsByClassName("star");
+      for (let i = 0; i < stars.length; i++) {
+        let img = stars[i].getElementsByTagName("img")[0];
+        let index = parseInt(num / 2);
+        let pos = num % 2;
         if (i < index && img != this.starIcon[2]) {
           img.src = this.starIcon[2];
         }
@@ -192,14 +192,14 @@ export default {
 
       this.lastStar = { index: index, position: pos };
       this.checkStar(this.lastStar.index);
-      var curStar = document.getElementsByClassName("star")[index - 1];
-      var img = curStar.getElementsByTagName("img")[0];
+      let curStar = document.getElementsByClassName("star")[index - 1];
+      let img = curStar.getElementsByTagName("img")[0];
       img.src = this.starIcon[pos + 1];
     },
     checkStar(index) {
-      var stars = document.getElementsByClassName("star");
-      for (var i = 0; i < stars.length; i++) {
-        var img = stars[i].getElementsByTagName("img")[0];
+      let stars = document.getElementsByClassName("star");
+      for (let i = 0; i < stars.length; i++) {
+        let img = stars[i].getElementsByTagName("img")[0];
         if (i < index && img != this.starIcon[2]) {
           img.src = this.starIcon[2];
           continue;
@@ -212,14 +212,14 @@ export default {
     },
 
     async submitScore() {
-      var score = (this.lastStar.index - 1) * 2 + this.lastStar.position + 1;
+      let score = (this.lastStar.index - 1) * 2 + this.lastStar.position + 1;
       if (score < 1) {
         this.dialogVisible = true;
         return;
       }
-      // var url = this.type=="video"?"/be/rating/video.do":"/be/rating/playlist.do ";
-      var data = {};
-      var url = "";
+      // let url = this.type=="video"?"/be/rating/video.do":"/be/rating/playlist.do ";
+      let data = {};
+      let url = "";
       if (this.type == "video") {
         url = "/be/rating/video.do";
         data.vid = this.pid;
@@ -233,15 +233,14 @@ export default {
         method: "post",
         url: url,
         data: data
-      }).then(res => {
-        var data = res.data;
+      }).then(() => {
+        // let data = res.data;
         this.scoreStatus = true;
         this.enableListener = false;
         // console.log(data);
-        var that = this;
-        this.getMyScore(function() {
-          that.promptContent = 1;
-          that.dialogVisible = true;
+        this.getMyScore(() => {
+          this.promptContent = 1;
+          this.dialogVisible = true;
         });
       });
     },

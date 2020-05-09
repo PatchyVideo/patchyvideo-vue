@@ -245,7 +245,7 @@ export default {
     };
   },
   created() {
-    var that = this;
+    let that = this;
     // 当前页面监视键盘输入
     document.onkeydown = function(e) {
       // 事件对象兼容
@@ -283,7 +283,7 @@ export default {
   mounted() {},
   updated() {
     let _that = this;
-    var infoTipObj = document.getElementsByClassName("el-autocomplete-suggestion");
+    let infoTipObj = document.getElementsByClassName("el-autocomplete-suggestion");
     for (let i = 0; i < infoTipObj.length; ++i) {
       infoTipObj[i].onclick = function() {
         _that.isInfoTipClick = true;
@@ -352,7 +352,7 @@ export default {
             this.getTagCategories(this.tags); // 范围转换后展示原始数据
             this.getRecTags(this.tags); // 获取推荐 TAG
           })
-          .catch(error => {});
+          .catch(() => {});
       }
       if (this.$route.path === "/video" || this.$route.path === "/postvideo") {
         this.axios({
@@ -367,7 +367,7 @@ export default {
             this.getTagCategories(this.tags); // 范围转换后展示原始数据
             this.getRecTags(this.tags); // 获取推荐 TAG
           })
-          .catch(error => {});
+          .catch(() => {});
       }
     },
     // 从视频列表里添加视频的时候添加视频列表的共有标签
@@ -384,7 +384,7 @@ export default {
           this.getTagCategories(this.tags); // 范围转换后展示原始数据
           this.getRecTags(this.tags); // 获取推荐 TAG
         })
-        .catch(error => {});
+        .catch(() => {});
     },
     getTagCategories(str) {
       this.axios({
@@ -407,11 +407,10 @@ export default {
           }
           this.msgMark = false;
         })
-        .catch(err => {});
+        .catch(() => {});
     },
     getTagCategoriesForAdd(str) {
       let strToArray = str.split();
-      let _that = this;
       this.axios({
         method: "post",
         url: "be/tags/query_tag_categories.do ",
@@ -445,7 +444,7 @@ export default {
           }
           this.getRecTags(this.tagsForRec);
         })
-        .catch(err => {});
+        .catch(() => {});
     },
     getRecTags(tags) {
       this.axios({
@@ -465,7 +464,7 @@ export default {
           // }
           this.animeMark++;
         })
-        .catch(err => {});
+        .catch(() => {});
     },
     deleteObj(i, item) {
       this.$delete(this.TagCategoriesData, item);
@@ -494,7 +493,7 @@ export default {
         return;
       }
     },
-    getiptVal(i, item) {
+    getiptVal(i) {
       this.iptVal = Object.keys(i)[0];
 
       this.getTagCategoriesForAdd(this.iptVal);
@@ -584,7 +583,7 @@ export default {
           method: "post",
           url: "be/videos/edittags.do",
           data: { video_id: this.msg, tags: this.tags }
-        }).then(res => {
+        }).then(() => {
           this.open5();
           this.closeTagPanel(true);
         });
@@ -595,7 +594,7 @@ export default {
           method: "post",
           url: "be/list/setcommontags.do",
           data: { pid: this.msg, tags: this.tags }
-        }).then(res => {
+        }).then(() => {
           this.open5();
           this.closeTagPanel(true);
         });
@@ -620,30 +619,30 @@ export default {
     },
     ConvertLangRes(langs, hastran = true) {
       if (!langs) return;
-      var LangList = [
+      let LangList = [
         { id: 1, lang: "CHS" },
         { id: 2, lang: "CHT" },
         { id: 5, lang: "ENG" },
         { id: 10, lang: "JPN" }
       ];
-      var level = [10, 5, 1, 2];
-      var Lang = "";
-      var mainLang = "";
-      var subLang = "";
+      let level = [10, 5, 1, 2];
+      let Lang = "";
+      let mainLang = "";
+      let subLang = "";
       // 经过一系列计算得出主副语言
 
       // 匹配当前语言的 ID
-      var CurrLangID = LangList.find(x => {
+      let CurrLangID = LangList.find(x => {
         return x.lang == this.$i18n.locale;
       });
       CurrLangID = CurrLangID ? CurrLangID.id : 1;
 
       //匹配对应 ID 的内容
-      var CurrLangWord = langs.find(x => {
+      let CurrLangWord = langs.find(x => {
         return x.l == CurrLangID;
       });
       if (!CurrLangWord) {
-        for (var i = 0; i < level.length; i++) {
+        for (let i = 0; i < level.length; i++) {
           CurrLangWord = langs.find(x => {
             return x.l == level[i];
           });
@@ -655,8 +654,8 @@ export default {
       if (hastran) {
         // 副语言匹配
         // 优先级：日语，英语，简体中文，繁体中文
-        var SubLangWord = null;
-        for (var i = 0; i < level.length; i++) {
+        let SubLangWord = null;
+        for (let i = 0; i < level.length; i++) {
           if (level[i] == CurrLangWord.l) continue;
           SubLangWord = langs.find(x => {
             return x.l == level[i];
@@ -666,8 +665,8 @@ export default {
         subLang = SubLangWord ? SubLangWord.w : mainLang;
 
         // 合成语言
-        Lang = `${mainLang.replace(/\_/g, " ")}`;
-        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/\_/g, " ")}</span>`;
+        Lang = `${mainLang.replace(/_/g, " ")}`;
+        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/_/g, " ")}</span>`;
       } else {
         Lang = mainLang;
       }
@@ -676,7 +675,7 @@ export default {
     // 下面是消息补全框的方法
     querySearchAsync(queryString, cb) {
       // this.infoTipMark = true;
-      var url = "/autocomplete/?q=" + queryString;
+      let url = "/autocomplete/?q=" + queryString;
       this.axios({
         method: "get",
         url: url
@@ -687,7 +686,7 @@ export default {
     },
     querySearchAsync2(queryString, cb) {
       // this.infoTipMark = true;
-      var url = "/be/autocomplete/ql?q=" + queryString;
+      let url = "/be/autocomplete/ql?q=" + queryString;
       this.axios({
         method: "get",
         url: url
@@ -738,7 +737,7 @@ export default {
   },
   props: {
     msg: {},
-    really: "",
+    really: String,
     visible: {
       type: Boolean,
       default: false
@@ -832,8 +831,7 @@ div {
       display: flex;
       margin-top: 0px;
       flex-direction: column;
-      .m_bg {
-      }
+      // .m_bg {}
       .m_a {
         transition: all 0.6s ease;
         background-color: rgba(215, 176, 184, 0.2);

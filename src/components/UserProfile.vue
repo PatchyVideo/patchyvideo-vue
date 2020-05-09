@@ -220,7 +220,7 @@
         <div class="desc">
           <div class="desc_name">{{ userData.username }}</div>
           <div class="text-form">
-            <textarea name id cols="30" rows="10" disabled="disabled">{{ userData.desc }}</textarea>
+            <textarea name id cols="30" rows="10" disabled="disabled" v-model="userData.desc"></textarea>
           </div>
         </div>
       </div>
@@ -233,7 +233,7 @@ import AppCropper from "@/components/Cropper";
 export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
-    var validateOldPass = (rule, value, callback) => {
+    let validateOldPass = (rule, value, callback) => {
       if (!value) {
         return callback(new Error(this.$t("enter_old_pass")));
       }
@@ -245,7 +245,7 @@ export default {
       }
       callback();
     };
-    var validatePass = (rule, value, callback) => {
+    let validatePass = (rule, value, callback) => {
       if (value === "") {
         callback(new Error(this.$t("enter_new_pass")));
       } else {
@@ -260,7 +260,7 @@ export default {
         callback();
       }
     };
-    var validatePass2 = (rule, value, callback) => {
+    let validatePass2 = (rule, value, callback) => {
       if (value === "") {
         callback(new Error(this.$t("enter_new_pass_again")));
       } else if (value !== this.ruleForm.pass) {
@@ -322,7 +322,7 @@ export default {
     },
     // sub() {
     //   this.loading = true;
-    //   var formObj = new FormData(document.getElementById("form1"));
+    //   let formObj = new FormData(document.getElementById("form1"));
     //   this.axios({
     //     method: "post",
     //     url: "be/helper/upload_image.do",
@@ -434,7 +434,7 @@ export default {
           }
           this.loading = false;
         })
-        .catch(err => {});
+        .catch(() => {});
     },
     getUserData() {
       this.axios({
@@ -460,7 +460,7 @@ export default {
         data: {
           desc: this.myData.desc
         }
-      }).then(res => {
+      }).then(() => {
         this.open2();
       });
     },
@@ -596,9 +596,9 @@ export default {
   background: #fff;
 }
 
-.wave.solid .circle:first-child {
-  /* animation: circle-opacity 2s; */
-}
+// .wave.solid .circle:first-child {
+//   /* animation: circle-opacity 2s; */
+// }
 
 .wave.solid.danger {
   color: red;

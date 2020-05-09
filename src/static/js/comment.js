@@ -1,7 +1,7 @@
 import { XmlEntities as htmle } from "html-entities";
 const parserHTML = new htmle();
 
-var faceslist = {
+let faceslist = {
   呵呵: "paopao/i_f01.gif",
   哈哈: "paopao/i_f02.gif",
   吐舌: "paopao/i_f03.gif",
@@ -54,7 +54,7 @@ var faceslist = {
   OK: "paopao/i_f50.gif"
 };
 
-var emojislist = {
+let emojislist = {
   好: "👌",
   哈哈: "😄",
   无奈: "😔",
@@ -65,8 +65,8 @@ var emojislist = {
 };
 
 /*function ParseFace(faceName) {
-    var face = faceslist.filter(v => {
-        var tmp = Object.keys(v).filter(v2 => v2 == faceName);
+    let face = faceslist.filter(v => {
+        let tmp = Object.keys(v).filter(v2 => v2 == faceName);
         if (tmp && tmp.length > 0) return v;
         return null;
     });
@@ -95,9 +95,9 @@ function ParseEmoji(emojiName) {
     let array = [];
     const MAXROW = 10;
     //读取face数据,转换成[{"呵呵":"src"},{}]格式
-    for (var i = 0; i < faceslist.length; i++) {
+    for (let i = 0; i < faceslist.length; i++) {
         let tmparr = [];
-        var faces = faceslist[i];
+        let faces = faceslist[i];
         for (let face in faces) {
             let obj = {};
             obj[face] = ParseFace(face);
@@ -106,11 +106,11 @@ function ParseEmoji(emojiName) {
         array.push(tmparr);
     }
 
-    var faces = [];
-    for (var index = 0; index < faceslist.length; index++) {
+    let faces = [];
+    for (let index = 0; index < faceslist.length; index++) {
         //计算最后一排个数
-        var face = array[index];
-        var faceRow = Math.ceil(face.length / MAXROW);
+        let face = array[index];
+        let faceRow = Math.ceil(face.length / MAXROW);
         let c = [];
         //转换成[[{"呵呵":"src"},{}],[]]格式
         for (let i = 0; i < faceRow; ++i) {
@@ -137,7 +137,7 @@ function getFace() {
   }
 
   //计算最后一排个数
-  var faceRow = Math.ceil(array.length / MAXROW);
+  let faceRow = Math.ceil(array.length / MAXROW);
   let c = [];
   //转换成[[{"呵呵":"src"},{}],[]]格式
   for (let i = 0; i < faceRow; ++i) {
@@ -159,10 +159,10 @@ function getFace() {
         faces.push(obj);
     }
     //计算最后一排个数
-    var faceRow = Math.ceil(faces.length / MAXROW);
-    var facesData = [];
+    let faceRow = Math.ceil(faces.length / MAXROW);
+    let facesData = [];
     for (let i = 0; i < faceRow; i++) {
-        var list = {};
+        let list = {};
         for (let j = i * MAXROW, k = 0; j < i * MAXROW + MAXROW; j++, k++) {
             list[k] = faces[j];
         }
@@ -184,7 +184,7 @@ function getEmoji() {
   }
 
   //计算最后一排个数
-  var faceRow = Math.ceil(array.length / MAXROW);
+  let faceRow = Math.ceil(array.length / MAXROW);
   let c = [];
   //转换成[[{"呵呵":"src"},{}],[]]格式
   for (let i = 0; i < faceRow; ++i) {
@@ -198,28 +198,31 @@ function getEmoji() {
 
 function ParseCommentT(content) {
   content = content.replace(/\[\[\{[\w]+\}\]\]/g, ""); // 过滤渲染属性
-  //var match = content.match(/((?<=\[\[)[^\(\]\]]+)/g);
-  var match = content.match(/\[\[[^\[\]]*\]\]/g);
+  //let match = content.match(/((?<=\[\[)[^\(\]\]]+)/g);
+  let match = content.match(/\[\[[^[\]]*\]\]/g);
   if (match) {
     match.forEach(v => {
       v = v.replace(/\[\[/g, "").replace(/\]\]/g, "");
-      var kv = v.split(":");
+      let kv = v.split(":");
       if (kv.length <= 1) return;
-      var action = kv[0];
-      var value = kv[1];
-      var newvalue = "";
+      let action = kv[0];
+      let value = kv[1];
+      let newvalue = "";
       switch (action) {
-        case "表情":
-          var face = ParseFace(value);
+        case "表情": {
+          let face = ParseFace(value);
           newvalue = face ? `[[{html}]]<img src='${face}' />[[{/html}]]` : v;
           break;
-        case "emoji":
-          var emoji = ParseEmoji(value);
+        }
+        case "emoji": {
+          let emoji = ParseEmoji(value);
           newvalue = emoji ? emoji : v;
           break;
-        default:
+        }
+        default: {
           newvalue = v;
           break;
+        }
       }
       content = content.replace(`[[${v}]]`, newvalue);
     });

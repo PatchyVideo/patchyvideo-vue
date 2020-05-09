@@ -81,7 +81,7 @@ export default {
         url: "/be/user/myprofile.do",
         data: {}
       }).then(ret => {
-        var status = ret.data.data.access_control.status;
+        let status = ret.data.data.access_control.status;
         if (status !== "admin") {
           this.$router.push({ path: "*" });
         } else {

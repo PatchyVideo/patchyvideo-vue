@@ -115,15 +115,19 @@ export default {
   props: {
     comment: {
       type: Object,
-      default: {}
+      default() {
+        return {};
+      }
     },
     index: {
       type: String,
-      default: 0
+      default: ""
     },
     commentAuthorsInfo: {
       type: Object,
-      default: {}
+      default() {
+        return {};
+      }
     },
     userId: {
       type: String,

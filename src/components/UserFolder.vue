@@ -116,7 +116,7 @@ export default {
       for (let i in obj) {
         array.push({
           url: obj[i].url,
-          tags: JSON.parse(JSON.stringify(obj[i].tags).replace(/(\",)+/g, '、",'))
+          tags: JSON.parse(JSON.stringify(obj[i].tags).replace(/(",)+/g, '、",'))
         });
       }
       this.tableData2 = array;
@@ -190,7 +190,7 @@ export default {
       this.doingState = false;
       this.failedState = true;
     },
-    tableRowClassName({ row, rowIndex }) {
+    tableRowClassName({ rowIndex }) {
       if (rowIndex === 1) {
         return "warning-row";
       } else if (rowIndex === 3) {
@@ -200,13 +200,13 @@ export default {
     },
     formatDate(value) {
       if (value) {
-        var upload_time = new Date(value.$date);
-        var y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
-        var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
-        var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
-        var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
+        let upload_time = new Date(value.$date);
+        let y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+        let M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        let d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        let h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+        let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+        let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
         return (
           y +
           "-" +
@@ -226,7 +226,7 @@ export default {
   },
   components: {},
   watch: {
-    value(n) {}
+    value() {}
   }
 };
 </script>
@@ -273,8 +273,7 @@ export default {
     }
   }
 
-  .first {
-  }
+  // .first {}
   .second {
     position: relative;
     width: 100%;
@@ -414,8 +413,7 @@ export default {
     }
   }
 }
-.el-icon-circle-plus-outline {
-}
+// .el-icon-circle-plus-outline {}
 .fa-plus-square:hover {
   background-color: rgba(1, 1, 1, 0.1);
   color: #2c3e50;
