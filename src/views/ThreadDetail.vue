@@ -247,7 +247,7 @@ export default {
             };
           }
         })
-        .catch(e => {});
+        .catch(() => {});
     },
     fetchData() {
       this.axios({

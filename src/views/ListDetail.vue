@@ -2,32 +2,7 @@
 <!--
     页面：视频列表的详细信息
     功能：展示展示视频列表的详细信息
-    包含组件：LeftNavbar.vue、TopNavbar.vue、Foot.vue、EditTags
     更新日志：
-    12/29/2019: v1.0 
-      release
-    1/9/2020：v1.0.1
-      1.加入了Tag编辑功能
-    1/16/2020:v1.0.2
-      1.增加EditTags对Postvideo的支持。
-      2.增加Move、DeleteVideo、SetCover 操作页面的组件，样式微调。
-    1/19/2020：v1.0.2
-      1.新增字体图标以及对应的元素操作。
-      （由于是百分百布局，存在滚动条问题，Dialog对话框触发后滚动条消失，页面会突然向右移动铺满）
-    1/20/2020：v1.0.3
-      1.新增添加视频 编辑 删除模块，但是现阶段接口不支持。
-    2/1/2020：v1.0.4
-      1.添加视频 编辑 删除模块完成
-      2.页面上的编辑标签在列表不可编辑或者未登录的时候隐藏
-    2/2/2020：v1.0.5
-      1.视频列表的索引值优化
-    2/4/2020：v1.0.6
-      1.添加视频的时候视频添加到播放列表的末尾而不是开头
-    2/7/2020：v1.0.7
-      1.tag编辑标签之前会请求标签数据
-    ★待解决问题：
-      1.播放列表里链接的复制功能因为涉及到对dom的直接操作，所以可能会有被抓住漏洞的风险
-      2.编辑共有标签的时候有时候会弹出“添加成功”的提示
 -->
 
 <i18n>
@@ -221,14 +196,14 @@
         <!-- 视频列表 -->
         <div class="recommend">
           <!-- 视频详情 -->
-          <div class="minbox shadow" v-for="(item, index) in videolistVideos" :key="item._id.$oid">
+          <div class="minbox shadow" v-for="item in videolistVideos" :key="item._id.$oid">
             <div class="re_video">
               <div class="edit">
                 <div id="edit_first">
                   <h1>{{ item.rank + 1 }}</h1>
                 </div>
                 <div v-if="editable" id="edit_second">
-                  <Move class="move" :msg="PlaylistItemOp(item, index)"></Move>
+                  <Move class="move" :msg="PlaylistItemOp(item)"></Move>
                   <!--上移-->
                 </div>
               </div>
@@ -239,7 +214,7 @@
                   <router-link
                     :to="{
                       path: './postvideo',
-                      query: getInsertData(item, index)
+                      query: getInsertData(item)
                     }"
                     class="insert-video"
                   >
@@ -261,8 +236,8 @@
                 </div>
               </div>
               <div v-if="editable" class="item_end">
-                <SetCover class="set-cover" :msg="PlaylistItemOp(item, index)"></SetCover>
-                <DeleteVideo class="delete-video" :msg="PlaylistItemOp(item, index)"></DeleteVideo>
+                <SetCover class="set-cover" :msg="PlaylistItemOp(item)"></SetCover>
+                <DeleteVideo class="delete-video" :msg="PlaylistItemOp(item)"></DeleteVideo>
               </div>
             </div>
           </div>
@@ -383,7 +358,7 @@ export default {
   },
   methods: {
     // 获取插入视频需要的数据
-    getInsertData(e, i) {
+    getInsertData(e) {
       let obj = {
         pid: this.videolistPid,
         rank: e.rank
@@ -391,7 +366,7 @@ export default {
       return obj;
     },
     // 获取移动组件所需要的数据
-    PlaylistItemOp(e, i) {
+    PlaylistItemOp(e) {
       let obj = {
         //移动组件所需要的数据
         pid: this.videolistPid,
@@ -466,7 +441,7 @@ export default {
             $("html").animate({ scrollTop: 0 }, 100);
           }
         })
-        .catch(error => {
+        .catch(() => {
           this.$router.push({ path: "/404" });
         });
     },
@@ -508,7 +483,7 @@ export default {
           desc: this.playlist_metadata.desc,
           private: this.playlist_metadata.private
         }
-      }).then(res => {
+      }).then(() => {
         this.open(this.$t("commit_tip"));
         this.openListEdit = false;
         this.getVideoList();
@@ -523,7 +498,7 @@ export default {
         data: {
           pid: this.videolistPid
         }
-      }).then(res => {
+      }).then(() => {
         this.open(this.$t("oper_tip"));
         this.getVideoList();
       });
@@ -536,7 +511,7 @@ export default {
         data: {
           pid: this.videolistPid
         }
-      }).then(res => {
+      }).then(() => {
         this.open(this.$t("delete_tip"));
         this.$router.push({ path: "/lists" });
       });
@@ -564,10 +539,10 @@ export default {
     }
   },
   watch: {
-    page(v) {
+    page() {
       this.getVideoList(this.page, this.count);
     },
-    count(v) {
+    count() {
       this.getVideoList(this.page, this.count);
     },
     f1() {

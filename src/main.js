@@ -69,7 +69,7 @@ if (!localStorage.getItem("lang")) {
 }
 i18n.locale = localStorage.getItem("lang");
 
-var vm = new Vue({
+new Vue({
   i18n,
   router,
   store,

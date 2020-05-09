@@ -113,7 +113,7 @@ export default {
         });
       }, Interval);
       const player = document.getElementById("player");
-      var vs = this.genIpfsVideo(ipfs, "QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh", player);
+      this.genIpfsVideo(ipfs, "QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh", player);
     });
   },
   methods: {

@@ -261,13 +261,13 @@ export default {
                     this.status = this.$t("request_failed");
                   }
                 })
-                .catch(error => {
+                .catch(() => {
                   this.loading = false;
                   this.open3();
                   this.status = this.$t("net_err");
                 });
             })
-            .catch(error => {
+            .catch(() => {
               this.loading = false;
               this.open3();
               this.status = this.$t("net_err");
@@ -324,8 +324,6 @@ input:-moz-placeholder {
 input:-ms-input-placeholder {
   /* Internet Explorer 10-11 */
   color: #c8c8c8;
-}
-input[type="text"] {
 }
 
 * {
@@ -389,8 +387,6 @@ a {
 
   border: 1px solid #c8c8c8;
   background-color: hsla(0, 0%, 71%, 0.1);
-}
-.middle input:focus {
 }
 
 .login {

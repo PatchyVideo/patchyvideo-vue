@@ -15,7 +15,7 @@
   <div>
     <topnavbar />
 
-    <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
+    <el-tabs type="border-card" v-model="activeName">
       <el-tab-pane :label="labelInfo[0]" name="first">
         <tagconhis v-if="activeName === 'first'"></tagconhis>
       </el-tab-pane>
@@ -45,11 +45,9 @@ export default {
   computed: {},
   mounted() {},
   updated() {},
-  methods: {
-    handleClick(e) {}
-  },
+  methods: {},
   watch: {
-    $route(newV, oldV) {
+    $route() {
       this.activeName = "first";
     }
   },

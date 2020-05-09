@@ -95,23 +95,8 @@ Vue.prototype.$echarts = echarts;
   <div>
     <topnavbar></topnavbar>
     <div class="content w">
-      <!--<el-menu
-        :default-active="activeIndex"
-        class="el-menu-demo"
-        mode="horizontal"
-        @select="handleSelect"
-        >
-        <el-menu-item index="1">个人中心</el-menu-item>
-        <el-menu-item index="2">我贡献的索引</el-menu-item>
-        <el-menu-item index="3">收藏夹</el-menu-item>
-      </el-menu>
-      <userprofile v-if="1==gotomark"></userprofile>
-      <usercontribute v-if="2==gotomark"></usercontribute>
-      <userfavorites v-if="3==gotomark"></userfavorites>-->
-
       <!-- 个人界面 -->
-
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeName">
         <el-tab-pane :label="labelInfo.length == info[0].length ? $t('me.tab1') : $t('outer_user.tab1')" name="first" v-if="labelInfo.length >= 1">
           <userprofile></userprofile>
         </el-tab-pane>
@@ -133,9 +118,6 @@ Vue.prototype.$echarts = echarts;
         <el-tab-pane :label="labelInfo.length == info[0].length ? $t('me.tab7') : $t('outer_user.tab7')" name="seven" v-if="labelInfo.length >= 7">
           <usersub v-if="this.activeName === 'seven'"></usersub>
         </el-tab-pane>
-        <!--<el-tab-pane label="文件管理" name="five">
-          <userfolder></userfolder>
-        </el-tab-pane>-->
       </el-tabs>
 
       <!-- 其他用户界面 -->
@@ -151,10 +133,8 @@ import usercontribute from "../components/UserContribute.vue";
 import listfolder from "../components/ListFolder.vue";
 import userfavorites from "../components/UserFavorites.vue";
 import userfolder from "../components/UserFolder.vue";
-import userpoststate from "../components/UserPostState.vue";
 import blacklist from "../components/BlackList.vue";
 import usersub from "../components/UserSub.vue";
-
 import Footer from "../components/Footer.vue";
 export default {
   data() {
@@ -194,8 +174,6 @@ export default {
     }
   },
   methods: {
-    handleSelect(key, keyPath) {},
-    handleClick(key) {},
     isUidNull() {
       this.axios({
         method: "post",
@@ -229,7 +207,6 @@ export default {
     userfavorites,
     usersub,
     userfolder,
-    userpoststate,
     Footer,
     blacklist
   }
@@ -275,9 +252,6 @@ h4 {
   background-attachment: fixed;
 }
 
-.font {
-}
-
 .standard {
   width: 1500px;
   margin: 10px 5px 0px;
@@ -306,7 +280,5 @@ h4 {
 }
 .topmsg div a:hover {
   background-color: #fafafa;
-}
-.topmsg div a:nth-child(1) {
 }
 </style>

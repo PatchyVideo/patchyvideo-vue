@@ -36,7 +36,7 @@
 
     <!-- PostVideo页面的正文 -->
     <div class="w main-page-background-img">
-      <el-tabs v-model="activeName" type="card" @tab-click="handleClick" class="topTabs">
+      <el-tabs v-model="activeName" type="card" class="topTabs">
         <el-tab-pane :label="$t('create')" name="first">
           <createNewList></createNewList>
         </el-tab-pane>
@@ -74,10 +74,7 @@ export default {
     }
   },
   mounted() {},
-  methods: {
-    // 切换标签页
-    handleClick(tab, event) {}
-  },
+  methods: {},
   components: { topnavbar, Footer, createNewList, leadInExistingList }
 };
 </script>
@@ -87,7 +84,6 @@ export default {
   text-align: left;
 }
 .main-page-background-img {
-  /* background-image: url("./../static/img/imoto3.jpg"); */
   background-repeat: no-repeat;
   min-height: 800px;
   width: 100%;

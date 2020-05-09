@@ -51,7 +51,7 @@
   <div>
     <topnavbar />
     <!-- home页面的正文 -->
-    <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
+    <el-tabs type="border-card" v-model="activeName">
       <el-tab-pane :label="labelInfo[0]" name="first">
         <i @click="changeLine" :class="{ 'el-icon-s-grid': flag, 'el-icon-menu': !flag }"></i>
         <homemain v-if="activeName === 'first' && !flag"></homemain>
@@ -67,12 +67,10 @@
 
 <script>
 import topnavbar from "../components/TopNavbar.vue";
-import left_navbar from "../components/LeftNavbar.vue";
 import subscribed from "../components/homecompoents/Subscribed.vue";
 import homemain from "../components/homecompoents/HomeMain.vue";
 import girdhomemain from "../components/homecompoents/GirdHomeMain.vue";
 import Footer from "../components/Footer.vue";
-import { copyToClipboardText } from "../static/js/generic";
 export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -101,7 +99,6 @@ export default {
     isLogin() {
       return !!this.$store.state.username;
     },
-    handleClick(e) {},
     // 切换网格/列表视图
     changeLine() {
       const flag = !this.flag;
@@ -112,12 +109,11 @@ export default {
     }
   },
   watch: {
-    $route(newV, oldV) {
+    $route() {
       this.activeName = "first";
     }
   },
   components: {
-    left_navbar,
     topnavbar,
     Footer,
     subscribed,
