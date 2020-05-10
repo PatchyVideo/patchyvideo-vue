@@ -81,14 +81,6 @@ const routes = [
     component: () => import("../views/SuperAdmin.vue")
   },
   {
-    path: "/ipfs",
-    component: () => import("../views/IPFS.vue")
-  },
-  {
-    path: "/ipfs/player",
-    component: () => import("../views/IPFS_player.vue")
-  },
-  {
     path: "/messages",
     component: () => import("../views/Messages.vue")
   },
@@ -144,7 +136,7 @@ function startLoading() {
 function endLoading() {
   if (irikuchiObj) {
     irikuchiObj.classList.add("kieru");
-    setTimeout(e => {
+    setTimeout(() => {
       irikuchiObj.style.display = "none";
     }, 500);
     clearInterval(itext);
@@ -152,19 +144,14 @@ function endLoading() {
 }
 
 //整活页面
-var page;
 function startPage() {
   changeSiteTitle("少女密室");
-  page = Loading.service({
+  Loading.service({
     lock: true,
     text: `${getYiyan()}`,
     customClass: "eloading"
     //background: 'rgba(0, 0, 0, 0.7)'
   });
-}
-
-function endPage() {
-  page.close();
 }
 
 /*
@@ -211,7 +198,7 @@ router.beforeEach((to, from, next) => {
     method: "get",
     url: "/be/alive.txt"
   })
-    .then(result => {
+    .then(() => {
       endLoading();
 
       // to 将要访问的路径

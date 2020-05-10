@@ -9,9 +9,6 @@
   "CHS": {
   "favorite":"收藏",
   "modify" :"修改",
-  "init_tip":"IPFS服务初始化中..",
-  "connecting_tip":"IPFS 服务已启动，正在连接..",
-  "connect_success_tip":" IPFS 节点已连接",
   "copy" : "副本",
   "add_copy":"添加副本",
   "del_copy":"删除副本",
@@ -40,9 +37,6 @@
   "ENG": {
   "favorite":"Add to playlist",
   "modify":"Change",
-  "init_tip":"IPFS Service initializing..",
-  "connecting_tip":"IPFS Service started, connecting..",
-  "connect_success_tip":" IPFS node is connected",
   "copy" : "Copies",
   "add_copy":"Add copies",
   "del_copy":"Delete copies",
@@ -73,9 +67,6 @@
   "CHT": {
   "favorite":"收藏",
   "modify" :"修改",
-  "init_tip":"IPFS服務初始化中..",
-  "connecting_tip":"IPFS 服務已啟動，正在連接..",
-  "connect_success_tip":" IPFS 節點已連接",
   "copy" : "副本",
   "add_copy":"添加副本",
   "del_copy":"刪除副本",
@@ -214,19 +205,8 @@
               allowfullscreen="true"
               style="width: 948px; height: 763px;  margin:10px auto 30px;display: block;"
             ></iframe>
-            <!-- 如果是 ipfs 视频则播放视频 -->
-            <div v-if="isIpfs" style="text-align: center;" id="nodes">{{ $t("init_tip") }}</div>
-            <video
-              :src="myVideoData.video.item.url"
-              id="player"
-              controls
-              loop
-              width="50%"
-              v-if="isIpfs"
-              style="position: relative;left: 50%;transform: translateX(-50%);"
-            ></video>
             <!-- 其他情况显示缩略图 -->
-            <img v-if="this.iframeUrl === '' && !isIpfs" :src="'/images/covers/' + myVideoData.video.item.cover_image" width="320px" height="200px" />
+            <img v-else :src="'/images/covers/' + myVideoData.video.item.cover_image" width="320px" height="200px" />
             <p class="videoDesc" @click="postAsCopy($event)" style="word-break: break-all;" v-html="myVideoData.video.item.desc" v-linkified></p>
           </div>
         </div>
@@ -355,9 +335,6 @@ import createNewList from "../components/CreateNewList.vue";
 import PagesOfVideo from "../components/VideoCompoents/PagesOfVideo.vue";
 import { copyToClipboardText } from "../static/js/generic";
 
-import IPFS from "ipfs";
-import VideoStream from "videostream";
-
 export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -448,18 +425,12 @@ export default {
       ],
       dialogVisible: false, // 删除提示框
       pid: "", // 视频的 id 值
-      // 视频是否为 ipfs 视频
-      isIpfs: false,
-      // ipfs 视频的 URL
-      ipfsURL: "",
       // 视频列表是否属于加载状态的判断
       loading: true,
       // 匹配视频简介中的短地址，用以扩展成完整地址
       URL_MATCHERS: {},
       // 扩展成的完整地址
       URL_EXPANDERS: {},
-      // 获取到的所有视频，以页数为第一维组成二维数组(和 localStorage 存储一起使用，已被弃用）
-      // localStorageNum: []
       iframeUrl: ""
     };
   },
@@ -517,15 +488,6 @@ export default {
     isLogin() {
       if (JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "") {
         return true;
-      } else {
-        return false;
-      }
-    },
-    // 获取 dom
-    nodeShow() {
-      var node = document.getElementById("nodes");
-      if (node) {
-        return node;
       } else {
         return false;
       }
@@ -650,7 +612,6 @@ export default {
             this.pid = this.myVideoData.video._id.$oid;
             // 标记视频简介中的链接
             this.urlifyDesc();
-            // 加载结束,加载动画消失
 
             // 回到顶部
             if ($("html").scrollTop()) {
@@ -659,11 +620,7 @@ export default {
             }
 
             if (this.myVideoData.video.item.site == "ipfs") {
-              this.isIpfs = true;
-              this.ipfsURL = this.myVideoData.video.item.url.slice(5);
-              this.establishIpfsPlayer();
-            } else {
-              this.isIpfs = false;
+              alert("patchyvideo.com已经不再支持ipfs视频的播放，如想观看ipfs视频请访问thvideo.tv!");
             }
           })
           .catch(() => {
@@ -955,53 +912,6 @@ export default {
         }
         this.loadingList = false;
       });
-    },
-
-    // 启动 ipfs 播放器
-    establishIpfsPlayer() {
-      //// IPFS Settings ////
-      const ipfs = new IPFS({
-        repo: "/ipfs"
-      });
-
-      const Interval = 5 * 1000;
-      ipfs.once("ready", () => {
-        // console.log("ipfs node ready.");
-        this.nodeShow.innerHTML = this.$t("connecting_tip");
-        setInterval(() => {
-          ipfs.swarm.peers((err, peerInfos) => {
-            if (err) {
-              throw err;
-            }
-            // console.log(peerInfos.length+" ipfs node(s) connect.");
-            this.nodeShow.innerHTML = peerInfos.length + this.$t("connect_success_tip");
-          });
-        }, Interval);
-        const player = document.getElementById("player");
-        this.genIpfsVideo(ipfs, this.ipfsURL, player);
-      });
-    },
-    // This is a function to simplify the js
-    // Need: Ipfs node init
-    genIpfsVideo(ipfsnode, hash, element) {
-      let stream;
-
-      const exampleFile = {
-        createReadStream(opts) {
-          const { start, end } = opts;
-          stream = ipfsnode.catReadableStream(hash, {
-            offset: start,
-            length: end && end - start
-          });
-          stream.on("error", err => {
-            console.log(err);
-          });
-          return stream;
-        }
-      };
-      let vs = new VideoStream(exampleFile, element);
-
-      return vs;
     }
   },
   watch: {

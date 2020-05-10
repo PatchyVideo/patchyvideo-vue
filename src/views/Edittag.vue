@@ -92,12 +92,8 @@ export default {
       activeName: "0"
     };
   },
+
   computed: {},
-  computed: {
-    aqwe() {
-      return "asda";
-    }
-  },
   mounted() {
     // 初始化页面名为 home
     this.$store.commit("changeBgc", "tag");

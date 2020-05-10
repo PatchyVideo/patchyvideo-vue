@@ -44,14 +44,9 @@
 - vue-infinite-scroll
 - Less
 - jquery
-- jquery-textcomplete（已经无用）
-- textcomplete（已经无用）
-- v-textcomplete（已经无用）
 - webpack
 - echarts
 - font-awesome
-- ipfs
-- videostream
 - vue-cropper
 
 项目依赖：

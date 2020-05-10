@@ -86,7 +86,7 @@
         <p>
           <strong>{{ $t("AboutIPFS") }}</strong>
         </p>
-        <router-link to="/ipfs">{{ $t("IPFS") }}</router-link>
+        <a href="https://thvideo.tv/#/ipfs">{{ $t("IPFS") }}</a>
         <a href="https://zh.wikipedia.org/wiki/%E6%98%9F%E9%99%85%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F">{{ $t("WhatIsIPFS") }}</a>
       </div>
       <div class="patchyvideo-links-item">
