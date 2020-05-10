@@ -99,7 +99,7 @@
 <template>
   <div>
     <!-- 退出登录的弹出框 -->
-    <el-dialog :title="$t('prompt.msg')" :modal-append-to-body="false" :visible.sync="dialogVisible" width="30%" v-loading="loading">
+    <el-dialog v-loading="loading" :title="$t('prompt.msg')" :modal-append-to-body="false" :visible.sync="dialogVisible" width="30%">
       <p>{{ $t("user.logout_prompt") }}</p>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">{{ $t("prompt.cancel") }}</el-button>
@@ -148,7 +148,7 @@
           @keyup.enter.native="gotoHome"
         >
           <!-- 搜索条件 -->
-          <el-select v-model="searchType" slot="prepend">
+          <el-select slot="prepend" v-model="searchType">
             <el-option :label="$t('search.tag_text')" value="tag"></el-option>
             <el-option :label="$t('search.text')" value="text"></el-option>
           </el-select>
@@ -157,18 +157,18 @@
             <div class="adviceList">
               <div
                 class="name"
-                v-bind:class="{
+                :class="{
                   Copyright: item.cat == 2,
                   Language: item.cat == 5,
                   Character: item.cat == 1,
                   Author: item.cat == 3,
                   General: item.cat == 0,
                   Meta: item.cat == 4,
-                  Soundtrack: item.cat == 6
+                  Soundtrack: item.cat == 6,
                 }"
                 v-html="item.tag || ConvertLangRes(item.langs)"
               ></div>
-              <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
+              <div v-if="item.cnt != null" class="addr">{{ item.cnt }}</div>
             </div>
           </template>
           <!-- 搜索按钮 -->
@@ -178,13 +178,13 @@
 
       <div>
         <!-- 登录和注册按钮 -->
-        <div class="loginUser" v-if="!isLogin">
+        <div v-if="!isLogin" class="loginUser">
           <router-link to="/login" class="loginUser-login" @click.native="login">{{ $t("user.login") }}</router-link>
           <router-link to="/signup" class="loginUser-signup">{{ $t("user.signup") }}</router-link>
         </div>
 
         <!-- 登录成功后的用户界面 -->
-        <div class="userHome" v-else>
+        <div v-else class="userHome">
           <el-tooltip effect="light" :content="this.$store.state.username" placement="bottom">
             <div @click="gotoUserPage">
               <el-avatar fit="cover" class="loginUser-userAvatar" :size="40" :src="userAvatar"></el-avatar>
@@ -198,7 +198,7 @@
           <el-badge :value="messagesNum" :hidden="!messagesNum" class="item">
             <router-link target="_blank" class="loginUser-message" to="/messages">{{ $t("user.message") }}</router-link>
           </el-badge>
-          <a class="loginUser-signup" @click="dialogVisible = true" style="cursor:pointer">{{ $t("user.logout") }}</a>
+          <a class="loginUser-signup" style="cursor: pointer;" @click="dialogVisible = true">{{ $t("user.logout") }}</a>
         </div>
       </div>
     </div>
@@ -209,6 +209,9 @@
 // import TextComplete from "v-textcomplete";
 export default {
   inject: ["reload"],
+  components: {
+    // TextComplete
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -242,13 +245,13 @@ export default {
         { tag: "OR", cat: 6, cnt: null },
         { tag: "NOT", cat: 6, cnt: null },
         { tag: "date:", cat: 6, cnt: null },
-        { tag: "tags:", cat: 6, cnt: null }
+        { tag: "tags:", cat: 6, cnt: null },
       ],
       infoTipMark: false,
       // 未读信息的数量
       messagesNum: 0,
       // 控制读取未读信息方法的变量
-      queryMessages: ""
+      queryMessages: "",
     };
   },
   computed: {
@@ -263,7 +266,12 @@ export default {
       } else {
         return "be/images/userphotos/" + this.$store.state.userAvatar;
       }
-    }
+    },
+  },
+  watch: {
+    iptVal2() {
+      this.iptVal = this.iptVal2;
+    },
   },
   created() {
     // 查看是否在别的设备上登录过
@@ -289,14 +297,14 @@ export default {
       this.axios({
         method: "post",
         url: "be/user/whoami",
-        data: {}
-      }).then(result => {
+        data: {},
+      }).then((result) => {
         if (result.data.data == "UNAUTHORISED_OPERATION" && this.getCookie()) {
           this.axios({
             method: "post",
             url: "/be/logout.do",
-            data: {}
-          }).then(result => {
+            data: {},
+          }).then(() => {
             this.open(this.$t("user.login_expire_prompt"));
             this.isLogin = false;
             // 清除所有session值(退出登录)
@@ -325,8 +333,8 @@ export default {
       this.axios({
         method: "post",
         url: "/be/logout.do",
-        data: {}
-      }).then(result => {
+        data: {},
+      }).then(() => {
         this.isLogin = false;
         // 清除所有 session 值(退出登录)
         sessionStorage.clear();
@@ -357,9 +365,9 @@ export default {
         this.$router
           .push({
             path: "/home",
-            query: { keyword: this.iptVal, qtype: this.searchType }
+            query: { keyword: this.iptVal, qtype: this.searchType },
           })
-          .catch(err => {
+          .catch((err) => {
             return err;
           });
       } else {
@@ -382,7 +390,7 @@ export default {
     // 设置 cookie
     // 储存变量为 username
     setCookie(username, days) {
-      var date = new Date(); // 获取时间
+      let date = new Date(); // 获取时间
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
       // 字符串拼接 cookie
       window.document.cookie = "username" + ":" + username + ";path=/;expires=" + date.toGMTString();
@@ -391,14 +399,14 @@ export default {
     // 获取 cookie
     getCookie: function() {
       if (document.cookie.length > 0) {
-        var arr = document.cookie.split("; ");
-        for (var i = 0; i < arr.length; i++) {
-          var arr3 = arr[i].split("=");
+        let arr = document.cookie.split("; ");
+        for (let i = 0; i < arr.length; i++) {
+          let arr3 = arr[i].split("=");
           // 判断查找相对应的值
           if (arr3[0] == "userAvatar") {
             this.$store.commit("getUserAvatar", arr3[1]);
           }
-          var arr2 = arr[i].split(":");
+          let arr2 = arr[i].split(":");
           // 判断查找相对应的值
           if (arr2[0] == "username") {
             if (arr2[1] != "") {
@@ -417,12 +425,12 @@ export default {
       this.axios({
         method: "post",
         url: "be/notes/list_unread.do",
-        data: {}
+        data: {},
       })
-        .then(result => {
+        .then((result) => {
           this.messagesNum = result.data.data.notes.length;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -430,11 +438,11 @@ export default {
     querySearchAsync(queryString, cb) {
       // 这里的 get(0) 是将 jq 对象转换为原生 js 对象
       // selectionStart 是获取光标当前位置
-      var endlocation = $("#ipt").get(0).selectionStart;
+      let endlocation = $("#ipt").get(0).selectionStart;
       // 切割输入框内的字符串，切割下光标左面的字符串
-      var query = queryString.slice(0, endlocation);
+      let query = queryString.slice(0, endlocation);
       // 获取所需要搜索的字符串的开头在搜索框内字符串的位置
-      var startlocation = this.match(query);
+      let startlocation = this.match(query);
       // 切割下所需要查询的字符串
       query = query.slice(startlocation, endlocation);
       // 字符串为空格的话不搜索
@@ -444,36 +452,36 @@ export default {
       }
 
       // 备份参数防止出现玄学问题
-      var query2 = query;
+      let query2 = query;
       // 搜索是否包含 sites 变量的关键字
-      var results = this.sites.filter(this.createFilter(query2));
+      let results = this.sites.filter(this.createFilter(query2));
 
       // 对输入框现在的数据进行备份
       this.iptVal3 = this.iptVal;
       this.startlocation = startlocation;
       this.endlocation = endlocation;
 
-      var url = "/autocomplete/?q=" + query;
+      let url = "/autocomplete/?q=" + query;
       this.axios({
         method: "get",
-        url: url
-      }).then(result => {
+        url: url,
+      }).then((result) => {
         if (result.status == "FALIED") {
           cb([]);
           return;
         }
-        var resultList = results.concat(result.data);
+        let resultList = results.concat(result.data);
         cb(resultList);
       });
     },
     querySearchAsync2(queryString, cb) {
       // 这里的 get(0) 是将 jq 对象转换为原生 js 对象
       // selectionStart 是获取光标当前位置
-      var endlocation = $("#ipt").get(0).selectionStart;
+      let endlocation = $("#ipt").get(0).selectionStart;
       // 切割输入框内的字符串，切割下光标左面的字符串
-      var query = queryString.slice(0, endlocation);
+      let query = queryString.slice(0, endlocation);
       // 获取所需要搜索的字符串的开头在搜索框内字符串的位置
-      var startlocation = this.match(query);
+      let startlocation = this.match(query);
       // 切割下所需要查询的字符串
       query = query.slice(startlocation, endlocation);
       // 字符串为空格的话不搜索
@@ -483,37 +491,37 @@ export default {
       }
 
       // 备份参数防止出现玄学问题
-      var query2 = query;
+      let query2 = query;
       // 搜索是否包含 sites 变量的关键字
-      var results = this.sites.filter(this.createFilter(query2));
+      let results = this.sites.filter(this.createFilter(query2));
 
       // 对输入框现在的数据进行备份
       this.iptVal3 = this.iptVal;
       this.startlocation = startlocation;
       this.endlocation = endlocation;
 
-      var url = "/be/autocomplete/ql?q=" + query;
+      let url = "/be/autocomplete/ql?q=" + query;
       this.axios({
         method: "get",
-        url: url
-      }).then(result => {
+        url: url,
+      }).then((result) => {
         if (result.status == "FALIED") {
           cb([]);
           return;
         }
-        var resultList = results.concat(result.data);
+        let resultList = results.concat(result.data);
         cb(resultList);
       });
     },
     // 搜索输入框内的搜索文字是否包含网站内容
     createFilter(query) {
-      return sites => {
+      return (sites) => {
         return sites.tag.toLowerCase().indexOf(query.toLowerCase()) === 0;
       };
     },
     // 搜索输入框内的搜索文字，返回搜索关键字所在的起始位置
     match(text) {
-      var i = text.length;
+      let i = text.length;
       while (i--) {
         if (
           text.charAt(i) == " " ||
@@ -539,37 +547,37 @@ export default {
     // 判断字符串是否全为空格
     isNull(str) {
       if (str == "") return true;
-      var regu = "^[ ]+$";
-      var re = new RegExp(regu);
+      let regu = "^[ ]+$";
+      let re = new RegExp(regu);
       return re.test(str);
     },
     ConvertLangRes(langs, hastran = true) {
       if (!langs) return;
-      var LangList = [
+      let LangList = [
         { id: 1, lang: "CHS" },
         { id: 2, lang: "CHT" },
         { id: 5, lang: "ENG" },
-        { id: 10, lang: "JPN" }
+        { id: 10, lang: "JPN" },
       ];
-      var level = [10, 5, 1, 2];
-      var Lang = "";
-      var mainLang = "";
-      var subLang = "";
+      let level = [10, 5, 1, 2];
+      let Lang = "";
+      let mainLang = "";
+      let subLang = "";
       // 经过一系列计算得出主副语言
 
       // 匹配当前语言的 ID
-      var CurrLangID = LangList.find(x => {
+      let CurrLangID = LangList.find((x) => {
         return x.lang == this.$i18n.locale;
       });
       CurrLangID = CurrLangID ? CurrLangID.id : 1;
 
       // 匹配对应 ID 的内容
-      var CurrLangWord = langs.find(x => {
+      let CurrLangWord = langs.find((x) => {
         return x.l == CurrLangID;
       });
       if (!CurrLangWord) {
-        for (var i = 0; i < level.length; i++) {
-          CurrLangWord = langs.find(x => {
+        for (let i = 0; i < level.length; i++) {
+          CurrLangWord = langs.find((x) => {
             return x.l == level[i];
           });
           if (CurrLangWord) break;
@@ -580,10 +588,10 @@ export default {
       if (hastran) {
         // 副语言匹配
         // 优先级：日语，英语，简体中文，繁体中文
-        var SubLangWord = null;
-        for (var i = 0; i < level.length; i++) {
+        let SubLangWord = null;
+        for (let i = 0; i < level.length; i++) {
           if (level[i] == CurrLangWord.l) continue;
-          SubLangWord = langs.find(x => {
+          SubLangWord = langs.find((x) => {
             return x.l == level[i];
           });
           if (SubLangWord) break;
@@ -591,8 +599,8 @@ export default {
         subLang = SubLangWord ? SubLangWord.w : mainLang;
 
         // 合成语言
-        Lang = `${mainLang.replace(/\_/g, " ")}`;
-        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/\_/g, " ")}</span>`;
+        Lang = `${mainLang.replace(/_/g, " ")}`;
+        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/_/g, " ")}</span>`;
       } else {
         Lang = mainLang;
       }
@@ -600,45 +608,31 @@ export default {
     },
     handleSelect(item) {
       // 切割字符串，并在中间加入搜索到的标签拼接成新的输入框的内容
-      var iptVal1 = this.iptVal3.slice(0, this.startlocation);
-      var iptVal2 = this.iptVal3.slice(this.endlocation);
-      var iptVal = iptVal1 + item.tag + " " + iptVal2;
+      let iptVal1 = this.iptVal3.slice(0, this.startlocation);
+      let iptVal2 = this.iptVal3.slice(this.endlocation);
+      let iptVal = iptVal1 + item.tag + " " + iptVal2;
       this.iptVal = iptVal;
       // 光标设置焦点事件
-      var endlocation = $("#ipt").focus();
+      $("#ipt").focus();
       this.infoTipMark = true;
     },
     open(message) {
       this.$message({
         message: message,
-        type: "error"
+        type: "error",
       });
     },
     handleSelect2(item) {
       // 切割字符串，并在中间加入搜索到的标签拼接成新的输入框的内容
-      var iptVal1 = this.iptVal3.slice(0, this.startlocation);
-      var iptVal2 = this.iptVal3.slice(this.endlocation);
-      var iptVal = iptVal1 + (item.tag || this.ConvertLangRes(item.langs, false)) + " " + iptVal2;
+      let iptVal1 = this.iptVal3.slice(0, this.startlocation);
+      let iptVal2 = this.iptVal3.slice(this.endlocation);
+      let iptVal = iptVal1 + (item.tag || this.ConvertLangRes(item.langs, false)) + " " + iptVal2;
       this.iptVal = iptVal;
       // 光标设置焦点事件
-      var endlocation = $("#ipt").focus();
+      $("#ipt").focus();
       this.infoTipMark = true;
     },
-    open(message) {
-      this.$message({
-        message: message,
-        type: "error"
-      });
-    }
   },
-  watch: {
-    iptVal2() {
-      this.iptVal = this.iptVal2;
-    }
-  },
-  components: {
-    // TextComplete
-  }
 };
 </script>
 

@@ -133,7 +133,7 @@
         <router-link to="/ipfs/player">{{ $t("content.video_test.link") }}</router-link>
         <p>{{ $t("content.video_test.player_tip") }}</p>
         <p></p>
-        <video src="https://ipfs.globalupload.io/QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh" id="player" controls loop width="50%">
+        <video id="player" src="https://ipfs.globalupload.io/QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh" controls loop width="50%">
           <p>{{ $t("content.video_test.err_tip") }}</p>
         </video>
         <p />
@@ -164,20 +164,21 @@
 import topnavbar from "../components/TopNavbar.vue";
 import Footer from "../components/Footer.vue";
 export default {
+  components: { topnavbar, Footer },
   data() {
     return {
       buttonInnerHTML: this.$t("content.video_test.video_switch_test_tip"),
       badapple: "https://ipfs.globalupload.io/QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh",
       lanlanlu: "https://ipfs.globalupload.io/QmT2LT2D513dTe1bNuBogfDCpZakaEuPquJmozYx6X6Gmq",
       erxiaojie: "https://ipfs.globalupload.io/QmNdrzSXnYyiTJGS3tj3SswhpJLpjhmNbTLm15hWR7kLdE",
-      count: 0
+      count: 0,
     };
   },
   computed: {
     // 搜索的关键字
     player() {
       return document.getElementById("player");
-    }
+    },
   },
   created() {
     // player.autoplay = "true"
@@ -205,9 +206,8 @@ export default {
     },
     playErxiaojie() {
       this.player.src = this.erxiaojie;
-    }
+    },
   },
-  components: { topnavbar, Footer }
 };
 </script>
 

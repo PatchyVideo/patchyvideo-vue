@@ -62,7 +62,7 @@
 </i18n>
 
 <template>
-  <div class="custom-upload" v-loading="loading">
+  <div v-loading="loading" class="custom-upload">
     <el-dialog :title="$t('title')" :visible.sync="showCropper" top="6vh" width="50%" height="600" class="cropper-dialog" center append-to-body>
       <vue-cropper v-if="showCropper" id="corpper" ref="cropper" :class="{ 'corpper-warp': showCropper }" v-bind="cropper" />
       <div v-if="showCropper" class="cropper-button">
@@ -71,17 +71,17 @@
       </div>
     </el-dialog>
     <el-dialog :modal="false" :title="$t('upload_userphoto')" :visible.sync="dialogVisible" width="40%" top="30vh" :before-close="handleClose">
-      <el-input v-model="imgNetUpUrl" :placeholder="$t('enter_url_prompt')" v-if="isShowNetUp" style="margin: 20px 0px 30px;"></el-input>
-      <span class="dialog-footer" style="text-align: center;margin: 20px 0px 30px;">
-        <el-button type="primary" @click="handleOpenFile()" v-if="!isShowNetUp">{{ $t("from_file") }}</el-button>
-        <el-button type="primary" v-if="!isShowNetUp" @click="showNetUp(true)">{{ $t("from_url") }}</el-button>
+      <el-input v-if="isShowNetUp" v-model="imgNetUpUrl" :placeholder="$t('enter_url_prompt')" style="margin: 20px 0px 30px;"></el-input>
+      <span class="dialog-footer" style="text-align: center; margin: 20px 0px 30px;">
+        <el-button v-if="!isShowNetUp" type="primary" @click="handleOpenFile()">{{ $t("from_file") }}</el-button>
+        <el-button v-if="!isShowNetUp" type="primary" @click="showNetUp(true)">{{ $t("from_url") }}</el-button>
         <el-button v-if="isShowNetUp" @click="imgNetUrlup()">{{ $t("ok") }}</el-button>
         <el-button v-if="isShowNetUp" @click="showNetUp(false)">{{ $t("cancel") }}</el-button>
       </span>
     </el-dialog>
-    <form action="/be/helper/upload_image.do" method="post" accept-charset="utf-8" enctype="multipart/form-data" id="form1" @submit.prevent="sub">
-      <input id="type" name="type" type="text" value="userphoto" v-show="false" />
-      <input id="file" name="file" type="file" tag="input" accept="image/*" @change="onChange($event)" :class="id" v-show="false" />
+    <form id="form1" action="/be/helper/upload_image.do" method="post" accept-charset="utf-8" enctype="multipart/form-data" @submit.prevent="sub">
+      <input v-show="false" id="type" name="type" type="text" value="userphoto" />
+      <input v-show="false" id="file" name="file" type="file" tag="input" accept="image/*" :class="id" @change="onChange($event)" />
       <el-button size="small" type="primary" :loading="loading" @click="dialogVisible = true">
         <i class="fa fa-upload" />
         {{ buttonName }}
@@ -97,47 +97,48 @@
 import { VueCropper } from "vue-cropper";
 // 定义的接口根据自己项目更换
 // import { uploadImage } from '@/api/upload'
-import { isImageFile, isMaxFileSize, readFile, loadImage } from "../static/js/upload.js"; // 见下文
+import { isImageFile, readFile } from "../static/js/upload.js"; // 见下文
 export default {
   components: {
     VueCropper,
-    isImageFile,
-    isMaxFileSize,
-    readFile,
-    loadImage
+    // isImageFile,
+    // isMaxFileSize,
+    // readFile,
+    // loadImage,
   },
   props: {
     // 最大上传文件的大小
     maxFileSize: {
       type: Number,
-      default: 2 // (MB)
+      default: 2, // (MB)
     },
     // 按钮文字
     buttonName: {
       type: String,
-      default: "Add Image"
+      default: "Add Image",
     },
     // 提示内容
     tips: {
-      type: String
+      type: String,
+      default: "",
     },
     // 图片裁剪比列
     fixedNumber: {
       type: Array,
       default: function() {
         return [];
-      }
+      },
     },
     // 图片文件分辨率的宽度
     width: {
       type: Number,
-      default: 460
+      default: 460,
     },
     // 图片文件分辨率的高度
     height: {
       type: Number,
-      default: 300
-    }
+      default: 300,
+    },
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -169,8 +170,8 @@ export default {
         fixedNumber: this.fixedNumber,
         original: false,
         canMoveBox: true,
-        canMove: true
-      }
+        canMove: true,
+      },
     };
   },
   methods: {
@@ -198,15 +199,15 @@ export default {
       data.items.add(this.imgFile);
       $("#file")[0].files = data.files;
       this.loading = true;
-      var formObj = new FormData(document.getElementById("form1"));
+      let formObj = new FormData(document.getElementById("form1"));
       this.axios({
         method: "post",
         url: "be/helper/upload_image.do",
         data: formObj,
         processData: false,
-        contentType: false
+        contentType: false,
       })
-        .then(res => {
+        .then((res) => {
           if (res.data.status == "SUCCEED") {
             this.file_key = res.data.data.file_key;
             this.changePhtoto(this.file_key);
@@ -215,7 +216,7 @@ export default {
             this.loading = false;
           }
         })
-        .catch(err => {
+        .catch(() => {
           this.$message.error(this.$t("file_size_prompt"));
           this.loading = false;
         });
@@ -225,17 +226,17 @@ export default {
       this.axios({
         method: "post",
         url: "be/user/changephoto.do",
-        data: { file_key: key }
-      }).then(res => {
+        data: { file_key: key },
+      }).then((res) => {
         // this.getMyData();
         this.$emit("subUploadSucceed", this.url, true);
-        var img = res.data.data;
+        let img = res.data.data;
         this.$store.commit("getUserAvatar", img);
         this.setCookie(img, 7);
         this.loading = false;
         this.$message({
           message: this.$t("upload_succeed"),
-          type: "success"
+          type: "success",
         });
         this.dialogVisible = false;
       });
@@ -248,9 +249,9 @@ export default {
       this.axios({
         method: "post",
         url: "/be/helper/upload_image_url.do",
-        data: { url: this.imgNetUpUrl, type: "userphoto" }
+        data: { url: this.imgNetUpUrl, type: "userphoto" },
       })
-        .then(res => {
+        .then((res) => {
           if (res.data.status === "SUCCEED") {
             this.file_key = res.data.data.file_key;
             this.changePhtoto(this.file_key);
@@ -262,7 +263,7 @@ export default {
             }
           }
         })
-        .catch(err => {
+        .catch(() => {
           this.$message.error(this.$t("upload_failed"));
         });
     },
@@ -296,10 +297,12 @@ export default {
         const src = await readFile(file);
         this.showCropper = true;
         this.cropper.img = src;
-      } catch (error) {}
+      } catch (error) {
+        // TODO: handle file error
+      }
     },
     dataURLtoFile(dataurl, filename) {
-      var arr = dataurl.split(","),
+      let arr = dataurl.split(","),
         mime = arr[0].match(/:(.*?);/)[1],
         bstr = atob(arr[1]),
         n = bstr.length,
@@ -312,7 +315,7 @@ export default {
     onImgCompression(img) {
       let canvas = document.createElement("canvas");
       let ctx = canvas.getContext("2d");
-      let initSize = img.src.length;
+      // let initSize = img.src.length;
       let width = img.width;
       let height = img.height;
       canvas.width = width;
@@ -327,7 +330,7 @@ export default {
     },
     // 封面上传功能
     uploadCover() {
-      this.$refs.cropper.getCropBlob(async imgRes => {
+      this.$refs.cropper.getCropBlob(async (imgRes) => {
         try {
           // 文件大小限制
           // if (!isMaxFileSize(imgRes, this.maxFileSize)) {
@@ -358,12 +361,12 @@ export default {
     },
     // 设置 cookie
     setCookie(username, days) {
-      var date = new Date(); // 获取时间
+      let date = new Date(); // 获取时间
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
       // 字符串拼接 cookie
       window.document.cookie = "userAvatar" + "=" + username + ";path=/;expires=" + date.toGMTString();
-    }
-  }
+    },
+  },
 };
 </script>
 

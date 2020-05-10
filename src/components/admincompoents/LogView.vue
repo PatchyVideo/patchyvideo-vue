@@ -39,7 +39,7 @@
         <el-option v-for="item in log.form.options" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
       <!-- 操作名 -->
-      <el-input class="opts" placeholder="操作名(可选)" v-model="log.form.op" clearable></el-input>
+      <el-input v-model="log.form.op" class="opts" placeholder="操作名(可选)" clearable></el-input>
 
       <el-button type="primary" @click="getLog()">查找</el-button>
 
@@ -48,20 +48,20 @@
       <!-- level查看 -->
       <div class="tag-box">
         <span>level：</span>
-        <el-tag @click="e => onLevelsChange()" style="margin: 0 5px;cursor: pointer;" :type="log.form.visibleLevels.includes('') ? '' : 'info'">全部</el-tag>
+        <el-tag style="margin: 0 5px; cursor: pointer;" :type="log.form.visibleLevels.includes('') ? '' : 'info'" @click="(e) => onLevelsChange()">全部</el-tag>
         <el-tag
           v-for="item in log.form.allLevels"
           :key="item"
-          style="margin: 0 5px;cursor: pointer;"
-          @click="e => onLevelsChange(item)"
+          style="margin: 0 5px; cursor: pointer;"
           :type="log.form.visibleLevels.includes(item) ? '' : 'info'"
+          @click="(e) => onLevelsChange(item)"
           >{{ item }}</el-tag
         >
       </div>
     </div>
 
     <!-- 表格 -->
-    <el-table :data="log.data" border style="width: 100%">
+    <el-table :data="log.data" border style="width: 100%;">
       <!-- 展开项 -->
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -125,13 +125,13 @@
       <!-- Level -->
       <el-table-column label="level" width="100">
         <template slot-scope="scope">
-          <span v-bind:class="scope.row.level">{{ scope.row.level }}</span>
+          <span :class="scope.row.level">{{ scope.row.level }}</span>
         </template>
       </el-table-column>
       <!-- subevents，由于版面关系只渲染“有”，并用黄色标记 -->
       <el-table-column label="subevents" width="120">
         <template slot-scope="scope">
-          <span v-bind:class="{ WARN: scope.row.subevents ? scope.row.subevents.length : 0 }">{{
+          <span :class="{ WARN: scope.row.subevents ? scope.row.subevents.length : 0 }">{{
             scope.row.subevents ? scope.row.subevents.length : 0 ? "YES" : " "
           }}</span>
         </template>
@@ -150,7 +150,7 @@
     </el-table>
 
     <!-- 分页器 -->
-    <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :page-count="100"></el-pagination>
+    <el-pagination background layout="prev, pager, next" :page-count="100" @current-change="handleCurrentChange"></el-pagination>
   </div>
 </template>
 
@@ -174,24 +174,24 @@ export default {
           timeRange: [],
           options: [
             { value: "latest", label: "时间正序" },
-            { value: "oldest", label: "时间倒序" }
+            { value: "oldest", label: "时间倒序" },
           ],
           allLevels: ["SEC", "MSG", "WARN", "ERR"],
           visibleLevels: [""],
-          op: ""
+          op: "",
         },
         // 表格的内容
         data: [],
         // 加载状态
-        loading: false
-      }
+        loading: false,
+      },
     };
   },
   created() {
     // 初始化时间域为打开此页面的前七天到打开页面的时间
     this.log.form.timeRange = [
       this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)),
-      this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date())
+      this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date()),
     ];
     this.getLog();
   },
@@ -209,14 +209,14 @@ export default {
           date_to: this.toUTCTime(this.log.form.timeRange[1]) + " GMT+8",
           order: this.log.order,
           op: this.log.form.op,
-          levels: JSON.stringify(this.log.form.visibleLevels) == '[""]' ? ["SEC", "MSG", "WARN", "ERR"] : this.log.form.visibleLevels
-        }
+          levels: JSON.stringify(this.log.form.visibleLevels) == '[""]' ? ["SEC", "MSG", "WARN", "ERR"] : this.log.form.visibleLevels,
+        },
       })
-        .then(ret => {
+        .then((ret) => {
           this.log.data = ret.data.data;
           this.loading = false;
         })
-        .catch(err => {
+        .catch(() => {
           this.loading = false;
         });
     },
@@ -232,7 +232,7 @@ export default {
         "d+": date.getDate().toString(), // 日
         "H+": date.getHours().toString(), // 时
         "m+": date.getMinutes().toString(), // 分
-        "s+": date.getSeconds().toString() // 秒
+        "s+": date.getSeconds().toString(), // 秒
         // 有其他格式化字符需求可以继续添加，必须转化成字符串
       };
       for (let k in opt) {
@@ -250,7 +250,7 @@ export default {
      * @return: UTC
      */
     toUTCTime(date) {
-      var UTC = new Date(new Date(date).getTime() - 8 * 3600 * 1000);
+      let UTC = new Date(new Date(date).getTime() - 8 * 3600 * 1000);
       return this.dateFormat("yyyy-MM-dd HH:mm:ss", UTC);
     },
     // 切换level选项时调用
@@ -277,8 +277,8 @@ export default {
     handleCurrentChange(val) {
       this.log.curPageNum = val;
       this.getLog();
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -286,9 +286,7 @@ export default {
 .select {
   margin: 0 5px 0 5px;
 }
-.log-form {
-  /* display: flex; */
-}
+/* .log-form {display: flex;} */
 .tag-box {
   margin: 10px 0 10px 0;
   display: inline-block;

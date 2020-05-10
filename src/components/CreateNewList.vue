@@ -60,7 +60,7 @@
 </i18n>
 
 <template>
-  <div class="listForm" v-loading="loading">
+  <div v-loading="loading" class="listForm">
     <el-form ref="list" :model="list" label-width="auto" :rules="rules">
       <!-- 标题 -->
       <el-form-item prop="title">
@@ -68,11 +68,11 @@
       </el-form-item>
       <!-- 简介 -->
       <el-form-item prop="desc">
-        <el-input type="textarea" :autosize="{ minRows: 6 }" :placeholder="$t('describe_your_playlist')" v-model="list.desc"></el-input>
+        <el-input v-model="list.desc" type="textarea" :autosize="{ minRows: 6 }" :placeholder="$t('describe_your_playlist')"></el-input>
       </el-form-item>
       <el-form-item>
         <el-checkbox v-model="list.private">{{ $t("set_as_private_playlist") }}</el-checkbox>
-        <a href="https://patchyvideo.wiki/Playlist" target="_blank" style="float:right">{{ $t("showListRules") }}</a>
+        <a href="https://patchyvideo.wiki/Playlist" target="_blank" style="float: right;">{{ $t("showListRules") }}</a>
       </el-form-item>
       <!-- 封面上传,暂时用不上 -->
       <el-form-item v-if="false">
@@ -88,7 +88,7 @@
         </el-upload>-->
       </el-form-item>
       <el-form-item class="createList">
-        <el-button type="primary" @click="onSubmit" style="width:80%">{{ $t("create_now") }}</el-button>
+        <el-button type="primary" style="width: 80%;" @click="onSubmit">{{ $t("create_now") }}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -96,12 +96,13 @@
 
 <script>
 export default {
+  components: {},
   props: {
     // 创建列表完成后是否需要跳转
     needGo: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -111,7 +112,7 @@ export default {
         title: "",
         desc: "",
         cover: "",
-        private: false
+        private: false,
       },
       // 校验数据
       rules: {
@@ -119,19 +120,19 @@ export default {
           {
             required: true,
             message: this.$t("no_title_prompt"),
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         desc: [
           {
             required: true,
             message: this.$t("no_desc_prompt"),
-            trigger: "blur"
-          }
-        ]
+            trigger: "blur",
+          },
+        ],
       },
       // 页面是否出于加载状态的标志
-      loading: false
+      loading: false,
     };
   },
   created() {},
@@ -141,7 +142,7 @@ export default {
       this.$message.warning(this.$t("one_cover_prompt"));
     },
     // 删除文件之前调用的函数
-    beforeRemove(file, fileList) {
+    beforeRemove(file) {
       return this.$confirm(this.$t("delete_confirm_prompt", { name: file.name }));
     },
     // 提交视频列表
@@ -149,7 +150,7 @@ export default {
       // 先使页面出于加载状态
       this.loading = true;
       // 表单验证
-      this.$refs.list.validate(async valid => {
+      this.$refs.list.validate(async (valid) => {
         if (valid) {
           await this.axios({
             method: "post",
@@ -158,10 +159,10 @@ export default {
               title: this.list.title,
               desc: this.list.desc,
               cover: this.list.cover,
-              private: this.list.private
-            }
+              private: this.list.private,
+            },
           })
-            .then(result => {
+            .then((result) => {
               // 提交失败的情况
               if (result.data.status == "FAILED") {
                 this.open(this.$t("create_failed"));
@@ -182,7 +183,7 @@ export default {
                 else this.$emit("closeMe", true);
               }
             })
-            .catch(err => {
+            .catch(() => {
               this.open(this.$t("create_failed"));
             });
           this.loading = false;
@@ -195,17 +196,16 @@ export default {
     open(message) {
       this.$message({
         message: message,
-        type: "error"
+        type: "error",
       });
     },
     open2(message) {
       this.$message({
         message: message,
-        type: "success"
+        type: "success",
       });
-    }
+    },
   },
-  components: {}
 };
 </script>
 

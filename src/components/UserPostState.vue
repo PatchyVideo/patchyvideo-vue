@@ -39,28 +39,28 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
-      failedData: [{ count: "null" }, { page: "null" }, { page_count: "null" }, { posts: "null" }]
+      failedData: [{ count: "null" }, { page: "null" }, { page_count: "null" }, { posts: "null" }],
     };
   },
   created() {
-    this.axios({
-      method: "post",
-      url: "be/posts/list_pending.do",
-      data: { page: 1, page_size: 9999 }
-    }).then(res => {});
+    // this.axios({
+    //   method: "post",
+    //   url: "be/posts/list_pending.do",
+    //   data: { page: 1, page_size: 9999 }
+    // }).then(res => {});
     this.axios({
       method: "post",
       url: "be/posts/list_failed.do",
-      data: { page: 1, page_size: 99999 }
-    }).then(res => {
+      data: { page: 1, page_size: 99999 },
+    }).then((res) => {
       this.failedData = res.data.data;
     });
   },
   methods: {},
-  components: {}
 };
 </script>
 

@@ -89,26 +89,26 @@
 </i18n>
 
 <template>
-  <div class="postBox" v-loading="loading">
+  <div v-loading="loading" class="postBox">
     <div class="content">
       <el-form ref="list" :model="list" label-width="auto" :rules="rules">
         <!-- 输入URL的文本框 -->
         <el-form-item prop="URL">
-          <el-input :placeholder="$t('input_addr')" v-model="list.URL">
+          <el-input v-model="list.URL" :placeholder="$t('input_addr')">
             <template slot="prepend">ipfs:</template>
           </el-input>
         </el-form-item>
         <!-- 视频源地址 -->
         <el-form-item>
-          <el-input :placeholder="$t('input_orig_addr')" v-model="list.original_url"></el-input>
+          <el-input v-model="list.original_url" :placeholder="$t('input_orig_addr')"></el-input>
         </el-form-item>
         <!-- 视频标题 -->
         <el-form-item prop="title">
-          <el-input :placeholder="$t('input_title')" v-model="list.title"></el-input>
+          <el-input v-model="list.title" :placeholder="$t('input_title')"></el-input>
         </el-form-item>
         <!-- 视频简介 -->
         <el-form-item prop="desc">
-          <el-input type="textarea" :autosize="{ minRows: 6 }" :placeholder="$t('introductory_video')" v-model="list.desc"></el-input>
+          <el-input v-model="list.desc" type="textarea" :autosize="{ minRows: 6 }" :placeholder="$t('introductory_video')"></el-input>
         </el-form-item>
         <!-- 上传视频封面 -->
         <el-form-item ref="videoCover" prop="cover" style="text-align: left;">
@@ -121,8 +121,8 @@
             :file-list="list.cover"
             :data="coverData"
           >
-            <el-button size type="primary" style="margin-right:10px;">{{ $t("upload_cover") }}</el-button>
-            <span slot="tip" style="color:red" v-if="noCover">{{ $t("upload_no_cover") }}</span>
+            <el-button size type="primary" style="margin-right: 10px;">{{ $t("upload_cover") }}</el-button>
+            <span v-if="noCover" slot="tip" style="color: red;">{{ $t("upload_no_cover") }}</span>
             <div slot="tip" class="el-upload__tip">{{ $t("upload_limit") }}</div>
           </el-upload>
         </el-form-item>
@@ -131,14 +131,14 @@
           <div class="tagsEdit">
             <h3>{{ $t("label") }}</h3>
             <div class="tagBox">
-              <p v-if="tags == ''" style="margin-bottom:10px;">{{ $t("no_label") }}</p>
-              <el-tag effect="dark" v-else v-for="item in tags" :key="item">{{ item }}</el-tag>
+              <p v-if="tags == ''" style="margin-bottom: 10px;">{{ $t("no_label") }}</p>
+              <el-tag v-for="item in tags" v-else :key="item" effect="dark">{{ item }}</el-tag>
             </div>
           </div>
         </el-form-item>
         <el-form-item>
           <!-- Wiki链接 -->
-          <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color:#409EFF;float:right;font-size:17px;">{{ $t("HowToPost") }}</a>
+          <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color: #409eff; float: right; font-size: 17px;">{{ $t("HowToPost") }}</a>
         </el-form-item>
         <!-- 上传视频的按钮 -->
         <el-form-item style="text-align: center;">
@@ -149,22 +149,23 @@
         </el-form-item>
       </el-form>
     </div>
-    <EditTags :msg="noData" :visible.sync="showTagPanel" @getEditTagsData="TagShow" class="EditTags"></EditTags>
+    <EditTags :msg="noData" :visible.sync="showTagPanel" class="EditTags" @getEditTagsData="TagShow"></EditTags>
   </div>
 </template>
 
 <script>
 import EditTags from "../components/EditTags";
 export default {
+  components: { EditTags },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     // URL 校验规则
-    var validateURL = (rule, value, callback) => {
+    let validateURL = (rule, value, callback) => {
       if (!value) {
         return callback(new Error(this.$t("not_input_addr")));
       }
-      var value2 = "ipfs:" + value;
-      var ipfsURL = /^ipfs:[a-zA-Z0-9]+/;
+      let value2 = "ipfs:" + value;
+      let ipfsURL = /^ipfs:[a-zA-Z0-9]+/;
       if (!ipfsURL.test(value2)) {
         return callback(new Error(this.$t("addr_err")));
       } else {
@@ -178,7 +179,7 @@ export default {
         original_url: "",
         title: "",
         desc: "",
-        cover: []
+        cover: [],
       },
       // 上传视频封面的携带数据
       coverData: { type: "cover" },
@@ -189,16 +190,16 @@ export default {
           {
             required: true,
             message: this.$t("not_input_title"),
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         desc: [
           {
             required: true,
             message: this.$t("not_introductory_video"),
-            trigger: "blur"
-          }
-        ]
+            trigger: "blur",
+          },
+        ],
       },
       // 校验封面是否上传
       noCover: false,
@@ -209,7 +210,7 @@ export default {
       // 标签页面传入的参数
       noData: "",
       // 视频的标签数组
-      tags: []
+      tags: [],
     };
   },
   computed: {
@@ -236,7 +237,7 @@ export default {
       } else {
         return "";
       }
-    }
+    },
   },
   created() {},
   mounted() {},
@@ -246,13 +247,13 @@ export default {
       this.$message.warning(this.$t("upload_cover_limit"));
     },
     // 删除文件调用的函数
-    beforeRemove(file, fileList) {
+    beforeRemove() {
       // return this.$confirm(`确定移除 ${file.name}？`);
       this.list.cover = [];
     },
     // 上传文件成功之后处理数据取消上传文件的校验规则
-    uploadVideoCover(response, file, fileList) {
-      var cover = {};
+    uploadVideoCover(response, file) {
+      let cover = {};
       cover.file_key = response.data.file_key;
       cover.name = file.name;
       this.list.cover.push(cover);
@@ -265,7 +266,7 @@ export default {
     // 上传视频
     postMultiVideos() {
       this.loading = true;
-      this.$refs.list.validate(valid => {
+      this.$refs.list.validate((valid) => {
         // 同时校验表单和封面数据
         if (valid && this.list.cover.length) {
           this.axios({
@@ -280,14 +281,14 @@ export default {
               original_url: this.list.original_url,
               copy: this.copy,
               pid: this.pid,
-              rank: this.rank
-            }
-          }).then(result => {
+              rank: this.rank,
+            },
+          }).then((result) => {
             if (result.data.status == "SUCCEED") {
               this.open4();
             } else if (result.data.status == "FAILED") {
               if (result.data.data.reason == "TAG_NOT_EXIST") {
-                var errorTag = result.data.data.aux;
+                let errorTag = result.data.data.aux;
                 this.open3(errorTag);
               } else {
                 this.open2();
@@ -315,29 +316,28 @@ export default {
     open2() {
       this.$message({
         message: this.$t("upload_fail"),
-        type: "error"
+        type: "error",
       });
     },
     open3(errorTag) {
       this.$message({
         message: this.$t("label") + errorTag + " " + this.$t("not_exist"),
-        type: "error"
+        type: "error",
       });
     },
     open4() {
       this.$message({
         message: this.$t("upload_success"),
-        type: "success"
+        type: "success",
       });
     },
     open5() {
       this.$message({
         message: this.$t("unknown_err"),
-        type: "error"
+        type: "error",
       });
-    }
+    },
   },
-  components: { EditTags }
 };
 </script>
 

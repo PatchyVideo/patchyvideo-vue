@@ -56,11 +56,12 @@ import Footer from "../components/Footer.vue";
 import createNewList from "../components/CreateNewList";
 import leadInExistingList from "../components/LeadInExistingList";
 export default {
+  components: { topnavbar, Footer, createNewList, leadInExistingList },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 默认打开的标签页
-      activeName: "first"
+      activeName: "first",
     };
   },
   created() {
@@ -75,7 +76,6 @@ export default {
   },
   mounted() {},
   methods: {},
-  components: { topnavbar, Footer, createNewList, leadInExistingList }
 };
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <div :style="(mini ? 'margin-top:8px;' : 'margin-top:16px;') + (highlight ? 'border: dashed yellow;' : '')" ref="cdiv">
+  <div ref="cdiv" :style="(mini ? 'margin-top:8px;' : 'margin-top:16px;') + (highlight ? 'border: dashed yellow;' : '')">
     <div v-if="comment" :style="'border: 1px solid #d1d5da;border-radius: 3px;' + (mini || pre ? 'margin-left:58px;' : 'margin-left:72px;')">
       <div class="left-avatar">
         <router-link
@@ -24,11 +24,11 @@
           <div v-if="!comment.hidden && (own || comment.meta.created_by.$oid == userId)" class="comment-bar">
             <i
               class="comment-bar-item pv-icon-pin"
-              @click="own && pin2(comment._id.$oid, comment.pinned)"
               :style="comment.pinned ? '' : 'transform: rotate(45deg);'"
+              @click="own && pin2(comment._id.$oid, comment.pinned)"
             ></i>
             &nbsp;
-            <i class="comment-bar-item el-icon-link " @click="copy2()"></i>
+            <i class="comment-bar-item el-icon-link" @click="copy2()"></i>
             &nbsp;
             <i class="comment-bar-item el-icon-edit" @click="edit2(comment._id.$oid, comment.content, comment.meta.created_by.$oid)"></i>
             &nbsp;
@@ -39,14 +39,14 @@
           <div v-else-if="userId" class="comment-bar">
             <i class="comment-bar-item pv-icon-pin" :style="comment.pinned ? '' : 'transform: rotate(45deg);'"></i>
             &nbsp;
-            <i class="comment-bar-item el-icon-link " @click="copy2()"></i>
+            <i class="comment-bar-item el-icon-link" @click="copy2()"></i>
             &nbsp;
             <i class="comment-bar-item pv-icon-reply" @click="reply2('user', comment._id.$oid, comment)"></i>
           </div>
           <div v-else class="comment-bar">
             <i class="comment-bar-item pv-icon-pin" :style="comment.pinned ? '' : 'transform: rotate(45deg);'"></i>
             &nbsp;
-            <i class="comment-bar-item el-icon-link " @click="copy2()"></i>
+            <i class="comment-bar-item el-icon-link" @click="copy2()"></i>
           </div>
         </div>
         <div class="comment-div" :style="mini ? 'padding: 5px 15px;' : 'padding: 15px;'">
@@ -55,15 +55,15 @@
           </div>
           <div v-else>
             此回复因离题或语言过激被折叠
-            <span style="color:#409eff" @click="comment.hidden = false">显示</span>
+            <span style="color: #409eff;" @click="comment.hidden = false">显示</span>
           </div>
           <div v-for="(commentC, indexC) in comment.children" :key="indexC">
             <thread-comment-box
               :mini="true"
               :comment="commentC"
               :index="index + '-' + commentC._id.$oid"
-              :commentAuthorsInfo="commentAuthorsInfo"
-              :userId="userId"
+              :comment-authors-info="commentAuthorsInfo"
+              :user-id="userId"
               :own="own || comment.meta.created_by.$oid == userId"
               @position="position"
               @pin2="pin2"
@@ -73,7 +73,7 @@
             ></thread-comment-box>
           </div>
           <div v-if="adcomment">
-            <div style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;">
+            <div style="margin-top: 16px; border: 1px solid #d1d5da; border-radius: 3px; margin-left: 58px;">
               <div class="left-avatar">
                 <el-avatar size="large" :src="adcomment.avatar"></el-avatar>
               </div>
@@ -107,44 +107,48 @@ import { copyToClipboardText } from "../static/js/generic";
 export default {
   name: "ThreadCommentBox",
   components: {
-    ThreadComment
-  },
-  data() {
-    return { highlight: false };
+    ThreadComment,
   },
   props: {
     comment: {
       type: Object,
-      default: {}
+      default() {
+        return {};
+      },
     },
     index: {
       type: String,
-      default: 0
+      default: "",
     },
     commentAuthorsInfo: {
       type: Object,
-      default: {}
+      default() {
+        return {};
+      },
     },
     userId: {
       type: String,
-      default: ""
+      default: "",
     },
     own: {
       type: Boolean,
-      default: false
+      default: false,
     },
     mini: {
       type: Boolean,
-      default: false
+      default: false,
     },
     adcomment: {
       type: Object,
-      default: null
+      default: null,
     },
     pre: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
+  },
+  data() {
+    return { highlight: false };
   },
   mounted() {
     if ("#L" + this.index == this.$route.hash) {
@@ -184,8 +188,8 @@ export default {
       } catch (e) {
         return '<div style="font-family:Consolas">Error: ' + e.message.replace(/ /g, "&nbsp;").replace(/\n/g, "<br />") + "</div>";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -29,13 +29,13 @@
   <div>
     <div class="bigbox standard">
       <div class="aside">
-        <div class="new-create" @click="changeDoingSatate()" :class="{ active: doingState }">
+        <div class="new-create" :class="{ active: doingState }" @click="changeDoingSatate()">
           <a>
             <i class="el-icon-goblet-square"></i>
             {{ $t("pending_post") }}
           </a>
         </div>
-        <div class="new-create" @click="changeFailedSatate()" :class="{ active: failedState }">
+        <div class="new-create" :class="{ active: failedState }" @click="changeFailedSatate()">
           <a>
             <i class="el-icon-goblet-full"></i>
             {{ $t("failed_post") }}
@@ -43,7 +43,7 @@
         </div>
       </div>
       <div class="main">
-        <div class="fav null" v-if="doingState">
+        <div v-if="doingState" class="fav null">
           <div class="add-list">
             <el-table ref="singleTable" :data="tableData2" highlight-current-row @current-change="handleCurrentChange">
               <el-table-column type="index" width="50"></el-table-column>
@@ -52,24 +52,24 @@
             </el-table>
           </div>
         </div>
-        <div class="fav notnull" v-if="failedState">
+        <div v-if="failedState" class="fav notnull">
           <div class="second">
             <el-switch
-              style="display: block"
               v-model="value"
+              style="display: block;"
               active-color="#13ce66"
               inactive-color="#ff4949"
               :active-text="$t('show_url_time')"
               :inactive-text="$t('show_all')"
             ></el-switch>
             <transition mode="out-in">
-              <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName" v-show="value">
+              <el-table v-show="value" :data="tableData" style="width: 100%;" :row-class-name="tableRowClassName">
                 <el-table-column prop="url" label="URL" align="center"></el-table-column>
                 <el-table-column prop="time" label="TIME" align="center"></el-table-column>
               </el-table>
             </transition>
             <transition mode="out-in">
-              <el-table :data="tableData" stripe style="width: 100%" v-show="!value">
+              <el-table v-show="!value" :data="tableData" stripe style="width: 100%;">
                 <el-table-column prop="url" label="URL" align="center"></el-table-column>
                 <el-table-column prop="time" label="TIME" align="center"></el-table-column>
                 <el-table-column prop="exception" label="EXCEPTION" align="center"></el-table-column>
@@ -84,6 +84,7 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -96,27 +97,30 @@ export default {
         {
           url: "null",
           time: "null",
-          exception: "null"
-        }
+          exception: "null",
+        },
       ],
       centerDialogVisible: false,
       value: true,
       doingState: true,
-      failedState: false
+      failedState: false,
     };
+  },
+  watch: {
+    value() {},
   },
   created() {
     this.axios({
       method: "post",
       url: "be/posts/list_pending.do",
-      data: { page: 1, page_size: 9999 }
-    }).then(res => {
+      data: { page: 1, page_size: 9999 },
+    }).then((res) => {
       let obj = res.data.data;
       let array = [];
       for (let i in obj) {
         array.push({
           url: obj[i].url,
-          tags: JSON.parse(JSON.stringify(obj[i].tags).replace(/(\",)+/g, '、",'))
+          tags: JSON.parse(JSON.stringify(obj[i].tags).replace(/(",)+/g, '、",')),
         });
       }
       this.tableData2 = array;
@@ -124,8 +128,8 @@ export default {
     this.axios({
       method: "post",
       url: "be/posts/list_failed.do",
-      data: { page: 1, page_size: 99999 }
-    }).then(res => {
+      data: { page: 1, page_size: 99999 },
+    }).then((res) => {
       this.failedData = JSON.parse(JSON.stringify(res.data.data.posts));
       let _that = this;
       let array = [];
@@ -137,7 +141,7 @@ export default {
           let array = [
             { url: _that.failedData[index].post_param.url },
             { time: this.formatDate(_that.failedData[index].time) },
-            { exception: JSON.stringify(_that.failedData[index].ret) }
+            { exception: JSON.stringify(_that.failedData[index].ret) },
           ];
           m[index] = array;
         }
@@ -190,7 +194,7 @@ export default {
       this.doingState = false;
       this.failedState = true;
     },
-    tableRowClassName({ row, rowIndex }) {
+    tableRowClassName({ rowIndex }) {
       if (rowIndex === 1) {
         return "warning-row";
       } else if (rowIndex === 3) {
@@ -200,13 +204,13 @@ export default {
     },
     formatDate(value) {
       if (value) {
-        var upload_time = new Date(value.$date);
-        var y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
-        var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
-        var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
-        var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
+        let upload_time = new Date(value.$date);
+        let y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+        let M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        let d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        let h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+        let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+        let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
         return (
           y +
           "-" +
@@ -222,12 +226,8 @@ export default {
           (Array(2).join(0) + s).slice(-2)
         );
       }
-    }
+    },
   },
-  components: {},
-  watch: {
-    value(n) {}
-  }
 };
 </script>
 
@@ -273,8 +273,7 @@ export default {
     }
   }
 
-  .first {
-  }
+  // .first {}
   .second {
     position: relative;
     width: 100%;
@@ -414,8 +413,7 @@ export default {
     }
   }
 }
-.el-icon-circle-plus-outline {
-}
+// .el-icon-circle-plus-outline {}
 .fa-plus-square:hover {
   background-color: rgba(1, 1, 1, 0.1);
   color: #2c3e50;

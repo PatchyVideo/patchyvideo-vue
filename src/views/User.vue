@@ -97,26 +97,26 @@ Vue.prototype.$echarts = echarts;
     <div class="content w">
       <!-- 个人界面 -->
       <el-tabs v-model="activeName">
-        <el-tab-pane :label="labelInfo.length == info[0].length ? $t('me.tab1') : $t('outer_user.tab1')" name="first" v-if="labelInfo.length >= 1">
+        <el-tab-pane v-if="labelInfo.length >= 1" :label="labelInfo.length == info[0].length ? $t('me.tab1') : $t('outer_user.tab1')" name="first">
           <userprofile></userprofile>
         </el-tab-pane>
-        <el-tab-pane :label="labelInfo.length == info[0].length ? $t('me.tab2') : $t('outer_user.tab2')" name="second" v-if="labelInfo.length >= 2">
-          <usercontribute v-if="this.activeName === 'second'"></usercontribute>
+        <el-tab-pane v-if="labelInfo.length >= 2" :label="labelInfo.length == info[0].length ? $t('me.tab2') : $t('outer_user.tab2')" name="second">
+          <usercontribute v-if="activeName === 'second'"></usercontribute>
         </el-tab-pane>
-        <el-tab-pane :label="labelInfo.length == info[0].length ? $t('me.tab3') : $t('outer_user.tab3')" name="third" v-if="labelInfo.length >= 3">
-          <listfolder v-if="this.activeName === 'third'"></listfolder>
+        <el-tab-pane v-if="labelInfo.length >= 3" :label="labelInfo.length == info[0].length ? $t('me.tab3') : $t('outer_user.tab3')" name="third">
+          <listfolder v-if="activeName === 'third'"></listfolder>
         </el-tab-pane>
-        <el-tab-pane :label="labelInfo.length == info[0].length ? $t('me.tab4') : $t('outer_user.tab4')" name="four" v-if="labelInfo.length >= 4">
-          <userfavorites v-if="this.activeName === 'four'"></userfavorites>
+        <el-tab-pane v-if="labelInfo.length >= 4" :label="labelInfo.length == info[0].length ? $t('me.tab4') : $t('outer_user.tab4')" name="four">
+          <userfavorites v-if="activeName === 'four'"></userfavorites>
         </el-tab-pane>
-        <el-tab-pane :label="labelInfo.length == info[0].length ? $t('me.tab5') : $t('outer_user.tab5')" name="fifth" v-if="labelInfo.length >= 5">
-          <userfolder v-if="this.activeName === 'fifth'"></userfolder>
+        <el-tab-pane v-if="labelInfo.length >= 5" :label="labelInfo.length == info[0].length ? $t('me.tab5') : $t('outer_user.tab5')" name="fifth">
+          <userfolder v-if="activeName === 'fifth'"></userfolder>
         </el-tab-pane>
-        <el-tab-pane :label="labelInfo.length == info[0].length ? $t('me.tab6') : $t('outer_user.tab6')" name="six" v-if="labelInfo.length >= 6">
-          <blacklist v-if="this.activeName === 'six'"></blacklist>
+        <el-tab-pane v-if="labelInfo.length >= 6" :label="labelInfo.length == info[0].length ? $t('me.tab6') : $t('outer_user.tab6')" name="six">
+          <blacklist v-if="activeName === 'six'"></blacklist>
         </el-tab-pane>
-        <el-tab-pane :label="labelInfo.length == info[0].length ? $t('me.tab7') : $t('outer_user.tab7')" name="seven" v-if="labelInfo.length >= 7">
-          <usersub v-if="this.activeName === 'seven'"></usersub>
+        <el-tab-pane v-if="labelInfo.length >= 7" :label="labelInfo.length == info[0].length ? $t('me.tab7') : $t('outer_user.tab7')" name="seven">
+          <usersub v-if="activeName === 'seven'"></usersub>
         </el-tab-pane>
       </el-tabs>
 
@@ -137,6 +137,17 @@ import blacklist from "../components/BlackList.vue";
 import usersub from "../components/UserSub.vue";
 import Footer from "../components/Footer.vue";
 export default {
+  components: {
+    topnavbar,
+    usercontribute,
+    userprofile,
+    listfolder,
+    userfavorites,
+    usersub,
+    userfolder,
+    Footer,
+    blacklist,
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -147,10 +158,17 @@ export default {
       activeName: "first",
       info: [
         ["我的信息", "我贡献的索引", "我的文件夹", "我的收藏", "索引状态", "订阅", "黑名单"],
-        ["用户信息", "他贡献的索引", "他的文件夹", "他的收藏"]
+        ["用户信息", "他贡献的索引", "他的文件夹", "他的收藏"],
       ],
-      labelInfo: ["我的信息", "我贡献的索引", "文件夹", "我的收藏", "索引状态", "订阅", "黑名单"]
+      labelInfo: ["我的信息", "我贡献的索引", "文件夹", "我的收藏", "索引状态", "订阅", "黑名单"],
     };
+  },
+  watch: {
+    $route(n) {
+      if (n.fullPath === "/users/me") {
+        this.labelInfo = this.info[0];
+      }
+    },
   },
   created() {
     // 判断 url 阶段,
@@ -178,8 +196,8 @@ export default {
       this.axios({
         method: "post",
         url: "be/user/profile.do",
-        data: { uid: this.$route.params.id }
-      }).then(res => {
+        data: { uid: this.$route.params.id },
+      }).then((res) => {
         if (res.data.status == "FAILED") {
           this.$router.push("/*");
           // this.$router.push("/home");
@@ -190,26 +208,8 @@ export default {
           this.labelInfo = this.info[1];
         }
       });
-    }
+    },
   },
-  watch: {
-    $route(n) {
-      if (n.fullPath === "/users/me") {
-        this.labelInfo = this.info[0];
-      }
-    }
-  },
-  components: {
-    topnavbar,
-    usercontribute,
-    userprofile,
-    listfolder,
-    userfavorites,
-    usersub,
-    userfolder,
-    Footer,
-    blacklist
-  }
 };
 </script>
 

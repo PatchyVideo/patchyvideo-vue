@@ -11,21 +11,21 @@
 
 <template>
   <div>
-    <el-card class="box-card" v-loading="loading">
+    <el-card v-loading="loading" class="box-card">
       <el-collapse v-model="activeNames" @change="handleChange">
-        <el-collapse-item title="已订阅的文本" name="1" style="text-align: center">
-          <div v-for="i in this.subDataTextNameData" :key="i">
+        <el-collapse-item title="已订阅的文本" name="1" style="text-align: center;">
+          <div v-for="i in subDataTextNameData" :key="i">
             <div class="sub-text">
               <h4>{{ i }}</h4>
               <div>
-                <el-tag type="danger" class="text-data" v-for="m in subQtMap(i, 'text')" :key="m._id.$oid">
+                <el-tag v-for="m in subQtMap(i, 'text')" :key="m._id.$oid" type="danger" class="text-data">
                   <transition mode="out-in">
                     <div v-if="m.iptVisble !== true">
-                      <span @keyup.enter="subUpDate(m, $event, 'text')" contenteditable="true">{{ m.qs }}</span>
+                      <span contenteditable="true" @keyup.enter="subUpDate(m, $event, 'text')">{{ m.qs }}</span>
                       <!--<i class="el-icon-edit"  @click="showIpt(m,index)"></i>-->
                       <i class="el-icon-delete" @click="subDel(m)"></i>
                     </div>
-                    <div class="text-ipt" v-if="m.iptVisble === true" style="display: flex;">
+                    <div v-if="m.iptVisble === true" class="text-ipt" style="display: flex;">
                       <el-input v-model="m.iptValue"></el-input>
                       <el-button @click="subUpDate(m)">确认</el-button>
                       <el-button @click="handleSubIptConfirm(m)">取消</el-button>
@@ -46,18 +46,18 @@
           </transition>-->
         </el-collapse-item>
         <el-collapse-item title="已订阅的标签/文本" name="2">
-          <div v-for="i in this.subDataTagsNameData" :key="i" style="margin-bottom: 20px">
+          <div v-for="i in subDataTagsNameData" :key="i" style="margin-bottom: 20px;">
             <div class="sub-tags">
               <h4>{{ i }}</h4>
               <div>
-                <el-tag class="tags-data" v-for="m in subQtMap(i, 'tag')" :key="m._id.$oid">
+                <el-tag v-for="m in subQtMap(i, 'tag')" :key="m._id.$oid" class="tags-data">
                   <transition mode="out-in">
                     <div v-if="m.iptVisble !== true">
-                      <span @keyup.enter="subUpDate(m, $event, 'tag')" contenteditable="true">{{ m.qs }}</span>
+                      <span contenteditable="true" @keyup.enter="subUpDate(m, $event, 'tag')">{{ m.qs }}</span>
                       <!--<i class="el-icon-edit"  @click="showIpt(m,index)"></i>-->
                       <i class="el-icon-delete" @click="subDel(m)"></i>
                     </div>
-                    <div class="tags-ipt" v-if="m.iptVisble === true" style="display: flex;">
+                    <div v-if="m.iptVisble === true" class="tags-ipt" style="display: flex;">
                       <el-input v-model="m.iptValue"></el-input>
                       <el-button @click="subUpDate(m)">确认</el-button>
                       <el-button @click="handleSubIptConfirm(m)">取消</el-button>
@@ -70,10 +70,10 @@
         </el-collapse-item>
       </el-collapse>
       <transition mode="out-in">
-        <div class="sub-add" v-if="subAddIptVisible">
+        <div v-if="subAddIptVisible" class="sub-add">
           <div class="sub-name">
             <el-checkbox v-model="checked" class="check" label="name" border></el-checkbox>
-            <el-input v-model="subAddName" placeholder="name可为空" v-if="checked"></el-input>
+            <el-input v-if="checked" v-model="subAddName" placeholder="name可为空"></el-input>
           </div>
           <!--<el-input v-model="subTagsIptValue"placeholder="要添加的标签内容" style="flex-grow: 1;"></el-input>-->
 
@@ -88,39 +88,39 @@
               :fetch-suggestions="querySearchAsync"
               :trigger-on-focus="false"
               placeholder="要添加的标签内容"
-              @select="handleSelect"
               class="input-new-tag"
+              @select="handleSelect"
             >
               <template slot-scope="{ item }">
                 <div class="adviceList">
                   <div
                     class="name"
-                    v-bind:class="{
+                    :class="{
                       Copyright: item.cat === 2,
                       Language: item.cat === 5,
                       Character: item.cat === 1,
                       Author: item.cat === 3,
                       General: item.cat === 0,
                       Meta: item.cat === 4,
-                      Soundtrack: item.cat === 6
+                      Soundtrack: item.cat === 6,
                     }"
                     v-html="item.tag || ConvertLangRes(item.langs)"
                   >
                     {{ item.tag }}
                   </div>
-                  <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
+                  <div v-if="item.cnt != null" class="addr">{{ item.cnt }}</div>
                 </div>
               </template>
             </el-autocomplete>
           </div>
 
           <div class="sub-action">
-            <el-button @click.native="subAdd(subTagsIptValue, subTagsIptName, 'tag')" type="primary">添加标签订阅</el-button>
-            <el-button @click.native="subAddIptVisible = false" style="margin: 0">取消</el-button>
+            <el-button type="primary" @click.native="subAdd(subTagsIptValue, subTagsIptName, 'tag')">添加标签订阅</el-button>
+            <el-button style="margin: 0;" @click.native="subAddIptVisible = false">取消</el-button>
           </div>
         </div>
 
-        <el-button v-else class="button-new-tag" size="small" type="primary" @click="showAddInput" style="width: 20%;">+ 添加订阅</el-button>
+        <el-button v-else class="button-new-tag" size="small" type="primary" style="width: 20%;" @click="showAddInput">+ 添加订阅</el-button>
       </transition>
     </el-card>
   </div>
@@ -128,6 +128,7 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -145,7 +146,7 @@ export default {
       couponSelected: [],
       options: [
         { value: "tag", label: "Tag/Text" },
-        { value: "text", label: "Text Only" }
+        { value: "text", label: "Text Only" },
       ],
       sites: [
         { tag: "site:acfun", cat: 6, cnt: null },
@@ -159,7 +160,7 @@ export default {
         { tag: "OR", cat: 6, cnt: null },
         { tag: "NOT", cat: 6, cnt: null },
         { tag: "date:", cat: 6, cnt: null },
-        { tag: "tags:", cat: 6, cnt: null }
+        { tag: "tags:", cat: 6, cnt: null },
       ],
       iptVal3: "",
       // 进行搜索的时候关键字的开头位置(起始位置)
@@ -183,13 +184,13 @@ export default {
       subAddIptVisible: false,
 
       activeNames: ["1", "2"],
-      subObj: []
+      subObj: [],
     };
   },
   created() {
     this.couponSelected = this.options[0].value;
     $(window).keydown(function(e) {
-      var key = window.event ? e.keyCode : e.which;
+      let key = window.event ? e.keyCode : e.which;
       // 获取用户按键，如果是回车，则不执行任何
       if (key.toString() === "13") {
         // 调用光标插入方法，在光标处插入 换行
@@ -200,7 +201,7 @@ export default {
   },
   mounted() {},
   methods: {
-    handleChange(val) {},
+    handleChange() {},
     handleSubIptConfirm(m) {
       m.iptVisble = false;
       this.$forceUpdate();
@@ -208,37 +209,37 @@ export default {
     showAddInput() {
       this.subAddIptVisible = true;
     },
-    showIpt(m, i) {
+    showIpt(m) {
       m.iptVisble = true;
       this.$forceUpdate();
     },
     ConvertLangRes(langs, hastran = true) {
       if (!langs) return;
-      var LangList = [
+      let LangList = [
         { id: 1, lang: "CHS" },
         { id: 2, lang: "CHT" },
         { id: 5, lang: "ENG" },
-        { id: 10, lang: "JPN" }
+        { id: 10, lang: "JPN" },
       ];
-      var level = [10, 5, 1, 2];
-      var Lang = "";
-      var mainLang = "";
-      var subLang = "";
+      let level = [10, 5, 1, 2];
+      let Lang = "";
+      let mainLang = "";
+      let subLang = "";
       // 经过一系列计算得出主副语言
 
       // 匹配当前语言的 ID
-      var CurrLangID = LangList.find(x => {
+      let CurrLangID = LangList.find((x) => {
         return x.lang == this.$i18n.locale;
       });
       CurrLangID = CurrLangID ? CurrLangID.id : 1;
 
       // 匹配对应 ID 的内容
-      var CurrLangWord = langs.find(x => {
+      let CurrLangWord = langs.find((x) => {
         return x.l == CurrLangID;
       });
       if (!CurrLangWord) {
-        for (var i = 0; i < level.length; i++) {
-          CurrLangWord = langs.find(x => {
+        for (let i = 0; i < level.length; i++) {
+          CurrLangWord = langs.find((x) => {
             return x.l == level[i];
           });
           if (CurrLangWord) break;
@@ -249,10 +250,10 @@ export default {
       if (hastran) {
         // 副语言匹配
         // 优先级：日语，英语，简体中文，繁体中文
-        var SubLangWord = null;
-        for (var i = 0; i < level.length; i++) {
+        let SubLangWord = null;
+        for (let i = 0; i < level.length; i++) {
           if (level[i] == CurrLangWord.l) continue;
-          SubLangWord = langs.find(x => {
+          SubLangWord = langs.find((x) => {
             return x.l == level[i];
           });
           if (SubLangWord) break;
@@ -260,24 +261,24 @@ export default {
         subLang = SubLangWord ? SubLangWord.w : mainLang;
 
         // 合成语言
-        Lang = `${mainLang.replace(/\_/g, " ")}`;
-        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/\_/g, " ")}</span>`;
+        Lang = `${mainLang.replace(/_/g, " ")}`;
+        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/_/g, " ")}</span>`;
       } else {
         Lang = mainLang;
       }
       return Lang;
     },
     handleSelect(item) {
-      var iptVal1 = this.iptVal3.slice(0, this.startlocation);
-      var iptVal2 = this.iptVal3.slice(this.endlocation);
-      var iptVal = iptVal1 + this.ConvertLangRes(item.langs, false) + " " + iptVal2;
+      let iptVal1 = this.iptVal3.slice(0, this.startlocation);
+      let iptVal2 = this.iptVal3.slice(this.endlocation);
+      let iptVal = iptVal1 + this.ConvertLangRes(item.langs, false) + " " + iptVal2;
       this.subAddIptValue = iptVal;
       // 光标设置焦点事件
-      var endlocation = $("#saveTagInput").focus();
+      $("#saveTagInput").focus();
       // this.subAddIptValue = this.ConvertLangRes(item.langs,false);
     },
     match(text) {
-      var i = text.length;
+      let i = text.length;
       while (i--) {
         if (
           text.charAt(i) === " " ||
@@ -302,18 +303,18 @@ export default {
     },
     isNull(str) {
       if (str === "") return true;
-      var regu = "^[ ]+$";
-      var re = new RegExp(regu);
+      let regu = "^[ ]+$";
+      let re = new RegExp(regu);
       return re.test(str);
     },
     querySearchAsync(queryString, cb) {
       // 这里的 get(0) 是将 jq 对象转换为原生 js 对象
       // selectionStart 是获取光标当前位置
-      var endlocation = $("#saveTagInput").get(0).selectionStart;
+      let endlocation = $("#saveTagInput").get(0).selectionStart;
       // 切割输入框内的字符串，切割下光标左面的字符串
-      var query = queryString.slice(0, endlocation);
+      let query = queryString.slice(0, endlocation);
       // 获取所需要搜索的字符串的开头在搜索框内字符串的位置
-      var startlocation = this.match(query);
+      let startlocation = this.match(query);
       // 切割下所需要查询的字符串
       query = query.slice(startlocation, endlocation);
       // 字符串为空格的话不搜索
@@ -323,48 +324,48 @@ export default {
       }
 
       // 备份参数防止出现玄学问题
-      var query2 = query;
+      // let query2 = query;
       // 搜索是否包含 sites 变量的关键字
-      var results = this.sites.filter(this.createFilter(query2));
+      // let results = this.sites.filter(this.createFilter(query2));
 
       this.iptVal3 = queryString;
       this.startlocation = startlocation;
       this.endlocation = endlocation;
 
-      var url = "/be/autocomplete/ql?q=" + query;
+      let url = "/be/autocomplete/ql?q=" + query;
       this.axios({
         method: "get",
-        url: url
-      }).then(result => {
+        url: url,
+      }).then((result) => {
         this.taglist = result.data;
         cb(result.data);
       });
     },
     createFilter(query) {
-      return sites => {
+      return (sites) => {
         return sites.tag.toLowerCase().indexOf(query.toLowerCase()) === 0;
       };
     },
-    subAdd(val, name, str) {
+    subAdd() {
       this.axios({
         method: "post",
         url: "/be/subs/add.do",
         data: {
           qtype: this.couponSelected,
           name: this.subAddName,
-          query: this.subAddIptValue
-        }
+          query: this.subAddIptValue,
+        },
       })
-        .then(res => {
+        .then((res) => {
           if (res.data.status === "SUCCEED") {
             this.$message({
               message: "添加成功",
-              type: "success"
+              type: "success",
             });
             this.subShowAll();
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -373,26 +374,26 @@ export default {
       this.axios({
         method: "post",
         url: "/be/subs/del.do",
-        data: { subid: m._id.$oid }
+        data: { subid: m._id.$oid },
       })
-        .then(res => {
+        .then((res) => {
           if (res.data.status === "SUCCEED") {
             this.$message({
               message: "删除成功",
-              type: "success"
+              type: "success",
             });
           }
           this.subShowAll();
           this.loading = false;
           this.$forceUpdate();
         })
-        .catch(err => {
+        .catch(() => {
           this.loading = false;
         });
     },
     subNameMap(arr, str) {
       let nameData = new Set(
-        arr.map((item, index, array) => {
+        arr.map((item) => {
           return item.name;
         })
       );
@@ -409,14 +410,14 @@ export default {
     },
     subQtMap(i, str) {
       if (str === "text") {
-        return this.subDataText.filter((item, index, array) => {
+        return this.subDataText.filter((item) => {
           if (item.name === i) {
             return item;
           }
         });
       }
       if (str === "tag") {
-        return this.subDataTags.filter((item, index, array) => {
+        return this.subDataTags.filter((item) => {
           if (item.name === i) {
             return item;
           }
@@ -445,7 +446,7 @@ export default {
         if (value === "") {
           this.$message({
             message: this.$t("值不能为空！"),
-            type: "warning"
+            type: "warning",
           });
           this.loading = false;
           return;
@@ -460,13 +461,13 @@ export default {
           qtype: str,
           name: "",
           query: m.iptValue,
-          subid: m._id.$oid
-        }
-      }).then(res => {
+          subid: m._id.$oid,
+        },
+      }).then((res) => {
         if (res.data.status === "SUCCEED") {
           this.$message({
             message: "修改成功",
-            type: "success"
+            type: "success",
           });
         }
         this.subShowAll();
@@ -477,11 +478,11 @@ export default {
       this.axios({
         method: "post",
         url: "be/subs/all.do",
-        data: {}
+        data: {},
       })
-        .then(res => {
+        .then((res) => {
           // console.log(res.data.data);
-          this.subDataText = res.data.data.subs.filter((item, index, array) => {
+          this.subDataText = res.data.data.subs.filter((item) => {
             return item.qt === "text";
           });
           // let e = [];
@@ -493,13 +494,13 @@ export default {
           // }
           // this.subDataTextIptId = e;
           this.subNameMap(this.subDataText, "text");
-          this.subDataTags = res.data.data.subs.filter((item, index, array) => {
+          this.subDataTags = res.data.data.subs.filter((item) => {
             return item.qt === "tag";
           });
           this.subNameMap(this.subDataTags, "tag");
           this.loading = false;
         })
-        .catch(err => {
+        .catch(() => {
           this.loading = false;
         });
     },
@@ -507,11 +508,10 @@ export default {
       this.axios({
         method: "post",
         url: "be/subs/tags.do",
-        data: {}
-      }).then(res => {});
-    }
+        data: {},
+      }).then(() => {});
+    },
   },
-  components: {}
 };
 </script>
 
@@ -822,9 +822,9 @@ export default {
 .Soundtrack {
   color: #ff7792;
 }
-.el-collapse {
-  /* width: 300px; */
-}
+// .el-collapse {
+//   /* width: 300px; */
+// }
 // .el-collapse {
 //   border-radius: 4px;
 //   border: 1px solid #ebeef5;

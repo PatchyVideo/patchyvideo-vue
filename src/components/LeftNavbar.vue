@@ -112,11 +112,11 @@
 <template>
   <div class="left-navbar">
     <!-- EditTags组件 -->
-    <EditTags ref="editTag" :msg="pid" :visible.sync="showTagPanel" v-if="showTagPanel" class="EditTags"></EditTags>
+    <EditTags v-if="showTagPanel" ref="editTag" :msg="pid" :visible.sync="showTagPanel" class="EditTags"></EditTags>
 
     <!-- 作者详情组件 -->
     <el-dialog :close-on-click-modal="false" :visible.sync="showAuthorData" width="70%">
-      <ShowAuthorData ref="AuthorData" :AuthorID="AuthorID"></ShowAuthorData>
+      <ShowAuthorData ref="AuthorData" :author-i-d="AuthorID"></ShowAuthorData>
     </el-dialog>
 
     <!-- 显示标签组件的对话框 -->
@@ -126,17 +126,17 @@
           <el-collapse-item v-for="(item, index) in tagLog" :key="index" :title="tagLogDate(item.time.$date)">
             <div>
               <div v-if="item.add.length">
-                <span style="margin-right:10px;margin-top:3px;color:#67C23A">{{ $t("tag_history.add") }}</span>
-                <el-tag type="success" v-for="tag in item.add" style="margin-right:5px;margin-top:3px" :key="tag">{{ tag }}</el-tag>
+                <span style="margin-right: 10px; margin-top: 3px; color: #67c23a;">{{ $t("tag_history.add") }}</span>
+                <el-tag v-for="tag in item.add" :key="tag" type="success" style="margin-right: 5px; margin-top: 3px;">{{ tag }}</el-tag>
                 <br />
               </div>
 
               <div v-if="item.del.length">
-                <span style="margin-right:10px;margin-top:3px;color:#F56C6C">{{ $t("tag_history.del") }}</span>
-                <el-tag type="danger" v-for="tag in item.del" style="margin-right:5px;margin-top:3px" :key="tag">{{ tag }}</el-tag>
+                <span style="margin-right: 10px; margin-top: 3px; color: #f56c6c;">{{ $t("tag_history.del") }}</span>
+                <el-tag v-for="tag in item.del" :key="tag" type="danger" style="margin-right: 5px; margin-top: 3px;">{{ tag }}</el-tag>
                 <br />
               </div>
-              <div v-if="item.user_obj.length" style="margin-top:5px">
+              <div v-if="item.user_obj.length" style="margin-top: 5px;">
                 <span v-for="user in item.user_obj" :key="user.profile.username" class="editer">
                   <el-avatar fit="cover" class="loginUser-userAvatar" :size="20" :src="'be/images/userphotos/' + user.profile.image"></el-avatar>
                   <router-link :to="'/users/' + user._id.$oid">{{ user.profile.username }}</router-link>
@@ -155,7 +155,7 @@
       <div class="titleTag">
         <h1>{{ title }}</h1>
         <div class="editTagButton">
-          <el-button v-if="$route.path === '/video' && isLogin == true" size="mini" @click="openEditTags" :disabled="showTagPanel">{{
+          <el-button v-if="$route.path === '/video' && isLogin == true" size="mini" :disabled="showTagPanel" @click="openEditTags">{{
             $t("tag.edit")
           }}</el-button>
         </div>
@@ -168,14 +168,14 @@
       </div>
 
       <!-- 在Home页面渲染的侧导航条内容 -->
-      <ul v-if="$route.path === '/home' && this.name === 'main'" class="tag-ul">
-        <li class="tag" v-for="(val, key) in msg" :key="key">
+      <ul v-if="$route.path === '/home' && name === 'main'" class="tag-ul">
+        <li v-for="(val, key) in msg" :key="key" class="tag">
           <el-tooltip :disabled="overflowed.indexOf(key) == -1" effect="light" :content="key.replace(/_/g, ' ')" placement="left">
             <div class="tag belong-to-home">
               <div class="tag-div">
                 <!-- 存在标签颜色 -->
                 <div v-if="colorTagList.indexOf(val) != -1">
-                  <p v-bind:class="val" :ref="val" @click="gotoHome(key)" @click.middle="gotoHome(key, true)">
+                  <p :ref="val" :class="val" @click="gotoHome(key)" @click.middle="gotoHome(key, true)">
                     {{ key.replace(/_/g, " ") }}
                   </p>
                 </div>
@@ -190,14 +190,14 @@
           </el-tooltip>
         </li>
       </ul>
-      <ul v-if="$route.path === '/home' && this.name === 'sub'" class="tag-ul">
-        <li class="tag belong-to-home" v-for="(val, key) in msg" :key="key">
+      <ul v-if="$route.path === '/home' && name === 'sub'" class="tag-ul">
+        <li v-for="(val, key) in msg" :key="key" class="tag belong-to-home">
           <div class="tag-div">
             <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
             <!-- 根据tag名称自动渲染tag颜色 -->
             <!-- 存在标签颜色 -->
             <div v-if="colorTagList.indexOf(val) != -1">
-              <p v-bind:class="val" @click="gotoHome(val)" @click.middle="gotoHome(val, true)">
+              <p :class="val" @click="gotoHome(val)" @click.middle="gotoHome(val, true)">
                 {{ val }}
               </p>
             </div>
@@ -212,25 +212,25 @@
       </ul>
       <!-- 在Detail页面渲染的侧导航条内容 -->
       <ul v-if="$route.path === '/video'">
-        <li class="belong-to-detail" v-for="(key, val) in msg" :key="val">
-          <h3 style="display:block;">{{ tranTagCategories(val) }}</h3>
+        <li v-for="(key, val) in msg" :key="val" class="belong-to-detail">
+          <h3 style="display: block;">{{ tranTagCategories(val) }}</h3>
           <!-- 根据tag名称自动渲染tag颜色 -->
           <div class="tag-ul">
-            <div :class="val != 'Author' && 'tag'" v-for="item in key" :key="item">
+            <div v-for="item in key" :key="item" :class="val != 'Author' && 'tag'">
               <el-tooltip :disabled="overflowed.indexOf(item) == -1" effect="light" :content="item.replace(/_/g, ' ')" placement="left">
                 <!-- 存在标签颜色 -->
                 <div v-if="colorTagList.indexOf(val) != -1 && val != 'Author'">
                   <div class="tag-div">
-                    <p v-bind:class="val" :ref="val">
+                    <p :ref="val" :class="val">
                       <span @click.left="gotoHome(item)" @click.middle="gotoHome(item, true)">{{ item.replace(/_/g, " ") }}</span>
                     </p>
                   </div>
                 </div>
                 <div v-else-if="val == 'Author'">
-                  <p v-bind:class="val" :ref="val" style="display:inline;">
+                  <p :ref="val" :class="val" style="display: inline;">
                     <span @click.left="gotoHome(item)" @click.middle="gotoHome(item, true)">{{ item.replace(/_/g, " ") }}</span>
                   </p>
-                  <el-button v-if="val == 'Author'" size="mini" style="margin-left:5px;display:inline;" @click="openAuthorData(item)">详情</el-button>
+                  <el-button v-if="val == 'Author'" size="mini" style="margin-left: 5px; display: inline;" @click="openAuthorData(item)">详情</el-button>
                 </div>
                 <!-- 其他情况 -->
                 <div v-else>
@@ -250,9 +250,23 @@
 <script>
 import ShowAuthorData from "../components/ShowAuthorData.vue";
 import EditTags from "../components/EditTags";
-import pvTag from "../components/GeneralComponents/pv-tag.vue";
+// import pvTag from "../components/GeneralComponents/pv-tag.vue";
 export default {
-  components: { EditTags, ShowAuthorData, pvTag },
+  components: {
+    EditTags,
+    ShowAuthorData,
+    // pvTag
+  },
+  props: {
+    msg: {
+      type: [Object, Array],
+      required: true,
+    },
+    name: {
+      type: String,
+      default: "",
+    },
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -275,8 +289,55 @@ export default {
       // Tag 颜色列表
       colorTagList: ["Copyright", "Language", "Character", "General", "Meta", "Soundtrack", "Author"],
       // 溢出元素表
-      overflowed: []
+      overflowed: [],
     };
+  },
+  computed: {
+    // 导航条的标题
+    title() {
+      if (this.$parent.ifSearch == true && this.$route.path == "/home") {
+        return this.$t("tag.title3");
+      } else if (this.$store.state.leftNavBarTitle == 1) {
+        return this.$t("tag.title");
+      } else if (this.$store.state.leftNavBarTitle == 2) {
+        return this.$t("tag.title2");
+      } else {
+        return this.$t("tag.title");
+      }
+    },
+    // 视频的 pid
+    pid() {
+      return this.$route.query.id || "";
+    },
+    // 翻译标签名
+    tranTagCategories() {
+      return function(name) {
+        let map = {
+          General: this.$t("General"),
+          Character: this.$t("Character"),
+          Copyright: this.$t("Copyright"),
+          Author: this.$t("Author"),
+          Meta: this.$t("Meta"),
+          Language: this.$t("Language"),
+          Soundtrack: this.$t("Soundtrack"),
+        };
+        return map[name];
+      };
+    },
+  },
+  watch: {
+    // 如果标签编辑界面被关闭，则重新请求页面数据
+    showTagPanel() {
+      if (this.showTagPanel == false) {
+        this.$parent.searchVideo();
+      }
+    },
+    // 当标签发生变动时刷新溢出属性
+    msg() {
+      this.$nextTick(function() {
+        this.freshOverflow();
+      });
+    },
   },
   mounted() {
     // 查看是否登录
@@ -287,7 +348,7 @@ export default {
       this.freshOverflow();
     });
     // 监听resize
-    var _this = this;
+    let _this = this;
     window.onresize = () => {
       _this.freshOverflow();
     };
@@ -297,15 +358,15 @@ export default {
     gotoHome(key, _blank = false) {
       if (key != "") {
         if (_blank) {
-          var routerPath = this.$router.resolve({
+          let routerPath = this.$router.resolve({
             path: "/home",
-            query: { keyword: key }
+            query: { keyword: key },
           });
           window.open(routerPath.href, "_blank");
         } else {
           this.$router.push({
             path: "/home",
-            query: { keyword: key }
+            query: { keyword: key },
           });
         }
       } else {
@@ -327,7 +388,7 @@ export default {
     postVideo() {
       this.$router.push({
         path: "/postvideo",
-        query: { use_tags: this.pid }
+        query: { use_tags: this.pid },
       });
     },
     // 查看标签编辑历史
@@ -337,27 +398,27 @@ export default {
       this.axios({
         method: "post",
         url: "/be/video/tag_log.do",
-        data: { vid: this.pid, lang: localStorage.getItem("lang") }
+        data: { vid: this.pid, lang: localStorage.getItem("lang") },
       })
-        .then(res => {
+        .then((res) => {
           this.tagLog = res.data.data;
           this.loading2 = false;
         })
-        .catch(res => {
+        .catch(() => {
           this.loading2 = false;
         });
     },
     // 标签的修改日期
     tagLogDate(date) {
-      var upload_time = new Date(date);
+      let upload_time = new Date(date);
       // 设置为东八区的时间
       upload_time.setTime(upload_time.getTime());
-      var y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
-      var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-      var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-      var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
-      var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
-      var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
+      let y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+      let M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+      let d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+      let h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+      let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+      let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
       return (
         y +
         "-" +
@@ -376,9 +437,9 @@ export default {
     // 更新溢出项
     freshOverflow() {
       this.overflowed = [];
-      this.colorTagList.forEach(i => {
+      this.colorTagList.forEach((i) => {
         if (this.$refs[i]) {
-          this.$refs[i].forEach(i2 => {
+          this.$refs[i].forEach((i2) => {
             if (Math.floor(this.getTextSize(i2.innerText, "100%", '"Avenir", Helvetica, Arial, sans-serif').width) > i2.offsetWidth) {
               this.overflowed.push(i2.innerText);
             }
@@ -388,8 +449,8 @@ export default {
     },
     // 计算文本宽度
     getTextSize(text, fontSize, fontFamily) {
-      var span = document.createElement("span");
-      var result = {};
+      let span = document.createElement("span");
+      let result = {};
       result.width = span.offsetWidth;
       result.height = span.offsetHeight;
       span.style.visibility = "hidden";
@@ -406,54 +467,8 @@ export default {
       result.height = parseFloat(window.getComputedStyle(span).height) - result.height;
       document.body.removeChild(span);
       return result;
-    }
-  },
-  watch: {
-    // 如果标签编辑界面被关闭，则重新请求页面数据
-    showTagPanel() {
-      if (this.showTagPanel == false) {
-        this.$parent.searchVideo();
-      }
     },
-    // 当标签发生变动时刷新溢出属性
-    msg() {
-      this.$nextTick(function() {
-        this.freshOverflow();
-      });
-    }
   },
-  computed: {
-    // 导航条的标题
-    title() {
-      if (this.$parent.ifSearch == true && this.$route.path == "/home") {
-        return this.$t("tag.title3");
-      } else if (this.$store.state.leftNavBarTitle == 1) {
-        return this.$t("tag.title");
-      } else if (this.$store.state.leftNavBarTitle == 2) {
-        return this.$t("tag.title2");
-      }
-    },
-    // 视频的 pid
-    pid() {
-      return this.$route.query.id || "";
-    },
-    // 翻译标签名
-    tranTagCategories() {
-      return function(name) {
-        var map = {
-          General: this.$t("General"),
-          Character: this.$t("Character"),
-          Copyright: this.$t("Copyright"),
-          Author: this.$t("Author"),
-          Meta: this.$t("Meta"),
-          Language: this.$t("Language"),
-          Soundtrack: this.$t("Soundtrack")
-        };
-        return map[name];
-      };
-    }
-  },
-  props: ["msg", "name"]
 };
 </script>
 
@@ -461,8 +476,7 @@ export default {
 .belong-to-home p {
   display: inline;
 }
-.belong-to-detail {
-}
+/* .belong-to-detail {} */
 .left_list ul li p {
   cursor: pointer;
 }

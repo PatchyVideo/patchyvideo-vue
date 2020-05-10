@@ -41,7 +41,7 @@
 </i18n>
 
 <template>
-  <div style="position:relative">
+  <div style="position: relative;">
     <!-- 没有评分就提交（分数 < 1）时  弹出框 -->
 
     <el-dialog :title="$t('prompt')" :visible.sync="dialogVisible" width="30%">
@@ -54,7 +54,7 @@
 
     <!-- 主题 -->
     <span>{{ $t("score") }}</span>
-    <div class="star" v-for="index in [1, 2, 3, 4, 5]" :key="index" @click="enableListener = !enableListener">
+    <div v-for="index in [1, 2, 3, 4, 5]" :key="index" class="star" @click="enableListener = !enableListener">
       <img :src="index <= lastStar.index ? starIcon[2] : starIcon[0]" />
       <div class="left" @mouseover="starHover(index, 0)"></div>
       <div class="right" @mouseover="starHover(index, 1)"></div>
@@ -78,7 +78,10 @@ import star_half from "../static/img/star_half.png";
 import star_full from "../static/img/star_full.png";
 export default {
   props: {
-    type: ""
+    type: {
+      type: String,
+      default: "",
+    },
   },
   data: function() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -96,19 +99,19 @@ export default {
         // 序号 1 起
         index: 0,
         // 位置 左 0 右 1
-        position: 0
+        position: 0,
       },
-      data: {}
+      data: {},
     };
+  },
+  watch: {
+    pid() {
+      this.getMyScore();
+    },
+    scoreStatus() {},
   },
   created() {
     this.isLogin() ? this.getMyScore() : this.getTotalRating();
-  },
-  watch: {
-    pid: function(val) {
-      this.getMyScore();
-    },
-    scoreStatus: function(val) {}
   },
   methods: {
     // 登录跳转
@@ -116,9 +119,9 @@ export default {
       this.$store.commit("changeifRouter", "0");
     },
     getMyScore(callBack) {
-      // var url = this.type="video"?"/be/rating/get_video.do":"/be/rating/get_playlist.do ";
-      var data = {};
-      var url = "";
+      // let url = this.type="video"?"/be/rating/get_video.do":"/be/rating/get_playlist.do ";
+      let data = {};
+      let url = "";
       if (this.type == "video") {
         url = "/be/rating/get_video.do";
         data.vid = this.pid;
@@ -129,9 +132,9 @@ export default {
       this.axios({
         method: "post",
         url: url,
-        data: data
-      }).then(res => {
-        var data = res.data;
+        data: data,
+      }).then((res) => {
+        let data = res.data;
         if (data.data.reason === "NOT_RATED") {
           // 没有评分过
           this.scoreStatus = false;
@@ -149,8 +152,8 @@ export default {
       });
     },
     getTotalRating() {
-      var data = {};
-      var url = "";
+      let data = {};
+      let url = "";
       if (this.type == "video") {
         url = "/be/rating/get_video_total.do ";
         data.vid = this.pid;
@@ -161,18 +164,18 @@ export default {
       this.axios({
         method: "post",
         url: url,
-        data: data
-      }).then(res => {
+        data: data,
+      }).then((res) => {
         this.data = res.data.data;
         // console.log(this.data);
       });
     },
     showStar(num) {
-      var stars = document.getElementsByClassName("star");
-      for (var i = 0; i < stars.length; i++) {
-        var img = stars[i].getElementsByTagName("img")[0];
-        var index = parseInt(num / 2);
-        var pos = num % 2;
+      let stars = document.getElementsByClassName("star");
+      for (let i = 0; i < stars.length; i++) {
+        let img = stars[i].getElementsByTagName("img")[0];
+        let index = parseInt(num / 2);
+        let pos = num % 2;
         if (i < index && img != this.starIcon[2]) {
           img.src = this.starIcon[2];
         }
@@ -192,14 +195,14 @@ export default {
 
       this.lastStar = { index: index, position: pos };
       this.checkStar(this.lastStar.index);
-      var curStar = document.getElementsByClassName("star")[index - 1];
-      var img = curStar.getElementsByTagName("img")[0];
+      let curStar = document.getElementsByClassName("star")[index - 1];
+      let img = curStar.getElementsByTagName("img")[0];
       img.src = this.starIcon[pos + 1];
     },
     checkStar(index) {
-      var stars = document.getElementsByClassName("star");
-      for (var i = 0; i < stars.length; i++) {
-        var img = stars[i].getElementsByTagName("img")[0];
+      let stars = document.getElementsByClassName("star");
+      for (let i = 0; i < stars.length; i++) {
+        let img = stars[i].getElementsByTagName("img")[0];
         if (i < index && img != this.starIcon[2]) {
           img.src = this.starIcon[2];
           continue;
@@ -212,14 +215,14 @@ export default {
     },
 
     async submitScore() {
-      var score = (this.lastStar.index - 1) * 2 + this.lastStar.position + 1;
+      let score = (this.lastStar.index - 1) * 2 + this.lastStar.position + 1;
       if (score < 1) {
         this.dialogVisible = true;
         return;
       }
-      // var url = this.type=="video"?"/be/rating/video.do":"/be/rating/playlist.do ";
-      var data = {};
-      var url = "";
+      // let url = this.type=="video"?"/be/rating/video.do":"/be/rating/playlist.do ";
+      let data = {};
+      let url = "";
       if (this.type == "video") {
         url = "/be/rating/video.do";
         data.vid = this.pid;
@@ -232,16 +235,15 @@ export default {
       this.axios({
         method: "post",
         url: url,
-        data: data
-      }).then(res => {
-        var data = res.data;
+        data: data,
+      }).then(() => {
+        // let data = res.data;
         this.scoreStatus = true;
         this.enableListener = false;
         // console.log(data);
-        var that = this;
-        this.getMyScore(function() {
-          that.promptContent = 1;
-          that.dialogVisible = true;
+        this.getMyScore(() => {
+          this.promptContent = 1;
+          this.dialogVisible = true;
         });
       });
     },
@@ -252,8 +254,8 @@ export default {
       } else {
         return false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

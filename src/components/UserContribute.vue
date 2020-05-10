@@ -32,29 +32,29 @@
 
 <template>
   <div>
-    <div class="bigbox standard" v-loading="loading">
+    <div v-loading="loading" class="bigbox standard">
       <el-container>
         <el-aside>
-          <p v-if="this.videoCount == 0" class="nulldata-left">{{ $t("no_data") }}</p>
+          <p v-if="videoCount == 0" class="nulldata-left">{{ $t("no_data") }}</p>
           <canvas id="myChart" width="800" height="800"></canvas>
         </el-aside>
         <el-main>
-          <p v-if="this.videoCount == 0" class="nulldata-right">{{ $t("no_data") }}</p>
-          <div class="minibox" v-if="this.videoCount != 0">
+          <p v-if="videoCount == 0" class="nulldata-right">{{ $t("no_data") }}</p>
+          <div v-if="videoCount != 0" class="minibox">
             <div class="minibox_top">
               <h3>{{ $t("video_list") }}</h3>
               <span>{{ $t("video_count", { videoCount: videoCount }) }}</span>
-              <i @click="changeLine" :class="{ 'el-icon-s-grid': flag, 'el-icon-menu': !flag }"></i>
+              <i :class="{ 'el-icon-s-grid': flag, 'el-icon-menu': !flag }" @click="changeLine"></i>
             </div>
 
-            <div class="video_lineUp" v-if="flag">
+            <div v-if="flag" class="video_lineUp">
               <router-link
+                v-for="i in videoData"
+                :key="i._id.$oid"
                 class="list-item"
                 target="_blank"
                 :to="{ path: '/video', query: { id: i._id.$oid } }"
                 tag="a"
-                v-for="i in videoData"
-                :key="i._id.$oid"
               >
                 <img :src="'/images/covers/' + i.item.cover_image" alt />
                 <h4>
@@ -62,14 +62,14 @@
                 </h4>
               </router-link>
             </div>
-            <div class="video_straightColumn" v-if="!flag">
+            <div v-if="!flag" class="video_straightColumn">
               <router-link
+                v-for="i in videoData"
+                :key="i._id.$oid"
                 class="list-item"
                 target="_blank"
                 :to="{ path: '/video', query: { id: i._id.$oid } }"
                 tag="a"
-                v-for="i in videoData"
-                :key="i._id.$oid"
               >
                 <img :src="'/images/covers/' + i.item.cover_image" alt />
                 <div class="list-item_content">
@@ -84,16 +84,16 @@
           </div>
 
           <el-pagination
+            v-if="videoCount != 0"
             background
             class="page-selector"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
             layout="jumper, prev, pager, next, sizes"
-            :current-page="this.page"
+            :current-page="page"
             :total="videoCount"
             :page-size="20"
             :page-sizes="[10, 20, 30, 40]"
-            v-if="this.videoCount != 0"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
           ></el-pagination>
         </el-main>
       </el-container>
@@ -103,6 +103,7 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -130,8 +131,20 @@ export default {
       Language_count: 0,
       SoundtrackObj_count: 0,
 
-      loading: true // 读取状态
+      loading: true, // 读取状态
     };
+  },
+  watch: {
+    $route() {
+      location.reload();
+    },
+    page() {
+      this.loading = true;
+      this.getData(this.page, this.count);
+    },
+    count() {
+      this.getData(this.page, this.count);
+    },
   },
   created() {
     this.getMaxCount();
@@ -157,17 +170,17 @@ export default {
           data: {
             page: 1,
             page_size: 20,
-            lang: localStorage.getItem("lang")
-          }
+            lang: localStorage.getItem("lang"),
+          },
         })
-          .then(result => {
+          .then((result) => {
             this.TagData = result.data.data.tags;
             this.videoData = result.data.data.videos;
             this.getTagCategories();
             this.videoCount = result.data.data.count;
             this.loading = false;
           })
-          .catch(err => {});
+          .catch(() => {});
         return;
       }
       if (this.$route.params.id != "me") {
@@ -178,10 +191,10 @@ export default {
             page: 1,
             page_size: 20,
             uid: this.$route.params.id,
-            lang: localStorage.getItem("lang")
-          }
+            lang: localStorage.getItem("lang"),
+          },
         })
-          .then(result => {
+          .then((result) => {
             this.TagData = result.data.data.tags;
 
             this.videoData = result.data.data.videos;
@@ -189,7 +202,7 @@ export default {
             this.videoCount = result.data.data.count;
             this.loading = false;
           })
-          .catch(err => {});
+          .catch(() => {});
         return;
       }
     },
@@ -203,17 +216,17 @@ export default {
           data: {
             page: e,
             page_size: count,
-            lang: localStorage.getItem("lang")
-          }
+            lang: localStorage.getItem("lang"),
+          },
         })
-          .then(result => {
+          .then((result) => {
             this.TagData = result.data.data.tags;
             this.videoData = result.data.data.videos;
             this.getTagCategories();
             this.videoCount = result.data.data.count;
             this.loading = false;
           })
-          .catch(err => {});
+          .catch(() => {});
         return;
       }
       if (this.$route.params.id != "me") {
@@ -224,10 +237,10 @@ export default {
             page: e,
             page_size: count,
             uid: this.$route.params.id,
-            lang: localStorage.getItem("lang")
-          }
+            lang: localStorage.getItem("lang"),
+          },
         })
-          .then(result => {
+          .then((result) => {
             this.TagData = result.data.data.tags;
 
             this.videoData = result.data.data.videos;
@@ -235,7 +248,7 @@ export default {
             this.videoCount = result.data.data.count;
             this.loading = false;
           })
-          .catch(err => {});
+          .catch(() => {});
         return;
       }
     },
@@ -246,7 +259,7 @@ export default {
       for (let i in this.TagData) {
         AarryAll.push({
           value: this.TagData[i].count,
-          name: this.TagData[i].tag
+          name: this.TagData[i].tag,
         });
         Aarryname.push(this.TagData[i].tag);
       }
@@ -256,16 +269,16 @@ export default {
         method: "post",
         url: "be/tags/query_tag_categories.do",
         data: {
-          tags: Aarryname
-        }
-      }).then(result => {
+          tags: Aarryname,
+        },
+      }).then((result) => {
         this.totallNum(result.data.data.categorie_map);
         this.drawLine();
       });
     },
     getcount(name) {
       // 统计计数
-      return this.TagData.filter(function(element, index, array) {
+      return this.TagData.filter((element) => {
         if (element.tag == name) {
           return element.count;
         }
@@ -336,60 +349,47 @@ export default {
             {
               name: "General",
               // value: this.General_count,
-              children: this.GeneralObj
+              children: this.GeneralObj,
             },
             {
               name: "Character",
               // value: this.Character_count,
-              children: this.CharacterObj
+              children: this.CharacterObj,
             },
             {
               name: "Copyright",
               // value: this.Copyright_count,
-              children: this.CopyrightObj
+              children: this.CopyrightObj,
             },
             {
               name: "Author",
               // value: this.Author_count,
-              children: this.AuthorObj
+              children: this.AuthorObj,
             },
             {
               name: "Meta",
               // value: this.Meta_count,
-              children: this.MetaObj
+              children: this.MetaObj,
             },
             {
               name: "Language",
               // value: this.Meta_count,
-              children: this.LanguageObj
+              children: this.LanguageObj,
             },
             {
               name: "Soundtrack",
               // value: this.Meta_count,
-              children: this.SoundtrackObj
-            }
-          ]
-        }
+              children: this.SoundtrackObj,
+            },
+          ],
+        },
       });
     },
     changeLine() {
       // 切换视频排列顺序
       this.flag = !this.flag;
-    }
+    },
   },
-  components: {},
-  watch: {
-    $route() {
-      location.reload();
-    },
-    page(v) {
-      this.loading = true;
-      this.getData(this.page, this.count);
-    },
-    count(v) {
-      this.getData(this.page, this.count);
-    }
-  }
 };
 </script>
 
@@ -423,8 +423,7 @@ export default {
         height: 46px;
         overflow: hidden;
         text-overflow: ellipsis;
-        a {
-        }
+        // a {}
       }
       &:hover {
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
@@ -459,8 +458,7 @@ export default {
         height: 46px;
         overflow: hidden;
         text-overflow: ellipsis;
-        a {
-        }
+        // a {}
       }
       &:hover {
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
@@ -514,8 +512,7 @@ export default {
     }
   }
 }
-#myChart {
-}
+// #myChart {}
 .minibox {
   .minibox_top {
     position: relative;
@@ -568,8 +565,7 @@ export default {
         height: 46px;
         overflow: hidden;
         text-overflow: ellipsis;
-        a {
-        }
+        // a {}
       }
       &:hover {
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);

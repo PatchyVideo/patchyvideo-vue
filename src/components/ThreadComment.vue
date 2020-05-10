@@ -1,15 +1,25 @@
 <template>
   <div ref="sdiv">
-    <div v-html="html" :style="'all:initial;font-size:' + fontsize + 'rem;'"></div>
+    <div :style="'all:initial;font-size:' + fontsize + 'rem;'" v-html="html"></div>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    html: {
+      type: String,
+      default: "",
+    },
+    fontsize: {
+      type: Number,
+      default: 0.9,
+    },
+  },
   mounted() {
     let style = document.createElement("style");
     style.innerHTML =
-      ".hljs{display:block;overflow-x:auto;padding:.5em;color:#383a42;background:#fafafa}.hljs-comment,.hljs-quote{color:#a0a1a7;font-style:italic}.hljs-doctag,.hljs-formula,.hljs-keyword{color:#a626a4}.hljs-deletion,.hljs-name,.hljs-section,.hljs-selector-tag,.hljs-subst{color:#e45649}.hljs-literal{color:#0184bb}.hljs-addition,.hljs-attribute,.hljs-meta-string,.hljs-regexp,.hljs-string{color:#50a14f}.hljs-built_in,.hljs-class .hljs-title{color:#c18401}.hljs-attr,.hljs-number,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-pseudo,.hljs-template-variable,.hljs-type,.hljs-variable{color:#986801}.hljs-bullet,.hljs-link,.hljs-meta,.hljs-selector-id,.hljs-symbol,.hljs-title{color:#4078f2}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}.hljs-link{text-decoration:underline}";
+      ".hljs{display:block;overflow-x:auto;padding:.5em;color:#383a42;background:#fafafa}.hljs-comment,.hljs-quote{color:#a0a1a7;font-style:italic}.hljs-doctag,.hljs-formula,.hljs-keyword{color:#a626a4}.hljs-deletion,.hljs-name,.hljs-section,.hljs-selector-tag,.hljs-subst{color:#e45649}.hljs-literal{color:#0184bb}.hljs-addition,.hljs-attribute,.hljs-meta-string,.hljs-regexp,.hljs-string{color:#50a14f}.hljs-built_in,.hljs-class .hljs-title{color:#c18401}.hljs-attr,.hljs-number,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-pseudo,.hljs-template-letiable,.hljs-type,.hljs-letiable{color:#986801}.hljs-bullet,.hljs-link,.hljs-meta,.hljs-selector-id,.hljs-symbol,.hljs-title{color:#4078f2}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}.hljs-link{text-decoration:underline}";
     this.$refs.sdiv.appendChild(style);
     let styleline = document.createElement("style");
     styleline.innerHTML =
@@ -31,15 +41,5 @@ export default {
         );
       });
   },
-  props: {
-    html: {
-      type: String,
-      default: ""
-    },
-    fontsize: {
-      type: Number,
-      default: 0.9
-    }
-  }
 };
 </script>

@@ -20,7 +20,7 @@ const parserMarkdownPlugins = {
   abbr: MarkdownPluginAbbr,
   container: MarkdownPluginContainer,
   ins: MarkdownPluginIns,
-  mark: MarkdownPluginMark
+  mark: MarkdownPluginMark,
 };
 import hljs from "./hljs";
 // utils
@@ -56,7 +56,7 @@ function parse(text) {
   let t = renderText.text;
   renderText = "";
   t = t
-    .replace(/<(h[1-6]|strong|em|s|u)>[\S\s]*?<\/\1>/g, match => {
+    .replace(/<(h[1-6]|strong|em|s|u)>[\S\s]*?<\/\1>/g, (match) => {
       return tohtml(match);
     })
     .replace(/<script[^>]*?>\n?([\S\s]*?)\n?<\/script>/g, (__, p1) => {
@@ -100,7 +100,7 @@ function parserChunk(text, stack, aindex) {
     }
     return {
       l: chunkLT.index + chunkLT[0].length + t.l - 1,
-      text: text + t.text
+      text: text + t.text,
     };
   }
   // [[chunk parser:"markdown" markdown-plugin:"subscript superscript"]]www[[/chunk]]
@@ -126,7 +126,7 @@ function parserChunk(text, stack, aindex) {
     type: chunkT[1],
     index: aindex + chunkT.index,
     indexT: aindex + chunkT.index + chunkSize,
-    data: data || {}
+    data: data || {},
   });
 
   const chunkLE = text.match(/\[\[\/(\w+)\]\]/);
@@ -162,7 +162,7 @@ function parserChunk(text, stack, aindex) {
     const t = parserChunk(textE.text.slice(chunkE.index + chunkE[0].length), stack, aindex + chunkT.index + chunkSize + textE.l + chunkE[0].length - 1);
     return {
       l: chunkT.index + chunkSize + textE.l + chunkE[0].length + t.l - 1,
-      text: text + t.text
+      text: text + t.text,
     };
   }
   // <p>www</p>\n
@@ -174,7 +174,7 @@ function parserChunk(text, stack, aindex) {
   const t = parserChunk(textE.text.slice(chunkE.index + chunkE[0].length), stack, aindex + chunkT.index + chunkSize + textE.l + chunkE[0].length - 1);
   return {
     l: chunkT.index + chunkSize + textE.l + chunkE[0].length + t.l - 1,
-    text: textB + t.text
+    text: textB + t.text,
   };
 }
 
@@ -231,7 +231,7 @@ function getTextPosition(index, text) {
 function getData(text) {
   const data = [...text.matchAll(/([\w-]+):"([^"]+)"/g)];
   const b = {};
-  data.forEach(value => {
+  data.forEach((value) => {
     b[value[1]] = value[2];
   });
   return b;
@@ -324,10 +324,10 @@ function parser(type, dataList, text) {
             }
           }
           return ""; // use external default escaping
-        }
+        },
       });
       if (dataList["markdown-plugin"]) {
-        dataList["markdown-plugin"].split(" ").forEach(value => {
+        dataList["markdown-plugin"].split(" ").forEach((value) => {
           if (parserMarkdownPlugins[value]) parserMarkdown = parserMarkdown.use(parserMarkdownPlugins[value]);
         });
       }

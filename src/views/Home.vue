@@ -51,13 +51,13 @@
   <div>
     <topnavbar />
     <!-- home页面的正文 -->
-    <el-tabs type="border-card" v-model="activeName">
+    <el-tabs v-model="activeName" type="border-card">
       <el-tab-pane :label="labelInfo[0]" name="first">
-        <i @click="changeLine" :class="{ 'el-icon-s-grid': flag, 'el-icon-menu': !flag }"></i>
+        <i :class="{ 'el-icon-s-grid': flag, 'el-icon-menu': !flag }" @click="changeLine"></i>
         <homemain v-if="activeName === 'first' && !flag"></homemain>
         <girdhomemain v-if="activeName === 'first' && flag"></girdhomemain>
       </el-tab-pane>
-      <el-tab-pane :label="labelInfo[1]" name="second" v-if="isLogin()">
+      <el-tab-pane v-if="isLogin()" :label="labelInfo[1]" name="second">
         <subscribed v-if="activeName === 'second'"></subscribed>
       </el-tab-pane>
     </el-tabs>
@@ -72,6 +72,13 @@ import homemain from "../components/homecompoents/HomeMain.vue";
 import girdhomemain from "../components/homecompoents/GirdHomeMain.vue";
 import Footer from "../components/Footer.vue";
 export default {
+  components: {
+    topnavbar,
+    Footer,
+    subscribed,
+    homemain,
+    girdhomemain,
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -79,8 +86,14 @@ export default {
       // true 表示网格视图，false 表示列表视图
       flag: false,
       label: ["主页"],
-      labelInfo: ["主页", "订阅"]
+      labelInfo: ["主页", "订阅"],
     };
+  },
+  computed: {},
+  watch: {
+    $route() {
+      this.activeName = "first";
+    },
   },
   created() {
     switch (this.$store.state.homeVideoDisplayStatus) {
@@ -92,7 +105,6 @@ export default {
         break;
     }
   },
-  computed: {},
   mounted() {},
   updated() {},
   methods: {
@@ -106,20 +118,8 @@ export default {
       localStorage.setItem("homeVideoDisplayStatus", flag + 0);
       this.$store.commit("changeHomeVDS", flag + 0);
       location.reload();
-    }
+    },
   },
-  watch: {
-    $route() {
-      this.activeName = "first";
-    }
-  },
-  components: {
-    topnavbar,
-    Footer,
-    subscribed,
-    homemain,
-    girdhomemain
-  }
 };
 </script>
 

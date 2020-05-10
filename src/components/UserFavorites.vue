@@ -37,27 +37,27 @@
 
 <template>
   <div v-loading="loading">
-    <div class="data_null standard" v-if="firstmaxcount == 0">
+    <div v-if="firstmaxcount == 0" class="data_null standard">
       <p>{{ $t("no_data") }}</p>
     </div>
-    <div class="bigbox standard" v-if="firstmaxcount != 0">
+    <div v-if="firstmaxcount != 0" class="bigbox standard">
       <div class="ky-wrap">
         <el-select id="select-order" v-model="couponSelected">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
-        <el-input :placeholder="$t('search')" v-model="listSearch" clearable class="inputbox" @keyup.enter.native="searchList()">
+        <el-input v-model="listSearch" :placeholder="$t('search')" clearable class="inputbox" @keyup.enter.native="searchList()">
           <el-button slot="append" icon="el-icon-search" @click="searchList()">搜索</el-button>
         </el-input>
       </div>
 
       <div class="fav">
-        <p class="nodata" v-if="myListVideoData.length === 0">{{ $t("no_data") }}</p>
+        <p v-if="myListVideoData.length === 0" class="nodata">{{ $t("no_data") }}</p>
         <router-link
+          v-for="i in myListVideoData"
+          :key="i._id.$oid"
           target="_blank"
           :to="{ path: '/listdetail', query: { id: i._id.$oid } }"
           class="list-item"
-          v-for="i in myListVideoData"
-          :key="i._id.$oid"
           tag="a"
         >
           <img :src="'/images/covers/' + i.cover" alt />
@@ -73,13 +73,13 @@
       <el-pagination
         background
         class="page-selector"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
         layout="jumper, prev, pager, next, sizes"
-        :current-page="this.page"
+        :current-page="page"
         :total="maxcount"
         :page-size="20"
         :page-sizes="[10, 20, 30, 40]"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
       ></el-pagination>
     </div>
   </div>
@@ -100,11 +100,25 @@ export default {
       options: [
         { value: "latest", label: this.$t("latest") },
         { value: "oldest", label: this.$t("oldest") },
-        { value: "last_modified", label: this.$t("last_modified") }
+        { value: "last_modified", label: this.$t("last_modified") },
       ],
       listSearch: "",
-      loading: true
+      loading: true,
     };
+  },
+  watch: {
+    couponSelected() {
+      // 排序更改时，重新请求数据
+      this.loading = true;
+      this.getVideoMaxCount();
+    },
+    page() {
+      this.loading = true;
+      this.getVideoData(this.page, this.count);
+    },
+    count() {
+      this.getVideoData(this.page, this.count);
+    },
   },
   created() {
     this.couponSelected = this.options[0].value;
@@ -119,7 +133,7 @@ export default {
     handleSizeChange(val) {
       this.count = val;
     },
-    handleChange(val) {
+    handleChange() {
       // console.log(val);
     },
 
@@ -132,10 +146,10 @@ export default {
           data: {
             page: 1,
             page_size: 20, // 无法确认视频总个数，第一次请求仅为获取视频总个数
-            order: this.couponSelected
+            order: this.couponSelected,
           },
-          withCredentials: true
-        }).then(res => {
+          withCredentials: true,
+        }).then((res) => {
           this.firstmaxcount = res.data.data.count;
           this.maxcount = res.data.data.count;
           this.myListVideoData = res.data.data.playlists;
@@ -155,9 +169,9 @@ export default {
             page: 1,
             page_size: 20,
             uid: this.$route.params.id,
-            order: this.couponSelected
-          }
-        }).then(res => {
+            order: this.couponSelected,
+          },
+        }).then((res) => {
           this.firstmaxcount = res.data.data.count;
           this.maxcount = res.data.data.count; //获取总的视频个数制作分页后开始第二次请求获取当前页面的数据
           // this.getVideoData(this.page,this.count);
@@ -179,10 +193,10 @@ export default {
             page: e,
             page_size: count,
             query: this.listSearch,
-            order: this.couponSelected
+            order: this.couponSelected,
           },
-          withCredentials: true
-        }).then(result => {
+          withCredentials: true,
+        }).then((result) => {
           this.maxcount = result.data.data.count;
           this.myListVideoData = result.data.data.playlists;
           this.loading = false;
@@ -197,30 +211,16 @@ export default {
             page_size: count,
             uid: this.$route.params.id,
             order: this.couponSelected,
-            query: this.listSearch
-          }
-        }).then(result => {
+            query: this.listSearch,
+          },
+        }).then((result) => {
           this.maxcount = result.data.data.count;
           this.myListVideoData = result.data.data.playlists;
           this.loading = false;
         });
       }
-    }
+    },
   },
-  watch: {
-    couponSelected(val) {
-      // 排序更改时，重新请求数据
-      this.loading = true;
-      this.getVideoMaxCount();
-    },
-    page(v) {
-      this.loading = true;
-      this.getVideoData(this.page, this.count);
-    },
-    count(v) {
-      this.getVideoData(this.page, this.count);
-    }
-  }
 };
 </script>
 
@@ -305,8 +305,7 @@ export default {
           transition: all 0.1s ease;
         }
       }
-      &:hover span {
-      }
+      // &:hover span {}
     }
   }
 

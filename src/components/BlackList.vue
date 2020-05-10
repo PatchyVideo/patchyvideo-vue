@@ -47,19 +47,19 @@
 </i18n>
 
 <template>
-  <div class="black-list" v-loading="loading">
-    <el-radio-group v-model="radio" ref="radiog">
+  <div v-loading="loading" class="black-list">
+    <el-radio-group ref="radiog" v-model="radio">
       <el-card class="box-card" :class="{ select: radio !== 3 }" @click.native="selectDiv(3)">
         <div slot="header" class="clearfix">
           <el-radio :label="3">
             <span :class="{ white: radio !== 3 }">{{ $t("default_blacklist") }}</span>
           </el-radio>
         </div>
-        <div v-for="v in this.defaultBlackData" :key="v" class="text item">
+        <div v-for="v in defaultBlackData" :key="v" class="text item">
           <el-tag>{{ v }}</el-tag>
         </div>
 
-        <el-button style=" padding: 3px 0;color: #f64c59;" type="text" @click.native="changeBlackList('default')">{{ $t("use") }}</el-button>
+        <el-button style="padding: 3px 0; color: #f64c59;" type="text" @click.native="changeBlackList('default')">{{ $t("use") }}</el-button>
       </el-card>
 
       <el-card class="box-card" :class="{ select: radio !== 6 }" @click.native="selectDiv(6)">
@@ -68,44 +68,44 @@
             <span :class="{ white: radio !== 6 }">{{ $t("custom_blacklist") }}</span>
           </el-radio>
         </div>
-        <div class="text item" :class="{ white: radio !== 6 }" v-if="!textareaVisble && !inputVisible && !dynamicTags.length">
+        <div v-if="!textareaVisble && !inputVisible && !dynamicTags.length" class="text item" :class="{ white: radio !== 6 }">
           <h4>{{ $t("blacklist_empty_prompt") }}</h4>
         </div>
-        <div :key="tag" v-for="tag in dynamicTags" class="text item">
+        <div v-for="tag in dynamicTags" :key="tag" class="text item">
           <el-tag closable :disable-transitions="false" @close="handleClose(tag)">{{ tag }}</el-tag>
         </div>
         <el-autocomplete
+          v-if="inputVisible"
           id="ipt"
+          ref="saveTagInput"
           v-model="inputValue"
           :fetch-suggestions="querySearchAsync"
           :trigger-on-focus="false"
           placeholder="请输入标签"
-          @select="handleSelect"
           class="input-new-tag"
-          v-if="inputVisible"
-          ref="saveTagInput"
           size="small"
+          style="margin: 20px 0px; width: 60%;"
+          @select="handleSelect"
           @keyup.enter.native="handleInputConfirm"
           @blur="handleInputConfirm"
-          style="margin: 20px 0px; width: 60%;"
         >
           <template slot-scope="{ item }">
             <div class="adviceList">
               <div
                 class="name"
-                v-bind:class="{
+                :class="{
                   Copyright: item.cat === 2,
                   Language: item.cat === 5,
                   Character: item.cat === 1,
                   Author: item.cat === 3,
                   General: item.cat === 0,
                   Meta: item.cat === 4,
-                  Soundtrack: item.cat === 6
+                  Soundtrack: item.cat === 6,
                 }"
               >
                 {{ item.tag }}
               </div>
-              <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
+              <div v-if="item.cnt != null" class="addr">{{ item.cnt }}</div>
             </div>
           </template>
         </el-autocomplete>
@@ -121,16 +121,16 @@
         ></el-input>-->
         <el-input
           v-if="textareaVisble"
-          type="textarea"
           ref="saveTagTextArea"
-          @blur="handleTextAreaConfirm"
+          v-model="textareaValue"
+          type="textarea"
           :autosize="{ minRows: 8 }"
           :placeholder="$t('blacklist_enter_prompt')"
-          v-model="textareaValue"
           style="margin: 20px 0px;"
+          @blur="handleTextAreaConfirm"
         ></el-input>
 
-        <div style="display:flex;">
+        <div style="display: flex;">
           <el-button v-if="!inputVisible && !textareaVisble" class="button-new-tag" type="primary" size="small" @click="showInput">{{
             $t("add_blacklist")
           }}</el-button>
@@ -142,7 +142,7 @@
           }}</el-button>
         </div>
 
-        <el-button style="padding:3px 0;color:#f64c59;" type="text" @click.native="changeBlackList(dynamicTags)">{{ $t("use") }}</el-button>
+        <el-button style="padding: 3px 0; color: #f64c59;" type="text" @click.native="changeBlackList(dynamicTags)">{{ $t("use") }}</el-button>
       </el-card>
     </el-radio-group>
   </div>
@@ -150,6 +150,7 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -161,7 +162,7 @@ export default {
       textareaVisble: false,
       inputValue: "",
       textareaValue: "",
-      loading: true
+      loading: true,
     };
   },
   created() {
@@ -179,13 +180,13 @@ export default {
 
     showInput() {
       this.inputVisible = true;
-      this.$nextTick(_ => {
+      this.$nextTick(() => {
         this.$refs.saveTagInput.$refs.input.focus();
       });
     },
     showTextarea() {
       this.textareaVisble = true;
-      this.$nextTick(_ => {
+      this.$nextTick(() => {
         this.$refs.saveTagTextArea.$refs.textarea.focus();
       });
     },
@@ -197,8 +198,8 @@ export default {
           this.axios({
             method: "post",
             url: "be/tags/query_tag_categories.do ",
-            data: { tags: [inputValue] }
-          }).then(res => {
+            data: { tags: [inputValue] },
+          }).then((res) => {
             if (JSON.stringify(res.data.data.categorie_map) === "{}") {
               this.$message.error(this.$t("tag_notexist_prompt"));
               this.inputValue = "";
@@ -207,7 +208,7 @@ export default {
             } else if (this.dynamicTags.indexOf(inputValue) !== -1) {
               this.$message({
                 message: this.$t("tag_already_exist_prompt"),
-                type: "warning"
+                type: "warning",
               });
               this.inputValue = "";
               return;
@@ -237,8 +238,8 @@ export default {
         this.axios({
           method: "post",
           url: "be/tags/query_tag_categories.do ",
-          data: { tags: textareaValue }
-        }).then(res => {
+          data: { tags: textareaValue },
+        }).then((res) => {
           if (textareaValue.length === 0) {
             this.textareaVisble = false;
             return;
@@ -262,18 +263,18 @@ export default {
       this.textareaValue = "";
     },
     querySearchAsync(queryString, cb) {
-      var url = "/autocomplete/?q=" + queryString;
+      let url = "/autocomplete/?q=" + queryString;
       this.axios({
         method: "get",
-        url: url
-      }).then(result => {
+        url: url,
+      }).then((result) => {
         this.taglist = result.data;
         cb(result.data);
       });
     },
     // 搜索输入框内的搜索文字是否包含网站内容
     createFilter(query) {
-      return sites => {
+      return (sites) => {
         return sites.tag.toLowerCase().indexOf(query.toLowerCase()) === 0;
       };
     },
@@ -284,8 +285,8 @@ export default {
       this.axios({
         method: "post",
         url: "be/tags/get_default_blacklist.do",
-        data: { lang: localStorage.getItem("lang") }
-      }).then(res => {
+        data: { lang: localStorage.getItem("lang") },
+      }).then((res) => {
         this.defaultBlackData = res.data.data.tags;
         this.getBlackList();
       });
@@ -300,8 +301,8 @@ export default {
       this.axios({
         method: "post",
         url: "be/user/get_blacklist.do",
-        data: { lang: localStorage.getItem("lang") }
-      }).then(res => {
+        data: { lang: localStorage.getItem("lang") },
+      }).then((res) => {
         this.blackData = res.data.data;
         if (res.data.data === "default" || JSON.stringify(this.defaultBlackData) === JSON.stringify(this.blackData)) {
           this.dynamicTags = [];
@@ -321,19 +322,18 @@ export default {
       this.axios({
         method: "post",
         url: "be/user/changeblacklist.do",
-        data: { blacklist: data }
-      }).then(res => {
+        data: { blacklist: data },
+      }).then(() => {
         this.$message({
           message: this.$t("update_successed"),
-          type: "success"
+          type: "success",
         });
         this.getBlackList();
 
         this.loading = false;
       });
-    }
+    },
   },
-  components: {}
 };
 </script>
 
@@ -368,8 +368,7 @@ export default {
 .el-tag {
   margin: 0px 3px;
 }
-.black-list {
-}
+// .black-list {}
 .text item {
   background-color: #99a9bf;
 }

@@ -63,11 +63,12 @@ import usermanagemennt from "../components/admincompoents/UserManagement.vue";
 import logview from "../components/admincompoents/LogView.vue";
 import parasettings from "../components/admincompoents/ParaSettings.vue";
 export default {
+  components: { topnavbar, Footer, usermanagemennt, logview, parasettings },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       activeName: "second",
-      admin: false
+      admin: false,
     };
   },
   created() {
@@ -79,18 +80,17 @@ export default {
       this.axios({
         method: "post",
         url: "/be/user/myprofile.do",
-        data: {}
-      }).then(ret => {
-        var status = ret.data.data.access_control.status;
+        data: {},
+      }).then((ret) => {
+        let status = ret.data.data.access_control.status;
         if (status !== "admin") {
           this.$router.push({ path: "*" });
         } else {
           this.admin = true;
         }
       });
-    }
+    },
   },
-  components: { topnavbar, Footer, usermanagemennt, logview, parasettings }
 };
 </script>
 

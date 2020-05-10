@@ -52,13 +52,13 @@
 <template>
   <div class="loginPic">
     <!-- 重置密码框正文 -->
-    <div class="w" v-loading="loading">
+    <div v-loading="loading" class="w">
       <!-- 标题 -->
       <h1>
         <router-link to="/home">PatchyVideo</router-link>
       </h1>
       <div class="top in">
-        <h3 style="color:#909399">{{ $t("reset_psd") }}</h3>
+        <h3 style="color: #909399;">{{ $t("reset_psd") }}</h3>
       </div>
 
       <!-- 新密码的框 -->
@@ -66,9 +66,9 @@
         <el-form-item prop="password1">
           <el-input
             id="password1"
+            v-model="FormRef.password1"
             name="password1"
             type="password"
-            v-model="FormRef.password1"
             :placeholder="$t('psd_input_tip')"
             prefix-icon="el-icon-lock"
           ></el-input>
@@ -76,9 +76,9 @@
         <el-form-item prop="password2">
           <el-input
             id="password2"
+            v-model="FormRef.password2"
             name="password2"
             type="password"
-            v-model="FormRef.password2"
             :placeholder="$t('repeat_input_tip')"
             prefix-icon="el-icon-key"
           ></el-input>
@@ -87,7 +87,7 @@
 
       <!-- 登录按钮 -->
       <div class="bottom in">
-        <div @click="resetpass()" class="login in">{{ $t("reset_psd") }}</div>
+        <div class="login in" @click="resetpass()">{{ $t("reset_psd") }}</div>
       </div>
     </div>
   </div>
@@ -95,9 +95,10 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
-    var validatePass2 = (rule, value, callback) => {
+    let validatePass2 = (rule, value, callback) => {
       if (value !== this.FormRef.password1) {
         callback(new Error(this.$t("err_tip")));
       } else {
@@ -108,26 +109,26 @@ export default {
       // 邮件地址
       FormRef: {
         password1: "",
-        password2: ""
+        password2: "",
       },
       // 校验密码
       rules: {
         password1: [
           { required: true, message: this.$t("input_psd"), trigger: "blur" },
-          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" }
+          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" },
         ],
         password2: [
           {
             required: true,
             message: this.$t("repeat_input_tip"),
-            trigger: "blur"
+            trigger: "blur",
           },
           { validator: validatePass2, trigger: "blur" },
-          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" }
-        ]
+          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" },
+        ],
       },
       // 视频列表是否属于加载状态的判断
-      loading: false
+      loading: false,
     };
   },
   computed: {
@@ -137,7 +138,7 @@ export default {
       } else {
         return "";
       }
-    }
+    },
   },
   created() {
     // 初始化页面名为 login
@@ -154,16 +155,16 @@ export default {
       // 先使页面出于加载状态
       this.loading = true;
       // 表单验证
-      this.$refs.FormRef.validate(valid => {
+      this.$refs.FormRef.validate((valid) => {
         if (valid) {
           this.axios({
             method: "post",
             url: "be/user/resetpass.do",
             data: {
               reset_key: this.reset_key,
-              new_pass: this.FormRef.password1
-            }
-          }).then(result => {
+              new_pass: this.FormRef.password1,
+            },
+          }).then((result) => {
             this.loading = false;
             if (result.data.status == "FAILED") {
               this.open();
@@ -181,17 +182,16 @@ export default {
     open() {
       this.$message({
         message: this.$t("fail_msg"),
-        type: "error"
+        type: "error",
       });
     },
     open2() {
       this.$message({
         message: this.$t("success_msg"),
-        type: "success"
+        type: "success",
       });
-    }
+    },
   },
-  components: {}
 };
 </script>
 

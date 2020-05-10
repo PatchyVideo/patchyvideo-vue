@@ -35,18 +35,18 @@
       <p v-else>本视频没有分P</p>
     </div>
     <div
-      class="PagesDetail"
       v-if="videoPages != 1"
       v-loading="loading"
+      class="PagesDetail"
       element-loading-text="加载分P中"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(255,255,255,1)"
     >
       <div
-        class="PageItems"
         v-for="(item, index) in pagesDetailOfThisPage"
         :key="index"
-        v-bind:class="{ PageItemsActive: item.id == $route.query.id }"
+        class="PageItems"
+        :class="{ PageItemsActive: item.id == $route.query.id }"
         @click="
           () => {
             if (!item.loading) pageOpts(item.page - 1);
@@ -60,14 +60,14 @@
       >
         <span>P{{ item.page }}&nbsp;</span>
         <span class="PageName">{{ item.part || "" }}&nbsp;</span>
-        <span v-if="item.loading" style="color:#909399">
+        <span v-if="item.loading" style="color: #909399;">
           获取索引状态中
           <i class="el-icon-loading"></i>
         </span>
-        <div v-else style="display:inline">
-          <span style="color:#67C23A;font-size:12px" v-if="item.isPosted">已索引</span>
+        <div v-else style="display: inline;">
+          <span v-if="item.isPosted" style="color: #67c23a; font-size: 12px;">已索引</span>
           <span v-else>
-            <span style="color:#F56C6C;font-size:12px">未索引!</span>
+            <span style="color: #f56c6c; font-size: 12px;">未索引!</span>
             <span class="PostNewIndex">点击添加此分P的索引</span>
           </span>
         </div>
@@ -75,7 +75,7 @@
     </div>
 
     <!-- 分P分页 -->
-    <div style="text-align:center">
+    <div style="text-align: center;">
       <el-pagination
         layout="prev, pager, next"
         :total="videoPages"
@@ -90,9 +90,13 @@
 
 <script>
 export default {
+  components: {},
   props: {
     // 视频的av号
-    aid: { type: String }
+    aid: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -112,14 +116,19 @@ export default {
       // 需要发布索引的分P对象
       postingPage: {},
       // 对于未被索引的视频，发布索引中的标志
-      indexPosting: false
+      indexPosting: false,
     };
   },
   computed: {
     // 分P信息详情（当前页）
     pagesDetailOfThisPage() {
       return this.pagesDetail.slice((this.currentPage - 1) * this.pageCount, Math.min(this.videoPages, this.currentPage * this.pageCount));
-    }
+    },
+  },
+  watch: {
+    aid() {
+      this.getVideoPages();
+    },
   },
   created() {},
   mounted() {},
@@ -129,9 +138,9 @@ export default {
       this.loading = true;
       await this.axios({
         method: "get",
-        url: `/proxy/bili/x/player/pagelist?aid=${this.aid}&jsonp=jsonp`
+        url: `/proxy/bili/x/player/pagelist?aid=${this.aid}&jsonp=jsonp`,
       })
-        .then(res => {
+        .then((res) => {
           this.videoPages = res.data.data.length;
           this.pagesDetail = res.data.data;
           // 为每个分P增加一个URL属性方便查询
@@ -141,7 +150,7 @@ export default {
           }
           this.ifPosted();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
       this.loading = false;
@@ -152,10 +161,10 @@ export default {
         method: "post",
         url: "be/getvideo_url_batch.do",
         data: {
-          urls: this.pagesDetailOfThisPage.map(item => item.url)
-        }
+          urls: this.pagesDetailOfThisPage.map((item) => item.url),
+        },
       })
-        .then(res => {
+        .then((res) => {
           if (res.data.status == "SUCCEED") {
             // 因为pagesDetailOfThisPage是计算属性不能直接修改，这里直接修改pagesDetail
             this.pagesDetail = this.pagesDetail.map((item, index) => {
@@ -178,7 +187,7 @@ export default {
             });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           this.pagesDetail = this.pagesDetail.map((item, index) => {
             if (index >= (this.currentPage - 1) * this.pageCount && index < Math.min(this.videoPages, this.currentPage * this.pageCount)) {
@@ -203,11 +212,11 @@ export default {
       }
       if (this.pagesDetail[index].isPosted) {
         if (_blank) {
-          var routerPath = this.$router.resolve({
+          let routerPath = this.$router.resolve({
             path: "/video",
             query: {
-              id: this.pagesDetail[index].id
-            }
+              id: this.pagesDetail[index].id,
+            },
           });
           window.open(routerPath.href, "_blank");
         } else
@@ -215,32 +224,26 @@ export default {
             .push({
               path: "/video",
               query: {
-                id: this.pagesDetail[index].id
-              }
+                id: this.pagesDetail[index].id,
+              },
             })
-            .catch(err => {});
+            .catch(() => {});
       } else {
-        var routerPath = this.$router.resolve({
+        let routerPath = this.$router.resolve({
           path: "/postvideo",
           query: {
             use_tags: this.$route.query.id,
             url: this.pagesDetail[index].url,
-            type: this.$parent.myVideoData.video.item.repost_type
-          }
+            type: this.$parent.myVideoData.video.item.repost_type,
+          },
         });
         window.open(routerPath.href, "_blank");
 
         // this.postingPage = this.pagesDetail[index];
         // this.confirmPosting = true;
       }
-    }
+    },
   },
-  watch: {
-    aid() {
-      this.getVideoPages();
-    }
-  },
-  components: {}
 };
 </script>
 

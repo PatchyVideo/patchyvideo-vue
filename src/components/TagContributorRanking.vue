@@ -1,16 +1,16 @@
 <template>
-  <div class="bang" v-loading="loading">
+  <div v-loading="loading" class="bang">
     <div style="height: 35px;">
       <transition name="anime-left">
-        <div v-show="this.loading === false" style="height: 35px;">
+        <div v-show="loading === false" style="height: 35px;">
           <el-select id="select-order" v-model="couponSelected">
-            <el-option style="text-align: center;" v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option v-for="item in options" :key="item.value" style="text-align: center;" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </div>
       </transition>
     </div>
 
-    <div v-for="(item, i) in ranking" v-bind:key="i">
+    <div v-for="(item, i) in ranking" :key="i">
       <div class="list-item" :class="{ top: i === 0, second: i === 1, three: i === 2 }">
         <h1 class="rank">{{ i + 1 }}</h1>
 
@@ -39,16 +39,23 @@ export default {
         { value: 24 * 7 * 52 * 10, label: "至今为止" },
         { value: 24 * 30, label: "过去一个月" },
         { value: 24 * 7, label: "过去一周" },
-        { value: 24 * 1, label: "过去一天" }
+        { value: 24 * 1, label: "过去一天" },
       ],
       couponSelected: "",
       loading: true,
       timeSpan: 24 * 7 * 52 * 10, // 过去一周
       displaySize: 30, // 显示前 30 个
-      ranking: []
+      ranking: [],
     };
   },
   computed: {},
+  watch: {
+    couponSelected() {
+      //排序更改时，重新请求数据
+      this.loading = true;
+      this.loadData();
+    },
+  },
   created() {
     this.couponSelected = this.options[0].value;
     this.loadData();
@@ -65,22 +72,15 @@ export default {
         url: "/be/ranking/tag_contributor.do",
         data: {
           hrs: this.couponSelected,
-          size: this.displaySize
-        }
-      }).then(result => {
-        var data = result.data.data;
+          size: this.displaySize,
+        },
+      }).then((result) => {
+        let data = result.data.data;
         this.ranking = data;
         this.loading = false;
       });
-    }
+    },
   },
-  watch: {
-    couponSelected(val) {
-      //排序更改时，重新请求数据
-      this.loading = true;
-      this.loadData();
-    }
-  }
 };
 </script>
 <style scoped lang="less">

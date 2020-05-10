@@ -1,9 +1,9 @@
 <template>
-  <div class="bang" v-loading="loading">
-    <h2 v-if="this.error">网络受到了异常波动！魔法代码：{{ btoa(this.error) }}</h2>
+  <div v-loading="loading" class="bang">
+    <h2 v-if="error">网络受到了异常波动！魔法代码：{{ btoa(error) }}</h2>
 
     <ul>
-      <li v-for="(item, index) in hisList" v-bind:key="index">
+      <li v-for="(item, index) in hisList" :key="index">
         <div v-if="item.add.length > 0 || item.del.length > 0">
           <div class="list-item">
             <div class="video-thumbnail">
@@ -12,7 +12,7 @@
             </div>
             <div class="video-title">
               <h4>
-                <img :src="require('../static/img/' + item.video_obj[0].item.site + '.png')" width="16px" style="margin-right:2px;display:inline;" />
+                <img :src="require('../static/img/' + item.video_obj[0].item.site + '.png')" width="16px" style="margin-right: 2px; display: inline;" />
                 <router-link target="_blank" :to="{ path: '/video', query: { id: item.vid.$oid } }" tag="a">{{ item.video_obj[0].item.title }}</router-link>
               </h4>
             </div>
@@ -28,13 +28,13 @@
               <div class="titleTag">
                 <div v-if="item.add.length > 0" class="tag">
                   添加：
-                  <div class="tag-div tag-add" v-for="(val, key) in item.add" :key="key">
+                  <div v-for="(val, key) in item.add" :key="key" class="tag-div tag-add">
                     <p @click="gotoHome(val)">{{ val }}</p>
                   </div>
                 </div>
                 <div v-if="item.del.length > 0" class="tag">
                   删除：
-                  <div class="tag-div tag-del" v-for="(val, key) in item.del" :key="key">
+                  <div v-for="(val, key) in item.del" :key="key" class="tag-div tag-del">
                     <p @click="gotoHome(val)">{{ val }}</p>
                   </div>
                 </div>
@@ -51,13 +51,13 @@
     <el-pagination
       background
       class="page-selector"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
       layout="jumper, prev, pager, next, sizes"
-      :current-page="this.page"
-      :page-count="this.maxPage"
+      :current-page="page"
+      :page-count="maxPage"
       :page-size="20"
       :page-sizes="[10, 20, 30, 40]"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
     ></el-pagination>
   </div>
 </template>
@@ -74,7 +74,7 @@ export default {
       page: 1,
       maxPage: 50,
       pageSize: 20,
-      GMT: 99 // 99 的时候为当前时区
+      GMT: 99, // 99 的时候为当前时区
     };
   },
   computed: {},
@@ -86,7 +86,7 @@ export default {
     // 点击标签显示标签的搜索结果
     gotoHome(key) {
       if (key != "") {
-        this.$router.push({ path: "/home", query: { keyword: key } }).catch(err => {
+        this.$router.push({ path: "/home", query: { keyword: key } }).catch((err) => {
           return err;
         });
       } else {
@@ -98,7 +98,7 @@ export default {
       this.loadData();
     },
     handleSizeChange(val) {
-      var page = Math.floor((this.page * this.pageSize) / val);
+      let page = Math.floor((this.page * this.pageSize) / val);
       this.page = page || 1;
       this.pageSize = val;
       this.loadData();
@@ -120,11 +120,11 @@ export default {
           data: {
             page: this.page,
             page_size: this.pageSize,
-            lang: this.$i18n.locale
-          }
+            lang: this.$i18n.locale,
+          },
         })
-          .then(result => {
-            var data = result.data.data;
+          .then((result) => {
+            let data = result.data.data;
             this.hisList = data;
             this.loading = false;
             // 回到顶部
@@ -133,7 +133,7 @@ export default {
               $("html").animate({ scrollTop: 0 }, 100);
             }
           })
-          .catch(error => {
+          .catch((error) => {
             this.error = error.message;
             this.hisList = [];
             this.loading = false;
@@ -147,9 +147,9 @@ export default {
           data: {
             page: this.page + 1,
             page_size: this.pageSize,
-            lang: this.$i18n.locale
-          }
-        }).then(result => {
+            lang: this.$i18n.locale,
+          },
+        }).then((result) => {
           if (result.data.data.length > 0) {
             this.dataNextPage = result.data.data;
             this.maxPage++;
@@ -163,28 +163,28 @@ export default {
     // 将时间戳转换为时间字符串
     // time: 时间戳 GMT:时区 (数字：-12~12)
     date2str(time, GMT) {
-      var upload_time = new Date(time);
+      let upload_time = new Date(time);
       // 获得当前时区
-      var currentGMT = 0 - upload_time.getTimezoneOffset() / 60;
+      let currentGMT = 0 - upload_time.getTimezoneOffset() / 60;
       if (GMT >= -12 && GMT <= 14) {
         // 时区差
-        var GMToffset = GMT - (0 - currentGMT);
+        let GMToffset = GMT - (0 - currentGMT);
         // 设置为对应时区的时间
         upload_time.setTime(upload_time.getTime() + 1000 * 3600 * GMToffset);
         currentGMT = GMT;
       }
-      var year = upload_time.getFullYear(); // getFullYear 方法以四位数字返回年份
-      var month = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-      var days = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-      var hours = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
-      var minutes = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
-      var seconds = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
+      let year = upload_time.getFullYear(); // getFullYear 方法以四位数字返回年份
+      let month = upload_time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+      let days = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+      let hours = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+      let minutes = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+      let seconds = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
 
       return `${year}-${(Array(2).join(0) + month).slice(-2)}-${(Array(2).join(0) + days).slice(-2)} ${(Array(2).join(0) + hours).slice(-2)}:${(
         Array(2).join(0) + minutes
       ).slice(-2)}:${(Array(2).join(0) + seconds).slice(-2)} (GMT${currentGMT >= 0 ? "+" : ""}${currentGMT})`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped lang="less">

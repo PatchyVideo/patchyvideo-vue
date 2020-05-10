@@ -1,5 +1,5 @@
 <template>
-  <div style="display:inline-flex;margin-right: 10px;">
+  <div style="display: inline-flex; margin-right: 10px;">
     <!--<el-input :class="newClass" v-model="newValue" style="margin-right: 5px;">
       <template v-if="newValue">
         <template v-if="loading">
@@ -26,25 +26,25 @@
     >
       <template v-if="newValue">
         <template v-if="loading">
-          <i slot="suffix" class="el-input__icon el-icon-loading" style="color:#E6A23C;"></i>
+          <i slot="suffix" class="el-input__icon el-icon-loading" style="color: #e6a23c;"></i>
         </template>
         <template v-else>
-          <i slot="suffix" class="el-input__icon el-icon-success" style="color:#67C23A;" v-if="nouse"></i>
-          <i slot="suffix" class="el-input__icon el-icon-error" style="color:#F56C6C;" v-else></i>
+          <i v-if="nouse" slot="suffix" class="el-input__icon el-icon-success" style="color: #67c23a;"></i>
+          <i v-else slot="suffix" class="el-input__icon el-icon-error" style="color: #f56c6c;"></i>
         </template>
       </template>
       <template slot-scope="{ item }">
         <div class="adviceList">
           <div
             class="name"
-            v-bind:class="{
+            :class="{
               Copyright: item.cat == 2,
               Language: item.cat == 5,
               Character: item.cat == 1,
               Author: item.cat == 3,
               General: item.cat == 0,
               Meta: item.cat == 4,
-              Soundtrack: item.cat == 6
+              Soundtrack: item.cat == 6,
             }"
             v-html="item.tag || ConvertLangRes(item.langs)"
           ></div>
@@ -66,19 +66,32 @@
 <script>
 export default {
   props: {
-    checkValue: { type: String },
-    checkValueAsync: { type: Function },
-    popperClass: { type: String },
-    placeholder: { type: String },
-    value: { type: String },
-    CheckStatus: { type: Number }
+    checkValue: {
+      type: String,
+      default: "",
+    },
+    popperClass: {
+      type: String,
+      default: "",
+    },
+    placeholder: {
+      type: String,
+      default: "",
+    },
+    value: {
+      type: String,
+      default: "",
+    },
+    checkStatus: {
+      type: Number,
+      default: 0,
+    },
   },
-  created() {},
   data() {
     return {
       newValue: "",
       nouse: true,
-      loading: false
+      loading: false,
     };
   },
   watch: {
@@ -88,77 +101,78 @@ export default {
     newValue(newValue, oldValue) {
       if (newValue !== oldValue) {
         this.$emit("input", this.newValue);
-        if (typeof this.checkValueAsync == "function") {
+        if (this.$listeners.checkValueAsync) {
           // this.CheckAysnc(newValue);
         } else {
           this.Check(newValue);
         }
       }
-    }
+    },
   },
+  created() {},
   methods: {
     Check(Value) {
       if (typeof this.checkValue == "undefined") {
         this.nouse = Value;
-        this.$emit("update:CheckStatus", this.nouse ? 1 : -1);
+        this.$emit("update:checkStatus", this.nouse ? 1 : -1);
       } else if (typeof this.checkValue == "string") {
         this.nouse = Value != this.checkValue;
-        this.$emit("update:CheckStatus", this.nouse ? 1 : -1);
+        this.$emit("update:checkStatus", this.nouse ? 1 : -1);
       }
       this.nouse = false;
-      this.$emit("update:CheckStatus", -1);
+      this.$emit("update:checkStatus", -1);
     },
     CheckAysnc(Value, callback) {
       if (!Value) return false;
-      this.$emit("update:CheckStatus", 0);
+      this.$emit("update:checkStatus", 0);
       this.loading = true;
-      Value = Value.replace(/\ /g, "_");
-      this.checkValueAsync(Value, res => {
-        var value = this.value;
-        value = value.replace(/\ /g, "_");
+      Value = Value.replace(/ /g, "_");
+      this.$emit("check-value-async", Value, (res) => {
+        let value = this.value;
+        value = value.replace(/ /g, "_");
         if (Value != value) {
-          this.$emit("update:CheckStatus", 0);
+          this.$emit("update:checkStatus", 0);
           this.loading = true;
           return false;
         }
-        var resultarr = [];
-        res.map(v => v.langs.map(val => resultarr.push(val.w)));
-        var result = resultarr.filter(v => v == Value);
+        let resultarr = [];
+        res.map((v) => v.langs.map((val) => resultarr.push(val.w)));
+        let result = resultarr.filter((v) => v == Value);
         this.nouse = result.length <= 0;
-        this.$emit("update:CheckStatus", result.length <= 0 ? 1 : -1);
+        this.$emit("update:checkStatus", result.length <= 0 ? 1 : -1);
         this.loading = false;
         return callback(res);
       });
       this.nouse = false;
-      this.$emit("update:CheckStatus", -1);
+      this.$emit("update:checkStatus", -1);
     },
     ConvertLangRes(langs, hastran = true) {
       if (!langs) return;
-      var LangList = [
+      let LangList = [
         { id: 1, lang: "CHS" },
         { id: 2, lang: "CHT" },
         { id: 5, lang: "ENG" },
-        { id: 10, lang: "JPN" }
+        { id: 10, lang: "JPN" },
       ];
-      var level = [10, 5, 1, 2];
-      var Lang = "";
-      var mainLang = "";
-      var subLang = "";
+      let level = [10, 5, 1, 2];
+      let Lang = "";
+      let mainLang = "";
+      let subLang = "";
       // 经过一系列计算得出主副语言
 
       // 匹配当前语言的 ID
-      var CurrLangID = LangList.find(x => {
+      let CurrLangID = LangList.find((x) => {
         return x.lang == this.$i18n.locale;
       });
       CurrLangID = CurrLangID ? CurrLangID.id : 1;
 
       // 匹配对应 ID 的内容
-      var CurrLangWord = langs.find(x => {
+      let CurrLangWord = langs.find((x) => {
         return x.l == CurrLangID;
       });
       if (!CurrLangWord) {
-        for (var i = 0; i < level.length; i++) {
-          CurrLangWord = langs.find(x => {
+        for (let i = 0; i < level.length; i++) {
+          CurrLangWord = langs.find((x) => {
             return x.l == level[i];
           });
           if (CurrLangWord) break;
@@ -169,10 +183,10 @@ export default {
       if (hastran) {
         // 副语言匹配
         // 优先级：日语，英语，简体中文，繁体中文
-        var SubLangWord = null;
-        for (var i = 0; i < level.length; i++) {
+        let SubLangWord = null;
+        for (let i = 0; i < level.length; i++) {
           if (level[i] == CurrLangWord.l) continue;
-          SubLangWord = langs.find(x => {
+          SubLangWord = langs.find((x) => {
             return x.l == level[i];
           });
           if (SubLangWord) break;
@@ -180,14 +194,14 @@ export default {
         subLang = SubLangWord ? SubLangWord.w : mainLang;
 
         // 合成语言
-        Lang = `${mainLang.replace(/\_/g, " ")}`;
-        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/\_/g, " ")}</span>`;
+        Lang = `${mainLang.replace(/_/g, " ")}`;
+        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/_/g, " ")}</span>`;
       } else {
         Lang = mainLang;
       }
       return Lang;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

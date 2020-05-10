@@ -42,21 +42,21 @@
 
 <template>
   <div class="loginPic">
-    <div class="w" v-loading="loading">
+    <div v-loading="loading" class="w">
       <h1>
         <router-link to="/home">PatchyVideo</router-link>
       </h1>
       <div class="top in">
-        <h3 style="color:#909399">{{ $t("reset_psd") }}</h3>
+        <h3 style="color: #909399;">{{ $t("reset_psd") }}</h3>
       </div>
 
       <el-form ref="FormRef" :model="FormRef" class="middle in" :rules="rules">
         <el-form-item prop="email">
           <el-input
             id="email"
+            v-model="FormRef.email"
             name="email"
             type="email"
-            v-model="FormRef.email"
             clearable
             :placeholder="$t('input_tip')"
             prefix-icon="el-icon-message"
@@ -67,7 +67,7 @@
 
       <!-- 登录按钮 -->
       <div class="bottom in">
-        <div @click="resetpass()" class="login in">{{ $t("button") }}</div>
+        <div class="login in" @click="resetpass()">{{ $t("button") }}</div>
       </div>
     </div>
   </div>
@@ -75,22 +75,23 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 邮件地址
       FormRef: {
-        email: ""
+        email: "",
       },
       // 校验地址
       rules: {
         email: [
           { required: true, message: this.$t("email_tip"), trigger: "blur" },
-          { type: "email", message: this.$t("err_tip"), trigger: ["blur"] }
-        ]
+          { type: "email", message: this.$t("err_tip"), trigger: ["blur"] },
+        ],
       },
       // 视频列表是否属于加载状态的判断
-      loading: false
+      loading: false,
     };
   },
   created() {
@@ -108,16 +109,16 @@ export default {
       // 先使页面出于加载状态
       this.loading = true;
       // 表单验证
-      this.$refs.FormRef.validate(valid => {
+      this.$refs.FormRef.validate((valid) => {
         if (valid) {
           this.axios({
             method: "post",
             url: "be/user/request_resetpass.do",
             data: {
               email: this.FormRef.email,
-              lang: localStorage.getItem("lang")
-            }
-          }).then(result => {
+              lang: localStorage.getItem("lang"),
+            },
+          }).then((result) => {
             this.loading = false;
             if (result.data.status == "FAILED") {
               this.open();
@@ -135,17 +136,16 @@ export default {
     open() {
       this.$message({
         message: "验证失败,请检查邮箱地址是否正确！",
-        type: "error"
+        type: "error",
       });
     },
     open2() {
       this.$message({
         message: "邮件发送成功，请查收！",
-        type: "success"
+        type: "success",
       });
-    }
+    },
   },
-  components: {}
 };
 </script>
 

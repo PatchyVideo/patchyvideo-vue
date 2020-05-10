@@ -111,7 +111,7 @@
 </i18n>
 
 <template>
-  <div v-show="visible" v-loading="loading" ref="aside">
+  <div v-show="visible" ref="aside" v-loading="loading">
     <el-dialog :title="$t('tip')" :visible.sync="dialogVisible" :modal-append-to-body="false" width="30%">
       <span>{{ $t("confirm_tip") }}</span>
       <span slot="footer" class="dialog-footer">
@@ -136,11 +136,11 @@
     >
       <el-form ref="createNewFolderForm" label-width="auto" :rules="folderNameRules" :model="newFolderForm">
         <el-form-item :label="$t('name')" prop="name">
-          <el-input :placeholder="$t('name')" v-model="newFolderForm.name"></el-input>
+          <el-input v-model="newFolderForm.name" :placeholder="$t('name')"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="createFolder" style="width:80%" :loading="loading">{{ $t("add") }}</el-button>
-          <el-button @click="showNewFolderDialog = false" style="width:80%;margin-top:10px;margin-left:0px">{{ $t("cancel") }}</el-button>
+          <el-button type="primary" style="width: 80%;" :loading="loading" @click="createFolder">{{ $t("add") }}</el-button>
+          <el-button style="width: 80%; margin-top: 10px; margin-left: 0px;" @click="showNewFolderDialog = false">{{ $t("cancel") }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -154,11 +154,11 @@
     >
       <el-form ref="refRenameFolderForm" label-width="auto" :rules="folderNameRules" :model="renameFolderForm">
         <el-form-item :label="$t('name')" prop="name">
-          <el-input :placeholder="$t('name')" v-model="renameFolderForm.name"></el-input>
+          <el-input v-model="renameFolderForm.name" :placeholder="$t('name')"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="renameFolder" style="width:80%" :loading="loading">{{ $t("rename") }}</el-button>
-          <el-button @click="showRenameFolderDialog = false" style="width:80%;margin-top:10px;margin-left:0px">{{ $t("cancel") }}</el-button>
+          <el-button type="primary" style="width: 80%;" :loading="loading" @click="renameFolder">{{ $t("rename") }}</el-button>
+          <el-button style="width: 80%; margin-top: 10px; margin-left: 0px;" @click="showRenameFolderDialog = false">{{ $t("cancel") }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -166,29 +166,29 @@
     <el-button type="primary" round @click="closeSelf">关闭</el-button>-->
     <el-breadcrumb separator="/">
       <el-breadcrumb-item v-for="i in toNavigablePath()" :key="i.dst">
-        <a @click="navigateTo(i.dst)" style="font-size: 21px">{{ i.name }}</a>
+        <a style="font-size: 21px;" @click="navigateTo(i.dst)">{{ i.name }}</a>
       </el-breadcrumb-item>
     </el-breadcrumb>
 
     <el-container>
-      <el-aside :style="{ width: this.asideWidth + 'px', position: 'relative', cursor: 'e-resize' }">
-        <div class="asaide-shelter" style="position: absolute;width: 97%;height: 100%;cursor: default"></div>
+      <el-aside :style="{ width: asideWidth + 'px', position: 'relative', cursor: 'e-resize' }">
+        <div class="asaide-shelter" style="position: absolute; width: 97%; height: 100%; cursor: default;"></div>
         <el-tree
           ref="folderTree"
           node-key="path"
           :props="props"
           :load="loadNode"
           :expand-on-click-node="false"
-          @node-click="handleTreeNodeClick"
-          style="width: 190px"
+          style="width: 190px;"
           lazy
+          @node-click="handleTreeNodeClick"
         ></el-tree>
         <el-switch
           v-if="loggedIn"
           v-model="currentFolderObject.privateView"
           :active-text="$t('private')"
           :inactive-text="$t('public')"
-          style="width: 97%;cursor: default;"
+          style="width: 97%; cursor: default;"
           @change="handleCurrentFolderPrivateViewChanged"
         ></el-switch>
         <!--<el-switch
@@ -199,9 +199,9 @@
       </el-aside>
       <el-main>
         <el-button v-if="loggedIn" @click="showNewFolderDialog = true">{{ $t("new_folder") }}</el-button>
-        <el-button v-if="loggedIn" @click="dialogVisible = true" type="danger" :disabled="this.currentSelectedItems == 0">{{ $t("del_select") }}</el-button>
+        <el-button v-if="loggedIn" type="danger" :disabled="currentSelectedItems == 0" @click="dialogVisible = true">{{ $t("del_select") }}</el-button>
         <el-button type="primary" round @click="addToCurrectFolder">{{ $t("add_2_cur_dir") }}</el-button>
-        <el-table ref="currentFolderTable" :data="currentFolderChildrens" style="width: 100%" @selection-change="handleCurrentFolderTableSelectionChange">
+        <el-table ref="currentFolderTable" :data="currentFolderChildrens" style="width: 100%;" @selection-change="handleCurrentFolderTableSelectionChange">
           <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column :label="$t('cover')" width="180" height="100" align="center">
             <template slot-scope="scope">
@@ -218,9 +218,9 @@
             <template slot-scope="scope">
               <router-link
                 v-if="typeof scope.row.playlist_object != 'undefined'"
+                :key="scope.row.playlist_object._id.$oid"
                 target="_blank"
                 :to="{ path: '/listdetail', query: { id: scope.row.playlist_object._id.$oid } }"
-                :key="scope.row.playlist_object._id.$oid"
                 tag="a"
               >
                 <h4>{{ scope.row.playlist_object.title.english }}</h4>
@@ -255,6 +255,39 @@
 <script>
 // import moment from "moment";
 export default {
+  filters: {
+    formatDate(value) {
+      if (value) {
+        let upload_time = new Date(value.$date);
+        let y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+        let M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        let d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        let h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+        let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+        let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
+        return (
+          y +
+          "-" +
+          // 数字不足两位自动补零，下同
+          (Array(2).join(0) + M).slice(-2) +
+          "-" +
+          (Array(2).join(0) + d).slice(-2) +
+          " " +
+          (Array(2).join(0) + h).slice(-2) +
+          ":" +
+          (Array(2).join(0) + m).slice(-2) +
+          ":" +
+          (Array(2).join(0) + s).slice(-2)
+        );
+      }
+    },
+  },
+  props: {
+    visible: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -265,7 +298,7 @@ export default {
       // for folder view
       props: {
         label: "name",
-        isLeaf: "leaf"
+        isLeaf: "leaf",
       },
       currentFolderChildrens: [],
       currentFolderObject: { privateView: false },
@@ -275,17 +308,17 @@ export default {
       showNewFolderDialog: false,
       showRenameFolderDialog: false,
       newFolderForm: {
-        name: ""
+        name: "",
       },
       renameFolderForm: {
         name: "",
-        row: null
+        row: null,
       },
       folderNameRules: {
-        name: [{ required: true, message: this.$t("input_name"), trigger: "blur" }]
+        name: [{ required: true, message: this.$t("input_name"), trigger: "blur" }],
       },
       priavteView: false,
-      pid: ""
+      pid: "",
     };
   },
   created() {
@@ -297,7 +330,7 @@ export default {
     let asideObj = this.$refs.aside.getElementsByClassName("el-aside")[0];
     let _that = this;
 
-    asideObj.onmousedown = e => {
+    asideObj.onmousedown = (e) => {
       const disX = e.clientX;
       const asideWidth = parseInt(asideObj.style.width);
       let asideBorder = parseInt(asideObj.style.width) * 0.99;
@@ -311,7 +344,7 @@ export default {
           _that.asideWidth = asideWidth + l;
           // asideObj.style.width = `${asideWidth+l}px`;
         };
-        document.onmouseup = function(e) {
+        document.onmouseup = function() {
           document.onmousemove = null;
           document.onmouseup = null;
         };
@@ -320,14 +353,14 @@ export default {
   },
   methods: {
     folderObjectToTreeNode(obj) {
-      var data = [];
-      for (var i = 0; i < obj.length; ++i) {
+      let data = [];
+      for (let i = 0; i < obj.length; ++i) {
         if (typeof obj[i].playlist_object == "undefined") {
           data.push({
             name: obj[i].name,
             leaf: false,
             path: obj[i].path,
-            children: []
+            children: [],
           });
         }
       }
@@ -347,10 +380,10 @@ export default {
         url: "be/folder/view",
         data: {
           path: node.data.path,
-          uid: this.user_id
+          uid: this.user_id,
         },
-        withCredentials: true
-      }).then(result => {
+        withCredentials: true,
+      }).then((result) => {
         result = result.data;
         if (result.status == "SUCCEED") {
           resolve(this.folderObjectToTreeNode(result.data.children));
@@ -371,10 +404,10 @@ export default {
         url: "be/folder/view",
         data: {
           path: this.currentPath,
-          uid: this.user_id
+          uid: this.user_id,
         },
-        withCredentials: true
-      }).then(result => {
+        withCredentials: true,
+      }).then((result) => {
         result = result.data;
         if (result.status == "SUCCEED") {
           this.currentFolderChildrens = result.data.children;
@@ -400,26 +433,26 @@ export default {
       this.getFolder();
     },
     toNavigablePath() {
-      var paths = this.currentPath.split("/").filter(Boolean);
+      let paths = this.currentPath.split("/").filter(Boolean);
       if (paths.length == 0) {
         return [
           {
             dst: "/",
-            name: "root"
-          }
+            name: "root",
+          },
         ];
       } else {
-        var result = [];
-        var priorPath = "/";
+        let result = [];
+        let priorPath = "/";
         result.push({
           dst: priorPath,
-          name: "root"
+          name: "root",
         });
-        for (var i = 0; i < paths.length; ++i) {
+        for (let i = 0; i < paths.length; ++i) {
           priorPath += paths[i] + "/";
-          var curObj = {
+          let curObj = {
             dst: priorPath,
-            name: paths[i]
+            name: paths[i],
           };
           result.push(curObj);
         }
@@ -430,7 +463,7 @@ export default {
       this.currentSelectedItems = val;
     },
 
-    handleCurrentFolderPrivateViewChanged(new_val) {
+    handleCurrentFolderPrivateViewChanged() {
       // console.log(this.currentFolderObject.privateView);
       this.axios({
         method: "post",
@@ -438,31 +471,31 @@ export default {
         data: {
           path: this.currentPath,
           private_edit: this.currentFolderObject.privateEdit,
-          private_view: this.currentFolderObject.privateView
+          private_view: this.currentFolderObject.privateView,
         },
-        withCredentials: true
+        withCredentials: true,
       });
     },
 
     createFolder() {
       this.loading = true;
-      var folderName = this.newFolderForm.name;
+      let folderName = this.newFolderForm.name;
       this.axios({
         method: "post",
         url: "be/folder/create",
         data: {
           root: this.currentPath,
-          name: folderName
+          name: folderName,
         },
-        withCredentials: true
-      }).then(result => {
+        withCredentials: true,
+      }).then((result) => {
         result = result.data;
         if (result.status == "SUCCEED") {
           this.showNewFolderDialog = false;
           this.newFolderForm.name = "";
           this.$message({
             message: this.$t("create_success"),
-            type: "success"
+            type: "success",
           });
           this.refreshCurrentFolder();
           const curTreeNode = this.$refs.folderTree.getNode(this.currentPath);
@@ -471,7 +504,7 @@ export default {
               name: folderName,
               path: this.currentPath + folderName + "/",
               leaf: false,
-              children: []
+              children: [],
             });
           }
         } else {
@@ -488,26 +521,26 @@ export default {
     deleteSelectedItems() {
       this.loading = true;
       if (this.currentSelectedItems) {
-        var pathsToDelete = [];
-        this.currentSelectedItems.forEach(obj => {
+        let pathsToDelete = [];
+        this.currentSelectedItems.forEach((obj) => {
           if (typeof obj.playlist_object == "undefined") pathsToDelete.push(obj.path);
         });
-        var pidsToDelete = [];
-        this.currentSelectedItems.forEach(obj => {
+        let pidsToDelete = [];
+        this.currentSelectedItems.forEach((obj) => {
           if (typeof obj.playlist_object !== "undefined") pidsToDelete.push(obj.playlist_object._id.$oid);
         });
         this.axios({
           method: "post",
           url: "be/folder/delete_many",
           data: {
-            paths: pathsToDelete
+            paths: pathsToDelete,
           },
-          withCredentials: true
-        }).then(result => {
+          withCredentials: true,
+        }).then((result) => {
           result = result.data;
           if (result.status == "SUCCEED") {
-            for (var i = 0; i < pathsToDelete.length; ++i) {
-              var node = this.$refs.folderTree.getNode(pathsToDelete[i]);
+            for (let i = 0; i < pathsToDelete.length; ++i) {
+              let node = this.$refs.folderTree.getNode(pathsToDelete[i]);
               this.$refs.folderTree.remove(node);
             }
             this.axios({
@@ -515,10 +548,10 @@ export default {
               url: "be/folder/del_pid",
               data: {
                 path: this.currentPath,
-                pids: pidsToDelete
+                pids: pidsToDelete,
               },
-              withCredentials: true
-            }).then(result => {
+              withCredentials: true,
+            }).then(() => {
               this.$message.success(this.$t("del_success"));
               this.getFolder();
             });
@@ -538,11 +571,11 @@ export default {
         url: "be/folder/add_pid",
         data: {
           path: this.currentPath,
-          pids: [this.pid]
+          pids: [this.pid],
         },
-        withCredentials: true
+        withCredentials: true,
       })
-        .then(result => {
+        .then((result) => {
           result = result.data;
           if (result.status == "SUCCEED") {
             this.$message.success(this.$t("add_sucess"));
@@ -552,7 +585,7 @@ export default {
           }
           this.loading = false;
         })
-        .catch(err => {
+        .catch(() => {
           // console.log(err);
           this.loading = false;
         });
@@ -565,23 +598,23 @@ export default {
         url: "be/folder/rename",
         data: {
           path: row.path,
-          new_name: this.renameFolderForm.name
+          new_name: this.renameFolderForm.name,
         },
-        withCredentials: true
-      }).then(result => {
+        withCredentials: true,
+      }).then((result) => {
         result = result.data;
         if (result.status == "SUCCEED") {
           this.showRenameFolderDialog = false;
           this.getFolder(() => {
-            var renamedTreeNode = this.$refs.folderTree.getNode(row.path);
-            var parentTreeNode = this.$refs.folderTree.getNode(this.currentPath);
+            let renamedTreeNode = this.$refs.folderTree.getNode(row.path);
+            let parentTreeNode = this.$refs.folderTree.getNode(this.currentPath);
             if (renamedTreeNode) {
               this.$refs.folderTree.remove(renamedTreeNode);
               parentTreeNode.data.children.push({
                 name: this.renameFolderForm.name,
                 path: result.data,
                 leaf: false,
-                children: []
+                children: [],
               });
             }
           });
@@ -599,41 +632,8 @@ export default {
       this.renameFolderForm.name = row.name;
       this.renameFolderForm.row = row;
       this.showRenameFolderDialog = true;
-    }
+    },
   },
-  props: {
-    visible: {
-      type: Boolean,
-      default: false
-    }
-  },
-  filters: {
-    formatDate(value) {
-      if (value) {
-        var upload_time = new Date(value.$date);
-        var y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
-        var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
-        var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
-        var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
-        return (
-          y +
-          "-" +
-          // 数字不足两位自动补零，下同
-          (Array(2).join(0) + M).slice(-2) +
-          "-" +
-          (Array(2).join(0) + d).slice(-2) +
-          " " +
-          (Array(2).join(0) + h).slice(-2) +
-          ":" +
-          (Array(2).join(0) + m).slice(-2) +
-          ":" +
-          (Array(2).join(0) + s).slice(-2)
-        );
-      }
-    }
-  }
 };
 </script>
 

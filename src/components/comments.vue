@@ -113,10 +113,10 @@
     <!-- 管理操作的弹出框 -->
     <el-dialog :title="$t('selectOpts')" :visible.sync="AuthOps" width="50%">
       <div v-loading="Authorizing">
-        <el-button style="width:100%;" @click="deletcomment()">{{ $t("deletcomment") }}</el-button>
+        <el-button style="width: 100%;" @click="deletcomment()">{{ $t("deletcomment") }}</el-button>
         <br />
         <br />
-        <el-button style="width:100%;" @click="hidecomment()">{{ $t("hidecomment") }}</el-button>
+        <el-button style="width: 100%;" @click="hidecomment()">{{ $t("hidecomment") }}</el-button>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="AuthOps = false">{{ $t("cancel") }}</el-button>
@@ -131,14 +131,14 @@
     </div>
 
     <!-- 发表评论 -->
-    <div class="comment" v-if="isLogin">
+    <div v-if="isLogin" class="comment">
       <!-- 表情区域 -->
       <div style="text-align: center !important;">
-        <el-popover placement="top" trigger="manual" content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。" v-model="faceVisible">
-          <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse:collapse;">
+        <el-popover v-model="faceVisible" placement="top" trigger="manual" content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+          <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse: collapse;">
             <tr v-for="(p, i) in faceData" :key="i">
-              <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse:collapse;">
-                <a @click="addFaceToComments(m)" v-for="(z, x) in m" :key="z">
+              <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse: collapse;">
+                <a v-for="(z, x) in m" :key="z" @click="addFaceToComments(m)">
                   <img :src="z" :alt="x" :title="x" />
                 </a>
               </td>
@@ -146,11 +146,11 @@
           </table>
 
           <el-button
+            slot="reference"
             class="face"
             type="success"
             icon="el-icon-magic-stick"
-            slot="reference"
-            style="width: 100px"
+            style="width: 100px;"
             @click="
               faceVisible = !faceVisible;
               emojiVisible = false;
@@ -158,21 +158,21 @@
             >表情</el-button
           >
         </el-popover>
-        <el-popover placement="top" trigger="manual" content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。" v-model="emojiVisible">
-          <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse:collapse;">
+        <el-popover v-model="emojiVisible" placement="top" trigger="manual" content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+          <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse: collapse;">
             <tr v-for="(p, i) in emojiData" :key="i">
-              <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse:collapse;">
-                <a @click="addEmojiToComments(m)" class="emoji" v-for="(z, x) in m" :key="x" v-text="z" :title="x"></a>
+              <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse: collapse;">
+                <a v-for="(z, x) in m" :key="x" class="emoji" :title="x" @click="addEmojiToComments(m)" v-text="z"></a>
               </td>
             </tr>
           </table>
 
           <el-button
+            slot="reference"
             class="face"
             type="success"
             icon="el-icon-magic-stick"
-            slot="reference"
-            style="width: 100px"
+            style="width: 100px;"
             @click="
               emojiVisible = !emojiVisible;
               faceVisible = false;
@@ -183,21 +183,21 @@
       </div>
 
       <el-input
+        v-model="comment"
         type="textarea"
         :autosize="{ minRows: 4 }"
         :placeholder="$t('saySth')"
         maxlength="500"
         show-word-limit
-        v-model="comment"
         @keyup.enter.native="postcommentOnInput()"
       ></el-input>
       <el-checkbox v-model="UsingEnter">{{ $t("usingEnter") }}</el-checkbox>
       <span>
         {{ $t("respect") }}
-        <a href="https://patchyvideo.wiki/Comments" target="_blank" style="color:#409EFF">{{ $t("commentRules") }}</a>
+        <a href="https://patchyvideo.wiki/Comments" target="_blank" style="color: #409eff;">{{ $t("commentRules") }}</a>
         {{ $t("yo") }}
       </span>
-      <el-button type="primary" @click="postcomment()" :loading="posting">{{ $t("post") }}</el-button>
+      <el-button type="primary" :loading="posting" @click="postcomment()">{{ $t("post") }}</el-button>
     </div>
     <!-- 未登录时显示 -->
     <div v-else>
@@ -207,9 +207,9 @@
 
     <!-- 评论详情 -->
     <el-divider></el-divider>
-    <div class="commentBox" v-for="(item, index) in allcomments" :key="index">
+    <div v-for="(item, index) in allcomments" :key="index" class="commentBox">
       <!-- 正常情况下的渲染 -->
-      <div class="commentDetail" v-if="!item.hidden && !item.deleted">
+      <div v-if="!item.hidden && !item.deleted" class="commentDetail">
         <!-- 用户头像 -->
         <div class="avatar">
           <el-avatar :src="userAvatar(commentUser(item.meta.created_by.$oid).profile.image)"></el-avatar>
@@ -224,22 +224,22 @@
           </div>
 
           <span class="commentDate">{{ commentdate(item.meta.created_at.$date) }}</span>
-          <el-button class="replycomment" v-if="item.children.length && !showReplies[index].show" type="text" @click="showReplies[index].show = true">{{
+          <el-button v-if="item.children.length && !showReplies[index].show" class="replycomment" type="text" @click="showReplies[index].show = true">{{
             $t("showRplies", { length: item.children.length })
           }}</el-button>
           <el-button
-            class="replycomment"
             v-else-if="!replycomments[index].show && isLogin"
+            class="replycomment"
             type="text"
             @click="openReplyBox(index, commentUser(item.meta.created_by.$oid).profile.username, item._id.$oid)"
             >{{ $t("reply") }}</el-button
           >
-          <el-button class="replycomment" v-else-if="isLogin" type="text" @click="replycomments[index].show = false">{{ $t("hideReply") }}</el-button>
+          <el-button v-else-if="isLogin" class="replycomment" type="text" @click="replycomments[index].show = false">{{ $t("hideReply") }}</el-button>
 
           <!-- 权限操作 -->
           <el-button
-            class="replycomment"
             v-if="isLogin && (Authorized || mycomment(commentUser(item.meta.created_by.$oid).profile.username))"
+            class="replycomment"
             type="text"
             @click="Authorizecomment(item._id.$oid)"
             >{{ $t("manage") }}</el-button
@@ -250,50 +250,50 @@
         <div>
           <el-collapse-transition>
             <div v-show="showReplies[index].show">
-              <div class="allReply" v-for="(reply, i) in item.children" :key="i">
+              <div v-for="(replyc, i) in item.children" :key="i" class="allReply">
                 <!-- 正常情况下的渲染 -->
-                <div v-if="!reply.hidden && !reply.deleted">
+                <div v-if="!replyc.hidden && !replyc.deleted">
                   <!-- 楼中楼头像 -->
-                  <div class="avatar" style="margin:0">
-                    <el-avatar :src="userAvatar(commentUser(reply.meta.created_by.$oid).profile.image)" size="small"></el-avatar>
+                  <div class="avatar" style="margin: 0;">
+                    <el-avatar :src="userAvatar(commentUser(replyc.meta.created_by.$oid).profile.image)" size="small"></el-avatar>
                   </div>
                   <!-- 楼中楼右半部分 -->
-                  <div class="commentContent" style="margin-left:40px;">
+                  <div class="commentContent" style="margin-left: 40px;">
                     <div v-linkified>
-                      <router-link :to="'/users/' + reply.meta.created_by.$oid" target="_blank"
-                        >{{ commentUser(reply.meta.created_by.$oid).profile.username }}:</router-link
+                      <router-link :to="'/users/' + replyc.meta.created_by.$oid" target="_blank"
+                        >{{ commentUser(replyc.meta.created_by.$oid).profile.username }}:</router-link
                       >
-                      <span v-if="typeof reply.reply_to !== 'undefined'">
+                      <span v-if="typeof replyc.reply_to !== 'undefined'">
                         {{ $t("replyPrompt") }}
-                        <router-link :to="'/users/' + cid_comment_map.get(reply.reply_to.$oid).meta.created_by.$oid" target="_blank"
-                          >@{{ commentUser(cid_comment_map.get(reply.reply_to.$oid).meta.created_by.$oid).profile.username }}</router-link
+                        <router-link :to="'/users/' + cid_comment_map.get(replyc.reply_to.$oid).meta.created_by.$oid" target="_blank"
+                          >@{{ commentUser(cid_comment_map.get(replyc.reply_to.$oid).meta.created_by.$oid).profile.username }}</router-link
                         >:
                       </span>
-                      <span v-html="parseComment(reply.content)"></span>
+                      <span v-html="parseComment(replyc.content)"></span>
                     </div>
-                    <span class="commentDate">{{ commentdate(reply.meta.created_at.$date) }}</span>
+                    <span class="commentDate">{{ commentdate(replyc.meta.created_at.$date) }}</span>
                     <el-button
                       v-if="isLogin"
                       class="replycomment"
                       type="text"
-                      @click="openReplyBox(index, commentUser(reply.meta.created_by.$oid).profile.username, reply._id.$oid)"
+                      @click="openReplyBox(index, commentUser(replyc.meta.created_by.$oid).profile.username, reply._id.$oid)"
                       >{{ $t("reply") }}</el-button
                     >
                     <!-- 权限操作 -->
                     <el-button
+                      v-if="isLogin && (Authorized || mycomment(commentUser(replyc.meta.created_by.$oid).profile.username))"
                       class="replycomment"
-                      v-if="isLogin && (Authorized || mycomment(commentUser(reply.meta.created_by.$oid).profile.username))"
                       type="text"
-                      @click="Authorizecomment(reply._id.$oid)"
+                      @click="Authorizecomment(replyc._id.$oid)"
                       >{{ $t("manage") }}</el-button
                     >
                   </div>
                 </div>
                 <!-- 被隐藏的时候的渲染 -->
-                <div style="margin-left:40px;margin-bottom:10px" v-if="reply.deleted">{{ $t("deletedcomment") }}</div>
-                <div style="margin-left:40px;" v-else-if="reply.hidden">
+                <div v-if="replyc.deleted" style="margin-left: 40px; margin-bottom: 10px;">{{ $t("deletedcomment") }}</div>
+                <div v-else-if="replyc.hidden" style="margin-left: 40px;">
                   {{ $t("hiddencomment") }}
-                  <el-button type="text" @click="reply.hidden = false">{{ $t("opencomment") }}</el-button>
+                  <el-button type="text" @click="replyc.hidden = false">{{ $t("opencomment") }}</el-button>
                 </div>
               </div>
             </div>
@@ -307,15 +307,15 @@
               <div class="replyBox">
                 <!-- 表情区域 -->
                 <el-popover
+                  v-model="replycomments[index].face"
                   placement="top"
                   trigger="manual"
                   content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
-                  v-model="replycomments[index].face"
                 >
-                  <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse:collapse;">
+                  <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse: collapse;">
                     <tr v-for="(p, i) in faceData" :key="i">
-                      <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse:collapse;">
-                        <a @click="addFaceToReply(m, index)" v-for="(z, x) in m" :key="x">
+                      <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse: collapse;">
+                        <a v-for="(z, x) in m" :key="x" @click="addFaceToReply(m, index)">
                           <img :src="z" :alt="x" :title="x" />
                         </a>
                       </td>
@@ -323,11 +323,11 @@
                   </table>
 
                   <el-button
+                    slot="reference"
                     class="face"
                     type="success"
                     icon="el-icon-magic-stick"
-                    slot="reference"
-                    style="width: 100px"
+                    style="width: 100px;"
                     @click="
                       replycomments[index].face = !replycomments[index].face;
                       replycomments[index].emoji = false;
@@ -336,25 +336,25 @@
                   >
                 </el-popover>
                 <el-popover
+                  v-model="replycomments[index].emoji"
                   placement="top"
                   trigger="manual"
                   content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
-                  v-model="replycomments[index].emoji"
                 >
-                  <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse:collapse;">
+                  <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse: collapse;">
                     <tr v-for="(p, i) in emojiData" :key="i">
-                      <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse:collapse;">
-                        <a @click="addEmojiToReply(m, index)" class="emoji" v-for="(z, x) in m" :key="x" v-text="z" :title="x"></a>
+                      <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse: collapse;">
+                        <a v-for="(z, x) in m" :key="x" class="emoji" :title="x" @click="addEmojiToReply(m, index)" v-text="z"></a>
                       </td>
                     </tr>
                   </table>
 
                   <el-button
+                    slot="reference"
                     class="face"
                     type="success"
                     icon="el-icon-magic-stick"
-                    slot="reference"
-                    style="width: 100px"
+                    style="width: 100px;"
                     @click="
                       replycomments[index].emoji = !replycomments[index].emoji;
                       replycomments[index].face = false;
@@ -363,23 +363,23 @@
                   >
                 </el-popover>
                 <el-input
+                  v-model="reply"
                   type="textarea"
                   :autosize="{ minRows: 1, maxRows: 4 }"
                   :placeholder="$t('replyTo')"
-                  v-model="reply"
                   maxlength="500"
                   show-word-limit
                   @keyup.enter.native="postReply(index)"
                 ></el-input>
-                <el-button style="margin:5px" type="primary" size="mini" round @click="postReply(index)" :loading="replying">{{ $t("post") }}</el-button>
+                <el-button style="margin: 5px;" type="primary" size="mini" round :loading="replying" @click="postReply(index)">{{ $t("post") }}</el-button>
               </div>
             </div>
           </el-collapse-transition>
         </div>
       </div>
       <!-- 被隐藏的时候的渲染 -->
-      <div class="deletedcomment" v-if="item.deleted">{{ $t("deletedcomment") }}</div>
-      <div class="hiddencomment" v-else-if="item.hidden">
+      <div v-if="item.deleted" class="deletedcomment">{{ $t("deletedcomment") }}</div>
+      <div v-else-if="item.hidden" class="hiddencomment">
         {{ $t("hiddencomment") }}
         <el-button type="text" @click="item.hidden = false">{{ $t("opencomment") }}</el-button>
       </div>
@@ -391,8 +391,12 @@
 <script>
 import { ParseComment, getFace, getEmoji } from "../static/js/comment";
 export default {
+  components: {},
   props: {
-    sid: { type: String }
+    sid: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -437,14 +441,14 @@ export default {
       // emoji 数据
       emojiData: [],
       // emoji 弹出标志
-      emojiVisible: false
+      emojiVisible: false,
     };
   },
   computed: {
     // 评论的用户
     commentUser() {
       return function(id) {
-        for (var i = 0; i < this.allUsers.length; i++) {
+        for (let i = 0; i < this.allUsers.length; i++) {
           if (id == this.allUsers[i]._id.$oid) {
             return this.allUsers[i];
           }
@@ -464,13 +468,13 @@ export default {
     // 评论的日期
     commentdate() {
       return function(date) {
-        var upload_time = new Date(date);
-        var y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
-        var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
-        var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
-        var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
+        let upload_time = new Date(date);
+        let y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+        let M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        let d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        let h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+        let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+        let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
         return (
           y +
           "-" +
@@ -507,15 +511,23 @@ export default {
       if (this.$route.path === "/listdetail")
         return {
           url: "/be/comments/add_to_playlist.do",
-          data: { pid: this.$route.query.id, text: this.comment }
+          data: { pid: this.$route.query.id, text: this.comment },
         };
       else if (this.$route.path === "/video")
         return {
           url: "/be/comments/add_to_video.do",
-          data: { vid: this.$route.query.id, text: this.comment }
+          data: { vid: this.$route.query.id, text: this.comment },
         };
       else return false;
-    }
+    },
+  },
+  watch: {
+    sid() {
+      this.tid = this.sid;
+    },
+    tid() {
+      this.getcomments();
+    },
   },
   created() {
     this.faceData = getFace();
@@ -534,7 +546,7 @@ export default {
     //     array.push(obj);
     //   }
     //   // 计算最后一排个数
-    //   var faceRow = Math.ceil(array.length / MAXROW);
+    //   let faceRow = Math.ceil(array.length / MAXROW);
     //   let c = [];
     //   // 转换成 [[{"呵呵":"src"},{}],[]] 格式
     //   for (let i = 0; i < faceRow; ++i) {
@@ -556,7 +568,7 @@ export default {
     //     array.push(obj);
     //   }
     //   // 计算最后一排个数
-    //   var faceRow = Math.ceil(array.length / MAXROW);
+    //   let faceRow = Math.ceil(array.length / MAXROW);
     //   let c = [];
     //   // 转换成 [[{"呵呵":"src"},{}],[]] 格式
     //   for (let i = 0; i < faceRow; ++i) {
@@ -591,55 +603,55 @@ export default {
         method: "post",
         url: "/be/comments/view.do",
         data: {
-          thread_id: this.tid
-        }
+          thread_id: this.tid,
+        },
       })
-        .then(result => {
+        .then((result) => {
           this.allcomments = result.data.data.comments;
           this.allUsers = result.data.data.users;
           this.cid_comment_map = new Map();
 
-          for (var i = 0; i < this.allcomments.length; i++) {
+          for (let i = 0; i < this.allcomments.length; i++) {
             //console.log(this.allcomments[i]);
-            for (var j = 0; j < this.allcomments[i].children.length; ++j) {
+            for (let j = 0; j < this.allcomments[i].children.length; ++j) {
               //console.log(this.allcomments[i].children[j]._id.$oid);
               this.cid_comment_map.set(this.allcomments[i].children[j]._id.$oid, this.allcomments[i].children[j]);
             }
           }
 
           // 初始化评论区开启标志
-          for (var i = 0; i < this.allcomments.length; i++) {
+          for (let i = 0; i < this.allcomments.length; i++) {
             this.showReplies.push({
               show: false,
               face: false,
-              emoji: false
+              emoji: false,
             });
           }
           // 初始化回复框开启标志
-          for (var i = 0; i < this.allcomments.length; i++) {
+          for (let i = 0; i < this.allcomments.length; i++) {
             this.replycomments.push({
               show: false,
               face: false,
-              emoji: false
+              emoji: false,
             });
           }
 
           this.loadingcomment = false;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           this.openFailed(this.$t("getcommentFailed"));
           this.loadingcomment = false;
         });
     },
     // parseComment(content) {
-    //   var match = content.match(/((?<=\[\[)[^\(\]\]]+)/g);
+    //   let match = content.match(/((?<=\[\[)[^\(\]\]]+)/g);
     //   match.map((v, i) => {
-    //     var kv = v.split(":");
+    //     let kv = v.split(":");
     //     if (kv.length <= 1) return;
-    //     var action = kv[0];
-    //     var value = kv[1];
-    //     var newvalue = "";
+    //     let action = kv[0];
+    //     let value = kv[1];
+    //     let newvalue = "";
     //     switch (action) {
     //       case "表情":
     //         newvalue = `<img src='${ParseFace(value)}' />`;
@@ -674,9 +686,9 @@ export default {
       this.axios({
         method: "post",
         url: this.requestURL.url,
-        data: this.requestURL.data
+        data: this.requestURL.data,
       })
-        .then(result => {
+        .then((result) => {
           this.posting = false;
           if (result.data.status == "SUCCEED") {
             this.tid = result.data.data.thread_id;
@@ -687,7 +699,7 @@ export default {
             this.openFailed(this.$t("postFailed"));
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           this.openFailed(this.$t("postFailed"));
           this.posting = false;
@@ -697,7 +709,7 @@ export default {
     openReplyBox(index, name, cid) {
       this.cidReplied = cid;
       this.reply = "";
-      for (var i = 0; i < this.replycomments.length; i++) {
+      for (let i = 0; i < this.replycomments.length; i++) {
         this.replycomments[i].show = false;
         this.replycomments[i].face = false;
         this.replycomments[i].emoji = false;
@@ -721,10 +733,10 @@ export default {
         url: "/be/comments/reply.do",
         data: {
           reply_to: this.cidReplied,
-          text: this.reply
-        }
+          text: this.reply,
+        },
       })
-        .then(result => {
+        .then((result) => {
           if (result.data.status == "SUCCEED") {
             this.reply = "";
             this.replycomments[index].show = false;
@@ -736,7 +748,7 @@ export default {
           }
           this.replying = false;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           this.replying = false;
           this.openFailed(this.$t("postFailed"));
@@ -757,15 +769,15 @@ export default {
         method: "post",
         url: "/be/user/is_authorized",
         data: {
-          op: "commentAdmin"
-        }
+          op: "commentAdmin",
+        },
       })
-        .then(result => {
+        .then((result) => {
           if (result.data.status == "SUCCEED") {
             this.Authorized = true;
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -781,10 +793,10 @@ export default {
         method: "post",
         url: "be/comments/del.do",
         data: {
-          cid: this.AuthorizedCid
-        }
+          cid: this.AuthorizedCid,
+        },
       })
-        .then(result => {
+        .then((result) => {
           if (result.data.status == "SUCCEED") {
             this.openSuccessful(this.$t("operationSuccessfully"));
             this.getcomments();
@@ -794,7 +806,7 @@ export default {
           this.Authorizing = false;
           this.AuthOps = false;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           this.openFailed(this.$t("operationFailed"));
           this.Authorizing = false;
@@ -808,10 +820,10 @@ export default {
         method: "post",
         url: "be/comments/hide.do",
         data: {
-          cid: this.AuthorizedCid
-        }
+          cid: this.AuthorizedCid,
+        },
       })
-        .then(result => {
+        .then((result) => {
           if (result.data.status == "SUCCEED") {
             this.openSuccessful(this.$t("operationSuccessfully"));
             this.getcomments();
@@ -821,7 +833,7 @@ export default {
           this.Authorizing = false;
           this.AuthOps = false;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           this.openFailed(this.$t("operationFailed"));
           this.Authorizing = false;
@@ -832,26 +844,17 @@ export default {
     openSuccessful(message) {
       this.$message({
         message: message,
-        type: "success"
+        type: "success",
       });
     },
 
     openFailed(message) {
       this.$message({
         message: message,
-        type: "error"
+        type: "error",
       });
-    }
-  },
-  watch: {
-    sid() {
-      this.tid = this.sid;
     },
-    tid() {
-      this.getcomments();
-    }
   },
-  components: {}
 };
 </script>
 

@@ -3,18 +3,18 @@
 <template>
   <div
     @mouseenter="
-      e => {
+      (e) => {
         hover = true;
       }
     "
     @mouseleave="
-      e => {
+      (e) => {
         hover = false;
       }
     "
     @mousemove="onMouseMove"
   >
-    <div v-if="hover && loadStatus && !error" style="width:200px;height:125px;overflow:hidden">
+    <div v-if="hover && loadStatus && !error" style="width: 200px; height: 125px; overflow: hidden;">
       <div class="progress-bar" :style="'height:' + prh + 'px;border-width: ' + Math.floor((prh - 2) / 2) + 'px 8px;'">
         <span ref="pspan" :style="'width:' + progress + '%'"></span>
       </div>
@@ -52,12 +52,12 @@ export default {
   props: {
     aid: {
       type: Number,
-      required: true
+      required: true,
     },
     coverImage: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -72,22 +72,22 @@ export default {
       hover: false,
       data: null,
       error: null,
-      prefresh: null
+      prefresh: null,
     };
   },
   computed: {
     prh() {
       return (this.width / 8) * 5 - (this.width / 16) * 9;
-    }
+    },
   },
   watch: {
     hover() {
       if (this.hover && !this.loadStatus) {
         this.$axios({
           method: "get",
-          url: `/proxy/bili/x/player/videoshot?aid=${this.aid}&index=1`
+          url: `/proxy/bili/x/player/videoshot?aid=${this.aid}&index=1`,
         })
-          .then(result => {
+          .then((result) => {
             if (result.data.code === 0 && result.data.data) {
               this.data = result.data.data;
               if (this.prefresh && this.hover) {
@@ -99,12 +99,12 @@ export default {
             }
             this.loadStatus = true;
           })
-          .catch(e => {
+          .catch((e) => {
             this.error = e.message;
             this.loadStatus = true;
           });
       }
-    }
+    },
   },
   methods: {
     onMouseMove(e) {
@@ -120,8 +120,8 @@ export default {
       this.progress = Math.floor((e.offsetX / this.width) * 100);
       this.x = (-i % this.data.img_x_len) * this.width;
       this.y = -Math.floor(i / this.data.img_x_len) * n;
-    }
-  }
+    },
+  },
 };
 </script>
 

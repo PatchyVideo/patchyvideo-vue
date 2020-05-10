@@ -109,27 +109,27 @@
 
     <!-- 更改视频级别的弹出框 -->
     <el-dialog :title="$t('management')" :visible.sync="managementBox" width="30%">
-      <div style="width:80%;margin:0 auto">
-        <el-select v-model="theVideoRank" placeholder="请修改视频的等级" style="width:100%">
+      <div style="width: 80%; margin: 0 auto;">
+        <el-select v-model="theVideoRank" placeholder="请修改视频的等级" style="width: 100%;">
           <el-option v-for="(val, key) in videoRanks" :key="key" :label="key" :value="val">{{ key }}</el-option>
         </el-select>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="managementBox = false">取 消</el-button>
-        <el-button type="primary" @click="manageVideo()" :loading="loading">确 定</el-button>
+        <el-button type="primary" :loading="loading" @click="manageVideo()">确 定</el-button>
       </span>
     </el-dialog>
 
     <!-- 更改视频级别的弹出框 -->
     <el-dialog title="修改视频发布类型" :visible.sync="changeRepostType" width="30%">
-      <div style="width:80%;margin:0 auto">
-        <el-select v-model="RepostType" :placeholder="$t('infotip.release_type')" style="width:100%">
+      <div style="width: 80%; margin: 0 auto;">
+        <el-select v-model="RepostType" :placeholder="$t('infotip.release_type')" style="width: 100%;">
           <el-option v-for="item in RepostTypes" :key="item.label" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="changeRepostType = false">取 消</el-button>
-        <el-button type="primary" @click="repostType()" :loading="loading">确 定</el-button>
+        <el-button type="primary" :loading="loading" @click="repostType()">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -138,13 +138,13 @@
       <!-- 新建列表的嵌套弹出框 -->
       <el-dialog width="60%" title="新建列表:" :visible.sync="newListDialog" append-to-body>
         <createNewList
+          :need-go="!newListDialog"
+          style="margin: 0 auto;"
           @closeMe="
-            $event => {
-              this.newListDialog = false;
+            ($event) => {
+              newListDialog = false;
             }
           "
-          :needGo="!newListDialog"
-          style="margin:0 auto"
         ></createNewList>
         <div slot="footer" class="dialog-footer">
           <el-button @click="newListDialog = false">取 消</el-button>
@@ -152,14 +152,14 @@
       </el-dialog>
 
       <div v-loading="loadingList">
-        <el-input placeholder="搜索我的列表..." v-model="myListQuery" @keyup.enter.native="getMyList()">
+        <el-input v-model="myListQuery" placeholder="搜索我的列表..." @keyup.enter.native="getMyList()">
           <el-button slot="append" icon="el-icon-search" @click="getMyList()"></el-button>
         </el-input>
         <div v-if="myVideoList.length" class="myVideoList">
           <div v-for="(item, index) in myVideoList" :key="index" class="myVideoListItem" @click="addToThisList(item._id.$oid)">
             <h2>{{ item.title.english }}</h2>
-            <h3 style="display:inline-block;color:#909399" v-if="item.private">[私密]</h3>
-            <h3 style="display:inline-block;color:#E6A23C" v-if="item.exist">[已有此视频]</h3>
+            <h3 v-if="item.private" style="display: inline-block; color: #909399;">[私密]</h3>
+            <h3 v-if="item.exist" style="display: inline-block; color: #e6a23c;">[已有此视频]</h3>
             <p>共{{ item.videos }}个视频</p>
           </div>
         </div>
@@ -168,31 +168,31 @@
         <el-pagination
           background
           class="page-selector"
-          @current-change="handleCurrentChange"
           layout=" prev, pager, next"
           :current-page="page"
           :total="maxcount"
           :page-size="10"
+          @current-change="handleCurrentChange"
         ></el-pagination>
-        <el-button class="createNewList" @click="newListDialog = true" type="primary">新建列表</el-button>
+        <el-button class="createNewList" type="primary" @click="newListDialog = true">新建列表</el-button>
       </div>
     </el-dialog>
 
     <!-- Detail 页面的正文 -->
-    <div class="w detail-page-background-img" v-loading="loading">
+    <div v-loading="loading" class="w detail-page-background-img">
       <left_navbar :msg="myVideoData.tag_by_category"></left_navbar>
 
       <div class="content">
         <!-- 推荐视频栏开始  -->
         <div class="recommend">
-          <h4 style="color:#606266">
+          <h4 style="color: #606266;">
             {{ videoType }}:
             <el-button v-if="isLogin" type="text" @click="changeRepostType = true">{{ $t("modify") }}</el-button>
-            <i v-if="isAdmin" class="el-icon-refresh" @click="refreshVideo(myVideoData)" style="float:right"></i>
+            <i v-if="isAdmin" class="el-icon-refresh" style="float: right;" @click="refreshVideo(myVideoData)"></i>
           </h4>
           <div class="re_top">
             <h2>{{ myVideoData.video.item.title }}</h2>
-            <div style="margin-left:5px;">
+            <div style="margin-left: 5px;">
               <el-button v-if="isLogin" icon="el-icon-star-off" type="primary" round @click="openMyList">{{ $t("favorite") }}</el-button>
               <el-button v-if="isAdmin" @click="managementBox = true">{{ $t("management") }}</el-button>
             </div>
@@ -200,7 +200,7 @@
           <h4 class="video_link">
             <a :href="myVideoData.video.item.url">{{ myVideoData.video.item.url }}</a>
             <!-- 一键复制的小图标 -->
-            <i @click="copyVideoLink(myVideoData.video.item.url)" class="fa fa-copy fa-1x" style="margin-left:4px;"></i>
+            <i class="fa fa-copy fa-1x" style="margin-left: 4px;" @click="copyVideoLink(myVideoData.video.item.url)"></i>
           </h4>
           <!-- 视频上传时间（？） -->
           <h5 style="text-align: center;">{{ videodate }}</h5>
@@ -209,25 +209,23 @@
           <div class="re_video">
             <!-- B站，A站，n站和油管显示内嵌视频播放 -->
             <iframe
+              v-if="iframeUrl !== ''"
               :src="iframeUrl"
-              v-if="this.iframeUrl !== ''"
               allowfullscreen="true"
-              style="width: 948px; height: 763px;  margin:10px auto 30px;display: block;"
+              style="width: 948px; height: 763px; margin: 10px auto 30px; display: block;"
             ></iframe>
             <!-- 如果是 ipfs 视频则播放视频 -->
-            <div v-if="isIpfs" style="text-align: center;" id="nodes">{{ $t("init_tip") }}</div>
+            <!-- <div v-if="isIpfs" id="nodes" style="text-align: center;">{{ $t("init_tip") }}</div> -->
             <video
-              :src="myVideoData.video.item.url"
-              id="player"
-              controls
-              loop
-              width="50%"
               v-if="isIpfs"
-              style="position: relative;left: 50%;transform: translateX(-50%);"
+              :src="'https://cloudflare-ipfs.com/ipfs/' + ipfsURL"
+              controls
+              width="50%"
+              style="position: relative; left: 50%; transform: translateX(-50%);"
             ></video>
             <!-- 其他情况显示缩略图 -->
-            <img v-if="this.iframeUrl === '' && !isIpfs" :src="'/images/covers/' + myVideoData.video.item.cover_image" width="320px" height="200px" />
-            <p class="videoDesc" @click="postAsCopy($event)" style="word-break: break-all;" v-html="myVideoData.video.item.desc" v-linkified></p>
+            <img v-if="iframeUrl === '' && !isIpfs" :src="'/images/covers/' + myVideoData.video.item.cover_image" width="320px" height="200px" />
+            <p v-linkified class="videoDesc" style="word-break: break-all;" @click="postAsCopy($event)" v-html="myVideoData.video.item.desc"></p>
           </div>
         </div>
 
@@ -247,17 +245,17 @@
             <h2>{{ $t("copy") }}</h2>
             <p v-if="myVideoData.copies == ''">
               {{ $t("infotip.nocopies") }}
-              <router-link :to="{ path: './postvideo', query: { copy: this.pid } }" tag="a" v-if="isLogin == true">
+              <router-link v-if="isLogin == true" :to="{ path: './postvideo', query: { copy: pid } }" tag="a">
                 <el-button type="text">[ {{ $t("add_copy") }}]</el-button>
               </router-link>
             </p>
             <p v-else>
               此视频有{{ myVideoData.copies.length }}个副本
-              <router-link :to="{ path: './postvideo', query: { copy: this.pid } }" tag="a" v-if="isLogin == true">
+              <router-link v-if="isLogin == true" :to="{ path: './postvideo', query: { copy: pid } }" tag="a">
                 <el-button type="text">[{{ $t("add_copy") }}]</el-button>
               </router-link>
-              <el-button type="text" @click="dialogVisible = true" v-if="isLogin == true">[{{ $t("del_copy") }}]</el-button>
-              <el-button type="text" @click="broadcastTags()" v-if="isLogin == true" style="margin-left:0px">[{{ $t("sync_replica_label") }}]</el-button>
+              <el-button v-if="isLogin == true" type="text" @click="dialogVisible = true">[{{ $t("del_copy") }}]</el-button>
+              <el-button v-if="isLogin == true" type="text" style="margin-left: 0px;" @click="broadcastTags()">[{{ $t("sync_replica_label") }}]</el-button>
             </p>
           </div>
           <div v-for="(value, key, index) in myVideoData.copies_by_repost_type" :key="index">
@@ -269,13 +267,13 @@
             <h3 v-if="key == 'repost'">{{ $t("repost") }}</h3>
             <h3 v-if="key == 'unknown'">{{ $t("unknown") }}</h3>
             <ul v-for="item in value" :key="item._id.$oid" class="copies">
-              <img :src="require('../static/img/' + item.item.site + '.png')" width="16px" style="margin-right:2px;vertical-align: middle;" />
+              <img :src="require('../static/img/' + item.item.site + '.png')" width="16px" style="margin-right: 2px; vertical-align: middle;" />
               <!-- 将页面参数刷新并重载页面，其中 @click.native 应该是 router-link 为了阻止 a 标签的默认跳转事件 -->
-              <a v-bind:class="{ shortTitleForPageVideos: item.item.part_name }" @click="shiftID(item._id.$oid)">{{ item.item.title }}</a>
+              <a :class="{ shortTitleForPageVideos: item.item.part_name }" @click="shiftID(item._id.$oid)">{{ item.item.title }}</a>
               <span v-if="item.item.part_name" class="shortTitleForTitleOfPageVideos"
                 >P{{ item.item.url.slice(item.item.url.indexOf("=") + 1, item.item.url.length) }}:{{ item.item.part_name }}</span
               >
-              <el-button type="text" @click="synctags(item._id.$oid)" v-if="isLogin == true" style="margin-left:10px"
+              <el-button v-if="isLogin == true" type="text" style="margin-left: 10px;" @click="synctags(item._id.$oid)"
                 >[{{ $t("sync_replica_label_from") }}]</el-button
               >
             </ul>
@@ -313,8 +311,8 @@
             <a v-if="item.prev != ''" @click="shiftID(item.prev)">【{{ $t("previous_article") }}】</a>
             <span v-else>【{{ $t("no_previous_article") }}】</span>
             <router-link :to="{ path: '/listdetail', query: { id: item._id.$oid } }" tag="a">{{ item.title.english }}</router-link>
-            <a v-if="item.next != ''" @click="shiftID(item.next)" style="float:right">【{{ $t("next_article") }}】</a>
-            <span v-else style="float:right">【{{ $t("no_next_article") }}】</span>
+            <a v-if="item.next != ''" style="float: right;" @click="shiftID(item.next)">【{{ $t("next_article") }}】</a>
+            <span v-else style="float: right;">【{{ $t("no_next_article") }}】</span>
           </ul>
         </div>
 
@@ -355,10 +353,19 @@ import createNewList from "../components/CreateNewList.vue";
 import PagesOfVideo from "../components/VideoCompoents/PagesOfVideo.vue";
 import { copyToClipboardText } from "../static/js/generic";
 
-import IPFS from "ipfs";
-import VideoStream from "videostream";
+// import IPFS from "ipfs";
+// import VideoStream from "videostream";
 
 export default {
+  components: {
+    left_navbar,
+    topnavbar,
+    Footer,
+    Comments,
+    Score,
+    createNewList,
+    PagesOfVideo,
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -382,19 +389,19 @@ export default {
             desc: "",
             // 视频上传时间(时间戳对象)
             upload_time: {
-              $date: ""
+              $date: "",
             },
             // 视频的链接
             url: "",
             //视频封面
             cover_image: "",
             // 视频所属的网站
-            site: "bilibili"
-          }
-        }
+            site: "bilibili",
+          },
+        },
       },
       // (如果是B站视频的话)视频的av号
-      aid: "",
+      aid: 0,
       // 我的视频列表
       myVideoList: [],
       // 我的全部视频列表（处理视频是否存在于该列表）
@@ -430,7 +437,7 @@ export default {
         仅管理员可见: 0,
         登录用户可见: 1,
         发布者和管理员可见: 2,
-        所有人可见: 3
+        所有人可见: 3,
       },
       // 本页面的视频的发布类型
       RepostType: "",
@@ -440,11 +447,11 @@ export default {
         { value: "official_repost", label: this.$t("official_repost") },
         {
           value: "authorized_translation",
-          label: this.$t("authorized_translation")
+          label: this.$t("authorized_translation"),
         },
         { value: "authorized_repost", label: this.$t("authorized_repost") },
         { value: "translation", label: this.$t("translation") },
-        { value: "repost", label: this.$t("repost") }
+        { value: "repost", label: this.$t("repost") },
       ],
       dialogVisible: false, // 删除提示框
       pid: "", // 视频的 id 值
@@ -460,7 +467,7 @@ export default {
       URL_EXPANDERS: {},
       // 获取到的所有视频，以页数为第一维组成二维数组(和 localStorage 存储一起使用，已被弃用）
       // localStorageNum: []
-      iframeUrl: ""
+      iframeUrl: "",
     };
   },
   computed: {
@@ -487,15 +494,15 @@ export default {
     },
     // 视频的上传日期
     videodate() {
-      var upload_time = new Date(this.myVideoData.video.item.upload_time.$date);
+      let upload_time = new Date(this.myVideoData.video.item.upload_time.$date);
       // 设置为东八区的时间
       upload_time.setTime(upload_time.getTime() + 1000 * 3600 * 8);
-      var y = upload_time.getFullYear(); // getFullYear 方法以四位数字返回年份
-      var M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-      var d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-      var h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
-      var m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
-      var s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
+      let y = upload_time.getFullYear(); // getFullYear 方法以四位数字返回年份
+      let M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+      let d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+      let h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+      let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+      let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
       return (
         "视频发布于 " +
         y +
@@ -523,13 +530,21 @@ export default {
     },
     // 获取 dom
     nodeShow() {
-      var node = document.getElementById("nodes");
+      let node = document.getElementById("nodes");
       if (node) {
         return node;
       } else {
         return false;
       }
-    }
+    },
+  },
+  watch: {
+    $route() {
+      this.searchVideo();
+    },
+    newListDialog() {
+      if (!this.newListDialog) this.getMyList();
+    },
   },
   created() {
     // 改变侧导航条的标题
@@ -545,19 +560,19 @@ export default {
     open1(message) {
       this.$message({
         message: message,
-        type: "success"
+        type: "success",
       });
     },
     open2() {
       this.$message({
         message: "同步成功！",
-        type: "success"
+        type: "success",
       });
     },
     open3(message) {
       this.$message({
         message: message,
-        type: "warning"
+        type: "warning",
       });
     },
     open4(message) {
@@ -572,9 +587,9 @@ export default {
       this.axios({
         method: "post",
         url: "be/lists/create_from_video.do",
-        data: { vid: this.pid }
-      }).then(res => {
-        var videoPid = res.data.data;
+        data: { vid: this.pid },
+      }).then((res) => {
+        let videoPid = res.data.data;
         this.$router.push({ path: "/listdetail", query: { id: videoPid } });
       });
     },
@@ -582,7 +597,7 @@ export default {
       this.axios({
         method: "post",
         url: "be/videos/breaklink.do",
-        data: { video_id: this.pid }
+        data: { video_id: this.pid },
       }).then(() => {
         this.$router.go(0);
       });
@@ -591,7 +606,7 @@ export default {
       this.axios({
         method: "post",
         url: "be/videos/broadcasttags.do",
-        data: { src: this.pid }
+        data: { src: this.pid },
       }).then(() => {
         this.open2();
       });
@@ -599,7 +614,7 @@ export default {
     // 复制视频连接
     copyVideoLink: function(url) {
       this.$alert("视频链接复制" + (copyToClipboardText(url) ? "成功！" : "失败！"), "分享链接", {
-        confirmButtonText: "确定"
+        confirmButtonText: "确定",
       });
     },
     // 设置内嵌播放链接
@@ -610,7 +625,7 @@ export default {
       let regYtb = /(https:\/\/|http:\/\/)www.youtube.com\/watch\?v=(\S+)/;
       let regAcf = /(https:\/\/|http:\/\/)www.acfun.cn\/v\/ac(\S+)/;
       if (regBili.exec(str) !== null) {
-        this.aid = regBili.exec(str)[2];
+        this.aid = parseInt(regBili.exec(str)[2]);
         return `//player.bilibili.com/player.html?aid=${regBili.exec(str)[2]}&cid=${cid}&page=${regBili.exec(str)[3]}`;
       }
       if (regNico.exec(str) !== null) {
@@ -634,10 +649,10 @@ export default {
           url: "be/getvideo.do",
           data: {
             vid: this.$route.query.id,
-            lang: localStorage.getItem("lang")
-          }
+            lang: localStorage.getItem("lang"),
+          },
         })
-          .then(result => {
+          .then((result) => {
             this.myVideoData = result.data.data;
             this.iframeUrl = this.regToIframe(this.myVideoData.video.item.url, this.myVideoData.video.item.cid || "");
             this.theVideoRank = result.data.data.video.clearence;
@@ -661,7 +676,7 @@ export default {
             if (this.myVideoData.video.item.site == "ipfs") {
               this.isIpfs = true;
               this.ipfsURL = this.myVideoData.video.item.url.slice(5);
-              this.establishIpfsPlayer();
+              // this.establishIpfsPlayer();
             } else {
               this.isIpfs = false;
             }
@@ -682,21 +697,21 @@ export default {
         method: "post",
         url: "be/videos/refresh.do",
         data: {
-          video_id: item.video._id.$oid
-        }
-      }).then(res => {
+          video_id: item.video._id.$oid,
+        },
+      }).then((res) => {
         if (res.data.status === "SUCCEED") {
           this.searchVideo();
           setTimeout(() => {
             this.$message({
               message: "更新成功！",
-              type: "success"
+              type: "success",
             });
           }, 500);
         } else {
           this.$message({
             message: "更新失败",
-            type: "warning"
+            type: "warning",
           });
         }
       });
@@ -706,8 +721,8 @@ export default {
       await this.axios({
         method: "post",
         url: "be/user/whoami",
-        data: {}
-      }).then(result => {
+        data: {},
+      }).then((result) => {
         if (result.data.data == "admin" && this.isLogin) {
           this.isAdmin = true;
         } else {
@@ -724,9 +739,9 @@ export default {
         url: "be/videos/set_clearence.do",
         data: {
           vid: this.pid,
-          clearence: this.theVideoRank
-        }
-      }).then(result => {
+          clearence: this.theVideoRank,
+        },
+      }).then((result) => {
         if (result.data.status == "SUCCEED") {
           this.open1("修改成功！");
           this.loading = false;
@@ -749,9 +764,9 @@ export default {
         url: "/be/videos/set_repost_type.do",
         data: {
           vid: this.pid,
-          repost_type: this.RepostType
-        }
-      }).then(result => {
+          repost_type: this.RepostType,
+        },
+      }).then((result) => {
         if (result.data.status == "SUCCEED") {
           this.open1("修改成功！");
           this.loading = false;
@@ -806,11 +821,11 @@ export default {
     },
     // 将视频简介里的连接变成链接
     urlifyDesc() {
-      var that = this;
-      var desc_text = this.myVideoData.video.item.desc;
-      var combined_matcher = "(";
-      var i = 1;
-      for (var regex in this.URL_MATCHERS) {
+      let that = this;
+      let desc_text = this.myVideoData.video.item.desc;
+      let combined_matcher = "(";
+      let i = 1;
+      for (let regex in this.URL_MATCHERS) {
         if (i == Object.keys(this.URL_MATCHERS).length) {
           combined_matcher += regex;
         } else {
@@ -819,10 +834,10 @@ export default {
         i += 1;
       }
       combined_matcher += ")";
-      var combined_matcher_regex = new RegExp(combined_matcher, "ig");
-      var is_logged_in = this.isLogin;
-      var desc_urlified = desc_text.replace(combined_matcher_regex, function(url) {
-        for (var key in that.URL_MATCHERS) {
+      let combined_matcher_regex = new RegExp(combined_matcher, "ig");
+      let is_logged_in = this.isLogin;
+      let desc_urlified = desc_text.replace(combined_matcher_regex, function(url) {
+        for (let key in that.URL_MATCHERS) {
           if (new RegExp(key, "i").test(url)) {
             const [expanded_url, link_type] = that.URL_MATCHERS[key](url);
             return `<div class="video-link-div"><a href="${expanded_url}">${url}</a>${that.buildUrlTools(is_logged_in, expanded_url, link_type)}</div>`;
@@ -838,7 +853,7 @@ export default {
       }
 
       if (link_type == "video") {
-        var ret = `<div class="url-tools">`;
+        let ret = `<div class="url-tools">`;
         // 利用 name 属性保存绑定的 URL
         ret += `<button name="${url}">添加副本</button>`;
         ret += `</div>`;
@@ -850,7 +865,7 @@ export default {
     // 将简介中的视频连接存为副本
     postAsCopy(event) {
       if (event.target.nodeName.toString() != "BUTTON") return;
-      var url = event.target.name;
+      let url = event.target.name;
       this.loading = true;
       this.axios({
         method: "post",
@@ -858,9 +873,9 @@ export default {
         data: {
           copy: this.myVideoData.video._id.$oid,
           url: url,
-          tags: this.myVideoData.tags
-        }
-      }).then(result => {
+          tags: this.myVideoData.tags,
+        },
+      }).then((result) => {
         if (result.data.status == "SUCCEED") {
           this.open1("副本添加成功！");
           // this.searchVideo();
@@ -886,9 +901,9 @@ export default {
         url: "/be/videos/synctags.do",
         data: {
           dst: this.myVideoData.video._id.$oid,
-          src: URL
-        }
-      }).then(result => {
+          src: URL,
+        },
+      }).then((result) => {
         if (result.data.status == "SUCCEED") {
           this.open1("同步成功！");
           // this.searchVideo();
@@ -918,10 +933,10 @@ export default {
           page: this.page,
           page_size: this.count,
           order: "last_modified",
-          vid: this.$route.query.id
+          vid: this.$route.query.id,
         },
-        withCredentials: true
-      }).then(result => {
+        withCredentials: true,
+      }).then((result) => {
         this.myVideoList = result.data.data.playlists;
         this.maxcount = result.data.data.count;
         this.loadingList = false;
@@ -942,9 +957,9 @@ export default {
           pid: pid,
           copy: "",
           url: this.myVideoData.video.item.url,
-          tags: this.myVideoData.tags
-        }
-      }).then(result => {
+          tags: this.myVideoData.tags,
+        },
+      }).then((result) => {
         if (result.data.status == "SUCCEED") {
           this.myListQuery = "";
           this.open1("添加成功！");
@@ -957,70 +972,53 @@ export default {
       });
     },
 
-    // 启动 ipfs 播放器
-    establishIpfsPlayer() {
-      //// IPFS Settings ////
-      const ipfs = new IPFS({
-        repo: "/ipfs"
-      });
+    // // 启动 ipfs 播放器
+    // establishIpfsPlayer() {
+    //   //// IPFS Settings ////
+    //   const ipfs = new IPFS({
+    //     repo: "/ipfs",
+    //   });
 
-      const Interval = 5 * 1000;
-      ipfs.once("ready", () => {
-        // console.log("ipfs node ready.");
-        this.nodeShow.innerHTML = this.$t("connecting_tip");
-        setInterval(() => {
-          ipfs.swarm.peers((err, peerInfos) => {
-            if (err) {
-              throw err;
-            }
-            // console.log(peerInfos.length+" ipfs node(s) connect.");
-            this.nodeShow.innerHTML = peerInfos.length + this.$t("connect_success_tip");
-          });
-        }, Interval);
-        const player = document.getElementById("player");
-        this.genIpfsVideo(ipfs, this.ipfsURL, player);
-      });
-    },
-    // This is a function to simplify the js
-    // Need: Ipfs node init
-    genIpfsVideo(ipfsnode, hash, element) {
-      let stream;
+    //   const Interval = 5 * 1000;
+    //   ipfs.once("ready", () => {
+    //     // console.log("ipfs node ready.");
+    //     this.nodeShow.innerHTML = this.$t("connecting_tip");
+    //     setInterval(() => {
+    //       ipfs.swarm.peers((err, peerInfos) => {
+    //         if (err) {
+    //           throw err;
+    //         }
+    //         // console.log(peerInfos.length+" ipfs node(s) connect.");
+    //         this.nodeShow.innerHTML = peerInfos.length + this.$t("connect_success_tip");
+    //       });
+    //     }, Interval);
+    //     const player = document.getElementById("player");
+    //     this.genIpfsVideo(ipfs, this.ipfsURL, player);
+    //   });
+    // },
+    // // This is a function to simplify the js
+    // // Need: Ipfs node init
+    // genIpfsVideo(ipfsnode, hash, element) {
+    //   let stream;
 
-      const exampleFile = {
-        createReadStream(opts) {
-          const { start, end } = opts;
-          stream = ipfsnode.catReadableStream(hash, {
-            offset: start,
-            length: end && end - start
-          });
-          stream.on("error", err => {
-            console.log(err);
-          });
-          return stream;
-        }
-      };
-      let vs = new VideoStream(exampleFile, element);
+    //   const exampleFile = {
+    //     createReadStream(opts) {
+    //       const { start, end } = opts;
+    //       stream = ipfsnode.catReadableStream(hash, {
+    //         offset: start,
+    //         length: end && end - start,
+    //       });
+    //       stream.on("error", (err) => {
+    //         console.log(err);
+    //       });
+    //       return stream;
+    //     },
+    //   };
+    //   let vs = new VideoStream(exampleFile, element);
 
-      return vs;
-    }
+    //   return vs;
+    // },
   },
-  watch: {
-    $route() {
-      this.searchVideo();
-    },
-    newListDialog() {
-      if (!this.newListDialog) this.getMyList();
-    }
-  },
-  components: {
-    left_navbar,
-    topnavbar,
-    Footer,
-    Comments,
-    Score,
-    createNewList,
-    PagesOfVideo
-  }
 };
 </script>
 

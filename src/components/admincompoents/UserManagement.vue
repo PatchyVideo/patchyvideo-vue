@@ -23,7 +23,7 @@
             <label>访问等级</label>
           </el-col>
           <el-col :span="18">
-            <el-input v-model="editUser.status" style="width:100%"></el-input>
+            <el-input v-model="editUser.status" style="width: 100%;"></el-input>
           </el-col>
         </el-row>
         <el-row>
@@ -31,7 +31,7 @@
             <label>访问模式</label>
           </el-col>
           <el-col :span="18">
-            <el-input v-model="editUser.access_mode" style="width:100%"></el-input>
+            <el-input v-model="editUser.access_mode" style="width: 100%;"></el-input>
           </el-col>
         </el-row>
         <el-row>
@@ -39,7 +39,7 @@
             <label>允许的操作</label>
           </el-col>
           <el-col :span="18">
-            <el-input v-model="editUser.allowed_ops" placeholder="[ ]" style="width:100%"></el-input>
+            <el-input v-model="editUser.allowed_ops" placeholder="[ ]" style="width: 100%;"></el-input>
           </el-col>
         </el-row>
         <el-row>
@@ -47,7 +47,7 @@
             <label>拒绝的操作</label>
           </el-col>
           <el-col :span="18">
-            <el-input v-model="editUser.denied_ops" placeholder="[ ]" style="width:100%"></el-input>
+            <el-input v-model="editUser.denied_ops" placeholder="[ ]" style="width: 100%;"></el-input>
           </el-col>
         </el-row>
       </div>
@@ -60,15 +60,15 @@
     <h1>{{ $t("title") }}</h1>
     <!-- 表单 -->
     <div class="usermanagement-form">
-      <el-input placeholder="搜索用户名..." v-model="usermanagement.keyword" @keyup.enter.native="getUserList(true)" clearable>
-        <el-select v-model="usermanagement.order" class="select" slot="prepend">
+      <el-input v-model="usermanagement.keyword" placeholder="搜索用户名..." clearable @keyup.enter.native="getUserList(true)">
+        <el-select slot="prepend" v-model="usermanagement.order" class="select">
           <el-option v-for="item in usermanagement.form.options" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
         <el-button slot="append" icon="el-icon-search" @click="getUserList(true)">查找</el-button>
       </el-input>
     </div>
 
-    <el-table :data="usermanagement.data.users" style="width: 100%">
+    <el-table :data="usermanagement.data.users" style="width: 100%;">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" class="demo-table-expand">
@@ -114,10 +114,10 @@
 
     <el-pagination
       background
-      @current-change="handleCurrentChange"
       :current-page="curPageNum"
       layout="pager"
       :page-count.sync="usermanagement.data.page_count"
+      @current-change="handleCurrentChange"
     ></el-pagination>
   </div>
 </template>
@@ -131,7 +131,7 @@ export default {
       couponSelected: "",
       options: [
         { value: "latest", label: "时间正序" },
-        { value: "oldest", label: "时间倒序" }
+        { value: "oldest", label: "时间倒序" },
       ],
       // 当前页码
       curPageNum: 1,
@@ -150,9 +150,9 @@ export default {
           timeRange: [],
           options: [
             { value: "latest", label: "时间正序" },
-            { value: "oldest", label: "时间倒序" }
-          ]
-        }
+            { value: "oldest", label: "时间倒序" },
+          ],
+        },
       },
       // 编辑的用户是当前页面的第几条 0 开始
       editUserIndex: 0,
@@ -162,10 +162,10 @@ export default {
         status: "normal",
         access_mode: "blacklist",
         allowed_ops: [],
-        denied_ops: []
+        denied_ops: [],
       },
       // 加载状态
-      loading: false
+      loading: false,
     };
   },
   watch: {},
@@ -173,7 +173,7 @@ export default {
     this.couponSelected = this.options[0].value;
     this.usermanagement.form.timeRange = [
       this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date(new Date().getTime() - 24 * 60 * 60 * 1000)),
-      this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date())
+      this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date()),
     ];
     this.getUserList();
   },
@@ -183,11 +183,11 @@ export default {
      */
     handleOk(done) {
       this.$confirm("确认提交？")
-        .then(_ => {
+        .then(() => {
           this.dialogVisible = false;
           done();
         })
-        .catch(_ => {});
+        .catch(() => {});
     },
     /**
      * 更新用户数据
@@ -203,7 +203,7 @@ export default {
      * 提交前判断用户数据是否通过弹窗修改（由于更新接口更新的数据全是传入 access_control 下的，所以可以直接传入字符串）
      */
     attrIsModify(attr) {
-      var user = this.usermanagement.data.users[this.editUserIndex];
+      let user = this.usermanagement.data.users[this.editUserIndex];
       return this.editUser[attr] != "undefined" && this.editUser[attr] != user.access_control[attr];
     },
     /**
@@ -211,15 +211,15 @@ export default {
      */
     async updateUserAttr(attr, reqRouter, paraName) {
       if (!(await this.attrIsModify(attr))) return;
-      var paras = { uid: this.editUser.uid };
+      let paras = { uid: this.editUser.uid };
       paras[paraName] = this.editUser[attr];
       await this.axios({
         method: "post",
         url: reqRouter,
-        data: paras
-      }).then(ret => {
-        var user = this.usermanagement.data.users[this.editUserIndex];
-        var data = ret.data.data;
+        data: paras,
+      }).then(() => {
+        let user = this.usermanagement.data.users[this.editUserIndex];
+        // let data = ret.data.data;
         user.access_control[attr] = this.editUser[attr];
       });
     },
@@ -227,9 +227,9 @@ export default {
      *点下编辑按钮，显示弹窗
      */
     showDialog(uid) {
-      var index = this.findEditUserIndex(uid);
+      let index = this.findEditUserIndex(uid);
       this.editUserIndex = index;
-      var user = this.usermanagement.data.users[index];
+      let user = this.usermanagement.data.users[index];
 
       this.dialogVisible = true;
       this.editUser = {
@@ -238,7 +238,7 @@ export default {
         status: user.access_control.status,
         access_mode: user.access_control.access_mode,
         allowed_ops: user.access_control.allowed_ops.toString(),
-        denied_ops: user.access_control.denied_ops.toString()
+        denied_ops: user.access_control.denied_ops.toString(),
       };
     },
     /*
@@ -250,7 +250,7 @@ export default {
       }
     },
     handleCurrentChange(val) {
-      var prePageNum = this.curPageNum;
+      let prePageNum = this.curPageNum;
       this.curPageNum = val;
       try {
         this.getUserList();
@@ -271,11 +271,11 @@ export default {
           page: this.curPageNum,
           page_size: this.usermanagement.size,
           query: this.usermanagement.keyword,
-          order: this.usermanagement.order
-        }
+          order: this.usermanagement.order,
+        },
       })
-        .then(ret => {
-          var data = ret.data.data;
+        .then((ret) => {
+          let data = ret.data.data;
           this.usermanagement.data = data;
           this.loading = false;
           // 回到顶部
@@ -284,7 +284,7 @@ export default {
             $("html").animate({ scrollTop: 0 }, 100);
           }
         })
-        .catch(err => {
+        .catch(() => {
           this.loading = false;
         });
     },
@@ -299,7 +299,7 @@ export default {
         "d+": date.getDate().toString(), // 日
         "H+": date.getHours().toString(), // 时
         "m+": date.getMinutes().toString(), // 分
-        "s+": date.getSeconds().toString() // 秒
+        "s+": date.getSeconds().toString(), // 秒
         // 有其他格式化字符需求可以继续添加，必须转化成字符串
       };
       for (let k in opt) {
@@ -316,10 +316,10 @@ export default {
      * @return: UTC
      */
     toUTCTime(date) {
-      var UTC = new Date(new Date(date).getTime() - 8 * 3600 * 1000);
+      let UTC = new Date(new Date(date).getTime() - 8 * 3600 * 1000);
       return this.dateFormat("yyyy-MM-dd HH:mm:ss", UTC);
-    }
-  }
+    },
+  },
 };
 </script>
 

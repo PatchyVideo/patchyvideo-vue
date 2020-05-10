@@ -86,7 +86,7 @@
 <template>
   <div class="signupPic">
     <!-- 注册框正文 -->
-    <div class="w" v-loading="loading">
+    <div v-loading="loading" class="w">
       <!-- 标题 -->
       <h1>
         <router-link to="home">PatchyVideo</router-link>
@@ -102,8 +102,8 @@
         <el-form-item prop="signup_username" class="signupInput">
           <el-input
             id="username"
-            name="username"
             v-model="signupFormRef.signup_username"
+            name="username"
             :placeholder="$t('input_username')"
             clearable
             prefix-icon="el-icon-user-solid"
@@ -112,9 +112,9 @@
         <el-form-item prop="signup_password1" class="signupInput">
           <el-input
             id="password1"
+            v-model="signupFormRef.signup_password1"
             name="password1"
             type="password"
-            v-model="signupFormRef.signup_password1"
             :placeholder="$t('input_psd')"
             prefix-icon="el-icon-lock"
           ></el-input>
@@ -122,9 +122,9 @@
         <el-form-item prop="signup_password2" class="signupInput">
           <el-input
             id="password2"
+            v-model="signupFormRef.signup_password2"
             name="password2"
             type="password"
-            v-model="signupFormRef.signup_password2"
             :placeholder="$t('repeat_psd')"
             prefix-icon="el-icon-key"
           ></el-input>
@@ -132,15 +132,15 @@
         <el-form-item prop="signup_email" class="signupInput">
           <el-input
             id="email"
+            v-model="signupFormRef.signup_email"
             name="email"
             type="email"
-            v-model="signupFormRef.signup_email"
             clearable
             placeholder="Email"
             prefix-icon="el-icon-message"
           ></el-input>
         </el-form-item>
-        <p id="status" style="text-align: center;" v-bind:class="{ alert: status != $t('ready') }">{{ status }}</p>
+        <p id="status" style="text-align: center;" :class="{ alert: status != $t('ready') }">{{ status }}</p>
       </el-form>
 
       <!-- 注册按钮 -->
@@ -154,17 +154,20 @@
 <script>
 // import login from "../views/Login.vue";
 export default {
+  components: {
+    // login
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     // 校验用户名是否已经存在
-    var checkUsername = (rule, value, callback) => {
+    let checkUsername = (rule, value, callback) => {
       this.axios({
         method: "post",
         url: "be/user/exists.do",
         data: {
-          username: value
-        }
-      }).then(result => {
+          username: value,
+        },
+      }).then((result) => {
         if (result.data.data == true) {
           callback(new Error(this.$t("account_limit")));
         } else {
@@ -173,7 +176,7 @@ export default {
       });
     };
     // 校验两次输入密码是否一致
-    var validatePass2 = (rule, value, callback) => {
+    let validatePass2 = (rule, value, callback) => {
       if (value !== this.signupFormRef.signup_password1) {
         callback(new Error(this.$t("psd_limit")));
       } else {
@@ -186,7 +189,7 @@ export default {
         signup_username: "",
         signup_password1: "",
         signup_password2: "",
-        signup_email: ""
+        signup_email: "",
       },
       // 事先向服务器请求的 session 值
       session: "",
@@ -195,34 +198,34 @@ export default {
           {
             required: true,
             message: this.$t("input_account"),
-            trigger: "blur"
+            trigger: "blur",
           },
           { validator: checkUsername, trigger: "blur" },
           {
             min: 2,
             max: 32,
             message: this.$t("account_limit"),
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         signup_password1: [
           { required: true, message: this.$t("input_psd"), trigger: "blur" },
-          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" }
+          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" },
         ],
         signup_password2: [
           { required: true, message: "请重复密码", trigger: "blur" },
           { validator: validatePass2, trigger: "blur" },
-          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" }
+          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" },
         ],
         signup_email: [
           { required: false, message: this.$t("input_email"), trigger: "blur" },
-          { type: "email", message: this.$t("email_limit"), trigger: ["blur"] }
-        ]
+          { type: "email", message: this.$t("email_limit"), trigger: ["blur"] },
+        ],
       },
       // 登录状态
       status: this.$t("ready"),
       // 视频列表是否属于加载状态的判断
-      loading: false
+      loading: false,
     };
   },
   created() {
@@ -235,21 +238,21 @@ export default {
     open2() {
       this.$message({
         message: this.$t("signup_success"),
-        type: "success"
+        type: "success",
       });
     },
 
     open3() {
       this.$message({
         message: this.$t("username_exist"),
-        type: "warning"
+        type: "warning",
       });
     },
 
     open4() {
       this.$message({
         message: this.$t("unknown_err"),
-        type: "warning"
+        type: "warning",
       });
     },
 
@@ -259,16 +262,16 @@ export default {
       this.loading = true;
 
       // 表单验证
-      this.$refs.signupFormRef.validate(valid => {
+      this.$refs.signupFormRef.validate((valid) => {
         if (valid) {
           // 验证成功，先获取 session
           this.axios({
             method: "post",
             url: "be/auth/get_session.do",
             data: {
-              type: "SIGNUP"
-            }
-          }).then(result => {
+              type: "SIGNUP",
+            },
+          }).then((result) => {
             this.session = result.data.data;
 
             // 请求登录
@@ -279,9 +282,9 @@ export default {
                 username: this.signupFormRef.signup_username,
                 password: this.signupFormRef.signup_password1,
                 email: this.signupFormRef.signup_email,
-                session: this.session
-              }
-            }).then(result => {
+                session: this.session,
+              },
+            }).then((result) => {
               if (result.status == 200) {
                 if (result.data.status == "SUCCEED") {
                   this.open2();
@@ -292,7 +295,7 @@ export default {
                 }
                 // 用户名已存在的情况
                 else {
-                  var reason = result.data.data.reason;
+                  let reason = result.data.data.reason;
                   if (reason == "USER_EXIST") {
                     this.open3();
                   } else {
@@ -312,11 +315,8 @@ export default {
           return false;
         }
       });
-    }
+    },
   },
-  components: {
-    // login
-  }
 };
 </script>
 

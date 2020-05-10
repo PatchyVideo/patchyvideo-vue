@@ -22,6 +22,13 @@
 
 <script>
 export default {
+  components: {},
+  props: {
+    msg: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {};
@@ -31,8 +38,8 @@ export default {
       this.axios({
         method: "post",
         url: "be/list/setcover.do",
-        data: this.msg
-      }).then(res => {
+        data: this.msg,
+      }).then((res) => {
         if (res.data.status == "SUCCEED") {
           // 方案一：全局刷新、会有闪屏，且所有数据重新请求，不好。
           // this.$router.go(0);
@@ -40,10 +47,8 @@ export default {
           this.$store.commit("refreshPage");
         }
       });
-    }
+    },
   },
-  props: ["msg"],
-  components: {}
 };
 </script>
 

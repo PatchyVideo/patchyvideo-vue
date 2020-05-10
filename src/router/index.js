@@ -13,129 +13,129 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "*",
-    redirect: "/404"
+    redirect: "/404",
   },
   {
     path: "/",
     redirect() {
       return "/home";
-    }
+    },
   },
   {
     path: "/404",
-    component: () => import("../views/404.vue")
+    component: () => import("../views/404.vue"),
   },
   {
     path: "/home",
-    component: () => import("../views/Home.vue")
+    component: () => import("../views/Home.vue"),
   },
   {
     path: "/lists",
-    component: () => import("../views/Lists.vue")
+    component: () => import("../views/Lists.vue"),
   },
   {
     path: "/createVideoList",
-    component: () => import("../views/CreateVideoList.vue")
+    component: () => import("../views/CreateVideoList.vue"),
   },
   {
     path: "/listdetail",
 
-    component: () => import("../views/ListDetail.vue")
+    component: () => import("../views/ListDetail.vue"),
   },
   {
     path: "/postvideo",
-    component: () => import("../views/PostVideo.vue")
+    component: () => import("../views/PostVideo.vue"),
   },
   {
     path: "/video",
-    component: () => import("../views/Detail.vue")
+    component: () => import("../views/Detail.vue"),
   },
   {
     path: "/login",
-    component: () => import("../views/Login.vue")
+    component: () => import("../views/Login.vue"),
   },
   {
     path: "/signup",
 
-    component: () => import("../views/SignUp.vue")
+    component: () => import("../views/SignUp.vue"),
   },
   {
     path: "/forgetPassword",
-    component: () => import("../views/ForgetPassword.vue")
+    component: () => import("../views/ForgetPassword.vue"),
   },
   {
     path: "/resetpassword",
-    component: () => import("../views/ResetPassword.vue")
+    component: () => import("../views/ResetPassword.vue"),
   },
   {
     path: "/edittag",
 
-    component: () => import("../views/Edittag.vue")
+    component: () => import("../views/Edittag.vue"),
   },
   {
     path: "/users/:id",
-    component: () => import("../views/User")
+    component: () => import("../views/User"),
   },
   {
     path: "/superadmin",
-    component: () => import("../views/SuperAdmin.vue")
+    component: () => import("../views/SuperAdmin.vue"),
   },
   {
     path: "/ipfs",
-    component: () => import("../views/IPFS.vue")
+    component: () => import("../views/IPFS.vue"),
   },
   {
     path: "/ipfs/player",
-    component: () => import("../views/IPFS_player.vue")
+    component: () => import("../views/IPFS_player.vue"),
   },
   {
     path: "/messages",
-    component: () => import("../views/Messages.vue")
+    component: () => import("../views/Messages.vue"),
   },
   {
     path: "/logscontributes",
-    component: () => import("../views/ContributionLogs.vue")
+    component: () => import("../views/ContributionLogs.vue"),
   },
   {
     path: "/test", // 测试用页面
-    component: () => import("../views/About.vue")
+    component: () => import("../views/About.vue"),
   },
   {
     path: "/forum",
-    component: () => import("../views/Forum.vue")
+    component: () => import("../views/Forum.vue"),
   },
   {
     path: "/forum/:fid",
-    component: () => import("../views/ForumDetail.vue")
+    component: () => import("../views/ForumDetail.vue"),
   },
   {
     path: "/forum/:fid/post/:tid",
-    component: () => import("../views/ThreadDetail.vue")
+    component: () => import("../views/ThreadDetail.vue"),
   },
   {
     path: "/fpost/:tid",
-    component: () => import("../views/ThreadDetail.vue")
-  }
+    component: () => import("../views/ThreadDetail.vue"),
+  },
 ];
 
 const router = new VueRouter({
   // mode: 'history',
   // base: process.env.BASE_URL,
-  routes
+  routes,
 });
 
-var doorObj = document.getElementById("door");
-var irikuchiObj = document.getElementsByClassName("irikuchi")[0];
+let doorObj = document.getElementById("door");
+let irikuchiObj = document.getElementsByClassName("irikuchi")[0];
 
-var text = ["", ".", "..", "..."];
-var itext;
+let text = ["", ".", "..", "..."];
+let itext;
 function startLoading() {
   if (irikuchiObj) {
     doorObj.classList.remove("kieru");
     irikuchiObj.style.display = "block";
   }
   changeSiteTitle("少女祈祷中");
-  var index = 0;
+  let index = 0;
   itext = setInterval(() => {
     index++;
     changeSiteTitle(`少女祈祷中${text[index % text.length]}`);
@@ -144,7 +144,7 @@ function startLoading() {
 function endLoading() {
   if (irikuchiObj) {
     irikuchiObj.classList.add("kieru");
-    setTimeout(e => {
+    setTimeout(() => {
       irikuchiObj.style.display = "none";
     }, 500);
     clearInterval(itext);
@@ -152,17 +152,19 @@ function endLoading() {
 }
 
 //整活页面
-var page;
+let page;
 function startPage() {
   changeSiteTitle("少女密室");
   page = Loading.service({
     lock: true,
     text: `${getYiyan()}`,
-    customClass: "eloading"
+    customClass: "eloading",
     //background: 'rgba(0, 0, 0, 0.7)'
   });
 }
 
+// TODO: close loading page when server alives
+// eslint-disable-next-line no-unused-vars
 function endPage() {
   page.close();
 }
@@ -209,9 +211,9 @@ router.beforeEach((to, from, next) => {
   startLoading();
   axios({
     method: "get",
-    url: "/be/alive.txt"
+    url: "/be/alive.txt",
   })
-    .then(result => {
+    .then(() => {
       endLoading();
 
       // to 将要访问的路径
@@ -240,9 +242,9 @@ router.beforeEach((to, from, next) => {
       }
       next();
     })
-    .catch(ex => {
+    .catch((ex) => {
       endLoading();
-      var res = ex.response;
+      let res = ex.response;
       if (res) {
         if (res.status == 404) {
           return next("/404");
@@ -251,7 +253,7 @@ router.beforeEach((to, from, next) => {
           Message({
             message: "巴瓦鲁魔法服务器正在跃迁中",
             type: "warning",
-            duration: 0
+            duration: 0,
           });
           return false;
         } else if (res.status == 500) {
@@ -259,7 +261,7 @@ router.beforeEach((to, from, next) => {
           Message.error({
             message: "巴瓦鲁魔法服务器哮喘犯了",
             type: "error",
-            duration: 0
+            duration: 0,
           });
           return false;
         } else if (res.status == 503) {
@@ -267,7 +269,7 @@ router.beforeEach((to, from, next) => {
           Message({
             message: "巴瓦鲁魔法服务器正在睡觉",
             type: "error",
-            duration: 0
+            duration: 0,
           });
           return false;
         } else if (res.status == 403) {
@@ -275,7 +277,7 @@ router.beforeEach((to, from, next) => {
           Message({
             message: "你被帕秋莉禁止进入巴瓦鲁魔法服务器",
             type: "error",
-            duration: 0
+            duration: 0,
           });
           return false;
         }
@@ -285,7 +287,7 @@ router.beforeEach((to, from, next) => {
       Message({
         message: "巴瓦鲁魔法服务器被隙间了",
         type: "error",
-        duration: 0
+        duration: 0,
       });
       return false;
     });
@@ -294,9 +296,9 @@ router.beforeEach((to, from, next) => {
 // 获取 cookie
 function getCookie() {
   if (document.cookie.length > 0) {
-    var arr = document.cookie.split("; ");
-    for (var i = 0; i < arr.length; i++) {
-      var arr2 = arr[i].split(":");
+    let arr = document.cookie.split("; ");
+    for (let i = 0; i < arr.length; i++) {
+      let arr2 = arr[i].split(":");
       // 判断查找相对应的值
       if (arr2[0] == "username") {
         if (arr2[1] != "") {

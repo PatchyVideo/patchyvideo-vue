@@ -108,7 +108,7 @@
     <topnavbar />
 
     <!-- EditTags 组件-->
-    <EditTags ref="editTag" :msg="temporaryValForVLP" :visible.sync="showTagPanel" v-if="showTagPanel"></EditTags>
+    <EditTags v-if="showTagPanel" ref="editTag" :msg="temporaryValForVLP" :visible.sync="showTagPanel"></EditTags>
 
     <!-- 编辑视频列表时的对话框 -->
     <el-dialog :title="$t('edit_list_info_dialog.title')" :visible.sync="openListEdit" width="40%" :close-on-click-modal="false">
@@ -120,18 +120,20 @@
         <!-- 简介 -->
         <el-form-item prop="desc">
           <el-input
+            v-model="playlist_metadata.desc"
             type="textarea"
             :autosize="{ minRows: 6 }"
             :placeholder="$t('edit_list_info_dialog.list_introduction_tip')"
-            v-model="playlist_metadata.desc"
           ></el-input>
         </el-form-item>
         <el-form-item>
           <el-checkbox v-model="playlist_metadata.private">{{ $t("edit_list_info_dialog.set_private_list") }}</el-checkbox>
         </el-form-item>
         <el-form-item class="createList">
-          <el-button type="primary" @click="onSubmit" style="width:80%" :loading="loading">{{ $t("edit_list_info_dialog.btn_ok") }}</el-button>
-          <el-button @click="openListEdit = false" style="width:80%;margin-top:10px;margin-left:0px">{{ $t("edit_list_info_dialog.btn_cancel") }}</el-button>
+          <el-button type="primary" style="width: 80%;" :loading="loading" @click="onSubmit">{{ $t("edit_list_info_dialog.btn_ok") }}</el-button>
+          <el-button style="width: 80%; margin-top: 10px; margin-left: 0px;" @click="openListEdit = false">{{
+            $t("edit_list_info_dialog.btn_cancel")
+          }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -153,7 +155,7 @@
     </el-dialog>
 
     <!-- listdetail页面的正文 -->
-    <div class="w main-page-background-img" v-loading="loading">
+    <div v-loading="loading" class="w main-page-background-img">
       <div class="content">
         <!-- 视频列表介绍 -->
         <div class="deemo shadow">
@@ -161,7 +163,7 @@
             <!--<img src="../static/img/5.png" style="float:left;margin-top:50px;" />
             <img src="../static/img/1.png" style="float:right;margin-top:50px;" />-->
             <h2>{{ videolistName }}</h2>
-            <img :src="'/images/covers/' + videolistDetail.playlist.cover" style="min-height:200px" />
+            <img :src="'/images/covers/' + videolistDetail.playlist.cover" style="min-height: 200px;" />
             <p>{{ videolistDesc }}</p>
           </div>
           <!-- 打开 Tag 编辑页面 -->
@@ -169,13 +171,13 @@
             <el-button type="success" @click="addVideo">{{ $t("btn_group.add_video") }}</el-button>
             <el-button type="success" @click="addFromList">{{ $t("btn_group.import_from_other") }}</el-button>
             <el-popover style="margin: 0px 10px;" width="100%" trigger="click">
-              <ListFolderView ref="listFolder" :msg="temporaryValForVLP" :visible.sync="showListFolder" v-if="isLogin"></ListFolderView>
-              <el-button type="primary" @click="openListFolder" class="EditTagsButton" slot="reference">{{ $t("btn_group.add_favorite") }}</el-button>
+              <ListFolderView v-if="isLogin" ref="listFolder" :msg="temporaryValForVLP" :visible.sync="showListFolder"></ListFolderView>
+              <el-button slot="reference" type="primary" class="EditTagsButton" @click="openListFolder">{{ $t("btn_group.add_favorite") }}</el-button>
             </el-popover>
 
             <el-button type="info" @click="openListEdit = true">{{ $t("btn_group.edit_list_info") }}</el-button>
 
-            <el-button type="primary" @click="openEditTags" class="EditTagsButton" :disabled="showTagPanel">{{ $t("btn_group.edit_common_tags") }}</el-button>
+            <el-button type="primary" class="EditTagsButton" :disabled="showTagPanel" @click="openEditTags">{{ $t("btn_group.edit_common_tags") }}</el-button>
 
             <el-button type="warning" @click="inverse()">{{ $t("btn_group.reverse_list") }}</el-button>
             <el-button type="danger" @click="dialogVisible = true">{{ $t("btn_group.delete") }}</el-button>
@@ -183,8 +185,8 @@
           <!-- 没有编辑权限的时候只提供加入收藏功能 -->
           <div v-else>
             <el-popover v-if="isLogin" style="margin: 0px 10px;" width="100%" trigger="click">
-              <ListFolderView ref="listFolder" :msg="temporaryValForVLP" :visible.sync="showListFolder" v-if="isLogin"></ListFolderView>
-              <el-button type="primary" @click="openListFolder" class="EditTagsButton" slot="reference">{{ $t("btn_group.add_favorite") }}</el-button>
+              <ListFolderView v-if="isLogin" ref="listFolder" :msg="temporaryValForVLP" :visible.sync="showListFolder"></ListFolderView>
+              <el-button slot="reference" type="primary" class="EditTagsButton" @click="openListFolder">{{ $t("btn_group.add_favorite") }}</el-button>
             </el-popover>
           </div>
           <!-- 评分区 -->
@@ -196,7 +198,7 @@
         <!-- 视频列表 -->
         <div class="recommend">
           <!-- 视频详情 -->
-          <div class="minbox shadow" v-for="item in videolistVideos" :key="item._id.$oid">
+          <div v-for="item in videolistVideos" :key="item._id.$oid" class="minbox shadow">
             <div class="re_video">
               <div class="edit">
                 <div id="edit_first">
@@ -214,7 +216,7 @@
                   <router-link
                     :to="{
                       path: './postvideo',
-                      query: getInsertData(item)
+                      query: getInsertData(item),
                     }"
                     class="insert-video"
                   >
@@ -228,11 +230,11 @@
                 <h4 v-if="item.item.part_name">P{{ item.item.url.slice(item.item.url.indexOf("=") + 1, item.item.url.length) }}:{{ item.item.part_name }}</h4>
                 <p>{{ item.item.desc }}</p>
                 <div>
-                  <img :src="require('../static/img/' + item.item.site + '.png')" width="16px" style="margin-right:2px" />
+                  <img :src="require('../static/img/' + item.item.site + '.png')" width="16px" style="margin-right: 2px;" />
                   <a :href="item.item.url">
                     {{ item.item.url }}
                   </a>
-                  <i @click="copyVideoLink(item.item.url)" class="fa fa-copy fa-lg" style="margin-left:2px"></i>
+                  <i class="fa fa-copy fa-lg" style="margin-left: 2px;" @click="copyVideoLink(item.item.url)"></i>
                 </div>
               </div>
               <div v-if="editable" class="item_end">
@@ -247,13 +249,13 @@
         <el-pagination
           background
           class="page-selector"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
           layout="jumper, prev, pager, next, sizes"
-          :current-page="this.page"
-          :total="this.maxcount"
+          :current-page="page"
+          :total="maxcount"
           :page-size="20"
           :page-sizes="[10, 20, 30, 40]"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
         ></el-pagination>
 
         <!-- 评论区 -->
@@ -280,6 +282,17 @@ import Score from "../components/Score.vue";
 import { copyToClipboardText } from "../static/js/generic";
 
 export default {
+  components: {
+    topnavbar,
+    Footer,
+    EditTags,
+    Move,
+    DeleteVideo,
+    ListFolderView,
+    SetCover,
+    Comments,
+    Score,
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -288,13 +301,13 @@ export default {
         title: "",
         desc: "",
         cover: "",
-        private: false
+        private: false,
       },
       // 视频列表的详细信息
       videolistDetail: {
         playlist: {
-          cover: ""
-        }
+          cover: "",
+        },
       },
       // 判断是否登录
       isLogin: false,
@@ -334,20 +347,36 @@ export default {
           {
             required: true,
             message: this.$t("edit_list_info_dialog.list_title_err_tip"),
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         desc: [
           {
             required: true,
             message: this.$t("edit_list_info_dialog.list_introduction_err_tip"),
-            trigger: "blur"
-          }
-        ]
+            trigger: "blur",
+          },
+        ],
       },
       // 播放列表目录页面是否显示
-      showListFolder: false
+      showListFolder: false,
     };
+  },
+  computed: {
+    f1() {
+      return this.$store.state.refreshCount;
+    },
+  },
+  watch: {
+    page() {
+      this.getVideoList(this.page, this.count);
+    },
+    count() {
+      this.getVideoList(this.page, this.count);
+    },
+    f1() {
+      this.getVideoList(this.page, this.count);
+    },
   },
   mounted() {
     // 查看是否登录
@@ -361,7 +390,7 @@ export default {
     getInsertData(e) {
       let obj = {
         pid: this.videolistPid,
-        rank: e.rank
+        rank: e.rank,
       };
       return obj;
     },
@@ -372,7 +401,7 @@ export default {
         pid: this.videolistPid,
         vid: e._id.$oid,
         page: this.page,
-        page_size: this.maxcount
+        page_size: this.maxcount,
       };
 
       return obj;
@@ -393,9 +422,9 @@ export default {
       this.axios({
         method: "post",
         url: "be/lists/get_playlist.do",
-        data: { page: e, page_size: count, pid: this.$route.query.id }
+        data: { page: e, page_size: count, pid: this.$route.query.id },
       })
-        .then(result => {
+        .then((result) => {
           // 请求失败的情况
           if (result.data.status == "FAILED") {
             // 列表不存在的情况，跳转到 404 页面
@@ -424,9 +453,9 @@ export default {
             method: "post",
             url: "be/lists/get_playlist_metadata.do",
             data: {
-              pid: this.videolistPid
-            }
-          }).then(result => {
+              pid: this.videolistPid,
+            },
+          }).then((result) => {
             this.playlist_metadata.title = result.data.data.playlist.title.english;
             this.playlist_metadata.desc = result.data.data.playlist.desc.english;
             this.playlist_metadata.private = result.data.data.playlist.private;
@@ -448,7 +477,7 @@ export default {
     // 复制视频连接
     copyVideoLink: function(url) {
       this.$alert("视频链接复制" + (copyToClipboardText(url) ? "成功！" : "失败！"), "分享链接", {
-        confirmButtonText: "确定"
+        confirmButtonText: "确定",
       });
     },
     // 添加视频
@@ -457,8 +486,8 @@ export default {
         path: "./postvideo",
         query: {
           pid: this.videolistPid,
-          rank: -1
-        }
+          rank: -1,
+        },
       });
     },
     // 从其他网站的收藏夹导入视频
@@ -467,8 +496,8 @@ export default {
         path: "./createVideoList",
         query: {
           pid: this.videolistPid,
-          exist: 1
-        }
+          exist: 1,
+        },
       });
     },
     // 提交视频详情修改数据
@@ -481,8 +510,8 @@ export default {
           pid: this.videolistPid,
           title: this.playlist_metadata.title,
           desc: this.playlist_metadata.desc,
-          private: this.playlist_metadata.private
-        }
+          private: this.playlist_metadata.private,
+        },
       }).then(() => {
         this.open(this.$t("commit_tip"));
         this.openListEdit = false;
@@ -496,8 +525,8 @@ export default {
         method: "post",
         url: "/be/list/inverse.do",
         data: {
-          pid: this.videolistPid
-        }
+          pid: this.videolistPid,
+        },
       }).then(() => {
         this.open(this.$t("oper_tip"));
         this.getVideoList();
@@ -509,8 +538,8 @@ export default {
         method: "post",
         url: "be/lists/del_playlist.do",
         data: {
-          pid: this.videolistPid
-        }
+          pid: this.videolistPid,
+        },
       }).then(() => {
         this.open(this.$t("delete_tip"));
         this.$router.push({ path: "/lists" });
@@ -529,37 +558,10 @@ export default {
     open(message) {
       this.$message({
         message: message,
-        type: "success"
+        type: "success",
       });
-    }
-  },
-  computed: {
-    f1() {
-      return this.$store.state.refreshCount;
-    }
-  },
-  watch: {
-    page() {
-      this.getVideoList(this.page, this.count);
     },
-    count() {
-      this.getVideoList(this.page, this.count);
-    },
-    f1() {
-      this.getVideoList(this.page, this.count);
-    }
   },
-  components: {
-    topnavbar,
-    Footer,
-    EditTags,
-    Move,
-    DeleteVideo,
-    ListFolderView,
-    SetCover,
-    Comments,
-    Score
-  }
 };
 </script>
 
@@ -695,8 +697,7 @@ export default {
   }
 }
 
-.shadow {
-}
+// .shadow {}
 .content {
   top: 3px;
   width: 80%;
@@ -756,8 +757,7 @@ export default {
   text-align: left;
   /* height: 150px; */
 }
-.re_video h1 {
-}
+// .re_video h1 {}
 .re_video_img {
   display: inline-block;
   width: 200px;

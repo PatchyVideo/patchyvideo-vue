@@ -61,29 +61,31 @@
 </i18n>
 
 <template>
-  <div class="postBox" v-loading="loading">
+  <div v-loading="loading" class="postBox">
     <div class="content">
       <!-- 输入URL的文本框 -->
-      <el-input type="textarea" :autosize="{ minRows: 8 }" :placeholder="$t('enter_url_prompt')" v-model="URLs"></el-input>
+      <el-input v-model="URLs" type="textarea" :autosize="{ minRows: 8 }" :placeholder="$t('enter_url_prompt')"></el-input>
       <!-- 标签编辑 -->
-      <div class="tagsEdit" v-if="false">
+      <div v-if="false" class="tagsEdit">
         <h3>{{ $t("tag") }}</h3>
         <div class="tagBox">
-          <p v-if="tags == ''" style="margin-bottom:10px;">{{ $t("no_tag") }}</p>
-          <el-tag effect="dark" v-else v-for="item in tags" :key="item">{{ item }}</el-tag>
+          <p v-if="tags == ''" style="margin-bottom: 10px;">{{ $t("no_tag") }}</p>
+          <el-tag v-for="item in tags" v-else :key="item" effect="dark">{{ item }}</el-tag>
         </div>
       </div>
       <!-- 高级选项 -->
       <p class="advancedOptions" @click="showAdvancedOptions">
         {{ $t("advance") }}
-        <i class="el-icon-caret-bottom" v-if="!advancedOptions"></i>
-        <i class="el-icon-caret-top" v-else></i>
+        <i v-if="!advancedOptions" class="el-icon-caret-bottom"></i>
+        <i v-else class="el-icon-caret-top"></i>
         <!-- Wiki链接 -->
-        <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color:#409EFF;float:right;margin-right:100px;margin-top:0px;">{{ $t("PostRules") }}</a>
+        <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color: #409eff; float: right; margin-right: 100px; margin-top: 0px;">{{
+          $t("PostRules")
+        }}</a>
       </p>
-      <el-collapse-transition style="margin-bottom:20px">
+      <el-collapse-transition style="margin-bottom: 20px;">
         <div v-show="advancedOptions" class="options">
-          <el-checkbox v-model="as_copies" style="margin-top:10px">{{ $t("mutually_copies") }}</el-checkbox>
+          <el-checkbox v-model="as_copies" style="margin-top: 10px;">{{ $t("mutually_copies") }}</el-checkbox>
         </div>
       </el-collapse-transition>
       <!-- 上传视频的按钮 -->
@@ -94,13 +96,14 @@
         </el-button>
       </div>
     </div>
-    <EditTags :msg="noData" :visible.sync="showTagPanel" @getEditTagsData="TagShow" class="EditTags"></EditTags>
+    <EditTags :msg="noData" :visible.sync="showTagPanel" class="EditTags" @getEditTagsData="TagShow"></EditTags>
   </div>
 </template>
 
 <script>
 import EditTags from "../components/EditTags";
 export default {
+  components: { EditTags },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -117,7 +120,7 @@ export default {
       // 是否互为副本
       as_copies: false,
       // 是否显示高级选项的标志
-      advancedOptions: false
+      advancedOptions: false,
     };
   },
   computed: {
@@ -144,7 +147,7 @@ export default {
       } else {
         return "";
       }
-    }
+    },
   },
   created() {},
   mounted() {},
@@ -161,7 +164,7 @@ export default {
     postMultiVideos() {
       this.loading = true;
       // 分割视频 URL
-      var videos = this.URLs.split(/\r?\n/).filter(function(i) {
+      let videos = this.URLs.split(/\r?\n/).filter(function(i) {
         return i;
       });
       this.axios({
@@ -173,14 +176,14 @@ export default {
           copy: this.copy,
           videos: videos,
           tags: this.tags,
-          as_copies: this.as_copies
-        }
-      }).then(result => {
+          as_copies: this.as_copies,
+        },
+      }).then((result) => {
         if (result.data.status == "SUCCEED") {
           this.open4();
         } else if (result.data.status == "FAILED") {
           if (result.data.data.reason == "TAG_NOT_EXIST") {
-            var errorTag = result.data.data.aux;
+            let errorTag = result.data.data.aux;
             this.open3(errorTag);
           } else {
             this.open2();
@@ -195,29 +198,28 @@ export default {
     open2() {
       this.$message({
         message: this.$t("post_failed"),
-        type: "error"
+        type: "error",
       });
     },
     open3(errorTag) {
       this.$message({
         message: this.$t("tag_not_exist", { tag: errorTag }),
-        type: "error"
+        type: "error",
       });
     },
     open4() {
       this.$message({
         message: this.$t("post_succeed"),
-        type: "success"
+        type: "success",
       });
     },
     open5() {
       this.$message({
         message: this.$t("unknown_error"),
-        type: "error"
+        type: "error",
       });
-    }
+    },
   },
-  components: { EditTags }
 };
 </script>
 

@@ -70,7 +70,7 @@
 
 <template>
   <transition mode="out-in">
-    <div v-if="visible" class="EditTags" :class="{ active: this.msg != '' }">
+    <div v-if="visible" class="EditTags" :class="{ active: msg != '' }">
       <el-dialog
         v-if="dialogVisible"
         :visible.sync="dialogVisible"
@@ -79,7 +79,7 @@
         :modal-append-to-body="false"
         :before-close="handleClose"
       >
-        <span style="font-size:19px;color: #5e6d82;">{{ $t("issave") }}</span>
+        <span style="font-size: 19px; color: #5e6d82;">{{ $t("issave") }}</span>
         <p></p>
         <span slot="footer" class="dialog-footer">
           <el-button @click="closeTagPanel(true)">{{ $t("cancel") }}</el-button>
@@ -94,14 +94,14 @@
             closeTagPanel(JSON.stringify(tagsOrigin) === JSON.stringify(tags));
           "
         >
-          <i class="el-icon-close" id="close" v-if="this.$route.path != '/postvideo'"></i>
+          <i v-if="this.$route.path != '/postvideo'" id="close" class="el-icon-close"></i>
         </a>
         <div class="minibox">
           <div class="m_bg"></div>
           <div class="m_a activeTag">
-            <ul class="Taglist" :class="v" v-for="v in this.tagCategoriesAll" :key="v">
+            <ul v-for="v in tagCategoriesAll" :key="v" class="Taglist" :class="v">
               <span v-for="(i, item) in TagCategoriesData" :key="item">
-                <div class="item" :class="{ selected: -1 === tagsForRec.indexOf(item) }" @click.stop="selected(i, item)" v-if="i === v">
+                <div v-if="i === v" class="item" :class="{ selected: -1 === tagsForRec.indexOf(item) }" @click.stop="selected(i, item)">
                   <div>
                     <p :class="`val_` + item">{{ item }}</p>
                     <a href="javascript:;" @click.stop="deleteObj(i, item)">
@@ -167,14 +167,14 @@
                     <div class="adviceList">
                       <div
                         class="name"
-                        v-bind:class="{
+                        :class="{
                           Copyright: item.cat == 2,
                           Language: item.cat == 5,
                           Character: item.cat == 1,
                           Author: item.cat == 3,
                           General: item.cat == 0,
                           Meta: item.cat == 4,
-                          Soundtrack: item.cat == 6
+                          Soundtrack: item.cat == 6,
                         }"
                         v-html="item.tag || ConvertLangRes(item.langs)"
                       ></div>
@@ -183,7 +183,7 @@
                   </template>
                 </el-autocomplete>
                 <a href="javascript:;" @click="addTag">
-                  <i class="el-icon-plus" id="add"></i>
+                  <i id="add" class="el-icon-plus"></i>
                 </a>
               </div>
             </div>
@@ -195,8 +195,8 @@
             <div>
               <span>{{ $t("recommnad_tags") }}</span>
               <transition mode="out-in">
-                <ul class="recTag Taglist" v-show="recTagsWatch">
-                  <li class="item" v-for="(i, item) in recTags" :key="item">
+                <ul v-show="recTagsWatch" class="recTag Taglist">
+                  <li v-for="(i, item) in recTags" :key="item" class="item">
                     <a href="javascript:;" @click="getiptVal(i, item)">
                       <p class="val_${str[i]}">{{ Object.keys(i)[0] }}</p>
                       <!--           <i class="el-icon-close"></i>-->
@@ -208,7 +208,7 @@
           </div>
         </div>
         <a href="javascript:;">
-          <a id="save" v-if="this.$route.path != '/postvideo'" @click="saveTag()" style="font-size: 28px">{{ $t("save") }}</a>
+          <a v-if="this.$route.path != '/postvideo'" id="save" style="font-size: 28px;" @click="saveTag()">{{ $t("save") }}</a>
         </a>
       </div>
     </div>
@@ -217,6 +217,21 @@
 
 <script>
 export default {
+  components: {},
+  props: {
+    msg: {
+      type: String,
+      default: "",
+    },
+    really: {
+      type: String,
+      default: "",
+    },
+    visible: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -232,7 +247,7 @@ export default {
       infoTip: [
         { name: "infoTip_1", isHidden: false },
         { name: "infoTip_2", isHidden: false },
-        { name: "infoTip_3", isHidden: false }
+        { name: "infoTip_3", isHidden: false },
       ],
       recTagsWatch: true,
       firstFlag: true,
@@ -241,11 +256,37 @@ export default {
       isInfoTipClick: false,
       infoTipMark: false,
       // 自动补全标签的内容
-      taglist: []
+      taglist: [],
     };
   },
+  watch: {
+    tags(n) {
+      this.$emit("getEditTagsData", n);
+    },
+    tagsForRec(newVal, oldVal) {
+      if (JSON.stringify(oldVal) != "[]" || this.animeMark != 0) {
+        this.recTagsWatch = false;
+        this.getRecTags(newVal);
+        // let _that = this;
+        // setTimeout(function() {
+        //   _that.recTagsWatch = !_that.recTagsWatch;
+        //   _that.getRecTags(newVal);
+        // }, 300);
+      }
+    },
+    msg() {
+      if (this.msg != "") {
+        this.getCommonTags();
+      }
+    },
+    really(v) {
+      if (v === true) {
+        // this.$emit("getEditTagsData", this.tags);
+      }
+    },
+  },
   created() {
-    var that = this;
+    let that = this;
     // 当前页面监视键盘输入
     document.onkeydown = function(e) {
       // 事件对象兼容
@@ -272,8 +313,8 @@ export default {
     this.axios({
       method: "post",
       url: "be/tags/query_categories.do",
-      data: {}
-    }).then(result => {
+      data: {},
+    }).then((result) => {
       let categories = result.data.data.categories;
       for (let i = 0; i < categories.length; i++) {
         this.tagCategoriesAll.push(categories[i].name);
@@ -283,7 +324,7 @@ export default {
   mounted() {},
   updated() {
     let _that = this;
-    var infoTipObj = document.getElementsByClassName("el-autocomplete-suggestion");
+    let infoTipObj = document.getElementsByClassName("el-autocomplete-suggestion");
     for (let i = 0; i < infoTipObj.length; ++i) {
       infoTipObj[i].onclick = function() {
         _that.isInfoTipClick = true;
@@ -309,14 +350,14 @@ export default {
     open2() {
       this.$message({
         message: this.$t("tag_add_succeed"),
-        type: "success"
+        type: "success",
       });
     },
 
     open3() {
       this.$message({
         message: this.$t("tag_already_exist"),
-        type: "warning"
+        type: "warning",
       });
     },
 
@@ -326,13 +367,13 @@ export default {
     open5() {
       this.$message({
         message: this.$t("tag_modify_succeed"),
-        type: "success"
+        type: "success",
       });
     },
     open6() {
       this.$message({
         message: this.$t("unknown_error"),
-        type: "error"
+        type: "error",
       });
     },
     getCommonTags() {
@@ -343,31 +384,31 @@ export default {
         this.axios({
           method: "post",
           url: "be/list/getcommontags.do",
-          data: { pid: this.msg, lang: localStorage.getItem("lang") }
+          data: { pid: this.msg, lang: localStorage.getItem("lang") },
         })
-          .then(res => {
+          .then((res) => {
             this.tags = res.data.data; // 原始数据
             this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); // 深拷贝，推荐 Tag 数据用
             this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); // 得到原始 Tag 数据
             this.getTagCategories(this.tags); // 范围转换后展示原始数据
             this.getRecTags(this.tags); // 获取推荐 TAG
           })
-          .catch(error => {});
+          .catch(() => {});
       }
       if (this.$route.path === "/video" || this.$route.path === "/postvideo") {
         this.axios({
           method: "post",
           url: "be/videos/gettags.do",
-          data: { video_id: this.msg, lang: localStorage.getItem("lang") }
+          data: { video_id: this.msg, lang: localStorage.getItem("lang") },
         })
-          .then(res => {
+          .then((res) => {
             this.tags = res.data.data; // 原始数据
             this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); // 深拷贝，推荐 Tag 数据用
             this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); // 得到原始 Tag 数据
             this.getTagCategories(this.tags); // 范围转换后展示原始数据
             this.getRecTags(this.tags); // 获取推荐 TAG
           })
-          .catch(error => {});
+          .catch(() => {});
       }
     },
     // 从视频列表里添加视频的时候添加视频列表的共有标签
@@ -375,24 +416,24 @@ export default {
       this.axios({
         method: "post",
         url: "be/list/getcommontags.do",
-        data: { pid: this.$route.query.pid, lang: localStorage.getItem("lang") }
+        data: { pid: this.$route.query.pid, lang: localStorage.getItem("lang") },
       })
-        .then(res => {
+        .then((res) => {
           this.tags = res.data.data; // 原始数据
           this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); // 深拷贝，推荐 Tag 数据用
           this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); // 得到原始 Tag 数据
           this.getTagCategories(this.tags); // 范围转换后展示原始数据
           this.getRecTags(this.tags); // 获取推荐 TAG
         })
-        .catch(error => {});
+        .catch(() => {});
     },
     getTagCategories(str) {
       this.axios({
         method: "post",
         url: "be/tags/query_tag_categories.do ",
-        data: { tags: str }
+        data: { tags: str },
       })
-        .then(res => {
+        .then((res) => {
           this.TagCategoriesData = res.data.data.categorie_map;
           // if(this.$route.path === "/postvideo"){
           //   this.animeMark =0;
@@ -407,17 +448,16 @@ export default {
           }
           this.msgMark = false;
         })
-        .catch(err => {});
+        .catch(() => {});
     },
     getTagCategoriesForAdd(str) {
       let strToArray = str.split();
-      let _that = this;
       this.axios({
         method: "post",
         url: "be/tags/query_tag_categories.do ",
-        data: { tags: strToArray }
+        data: { tags: strToArray },
       })
-        .then(res => {
+        .then((res) => {
           if (JSON.stringify(res.data.data.categorie_map) == "{}") {
             this.open4();
           } else if (this.tags.indexOf(this.iptVal) != -1) {
@@ -445,7 +485,7 @@ export default {
           }
           this.getRecTags(this.tagsForRec);
         })
-        .catch(err => {});
+        .catch(() => {});
     },
     getRecTags(tags) {
       this.axios({
@@ -454,10 +494,10 @@ export default {
         data: {
           tags: tags,
           exclude: this.tags,
-          lang: localStorage.getItem("lang")
-        }
+          lang: localStorage.getItem("lang"),
+        },
       })
-        .then(res => {
+        .then((res) => {
           this.recTags = res.data.data.tags;
           this.recTagsWatch = true;
           // if (this.animeMark != 0) {
@@ -465,7 +505,7 @@ export default {
           // }
           this.animeMark++;
         })
-        .catch(err => {});
+        .catch(() => {});
     },
     deleteObj(i, item) {
       this.$delete(this.TagCategoriesData, item);
@@ -494,7 +534,7 @@ export default {
         return;
       }
     },
-    getiptVal(i, item) {
+    getiptVal(i) {
       this.iptVal = Object.keys(i)[0];
 
       this.getTagCategoriesForAdd(this.iptVal);
@@ -583,8 +623,8 @@ export default {
         this.axios({
           method: "post",
           url: "be/videos/edittags.do",
-          data: { video_id: this.msg, tags: this.tags }
-        }).then(res => {
+          data: { video_id: this.msg, tags: this.tags },
+        }).then(() => {
           this.open5();
           this.closeTagPanel(true);
         });
@@ -594,8 +634,8 @@ export default {
         this.axios({
           method: "post",
           url: "be/list/setcommontags.do",
-          data: { pid: this.msg, tags: this.tags }
-        }).then(res => {
+          data: { pid: this.msg, tags: this.tags },
+        }).then(() => {
           this.open5();
           this.closeTagPanel(true);
         });
@@ -620,31 +660,31 @@ export default {
     },
     ConvertLangRes(langs, hastran = true) {
       if (!langs) return;
-      var LangList = [
+      let LangList = [
         { id: 1, lang: "CHS" },
         { id: 2, lang: "CHT" },
         { id: 5, lang: "ENG" },
-        { id: 10, lang: "JPN" }
+        { id: 10, lang: "JPN" },
       ];
-      var level = [10, 5, 1, 2];
-      var Lang = "";
-      var mainLang = "";
-      var subLang = "";
+      let level = [10, 5, 1, 2];
+      let Lang = "";
+      let mainLang = "";
+      let subLang = "";
       // 经过一系列计算得出主副语言
 
       // 匹配当前语言的 ID
-      var CurrLangID = LangList.find(x => {
+      let CurrLangID = LangList.find((x) => {
         return x.lang == this.$i18n.locale;
       });
       CurrLangID = CurrLangID ? CurrLangID.id : 1;
 
       //匹配对应 ID 的内容
-      var CurrLangWord = langs.find(x => {
+      let CurrLangWord = langs.find((x) => {
         return x.l == CurrLangID;
       });
       if (!CurrLangWord) {
-        for (var i = 0; i < level.length; i++) {
-          CurrLangWord = langs.find(x => {
+        for (let i = 0; i < level.length; i++) {
+          CurrLangWord = langs.find((x) => {
             return x.l == level[i];
           });
           if (CurrLangWord) break;
@@ -655,10 +695,10 @@ export default {
       if (hastran) {
         // 副语言匹配
         // 优先级：日语，英语，简体中文，繁体中文
-        var SubLangWord = null;
-        for (var i = 0; i < level.length; i++) {
+        let SubLangWord = null;
+        for (let i = 0; i < level.length; i++) {
           if (level[i] == CurrLangWord.l) continue;
-          SubLangWord = langs.find(x => {
+          SubLangWord = langs.find((x) => {
             return x.l == level[i];
           });
           if (SubLangWord) break;
@@ -666,8 +706,8 @@ export default {
         subLang = SubLangWord ? SubLangWord.w : mainLang;
 
         // 合成语言
-        Lang = `${mainLang.replace(/\_/g, " ")}`;
-        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/\_/g, " ")}</span>`;
+        Lang = `${mainLang.replace(/_/g, " ")}`;
+        Lang += `<span style='font-size:8px;color: gray;display: block;'>${subLang.replace(/_/g, " ")}</span>`;
       } else {
         Lang = mainLang;
       }
@@ -676,22 +716,22 @@ export default {
     // 下面是消息补全框的方法
     querySearchAsync(queryString, cb) {
       // this.infoTipMark = true;
-      var url = "/autocomplete/?q=" + queryString;
+      let url = "/autocomplete/?q=" + queryString;
       this.axios({
         method: "get",
-        url: url
-      }).then(result => {
+        url: url,
+      }).then((result) => {
         this.taglist = result.data;
         cb(result.data);
       });
     },
     querySearchAsync2(queryString, cb) {
       // this.infoTipMark = true;
-      var url = "/be/autocomplete/ql?q=" + queryString;
+      let url = "/be/autocomplete/ql?q=" + queryString;
       this.axios({
         method: "get",
-        url: url
-      }).then(result => {
+        url: url,
+      }).then((result) => {
         this.taglist = result.data;
         cb(result.data);
       });
@@ -707,44 +747,9 @@ export default {
       this.infoTipMark = true;
       // console.log("选中时的值为" + this.infoTipMark);
       // console.log("选中");
-    }
+    },
     // 消息提示
   },
-  watch: {
-    tags(n) {
-      this.$emit("getEditTagsData", n);
-    },
-    tagsForRec(newVal, oldVal) {
-      if (JSON.stringify(oldVal) != "[]" || this.animeMark != 0) {
-        this.recTagsWatch = false;
-        this.getRecTags(newVal);
-        // let _that = this;
-        // setTimeout(function() {
-        //   _that.recTagsWatch = !_that.recTagsWatch;
-        //   _that.getRecTags(newVal);
-        // }, 300);
-      }
-    },
-    msg() {
-      if (this.msg != "") {
-        this.getCommonTags();
-      }
-    },
-    really(v) {
-      if (v === true) {
-        // this.$emit("getEditTagsData", this.tags);
-      }
-    }
-  },
-  props: {
-    msg: {},
-    really: "",
-    visible: {
-      type: Boolean,
-      default: false
-    }
-  },
-  components: {}
 };
 </script>
 
@@ -832,8 +837,7 @@ div {
       display: flex;
       margin-top: 0px;
       flex-direction: column;
-      .m_bg {
-      }
+      // .m_bg {}
       .m_a {
         transition: all 0.6s ease;
         background-color: rgba(215, 176, 184, 0.2);
