@@ -1,6 +1,6 @@
 const webpack = require("webpack");
 const path = require("path");
-let BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const utils = {
   assetsPath: function(_path) {
     const assetsSubDirectory =
