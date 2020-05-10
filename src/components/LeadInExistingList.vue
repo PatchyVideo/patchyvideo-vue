@@ -41,14 +41,14 @@
 </i18n>
 
 <template>
-  <div class="listForm" v-loading="loading">
+  <div v-loading="loading" class="listForm">
     <el-form ref="list" :model="list" label-width="auto" :rules="rules">
       <h3 class="desc">{{ $t("prompt") }}</h3>
       <el-form-item prop="URL">
         <el-input v-model="list.URL" :placeholder="$t('url_placeholder')" @keyup.enter.native="onSubmit"></el-input>
       </el-form-item>
       <el-form-item class="leadInList">
-        <el-button type="primary" @click="onSubmit" style="width:80%">{{ $t("upload_now") }}</el-button>
+        <el-button type="primary" style="width:80%" @click="onSubmit">{{ $t("upload_now") }}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -56,6 +56,7 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -147,8 +148,7 @@ export default {
         type: "success"
       });
     }
-  },
-  components: {}
+  }
 };
 </script>
 

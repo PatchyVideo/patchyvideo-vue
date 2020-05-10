@@ -53,7 +53,7 @@
       </el-table>
       <div v-if="threadList.length != threadResult.length" style="text-align:center;color:gray">
         本页含有{{ threadResult.length - threadList.length }}个隐藏贴
-        <span @click="threadList = threadResult" style="color:#409eff">显示</span>
+        <span style="color:#409eff" @click="threadList = threadResult">显示</span>
       </div>
       <div style="text-align:center;margin-top:4px">
         <el-button type="primary" size="small" plain style="display:inline-flex;vertical-align:middle;" disabled>暂无功能</el-button>
@@ -71,7 +71,7 @@
       </div>
       <el-dialog :title="(Finfo[fid].title || '神秘板块') + ' > 发表新帖'" :visible.sync="postT.visible">
         <h2 style="display:inline-flex;color: #2c3e50;">{{ Finfo[fid].title || "神秘板块" }} ></h2>
-        <el-form :model="postF" @submit.native.prevent style="display:inline-flex">
+        <el-form :model="postF" style="display:inline-flex" @submit.native.prevent>
           <el-input v-model="postF.title" style="width:320px" placeholder="在这里填写标题~"></el-input
         ></el-form>
         <div class="t"></div>
@@ -88,7 +88,7 @@
             </div>
             <div class="comment-div" style="padding: 15px;">
               <el-form :model="postF" @submit.native.prevent>
-                <el-input type="textarea" v-model="postF.comment" required></el-input>
+                <el-input v-model="postF.comment" type="textarea" required></el-input>
               </el-form>
             </div>
           </div>

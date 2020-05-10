@@ -35,11 +35,11 @@
           {{ $t("MsgCenter") }}
         </div>
         <ul class="messageNav-list">
-          <li v-bind:class="{ messageNavListActive: messageType == 0 }" @click="messageType = 0">
+          <li :class="{ messageNavListActive: messageType == 0 }" @click="messageType = 0">
             <i class="el-icon-star-on"></i>
             {{ $t("UnreadMsg") }}
           </li>
-          <li v-bind:class="{ messageNavListActive: messageType == 1 }" @click="messageType = 1">
+          <li :class="{ messageNavListActive: messageType == 1 }" @click="messageType = 1">
             <i class="el-icon-star-on"></i>
             {{ $t("AllMsg") }}
           </li>
@@ -59,6 +59,7 @@ import topnavbar from "../components/TopNavbar.vue";
 import unreadMsg from "../components/messageCompoents/UnreadMsg.vue";
 import allMsg from "../components/messageCompoents/AllMessage.vue";
 export default {
+  components: { topnavbar, unreadMsg, allMsg },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -72,8 +73,7 @@ export default {
     // 修改网站标题
     document.title = "消息中心 - Patchyvideo";
   },
-  methods: {},
-  components: { topnavbar, unreadMsg, allMsg }
+  methods: {}
 };
 </script>
 

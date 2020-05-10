@@ -81,6 +81,7 @@ import IPFS from "ipfs";
 import VideoStream from "videostream";
 
 export default {
+  components: { topnavbar, Footer },
   data() {
     return {};
   },
@@ -139,8 +140,7 @@ export default {
 
       return vs;
     }
-  },
-  components: { topnavbar, Footer }
+  }
 };
 </script>
 

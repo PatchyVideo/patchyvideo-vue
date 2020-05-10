@@ -47,15 +47,15 @@
 </i18n>
 
 <template>
-  <div class="black-list" v-loading="loading">
-    <el-radio-group v-model="radio" ref="radiog">
+  <div v-loading="loading" class="black-list">
+    <el-radio-group ref="radiog" v-model="radio">
       <el-card class="box-card" :class="{ select: radio !== 3 }" @click.native="selectDiv(3)">
         <div slot="header" class="clearfix">
           <el-radio :label="3">
             <span :class="{ white: radio !== 3 }">{{ $t("default_blacklist") }}</span>
           </el-radio>
         </div>
-        <div v-for="v in this.defaultBlackData" :key="v" class="text item">
+        <div v-for="v in defaultBlackData" :key="v" class="text item">
           <el-tag>{{ v }}</el-tag>
         </div>
 
@@ -68,32 +68,32 @@
             <span :class="{ white: radio !== 6 }">{{ $t("custom_blacklist") }}</span>
           </el-radio>
         </div>
-        <div class="text item" :class="{ white: radio !== 6 }" v-if="!textareaVisble && !inputVisible && !dynamicTags.length">
+        <div v-if="!textareaVisble && !inputVisible && !dynamicTags.length" class="text item" :class="{ white: radio !== 6 }">
           <h4>{{ $t("blacklist_empty_prompt") }}</h4>
         </div>
-        <div :key="tag" v-for="tag in dynamicTags" class="text item">
+        <div v-for="tag in dynamicTags" :key="tag" class="text item">
           <el-tag closable :disable-transitions="false" @close="handleClose(tag)">{{ tag }}</el-tag>
         </div>
         <el-autocomplete
+          v-if="inputVisible"
           id="ipt"
+          ref="saveTagInput"
           v-model="inputValue"
           :fetch-suggestions="querySearchAsync"
           :trigger-on-focus="false"
           placeholder="请输入标签"
-          @select="handleSelect"
           class="input-new-tag"
-          v-if="inputVisible"
-          ref="saveTagInput"
           size="small"
+          style="margin: 20px 0px; width: 60%;"
+          @select="handleSelect"
           @keyup.enter.native="handleInputConfirm"
           @blur="handleInputConfirm"
-          style="margin: 20px 0px; width: 60%;"
         >
           <template slot-scope="{ item }">
             <div class="adviceList">
               <div
                 class="name"
-                v-bind:class="{
+                :class="{
                   Copyright: item.cat === 2,
                   Language: item.cat === 5,
                   Character: item.cat === 1,
@@ -105,7 +105,7 @@
               >
                 {{ item.tag }}
               </div>
-              <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
+              <div v-if="item.cnt != null" class="addr">{{ item.cnt }}</div>
             </div>
           </template>
         </el-autocomplete>
@@ -121,13 +121,13 @@
         ></el-input>-->
         <el-input
           v-if="textareaVisble"
-          type="textarea"
           ref="saveTagTextArea"
-          @blur="handleTextAreaConfirm"
+          v-model="textareaValue"
+          type="textarea"
           :autosize="{ minRows: 8 }"
           :placeholder="$t('blacklist_enter_prompt')"
-          v-model="textareaValue"
           style="margin: 20px 0px;"
+          @blur="handleTextAreaConfirm"
         ></el-input>
 
         <div style="display:flex;">
@@ -150,6 +150,7 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -332,8 +333,7 @@ export default {
         this.loading = false;
       });
     }
-  },
-  components: {}
+  }
 };
 </script>
 

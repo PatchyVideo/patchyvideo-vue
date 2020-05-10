@@ -1,16 +1,16 @@
 <template>
-  <div class="bang" v-loading="loading">
+  <div v-loading="loading" class="bang">
     <div style="height: 35px;">
       <transition name="anime-left">
-        <div v-show="this.loading === false" style="height: 35px;">
+        <div v-show="loading === false" style="height: 35px;">
           <el-select id="select-order" v-model="couponSelected">
-            <el-option style="text-align: center;" v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option v-for="item in options" :key="item.value" style="text-align: center;" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </div>
       </transition>
     </div>
 
-    <div v-for="(item, i) in ranking" v-bind:key="i">
+    <div v-for="(item, i) in ranking" :key="i">
       <div class="list-item" :class="{ top: i === 0, second: i === 1, three: i === 2 }">
         <h1 class="rank">{{ i + 1 }}</h1>
 
@@ -49,6 +49,13 @@ export default {
     };
   },
   computed: {},
+  watch: {
+    couponSelected() {
+      //排序更改时，重新请求数据
+      this.loading = true;
+      this.loadData();
+    }
+  },
   created() {
     this.couponSelected = this.options[0].value;
     this.loadData();
@@ -72,13 +79,6 @@ export default {
         this.ranking = data;
         this.loading = false;
       });
-    }
-  },
-  watch: {
-    couponSelected() {
-      //排序更改时，重新请求数据
-      this.loading = true;
-      this.loadData();
     }
   }
 };

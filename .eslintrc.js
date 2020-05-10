@@ -7,11 +7,18 @@ module.exports = {
     jquery: true,
     node: true
   },
-  extends: ["plugin:vue/essential", "eslint:recommended", "@vue/prettier"],
+  extends: ["plugin:vue/recommended", "eslint:recommended", "@vue/prettier"],
   parserOptions: {
     parser: "babel-eslint"
   },
   rules: {
-    "prettier/prettier": "warn"
+    "prettier/prettier": "warn",
+    "vue/component-tags-order": [
+      "warn",
+      {
+        order: ["i18n", "template", "script", "style"]
+      }
+    ],
+    "vue/no-v-html": "off"
   }
 };

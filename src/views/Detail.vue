@@ -116,7 +116,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="managementBox = false">取 消</el-button>
-        <el-button type="primary" @click="manageVideo()" :loading="loading">确 定</el-button>
+        <el-button type="primary" :loading="loading" @click="manageVideo()">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -129,7 +129,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="changeRepostType = false">取 消</el-button>
-        <el-button type="primary" @click="repostType()" :loading="loading">确 定</el-button>
+        <el-button type="primary" :loading="loading" @click="repostType()">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -138,13 +138,13 @@
       <!-- 新建列表的嵌套弹出框 -->
       <el-dialog width="60%" title="新建列表:" :visible.sync="newListDialog" append-to-body>
         <createNewList
+          :need-go="!newListDialog"
+          style="margin:0 auto"
           @closeMe="
             $event => {
-              this.newListDialog = false;
+              newListDialog = false;
             }
           "
-          :needGo="!newListDialog"
-          style="margin:0 auto"
         ></createNewList>
         <div slot="footer" class="dialog-footer">
           <el-button @click="newListDialog = false">取 消</el-button>
@@ -152,14 +152,14 @@
       </el-dialog>
 
       <div v-loading="loadingList">
-        <el-input placeholder="搜索我的列表..." v-model="myListQuery" @keyup.enter.native="getMyList()">
+        <el-input v-model="myListQuery" placeholder="搜索我的列表..." @keyup.enter.native="getMyList()">
           <el-button slot="append" icon="el-icon-search" @click="getMyList()"></el-button>
         </el-input>
         <div v-if="myVideoList.length" class="myVideoList">
           <div v-for="(item, index) in myVideoList" :key="index" class="myVideoListItem" @click="addToThisList(item._id.$oid)">
             <h2>{{ item.title.english }}</h2>
-            <h3 style="display:inline-block;color:#909399" v-if="item.private">[私密]</h3>
-            <h3 style="display:inline-block;color:#E6A23C" v-if="item.exist">[已有此视频]</h3>
+            <h3 v-if="item.private" style="display:inline-block;color:#909399">[私密]</h3>
+            <h3 v-if="item.exist" style="display:inline-block;color:#E6A23C">[已有此视频]</h3>
             <p>共{{ item.videos }}个视频</p>
           </div>
         </div>
@@ -168,18 +168,18 @@
         <el-pagination
           background
           class="page-selector"
-          @current-change="handleCurrentChange"
           layout=" prev, pager, next"
           :current-page="page"
           :total="maxcount"
           :page-size="10"
+          @current-change="handleCurrentChange"
         ></el-pagination>
-        <el-button class="createNewList" @click="newListDialog = true" type="primary">新建列表</el-button>
+        <el-button class="createNewList" type="primary" @click="newListDialog = true">新建列表</el-button>
       </div>
     </el-dialog>
 
     <!-- Detail 页面的正文 -->
-    <div class="w detail-page-background-img" v-loading="loading">
+    <div v-loading="loading" class="w detail-page-background-img">
       <left_navbar :msg="myVideoData.tag_by_category"></left_navbar>
 
       <div class="content">
@@ -188,7 +188,7 @@
           <h4 style="color:#606266">
             {{ videoType }}:
             <el-button v-if="isLogin" type="text" @click="changeRepostType = true">{{ $t("modify") }}</el-button>
-            <i v-if="isAdmin" class="el-icon-refresh" @click="refreshVideo(myVideoData)" style="float:right"></i>
+            <i v-if="isAdmin" class="el-icon-refresh" style="float:right" @click="refreshVideo(myVideoData)"></i>
           </h4>
           <div class="re_top">
             <h2>{{ myVideoData.video.item.title }}</h2>
@@ -200,7 +200,7 @@
           <h4 class="video_link">
             <a :href="myVideoData.video.item.url">{{ myVideoData.video.item.url }}</a>
             <!-- 一键复制的小图标 -->
-            <i @click="copyVideoLink(myVideoData.video.item.url)" class="fa fa-copy fa-1x" style="margin-left:4px;"></i>
+            <i class="fa fa-copy fa-1x" style="margin-left:4px;" @click="copyVideoLink(myVideoData.video.item.url)"></i>
           </h4>
           <!-- 视频上传时间（？） -->
           <h5 style="text-align: center;">{{ videodate }}</h5>
@@ -209,25 +209,25 @@
           <div class="re_video">
             <!-- B站，A站，n站和油管显示内嵌视频播放 -->
             <iframe
+              v-if="iframeUrl !== ''"
               :src="iframeUrl"
-              v-if="this.iframeUrl !== ''"
               allowfullscreen="true"
               style="width: 948px; height: 763px;  margin:10px auto 30px;display: block;"
             ></iframe>
             <!-- 如果是 ipfs 视频则播放视频 -->
-            <div v-if="isIpfs" style="text-align: center;" id="nodes">{{ $t("init_tip") }}</div>
+            <div v-if="isIpfs" id="nodes" style="text-align: center;">{{ $t("init_tip") }}</div>
             <video
-              :src="myVideoData.video.item.url"
+              v-if="isIpfs"
               id="player"
+              :src="myVideoData.video.item.url"
               controls
               loop
               width="50%"
-              v-if="isIpfs"
               style="position: relative;left: 50%;transform: translateX(-50%);"
             ></video>
             <!-- 其他情况显示缩略图 -->
-            <img v-if="this.iframeUrl === '' && !isIpfs" :src="'/images/covers/' + myVideoData.video.item.cover_image" width="320px" height="200px" />
-            <p class="videoDesc" @click="postAsCopy($event)" style="word-break: break-all;" v-html="myVideoData.video.item.desc" v-linkified></p>
+            <img v-if="iframeUrl === '' && !isIpfs" :src="'/images/covers/' + myVideoData.video.item.cover_image" width="320px" height="200px" />
+            <p v-linkified class="videoDesc" style="word-break: break-all;" @click="postAsCopy($event)" v-html="myVideoData.video.item.desc"></p>
           </div>
         </div>
 
@@ -247,17 +247,17 @@
             <h2>{{ $t("copy") }}</h2>
             <p v-if="myVideoData.copies == ''">
               {{ $t("infotip.nocopies") }}
-              <router-link :to="{ path: './postvideo', query: { copy: this.pid } }" tag="a" v-if="isLogin == true">
+              <router-link v-if="isLogin == true" :to="{ path: './postvideo', query: { copy: pid } }" tag="a">
                 <el-button type="text">[ {{ $t("add_copy") }}]</el-button>
               </router-link>
             </p>
             <p v-else>
               此视频有{{ myVideoData.copies.length }}个副本
-              <router-link :to="{ path: './postvideo', query: { copy: this.pid } }" tag="a" v-if="isLogin == true">
+              <router-link v-if="isLogin == true" :to="{ path: './postvideo', query: { copy: pid } }" tag="a">
                 <el-button type="text">[{{ $t("add_copy") }}]</el-button>
               </router-link>
-              <el-button type="text" @click="dialogVisible = true" v-if="isLogin == true">[{{ $t("del_copy") }}]</el-button>
-              <el-button type="text" @click="broadcastTags()" v-if="isLogin == true" style="margin-left:0px">[{{ $t("sync_replica_label") }}]</el-button>
+              <el-button v-if="isLogin == true" type="text" @click="dialogVisible = true">[{{ $t("del_copy") }}]</el-button>
+              <el-button v-if="isLogin == true" type="text" style="margin-left:0px" @click="broadcastTags()">[{{ $t("sync_replica_label") }}]</el-button>
             </p>
           </div>
           <div v-for="(value, key, index) in myVideoData.copies_by_repost_type" :key="index">
@@ -271,11 +271,11 @@
             <ul v-for="item in value" :key="item._id.$oid" class="copies">
               <img :src="require('../static/img/' + item.item.site + '.png')" width="16px" style="margin-right:2px;vertical-align: middle;" />
               <!-- 将页面参数刷新并重载页面，其中 @click.native 应该是 router-link 为了阻止 a 标签的默认跳转事件 -->
-              <a v-bind:class="{ shortTitleForPageVideos: item.item.part_name }" @click="shiftID(item._id.$oid)">{{ item.item.title }}</a>
+              <a :class="{ shortTitleForPageVideos: item.item.part_name }" @click="shiftID(item._id.$oid)">{{ item.item.title }}</a>
               <span v-if="item.item.part_name" class="shortTitleForTitleOfPageVideos"
                 >P{{ item.item.url.slice(item.item.url.indexOf("=") + 1, item.item.url.length) }}:{{ item.item.part_name }}</span
               >
-              <el-button type="text" @click="synctags(item._id.$oid)" v-if="isLogin == true" style="margin-left:10px"
+              <el-button v-if="isLogin == true" type="text" style="margin-left:10px" @click="synctags(item._id.$oid)"
                 >[{{ $t("sync_replica_label_from") }}]</el-button
               >
             </ul>
@@ -313,7 +313,7 @@
             <a v-if="item.prev != ''" @click="shiftID(item.prev)">【{{ $t("previous_article") }}】</a>
             <span v-else>【{{ $t("no_previous_article") }}】</span>
             <router-link :to="{ path: '/listdetail', query: { id: item._id.$oid } }" tag="a">{{ item.title.english }}</router-link>
-            <a v-if="item.next != ''" @click="shiftID(item.next)" style="float:right">【{{ $t("next_article") }}】</a>
+            <a v-if="item.next != ''" style="float:right" @click="shiftID(item.next)">【{{ $t("next_article") }}】</a>
             <span v-else style="float:right">【{{ $t("no_next_article") }}】</span>
           </ul>
         </div>
@@ -359,6 +359,15 @@ import IPFS from "ipfs";
 import VideoStream from "videostream";
 
 export default {
+  components: {
+    left_navbar,
+    topnavbar,
+    Footer,
+    Comments,
+    Score,
+    createNewList,
+    PagesOfVideo
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -394,7 +403,7 @@ export default {
         }
       },
       // (如果是B站视频的话)视频的av号
-      aid: "",
+      aid: 0,
       // 我的视频列表
       myVideoList: [],
       // 我的全部视频列表（处理视频是否存在于该列表）
@@ -531,6 +540,14 @@ export default {
       }
     }
   },
+  watch: {
+    $route() {
+      this.searchVideo();
+    },
+    newListDialog() {
+      if (!this.newListDialog) this.getMyList();
+    }
+  },
   created() {
     // 改变侧导航条的标题
     this.$store.commit("changeLeftNavBarTitle", 1);
@@ -610,7 +627,7 @@ export default {
       let regYtb = /(https:\/\/|http:\/\/)www.youtube.com\/watch\?v=(\S+)/;
       let regAcf = /(https:\/\/|http:\/\/)www.acfun.cn\/v\/ac(\S+)/;
       if (regBili.exec(str) !== null) {
-        this.aid = regBili.exec(str)[2];
+        this.aid = parseInt(regBili.exec(str)[2]);
         return `//player.bilibili.com/player.html?aid=${regBili.exec(str)[2]}&cid=${cid}&page=${regBili.exec(str)[3]}`;
       }
       if (regNico.exec(str) !== null) {
@@ -1003,23 +1020,6 @@ export default {
 
       return vs;
     }
-  },
-  watch: {
-    $route() {
-      this.searchVideo();
-    },
-    newListDialog() {
-      if (!this.newListDialog) this.getMyList();
-    }
-  },
-  components: {
-    left_navbar,
-    topnavbar,
-    Footer,
-    Comments,
-    Score,
-    createNewList,
-    PagesOfVideo
   }
 };
 </script>

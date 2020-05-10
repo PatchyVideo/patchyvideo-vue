@@ -108,7 +108,7 @@
     <topnavbar />
 
     <!-- EditTags 组件-->
-    <EditTags ref="editTag" :msg="temporaryValForVLP" :visible.sync="showTagPanel" v-if="showTagPanel"></EditTags>
+    <EditTags v-if="showTagPanel" ref="editTag" :msg="temporaryValForVLP" :visible.sync="showTagPanel"></EditTags>
 
     <!-- 编辑视频列表时的对话框 -->
     <el-dialog :title="$t('edit_list_info_dialog.title')" :visible.sync="openListEdit" width="40%" :close-on-click-modal="false">
@@ -120,18 +120,18 @@
         <!-- 简介 -->
         <el-form-item prop="desc">
           <el-input
+            v-model="playlist_metadata.desc"
             type="textarea"
             :autosize="{ minRows: 6 }"
             :placeholder="$t('edit_list_info_dialog.list_introduction_tip')"
-            v-model="playlist_metadata.desc"
           ></el-input>
         </el-form-item>
         <el-form-item>
           <el-checkbox v-model="playlist_metadata.private">{{ $t("edit_list_info_dialog.set_private_list") }}</el-checkbox>
         </el-form-item>
         <el-form-item class="createList">
-          <el-button type="primary" @click="onSubmit" style="width:80%" :loading="loading">{{ $t("edit_list_info_dialog.btn_ok") }}</el-button>
-          <el-button @click="openListEdit = false" style="width:80%;margin-top:10px;margin-left:0px">{{ $t("edit_list_info_dialog.btn_cancel") }}</el-button>
+          <el-button type="primary" style="width:80%" :loading="loading" @click="onSubmit">{{ $t("edit_list_info_dialog.btn_ok") }}</el-button>
+          <el-button style="width:80%;margin-top:10px;margin-left:0px" @click="openListEdit = false">{{ $t("edit_list_info_dialog.btn_cancel") }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -153,7 +153,7 @@
     </el-dialog>
 
     <!-- listdetail页面的正文 -->
-    <div class="w main-page-background-img" v-loading="loading">
+    <div v-loading="loading" class="w main-page-background-img">
       <div class="content">
         <!-- 视频列表介绍 -->
         <div class="deemo shadow">
@@ -169,13 +169,13 @@
             <el-button type="success" @click="addVideo">{{ $t("btn_group.add_video") }}</el-button>
             <el-button type="success" @click="addFromList">{{ $t("btn_group.import_from_other") }}</el-button>
             <el-popover style="margin: 0px 10px;" width="100%" trigger="click">
-              <ListFolderView ref="listFolder" :msg="temporaryValForVLP" :visible.sync="showListFolder" v-if="isLogin"></ListFolderView>
-              <el-button type="primary" @click="openListFolder" class="EditTagsButton" slot="reference">{{ $t("btn_group.add_favorite") }}</el-button>
+              <ListFolderView v-if="isLogin" ref="listFolder" :msg="temporaryValForVLP" :visible.sync="showListFolder"></ListFolderView>
+              <el-button slot="reference" type="primary" class="EditTagsButton" @click="openListFolder">{{ $t("btn_group.add_favorite") }}</el-button>
             </el-popover>
 
             <el-button type="info" @click="openListEdit = true">{{ $t("btn_group.edit_list_info") }}</el-button>
 
-            <el-button type="primary" @click="openEditTags" class="EditTagsButton" :disabled="showTagPanel">{{ $t("btn_group.edit_common_tags") }}</el-button>
+            <el-button type="primary" class="EditTagsButton" :disabled="showTagPanel" @click="openEditTags">{{ $t("btn_group.edit_common_tags") }}</el-button>
 
             <el-button type="warning" @click="inverse()">{{ $t("btn_group.reverse_list") }}</el-button>
             <el-button type="danger" @click="dialogVisible = true">{{ $t("btn_group.delete") }}</el-button>
@@ -183,8 +183,8 @@
           <!-- 没有编辑权限的时候只提供加入收藏功能 -->
           <div v-else>
             <el-popover v-if="isLogin" style="margin: 0px 10px;" width="100%" trigger="click">
-              <ListFolderView ref="listFolder" :msg="temporaryValForVLP" :visible.sync="showListFolder" v-if="isLogin"></ListFolderView>
-              <el-button type="primary" @click="openListFolder" class="EditTagsButton" slot="reference">{{ $t("btn_group.add_favorite") }}</el-button>
+              <ListFolderView v-if="isLogin" ref="listFolder" :msg="temporaryValForVLP" :visible.sync="showListFolder"></ListFolderView>
+              <el-button slot="reference" type="primary" class="EditTagsButton" @click="openListFolder">{{ $t("btn_group.add_favorite") }}</el-button>
             </el-popover>
           </div>
           <!-- 评分区 -->
@@ -196,7 +196,7 @@
         <!-- 视频列表 -->
         <div class="recommend">
           <!-- 视频详情 -->
-          <div class="minbox shadow" v-for="item in videolistVideos" :key="item._id.$oid">
+          <div v-for="item in videolistVideos" :key="item._id.$oid" class="minbox shadow">
             <div class="re_video">
               <div class="edit">
                 <div id="edit_first">
@@ -232,7 +232,7 @@
                   <a :href="item.item.url">
                     {{ item.item.url }}
                   </a>
-                  <i @click="copyVideoLink(item.item.url)" class="fa fa-copy fa-lg" style="margin-left:2px"></i>
+                  <i class="fa fa-copy fa-lg" style="margin-left:2px" @click="copyVideoLink(item.item.url)"></i>
                 </div>
               </div>
               <div v-if="editable" class="item_end">
@@ -247,13 +247,13 @@
         <el-pagination
           background
           class="page-selector"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
           layout="jumper, prev, pager, next, sizes"
-          :current-page="this.page"
-          :total="this.maxcount"
+          :current-page="page"
+          :total="maxcount"
           :page-size="20"
           :page-sizes="[10, 20, 30, 40]"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
         ></el-pagination>
 
         <!-- 评论区 -->
@@ -280,6 +280,17 @@ import Score from "../components/Score.vue";
 import { copyToClipboardText } from "../static/js/generic";
 
 export default {
+  components: {
+    topnavbar,
+    Footer,
+    EditTags,
+    Move,
+    DeleteVideo,
+    ListFolderView,
+    SetCover,
+    Comments,
+    Score
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -348,6 +359,22 @@ export default {
       // 播放列表目录页面是否显示
       showListFolder: false
     };
+  },
+  computed: {
+    f1() {
+      return this.$store.state.refreshCount;
+    }
+  },
+  watch: {
+    page() {
+      this.getVideoList(this.page, this.count);
+    },
+    count() {
+      this.getVideoList(this.page, this.count);
+    },
+    f1() {
+      this.getVideoList(this.page, this.count);
+    }
   },
   mounted() {
     // 查看是否登录
@@ -532,33 +559,6 @@ export default {
         type: "success"
       });
     }
-  },
-  computed: {
-    f1() {
-      return this.$store.state.refreshCount;
-    }
-  },
-  watch: {
-    page() {
-      this.getVideoList(this.page, this.count);
-    },
-    count() {
-      this.getVideoList(this.page, this.count);
-    },
-    f1() {
-      this.getVideoList(this.page, this.count);
-    }
-  },
-  components: {
-    topnavbar,
-    Footer,
-    EditTags,
-    Move,
-    DeleteVideo,
-    ListFolderView,
-    SetCover,
-    Comments,
-    Score
   }
 };
 </script>
@@ -695,8 +695,7 @@ export default {
   }
 }
 
-.shadow {
-}
+// .shadow {}
 .content {
   top: 3px;
   width: 80%;
@@ -756,8 +755,7 @@ export default {
   text-align: left;
   /* height: 150px; */
 }
-.re_video h1 {
-}
+// .re_video h1 {}
 .re_video_img {
   display: inline-block;
   width: 200px;

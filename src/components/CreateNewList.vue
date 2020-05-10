@@ -60,7 +60,7 @@
 </i18n>
 
 <template>
-  <div class="listForm" v-loading="loading">
+  <div v-loading="loading" class="listForm">
     <el-form ref="list" :model="list" label-width="auto" :rules="rules">
       <!-- 标题 -->
       <el-form-item prop="title">
@@ -68,7 +68,7 @@
       </el-form-item>
       <!-- 简介 -->
       <el-form-item prop="desc">
-        <el-input type="textarea" :autosize="{ minRows: 6 }" :placeholder="$t('describe_your_playlist')" v-model="list.desc"></el-input>
+        <el-input v-model="list.desc" type="textarea" :autosize="{ minRows: 6 }" :placeholder="$t('describe_your_playlist')"></el-input>
       </el-form-item>
       <el-form-item>
         <el-checkbox v-model="list.private">{{ $t("set_as_private_playlist") }}</el-checkbox>
@@ -88,7 +88,7 @@
         </el-upload>-->
       </el-form-item>
       <el-form-item class="createList">
-        <el-button type="primary" @click="onSubmit" style="width:80%">{{ $t("create_now") }}</el-button>
+        <el-button type="primary" style="width:80%" @click="onSubmit">{{ $t("create_now") }}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -96,6 +96,7 @@
 
 <script>
 export default {
+  components: {},
   props: {
     // 创建列表完成后是否需要跳转
     needGo: {
@@ -204,8 +205,7 @@ export default {
         type: "success"
       });
     }
-  },
-  components: {}
+  }
 };
 </script>
 

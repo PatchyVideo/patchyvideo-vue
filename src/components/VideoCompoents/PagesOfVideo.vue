@@ -35,18 +35,18 @@
       <p v-else>本视频没有分P</p>
     </div>
     <div
-      class="PagesDetail"
       v-if="videoPages != 1"
       v-loading="loading"
+      class="PagesDetail"
       element-loading-text="加载分P中"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(255,255,255,1)"
     >
       <div
-        class="PageItems"
         v-for="(item, index) in pagesDetailOfThisPage"
         :key="index"
-        v-bind:class="{ PageItemsActive: item.id == $route.query.id }"
+        class="PageItems"
+        :class="{ PageItemsActive: item.id == $route.query.id }"
         @click="
           () => {
             if (!item.loading) pageOpts(item.page - 1);
@@ -65,7 +65,7 @@
           <i class="el-icon-loading"></i>
         </span>
         <div v-else style="display:inline">
-          <span style="color:#67C23A;font-size:12px" v-if="item.isPosted">已索引</span>
+          <span v-if="item.isPosted" style="color:#67C23A;font-size:12px">已索引</span>
           <span v-else>
             <span style="color:#F56C6C;font-size:12px">未索引!</span>
             <span class="PostNewIndex">点击添加此分P的索引</span>
@@ -90,9 +90,13 @@
 
 <script>
 export default {
+  components: {},
   props: {
     // 视频的av号
-    aid: { type: String }
+    aid: {
+      type: Number,
+      required: true
+    }
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -119,6 +123,11 @@ export default {
     // 分P信息详情（当前页）
     pagesDetailOfThisPage() {
       return this.pagesDetail.slice((this.currentPage - 1) * this.pageCount, Math.min(this.videoPages, this.currentPage * this.pageCount));
+    }
+  },
+  watch: {
+    aid() {
+      this.getVideoPages();
     }
   },
   created() {},
@@ -234,13 +243,7 @@ export default {
         // this.confirmPosting = true;
       }
     }
-  },
-  watch: {
-    aid() {
-      this.getVideoPages();
-    }
-  },
-  components: {}
+  }
 };
 </script>
 

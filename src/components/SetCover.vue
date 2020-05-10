@@ -22,6 +22,13 @@
 
 <script>
 export default {
+  components: {},
+  props: {
+    msg: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {};
@@ -41,9 +48,7 @@ export default {
         }
       });
     }
-  },
-  props: ["msg"],
-  components: {}
+  }
 };
 </script>
 

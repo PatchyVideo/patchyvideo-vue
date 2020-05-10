@@ -69,6 +69,13 @@ import PostSingleVideo from "../components/PostSingleVideo";
 import PostMultiVideos from "../components/PostMultiVideos";
 import PostIPFSVideo from "../components/PostIPFSVideo";
 export default {
+  components: {
+    topnavbar,
+    Footer,
+    PostSingleVideo,
+    PostMultiVideos,
+    PostIPFSVideo
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -83,14 +90,7 @@ export default {
     document.title = this.$t("title") + " - Patchyvideo";
   },
   mounted() {},
-  methods: {},
-  components: {
-    topnavbar,
-    Footer,
-    PostSingleVideo,
-    PostMultiVideos,
-    PostIPFSVideo
-  }
+  methods: {}
 };
 </script>
 

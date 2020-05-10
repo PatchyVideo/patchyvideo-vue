@@ -70,7 +70,7 @@
 
 <template>
   <transition mode="out-in">
-    <div v-if="visible" class="EditTags" :class="{ active: this.msg != '' }">
+    <div v-if="visible" class="EditTags" :class="{ active: msg != '' }">
       <el-dialog
         v-if="dialogVisible"
         :visible.sync="dialogVisible"
@@ -94,14 +94,14 @@
             closeTagPanel(JSON.stringify(tagsOrigin) === JSON.stringify(tags));
           "
         >
-          <i class="el-icon-close" id="close" v-if="this.$route.path != '/postvideo'"></i>
+          <i v-if="this.$route.path != '/postvideo'" id="close" class="el-icon-close"></i>
         </a>
         <div class="minibox">
           <div class="m_bg"></div>
           <div class="m_a activeTag">
-            <ul class="Taglist" :class="v" v-for="v in this.tagCategoriesAll" :key="v">
+            <ul v-for="v in tagCategoriesAll" :key="v" class="Taglist" :class="v">
               <span v-for="(i, item) in TagCategoriesData" :key="item">
-                <div class="item" :class="{ selected: -1 === tagsForRec.indexOf(item) }" @click.stop="selected(i, item)" v-if="i === v">
+                <div v-if="i === v" class="item" :class="{ selected: -1 === tagsForRec.indexOf(item) }" @click.stop="selected(i, item)">
                   <div>
                     <p :class="`val_` + item">{{ item }}</p>
                     <a href="javascript:;" @click.stop="deleteObj(i, item)">
@@ -167,7 +167,7 @@
                     <div class="adviceList">
                       <div
                         class="name"
-                        v-bind:class="{
+                        :class="{
                           Copyright: item.cat == 2,
                           Language: item.cat == 5,
                           Character: item.cat == 1,
@@ -183,7 +183,7 @@
                   </template>
                 </el-autocomplete>
                 <a href="javascript:;" @click="addTag">
-                  <i class="el-icon-plus" id="add"></i>
+                  <i id="add" class="el-icon-plus"></i>
                 </a>
               </div>
             </div>
@@ -195,8 +195,8 @@
             <div>
               <span>{{ $t("recommnad_tags") }}</span>
               <transition mode="out-in">
-                <ul class="recTag Taglist" v-show="recTagsWatch">
-                  <li class="item" v-for="(i, item) in recTags" :key="item">
+                <ul v-show="recTagsWatch" class="recTag Taglist">
+                  <li v-for="(i, item) in recTags" :key="item" class="item">
                     <a href="javascript:;" @click="getiptVal(i, item)">
                       <p class="val_${str[i]}">{{ Object.keys(i)[0] }}</p>
                       <!--           <i class="el-icon-close"></i>-->
@@ -208,7 +208,7 @@
           </div>
         </div>
         <a href="javascript:;">
-          <a id="save" v-if="this.$route.path != '/postvideo'" @click="saveTag()" style="font-size: 28px">{{ $t("save") }}</a>
+          <a v-if="this.$route.path != '/postvideo'" id="save" style="font-size: 28px" @click="saveTag()">{{ $t("save") }}</a>
         </a>
       </div>
     </div>
@@ -217,6 +217,21 @@
 
 <script>
 export default {
+  components: {},
+  props: {
+    msg: {
+      type: String,
+      default: ""
+    },
+    really: {
+      type: String,
+      default: ""
+    },
+    visible: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -243,6 +258,32 @@ export default {
       // 自动补全标签的内容
       taglist: []
     };
+  },
+  watch: {
+    tags(n) {
+      this.$emit("getEditTagsData", n);
+    },
+    tagsForRec(newVal, oldVal) {
+      if (JSON.stringify(oldVal) != "[]" || this.animeMark != 0) {
+        this.recTagsWatch = false;
+        this.getRecTags(newVal);
+        // let _that = this;
+        // setTimeout(function() {
+        //   _that.recTagsWatch = !_that.recTagsWatch;
+        //   _that.getRecTags(newVal);
+        // }, 300);
+      }
+    },
+    msg() {
+      if (this.msg != "") {
+        this.getCommonTags();
+      }
+    },
+    really(v) {
+      if (v === true) {
+        // this.$emit("getEditTagsData", this.tags);
+      }
+    }
   },
   created() {
     let that = this;
@@ -708,42 +749,7 @@ export default {
       // console.log("选中");
     }
     // 消息提示
-  },
-  watch: {
-    tags(n) {
-      this.$emit("getEditTagsData", n);
-    },
-    tagsForRec(newVal, oldVal) {
-      if (JSON.stringify(oldVal) != "[]" || this.animeMark != 0) {
-        this.recTagsWatch = false;
-        this.getRecTags(newVal);
-        // let _that = this;
-        // setTimeout(function() {
-        //   _that.recTagsWatch = !_that.recTagsWatch;
-        //   _that.getRecTags(newVal);
-        // }, 300);
-      }
-    },
-    msg() {
-      if (this.msg != "") {
-        this.getCommonTags();
-      }
-    },
-    really(v) {
-      if (v === true) {
-        // this.$emit("getEditTagsData", this.tags);
-      }
-    }
-  },
-  props: {
-    msg: {},
-    really: String,
-    visible: {
-      type: Boolean,
-      default: false
-    }
-  },
-  components: {}
+  }
 };
 </script>
 

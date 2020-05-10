@@ -62,7 +62,7 @@ const ShadowRoot = {
 };
 
 function install(vue) {
-  vue.component("shadow-root", ShadowRoot);
+  vue.component("ShadowRoot", ShadowRoot);
 
   vue.directive("shadow", {
     bind(el) {

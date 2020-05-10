@@ -102,25 +102,25 @@
 </i18n>
 
 <template>
-  <div class="postBox" v-loading="loading">
+  <div v-loading="loading" class="postBox">
     <div class="content">
       <!-- 视频输入框 -->
-      <el-input v-model="VideoURL" @keyup.enter.native="onFetchVideo_Click" :placeholder="$t('video_url')">
+      <el-input v-model="VideoURL" :placeholder="$t('video_url')" @keyup.enter.native="onFetchVideo_Click">
         <el-button slot="append" @click="onFetchVideo_Click">{{ $t("get_info") }}</el-button>
       </el-input>
       <!-- 视频URL验证成功的时候出现的内容 -->
       <el-collapse-transition>
         <!-- 视频详情 -->
-        <div class="videoDetail" v-show="show">
+        <div v-show="show" class="videoDetail">
           <img :src="thumbnail" />
           <h2>{{ title }}</h2>
           <p style="word-break: break-all;">{{ desc }}</p>
           <!-- 标签编辑 -->
-          <div class="tagsEdit" v-if="false">
+          <div v-if="false" class="tagsEdit">
             <h3>{{ $t("tag") }}</h3>
             <div class="tagBox">
               <p v-if="tags == ''">{{ $t("no_tag") }}</p>
-              <el-tag effect="dark" v-else v-for="item in tags" :key="item" style="margin-left:5px;margin-right:5px;margin-top:5px">{{ item }}</el-tag>
+              <el-tag v-for="item in tags" v-else :key="item" effect="dark" style="margin-left:5px;margin-right:5px;margin-top:5px">{{ item }}</el-tag>
             </div>
           </div>
         </div>
@@ -144,13 +144,14 @@
 
     <!-- 标签编辑组件 -->
     <!-- :key="refreshMark"-->
-    <EditTags ref="EditTags" :msg="use_tags" :really="isReally" :visible.sync="showTagPanel" @getEditTagsData="TagShow" class="EditTags"></EditTags>
+    <EditTags ref="EditTags" :msg="use_tags" :really="isReally" :visible.sync="showTagPanel" class="EditTags" @getEditTagsData="TagShow"></EditTags>
   </div>
 </template>
 
 <script>
 import EditTags from "../components/EditTags";
 export default {
+  components: { EditTags },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -746,9 +747,7 @@ export default {
         type: "error"
       });
     }
-  },
-
-  components: { EditTags }
+  }
 };
 </script>
 

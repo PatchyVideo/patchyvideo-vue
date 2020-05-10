@@ -77,7 +77,7 @@
     <topnavbar />
 
     <!-- list 页面的正文 -->
-    <div class="w main-page-background-img" v-loading="loading">
+    <div v-loading="loading" class="w main-page-background-img">
       <div class="content">
         <!-- 视频列表介绍 -->
         <div class="deemo shadow">
@@ -102,18 +102,18 @@
               <el-button type="primary" plain class="createPlayListButton" @click="createVideoList">{{ $t("create_playList") }}</el-button>
             </div>
             <!-- 搜索框 -->
-            <el-input :placeholder="$t('search.input_tip')" v-model="listSearch" clearable class="inputbox" @keyup.enter.native="goToSearch()">
+            <el-input v-model="listSearch" :placeholder="$t('search.input_tip')" clearable class="inputbox" @keyup.enter.native="goToSearch()">
               <el-button slot="append" icon="el-icon-search" @click="goToSearch()">{{ $t("search.btn") }}</el-button>
             </el-input>
             <!-- 排序选择框 -->
-            <el-select v-model="couponSelected" @change="handleCouponChange" class="select">
+            <el-select v-model="couponSelected" class="select" @change="handleCouponChange">
               <el-option v-for="item in options" :key="item.value" :label="$t('search.downlist.' + item.value)" :value="item.value"></el-option>
             </el-select>
           </div>
           <!-- 视频列表列表 -->
           <div class="videolistlist">
             <p v-if="videolist.length == 0" style="display:inline-block;margin:0 auto;margin-top:10px;">{{ $t("err_tip") }}</p>
-            <div class="minbox shadow" v-for="item in videolist" :key="item._id.$oid">
+            <div v-for="item in videolist" :key="item._id.$oid" class="minbox shadow">
               <!-- 视频列表标题 -->
               <div class="re_top">
                 <h2>
@@ -144,13 +144,13 @@
         <el-pagination
           background
           class="page-selector"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
           layout="jumper, prev, pager, next, sizes"
-          :current-page="this.page"
-          :total="this.maxcount"
+          :current-page="page"
+          :total="maxcount"
           :page-size="20"
           :page-sizes="[10, 20, 30, 40]"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
         ></el-pagination>
       </div>
     </div>
@@ -163,6 +163,7 @@
 import topnavbar from "../components/TopNavbar.vue";
 import Footer from "../components/Footer.vue";
 export default {
+  components: { topnavbar, Footer },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -190,6 +191,7 @@ export default {
       listSearch: ""
     };
   },
+  watch: {},
   created() {
     // 初始化页面名为 list
     this.$store.commit("changeBgc", "list");
@@ -358,9 +360,7 @@ export default {
     createVideoList() {
       this.$router.push({ path: "/createVideoList" });
     }
-  },
-  watch: {},
-  components: { topnavbar, Footer }
+  }
 };
 </script>
 

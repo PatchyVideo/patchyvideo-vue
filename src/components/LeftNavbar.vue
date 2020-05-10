@@ -112,11 +112,11 @@
 <template>
   <div class="left-navbar">
     <!-- EditTags组件 -->
-    <EditTags ref="editTag" :msg="pid" :visible.sync="showTagPanel" v-if="showTagPanel" class="EditTags"></EditTags>
+    <EditTags v-if="showTagPanel" ref="editTag" :msg="pid" :visible.sync="showTagPanel" class="EditTags"></EditTags>
 
     <!-- 作者详情组件 -->
     <el-dialog :close-on-click-modal="false" :visible.sync="showAuthorData" width="70%">
-      <ShowAuthorData ref="AuthorData" :AuthorID="AuthorID"></ShowAuthorData>
+      <ShowAuthorData ref="AuthorData" :author-i-d="AuthorID"></ShowAuthorData>
     </el-dialog>
 
     <!-- 显示标签组件的对话框 -->
@@ -127,13 +127,13 @@
             <div>
               <div v-if="item.add.length">
                 <span style="margin-right:10px;margin-top:3px;color:#67C23A">{{ $t("tag_history.add") }}</span>
-                <el-tag type="success" v-for="tag in item.add" style="margin-right:5px;margin-top:3px" :key="tag">{{ tag }}</el-tag>
+                <el-tag v-for="tag in item.add" :key="tag" type="success" style="margin-right:5px;margin-top:3px">{{ tag }}</el-tag>
                 <br />
               </div>
 
               <div v-if="item.del.length">
                 <span style="margin-right:10px;margin-top:3px;color:#F56C6C">{{ $t("tag_history.del") }}</span>
-                <el-tag type="danger" v-for="tag in item.del" style="margin-right:5px;margin-top:3px" :key="tag">{{ tag }}</el-tag>
+                <el-tag v-for="tag in item.del" :key="tag" type="danger" style="margin-right:5px;margin-top:3px">{{ tag }}</el-tag>
                 <br />
               </div>
               <div v-if="item.user_obj.length" style="margin-top:5px">
@@ -155,7 +155,7 @@
       <div class="titleTag">
         <h1>{{ title }}</h1>
         <div class="editTagButton">
-          <el-button v-if="$route.path === '/video' && isLogin == true" size="mini" @click="openEditTags" :disabled="showTagPanel">{{
+          <el-button v-if="$route.path === '/video' && isLogin == true" size="mini" :disabled="showTagPanel" @click="openEditTags">{{
             $t("tag.edit")
           }}</el-button>
         </div>
@@ -168,14 +168,14 @@
       </div>
 
       <!-- 在Home页面渲染的侧导航条内容 -->
-      <ul v-if="$route.path === '/home' && this.name === 'main'" class="tag-ul">
-        <li class="tag" v-for="(val, key) in msg" :key="key">
+      <ul v-if="$route.path === '/home' && name === 'main'" class="tag-ul">
+        <li v-for="(val, key) in msg" :key="key" class="tag">
           <el-tooltip :disabled="overflowed.indexOf(key) == -1" effect="light" :content="key.replace(/_/g, ' ')" placement="left">
             <div class="tag belong-to-home">
               <div class="tag-div">
                 <!-- 存在标签颜色 -->
                 <div v-if="colorTagList.indexOf(val) != -1">
-                  <p v-bind:class="val" :ref="val" @click="gotoHome(key)" @click.middle="gotoHome(key, true)">
+                  <p :ref="val" :class="val" @click="gotoHome(key)" @click.middle="gotoHome(key, true)">
                     {{ key.replace(/_/g, " ") }}
                   </p>
                 </div>
@@ -190,14 +190,14 @@
           </el-tooltip>
         </li>
       </ul>
-      <ul v-if="$route.path === '/home' && this.name === 'sub'" class="tag-ul">
-        <li class="tag belong-to-home" v-for="(val, key) in msg" :key="key">
+      <ul v-if="$route.path === '/home' && name === 'sub'" class="tag-ul">
+        <li v-for="(val, key) in msg" :key="key" class="tag belong-to-home">
           <div class="tag-div">
             <!-- <router-link :to="'href=+/search?query='+i">{{i}}</router-link> -->
             <!-- 根据tag名称自动渲染tag颜色 -->
             <!-- 存在标签颜色 -->
             <div v-if="colorTagList.indexOf(val) != -1">
-              <p v-bind:class="val" @click="gotoHome(val)" @click.middle="gotoHome(val, true)">
+              <p :class="val" @click="gotoHome(val)" @click.middle="gotoHome(val, true)">
                 {{ val }}
               </p>
             </div>
@@ -212,22 +212,22 @@
       </ul>
       <!-- 在Detail页面渲染的侧导航条内容 -->
       <ul v-if="$route.path === '/video'">
-        <li class="belong-to-detail" v-for="(key, val) in msg" :key="val">
+        <li v-for="(key, val) in msg" :key="val" class="belong-to-detail">
           <h3 style="display:block;">{{ tranTagCategories(val) }}</h3>
           <!-- 根据tag名称自动渲染tag颜色 -->
           <div class="tag-ul">
-            <div :class="val != 'Author' && 'tag'" v-for="item in key" :key="item">
+            <div v-for="item in key" :key="item" :class="val != 'Author' && 'tag'">
               <el-tooltip :disabled="overflowed.indexOf(item) == -1" effect="light" :content="item.replace(/_/g, ' ')" placement="left">
                 <!-- 存在标签颜色 -->
                 <div v-if="colorTagList.indexOf(val) != -1 && val != 'Author'">
                   <div class="tag-div">
-                    <p v-bind:class="val" :ref="val">
+                    <p :ref="val" :class="val">
                       <span @click.left="gotoHome(item)" @click.middle="gotoHome(item, true)">{{ item.replace(/_/g, " ") }}</span>
                     </p>
                   </div>
                 </div>
                 <div v-else-if="val == 'Author'">
-                  <p v-bind:class="val" :ref="val" style="display:inline;">
+                  <p :ref="val" :class="val" style="display:inline;">
                     <span @click.left="gotoHome(item)" @click.middle="gotoHome(item, true)">{{ item.replace(/_/g, " ") }}</span>
                   </p>
                   <el-button v-if="val == 'Author'" size="mini" style="margin-left:5px;display:inline;" @click="openAuthorData(item)">详情</el-button>
@@ -257,6 +257,18 @@ export default {
     ShowAuthorData
     // pvTag
   },
+  props: {
+    msg: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
+    name: {
+      type: String,
+      default: ""
+    }
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -281,6 +293,53 @@ export default {
       // 溢出元素表
       overflowed: []
     };
+  },
+  computed: {
+    // 导航条的标题
+    title() {
+      if (this.$parent.ifSearch == true && this.$route.path == "/home") {
+        return this.$t("tag.title3");
+      } else if (this.$store.state.leftNavBarTitle == 1) {
+        return this.$t("tag.title");
+      } else if (this.$store.state.leftNavBarTitle == 2) {
+        return this.$t("tag.title2");
+      } else {
+        return this.$t("tag.title");
+      }
+    },
+    // 视频的 pid
+    pid() {
+      return this.$route.query.id || "";
+    },
+    // 翻译标签名
+    tranTagCategories() {
+      return function(name) {
+        let map = {
+          General: this.$t("General"),
+          Character: this.$t("Character"),
+          Copyright: this.$t("Copyright"),
+          Author: this.$t("Author"),
+          Meta: this.$t("Meta"),
+          Language: this.$t("Language"),
+          Soundtrack: this.$t("Soundtrack")
+        };
+        return map[name];
+      };
+    }
+  },
+  watch: {
+    // 如果标签编辑界面被关闭，则重新请求页面数据
+    showTagPanel() {
+      if (this.showTagPanel == false) {
+        this.$parent.searchVideo();
+      }
+    },
+    // 当标签发生变动时刷新溢出属性
+    msg() {
+      this.$nextTick(function() {
+        this.freshOverflow();
+      });
+    }
   },
   mounted() {
     // 查看是否登录
@@ -411,55 +470,7 @@ export default {
       document.body.removeChild(span);
       return result;
     }
-  },
-  watch: {
-    // 如果标签编辑界面被关闭，则重新请求页面数据
-    showTagPanel() {
-      if (this.showTagPanel == false) {
-        this.$parent.searchVideo();
-      }
-    },
-    // 当标签发生变动时刷新溢出属性
-    msg() {
-      this.$nextTick(function() {
-        this.freshOverflow();
-      });
-    }
-  },
-  computed: {
-    // 导航条的标题
-    title() {
-      if (this.$parent.ifSearch == true && this.$route.path == "/home") {
-        return this.$t("tag.title3");
-      } else if (this.$store.state.leftNavBarTitle == 1) {
-        return this.$t("tag.title");
-      } else if (this.$store.state.leftNavBarTitle == 2) {
-        return this.$t("tag.title2");
-      } else {
-        return this.$t("tag.title");
-      }
-    },
-    // 视频的 pid
-    pid() {
-      return this.$route.query.id || "";
-    },
-    // 翻译标签名
-    tranTagCategories() {
-      return function(name) {
-        let map = {
-          General: this.$t("General"),
-          Character: this.$t("Character"),
-          Copyright: this.$t("Copyright"),
-          Author: this.$t("Author"),
-          Meta: this.$t("Meta"),
-          Language: this.$t("Language"),
-          Soundtrack: this.$t("Soundtrack")
-        };
-        return map[name];
-      };
-    }
-  },
-  props: ["msg", "name"]
+  }
 };
 </script>
 

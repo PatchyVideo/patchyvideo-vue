@@ -111,7 +111,7 @@
 </i18n>
 
 <template>
-  <div v-show="visible" v-loading="loading" ref="aside">
+  <div v-show="visible" ref="aside" v-loading="loading">
     <el-dialog :title="$t('tip')" :visible.sync="dialogVisible" :modal-append-to-body="false" width="30%">
       <span>{{ $t("confirm_tip") }}</span>
       <span slot="footer" class="dialog-footer">
@@ -136,11 +136,11 @@
     >
       <el-form ref="createNewFolderForm" label-width="auto" :rules="folderNameRules" :model="newFolderForm">
         <el-form-item :label="$t('name')" prop="name">
-          <el-input :placeholder="$t('name')" v-model="newFolderForm.name"></el-input>
+          <el-input v-model="newFolderForm.name" :placeholder="$t('name')"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="createFolder" style="width:80%" :loading="loading">{{ $t("add") }}</el-button>
-          <el-button @click="showNewFolderDialog = false" style="width:80%;margin-top:10px;margin-left:0px">{{ $t("cancel") }}</el-button>
+          <el-button type="primary" style="width:80%" :loading="loading" @click="createFolder">{{ $t("add") }}</el-button>
+          <el-button style="width:80%;margin-top:10px;margin-left:0px" @click="showNewFolderDialog = false">{{ $t("cancel") }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -154,11 +154,11 @@
     >
       <el-form ref="refRenameFolderForm" label-width="auto" :rules="folderNameRules" :model="renameFolderForm">
         <el-form-item :label="$t('name')" prop="name">
-          <el-input :placeholder="$t('name')" v-model="renameFolderForm.name"></el-input>
+          <el-input v-model="renameFolderForm.name" :placeholder="$t('name')"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="renameFolder" style="width:80%" :loading="loading">{{ $t("rename") }}</el-button>
-          <el-button @click="showRenameFolderDialog = false" style="width:80%;margin-top:10px;margin-left:0px">{{ $t("cancel") }}</el-button>
+          <el-button type="primary" style="width:80%" :loading="loading" @click="renameFolder">{{ $t("rename") }}</el-button>
+          <el-button style="width:80%;margin-top:10px;margin-left:0px" @click="showRenameFolderDialog = false">{{ $t("cancel") }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -166,12 +166,12 @@
     <el-button type="primary" round @click="closeSelf">关闭</el-button>-->
     <el-breadcrumb separator="/">
       <el-breadcrumb-item v-for="i in toNavigablePath()" :key="i.dst">
-        <a @click="navigateTo(i.dst)" style="font-size: 21px">{{ i.name }}</a>
+        <a style="font-size: 21px" @click="navigateTo(i.dst)">{{ i.name }}</a>
       </el-breadcrumb-item>
     </el-breadcrumb>
 
     <el-container>
-      <el-aside :style="{ width: this.asideWidth + 'px', position: 'relative', cursor: 'e-resize' }">
+      <el-aside :style="{ width: asideWidth + 'px', position: 'relative', cursor: 'e-resize' }">
         <div class="asaide-shelter" style="position: absolute;width: 97%;height: 100%;cursor: default"></div>
         <el-tree
           ref="folderTree"
@@ -179,9 +179,9 @@
           :props="props"
           :load="loadNode"
           :expand-on-click-node="false"
-          @node-click="handleTreeNodeClick"
           style="width: 190px"
           lazy
+          @node-click="handleTreeNodeClick"
         ></el-tree>
         <el-switch
           v-if="loggedIn"
@@ -199,7 +199,7 @@
       </el-aside>
       <el-main>
         <el-button v-if="loggedIn" @click="showNewFolderDialog = true">{{ $t("new_folder") }}</el-button>
-        <el-button v-if="loggedIn" @click="dialogVisible = true" type="danger" :disabled="this.currentSelectedItems == 0">{{ $t("del_select") }}</el-button>
+        <el-button v-if="loggedIn" type="danger" :disabled="currentSelectedItems == 0" @click="dialogVisible = true">{{ $t("del_select") }}</el-button>
         <el-button type="primary" round @click="addToCurrectFolder">{{ $t("add_2_cur_dir") }}</el-button>
         <el-table ref="currentFolderTable" :data="currentFolderChildrens" style="width: 100%" @selection-change="handleCurrentFolderTableSelectionChange">
           <el-table-column type="selection" width="55"></el-table-column>
@@ -218,9 +218,9 @@
             <template slot-scope="scope">
               <router-link
                 v-if="typeof scope.row.playlist_object != 'undefined'"
+                :key="scope.row.playlist_object._id.$oid"
                 target="_blank"
                 :to="{ path: '/listdetail', query: { id: scope.row.playlist_object._id.$oid } }"
-                :key="scope.row.playlist_object._id.$oid"
                 tag="a"
               >
                 <h4>{{ scope.row.playlist_object.title.english }}</h4>
@@ -255,6 +255,39 @@
 <script>
 // import moment from "moment";
 export default {
+  filters: {
+    formatDate(value) {
+      if (value) {
+        let upload_time = new Date(value.$date);
+        let y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+        let M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        let d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        let h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+        let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+        let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
+        return (
+          y +
+          "-" +
+          // 数字不足两位自动补零，下同
+          (Array(2).join(0) + M).slice(-2) +
+          "-" +
+          (Array(2).join(0) + d).slice(-2) +
+          " " +
+          (Array(2).join(0) + h).slice(-2) +
+          ":" +
+          (Array(2).join(0) + m).slice(-2) +
+          ":" +
+          (Array(2).join(0) + s).slice(-2)
+        );
+      }
+    }
+  },
+  props: {
+    visible: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -599,39 +632,6 @@ export default {
       this.renameFolderForm.name = row.name;
       this.renameFolderForm.row = row;
       this.showRenameFolderDialog = true;
-    }
-  },
-  props: {
-    visible: {
-      type: Boolean,
-      default: false
-    }
-  },
-  filters: {
-    formatDate(value) {
-      if (value) {
-        let upload_time = new Date(value.$date);
-        let y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
-        let M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        let d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        let h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
-        let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
-        let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
-        return (
-          y +
-          "-" +
-          // 数字不足两位自动补零，下同
-          (Array(2).join(0) + M).slice(-2) +
-          "-" +
-          (Array(2).join(0) + d).slice(-2) +
-          " " +
-          (Array(2).join(0) + h).slice(-2) +
-          ":" +
-          (Array(2).join(0) + m).slice(-2) +
-          ":" +
-          (Array(2).join(0) + s).slice(-2)
-        );
-      }
     }
   }
 };

@@ -54,7 +54,7 @@
 
     <!-- 主题 -->
     <span>{{ $t("score") }}</span>
-    <div class="star" v-for="index in [1, 2, 3, 4, 5]" :key="index" @click="enableListener = !enableListener">
+    <div v-for="index in [1, 2, 3, 4, 5]" :key="index" class="star" @click="enableListener = !enableListener">
       <img :src="index <= lastStar.index ? starIcon[2] : starIcon[0]" />
       <div class="left" @mouseover="starHover(index, 0)"></div>
       <div class="right" @mouseover="starHover(index, 1)"></div>
@@ -78,7 +78,10 @@ import star_half from "../static/img/star_half.png";
 import star_full from "../static/img/star_full.png";
 export default {
   props: {
-    type: String
+    type: {
+      type: String,
+      default: ""
+    }
   },
   data: function() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -101,14 +104,14 @@ export default {
       data: {}
     };
   },
-  created() {
-    this.isLogin() ? this.getMyScore() : this.getTotalRating();
-  },
   watch: {
     pid() {
       this.getMyScore();
     },
     scoreStatus() {}
+  },
+  created() {
+    this.isLogin() ? this.getMyScore() : this.getTotalRating();
   },
   methods: {
     // 登录跳转

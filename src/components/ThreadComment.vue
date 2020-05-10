@@ -1,11 +1,21 @@
 <template>
   <div ref="sdiv">
-    <div v-html="html" :style="'all:initial;font-size:' + fontsize + 'rem;'"></div>
+    <div :style="'all:initial;font-size:' + fontsize + 'rem;'" v-html="html"></div>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    html: {
+      type: String,
+      default: ""
+    },
+    fontsize: {
+      type: Number,
+      default: 0.9
+    }
+  },
   mounted() {
     let style = document.createElement("style");
     style.innerHTML =
@@ -30,16 +40,6 @@ export default {
             "\n</li></ul>"
         );
       });
-  },
-  props: {
-    html: {
-      type: String,
-      default: ""
-    },
-    fontsize: {
-      type: Number,
-      default: 0.9
-    }
   }
 };
 </script>

@@ -14,8 +14,8 @@
             <thread-comment-box
               :comment="comment"
               :index="comment._id.$oid"
-              :commentAuthorsInfo="commentAuthorsInfo"
-              :userId="userInfo.id"
+              :comment-authors-info="commentAuthorsInfo"
+              :user-id="userInfo.id"
               :own="userInfo.isAdmin"
               @position="position"
               @pin2="pin2"
@@ -26,7 +26,7 @@
           </div>
           <div>
             <el-dialog :title="(replyT.type == 'thread' ? '主帖' : '楼中楼') + ' > 发表回复'" :visible.sync="replyT.visible">
-              <thread-comment-box v-if="replyT.comment" :pre="true" :comment="replyT.comment" :commentAuthorsInfo="commentAuthorsInfo"></thread-comment-box>
+              <thread-comment-box v-if="replyT.comment" :pre="true" :comment="replyT.comment" :comment-authors-info="commentAuthorsInfo"></thread-comment-box>
               <div style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;">
                 <div class="left-avatar">
                   <el-avatar size="large" :src="user.avatar"></el-avatar>
@@ -40,7 +40,7 @@
                   </div>
                   <div class="comment-div" style="padding: 15px;">
                     <el-form :model="replyF" @submit.native.prevent>
-                      <el-input type="textarea" v-model="replyF.comment" required></el-input>
+                      <el-input v-model="replyF.comment" type="textarea" required></el-input>
                     </el-form>
                   </div>
                 </div>
@@ -48,7 +48,7 @@
               <div slot="footer" class="dialog-footer">
                 <span style="color:gray">注：建议先预览再发帖，提前发现问题</span>&emsp;
                 <el-button @click="replyF.show = true">预览</el-button>
-                <el-button type="primary" @click="reply()" :disabled="processing">发表</el-button>
+                <el-button type="primary" :disabled="processing" @click="reply()">发表</el-button>
               </div>
             </el-dialog>
             <el-dialog v-if="replyF.show" :title="(replyT.type == 'thread' ? '主帖' : '楼中楼') + ' > 预览回复'" :visible.sync="replyF.show">
@@ -66,7 +66,7 @@
                       }
                     : null
                 "
-                :commentAuthorsInfo="commentAuthorsInfo"
+                :comment-authors-info="commentAuthorsInfo"
               ></thread-comment-box>
               <div v-if="replyT.type == 'thread'" style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;">
                 <div class="left-avatar">
@@ -108,7 +108,7 @@
                   </div>
                   <div class="comment-div" style="padding: 15px;">
                     <el-form :model="editF" @submit.native.prevent>
-                      <el-input type="textarea" v-model="editF.comment" required></el-input>
+                      <el-input v-model="editF.comment" type="textarea" required></el-input>
                     </el-form>
                   </div>
                 </div>
@@ -116,7 +116,7 @@
               <div slot="footer" class="dialog-footer">
                 <span style="color:gray">注：建议先预览再发帖，提前发现问题</span>&emsp;
                 <el-button @click="editF.show = true">预览</el-button>
-                <el-button type="primary" @click="edit()" :disabled="processing">提交</el-button>
+                <el-button type="primary" :disabled="processing" @click="edit()">提交</el-button>
               </div>
             </el-dialog>
             <el-dialog v-if="editF.show" title="预览回复" :visible.sync="editF.show">

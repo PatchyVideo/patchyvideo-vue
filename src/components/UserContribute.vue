@@ -32,29 +32,29 @@
 
 <template>
   <div>
-    <div class="bigbox standard" v-loading="loading">
+    <div v-loading="loading" class="bigbox standard">
       <el-container>
         <el-aside>
-          <p v-if="this.videoCount == 0" class="nulldata-left">{{ $t("no_data") }}</p>
+          <p v-if="videoCount == 0" class="nulldata-left">{{ $t("no_data") }}</p>
           <canvas id="myChart" width="800" height="800"></canvas>
         </el-aside>
         <el-main>
-          <p v-if="this.videoCount == 0" class="nulldata-right">{{ $t("no_data") }}</p>
-          <div class="minibox" v-if="this.videoCount != 0">
+          <p v-if="videoCount == 0" class="nulldata-right">{{ $t("no_data") }}</p>
+          <div v-if="videoCount != 0" class="minibox">
             <div class="minibox_top">
               <h3>{{ $t("video_list") }}</h3>
               <span>{{ $t("video_count", { videoCount: videoCount }) }}</span>
-              <i @click="changeLine" :class="{ 'el-icon-s-grid': flag, 'el-icon-menu': !flag }"></i>
+              <i :class="{ 'el-icon-s-grid': flag, 'el-icon-menu': !flag }" @click="changeLine"></i>
             </div>
 
-            <div class="video_lineUp" v-if="flag">
+            <div v-if="flag" class="video_lineUp">
               <router-link
+                v-for="i in videoData"
+                :key="i._id.$oid"
                 class="list-item"
                 target="_blank"
                 :to="{ path: '/video', query: { id: i._id.$oid } }"
                 tag="a"
-                v-for="i in videoData"
-                :key="i._id.$oid"
               >
                 <img :src="'/images/covers/' + i.item.cover_image" alt />
                 <h4>
@@ -62,14 +62,14 @@
                 </h4>
               </router-link>
             </div>
-            <div class="video_straightColumn" v-if="!flag">
+            <div v-if="!flag" class="video_straightColumn">
               <router-link
+                v-for="i in videoData"
+                :key="i._id.$oid"
                 class="list-item"
                 target="_blank"
                 :to="{ path: '/video', query: { id: i._id.$oid } }"
                 tag="a"
-                v-for="i in videoData"
-                :key="i._id.$oid"
               >
                 <img :src="'/images/covers/' + i.item.cover_image" alt />
                 <div class="list-item_content">
@@ -84,16 +84,16 @@
           </div>
 
           <el-pagination
+            v-if="videoCount != 0"
             background
             class="page-selector"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
             layout="jumper, prev, pager, next, sizes"
-            :current-page="this.page"
+            :current-page="page"
             :total="videoCount"
             :page-size="20"
             :page-sizes="[10, 20, 30, 40]"
-            v-if="this.videoCount != 0"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
           ></el-pagination>
         </el-main>
       </el-container>
@@ -103,6 +103,7 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -132,6 +133,18 @@ export default {
 
       loading: true // 读取状态
     };
+  },
+  watch: {
+    $route() {
+      location.reload();
+    },
+    page() {
+      this.loading = true;
+      this.getData(this.page, this.count);
+    },
+    count() {
+      this.getData(this.page, this.count);
+    }
   },
   created() {
     this.getMaxCount();
@@ -375,19 +388,6 @@ export default {
     changeLine() {
       // 切换视频排列顺序
       this.flag = !this.flag;
-    }
-  },
-  components: {},
-  watch: {
-    $route() {
-      location.reload();
-    },
-    page() {
-      this.loading = true;
-      this.getData(this.page, this.count);
-    },
-    count() {
-      this.getData(this.page, this.count);
     }
   }
 };

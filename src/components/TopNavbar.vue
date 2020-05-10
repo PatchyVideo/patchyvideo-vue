@@ -99,7 +99,7 @@
 <template>
   <div>
     <!-- 退出登录的弹出框 -->
-    <el-dialog :title="$t('prompt.msg')" :modal-append-to-body="false" :visible.sync="dialogVisible" width="30%" v-loading="loading">
+    <el-dialog v-loading="loading" :title="$t('prompt.msg')" :modal-append-to-body="false" :visible.sync="dialogVisible" width="30%">
       <p>{{ $t("user.logout_prompt") }}</p>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">{{ $t("prompt.cancel") }}</el-button>
@@ -148,7 +148,7 @@
           @keyup.enter.native="gotoHome"
         >
           <!-- 搜索条件 -->
-          <el-select v-model="searchType" slot="prepend">
+          <el-select slot="prepend" v-model="searchType">
             <el-option :label="$t('search.tag_text')" value="tag"></el-option>
             <el-option :label="$t('search.text')" value="text"></el-option>
           </el-select>
@@ -157,7 +157,7 @@
             <div class="adviceList">
               <div
                 class="name"
-                v-bind:class="{
+                :class="{
                   Copyright: item.cat == 2,
                   Language: item.cat == 5,
                   Character: item.cat == 1,
@@ -168,7 +168,7 @@
                 }"
                 v-html="item.tag || ConvertLangRes(item.langs)"
               ></div>
-              <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
+              <div v-if="item.cnt != null" class="addr">{{ item.cnt }}</div>
             </div>
           </template>
           <!-- 搜索按钮 -->
@@ -178,13 +178,13 @@
 
       <div>
         <!-- 登录和注册按钮 -->
-        <div class="loginUser" v-if="!isLogin">
+        <div v-if="!isLogin" class="loginUser">
           <router-link to="/login" class="loginUser-login" @click.native="login">{{ $t("user.login") }}</router-link>
           <router-link to="/signup" class="loginUser-signup">{{ $t("user.signup") }}</router-link>
         </div>
 
         <!-- 登录成功后的用户界面 -->
-        <div class="userHome" v-else>
+        <div v-else class="userHome">
           <el-tooltip effect="light" :content="this.$store.state.username" placement="bottom">
             <div @click="gotoUserPage">
               <el-avatar fit="cover" class="loginUser-userAvatar" :size="40" :src="userAvatar"></el-avatar>
@@ -198,7 +198,7 @@
           <el-badge :value="messagesNum" :hidden="!messagesNum" class="item">
             <router-link target="_blank" class="loginUser-message" to="/messages">{{ $t("user.message") }}</router-link>
           </el-badge>
-          <a class="loginUser-signup" @click="dialogVisible = true" style="cursor:pointer">{{ $t("user.logout") }}</a>
+          <a class="loginUser-signup" style="cursor:pointer" @click="dialogVisible = true">{{ $t("user.logout") }}</a>
         </div>
       </div>
     </div>
@@ -209,6 +209,9 @@
 // import TextComplete from "v-textcomplete";
 export default {
   inject: ["reload"],
+  components: {
+    // TextComplete
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -263,6 +266,11 @@ export default {
       } else {
         return "be/images/userphotos/" + this.$store.state.userAvatar;
       }
+    }
+  },
+  watch: {
+    iptVal2() {
+      this.iptVal = this.iptVal2;
     }
   },
   created() {
@@ -624,14 +632,6 @@ export default {
       $("#ipt").focus();
       this.infoTipMark = true;
     }
-  },
-  watch: {
-    iptVal2() {
-      this.iptVal = this.iptVal2;
-    }
-  },
-  components: {
-    // TextComplete
   }
 };
 </script>

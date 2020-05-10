@@ -57,12 +57,12 @@
     <topnavbar />
 
     <div class="tagpage">
-      <div class="content" v-loading="loading">
+      <div v-loading="loading" class="content">
         {{ aqwe }}
         <!-- 每个标签种类的表单 -->
-        <el-tabs type="border-card" v-model="activeName">
-          <el-tab-pane :lazy="true" v-for="(item, i) in tagCategories" :key="item" :label="$t('tag_categories.' + item)" :name="i.toString()">
-            <tagDetail :tagCategorie="item"></tagDetail>
+        <el-tabs v-model="activeName" type="border-card">
+          <el-tab-pane v-for="(item, i) in tagCategories" :key="item" :lazy="true" :label="$t('tag_categories.' + item)" :name="i.toString()">
+            <tagDetail :tag-categorie="item"></tagDetail>
           </el-tab-pane>
           <el-tab-pane :lazy="true" :label="$t('search_tag')" :name="(tagCategories.length + 1).toString()">
             <searchTag></searchTag>
@@ -81,6 +81,7 @@ import tagDetail from "../components/tagDetail.vue";
 import searchTag from "../components/searchTag.vue";
 import Footer from "../components/Footer.vue";
 export default {
+  components: { topnavbar, tagDetail, searchTag, Footer },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -120,8 +121,7 @@ export default {
         this.loading = false;
       });
     }
-  },
-  components: { topnavbar, tagDetail, searchTag, Footer }
+  }
 };
 </script>
 

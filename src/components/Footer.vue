@@ -114,6 +114,7 @@
 <script>
 import { getYiyan } from "../static/js/yiyan";
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -133,6 +134,12 @@ export default {
     },
     commitOfServer2() {
       return this.commitOfServer.slice(0, 8);
+    }
+  },
+  watch: {
+    locale(val) {
+      localStorage.setItem("lang", val);
+      location.reload();
     }
   },
   created() {
@@ -160,14 +167,7 @@ export default {
         this.commitOfServer = result.data;
       });
     }
-  },
-  watch: {
-    locale(val) {
-      localStorage.setItem("lang", val);
-      location.reload();
-    }
-  },
-  components: {}
+  }
 };
 </script>
 

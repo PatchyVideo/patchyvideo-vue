@@ -63,6 +63,7 @@ import usermanagemennt from "../components/admincompoents/UserManagement.vue";
 import logview from "../components/admincompoents/LogView.vue";
 import parasettings from "../components/admincompoents/ParaSettings.vue";
 export default {
+  components: { topnavbar, Footer, usermanagemennt, logview, parasettings },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -89,8 +90,7 @@ export default {
         }
       });
     }
-  },
-  components: { topnavbar, Footer, usermanagemennt, logview, parasettings }
+  }
 };
 </script>
 

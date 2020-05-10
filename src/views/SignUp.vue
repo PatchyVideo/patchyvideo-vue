@@ -86,7 +86,7 @@
 <template>
   <div class="signupPic">
     <!-- 注册框正文 -->
-    <div class="w" v-loading="loading">
+    <div v-loading="loading" class="w">
       <!-- 标题 -->
       <h1>
         <router-link to="home">PatchyVideo</router-link>
@@ -102,8 +102,8 @@
         <el-form-item prop="signup_username" class="signupInput">
           <el-input
             id="username"
-            name="username"
             v-model="signupFormRef.signup_username"
+            name="username"
             :placeholder="$t('input_username')"
             clearable
             prefix-icon="el-icon-user-solid"
@@ -112,9 +112,9 @@
         <el-form-item prop="signup_password1" class="signupInput">
           <el-input
             id="password1"
+            v-model="signupFormRef.signup_password1"
             name="password1"
             type="password"
-            v-model="signupFormRef.signup_password1"
             :placeholder="$t('input_psd')"
             prefix-icon="el-icon-lock"
           ></el-input>
@@ -122,9 +122,9 @@
         <el-form-item prop="signup_password2" class="signupInput">
           <el-input
             id="password2"
+            v-model="signupFormRef.signup_password2"
             name="password2"
             type="password"
-            v-model="signupFormRef.signup_password2"
             :placeholder="$t('repeat_psd')"
             prefix-icon="el-icon-key"
           ></el-input>
@@ -132,15 +132,15 @@
         <el-form-item prop="signup_email" class="signupInput">
           <el-input
             id="email"
+            v-model="signupFormRef.signup_email"
             name="email"
             type="email"
-            v-model="signupFormRef.signup_email"
             clearable
             placeholder="Email"
             prefix-icon="el-icon-message"
           ></el-input>
         </el-form-item>
-        <p id="status" style="text-align: center;" v-bind:class="{ alert: status != $t('ready') }">{{ status }}</p>
+        <p id="status" style="text-align: center;" :class="{ alert: status != $t('ready') }">{{ status }}</p>
       </el-form>
 
       <!-- 注册按钮 -->
@@ -154,6 +154,9 @@
 <script>
 // import login from "../views/Login.vue";
 export default {
+  components: {
+    // login
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     // 校验用户名是否已经存在
@@ -313,9 +316,6 @@ export default {
         }
       });
     }
-  },
-  components: {
-    // login
   }
 };
 </script>

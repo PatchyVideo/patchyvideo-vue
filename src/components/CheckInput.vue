@@ -29,15 +29,15 @@
           <i slot="suffix" class="el-input__icon el-icon-loading" style="color:#E6A23C;"></i>
         </template>
         <template v-else>
-          <i slot="suffix" class="el-input__icon el-icon-success" style="color:#67C23A;" v-if="nouse"></i>
-          <i slot="suffix" class="el-input__icon el-icon-error" style="color:#F56C6C;" v-else></i>
+          <i v-if="nouse" slot="suffix" class="el-input__icon el-icon-success" style="color:#67C23A;"></i>
+          <i v-else slot="suffix" class="el-input__icon el-icon-error" style="color:#F56C6C;"></i>
         </template>
       </template>
       <template slot-scope="{ item }">
         <div class="adviceList">
           <div
             class="name"
-            v-bind:class="{
+            :class="{
               Copyright: item.cat == 2,
               Language: item.cat == 5,
               Character: item.cat == 1,
@@ -66,14 +66,27 @@
 <script>
 export default {
   props: {
-    checkValue: { type: String },
-    checkValueAsync: { type: Function },
-    popperClass: { type: String },
-    placeholder: { type: String },
-    value: { type: String },
-    CheckStatus: { type: Number }
+    checkValue: {
+      type: String,
+      default: ""
+    },
+    popperClass: {
+      type: String,
+      default: ""
+    },
+    placeholder: {
+      type: String,
+      default: ""
+    },
+    value: {
+      type: String,
+      default: ""
+    },
+    checkStatus: {
+      type: Number,
+      default: 0
+    }
   },
-  created() {},
   data() {
     return {
       newValue: "",
@@ -88,7 +101,7 @@ export default {
     newValue(newValue, oldValue) {
       if (newValue !== oldValue) {
         this.$emit("input", this.newValue);
-        if (typeof this.checkValueAsync == "function") {
+        if (this.$listeners.checkValueAsync) {
           // this.CheckAysnc(newValue);
         } else {
           this.Check(newValue);
@@ -96,28 +109,29 @@ export default {
       }
     }
   },
+  created() {},
   methods: {
     Check(Value) {
       if (typeof this.checkValue == "undefined") {
         this.nouse = Value;
-        this.$emit("update:CheckStatus", this.nouse ? 1 : -1);
+        this.$emit("update:checkStatus", this.nouse ? 1 : -1);
       } else if (typeof this.checkValue == "string") {
         this.nouse = Value != this.checkValue;
-        this.$emit("update:CheckStatus", this.nouse ? 1 : -1);
+        this.$emit("update:checkStatus", this.nouse ? 1 : -1);
       }
       this.nouse = false;
-      this.$emit("update:CheckStatus", -1);
+      this.$emit("update:checkStatus", -1);
     },
     CheckAysnc(Value, callback) {
       if (!Value) return false;
-      this.$emit("update:CheckStatus", 0);
+      this.$emit("update:checkStatus", 0);
       this.loading = true;
       Value = Value.replace(/ /g, "_");
-      this.checkValueAsync(Value, res => {
+      this.$emit("check-value-async", Value, res => {
         let value = this.value;
         value = value.replace(/ /g, "_");
         if (Value != value) {
-          this.$emit("update:CheckStatus", 0);
+          this.$emit("update:checkStatus", 0);
           this.loading = true;
           return false;
         }
@@ -125,12 +139,12 @@ export default {
         res.map(v => v.langs.map(val => resultarr.push(val.w)));
         let result = resultarr.filter(v => v == Value);
         this.nouse = result.length <= 0;
-        this.$emit("update:CheckStatus", result.length <= 0 ? 1 : -1);
+        this.$emit("update:checkStatus", result.length <= 0 ? 1 : -1);
         this.loading = false;
         return callback(res);
       });
       this.nouse = false;
-      this.$emit("update:CheckStatus", -1);
+      this.$emit("update:checkStatus", -1);
     },
     ConvertLangRes(langs, hastran = true) {
       if (!langs) return;

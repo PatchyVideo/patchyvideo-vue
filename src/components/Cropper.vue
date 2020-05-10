@@ -62,7 +62,7 @@
 </i18n>
 
 <template>
-  <div class="custom-upload" v-loading="loading">
+  <div v-loading="loading" class="custom-upload">
     <el-dialog :title="$t('title')" :visible.sync="showCropper" top="6vh" width="50%" height="600" class="cropper-dialog" center append-to-body>
       <vue-cropper v-if="showCropper" id="corpper" ref="cropper" :class="{ 'corpper-warp': showCropper }" v-bind="cropper" />
       <div v-if="showCropper" class="cropper-button">
@@ -71,17 +71,17 @@
       </div>
     </el-dialog>
     <el-dialog :modal="false" :title="$t('upload_userphoto')" :visible.sync="dialogVisible" width="40%" top="30vh" :before-close="handleClose">
-      <el-input v-model="imgNetUpUrl" :placeholder="$t('enter_url_prompt')" v-if="isShowNetUp" style="margin: 20px 0px 30px;"></el-input>
+      <el-input v-if="isShowNetUp" v-model="imgNetUpUrl" :placeholder="$t('enter_url_prompt')" style="margin: 20px 0px 30px;"></el-input>
       <span class="dialog-footer" style="text-align: center;margin: 20px 0px 30px;">
-        <el-button type="primary" @click="handleOpenFile()" v-if="!isShowNetUp">{{ $t("from_file") }}</el-button>
-        <el-button type="primary" v-if="!isShowNetUp" @click="showNetUp(true)">{{ $t("from_url") }}</el-button>
+        <el-button v-if="!isShowNetUp" type="primary" @click="handleOpenFile()">{{ $t("from_file") }}</el-button>
+        <el-button v-if="!isShowNetUp" type="primary" @click="showNetUp(true)">{{ $t("from_url") }}</el-button>
         <el-button v-if="isShowNetUp" @click="imgNetUrlup()">{{ $t("ok") }}</el-button>
         <el-button v-if="isShowNetUp" @click="showNetUp(false)">{{ $t("cancel") }}</el-button>
       </span>
     </el-dialog>
-    <form action="/be/helper/upload_image.do" method="post" accept-charset="utf-8" enctype="multipart/form-data" id="form1" @submit.prevent="sub">
-      <input id="type" name="type" type="text" value="userphoto" v-show="false" />
-      <input id="file" name="file" type="file" tag="input" accept="image/*" @change="onChange($event)" :class="id" v-show="false" />
+    <form id="form1" action="/be/helper/upload_image.do" method="post" accept-charset="utf-8" enctype="multipart/form-data" @submit.prevent="sub">
+      <input v-show="false" id="type" name="type" type="text" value="userphoto" />
+      <input v-show="false" id="file" name="file" type="file" tag="input" accept="image/*" :class="id" @change="onChange($event)" />
       <el-button size="small" type="primary" :loading="loading" @click="dialogVisible = true">
         <i class="fa fa-upload" />
         {{ buttonName }}
@@ -119,7 +119,8 @@ export default {
     },
     // 提示内容
     tips: {
-      type: String
+      type: String,
+      default: ""
     },
     // 图片裁剪比列
     fixedNumber: {

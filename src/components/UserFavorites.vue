@@ -37,27 +37,27 @@
 
 <template>
   <div v-loading="loading">
-    <div class="data_null standard" v-if="firstmaxcount == 0">
+    <div v-if="firstmaxcount == 0" class="data_null standard">
       <p>{{ $t("no_data") }}</p>
     </div>
-    <div class="bigbox standard" v-if="firstmaxcount != 0">
+    <div v-if="firstmaxcount != 0" class="bigbox standard">
       <div class="ky-wrap">
         <el-select id="select-order" v-model="couponSelected">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
-        <el-input :placeholder="$t('search')" v-model="listSearch" clearable class="inputbox" @keyup.enter.native="searchList()">
+        <el-input v-model="listSearch" :placeholder="$t('search')" clearable class="inputbox" @keyup.enter.native="searchList()">
           <el-button slot="append" icon="el-icon-search" @click="searchList()">搜索</el-button>
         </el-input>
       </div>
 
       <div class="fav">
-        <p class="nodata" v-if="myListVideoData.length === 0">{{ $t("no_data") }}</p>
+        <p v-if="myListVideoData.length === 0" class="nodata">{{ $t("no_data") }}</p>
         <router-link
+          v-for="i in myListVideoData"
+          :key="i._id.$oid"
           target="_blank"
           :to="{ path: '/listdetail', query: { id: i._id.$oid } }"
           class="list-item"
-          v-for="i in myListVideoData"
-          :key="i._id.$oid"
           tag="a"
         >
           <img :src="'/images/covers/' + i.cover" alt />
@@ -73,13 +73,13 @@
       <el-pagination
         background
         class="page-selector"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
         layout="jumper, prev, pager, next, sizes"
-        :current-page="this.page"
+        :current-page="page"
         :total="maxcount"
         :page-size="20"
         :page-sizes="[10, 20, 30, 40]"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
       ></el-pagination>
     </div>
   </div>
@@ -105,6 +105,20 @@ export default {
       listSearch: "",
       loading: true
     };
+  },
+  watch: {
+    couponSelected() {
+      // 排序更改时，重新请求数据
+      this.loading = true;
+      this.getVideoMaxCount();
+    },
+    page() {
+      this.loading = true;
+      this.getVideoData(this.page, this.count);
+    },
+    count() {
+      this.getVideoData(this.page, this.count);
+    }
   },
   created() {
     this.couponSelected = this.options[0].value;
@@ -205,20 +219,6 @@ export default {
           this.loading = false;
         });
       }
-    }
-  },
-  watch: {
-    couponSelected() {
-      // 排序更改时，重新请求数据
-      this.loading = true;
-      this.getVideoMaxCount();
-    },
-    page() {
-      this.loading = true;
-      this.getVideoData(this.page, this.count);
-    },
-    count() {
-      this.getVideoData(this.page, this.count);
     }
   }
 };

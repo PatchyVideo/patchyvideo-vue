@@ -42,7 +42,7 @@
 
 <template>
   <div class="loginPic">
-    <div class="w" v-loading="loading">
+    <div v-loading="loading" class="w">
       <h1>
         <router-link to="/home">PatchyVideo</router-link>
       </h1>
@@ -54,9 +54,9 @@
         <el-form-item prop="email">
           <el-input
             id="email"
+            v-model="FormRef.email"
             name="email"
             type="email"
-            v-model="FormRef.email"
             clearable
             :placeholder="$t('input_tip')"
             prefix-icon="el-icon-message"
@@ -67,7 +67,7 @@
 
       <!-- 登录按钮 -->
       <div class="bottom in">
-        <div @click="resetpass()" class="login in">{{ $t("button") }}</div>
+        <div class="login in" @click="resetpass()">{{ $t("button") }}</div>
       </div>
     </div>
   </div>
@@ -75,6 +75,7 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -144,8 +145,7 @@ export default {
         type: "success"
       });
     }
-  },
-  components: {}
+  }
 };
 </script>
 

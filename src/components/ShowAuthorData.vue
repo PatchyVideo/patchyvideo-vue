@@ -127,80 +127,80 @@
     <div class="AuthorName">
       <!-- 头像 -->
       <el-avatar fit="cover" style="margin-right:5px" :size="30" :src="author.avatar"></el-avatar>
-      <span class="tagLabel" v-if="authorLanguages.CHS">
+      <span v-if="authorLanguages.CHS" class="tagLabel">
         简体中文:
         <span class="tagName" @click="gotoHome(authorLanguages.CHS)">{{ authorLanguages.CHS }}</span>
       </span>
-      <span class="tagLabel" v-if="authorLanguages.CHT">
+      <span v-if="authorLanguages.CHT" class="tagLabel">
         繁體中文:
         <span class="tagName" @click="gotoHome(authorLanguages.CHT)">{{ authorLanguages.CHT }}</span>
       </span>
-      <span class="tagLabel" v-if="authorLanguages.JPN">
+      <span v-if="authorLanguages.JPN" class="tagLabel">
         日本語:
         <span class="tagName" @click="gotoHome(authorLanguages.JPN)">{{ authorLanguages.JPN }}</span>
       </span>
-      <span class="tagLabel" v-if="authorLanguages.ENG">
+      <span v-if="authorLanguages.ENG" class="tagLabel">
         English:
         <span class="tagName" @click="gotoHome(authorLanguages.ENG)">{{ authorLanguages.ENG }}</span>
       </span>
-      <span class="tagLabel" v-if="authorLanguages.KOR">
+      <span v-if="authorLanguages.KOR" class="tagLabel">
         한국어:
         <span class="tagName" @click="gotoHome(authorLanguages.KOR)">{{ authorLanguages.KOR }}</span>
       </span>
-      <span class="tagLabel" v-if="authorLanguages.CSY">
+      <span v-if="authorLanguages.CSY" class="tagLabel">
         čeština:
         <span class="tagName" @click="gotoHome(authorLanguages.CSY)">{{ authorLanguages.CSY }}</span>
       </span>
-      <span class="tagLabel" v-if="authorLanguages.NLD">
+      <span v-if="authorLanguages.NLD" class="tagLabel">
         Nederlands:
         <span class="tagName" @click="gotoHome(authorLanguages.NLD)">{{ authorLanguages.NLD }}</span>
       </span>
-      <span class="tagLabel" v-if="authorLanguages.FRA">
+      <span v-if="authorLanguages.FRA" class="tagLabel">
         français:
         <span class="tagName" @click="gotoHome(authorLanguages.FRA)">{{ authorLanguages.FRA }}</span>
       </span>
-      <span class="tagLabel" v-if="authorLanguages.DEU">
+      <span v-if="authorLanguages.DEU" class="tagLabel">
         Deutsch:
         <span class="tagName" @click="gotoHome(authorLanguages.DEU)">{{ authorLanguages.DEU }}</span>
       </span>
-      <span class="tagLabel" v-if="authorLanguages.HUN">
+      <span v-if="authorLanguages.HUN" class="tagLabel">
         magyar nyelv:
         <span class="tagName" @click="gotoHome(authorLanguages.HUN)">{{ authorLanguages.HUN }}</span>
       </span>
-      <span class="tagLabel" v-if="authorLanguages.ITA">
+      <span v-if="authorLanguages.ITA" class="tagLabel">
         italiano:
         <span class="tagName" @click="gotoHome(authorLanguages.ITA)">{{ authorLanguages.ITA }}</span>
       </span>
-      <span class="tagLabel" v-if="authorLanguages.PLK">
+      <span v-if="authorLanguages.PLK" class="tagLabel">
         polski:
         <span class="tagName" @click="gotoHome(authorLanguages.PLK)">{{ authorLanguages.PLK }}</span>
       </span>
-      <span class="tagLabel" v-if="authorLanguages.PTB">
+      <span v-if="authorLanguages.PTB" class="tagLabel">
         português:
         <span class="tagName" @click="gotoHome(authorLanguages.PTB)">{{ authorLanguages.PTB }}</span>
       </span>
-      <span class="tagLabel" v-if="authorLanguages.ROM">
+      <span v-if="authorLanguages.ROM" class="tagLabel">
         limba română:
         <span class="tagName" @click="gotoHome(authorLanguages.ROM)">{{ authorLanguages.ROM }}</span>
       </span>
-      <span class="tagLabel" v-if="authorLanguages.RUS">
+      <span v-if="authorLanguages.RUS" class="tagLabel">
         русский язык:
         <span class="tagName" @click="gotoHome(authorLanguages.RUS)">{{ authorLanguages.RUS }}</span>
       </span>
-      <span class="tagLabel" v-if="authorLanguages.ESP">
+      <span v-if="authorLanguages.ESP" class="tagLabel">
         español:
         <span class="tagName" @click="gotoHome(authorLanguages.ESP)">{{ authorLanguages.ESP }}</span>
       </span>
-      <span class="tagLabel" v-if="authorLanguages.TRK">
+      <span v-if="authorLanguages.TRK" class="tagLabel">
         Türk dili:
         <span class="tagName" @click="gotoHome(authorLanguages.TRK)">{{ authorLanguages.TRK }}</span>
       </span>
-      <span class="tagLabel" v-if="authorLanguages.VIN">
+      <span v-if="authorLanguages.VIN" class="tagLabel">
         Tiếng Việt:
         <span class="tagName" @click="gotoHome(authorLanguages.VIN)">{{ authorLanguages.VIN }}</span>
       </span>
       <!-- 标签别名 -->
-      <span class="tagLabel" v-for="item in authorAlias" :key="item">
+      <span v-for="item in authorAlias" :key="item" class="tagLabel">
         -:
         <span class="tagName" @click="gotoHome(item)">{{ item }}</span>
       </span>
@@ -216,13 +216,13 @@
           </el-form-item>
           <el-form-item :label="$t('user_url')" prop="userSpaces">
             <p v-for="(URL, index) in author.userSpaces" :key="URL">
-              <a target="_blank" :href="URL" :key="URL">{{ URL }}</a>
+              <a :key="URL" target="_blank" :href="URL">{{ URL }}</a>
               <el-button type="text" style="margin-left:5px" @click="deluserSpace(index)">删除</el-button>
             </p>
             <p v-if="!author.userSpaces.length">{{ $t("no_user_url") }}</p>
           </el-form-item>
           <el-form-item>
-            <el-input :placeholder="$t('enter_user_url_prompt')" clearable v-model="URLval" @keyup.enter.native="adduserSpace()">
+            <el-input v-model="URLval" :placeholder="$t('enter_user_url_prompt')" clearable @keyup.enter.native="adduserSpace()">
               <template slot="prepend"></template>
               <el-button slot="append" @click="adduserSpace()">
                 {{ $t("add") }}
@@ -230,7 +230,7 @@
             </el-input>
           </el-form-item>
           <el-form-item :label="$t('author_tags')">
-            <el-tag :disable-transitions="true" v-for="tag in author.commonTags" :key="tag" style="margin:10px;" closable @close="handleClose(tag)">{{
+            <el-tag v-for="tag in author.commonTags" :key="tag" :disable-transitions="true" style="margin:10px;" closable @close="handleClose(tag)">{{
               tag
             }}</el-tag>
             <p v-if="!author.commonTags.length">{{ $t("no_tag") }}</p>
@@ -251,7 +251,7 @@
                 <div class="adviceList">
                   <div
                     class="name"
-                    v-bind:class="{
+                    :class="{
                       Copyright: item.cat == 2,
                       Language: item.cat == 5,
                       Character: item.cat == 1,
@@ -266,16 +266,16 @@
                   <div class="addr">{{ item.cnt }}</div>
                 </div>
               </template>
-              <el-button @click="addTag" slot="append" :loading="loading2">
+              <el-button slot="append" :loading="loading2" @click="addTag">
                 {{ $t("add") }}
               </el-button>
             </el-autocomplete>
           </el-form-item>
           <el-form-item :label="$t('desc')" style="margin-top:5px">
-            <el-input type="textarea" :autosize="{ minRows: 4 }" :placeholder="$t('write_something')" clearable v-model="author.desc"></el-input>
+            <el-input v-model="author.desc" type="textarea" :autosize="{ minRows: 4 }" :placeholder="$t('write_something')" clearable></el-input>
           </el-form-item>
           <el-form-item :label="$t('user_picture')" style="margin-top:5px">
-            <el-button @click="useFile = !useFile" style="float:right">
+            <el-button style="float:right" @click="useFile = !useFile">
               {{ $t("change_method") }}
             </el-button>
             <el-upload
@@ -299,9 +299,9 @@
                 <el-button type="text" style="margin-left:5px" @click="avatarURL = ''">{{ $t("del") }}</el-button>
               </p>
               <p v-else>{{ $t("no_url") }}</p>
-              <el-input style="width:60%" :placeholder="$t('enter_pic_url_prompt')" clearable v-model="avatarIpt" @keyup.enter.native="uploadImageUrl">
+              <el-input v-model="avatarIpt" style="width:60%" :placeholder="$t('enter_pic_url_prompt')" clearable @keyup.enter.native="uploadImageUrl">
                 <template slot="prepend"></template>
-                <el-button slot="append" @click="uploadImageUrl" :loading="loading3">{{ $t("add") }}</el-button>
+                <el-button slot="append" :loading="loading3" @click="uploadImageUrl">{{ $t("add") }}</el-button>
               </el-input>
             </div>
           </el-form-item>
@@ -330,19 +330,19 @@
           </el-form-item>
           <el-form-item :v-else="$t('user_url')" prop="userSpaces">
             <p v-for="URL in author.userSpaces" :key="URL">
-              <a target="_blank" :href="URL" :key="URL">{{ URL }}</a>
+              <a :key="URL" target="_blank" :href="URL">{{ URL }}</a>
             </p>
             <p v-if="!author.userSpaces.length">{{ $t("no_user_url") }}</p>
           </el-form-item>
           <el-form-item :label="$t('author_tags')">
-            <el-tag :disable-transitions="true" v-for="tag in author.commonTags" :key="tag" style="margin:10px;">
+            <el-tag v-for="tag in author.commonTags" :key="tag" :disable-transitions="true" style="margin:10px;">
               <span style="cursor: pointer;" @click="gotoHome(tag)">{{ tag }}</span>
             </el-tag>
             <p v-if="!author.commonTags.length">{{ $t("no_tag") }}</p>
           </el-form-item>
           <el-form-item :label="$t('user_desc')">
             <p v-if="author.desc == ''">{{ $t("no_desc") }}</p>
-            <p v-else style="white-space: pre-line;" v-linkified>{{ author.desc }}</p>
+            <p v-else v-linkified style="white-space: pre-line;">{{ author.desc }}</p>
           </el-form-item>
         </el-form>
       </div>
@@ -362,7 +362,13 @@
 
 <script>
 export default {
-  props: ["AuthorID"],
+  components: {},
+  props: {
+    authorID: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -435,6 +441,12 @@ export default {
       isInfoTipClick: false
     };
   },
+  watch: {
+    authorID() {
+      this.edit = false;
+      this.getAuthorData();
+    }
+  },
   created() {
     this.getAuthorData();
   },
@@ -456,8 +468,8 @@ export default {
         method: "post",
         url: "/be/tags/get_tag.do",
         data: {
-          tagid: this.AuthorID,
-          tag: this.AuthorID
+          tagid: this.authorID,
+          tag: this.authorID
         }
       })
         .then(result => {
@@ -468,7 +480,7 @@ export default {
             method: "post",
             url: "/be/authors/get_record.do",
             data: {
-              tag: this.AuthorID,
+              tag: this.authorID,
               lang: localStorage.getItem("lang")
             }
           })
@@ -587,7 +599,7 @@ export default {
             url: "/be/authors/create_or_modify.do",
             data: {
               author_type: this.author.authorType,
-              tagid: this.AuthorID,
+              tagid: this.authorID,
               common_tags: this.author.commonTags,
               user_spaces: this.author.userSpaces,
               desc: this.author.desc,
@@ -705,14 +717,7 @@ export default {
         type: "error"
       });
     }
-  },
-  watch: {
-    AuthorID() {
-      this.edit = false;
-      this.getAuthorData();
-    }
-  },
-  components: {}
+  }
 };
 </script>
 

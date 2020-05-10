@@ -11,21 +11,21 @@
 
 <template>
   <div>
-    <el-card class="box-card" v-loading="loading">
+    <el-card v-loading="loading" class="box-card">
       <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item title="已订阅的文本" name="1" style="text-align: center">
-          <div v-for="i in this.subDataTextNameData" :key="i">
+          <div v-for="i in subDataTextNameData" :key="i">
             <div class="sub-text">
               <h4>{{ i }}</h4>
               <div>
-                <el-tag type="danger" class="text-data" v-for="m in subQtMap(i, 'text')" :key="m._id.$oid">
+                <el-tag v-for="m in subQtMap(i, 'text')" :key="m._id.$oid" type="danger" class="text-data">
                   <transition mode="out-in">
                     <div v-if="m.iptVisble !== true">
-                      <span @keyup.enter="subUpDate(m, $event, 'text')" contenteditable="true">{{ m.qs }}</span>
+                      <span contenteditable="true" @keyup.enter="subUpDate(m, $event, 'text')">{{ m.qs }}</span>
                       <!--<i class="el-icon-edit"  @click="showIpt(m,index)"></i>-->
                       <i class="el-icon-delete" @click="subDel(m)"></i>
                     </div>
-                    <div class="text-ipt" v-if="m.iptVisble === true" style="display: flex;">
+                    <div v-if="m.iptVisble === true" class="text-ipt" style="display: flex;">
                       <el-input v-model="m.iptValue"></el-input>
                       <el-button @click="subUpDate(m)">确认</el-button>
                       <el-button @click="handleSubIptConfirm(m)">取消</el-button>
@@ -46,18 +46,18 @@
           </transition>-->
         </el-collapse-item>
         <el-collapse-item title="已订阅的标签/文本" name="2">
-          <div v-for="i in this.subDataTagsNameData" :key="i" style="margin-bottom: 20px">
+          <div v-for="i in subDataTagsNameData" :key="i" style="margin-bottom: 20px">
             <div class="sub-tags">
               <h4>{{ i }}</h4>
               <div>
-                <el-tag class="tags-data" v-for="m in subQtMap(i, 'tag')" :key="m._id.$oid">
+                <el-tag v-for="m in subQtMap(i, 'tag')" :key="m._id.$oid" class="tags-data">
                   <transition mode="out-in">
                     <div v-if="m.iptVisble !== true">
-                      <span @keyup.enter="subUpDate(m, $event, 'tag')" contenteditable="true">{{ m.qs }}</span>
+                      <span contenteditable="true" @keyup.enter="subUpDate(m, $event, 'tag')">{{ m.qs }}</span>
                       <!--<i class="el-icon-edit"  @click="showIpt(m,index)"></i>-->
                       <i class="el-icon-delete" @click="subDel(m)"></i>
                     </div>
-                    <div class="tags-ipt" v-if="m.iptVisble === true" style="display: flex;">
+                    <div v-if="m.iptVisble === true" class="tags-ipt" style="display: flex;">
                       <el-input v-model="m.iptValue"></el-input>
                       <el-button @click="subUpDate(m)">确认</el-button>
                       <el-button @click="handleSubIptConfirm(m)">取消</el-button>
@@ -70,10 +70,10 @@
         </el-collapse-item>
       </el-collapse>
       <transition mode="out-in">
-        <div class="sub-add" v-if="subAddIptVisible">
+        <div v-if="subAddIptVisible" class="sub-add">
           <div class="sub-name">
             <el-checkbox v-model="checked" class="check" label="name" border></el-checkbox>
-            <el-input v-model="subAddName" placeholder="name可为空" v-if="checked"></el-input>
+            <el-input v-if="checked" v-model="subAddName" placeholder="name可为空"></el-input>
           </div>
           <!--<el-input v-model="subTagsIptValue"placeholder="要添加的标签内容" style="flex-grow: 1;"></el-input>-->
 
@@ -88,14 +88,14 @@
               :fetch-suggestions="querySearchAsync"
               :trigger-on-focus="false"
               placeholder="要添加的标签内容"
-              @select="handleSelect"
               class="input-new-tag"
+              @select="handleSelect"
             >
               <template slot-scope="{ item }">
                 <div class="adviceList">
                   <div
                     class="name"
-                    v-bind:class="{
+                    :class="{
                       Copyright: item.cat === 2,
                       Language: item.cat === 5,
                       Character: item.cat === 1,
@@ -108,19 +108,19 @@
                   >
                     {{ item.tag }}
                   </div>
-                  <div class="addr" v-if="item.cnt != null">{{ item.cnt }}</div>
+                  <div v-if="item.cnt != null" class="addr">{{ item.cnt }}</div>
                 </div>
               </template>
             </el-autocomplete>
           </div>
 
           <div class="sub-action">
-            <el-button @click.native="subAdd(subTagsIptValue, subTagsIptName, 'tag')" type="primary">添加标签订阅</el-button>
-            <el-button @click.native="subAddIptVisible = false" style="margin: 0">取消</el-button>
+            <el-button type="primary" @click.native="subAdd(subTagsIptValue, subTagsIptName, 'tag')">添加标签订阅</el-button>
+            <el-button style="margin: 0" @click.native="subAddIptVisible = false">取消</el-button>
           </div>
         </div>
 
-        <el-button v-else class="button-new-tag" size="small" type="primary" @click="showAddInput" style="width: 20%;">+ 添加订阅</el-button>
+        <el-button v-else class="button-new-tag" size="small" type="primary" style="width: 20%;" @click="showAddInput">+ 添加订阅</el-button>
       </transition>
     </el-card>
   </div>
@@ -128,6 +128,7 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -510,8 +511,7 @@ export default {
         data: {}
       }).then(() => {});
     }
-  },
-  components: {}
+  }
 };
 </script>
 

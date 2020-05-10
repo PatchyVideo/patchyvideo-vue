@@ -21,7 +21,7 @@
       <div class="tag-div">
         <!-- 存在标签颜色 -->
         <div v-if="colorTagList.indexOf(type) != -1">
-          <p class="tag-text" v-bind:class="type" :ref="tipText" @click="gotoHome(tipText)" @click.middle="gotoHome(tipText, true)">{{ tipText }}</p>
+          <p :ref="tipText" class="tag-text" :class="type" @click="gotoHome(tipText)" @click.middle="gotoHome(tipText, true)">{{ tipText }}</p>
         </div>
         <!-- 其他情况 -->
         <div v-else>
@@ -34,6 +34,7 @@
 
 <script>
 export default {
+  components: {},
   props: {
     // 标签种类
     type: {
@@ -80,8 +81,7 @@ export default {
         this.$router.push({ path: "/home" });
       }
     }
-  },
-  components: {}
+  }
 };
 </script>
 

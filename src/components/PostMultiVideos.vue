@@ -61,23 +61,23 @@
 </i18n>
 
 <template>
-  <div class="postBox" v-loading="loading">
+  <div v-loading="loading" class="postBox">
     <div class="content">
       <!-- 输入URL的文本框 -->
-      <el-input type="textarea" :autosize="{ minRows: 8 }" :placeholder="$t('enter_url_prompt')" v-model="URLs"></el-input>
+      <el-input v-model="URLs" type="textarea" :autosize="{ minRows: 8 }" :placeholder="$t('enter_url_prompt')"></el-input>
       <!-- 标签编辑 -->
-      <div class="tagsEdit" v-if="false">
+      <div v-if="false" class="tagsEdit">
         <h3>{{ $t("tag") }}</h3>
         <div class="tagBox">
           <p v-if="tags == ''" style="margin-bottom:10px;">{{ $t("no_tag") }}</p>
-          <el-tag effect="dark" v-else v-for="item in tags" :key="item">{{ item }}</el-tag>
+          <el-tag v-for="item in tags" v-else :key="item" effect="dark">{{ item }}</el-tag>
         </div>
       </div>
       <!-- 高级选项 -->
       <p class="advancedOptions" @click="showAdvancedOptions">
         {{ $t("advance") }}
-        <i class="el-icon-caret-bottom" v-if="!advancedOptions"></i>
-        <i class="el-icon-caret-top" v-else></i>
+        <i v-if="!advancedOptions" class="el-icon-caret-bottom"></i>
+        <i v-else class="el-icon-caret-top"></i>
         <!-- Wiki链接 -->
         <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color:#409EFF;float:right;margin-right:100px;margin-top:0px;">{{ $t("PostRules") }}</a>
       </p>
@@ -94,13 +94,14 @@
         </el-button>
       </div>
     </div>
-    <EditTags :msg="noData" :visible.sync="showTagPanel" @getEditTagsData="TagShow" class="EditTags"></EditTags>
+    <EditTags :msg="noData" :visible.sync="showTagPanel" class="EditTags" @getEditTagsData="TagShow"></EditTags>
   </div>
 </template>
 
 <script>
 import EditTags from "../components/EditTags";
 export default {
+  components: { EditTags },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -216,8 +217,7 @@ export default {
         type: "error"
       });
     }
-  },
-  components: { EditTags }
+  }
 };
 </script>
 

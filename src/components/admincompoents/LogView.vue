@@ -39,7 +39,7 @@
         <el-option v-for="item in log.form.options" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
       <!-- 操作名 -->
-      <el-input class="opts" placeholder="操作名(可选)" v-model="log.form.op" clearable></el-input>
+      <el-input v-model="log.form.op" class="opts" placeholder="操作名(可选)" clearable></el-input>
 
       <el-button type="primary" @click="getLog()">查找</el-button>
 
@@ -48,13 +48,13 @@
       <!-- level查看 -->
       <div class="tag-box">
         <span>level：</span>
-        <el-tag @click="e => onLevelsChange()" style="margin: 0 5px;cursor: pointer;" :type="log.form.visibleLevels.includes('') ? '' : 'info'">全部</el-tag>
+        <el-tag style="margin: 0 5px;cursor: pointer;" :type="log.form.visibleLevels.includes('') ? '' : 'info'" @click="e => onLevelsChange()">全部</el-tag>
         <el-tag
           v-for="item in log.form.allLevels"
           :key="item"
           style="margin: 0 5px;cursor: pointer;"
-          @click="e => onLevelsChange(item)"
           :type="log.form.visibleLevels.includes(item) ? '' : 'info'"
+          @click="e => onLevelsChange(item)"
           >{{ item }}</el-tag
         >
       </div>
@@ -125,13 +125,13 @@
       <!-- Level -->
       <el-table-column label="level" width="100">
         <template slot-scope="scope">
-          <span v-bind:class="scope.row.level">{{ scope.row.level }}</span>
+          <span :class="scope.row.level">{{ scope.row.level }}</span>
         </template>
       </el-table-column>
       <!-- subevents，由于版面关系只渲染“有”，并用黄色标记 -->
       <el-table-column label="subevents" width="120">
         <template slot-scope="scope">
-          <span v-bind:class="{ WARN: scope.row.subevents ? scope.row.subevents.length : 0 }">{{
+          <span :class="{ WARN: scope.row.subevents ? scope.row.subevents.length : 0 }">{{
             scope.row.subevents ? scope.row.subevents.length : 0 ? "YES" : " "
           }}</span>
         </template>
@@ -150,7 +150,7 @@
     </el-table>
 
     <!-- 分页器 -->
-    <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :page-count="100"></el-pagination>
+    <el-pagination background layout="prev, pager, next" :page-count="100" @current-change="handleCurrentChange"></el-pagination>
   </div>
 </template>
 

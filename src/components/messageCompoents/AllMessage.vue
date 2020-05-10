@@ -31,7 +31,7 @@
 <template>
   <div class="unreadMsg">
     <div class="unreadMsg-title">{{ $t("allMsg") }}</div>
-    <div class="unreadMsg-detail" v-loading="loading">
+    <div v-loading="loading" class="unreadMsg-detail">
       <div v-if="loading || !allMsg.length" style="min-height:400px">{{ $t("noMsg") }}</div>
       <!-- 所有消息列表 -->
       <div v-else>
@@ -65,6 +65,7 @@
 <script>
 import { ParseComment } from "../../static/js/comment";
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -211,8 +212,7 @@ export default {
         window.open(routeData.href, "_blank");
       } else return;
     }
-  },
-  components: {}
+  }
 };
 </script>
 

@@ -56,6 +56,7 @@ import Footer from "../components/Footer.vue";
 import createNewList from "../components/CreateNewList";
 import leadInExistingList from "../components/LeadInExistingList";
 export default {
+  components: { topnavbar, Footer, createNewList, leadInExistingList },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -74,8 +75,7 @@ export default {
     }
   },
   mounted() {},
-  methods: {},
-  components: { topnavbar, Footer, createNewList, leadInExistingList }
+  methods: {}
 };
 </script>
 

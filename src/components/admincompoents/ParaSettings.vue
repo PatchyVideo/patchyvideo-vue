@@ -34,11 +34,11 @@
     <el-switch v-model="isEdit" active-text="编辑" inactive-text="查看" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
     <div v-loading="loading">
       <el-form ref="form" :model="data" label-width="60px" :disabled="!isEdit">
-        <el-form-item :label="index" v-for="(item, index) in data" :key="index">
-          <el-input style="width:600px" :placeholder="item" v-model="data[index]"></el-input>
+        <el-form-item v-for="(item, index) in data" :key="index" :label="index">
+          <el-input v-model="data[index]" style="width:600px" :placeholder="item"></el-input>
           <el-button
-            type="primary"
             v-if="isEdit"
+            type="primary"
             @click="
               dialogVisible = true;
               targetPara = index;

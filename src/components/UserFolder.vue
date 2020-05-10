@@ -29,13 +29,13 @@
   <div>
     <div class="bigbox standard">
       <div class="aside">
-        <div class="new-create" @click="changeDoingSatate()" :class="{ active: doingState }">
+        <div class="new-create" :class="{ active: doingState }" @click="changeDoingSatate()">
           <a>
             <i class="el-icon-goblet-square"></i>
             {{ $t("pending_post") }}
           </a>
         </div>
-        <div class="new-create" @click="changeFailedSatate()" :class="{ active: failedState }">
+        <div class="new-create" :class="{ active: failedState }" @click="changeFailedSatate()">
           <a>
             <i class="el-icon-goblet-full"></i>
             {{ $t("failed_post") }}
@@ -43,7 +43,7 @@
         </div>
       </div>
       <div class="main">
-        <div class="fav null" v-if="doingState">
+        <div v-if="doingState" class="fav null">
           <div class="add-list">
             <el-table ref="singleTable" :data="tableData2" highlight-current-row @current-change="handleCurrentChange">
               <el-table-column type="index" width="50"></el-table-column>
@@ -52,24 +52,24 @@
             </el-table>
           </div>
         </div>
-        <div class="fav notnull" v-if="failedState">
+        <div v-if="failedState" class="fav notnull">
           <div class="second">
             <el-switch
-              style="display: block"
               v-model="value"
+              style="display: block"
               active-color="#13ce66"
               inactive-color="#ff4949"
               :active-text="$t('show_url_time')"
               :inactive-text="$t('show_all')"
             ></el-switch>
             <transition mode="out-in">
-              <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName" v-show="value">
+              <el-table v-show="value" :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
                 <el-table-column prop="url" label="URL" align="center"></el-table-column>
                 <el-table-column prop="time" label="TIME" align="center"></el-table-column>
               </el-table>
             </transition>
             <transition mode="out-in">
-              <el-table :data="tableData" stripe style="width: 100%" v-show="!value">
+              <el-table v-show="!value" :data="tableData" stripe style="width: 100%">
                 <el-table-column prop="url" label="URL" align="center"></el-table-column>
                 <el-table-column prop="time" label="TIME" align="center"></el-table-column>
                 <el-table-column prop="exception" label="EXCEPTION" align="center"></el-table-column>
@@ -84,6 +84,7 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -104,6 +105,9 @@ export default {
       doingState: true,
       failedState: false
     };
+  },
+  watch: {
+    value() {}
   },
   created() {
     this.axios({
@@ -223,10 +227,6 @@ export default {
         );
       }
     }
-  },
-  components: {},
-  watch: {
-    value() {}
   }
 };
 </script>

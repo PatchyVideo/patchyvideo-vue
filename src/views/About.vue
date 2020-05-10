@@ -18,14 +18,14 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {};
   },
   created() {},
   mounted() {},
-  methods: {},
-  components: {}
+  methods: {}
 };
 </script>
 

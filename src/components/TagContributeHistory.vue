@@ -1,9 +1,9 @@
 <template>
-  <div class="bang" v-loading="loading">
-    <h2 v-if="this.error">网络受到了异常波动！魔法代码：{{ btoa(this.error) }}</h2>
+  <div v-loading="loading" class="bang">
+    <h2 v-if="error">网络受到了异常波动！魔法代码：{{ btoa(error) }}</h2>
 
     <ul>
-      <li v-for="(item, index) in hisList" v-bind:key="index">
+      <li v-for="(item, index) in hisList" :key="index">
         <div v-if="item.add.length > 0 || item.del.length > 0">
           <div class="list-item">
             <div class="video-thumbnail">
@@ -28,13 +28,13 @@
               <div class="titleTag">
                 <div v-if="item.add.length > 0" class="tag">
                   添加：
-                  <div class="tag-div tag-add" v-for="(val, key) in item.add" :key="key">
+                  <div v-for="(val, key) in item.add" :key="key" class="tag-div tag-add">
                     <p @click="gotoHome(val)">{{ val }}</p>
                   </div>
                 </div>
                 <div v-if="item.del.length > 0" class="tag">
                   删除：
-                  <div class="tag-div tag-del" v-for="(val, key) in item.del" :key="key">
+                  <div v-for="(val, key) in item.del" :key="key" class="tag-div tag-del">
                     <p @click="gotoHome(val)">{{ val }}</p>
                   </div>
                 </div>
@@ -51,13 +51,13 @@
     <el-pagination
       background
       class="page-selector"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
       layout="jumper, prev, pager, next, sizes"
-      :current-page="this.page"
-      :page-count="this.maxPage"
+      :current-page="page"
+      :page-count="maxPage"
       :page-size="20"
       :page-sizes="[10, 20, 30, 40]"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
     ></el-pagination>
   </div>
 </template>

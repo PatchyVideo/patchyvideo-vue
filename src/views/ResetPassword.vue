@@ -52,7 +52,7 @@
 <template>
   <div class="loginPic">
     <!-- 重置密码框正文 -->
-    <div class="w" v-loading="loading">
+    <div v-loading="loading" class="w">
       <!-- 标题 -->
       <h1>
         <router-link to="/home">PatchyVideo</router-link>
@@ -66,9 +66,9 @@
         <el-form-item prop="password1">
           <el-input
             id="password1"
+            v-model="FormRef.password1"
             name="password1"
             type="password"
-            v-model="FormRef.password1"
             :placeholder="$t('psd_input_tip')"
             prefix-icon="el-icon-lock"
           ></el-input>
@@ -76,9 +76,9 @@
         <el-form-item prop="password2">
           <el-input
             id="password2"
+            v-model="FormRef.password2"
             name="password2"
             type="password"
-            v-model="FormRef.password2"
             :placeholder="$t('repeat_input_tip')"
             prefix-icon="el-icon-key"
           ></el-input>
@@ -87,7 +87,7 @@
 
       <!-- 登录按钮 -->
       <div class="bottom in">
-        <div @click="resetpass()" class="login in">{{ $t("reset_psd") }}</div>
+        <div class="login in" @click="resetpass()">{{ $t("reset_psd") }}</div>
       </div>
     </div>
   </div>
@@ -95,6 +95,7 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     let validatePass2 = (rule, value, callback) => {
@@ -190,8 +191,7 @@ export default {
         type: "success"
       });
     }
-  },
-  components: {}
+  }
 };
 </script>
 

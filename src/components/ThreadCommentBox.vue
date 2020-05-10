@@ -1,5 +1,5 @@
 <template>
-  <div :style="(mini ? 'margin-top:8px;' : 'margin-top:16px;') + (highlight ? 'border: dashed yellow;' : '')" ref="cdiv">
+  <div ref="cdiv" :style="(mini ? 'margin-top:8px;' : 'margin-top:16px;') + (highlight ? 'border: dashed yellow;' : '')">
     <div v-if="comment" :style="'border: 1px solid #d1d5da;border-radius: 3px;' + (mini || pre ? 'margin-left:58px;' : 'margin-left:72px;')">
       <div class="left-avatar">
         <router-link
@@ -24,8 +24,8 @@
           <div v-if="!comment.hidden && (own || comment.meta.created_by.$oid == userId)" class="comment-bar">
             <i
               class="comment-bar-item pv-icon-pin"
-              @click="own && pin2(comment._id.$oid, comment.pinned)"
               :style="comment.pinned ? '' : 'transform: rotate(45deg);'"
+              @click="own && pin2(comment._id.$oid, comment.pinned)"
             ></i>
             &nbsp;
             <i class="comment-bar-item el-icon-link " @click="copy2()"></i>
@@ -62,8 +62,8 @@
               :mini="true"
               :comment="commentC"
               :index="index + '-' + commentC._id.$oid"
-              :commentAuthorsInfo="commentAuthorsInfo"
-              :userId="userId"
+              :comment-authors-info="commentAuthorsInfo"
+              :user-id="userId"
               :own="own || comment.meta.created_by.$oid == userId"
               @position="position"
               @pin2="pin2"
@@ -109,9 +109,6 @@ export default {
   components: {
     ThreadComment
   },
-  data() {
-    return { highlight: false };
-  },
   props: {
     comment: {
       type: Object,
@@ -149,6 +146,9 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  data() {
+    return { highlight: false };
   },
   mounted() {
     if ("#L" + this.index == this.$route.hash) {

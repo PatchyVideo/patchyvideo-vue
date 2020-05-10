@@ -60,8 +60,8 @@
     <h1>{{ $t("title") }}</h1>
     <!-- 表单 -->
     <div class="usermanagement-form">
-      <el-input placeholder="搜索用户名..." v-model="usermanagement.keyword" @keyup.enter.native="getUserList(true)" clearable>
-        <el-select v-model="usermanagement.order" class="select" slot="prepend">
+      <el-input v-model="usermanagement.keyword" placeholder="搜索用户名..." clearable @keyup.enter.native="getUserList(true)">
+        <el-select slot="prepend" v-model="usermanagement.order" class="select">
           <el-option v-for="item in usermanagement.form.options" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
         <el-button slot="append" icon="el-icon-search" @click="getUserList(true)">查找</el-button>
@@ -114,10 +114,10 @@
 
     <el-pagination
       background
-      @current-change="handleCurrentChange"
       :current-page="curPageNum"
       layout="pager"
       :page-count.sync="usermanagement.data.page_count"
+      @current-change="handleCurrentChange"
     ></el-pagination>
   </div>
 </template>

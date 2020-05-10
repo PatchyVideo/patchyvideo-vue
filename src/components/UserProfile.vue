@@ -125,7 +125,7 @@
 <template>
   <div>
     <!--<el-button @click="testIpfs">dwa</el-button>-->
-    <div class="bigbox standard" v-if="this.$route.params.id == 'me'" v-loading="loading">
+    <div v-if="this.$route.params.id == 'me'" v-loading="loading" class="bigbox standard">
       <div class="bigbox_left">
         <div class="left-content">
           <div class="wave ripple danger">
@@ -134,8 +134,8 @@
             <div class="circle" :class="{ animeActive3: mounseMark }"></div>
           </div>
           <div class="face" @mouseover="faceMouseOver(true)" @mouseleave="faceMouseOver(false)">
-            <img :src="this.url" alt v-if="this.url != ''" />
-            <img :src="'be/images/userphotos/' + myData.image" alt v-if="this.url === ''" />
+            <img v-if="url != ''" :src="url" alt />
+            <img v-if="url === ''" :src="'be/images/userphotos/' + myData.image" alt />
           </div>
 
           <p>{{ $t("cur_pic") }}</p>
@@ -158,13 +158,13 @@
         </div>
       </div>
 
-      <div class="bigbox_left" id="imoto2"></div>
+      <div id="imoto2" class="bigbox_left"></div>
       <div class="bigbox_right">
         <div class="desc">
           <div class="desc_name" style="display: flex;height:30px; ">
             <p v-if="isNameEdit === false" style="margin-right: 10px">{{ myData.username }}</p>
             <i v-if="isNameEdit === false" class="el-icon-edit" @click="islSetUserName(true)"></i>
-            <el-input v-if="isNameEdit === true" :placeholder="$t('change_username')" prefix-icon="el-icon-user" v-model="myName"></el-input>
+            <el-input v-if="isNameEdit === true" v-model="myName" :placeholder="$t('change_username')" prefix-icon="el-icon-user"></el-input>
             <el-button v-if="isNameEdit === true" type="primary" icon="el-icon-edit" :disabled="myName === ''" @click="setUserName">{{
               $t("update")
             }}</el-button>
@@ -172,7 +172,7 @@
           </div>
 
           <div class="text-form">
-            <textarea name v-model="myData.desc" cols="30" rows="10"></textarea>
+            <textarea v-model="myData.desc" name cols="30" rows="10"></textarea>
           </div>
           <button @click="changeDesc()">{{ $t("save") }}</button>
         </div>
@@ -182,15 +182,15 @@
             <!--<input type="password" placeholder="Old Password">
             <input type="password" placeholder="New Password">
             <input type="password" placeholder="Repeat New Password">-->
-            <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form ref="ruleForm" :model="ruleForm" status-icon :rules="rules" label-width="100px" class="demo-ruleForm">
               <el-form-item :label="$t('old_pass')" prop="old_pass">
                 <el-input v-model.number="ruleForm.old_pass"></el-input>
               </el-form-item>
               <el-form-item :label="$t('new_pass')" prop="pass">
-                <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+                <el-input v-model="ruleForm.pass" type="password" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item :label="$t('confirm_pass')" prop="checkPass">
-                <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+                <el-input v-model="ruleForm.checkPass" type="password" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item class="post">
                 <el-button type="primary" @click="submitForm('ruleForm')">{{ $t("submit") }}</el-button>
@@ -204,13 +204,13 @@
         <div class="email">
           <div class="email-info">{{ $t("bind_mail") }}</div>
 
-          <el-input :placeholder="$t('enter_email')" prefix-icon="el-icon-message" v-model="myEmail"></el-input>
+          <el-input v-model="myEmail" :placeholder="$t('enter_email')" prefix-icon="el-icon-message"></el-input>
           <button @click="bindEmail()">{{ $t("bind") }}</button>
-          <p style="margin-top: 20px" v-if="myData.email !== ''">已绑定邮箱:{{ myData.email }}</p>
+          <p v-if="myData.email !== ''" style="margin-top: 20px">已绑定邮箱:{{ myData.email }}</p>
         </div>
       </div>
     </div>
-    <div class="bigbox standard" v-if="this.$route.params.id != 'me'" v-loading="loading">
+    <div v-if="this.$route.params.id != 'me'" v-loading="loading" class="bigbox standard">
       <div class="bigbox_left" :class="{ bg: this.$route.params.id != 'me' }"></div>
       <div class="bigbox_right">
         <div class="face2">
@@ -220,7 +220,7 @@
         <div class="desc">
           <div class="desc_name">{{ userData.username }}</div>
           <div class="text-form">
-            <textarea name id cols="30" rows="10" disabled="disabled" v-model="userData.desc"></textarea>
+            <textarea id v-model="userData.desc" name cols="30" rows="10" disabled="disabled"></textarea>
           </div>
         </div>
       </div>
@@ -231,6 +231,7 @@
 <script>
 import AppCropper from "@/components/Cropper";
 export default {
+  components: { AppCropper },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     let validateOldPass = (rule, value, callback) => {
@@ -302,6 +303,18 @@ export default {
       mounseMark: false,
       loading: true
     };
+  },
+  watch: {
+    ifupdate(n) {
+      if (n === true) {
+        this.getMyData();
+      }
+    },
+    $route(n) {
+      if (n.fullPath === "/users/me") {
+        this.getMyData();
+      }
+    }
   },
   created() {
     if (this.$route.params.id == "me") {
@@ -518,20 +531,7 @@ export default {
         }
       });
     }
-  },
-  watch: {
-    ifupdate(n) {
-      if (n === true) {
-        this.getMyData();
-      }
-    },
-    $route(n) {
-      if (n.fullPath === "/users/me") {
-        this.getMyData();
-      }
-    }
-  },
-  components: { AppCropper }
+  }
 };
 </script>
 

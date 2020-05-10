@@ -37,6 +37,7 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -45,8 +46,7 @@ export default {
     };
   },
   created() {},
-  methods: {},
-  components: {}
+  methods: {}
 };
 </script>
 

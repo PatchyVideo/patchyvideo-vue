@@ -89,7 +89,7 @@
 <template>
   <div class="loginPic">
     <!-- 登录框正文 -->
-    <div class="w" v-loading="loading">
+    <div v-loading="loading" class="w">
       <!-- 标题 -->
       <h1>
         <router-link to="/home">PatchyVideo</router-link>
@@ -105,9 +105,9 @@
         <el-form-item prop="login_name">
           <el-input
             id="username"
+            v-model="loginFormRef.login_name"
             name="username"
             :placeholder="$t('username')"
-            v-model="loginFormRef.login_name"
             clearable
             prefix-icon="el-icon-user"
           ></el-input>
@@ -115,9 +115,9 @@
         <el-form-item prop="login_password">
           <el-input
             id="password"
+            v-model="loginFormRef.login_password"
             name="password"
             :placeholder="$t('psd')"
-            v-model="loginFormRef.login_password"
             show-password
             prefix-icon="el-icon-lock"
             @keyup.enter.native="login"
@@ -126,12 +126,12 @@
         <p style="text-align: left;margin-top:30px">
           <router-link to="/forgetPassword" class="forgetPassword">{{ $t("forget_psd") }}</router-link>
         </p>
-        <p id="status" style="text-align: center;" v-bind:class="{ alert: status != $t('status') }">{{ status }}</p>
+        <p id="status" style="text-align: center;" :class="{ alert: status != $t('status') }">{{ status }}</p>
       </el-form>
 
       <!-- 登录按钮 -->
       <div class="bottom in">
-        <div @click="login" class="login in">{{ $t("login") }}</div>
+        <div class="login in" @click="login">{{ $t("login") }}</div>
       </div>
     </div>
   </div>
@@ -141,6 +141,9 @@
 // import signup from "../views/SignUp";
 import { changeSiteTitle } from "../static/js/base";
 export default {
+  components: {
+    // signup
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -289,9 +292,6 @@ export default {
       window.document.cookie = "username" + ":" + username + ";path=/;expires=" + date.toUTCString();
       window.document.cookie = "userAvatar" + "=" + userAvatar + ";path=/;expires=" + date.toUTCString();
     }
-  },
-  components: {
-    // signup
   }
 };
 </script>

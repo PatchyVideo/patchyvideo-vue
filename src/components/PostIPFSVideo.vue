@@ -89,26 +89,26 @@
 </i18n>
 
 <template>
-  <div class="postBox" v-loading="loading">
+  <div v-loading="loading" class="postBox">
     <div class="content">
       <el-form ref="list" :model="list" label-width="auto" :rules="rules">
         <!-- 输入URL的文本框 -->
         <el-form-item prop="URL">
-          <el-input :placeholder="$t('input_addr')" v-model="list.URL">
+          <el-input v-model="list.URL" :placeholder="$t('input_addr')">
             <template slot="prepend">ipfs:</template>
           </el-input>
         </el-form-item>
         <!-- 视频源地址 -->
         <el-form-item>
-          <el-input :placeholder="$t('input_orig_addr')" v-model="list.original_url"></el-input>
+          <el-input v-model="list.original_url" :placeholder="$t('input_orig_addr')"></el-input>
         </el-form-item>
         <!-- 视频标题 -->
         <el-form-item prop="title">
-          <el-input :placeholder="$t('input_title')" v-model="list.title"></el-input>
+          <el-input v-model="list.title" :placeholder="$t('input_title')"></el-input>
         </el-form-item>
         <!-- 视频简介 -->
         <el-form-item prop="desc">
-          <el-input type="textarea" :autosize="{ minRows: 6 }" :placeholder="$t('introductory_video')" v-model="list.desc"></el-input>
+          <el-input v-model="list.desc" type="textarea" :autosize="{ minRows: 6 }" :placeholder="$t('introductory_video')"></el-input>
         </el-form-item>
         <!-- 上传视频封面 -->
         <el-form-item ref="videoCover" prop="cover" style="text-align: left;">
@@ -122,7 +122,7 @@
             :data="coverData"
           >
             <el-button size type="primary" style="margin-right:10px;">{{ $t("upload_cover") }}</el-button>
-            <span slot="tip" style="color:red" v-if="noCover">{{ $t("upload_no_cover") }}</span>
+            <span v-if="noCover" slot="tip" style="color:red">{{ $t("upload_no_cover") }}</span>
             <div slot="tip" class="el-upload__tip">{{ $t("upload_limit") }}</div>
           </el-upload>
         </el-form-item>
@@ -132,7 +132,7 @@
             <h3>{{ $t("label") }}</h3>
             <div class="tagBox">
               <p v-if="tags == ''" style="margin-bottom:10px;">{{ $t("no_label") }}</p>
-              <el-tag effect="dark" v-else v-for="item in tags" :key="item">{{ item }}</el-tag>
+              <el-tag v-for="item in tags" v-else :key="item" effect="dark">{{ item }}</el-tag>
             </div>
           </div>
         </el-form-item>
@@ -149,13 +149,14 @@
         </el-form-item>
       </el-form>
     </div>
-    <EditTags :msg="noData" :visible.sync="showTagPanel" @getEditTagsData="TagShow" class="EditTags"></EditTags>
+    <EditTags :msg="noData" :visible.sync="showTagPanel" class="EditTags" @getEditTagsData="TagShow"></EditTags>
   </div>
 </template>
 
 <script>
 import EditTags from "../components/EditTags";
 export default {
+  components: { EditTags },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     // URL 校验规则
@@ -336,8 +337,7 @@ export default {
         type: "error"
       });
     }
-  },
-  components: { EditTags }
+  }
 };
 </script>
 
