@@ -34,7 +34,7 @@ Vue.prototype.$echarts = echarts;
 
 const i18n = new VueI18n({
   locale: "CHS", // set locale
-  fallbackLocale: "ENG"
+  fallbackLocale: "ENG",
 });
 
 // 导入神秘的 css
@@ -49,7 +49,7 @@ const localMap = {
   "zh-cn": "CHS",
   "zh-tw": "CHT",
   "zh-hk": "CHT",
-  ja: "JPN"
+  ja: "JPN",
 };
 
 console.log("巴瓦鲁魔法服务器启动！");
@@ -73,5 +73,5 @@ new Vue({
   i18n,
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount("#app");

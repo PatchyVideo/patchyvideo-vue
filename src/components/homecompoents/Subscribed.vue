@@ -36,13 +36,13 @@
     <!-- <topnavbar /> -->
     <!-- home页面的正文 -->
     <div class="tag-box">
-      <el-tag key style="margin: 0 5px" :type="visibleSubs.includes('') ? '' : 'info'" @click="e => onSubsChange()">全部</el-tag>
+      <el-tag key style="margin: 0 5px;" :type="visibleSubs.includes('') ? '' : 'info'" @click="(e) => onSubsChange()">全部</el-tag>
       <el-tag
         v-for="item in allSubs"
         :key="item._id.$oid"
-        style="margin: 0 5px"
+        style="margin: 0 5px;"
         :type="visibleSubs.includes(item._id.$oid) ? '' : 'info'"
-        @click="e => onSubsChange(item._id.$oid)"
+        @click="(e) => onSubsChange(item._id.$oid)"
         >{{ item.name || item.qs }}</el-tag
       >
     </div>
@@ -73,19 +73,19 @@
               </router-link>
 
               <div class="video-detail">
-                <img :src="require('../../static/img/' + item.item.site + '.png')" width="16px" style="margin-right:2px;display:inline;" />
-                <h4 style="display:inline;">
+                <img :src="require('../../static/img/' + item.item.site + '.png')" width="16px" style="margin-right: 2px; display: inline;" />
+                <h4 style="display: inline;">
                   <router-link target="_blank" :to="{ path: '/video', query: { id: item._id.$oid } }" tag="a">{{ item.item.title }}</router-link>
                 </h4>
                 <p>{{ item.item.desc }}</p>
                 <div>
                   <a target="_blank" :href="item.item.url">{{ item.item.url }}</a>
-                  <i class="fa fa-copy fa-lg" style="margin-left:2px" @click="copyVideoLink(item.item.url)"></i>
+                  <i class="fa fa-copy fa-lg" style="margin-left: 2px;" @click="copyVideoLink(item.item.url)"></i>
                 </div>
               </div>
             </div>
             订阅来源：
-            <el-tag v-for="i in item.sat_objs" :key="'s' + i._id.$oid" style="margin: 0 5px">{{ i.name || i.qs }}</el-tag>
+            <el-tag v-for="i in item.sat_objs" :key="'s' + i._id.$oid" style="margin: 0 5px;">{{ i.name || i.qs }}</el-tag>
           </li>
         </ul>
 
@@ -121,7 +121,7 @@ export default {
         { value: "latest", label: this.$t("latest") },
         { value: "oldest", label: this.$t("oldest") },
         { value: "video_latest", label: this.$t("latest_video") },
-        { value: "video_oldest", label: this.$t("oldest_video") }
+        { value: "video_oldest", label: this.$t("oldest_video") },
       ],
       // 当前视频列表的排列顺序
       couponSelected: "",
@@ -145,7 +145,7 @@ export default {
       // 是否显示隐藏视频
       checked: true,
       visibleSubs: [""],
-      allSubs: {}
+      allSubs: {},
     };
   },
   watch: {
@@ -220,7 +220,7 @@ export default {
       if (newV.query.keyword !== oldV.query.keyword || newV.query.qtype !== oldV.query.qtype) {
         // 修改网站标题
         document.title = this.$t("search_result", {
-          result: newV.query.keyword
+          result: newV.query.keyword,
         });
         this.ifSearch = true;
         this.searchKeyWord = newV.query.keyword;
@@ -233,7 +233,7 @@ export default {
         this.getSearchData(this.page, this.count, newV.query.keyword);
         return;
       }
-    }
+    },
   },
   created() {
     this.couponSelected = this.options[2].value;
@@ -393,10 +393,10 @@ export default {
           order: this.couponSelected,
           hide_placeholder: this.checked,
           visible: this.visibleSubs,
-          lang: localStorage.getItem("lang")
-        }
+          lang: localStorage.getItem("lang"),
+        },
       })
-        .then(result => {
+        .then((result) => {
           // let a = result.data.data.videos[0];
           // console.log(a);
           this.listvideo = this.match_video_query(result.data.data.videos, result.data.data.objs);
@@ -421,7 +421,7 @@ export default {
             $("html").animate({ scrollTop: 0 }, 100);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           this.listvideo = "";
           this.loading = false;
@@ -443,10 +443,10 @@ export default {
           order: this.couponSelected,
           hide_placeholder: this.checked,
           visible: this.visibleSubs,
-          lang: localStorage.getItem("lang")
-        }
+          lang: localStorage.getItem("lang"),
+        },
       })
-        .then(result => {
+        .then((result) => {
           // let a = result.data.data.videos[0];
           // console.log(a);
           this.listvideo = this.match_video_query(result.data.data.videos, result.data.data.objs);
@@ -468,7 +468,7 @@ export default {
             $("html").animate({ scrollTop: 0 }, 100);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           this.listvideo = "";
           this.loading = false;
@@ -493,8 +493,8 @@ export default {
         this.visibleSubs = [""];
       }
       this.getListVideo_VideoOnly(this.page, this.count);
-    }
-  }
+    },
+  },
 };
 </script>
 

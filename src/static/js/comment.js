@@ -51,7 +51,7 @@ let faceslist = {
   胜利: "paopao/i_f47.gif",
   大拇指: "paopao/i_f48.gif",
   弱: "paopao/i_f49.gif",
-  OK: "paopao/i_f50.gif"
+  OK: "paopao/i_f50.gif",
 };
 
 let emojislist = {
@@ -61,7 +61,7 @@ let emojislist = {
   害怕: "😰",
   笑哭: "😂",
   高兴: "😃",
-  微笑: "🙂"
+  微笑: "🙂",
 };
 
 /*function ParseFace(faceName) {
@@ -201,7 +201,7 @@ function ParseCommentT(content) {
   //let match = content.match(/((?<=\[\[)[^\(\]\]]+)/g);
   let match = content.match(/\[\[[^[\]]*\]\]/g);
   if (match) {
-    match.forEach(v => {
+    match.forEach((v) => {
       v = v.replace(/\[\[/g, "").replace(/\]\]/g, "");
       let kv = v.split(":");
       if (kv.length <= 1) return;

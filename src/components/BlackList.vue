@@ -59,7 +59,7 @@
           <el-tag>{{ v }}</el-tag>
         </div>
 
-        <el-button style=" padding: 3px 0;color: #f64c59;" type="text" @click.native="changeBlackList('default')">{{ $t("use") }}</el-button>
+        <el-button style="padding: 3px 0; color: #f64c59;" type="text" @click.native="changeBlackList('default')">{{ $t("use") }}</el-button>
       </el-card>
 
       <el-card class="box-card" :class="{ select: radio !== 6 }" @click.native="selectDiv(6)">
@@ -100,7 +100,7 @@
                   Author: item.cat === 3,
                   General: item.cat === 0,
                   Meta: item.cat === 4,
-                  Soundtrack: item.cat === 6
+                  Soundtrack: item.cat === 6,
                 }"
               >
                 {{ item.tag }}
@@ -130,7 +130,7 @@
           @blur="handleTextAreaConfirm"
         ></el-input>
 
-        <div style="display:flex;">
+        <div style="display: flex;">
           <el-button v-if="!inputVisible && !textareaVisble" class="button-new-tag" type="primary" size="small" @click="showInput">{{
             $t("add_blacklist")
           }}</el-button>
@@ -142,7 +142,7 @@
           }}</el-button>
         </div>
 
-        <el-button style="padding:3px 0;color:#f64c59;" type="text" @click.native="changeBlackList(dynamicTags)">{{ $t("use") }}</el-button>
+        <el-button style="padding: 3px 0; color: #f64c59;" type="text" @click.native="changeBlackList(dynamicTags)">{{ $t("use") }}</el-button>
       </el-card>
     </el-radio-group>
   </div>
@@ -162,7 +162,7 @@ export default {
       textareaVisble: false,
       inputValue: "",
       textareaValue: "",
-      loading: true
+      loading: true,
     };
   },
   created() {
@@ -198,8 +198,8 @@ export default {
           this.axios({
             method: "post",
             url: "be/tags/query_tag_categories.do ",
-            data: { tags: [inputValue] }
-          }).then(res => {
+            data: { tags: [inputValue] },
+          }).then((res) => {
             if (JSON.stringify(res.data.data.categorie_map) === "{}") {
               this.$message.error(this.$t("tag_notexist_prompt"));
               this.inputValue = "";
@@ -208,7 +208,7 @@ export default {
             } else if (this.dynamicTags.indexOf(inputValue) !== -1) {
               this.$message({
                 message: this.$t("tag_already_exist_prompt"),
-                type: "warning"
+                type: "warning",
               });
               this.inputValue = "";
               return;
@@ -238,8 +238,8 @@ export default {
         this.axios({
           method: "post",
           url: "be/tags/query_tag_categories.do ",
-          data: { tags: textareaValue }
-        }).then(res => {
+          data: { tags: textareaValue },
+        }).then((res) => {
           if (textareaValue.length === 0) {
             this.textareaVisble = false;
             return;
@@ -266,15 +266,15 @@ export default {
       let url = "/autocomplete/?q=" + queryString;
       this.axios({
         method: "get",
-        url: url
-      }).then(result => {
+        url: url,
+      }).then((result) => {
         this.taglist = result.data;
         cb(result.data);
       });
     },
     // 搜索输入框内的搜索文字是否包含网站内容
     createFilter(query) {
-      return sites => {
+      return (sites) => {
         return sites.tag.toLowerCase().indexOf(query.toLowerCase()) === 0;
       };
     },
@@ -285,8 +285,8 @@ export default {
       this.axios({
         method: "post",
         url: "be/tags/get_default_blacklist.do",
-        data: { lang: localStorage.getItem("lang") }
-      }).then(res => {
+        data: { lang: localStorage.getItem("lang") },
+      }).then((res) => {
         this.defaultBlackData = res.data.data.tags;
         this.getBlackList();
       });
@@ -301,8 +301,8 @@ export default {
       this.axios({
         method: "post",
         url: "be/user/get_blacklist.do",
-        data: { lang: localStorage.getItem("lang") }
-      }).then(res => {
+        data: { lang: localStorage.getItem("lang") },
+      }).then((res) => {
         this.blackData = res.data.data;
         if (res.data.data === "default" || JSON.stringify(this.defaultBlackData) === JSON.stringify(this.blackData)) {
           this.dynamicTags = [];
@@ -322,18 +322,18 @@ export default {
       this.axios({
         method: "post",
         url: "be/user/changeblacklist.do",
-        data: { blacklist: data }
+        data: { blacklist: data },
       }).then(() => {
         this.$message({
           message: this.$t("update_successed"),
-          type: "success"
+          type: "success",
         });
         this.getBlackList();
 
         this.loading = false;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

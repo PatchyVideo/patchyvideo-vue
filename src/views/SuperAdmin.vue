@@ -68,7 +68,7 @@ export default {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       activeName: "second",
-      admin: false
+      admin: false,
     };
   },
   created() {
@@ -80,8 +80,8 @@ export default {
       this.axios({
         method: "post",
         url: "/be/user/myprofile.do",
-        data: {}
-      }).then(ret => {
+        data: {},
+      }).then((ret) => {
         let status = ret.data.data.access_control.status;
         if (status !== "admin") {
           this.$router.push({ path: "*" });
@@ -89,8 +89,8 @@ export default {
           this.admin = true;
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

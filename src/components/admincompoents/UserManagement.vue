@@ -23,7 +23,7 @@
             <label>访问等级</label>
           </el-col>
           <el-col :span="18">
-            <el-input v-model="editUser.status" style="width:100%"></el-input>
+            <el-input v-model="editUser.status" style="width: 100%;"></el-input>
           </el-col>
         </el-row>
         <el-row>
@@ -31,7 +31,7 @@
             <label>访问模式</label>
           </el-col>
           <el-col :span="18">
-            <el-input v-model="editUser.access_mode" style="width:100%"></el-input>
+            <el-input v-model="editUser.access_mode" style="width: 100%;"></el-input>
           </el-col>
         </el-row>
         <el-row>
@@ -39,7 +39,7 @@
             <label>允许的操作</label>
           </el-col>
           <el-col :span="18">
-            <el-input v-model="editUser.allowed_ops" placeholder="[ ]" style="width:100%"></el-input>
+            <el-input v-model="editUser.allowed_ops" placeholder="[ ]" style="width: 100%;"></el-input>
           </el-col>
         </el-row>
         <el-row>
@@ -47,7 +47,7 @@
             <label>拒绝的操作</label>
           </el-col>
           <el-col :span="18">
-            <el-input v-model="editUser.denied_ops" placeholder="[ ]" style="width:100%"></el-input>
+            <el-input v-model="editUser.denied_ops" placeholder="[ ]" style="width: 100%;"></el-input>
           </el-col>
         </el-row>
       </div>
@@ -68,7 +68,7 @@
       </el-input>
     </div>
 
-    <el-table :data="usermanagement.data.users" style="width: 100%">
+    <el-table :data="usermanagement.data.users" style="width: 100%;">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" class="demo-table-expand">
@@ -131,7 +131,7 @@ export default {
       couponSelected: "",
       options: [
         { value: "latest", label: "时间正序" },
-        { value: "oldest", label: "时间倒序" }
+        { value: "oldest", label: "时间倒序" },
       ],
       // 当前页码
       curPageNum: 1,
@@ -150,9 +150,9 @@ export default {
           timeRange: [],
           options: [
             { value: "latest", label: "时间正序" },
-            { value: "oldest", label: "时间倒序" }
-          ]
-        }
+            { value: "oldest", label: "时间倒序" },
+          ],
+        },
       },
       // 编辑的用户是当前页面的第几条 0 开始
       editUserIndex: 0,
@@ -162,10 +162,10 @@ export default {
         status: "normal",
         access_mode: "blacklist",
         allowed_ops: [],
-        denied_ops: []
+        denied_ops: [],
       },
       // 加载状态
-      loading: false
+      loading: false,
     };
   },
   watch: {},
@@ -173,7 +173,7 @@ export default {
     this.couponSelected = this.options[0].value;
     this.usermanagement.form.timeRange = [
       this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date(new Date().getTime() - 24 * 60 * 60 * 1000)),
-      this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date())
+      this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date()),
     ];
     this.getUserList();
   },
@@ -216,7 +216,7 @@ export default {
       await this.axios({
         method: "post",
         url: reqRouter,
-        data: paras
+        data: paras,
       }).then(() => {
         let user = this.usermanagement.data.users[this.editUserIndex];
         // let data = ret.data.data;
@@ -238,7 +238,7 @@ export default {
         status: user.access_control.status,
         access_mode: user.access_control.access_mode,
         allowed_ops: user.access_control.allowed_ops.toString(),
-        denied_ops: user.access_control.denied_ops.toString()
+        denied_ops: user.access_control.denied_ops.toString(),
       };
     },
     /*
@@ -271,10 +271,10 @@ export default {
           page: this.curPageNum,
           page_size: this.usermanagement.size,
           query: this.usermanagement.keyword,
-          order: this.usermanagement.order
-        }
+          order: this.usermanagement.order,
+        },
       })
-        .then(ret => {
+        .then((ret) => {
           let data = ret.data.data;
           this.usermanagement.data = data;
           this.loading = false;
@@ -299,7 +299,7 @@ export default {
         "d+": date.getDate().toString(), // 日
         "H+": date.getHours().toString(), // 时
         "m+": date.getMinutes().toString(), // 分
-        "s+": date.getSeconds().toString() // 秒
+        "s+": date.getSeconds().toString(), // 秒
         // 有其他格式化字符需求可以继续添加，必须转化成字符串
       };
       for (let k in opt) {
@@ -318,8 +318,8 @@ export default {
     toUTCTime(date) {
       let UTC = new Date(new Date(date).getTime() - 8 * 3600 * 1000);
       return this.dateFormat("yyyy-MM-dd HH:mm:ss", UTC);
-    }
-  }
+    },
+  },
 };
 </script>
 

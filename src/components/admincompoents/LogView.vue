@@ -48,20 +48,20 @@
       <!-- level查看 -->
       <div class="tag-box">
         <span>level：</span>
-        <el-tag style="margin: 0 5px;cursor: pointer;" :type="log.form.visibleLevels.includes('') ? '' : 'info'" @click="e => onLevelsChange()">全部</el-tag>
+        <el-tag style="margin: 0 5px; cursor: pointer;" :type="log.form.visibleLevels.includes('') ? '' : 'info'" @click="(e) => onLevelsChange()">全部</el-tag>
         <el-tag
           v-for="item in log.form.allLevels"
           :key="item"
-          style="margin: 0 5px;cursor: pointer;"
+          style="margin: 0 5px; cursor: pointer;"
           :type="log.form.visibleLevels.includes(item) ? '' : 'info'"
-          @click="e => onLevelsChange(item)"
+          @click="(e) => onLevelsChange(item)"
           >{{ item }}</el-tag
         >
       </div>
     </div>
 
     <!-- 表格 -->
-    <el-table :data="log.data" border style="width: 100%">
+    <el-table :data="log.data" border style="width: 100%;">
       <!-- 展开项 -->
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -174,24 +174,24 @@ export default {
           timeRange: [],
           options: [
             { value: "latest", label: "时间正序" },
-            { value: "oldest", label: "时间倒序" }
+            { value: "oldest", label: "时间倒序" },
           ],
           allLevels: ["SEC", "MSG", "WARN", "ERR"],
           visibleLevels: [""],
-          op: ""
+          op: "",
         },
         // 表格的内容
         data: [],
         // 加载状态
-        loading: false
-      }
+        loading: false,
+      },
     };
   },
   created() {
     // 初始化时间域为打开此页面的前七天到打开页面的时间
     this.log.form.timeRange = [
       this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)),
-      this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date())
+      this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date()),
     ];
     this.getLog();
   },
@@ -209,10 +209,10 @@ export default {
           date_to: this.toUTCTime(this.log.form.timeRange[1]) + " GMT+8",
           order: this.log.order,
           op: this.log.form.op,
-          levels: JSON.stringify(this.log.form.visibleLevels) == '[""]' ? ["SEC", "MSG", "WARN", "ERR"] : this.log.form.visibleLevels
-        }
+          levels: JSON.stringify(this.log.form.visibleLevels) == '[""]' ? ["SEC", "MSG", "WARN", "ERR"] : this.log.form.visibleLevels,
+        },
       })
-        .then(ret => {
+        .then((ret) => {
           this.log.data = ret.data.data;
           this.loading = false;
         })
@@ -232,7 +232,7 @@ export default {
         "d+": date.getDate().toString(), // 日
         "H+": date.getHours().toString(), // 时
         "m+": date.getMinutes().toString(), // 分
-        "s+": date.getSeconds().toString() // 秒
+        "s+": date.getSeconds().toString(), // 秒
         // 有其他格式化字符需求可以继续添加，必须转化成字符串
       };
       for (let k in opt) {
@@ -277,8 +277,8 @@ export default {
     handleCurrentChange(val) {
       this.log.curPageNum = val;
       this.getLog();
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -113,10 +113,10 @@
     <!-- 管理操作的弹出框 -->
     <el-dialog :title="$t('selectOpts')" :visible.sync="AuthOps" width="50%">
       <div v-loading="Authorizing">
-        <el-button style="width:100%;" @click="deletcomment()">{{ $t("deletcomment") }}</el-button>
+        <el-button style="width: 100%;" @click="deletcomment()">{{ $t("deletcomment") }}</el-button>
         <br />
         <br />
-        <el-button style="width:100%;" @click="hidecomment()">{{ $t("hidecomment") }}</el-button>
+        <el-button style="width: 100%;" @click="hidecomment()">{{ $t("hidecomment") }}</el-button>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="AuthOps = false">{{ $t("cancel") }}</el-button>
@@ -135,9 +135,9 @@
       <!-- 表情区域 -->
       <div style="text-align: center !important;">
         <el-popover v-model="faceVisible" placement="top" trigger="manual" content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
-          <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse:collapse;">
+          <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse: collapse;">
             <tr v-for="(p, i) in faceData" :key="i">
-              <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse:collapse;">
+              <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse: collapse;">
                 <a v-for="(z, x) in m" :key="z" @click="addFaceToComments(m)">
                   <img :src="z" :alt="x" :title="x" />
                 </a>
@@ -150,7 +150,7 @@
             class="face"
             type="success"
             icon="el-icon-magic-stick"
-            style="width: 100px"
+            style="width: 100px;"
             @click="
               faceVisible = !faceVisible;
               emojiVisible = false;
@@ -159,9 +159,9 @@
           >
         </el-popover>
         <el-popover v-model="emojiVisible" placement="top" trigger="manual" content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
-          <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse:collapse;">
+          <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse: collapse;">
             <tr v-for="(p, i) in emojiData" :key="i">
-              <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse:collapse;">
+              <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse: collapse;">
                 <a v-for="(z, x) in m" :key="x" class="emoji" :title="x" @click="addEmojiToComments(m)" v-text="z"></a>
               </td>
             </tr>
@@ -172,7 +172,7 @@
             class="face"
             type="success"
             icon="el-icon-magic-stick"
-            style="width: 100px"
+            style="width: 100px;"
             @click="
               emojiVisible = !emojiVisible;
               faceVisible = false;
@@ -194,7 +194,7 @@
       <el-checkbox v-model="UsingEnter">{{ $t("usingEnter") }}</el-checkbox>
       <span>
         {{ $t("respect") }}
-        <a href="https://patchyvideo.wiki/Comments" target="_blank" style="color:#409EFF">{{ $t("commentRules") }}</a>
+        <a href="https://patchyvideo.wiki/Comments" target="_blank" style="color: #409eff;">{{ $t("commentRules") }}</a>
         {{ $t("yo") }}
       </span>
       <el-button type="primary" :loading="posting" @click="postcomment()">{{ $t("post") }}</el-button>
@@ -254,11 +254,11 @@
                 <!-- 正常情况下的渲染 -->
                 <div v-if="!replyc.hidden && !replyc.deleted">
                   <!-- 楼中楼头像 -->
-                  <div class="avatar" style="margin:0">
+                  <div class="avatar" style="margin: 0;">
                     <el-avatar :src="userAvatar(commentUser(replyc.meta.created_by.$oid).profile.image)" size="small"></el-avatar>
                   </div>
                   <!-- 楼中楼右半部分 -->
-                  <div class="commentContent" style="margin-left:40px;">
+                  <div class="commentContent" style="margin-left: 40px;">
                     <div v-linkified>
                       <router-link :to="'/users/' + replyc.meta.created_by.$oid" target="_blank"
                         >{{ commentUser(replyc.meta.created_by.$oid).profile.username }}:</router-link
@@ -290,8 +290,8 @@
                   </div>
                 </div>
                 <!-- 被隐藏的时候的渲染 -->
-                <div v-if="replyc.deleted" style="margin-left:40px;margin-bottom:10px">{{ $t("deletedcomment") }}</div>
-                <div v-else-if="replyc.hidden" style="margin-left:40px;">
+                <div v-if="replyc.deleted" style="margin-left: 40px; margin-bottom: 10px;">{{ $t("deletedcomment") }}</div>
+                <div v-else-if="replyc.hidden" style="margin-left: 40px;">
                   {{ $t("hiddencomment") }}
                   <el-button type="text" @click="replyc.hidden = false">{{ $t("opencomment") }}</el-button>
                 </div>
@@ -312,9 +312,9 @@
                   trigger="manual"
                   content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
                 >
-                  <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse:collapse;">
+                  <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse: collapse;">
                     <tr v-for="(p, i) in faceData" :key="i">
-                      <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse:collapse;">
+                      <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse: collapse;">
                         <a v-for="(z, x) in m" :key="x" @click="addFaceToReply(m, index)">
                           <img :src="z" :alt="x" :title="x" />
                         </a>
@@ -327,7 +327,7 @@
                     class="face"
                     type="success"
                     icon="el-icon-magic-stick"
-                    style="width: 100px"
+                    style="width: 100px;"
                     @click="
                       replycomments[index].face = !replycomments[index].face;
                       replycomments[index].emoji = false;
@@ -341,9 +341,9 @@
                   trigger="manual"
                   content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
                 >
-                  <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse:collapse;">
+                  <table cellpadding="1" cellspacing="1" align="center" border="1" bordercolor="#e3e3e3" style="border-collapse: collapse;">
                     <tr v-for="(p, i) in emojiData" :key="i">
-                      <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse:collapse;">
+                      <td v-for="(m, n) in p" :key="n" border="1" style="border-collapse: collapse;">
                         <a v-for="(z, x) in m" :key="x" class="emoji" :title="x" @click="addEmojiToReply(m, index)" v-text="z"></a>
                       </td>
                     </tr>
@@ -354,7 +354,7 @@
                     class="face"
                     type="success"
                     icon="el-icon-magic-stick"
-                    style="width: 100px"
+                    style="width: 100px;"
                     @click="
                       replycomments[index].emoji = !replycomments[index].emoji;
                       replycomments[index].face = false;
@@ -371,7 +371,7 @@
                   show-word-limit
                   @keyup.enter.native="postReply(index)"
                 ></el-input>
-                <el-button style="margin:5px" type="primary" size="mini" round :loading="replying" @click="postReply(index)">{{ $t("post") }}</el-button>
+                <el-button style="margin: 5px;" type="primary" size="mini" round :loading="replying" @click="postReply(index)">{{ $t("post") }}</el-button>
               </div>
             </div>
           </el-collapse-transition>
@@ -395,8 +395,8 @@ export default {
   props: {
     sid: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -441,7 +441,7 @@ export default {
       // emoji 数据
       emojiData: [],
       // emoji 弹出标志
-      emojiVisible: false
+      emojiVisible: false,
     };
   },
   computed: {
@@ -511,15 +511,15 @@ export default {
       if (this.$route.path === "/listdetail")
         return {
           url: "/be/comments/add_to_playlist.do",
-          data: { pid: this.$route.query.id, text: this.comment }
+          data: { pid: this.$route.query.id, text: this.comment },
         };
       else if (this.$route.path === "/video")
         return {
           url: "/be/comments/add_to_video.do",
-          data: { vid: this.$route.query.id, text: this.comment }
+          data: { vid: this.$route.query.id, text: this.comment },
         };
       else return false;
-    }
+    },
   },
   watch: {
     sid() {
@@ -527,7 +527,7 @@ export default {
     },
     tid() {
       this.getcomments();
-    }
+    },
   },
   created() {
     this.faceData = getFace();
@@ -603,10 +603,10 @@ export default {
         method: "post",
         url: "/be/comments/view.do",
         data: {
-          thread_id: this.tid
-        }
+          thread_id: this.tid,
+        },
       })
-        .then(result => {
+        .then((result) => {
           this.allcomments = result.data.data.comments;
           this.allUsers = result.data.data.users;
           this.cid_comment_map = new Map();
@@ -624,7 +624,7 @@ export default {
             this.showReplies.push({
               show: false,
               face: false,
-              emoji: false
+              emoji: false,
             });
           }
           // 初始化回复框开启标志
@@ -632,13 +632,13 @@ export default {
             this.replycomments.push({
               show: false,
               face: false,
-              emoji: false
+              emoji: false,
             });
           }
 
           this.loadingcomment = false;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           this.openFailed(this.$t("getcommentFailed"));
           this.loadingcomment = false;
@@ -686,9 +686,9 @@ export default {
       this.axios({
         method: "post",
         url: this.requestURL.url,
-        data: this.requestURL.data
+        data: this.requestURL.data,
       })
-        .then(result => {
+        .then((result) => {
           this.posting = false;
           if (result.data.status == "SUCCEED") {
             this.tid = result.data.data.thread_id;
@@ -699,7 +699,7 @@ export default {
             this.openFailed(this.$t("postFailed"));
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           this.openFailed(this.$t("postFailed"));
           this.posting = false;
@@ -733,10 +733,10 @@ export default {
         url: "/be/comments/reply.do",
         data: {
           reply_to: this.cidReplied,
-          text: this.reply
-        }
+          text: this.reply,
+        },
       })
-        .then(result => {
+        .then((result) => {
           if (result.data.status == "SUCCEED") {
             this.reply = "";
             this.replycomments[index].show = false;
@@ -748,7 +748,7 @@ export default {
           }
           this.replying = false;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           this.replying = false;
           this.openFailed(this.$t("postFailed"));
@@ -769,15 +769,15 @@ export default {
         method: "post",
         url: "/be/user/is_authorized",
         data: {
-          op: "commentAdmin"
-        }
+          op: "commentAdmin",
+        },
       })
-        .then(result => {
+        .then((result) => {
           if (result.data.status == "SUCCEED") {
             this.Authorized = true;
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -793,10 +793,10 @@ export default {
         method: "post",
         url: "be/comments/del.do",
         data: {
-          cid: this.AuthorizedCid
-        }
+          cid: this.AuthorizedCid,
+        },
       })
-        .then(result => {
+        .then((result) => {
           if (result.data.status == "SUCCEED") {
             this.openSuccessful(this.$t("operationSuccessfully"));
             this.getcomments();
@@ -806,7 +806,7 @@ export default {
           this.Authorizing = false;
           this.AuthOps = false;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           this.openFailed(this.$t("operationFailed"));
           this.Authorizing = false;
@@ -820,10 +820,10 @@ export default {
         method: "post",
         url: "be/comments/hide.do",
         data: {
-          cid: this.AuthorizedCid
-        }
+          cid: this.AuthorizedCid,
+        },
       })
-        .then(result => {
+        .then((result) => {
           if (result.data.status == "SUCCEED") {
             this.openSuccessful(this.$t("operationSuccessfully"));
             this.getcomments();
@@ -833,7 +833,7 @@ export default {
           this.Authorizing = false;
           this.AuthOps = false;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           this.openFailed(this.$t("operationFailed"));
           this.Authorizing = false;
@@ -844,17 +844,17 @@ export default {
     openSuccessful(message) {
       this.$message({
         message: message,
-        type: "success"
+        type: "success",
       });
     },
 
     openFailed(message) {
       this.$message({
         message: message,
-        type: "error"
+        type: "error",
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

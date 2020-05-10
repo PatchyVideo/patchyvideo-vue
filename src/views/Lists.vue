@@ -112,7 +112,7 @@
           </div>
           <!-- 视频列表列表 -->
           <div class="videolistlist">
-            <p v-if="videolist.length == 0" style="display:inline-block;margin:0 auto;margin-top:10px;">{{ $t("err_tip") }}</p>
+            <p v-if="videolist.length == 0" style="display: inline-block; margin: 0 auto; margin-top: 10px;">{{ $t("err_tip") }}</p>
             <div v-for="item in videolist" :key="item._id.$oid" class="minbox shadow">
               <!-- 视频列表标题 -->
               <div class="re_top">
@@ -183,12 +183,12 @@ export default {
       options: [
         { value: "latest", label: "时间正序" },
         { value: "oldest", label: "时间倒序" },
-        { value: "last_modified", label: "最新修改" }
+        { value: "last_modified", label: "最新修改" },
       ],
       // 当前视频列表的排列顺序
       couponSelected: "latest",
       // 视频列表的搜索关键字
-      listSearch: ""
+      listSearch: "",
     };
   },
   watch: {},
@@ -240,8 +240,8 @@ export default {
           page: this.page,
           size: this.count,
           order: this.couponSelected,
-          key: this.listSearch
-        }
+          key: this.listSearch,
+        },
       });
       // 是否为搜索状态
       if (!this.$route.query.key || this.$route.query.key == "") {
@@ -261,8 +261,8 @@ export default {
           page: this.page,
           size: this.count,
           order: this.couponSelected,
-          key: this.listSearch
-        }
+          key: this.listSearch,
+        },
       });
       // 是否为搜索状态
       if (!this.$route.query.key || this.$route.query.key == "") {
@@ -281,8 +281,8 @@ export default {
           page: this.page,
           size: this.count,
           order: this.couponSelected,
-          key: this.listSearch
-        }
+          key: this.listSearch,
+        },
       });
       // 是否为搜索状态
       if (!this.$route.query.key || this.$route.query.key == "") {
@@ -302,8 +302,8 @@ export default {
           page: this.page,
           size: this.count,
           order: this.couponSelected,
-          key: this.listSearch
-        }
+          key: this.listSearch,
+        },
       });
       this.searchList();
     },
@@ -316,8 +316,8 @@ export default {
       this.axios({
         method: "post",
         url: "be/lists/all.do",
-        data: { page: e, page_size: count, order: this.couponSelected }
-      }).then(result => {
+        data: { page: e, page_size: count, order: this.couponSelected },
+      }).then((result) => {
         this.maxcount = result.data.data.count;
         this.maxpage = result.data.data.page_count;
         this.videolist = result.data.data.playlists;
@@ -345,9 +345,9 @@ export default {
           page: this.page,
           page_size: this.count,
           order: this.couponSelected,
-          query: this.listSearch
-        }
-      }).then(result => {
+          query: this.listSearch,
+        },
+      }).then((result) => {
         this.maxcount = result.data.data.count;
         this.maxpage = result.data.data.page_count;
         this.videolist = result.data.data.playlists;
@@ -359,8 +359,8 @@ export default {
     // 创建播放列表
     createVideoList() {
       this.$router.push({ path: "/createVideoList" });
-    }
-  }
+    },
+  },
 };
 </script>
 

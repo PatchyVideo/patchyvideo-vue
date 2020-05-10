@@ -27,7 +27,7 @@
           <div>
             <el-dialog :title="(replyT.type == 'thread' ? '主帖' : '楼中楼') + ' > 发表回复'" :visible.sync="replyT.visible">
               <thread-comment-box v-if="replyT.comment" :pre="true" :comment="replyT.comment" :comment-authors-info="commentAuthorsInfo"></thread-comment-box>
-              <div style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;">
+              <div style="margin-top: 16px; border: 1px solid #d1d5da; border-radius: 3px; margin-left: 58px;">
                 <div class="left-avatar">
                   <el-avatar size="large" :src="user.avatar"></el-avatar>
                 </div>
@@ -46,7 +46,7 @@
                 </div>
               </div>
               <div slot="footer" class="dialog-footer">
-                <span style="color:gray">注：建议先预览再发帖，提前发现问题</span>&emsp;
+                <span style="color: gray;">注：建议先预览再发帖，提前发现问题</span>&emsp;
                 <el-button @click="replyF.show = true">预览</el-button>
                 <el-button type="primary" :disabled="processing" @click="reply()">发表</el-button>
               </div>
@@ -62,13 +62,13 @@
                         username: user.username,
                         avatar: user.avatar,
                         comment: replyF.comment,
-                        date: +new Date()
+                        date: +new Date(),
                       }
                     : null
                 "
                 :comment-authors-info="commentAuthorsInfo"
               ></thread-comment-box>
-              <div v-if="replyT.type == 'thread'" style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;">
+              <div v-if="replyT.type == 'thread'" style="margin-top: 16px; border: 1px solid #d1d5da; border-radius: 3px; margin-left: 58px;">
                 <div class="left-avatar">
                   <el-avatar size="large" :src="user.avatar"></el-avatar>
                 </div>
@@ -90,7 +90,7 @@
           </div>
           <div>
             <el-dialog title="编辑回复" :visible.sync="editF.visible">
-              <div style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;">
+              <div style="margin-top: 16px; border: 1px solid #d1d5da; border-radius: 3px; margin-left: 58px;">
                 <div class="left-avatar">
                   <el-avatar
                     v-if="commentAuthorsInfo[editF.uid]"
@@ -114,13 +114,13 @@
                 </div>
               </div>
               <div slot="footer" class="dialog-footer">
-                <span style="color:gray">注：建议先预览再发帖，提前发现问题</span>&emsp;
+                <span style="color: gray;">注：建议先预览再发帖，提前发现问题</span>&emsp;
                 <el-button @click="editF.show = true">预览</el-button>
                 <el-button type="primary" :disabled="processing" @click="edit()">提交</el-button>
               </div>
             </el-dialog>
             <el-dialog v-if="editF.show" title="预览回复" :visible.sync="editF.show">
-              <div style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;">
+              <div style="margin-top: 16px; border: 1px solid #d1d5da; border-radius: 3px; margin-left: 58px;">
                 <div class="left-avatar">
                   <el-avatar
                     v-if="commentAuthorsInfo[editF.uid]"
@@ -147,7 +147,7 @@
             </el-dialog>
           </div>
         </el-col>
-        <el-col :span="6" style="text-align:center;position:fixed;top:90px;max-width:277.5px;margin-left:832.5px">
+        <el-col :span="6" style="text-align: center; position: fixed; top: 90px; max-width: 277.5px; margin-left: 832.5px;">
           {{ (commentList.length || 0) != 0 ? "帖子共有" + commentList.length + "个回复" : "帖子看起来很冷清呢" }}<br />
           <span v-if="user.username">
             <el-button type="primary" size="small" plain @click="reply2('thread', $route.params.tid, commentList[0])">发表回复</el-button>
@@ -176,14 +176,14 @@ export default {
     topNavbar,
     cfooter,
     ThreadComment,
-    ThreadCommentBox
+    ThreadCommentBox,
   },
   data() {
     return {
       Finfo: {
         "5e8fce11beb63ebb98f8b50c": {
-          title: "意见反馈"
-        }
+          title: "意见反馈",
+        },
       },
       title: "",
       pinned: false,
@@ -192,18 +192,18 @@ export default {
       commentAuthorsInfo: {},
       userInfo: {
         id: "",
-        isAdmin: false
+        isAdmin: false,
       },
       replyT: {
         visible: false,
         conform: "",
         type: "",
         id: "",
-        comment: {}
+        comment: {},
       },
       replyF: {
         show: false,
-        comment: ""
+        comment: "",
       },
       editF: {
         visible: false,
@@ -212,8 +212,8 @@ export default {
         comment: "",
         bcomment: "",
         uid: "",
-        count: 0
-      }
+        count: 0,
+      },
     };
   },
   computed: {
@@ -223,9 +223,9 @@ export default {
     user() {
       return {
         username: this.$store.state.username,
-        avatar: this.$store.state.userAvatar == "default" ? require("../static/img/defaultAvatar.jpg") : "be/images/userphotos/" + this.$store.state.userAvatar
+        avatar: this.$store.state.userAvatar == "default" ? require("../static/img/defaultAvatar.jpg") : "be/images/userphotos/" + this.$store.state.userAvatar,
       };
-    }
+    },
   },
   mounted() {
     this.fetchUserData();
@@ -237,13 +237,13 @@ export default {
         method: "post",
         url: "/be/user/myprofile.do",
         data: {},
-        withCredentials: true
+        withCredentials: true,
       })
-        .then(result => {
+        .then((result) => {
           if (result.data.status == "SUCCEED") {
             this.userInfo = {
               id: result.data.data._id.$oid,
-              isAdmin: result.data.data.access_control.status == "admin"
+              isAdmin: result.data.data.access_control.status == "admin",
             };
           }
         })
@@ -253,9 +253,9 @@ export default {
       this.axios({
         method: "post",
         url: "/be/forums/view_thread.do",
-        data: { forum_tid: this.$route.params.tid }
+        data: { forum_tid: this.$route.params.tid },
       })
-        .then(result => {
+        .then((result) => {
           if (result.data.status == "SUCCEED") {
             if (result.data.data.comments == []) return;
             this.commentList = [];
@@ -264,7 +264,7 @@ export default {
             this.pinned = result.data.data.pinned;
             let pincl = [];
             let cl = [];
-            result.data.data.comments.forEach(value => {
+            result.data.data.comments.forEach((value) => {
               if (value.deleted) return;
               let c = JSON.parse(JSON.stringify(value));
               c.children = [];
@@ -357,13 +357,13 @@ export default {
             //   },
             //   children: []
             // });
-            result.data.data.users.forEach(data => {
+            result.data.data.users.forEach((data) => {
               this.$set(this.commentAuthorsInfo, data._id.$oid, data);
             });
             changeSiteTitle(this.title + " - 讨论板");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error);
           // this.$router.push({ path: "/404" });
         });
@@ -395,24 +395,24 @@ export default {
         url: "/be/comments/pin.do",
         data: {
           cid: id,
-          pinned: !pinned
-        }
+          pinned: !pinned,
+        },
       })
-        .then(result => {
+        .then((result) => {
           if (result.data.status == "SUCCEED") {
             this.$message({
               type: "success",
-              message: (pinned ? "取消" : "") + "置顶成功！"
+              message: (pinned ? "取消" : "") + "置顶成功！",
             });
             this.fetchData();
           } else {
             throw result.data.status;
           }
         })
-        .catch(e => {
+        .catch((e) => {
           this.$message({
             type: "error",
-            message: (pinned ? "取消" : "") + "置顶失败：" + e.message
+            message: (pinned ? "取消" : "") + "置顶失败：" + e.message,
           });
         });
     },
@@ -422,24 +422,24 @@ export default {
         url: "/be/forums/pin_thread.do",
         data: {
           forum_tid: id,
-          pinned: !this.pinned
-        }
+          pinned: !this.pinned,
+        },
       })
-        .then(result => {
+        .then((result) => {
           if (result.data.status == "SUCCEED") {
             this.$message({
               type: "success",
-              message: (this.pinned ? "取消" : "") + "置顶成功！"
+              message: (this.pinned ? "取消" : "") + "置顶成功！",
             });
             this.fetchData();
           } else {
             throw result.data.status;
           }
         })
-        .catch(e => {
+        .catch((e) => {
           this.$message({
             type: "error",
-            message: (this.pinned ? "取消" : "") + "置顶失败：" + e.message
+            message: (this.pinned ? "取消" : "") + "置顶失败：" + e.message,
           });
         });
     },
@@ -451,7 +451,7 @@ export default {
         comment,
         bcomment: comment,
         uid,
-        count: 0
+        count: 0,
       };
     },
     edit() {
@@ -461,13 +461,13 @@ export default {
           "还没有编辑任何信息呢...",
           "先编辑下再发布吧！",
           "呐呐，编辑完再发布有什么错嘛？",
-          "我说没有编辑就是没有编辑啦！编辑完再发布嘛！"
+          "我说没有编辑就是没有编辑啦！编辑完再发布嘛！",
         ];
         const msg = msgl[this.editF.count] || "你就没有其他事可做吗";
         this.$set(this.editF, "count", this.editF.count + 1);
         this.$message({
           type: "info",
-          message: msg
+          message: msg,
         });
         return;
       }
@@ -477,14 +477,14 @@ export default {
         url: "/be/comments/edit_unfiltered.do",
         data: {
           cid: this.editF.id,
-          text: this.editF.comment
-        }
+          text: this.editF.comment,
+        },
       })
-        .then(result => {
+        .then((result) => {
           if (result.data.status == "SUCCEED") {
             this.$message({
               type: "success",
-              message: "提交成功！"
+              message: "提交成功！",
             });
             this.fetchData();
             this.$set(this.editF, "visible", false);
@@ -493,10 +493,10 @@ export default {
             throw result.data.status;
           }
         })
-        .catch(e => {
+        .catch((e) => {
           this.$message({
             type: "error",
-            message: "提交失败：" + e.message
+            message: "提交失败：" + e.message,
           });
         });
     },
@@ -504,38 +504,38 @@ export default {
       this.$confirm("此操作将删除所选的回复，确定要继续吗？", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           this.axios({
             method: "post",
             url: "/be/comments/del.do",
             data: {
-              cid: id
-            }
+              cid: id,
+            },
           })
-            .then(result => {
+            .then((result) => {
               if (result.data.status == "SUCCEED") {
                 this.$message({
                   type: "success",
-                  message: "删除成功！"
+                  message: "删除成功！",
                 });
                 this.fetchData();
               } else {
                 throw result.data.data;
               }
             })
-            .catch(e => {
+            .catch((e) => {
               this.$message({
                 type: "error",
-                message: "删除失败：" + e.message
+                message: "删除失败：" + e.message,
               });
             });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "删除已取消"
+            message: "删除已取消",
           });
         });
     },
@@ -543,40 +543,40 @@ export default {
       this.$confirm("此操作将删除帖子的所有内容，真的确定要继续吗？\n请三思！", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           this.axios({
             method: "post",
             url: "/be/forums/delete_thread.do",
             data: {
-              forum_tid: id
-            }
+              forum_tid: id,
+            },
           })
-            .then(result => {
+            .then((result) => {
               if (result.data.status == "SUCCEED") {
                 this.$message({
                   type: "success",
-                  message: "删除成功！"
+                  message: "删除成功！",
                 });
                 this.$router.push({
-                  path: "/forum/" + (this.fid || "")
+                  path: "/forum/" + (this.fid || ""),
                 });
               } else {
                 throw result.data.data;
               }
             })
-            .catch(e => {
+            .catch((e) => {
               this.$message({
                 type: "error",
-                message: "删除失败：" + e.message
+                message: "删除失败：" + e.message,
               });
             });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "删除已取消"
+            message: "删除已取消",
           });
         });
     },
@@ -589,7 +589,7 @@ export default {
         this.$confirm("此操作将清空您已存的编辑，确定要继续吗？", "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning"
+          type: "warning",
         })
           .then(() => {
             this.replyT = { visible: true, type, id, comment };
@@ -598,7 +598,7 @@ export default {
           .catch(() => {
             this.$message({
               type: "info",
-              message: "回复已取消"
+              message: "回复已取消",
             });
           });
       } else {
@@ -610,7 +610,7 @@ export default {
       if (this.replyF.comment.replace(/[\s]/g, "") == "") {
         this.$message({
           type: "info",
-          message: "填写下发布的内容吧！"
+          message: "填写下发布的内容吧！",
         });
         return;
       }
@@ -623,14 +623,14 @@ export default {
               url: "/be/forums/add_to_thread_unfiltered.do",
               data: {
                 forum_tid: this.$route.params.tid,
-                text: this.replyF.comment
-              }
+                text: this.replyF.comment,
+              },
             })
-              .then(result => {
+              .then((result) => {
                 if (result.data.status == "SUCCEED") {
                   this.$message({
                     type: "success",
-                    message: "发表成功！"
+                    message: "发表成功！",
                   });
                   this.fetchData();
                   this.$set(this.replyT, "visible", false);
@@ -639,7 +639,7 @@ export default {
                   throw result.data.data;
                 }
               })
-              .catch(e => {
+              .catch((e) => {
                 throw e;
               });
             break;
@@ -650,14 +650,14 @@ export default {
               url: "/be/forums/reply_unfiltered.do",
               data: {
                 reply_to: this.replyT.id,
-                text: this.replyF.comment
-              }
+                text: this.replyF.comment,
+              },
             })
-              .then(result => {
+              .then((result) => {
                 if (result.data.status == "SUCCEED") {
                   this.$message({
                     type: "success",
-                    message: "发表成功！"
+                    message: "发表成功！",
                   });
                   this.fetchData();
                   this.$set(this.replyT, "visible", false);
@@ -666,7 +666,7 @@ export default {
                   throw result.data.data;
                 }
               })
-              .catch(e => {
+              .catch((e) => {
                 throw e;
               });
             break;
@@ -675,11 +675,11 @@ export default {
       } catch (e) {
         this.$message({
           type: "error",
-          message: "发表失败：" + e.message
+          message: "发表失败：" + e.message,
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

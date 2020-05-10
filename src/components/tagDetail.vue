@@ -210,10 +210,12 @@
       ></CheckInput>
       <el-button type="info" @click="addTag()">{{ $t("add_tag") }}</el-button>
       <!-- Wiki链接 -->
-      <a href="https://patchyvideo.wiki/Tags" target="_blank" style="color:#409EFF;float:right;margin-right:100px;margin-top:15px;">{{ $t("rulesOfTags") }}</a>
+      <a href="https://patchyvideo.wiki/Tags" target="_blank" style="color: #409eff; float: right; margin-right: 100px; margin-top: 15px;">{{
+        $t("rulesOfTags")
+      }}</a>
     </div>
     <!-- 表格正文 -->
-    <el-table :data="tagData" style="width: 100%">
+    <el-table :data="tagData" style="width: 100%;">
       <!-- 表格的展开项 -->
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -223,12 +225,12 @@
           <div class="languageSuppot">
             <el-row>
               <el-col :span="3">
-                <el-select v-model="newTagLanguage" :placeholder="$t('select_lang_prompt')" size="mini" style="width:95%">
+                <el-select v-model="newTagLanguage" :placeholder="$t('select_lang_prompt')" size="mini" style="width: 95%;">
                   <el-option v-for="item in languagesList2(props.row.languages)" :key="item.value" :label="item.label" :value="item"></el-option>
                 </el-select>
               </el-col>
               <el-col :span="4">
-                <el-input v-model="new_Tag" size="small" style="width:100%" @keyup.enter.native="addTagLanguage(props.$index)"></el-input>
+                <el-input v-model="new_Tag" size="small" style="width: 100%;" @keyup.enter.native="addTagLanguage(props.$index)"></el-input>
               </el-col>
               <el-col :span="4">
                 <el-button type="primary" size="mini" round class="confirmChange" @click="addTagLanguage(props.$index)">{{ $t("add") }}</el-button>
@@ -245,7 +247,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.CHS"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'CHS')"
                 ></el-input>
               </el-col>
@@ -269,7 +271,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.CHT"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'CHT')"
                 ></el-input>
               </el-col>
@@ -293,7 +295,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.JPN"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'JPN')"
                 ></el-input>
               </el-col>
@@ -317,7 +319,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.ENG"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'ENG')"
                 ></el-input>
               </el-col>
@@ -341,7 +343,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.KOR"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'KOR')"
                 ></el-input>
               </el-col>
@@ -365,7 +367,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.CSY"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'CSY')"
                 ></el-input>
               </el-col>
@@ -389,7 +391,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.NLD"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'NLD')"
                 ></el-input>
               </el-col>
@@ -413,7 +415,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.FRA"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'FRA')"
                 ></el-input>
               </el-col>
@@ -437,7 +439,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.DEU"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'DEU')"
                 ></el-input>
               </el-col>
@@ -461,7 +463,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.HUN"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'HUN')"
                 ></el-input>
               </el-col>
@@ -485,7 +487,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.ITA"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'ITA')"
                 ></el-input>
               </el-col>
@@ -509,7 +511,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.PLK"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'PLK')"
                 ></el-input>
               </el-col>
@@ -533,7 +535,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.PTB"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'PTB')"
                 ></el-input>
               </el-col>
@@ -557,7 +559,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.ROM"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'ROM')"
                 ></el-input>
               </el-col>
@@ -581,7 +583,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.RUS"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'RUS')"
                 ></el-input>
               </el-col>
@@ -605,7 +607,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.ESP"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'ESP')"
                 ></el-input>
               </el-col>
@@ -629,7 +631,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.TRK"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'TRK')"
                 ></el-input>
               </el-col>
@@ -653,7 +655,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].languages.VIN"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmChange(props.$index, 'VIN')"
                 ></el-input>
               </el-col>
@@ -680,7 +682,7 @@
                 <el-input
                   v-model="tagEdit[props.$index].alias[i]"
                   size="small"
-                  style="width:100%"
+                  style="width: 100%;"
                   @keyup.enter.native="confirmAliasChange(props.$index, i)"
                 ></el-input>
               </el-col>
@@ -714,7 +716,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.CHS)"
               >{{ scope.row.languages.CHS.replace(/\_/g, " ") }}</span
@@ -730,7 +732,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.CHT)"
               >{{ scope.row.languages.CHT }}</span
@@ -746,7 +748,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.JPN)"
               >{{ scope.row.languages.JPN.replace(/\_/g, " ") }}</span
@@ -762,7 +764,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.ENG)"
               >{{ scope.row.languages.ENG.replace(/\_/g, " ") }}</span
@@ -778,7 +780,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.KOR)"
               >{{ scope.row.languages.KOR.replace(/\_/g, " ") }}</span
@@ -794,7 +796,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.CSY)"
               >{{ scope.row.languages.CSY.replace(/\_/g, " ") }}</span
@@ -810,7 +812,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.NLD)"
               >{{ scope.row.languages.NLD.replace(/\_/g, " ") }}</span
@@ -826,7 +828,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.FRA)"
               >{{ scope.row.languages.FRA.replace(/\_/g, " ") }}</span
@@ -842,7 +844,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.DEU)"
               >{{ scope.row.languages.DEU.replace(/\_/g, " ") }}</span
@@ -858,7 +860,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.HUN)"
               >{{ scope.row.languages.HUN.replace(/\_/g, " ") }}</span
@@ -874,7 +876,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.ITA)"
               >{{ scope.row.languages.ITA.replace(/\_/g, " ") }}</span
@@ -890,7 +892,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.PLK)"
               >{{ scope.row.languages.PLK.replace(/\_/g, " ") }}</span
@@ -906,7 +908,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.PTB)"
               >{{ scope.row.languages.PTB.replace(/\_/g, " ") }}</span
@@ -922,7 +924,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.ROM)"
               >{{ scope.row.languages.ROM.replace(/\_/g, " ") }}</span
@@ -938,7 +940,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.RUS)"
               >{{ scope.row.languages.RUS.replace(/\_/g, " ") }}</span
@@ -954,7 +956,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.ESP)"
               >{{ scope.row.languages.ESP.replace(/\_/g, " ") }}</span
@@ -970,7 +972,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.TRK)"
               >{{ scope.row.languages.TRK.replace(/\_/g, " ") }}</span
@@ -986,7 +988,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(scope.row.languages.VIN)"
               >{{ scope.row.languages.VIN.replace(/\_/g, " ") }}</span
@@ -1003,7 +1005,7 @@
                 Character: scope.row.category == 'Character',
                 Author: scope.row.category == 'Author',
                 General: scope.row.category == 'General',
-                Meta: scope.row.category == 'Meta'
+                Meta: scope.row.category == 'Meta',
               }"
               @click="gotoHome(item)"
               >{{ item.replace(/\_/g, " ") }}</span
@@ -1019,7 +1021,7 @@
             <el-button type="primary" round @click="openDialog(scope.$index)">{{ $t("change_category") }}</el-button>
           </div>
           <div v-else>
-            <el-button type="danger" round style="margin-left:40px" @click="advancedOptions = true">{{ $t("show_advance") }}</el-button>
+            <el-button type="danger" round style="margin-left: 40px;" @click="advancedOptions = true">{{ $t("show_advance") }}</el-button>
           </div>
         </template>
       </el-table-column>
@@ -1040,8 +1042,8 @@
 
     <!-- 更改分类的弹出框 -->
     <el-dialog :title="$t('prompt')" :visible.sync="dialogVisible" width="20%">
-      <div style="width:80%;margin:0 auto">
-        <el-select v-model="newTagCategorie" :placeholder="$t('select_categoty')" style="width:100%">
+      <div style="width: 80%; margin: 0 auto;">
+        <el-select v-model="newTagCategorie" :placeholder="$t('select_categoty')" style="width: 100%;">
           <el-option v-for="item in tagCategories2" :key="item" :label="item" :value="item"></el-option>
         </el-select>
       </div>
@@ -1061,8 +1063,8 @@ export default {
   props: {
     tagCategorie: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -1094,7 +1096,7 @@ export default {
         { value: "RUS", label: "русский язык" },
         { value: "ESP", label: "español" },
         { value: "TRK", label: "Türk dili" },
-        { value: "VIN", label: "Tiếng Việt" }
+        { value: "VIN", label: "Tiếng Việt" },
       ],
       // 标签种类
       tagCategories: [],
@@ -1112,7 +1114,7 @@ export default {
         { value: "latest", label: this.$t("latest") },
         { value: "oldest", label: this.$t("oldest") },
         { value: "count", label: this.$t("count") },
-        { value: "count_inv", label: this.$t("count_inv") }
+        { value: "count_inv", label: this.$t("count_inv") },
       ],
       // 当前标签列表的排列顺序
       couponSelected: "latest",
@@ -1137,7 +1139,7 @@ export default {
       // 页面是否属于加载状态的判断
       loading: true,
       //标签检查状态
-      checkTag: 0
+      checkTag: 0,
     };
   },
   computed: {
@@ -1156,7 +1158,7 @@ export default {
         }
       }
       return list;
-    }
+    },
   },
   watch: {
     page() {
@@ -1169,7 +1171,7 @@ export default {
     couponSelected() {
       this.handleCurrentChange(1);
       this.requestCategorieTags();
-    }
+    },
   },
   created() {},
   mounted() {
@@ -1183,8 +1185,8 @@ export default {
       this.axios({
         method: "post",
         url: "be/tags/query_categories.do",
-        data: {}
-      }).then(result => {
+        data: {},
+      }).then((result) => {
         let categories = result.data.data.categories;
         for (let i = 0; i < categories.length; i++) {
           this.tagCategories.push(categories[i].name);
@@ -1202,9 +1204,9 @@ export default {
           category: this.tagCategorie,
           order: this.couponSelected,
           page: this.page,
-          page_size: this.count
-        }
-      }).then(result => {
+          page_size: this.count,
+        },
+      }).then((result) => {
         this.tagData = result.data.data.tags;
         // 克隆对象，防止指针指向同一个对象之后形成双向绑定
         this.tagEdit = JSON.parse(JSON.stringify(result.data.data.tags));
@@ -1222,7 +1224,7 @@ export default {
     // 标签点击搜索功能
     gotoHome(key) {
       if (key != "") {
-        this.$router.push({ path: "/home", query: { keyword: key } }).catch(err => {
+        this.$router.push({ path: "/home", query: { keyword: key } }).catch((err) => {
           return err;
         });
       } else {
@@ -1263,9 +1265,9 @@ export default {
         data: {
           tag: tag,
           category: category,
-          language: language
-        }
-      }).then(result => {
+          language: language,
+        },
+      }).then((result) => {
         if (result.data.status == "SUCCEED") {
           this.open(this.$t("add_succeed"));
           this.newTag = "";
@@ -1310,9 +1312,9 @@ export default {
         data: {
           tag: tag,
           new_tag: new_tag,
-          language: language
-        }
-      }).then(result => {
+          language: language,
+        },
+      }).then((result) => {
         if (result.data.status == "SUCCEED") {
           this.open(this.$t("add_succeed"));
           this.new_Tag = "";
@@ -1353,9 +1355,9 @@ export default {
         url: "be/tags/add_alias.do",
         data: {
           tag: tag,
-          new_tag: new_tag
-        }
-      }).then(result => {
+          new_tag: new_tag,
+        },
+      }).then((result) => {
         if (result.data.status == "SUCCEED") {
           this.loading = false;
           this.open(this.$t("add_succeed"));
@@ -1378,7 +1380,7 @@ export default {
       this.$confirm(this.$t("delete_confirm_prompt"), this.$t("prompt"), {
         confirmButtonText: this.$t("ok"),
         cancelButtonText: this.$t("cancel"),
-        type: "warning"
+        type: "warning",
       })
         // 点击确定之后
         .then(() => {
@@ -1387,10 +1389,10 @@ export default {
             method: "post",
             url: "be/tags/remove_tag.do",
             data: {
-              tag: tag
+              tag: tag,
             },
-            withCredentials: true
-          }).then(result => {
+            withCredentials: true,
+          }).then((result) => {
             if (result.data.status == "SUCCEED") {
               this.loading = false;
               this.open(this.$t("delete_succeed"));
@@ -1414,7 +1416,7 @@ export default {
       this.$confirm(this.$t("delete_confirm_prompt"), this.$t("prompt"), {
         confirmButtonText: this.$t("ok"),
         cancelButtonText: this.$t("cancel"),
-        type: "warning"
+        type: "warning",
       })
         // 点击确定之后
         .then(() => {
@@ -1423,9 +1425,9 @@ export default {
             method: "post",
             url: "be/tags/remove_alias.do",
             data: {
-              alias: alias
-            }
-          }).then(result => {
+              alias: alias,
+            },
+          }).then((result) => {
             if (result.data.status == "SUCCEED") {
               this.loading = false;
               this.open(this.$t("delete_succeed"));
@@ -1459,9 +1461,9 @@ export default {
         data: {
           tag: tag,
           new_tag: new_tag,
-          language: language
-        }
-      }).then(result => {
+          language: language,
+        },
+      }).then((result) => {
         if (result.data.status == "SUCCEED") {
           this.loading = false;
           this.open(this.$t("rename_succeed"));
@@ -1487,9 +1489,9 @@ export default {
         url: "be/tags/rename_alias.do",
         data: {
           tag: tag,
-          new_tag: new_tag
-        }
-      }).then(result => {
+          new_tag: new_tag,
+        },
+      }).then((result) => {
         if (result.data.status == "SUCCEED") {
           this.loading = false;
           this.open(this.$t("rename_succeed"));
@@ -1515,9 +1517,9 @@ export default {
         url: "be/tags/transfer_category.do",
         data: {
           tag: tag,
-          category: category
-        }
-      }).then(result => {
+          category: category,
+        },
+      }).then((result) => {
         if (result.data.status == "SUCCEED") {
           this.open(this.$t("rename_succeed"));
           this.loading = false;
@@ -1550,13 +1552,13 @@ export default {
     open(message) {
       this.$message({
         message: message,
-        type: "success"
+        type: "success",
       });
     },
     open2(message) {
       this.$message({
         message: message,
-        type: "error"
+        type: "error",
       });
     },
     // 下面是消息补全框的方法
@@ -1565,8 +1567,8 @@ export default {
       let url = "/autocomplete/?q=" + queryString;
       this.axios({
         method: "get",
-        url: url
-      }).then(result => {
+        url: url,
+      }).then((result) => {
         this.taglist = result.data;
         cb(result.data);
       });
@@ -1576,8 +1578,8 @@ export default {
       let url = "/be/autocomplete/ql?q=" + queryString;
       this.axios({
         method: "get",
-        url: url
-      }).then(result => {
+        url: url,
+      }).then((result) => {
         this.taglist = result.data;
         cb(result.data);
       });
@@ -1586,8 +1588,8 @@ export default {
       this.newTag = item.tag;
       // console.log("选中时的值为" + this.infoTipMark);
       // console.log("选中");
-    }
-  }
+    },
+  },
 };
 </script>
 

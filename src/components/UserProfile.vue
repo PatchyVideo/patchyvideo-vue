@@ -161,8 +161,8 @@
       <div id="imoto2" class="bigbox_left"></div>
       <div class="bigbox_right">
         <div class="desc">
-          <div class="desc_name" style="display: flex;height:30px; ">
-            <p v-if="isNameEdit === false" style="margin-right: 10px">{{ myData.username }}</p>
+          <div class="desc_name" style="display: flex; height: 30px;">
+            <p v-if="isNameEdit === false" style="margin-right: 10px;">{{ myData.username }}</p>
             <i v-if="isNameEdit === false" class="el-icon-edit" @click="islSetUserName(true)"></i>
             <el-input v-if="isNameEdit === true" v-model="myName" :placeholder="$t('change_username')" prefix-icon="el-icon-user"></el-input>
             <el-button v-if="isNameEdit === true" type="primary" icon="el-icon-edit" :disabled="myName === ''" @click="setUserName">{{
@@ -206,7 +206,7 @@
 
           <el-input v-model="myEmail" :placeholder="$t('enter_email')" prefix-icon="el-icon-message"></el-input>
           <button @click="bindEmail()">{{ $t("bind") }}</button>
-          <p v-if="myData.email !== ''" style="margin-top: 20px">已绑定邮箱:{{ myData.email }}</p>
+          <p v-if="myData.email !== ''" style="margin-top: 20px;">已绑定邮箱:{{ myData.email }}</p>
         </div>
       </div>
     </div>
@@ -274,12 +274,12 @@ export default {
       ruleForm: {
         pass: "",
         checkPass: "",
-        old_pass: ""
+        old_pass: "",
       },
       rules: {
         pass: [{ validator: validatePass, trigger: "blur" }],
         checkPass: [{ validator: validatePass2, trigger: "blur" }],
-        old_pass: [{ validator: validateOldPass, trigger: "blur" }]
+        old_pass: [{ validator: validateOldPass, trigger: "blur" }],
       },
       file_key: "",
       myEmail: "",
@@ -287,21 +287,21 @@ export default {
         image: "null",
         username: "null",
         desc: "null",
-        email: "null"
+        email: "null",
       },
       userData: {
         desc: "null",
         email: "null",
         image: "null",
         pubkey: "null",
-        username: "null"
+        username: "null",
       },
       url: "",
       myName: "",
       isNameEdit: false,
       ifupdate: false,
       mounseMark: false,
-      loading: true
+      loading: true,
     };
   },
   watch: {
@@ -314,7 +314,7 @@ export default {
       if (n.fullPath === "/users/me") {
         this.getMyData();
       }
-    }
+    },
   },
   created() {
     if (this.$route.params.id == "me") {
@@ -372,23 +372,23 @@ export default {
       this.axios({
         method: "post",
         url: "be/user/changeemail.do",
-        data: { new_email: this.myEmail + "" }
-      }).then(res => {
+        data: { new_email: this.myEmail + "" },
+      }).then((res) => {
         if (res.data.status === "FAILED") {
           this.$message({
             message: this.$t("invalid_email"),
-            type: "warning"
+            type: "warning",
           });
         } else {
           this.$message({
             message: this.$t("bind_succeed"),
-            type: "success"
+            type: "success",
           });
         }
       });
     },
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           // this.$message({
           //   message: "提交成功！",
@@ -398,7 +398,7 @@ export default {
         } else {
           this.$message({
             message: this.$t("check_form"),
-            type: "warning"
+            type: "warning",
           });
           return false;
         }
@@ -413,14 +413,14 @@ export default {
     open2() {
       this.$message({
         message: this.$t("update_succeed"),
-        type: "success"
+        type: "success",
       });
     },
 
     open3() {
       this.$message({
         message: this.$t("check_form"),
-        type: "warning"
+        type: "warning",
       });
     },
 
@@ -435,9 +435,9 @@ export default {
         method: "post",
         url: "/be/user/myprofile.do",
         data: {},
-        withCredentials: true
+        withCredentials: true,
       })
-        .then(res => {
+        .then((res) => {
           if (res.data.status == "ERROR") {
             // 火狐浏览器有 BUG 暂时先这样跳，等 cookie 登陆做完后再在 user 页面判断。
             // this.$router.push("/login");
@@ -453,8 +453,8 @@ export default {
       this.axios({
         method: "post",
         url: "be/user/profile.do",
-        data: { uid: this.$route.params.id }
-      }).then(res => {
+        data: { uid: this.$route.params.id },
+      }).then((res) => {
         this.userData = res.data.data.profile;
         this.loading = false;
       });
@@ -463,7 +463,7 @@ export default {
       if (this.myData.desc.length > 2000) {
         this.$message({
           message: this.$t("desc_long"),
-          type: "warning"
+          type: "warning",
         });
         return;
       }
@@ -471,8 +471,8 @@ export default {
         method: "post",
         url: "be/user/changedesc.do",
         data: {
-          desc: this.myData.desc
-        }
+          desc: this.myData.desc,
+        },
       }).then(() => {
         this.open2();
       });
@@ -483,19 +483,19 @@ export default {
         method: "post",
         url: "be/user/changename.do",
         data: {
-          name: this.myName
-        }
-      }).then(res => {
+          name: this.myName,
+        },
+      }).then((res) => {
         if (res.data.status === "FAILED") {
           if (res.data.data.reason === "USER_ALREADY_EXIST") {
             this.$message({
               message: this.$t("user_exist"),
-              type: "warning"
+              type: "warning",
             });
           } else if (res.data.data.reason === "NAME_LENGTH") {
             this.$message({
               message: this.$t("user_length"),
-              type: "warning"
+              type: "warning",
             });
           } else {
             this.$message.error(this.$t("update_failed"));
@@ -521,17 +521,17 @@ export default {
         url: "be/user/changepass.do",
         data: {
           old_pass: this.ruleForm.old_pass + "",
-          new_pass: this.ruleForm.pass + ""
-        }
-      }).then(res => {
+          new_pass: this.ruleForm.pass + "",
+        },
+      }).then((res) => {
         if (res.data.status == "FAILED") {
           this.$message.error(this.$t("wrong_pass"));
         } else {
           this.open2();
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -12,7 +12,7 @@
             </div>
             <div class="video-title">
               <h4>
-                <img :src="require('../static/img/' + item.video_obj[0].item.site + '.png')" width="16px" style="margin-right:2px;display:inline;" />
+                <img :src="require('../static/img/' + item.video_obj[0].item.site + '.png')" width="16px" style="margin-right: 2px; display: inline;" />
                 <router-link target="_blank" :to="{ path: '/video', query: { id: item.vid.$oid } }" tag="a">{{ item.video_obj[0].item.title }}</router-link>
               </h4>
             </div>
@@ -74,7 +74,7 @@ export default {
       page: 1,
       maxPage: 50,
       pageSize: 20,
-      GMT: 99 // 99 的时候为当前时区
+      GMT: 99, // 99 的时候为当前时区
     };
   },
   computed: {},
@@ -86,7 +86,7 @@ export default {
     // 点击标签显示标签的搜索结果
     gotoHome(key) {
       if (key != "") {
-        this.$router.push({ path: "/home", query: { keyword: key } }).catch(err => {
+        this.$router.push({ path: "/home", query: { keyword: key } }).catch((err) => {
           return err;
         });
       } else {
@@ -120,10 +120,10 @@ export default {
           data: {
             page: this.page,
             page_size: this.pageSize,
-            lang: this.$i18n.locale
-          }
+            lang: this.$i18n.locale,
+          },
         })
-          .then(result => {
+          .then((result) => {
             let data = result.data.data;
             this.hisList = data;
             this.loading = false;
@@ -133,7 +133,7 @@ export default {
               $("html").animate({ scrollTop: 0 }, 100);
             }
           })
-          .catch(error => {
+          .catch((error) => {
             this.error = error.message;
             this.hisList = [];
             this.loading = false;
@@ -147,9 +147,9 @@ export default {
           data: {
             page: this.page + 1,
             page_size: this.pageSize,
-            lang: this.$i18n.locale
-          }
-        }).then(result => {
+            lang: this.$i18n.locale,
+          },
+        }).then((result) => {
           if (result.data.data.length > 0) {
             this.dataNextPage = result.data.data;
             this.maxPage++;
@@ -183,8 +183,8 @@ export default {
       return `${year}-${(Array(2).join(0) + month).slice(-2)}-${(Array(2).join(0) + days).slice(-2)} ${(Array(2).join(0) + hours).slice(-2)}:${(
         Array(2).join(0) + minutes
       ).slice(-2)}:${(Array(2).join(0) + seconds).slice(-2)} (GMT${currentGMT >= 0 ? "+" : ""}${currentGMT})`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped lang="less">

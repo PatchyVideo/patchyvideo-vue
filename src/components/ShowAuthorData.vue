@@ -126,7 +126,7 @@
     <!-- 头像&各种语言标签 -->
     <div class="AuthorName">
       <!-- 头像 -->
-      <el-avatar fit="cover" style="margin-right:5px" :size="30" :src="author.avatar"></el-avatar>
+      <el-avatar fit="cover" style="margin-right: 5px;" :size="30" :src="author.avatar"></el-avatar>
       <span v-if="authorLanguages.CHS" class="tagLabel">
         简体中文:
         <span class="tagName" @click="gotoHome(authorLanguages.CHS)">{{ authorLanguages.CHS }}</span>
@@ -217,7 +217,7 @@
           <el-form-item :label="$t('user_url')" prop="userSpaces">
             <p v-for="(URL, index) in author.userSpaces" :key="URL">
               <a :key="URL" target="_blank" :href="URL">{{ URL }}</a>
-              <el-button type="text" style="margin-left:5px" @click="deluserSpace(index)">删除</el-button>
+              <el-button type="text" style="margin-left: 5px;" @click="deluserSpace(index)">删除</el-button>
             </p>
             <p v-if="!author.userSpaces.length">{{ $t("no_user_url") }}</p>
           </el-form-item>
@@ -230,7 +230,7 @@
             </el-input>
           </el-form-item>
           <el-form-item :label="$t('author_tags')">
-            <el-tag v-for="tag in author.commonTags" :key="tag" :disable-transitions="true" style="margin:10px;" closable @close="handleClose(tag)">{{
+            <el-tag v-for="tag in author.commonTags" :key="tag" :disable-transitions="true" style="margin: 10px;" closable @close="handleClose(tag)">{{
               tag
             }}</el-tag>
             <p v-if="!author.commonTags.length">{{ $t("no_tag") }}</p>
@@ -258,7 +258,7 @@
                       Author: item.cat == 3,
                       General: item.cat == 0,
                       Meta: item.cat == 4,
-                      Soundtrack: item.cat == 6
+                      Soundtrack: item.cat == 6,
                     }"
                   >
                     {{ item.tag }}
@@ -271,11 +271,11 @@
               </el-button>
             </el-autocomplete>
           </el-form-item>
-          <el-form-item :label="$t('desc')" style="margin-top:5px">
+          <el-form-item :label="$t('desc')" style="margin-top: 5px;">
             <el-input v-model="author.desc" type="textarea" :autosize="{ minRows: 4 }" :placeholder="$t('write_something')" clearable></el-input>
           </el-form-item>
-          <el-form-item :label="$t('user_picture')" style="margin-top:5px">
-            <el-button style="float:right" @click="useFile = !useFile">
+          <el-form-item :label="$t('user_picture')" style="margin-top: 5px;">
+            <el-button style="float: right;" @click="useFile = !useFile">
               {{ $t("change_method") }}
             </el-button>
             <el-upload
@@ -288,7 +288,7 @@
               :file-list="avatarKey"
               :data="avatarData"
             >
-              <el-button size type="primary" style="margin-right:10px;">
+              <el-button size type="primary" style="margin-right: 10px;">
                 {{ $t("change_method") }}
               </el-button>
               <div>{{ $t("file_too_large") }}</div>
@@ -296,10 +296,10 @@
             <div v-else>
               <p v-if="avatarURL != ''">
                 {{ $t("upload_succeed") }}
-                <el-button type="text" style="margin-left:5px" @click="avatarURL = ''">{{ $t("del") }}</el-button>
+                <el-button type="text" style="margin-left: 5px;" @click="avatarURL = ''">{{ $t("del") }}</el-button>
               </p>
               <p v-else>{{ $t("no_url") }}</p>
-              <el-input v-model="avatarIpt" style="width:60%" :placeholder="$t('enter_pic_url_prompt')" clearable @keyup.enter.native="uploadImageUrl">
+              <el-input v-model="avatarIpt" style="width: 60%;" :placeholder="$t('enter_pic_url_prompt')" clearable @keyup.enter.native="uploadImageUrl">
                 <template slot="prepend"></template>
                 <el-button slot="append" :loading="loading3" @click="uploadImageUrl">{{ $t("add") }}</el-button>
               </el-input>
@@ -308,7 +308,7 @@
         </el-form>
       </div>
       <!-- 填补 foot 的空间的容器 -->
-      <div style="width:100%;height:60px;"></div>
+      <div style="width: 100%; height: 60px;"></div>
       <div class="foot">
         <el-button class="Edit" @click="edit = false">
           {{ $t("back") }}
@@ -335,7 +335,7 @@
             <p v-if="!author.userSpaces.length">{{ $t("no_user_url") }}</p>
           </el-form-item>
           <el-form-item :label="$t('author_tags')">
-            <el-tag v-for="tag in author.commonTags" :key="tag" :disable-transitions="true" style="margin:10px;">
+            <el-tag v-for="tag in author.commonTags" :key="tag" :disable-transitions="true" style="margin: 10px;">
               <span style="cursor: pointer;" @click="gotoHome(tag)">{{ tag }}</span>
             </el-tag>
             <p v-if="!author.commonTags.length">{{ $t("no_tag") }}</p>
@@ -347,7 +347,7 @@
         </el-form>
       </div>
       <!-- 填补 foot 的空间的容器 -->
-      <div style="width:100%;height:60px;"></div>
+      <div style="width: 100%; height: 60px;"></div>
       <div class="foot">
         <el-button class="Edit" @click="getAuthorData()">
           {{ $t("refresh") }}
@@ -366,8 +366,8 @@ export default {
   props: {
     authorID: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -397,7 +397,7 @@ export default {
         // 作者简介
         desc: "",
         // 作者头像
-        avatar: require("../static/img/defaultAvatar.jpg")
+        avatar: require("../static/img/defaultAvatar.jpg"),
       },
       // 输入框中作者空间的URL
       URLval: "",
@@ -408,7 +408,7 @@ export default {
       // 作者的性质选项
       authorTypes: [
         { value: "individual", label: this.$t("individual") },
-        { value: "group", label: this.$t("group") }
+        { value: "group", label: this.$t("group") },
       ],
       // 作者是否有资料的标志
       haveData: false,
@@ -428,24 +428,24 @@ export default {
           {
             required: true,
             message: this.$t("select_author_type"),
-            trigger: "change"
-          }
+            trigger: "change",
+          },
         ],
-        userSpaces: [{ required: false, message: this.$t("enter_url"), trigger: "change" }]
+        userSpaces: [{ required: false, message: this.$t("enter_url"), trigger: "change" }],
       },
       infoTip: [
         { name: "infoTip_1", isHidden: false },
         { name: "infoTip_2", isHidden: false },
-        { name: "infoTip_3", isHidden: false }
+        { name: "infoTip_3", isHidden: false },
       ],
-      isInfoTipClick: false
+      isInfoTipClick: false,
     };
   },
   watch: {
     authorID() {
       this.edit = false;
       this.getAuthorData();
-    }
+    },
   },
   created() {
     this.getAuthorData();
@@ -454,7 +454,7 @@ export default {
     // 标签点击搜索功能
     gotoHome(key) {
       if (key != "") {
-        this.$router.push({ path: "/home", query: { keyword: key } }).catch(err => {
+        this.$router.push({ path: "/home", query: { keyword: key } }).catch((err) => {
           return err;
         });
       } else {
@@ -469,10 +469,10 @@ export default {
         url: "/be/tags/get_tag.do",
         data: {
           tagid: this.authorID,
-          tag: this.authorID
-        }
+          tag: this.authorID,
+        },
       })
-        .then(result => {
+        .then((result) => {
           this.authorLanguages = result.data.data.tag_obj.languages;
           this.authorAlias = result.data.data.tag_obj.alias;
 
@@ -481,10 +481,10 @@ export default {
             url: "/be/authors/get_record.do",
             data: {
               tag: this.authorID,
-              lang: localStorage.getItem("lang")
-            }
+              lang: localStorage.getItem("lang"),
+            },
           })
-            .then(result => {
+            .then((result) => {
               if (result.data.status == "FAILED") {
                 if (result.data.data.reason == "RECORD_NOT_FOUND") {
                   this.author.authorType = "individual";
@@ -566,10 +566,10 @@ export default {
         url: "/be/helper/upload_image_url.do",
         data: {
           url: this.avatarIpt,
-          type: "userphoto"
-        }
+          type: "userphoto",
+        },
       })
-        .then(result => {
+        .then((result) => {
           this.avatarURL = result.data.data.file_key;
           this.avatarIpt = "";
           this.loading3 = false;
@@ -592,7 +592,7 @@ export default {
         avatar_file_key = undefined;
       }
       this.loading = true;
-      this.$refs.authorForm.validate(valid => {
+      this.$refs.authorForm.validate((valid) => {
         if (valid) {
           this.axios({
             method: "post",
@@ -603,8 +603,8 @@ export default {
               common_tags: this.author.commonTags,
               user_spaces: this.author.userSpaces,
               desc: this.author.desc,
-              avatar_file_key: avatar_file_key
-            }
+              avatar_file_key: avatar_file_key,
+            },
           })
             .then(() => {
               this.open2(this.$t("update_succeed"));
@@ -627,8 +627,8 @@ export default {
       let url = "/autocomplete/?q=" + queryString;
       this.axios({
         method: "get",
-        url: url
-      }).then(result => {
+        url: url,
+      }).then((result) => {
         this.taglist = result.data;
         cb(result.data);
       });
@@ -669,9 +669,9 @@ export default {
       this.axios({
         method: "post",
         url: "be/tags/query_tag_categories.do ",
-        data: { tags: strToArray }
+        data: { tags: strToArray },
       })
-        .then(res => {
+        .then((res) => {
           if (JSON.stringify(res.data.data.categorie_map) == "{}") {
             this.open4(this.$t("tag_not_exist"));
           } else if (this.author.commonTags.indexOf(this.iptVal) != -1) {
@@ -693,13 +693,13 @@ export default {
     open2(message) {
       this.$message({
         message: message,
-        type: "success"
+        type: "success",
       });
     },
     open3() {
       this.$message({
         message: this.$t("tag_already_exist"),
-        type: "warning"
+        type: "warning",
       });
     },
     open4(message) {
@@ -708,16 +708,16 @@ export default {
     open5() {
       this.$message({
         message: this.$t("update_succeed"),
-        type: "success"
+        type: "success",
       });
     },
     open6() {
       this.$message({
         message: this.$t("unknown_error"),
-        type: "error"
+        type: "error",
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -40,8 +40,8 @@ export default {
   props: {
     msg: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -53,8 +53,8 @@ export default {
       this.axios({
         method: "post",
         url: "be/list/moveup.do",
-        data: this.msg
-      }).then(res => {
+        data: this.msg,
+      }).then((res) => {
         if (res.data.status == "SUCCEED") {
           // 方案一：全局刷新、会有闪屏，且所有数据重新请求，不好。
           // this.$router.go(0);
@@ -68,8 +68,8 @@ export default {
       this.axios({
         method: "post",
         url: "be/list/movedown.do",
-        data: this.msg
-      }).then(res => {
+        data: this.msg,
+      }).then((res) => {
         if (res.data.status == "SUCCEED") {
           // 方案一：全局刷新、会有闪屏，且所有数据重新请求，不好。
           // this.$router.go(0);
@@ -77,8 +77,8 @@ export default {
           this.$store.commit("refreshPage");
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -79,7 +79,7 @@
         :modal-append-to-body="false"
         :before-close="handleClose"
       >
-        <span style="font-size:19px;color: #5e6d82;">{{ $t("issave") }}</span>
+        <span style="font-size: 19px; color: #5e6d82;">{{ $t("issave") }}</span>
         <p></p>
         <span slot="footer" class="dialog-footer">
           <el-button @click="closeTagPanel(true)">{{ $t("cancel") }}</el-button>
@@ -174,7 +174,7 @@
                           Author: item.cat == 3,
                           General: item.cat == 0,
                           Meta: item.cat == 4,
-                          Soundtrack: item.cat == 6
+                          Soundtrack: item.cat == 6,
                         }"
                         v-html="item.tag || ConvertLangRes(item.langs)"
                       ></div>
@@ -208,7 +208,7 @@
           </div>
         </div>
         <a href="javascript:;">
-          <a v-if="this.$route.path != '/postvideo'" id="save" style="font-size: 28px" @click="saveTag()">{{ $t("save") }}</a>
+          <a v-if="this.$route.path != '/postvideo'" id="save" style="font-size: 28px;" @click="saveTag()">{{ $t("save") }}</a>
         </a>
       </div>
     </div>
@@ -221,16 +221,16 @@ export default {
   props: {
     msg: {
       type: String,
-      default: ""
+      default: "",
     },
     really: {
       type: String,
-      default: ""
+      default: "",
     },
     visible: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -247,7 +247,7 @@ export default {
       infoTip: [
         { name: "infoTip_1", isHidden: false },
         { name: "infoTip_2", isHidden: false },
-        { name: "infoTip_3", isHidden: false }
+        { name: "infoTip_3", isHidden: false },
       ],
       recTagsWatch: true,
       firstFlag: true,
@@ -256,7 +256,7 @@ export default {
       isInfoTipClick: false,
       infoTipMark: false,
       // 自动补全标签的内容
-      taglist: []
+      taglist: [],
     };
   },
   watch: {
@@ -283,7 +283,7 @@ export default {
       if (v === true) {
         // this.$emit("getEditTagsData", this.tags);
       }
-    }
+    },
   },
   created() {
     let that = this;
@@ -313,8 +313,8 @@ export default {
     this.axios({
       method: "post",
       url: "be/tags/query_categories.do",
-      data: {}
-    }).then(result => {
+      data: {},
+    }).then((result) => {
       let categories = result.data.data.categories;
       for (let i = 0; i < categories.length; i++) {
         this.tagCategoriesAll.push(categories[i].name);
@@ -350,14 +350,14 @@ export default {
     open2() {
       this.$message({
         message: this.$t("tag_add_succeed"),
-        type: "success"
+        type: "success",
       });
     },
 
     open3() {
       this.$message({
         message: this.$t("tag_already_exist"),
-        type: "warning"
+        type: "warning",
       });
     },
 
@@ -367,13 +367,13 @@ export default {
     open5() {
       this.$message({
         message: this.$t("tag_modify_succeed"),
-        type: "success"
+        type: "success",
       });
     },
     open6() {
       this.$message({
         message: this.$t("unknown_error"),
-        type: "error"
+        type: "error",
       });
     },
     getCommonTags() {
@@ -384,9 +384,9 @@ export default {
         this.axios({
           method: "post",
           url: "be/list/getcommontags.do",
-          data: { pid: this.msg, lang: localStorage.getItem("lang") }
+          data: { pid: this.msg, lang: localStorage.getItem("lang") },
         })
-          .then(res => {
+          .then((res) => {
             this.tags = res.data.data; // 原始数据
             this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); // 深拷贝，推荐 Tag 数据用
             this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); // 得到原始 Tag 数据
@@ -399,9 +399,9 @@ export default {
         this.axios({
           method: "post",
           url: "be/videos/gettags.do",
-          data: { video_id: this.msg, lang: localStorage.getItem("lang") }
+          data: { video_id: this.msg, lang: localStorage.getItem("lang") },
         })
-          .then(res => {
+          .then((res) => {
             this.tags = res.data.data; // 原始数据
             this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); // 深拷贝，推荐 Tag 数据用
             this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); // 得到原始 Tag 数据
@@ -416,9 +416,9 @@ export default {
       this.axios({
         method: "post",
         url: "be/list/getcommontags.do",
-        data: { pid: this.$route.query.pid, lang: localStorage.getItem("lang") }
+        data: { pid: this.$route.query.pid, lang: localStorage.getItem("lang") },
       })
-        .then(res => {
+        .then((res) => {
           this.tags = res.data.data; // 原始数据
           this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); // 深拷贝，推荐 Tag 数据用
           this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); // 得到原始 Tag 数据
@@ -431,9 +431,9 @@ export default {
       this.axios({
         method: "post",
         url: "be/tags/query_tag_categories.do ",
-        data: { tags: str }
+        data: { tags: str },
       })
-        .then(res => {
+        .then((res) => {
           this.TagCategoriesData = res.data.data.categorie_map;
           // if(this.$route.path === "/postvideo"){
           //   this.animeMark =0;
@@ -455,9 +455,9 @@ export default {
       this.axios({
         method: "post",
         url: "be/tags/query_tag_categories.do ",
-        data: { tags: strToArray }
+        data: { tags: strToArray },
       })
-        .then(res => {
+        .then((res) => {
           if (JSON.stringify(res.data.data.categorie_map) == "{}") {
             this.open4();
           } else if (this.tags.indexOf(this.iptVal) != -1) {
@@ -494,10 +494,10 @@ export default {
         data: {
           tags: tags,
           exclude: this.tags,
-          lang: localStorage.getItem("lang")
-        }
+          lang: localStorage.getItem("lang"),
+        },
       })
-        .then(res => {
+        .then((res) => {
           this.recTags = res.data.data.tags;
           this.recTagsWatch = true;
           // if (this.animeMark != 0) {
@@ -623,7 +623,7 @@ export default {
         this.axios({
           method: "post",
           url: "be/videos/edittags.do",
-          data: { video_id: this.msg, tags: this.tags }
+          data: { video_id: this.msg, tags: this.tags },
         }).then(() => {
           this.open5();
           this.closeTagPanel(true);
@@ -634,7 +634,7 @@ export default {
         this.axios({
           method: "post",
           url: "be/list/setcommontags.do",
-          data: { pid: this.msg, tags: this.tags }
+          data: { pid: this.msg, tags: this.tags },
         }).then(() => {
           this.open5();
           this.closeTagPanel(true);
@@ -664,7 +664,7 @@ export default {
         { id: 1, lang: "CHS" },
         { id: 2, lang: "CHT" },
         { id: 5, lang: "ENG" },
-        { id: 10, lang: "JPN" }
+        { id: 10, lang: "JPN" },
       ];
       let level = [10, 5, 1, 2];
       let Lang = "";
@@ -673,18 +673,18 @@ export default {
       // 经过一系列计算得出主副语言
 
       // 匹配当前语言的 ID
-      let CurrLangID = LangList.find(x => {
+      let CurrLangID = LangList.find((x) => {
         return x.lang == this.$i18n.locale;
       });
       CurrLangID = CurrLangID ? CurrLangID.id : 1;
 
       //匹配对应 ID 的内容
-      let CurrLangWord = langs.find(x => {
+      let CurrLangWord = langs.find((x) => {
         return x.l == CurrLangID;
       });
       if (!CurrLangWord) {
         for (let i = 0; i < level.length; i++) {
-          CurrLangWord = langs.find(x => {
+          CurrLangWord = langs.find((x) => {
             return x.l == level[i];
           });
           if (CurrLangWord) break;
@@ -698,7 +698,7 @@ export default {
         let SubLangWord = null;
         for (let i = 0; i < level.length; i++) {
           if (level[i] == CurrLangWord.l) continue;
-          SubLangWord = langs.find(x => {
+          SubLangWord = langs.find((x) => {
             return x.l == level[i];
           });
           if (SubLangWord) break;
@@ -719,8 +719,8 @@ export default {
       let url = "/autocomplete/?q=" + queryString;
       this.axios({
         method: "get",
-        url: url
-      }).then(result => {
+        url: url,
+      }).then((result) => {
         this.taglist = result.data;
         cb(result.data);
       });
@@ -730,8 +730,8 @@ export default {
       let url = "/be/autocomplete/ql?q=" + queryString;
       this.axios({
         method: "get",
-        url: url
-      }).then(result => {
+        url: url,
+      }).then((result) => {
         this.taglist = result.data;
         cb(result.data);
       });
@@ -747,9 +747,9 @@ export default {
       this.infoTipMark = true;
       // console.log("选中时的值为" + this.infoTipMark);
       // console.log("选中");
-    }
+    },
     // 消息提示
-  }
+  },
 };
 </script>
 

@@ -48,7 +48,7 @@
         <el-input v-model="list.URL" :placeholder="$t('url_placeholder')" @keyup.enter.native="onSubmit"></el-input>
       </el-form-item>
       <el-form-item class="leadInList">
-        <el-button type="primary" style="width:80%" @click="onSubmit">{{ $t("upload_now") }}</el-button>
+        <el-button type="primary" style="width: 80%;" @click="onSubmit">{{ $t("upload_now") }}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -62,21 +62,21 @@ export default {
     return {
       // 播放列表数据
       list: {
-        URL: ""
+        URL: "",
       },
       // 校验数据
       rules: {
-        URL: [{ required: true, message: this.$t("no_url_prompt"), trigger: "blur" }]
+        URL: [{ required: true, message: this.$t("no_url_prompt"), trigger: "blur" }],
       },
       // 页面是否出于加载状态的标志
-      loading: false
+      loading: false,
     };
   },
   computed: {
     // 要导入的视频列表是否已经存在的标志
     exist() {
       return typeof this.$route.query.pid != "undefined" && this.$route.query.exist == "1";
-    }
+    },
   },
   methods: {
     // 提交视频列表
@@ -84,7 +84,7 @@ export default {
       // 先使页面出于加载状态
       this.loading = true;
       // 表单验证
-      this.$refs.list.validate(valid => {
+      this.$refs.list.validate((valid) => {
         if (valid) {
           // 如果导入的视频列表已经存在
           if (this.exist) {
@@ -93,9 +93,9 @@ export default {
               url: "/be/lists/extend_from_existing_playlists.do",
               data: {
                 pid: this.$route.query.pid,
-                url: this.list.URL
-              }
-            }).then(result => {
+                url: this.list.URL,
+              },
+            }).then((result) => {
               this.loading = false;
               if (result.data.status == "FAILED") {
                 this.open();
@@ -103,7 +103,7 @@ export default {
                 this.open2();
                 this.$router.push({
                   path: "/listdetail",
-                  query: { id: result.data.data.pid }
+                  query: { id: result.data.data.pid },
                 });
               }
             });
@@ -115,9 +115,9 @@ export default {
               url: "be/lists/create_from_existing_playlists.do",
               data: {
                 url: this.list.URL,
-                lang: localStorage.getItem("lang")
-              }
-            }).then(result => {
+                lang: localStorage.getItem("lang"),
+              },
+            }).then((result) => {
               this.loading = false;
               if (result.data.status == "FAILED") {
                 this.open();
@@ -125,7 +125,7 @@ export default {
                 this.open2();
                 this.$router.push({
                   path: "/listdetail",
-                  query: { id: result.data.data.pid }
+                  query: { id: result.data.data.pid },
                 });
               }
             });
@@ -139,16 +139,16 @@ export default {
     open() {
       this.$message({
         message: this.$t("upload_failed"),
-        type: "error"
+        type: "error",
       });
     },
     open2() {
       this.$message({
         message: this.$t("upload_succeed"),
-        type: "success"
+        type: "success",
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

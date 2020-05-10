@@ -100,10 +100,10 @@ export default {
       options: [
         { value: "latest", label: this.$t("latest") },
         { value: "oldest", label: this.$t("oldest") },
-        { value: "last_modified", label: this.$t("last_modified") }
+        { value: "last_modified", label: this.$t("last_modified") },
       ],
       listSearch: "",
-      loading: true
+      loading: true,
     };
   },
   watch: {
@@ -118,7 +118,7 @@ export default {
     },
     count() {
       this.getVideoData(this.page, this.count);
-    }
+    },
   },
   created() {
     this.couponSelected = this.options[0].value;
@@ -146,10 +146,10 @@ export default {
           data: {
             page: 1,
             page_size: 20, // 无法确认视频总个数，第一次请求仅为获取视频总个数
-            order: this.couponSelected
+            order: this.couponSelected,
           },
-          withCredentials: true
-        }).then(res => {
+          withCredentials: true,
+        }).then((res) => {
           this.firstmaxcount = res.data.data.count;
           this.maxcount = res.data.data.count;
           this.myListVideoData = res.data.data.playlists;
@@ -169,9 +169,9 @@ export default {
             page: 1,
             page_size: 20,
             uid: this.$route.params.id,
-            order: this.couponSelected
-          }
-        }).then(res => {
+            order: this.couponSelected,
+          },
+        }).then((res) => {
           this.firstmaxcount = res.data.data.count;
           this.maxcount = res.data.data.count; //获取总的视频个数制作分页后开始第二次请求获取当前页面的数据
           // this.getVideoData(this.page,this.count);
@@ -193,10 +193,10 @@ export default {
             page: e,
             page_size: count,
             query: this.listSearch,
-            order: this.couponSelected
+            order: this.couponSelected,
           },
-          withCredentials: true
-        }).then(result => {
+          withCredentials: true,
+        }).then((result) => {
           this.maxcount = result.data.data.count;
           this.myListVideoData = result.data.data.playlists;
           this.loading = false;
@@ -211,16 +211,16 @@ export default {
             page_size: count,
             uid: this.$route.params.id,
             order: this.couponSelected,
-            query: this.listSearch
-          }
-        }).then(result => {
+            query: this.listSearch,
+          },
+        }).then((result) => {
           this.maxcount = result.data.data.count;
           this.myListVideoData = result.data.data.playlists;
           this.loading = false;
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

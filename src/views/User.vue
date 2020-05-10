@@ -146,7 +146,7 @@ export default {
     usersub,
     userfolder,
     Footer,
-    blacklist
+    blacklist,
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -158,9 +158,9 @@ export default {
       activeName: "first",
       info: [
         ["我的信息", "我贡献的索引", "我的文件夹", "我的收藏", "索引状态", "订阅", "黑名单"],
-        ["用户信息", "他贡献的索引", "他的文件夹", "他的收藏"]
+        ["用户信息", "他贡献的索引", "他的文件夹", "他的收藏"],
       ],
-      labelInfo: ["我的信息", "我贡献的索引", "文件夹", "我的收藏", "索引状态", "订阅", "黑名单"]
+      labelInfo: ["我的信息", "我贡献的索引", "文件夹", "我的收藏", "索引状态", "订阅", "黑名单"],
     };
   },
   watch: {
@@ -168,7 +168,7 @@ export default {
       if (n.fullPath === "/users/me") {
         this.labelInfo = this.info[0];
       }
-    }
+    },
   },
   created() {
     // 判断 url 阶段,
@@ -196,8 +196,8 @@ export default {
       this.axios({
         method: "post",
         url: "be/user/profile.do",
-        data: { uid: this.$route.params.id }
-      }).then(res => {
+        data: { uid: this.$route.params.id },
+      }).then((res) => {
         if (res.data.status == "FAILED") {
           this.$router.push("/*");
           // this.$router.push("/home");
@@ -208,8 +208,8 @@ export default {
           this.labelInfo = this.info[1];
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

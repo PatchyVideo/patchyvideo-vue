@@ -126,17 +126,17 @@
           <el-collapse-item v-for="(item, index) in tagLog" :key="index" :title="tagLogDate(item.time.$date)">
             <div>
               <div v-if="item.add.length">
-                <span style="margin-right:10px;margin-top:3px;color:#67C23A">{{ $t("tag_history.add") }}</span>
-                <el-tag v-for="tag in item.add" :key="tag" type="success" style="margin-right:5px;margin-top:3px">{{ tag }}</el-tag>
+                <span style="margin-right: 10px; margin-top: 3px; color: #67c23a;">{{ $t("tag_history.add") }}</span>
+                <el-tag v-for="tag in item.add" :key="tag" type="success" style="margin-right: 5px; margin-top: 3px;">{{ tag }}</el-tag>
                 <br />
               </div>
 
               <div v-if="item.del.length">
-                <span style="margin-right:10px;margin-top:3px;color:#F56C6C">{{ $t("tag_history.del") }}</span>
-                <el-tag v-for="tag in item.del" :key="tag" type="danger" style="margin-right:5px;margin-top:3px">{{ tag }}</el-tag>
+                <span style="margin-right: 10px; margin-top: 3px; color: #f56c6c;">{{ $t("tag_history.del") }}</span>
+                <el-tag v-for="tag in item.del" :key="tag" type="danger" style="margin-right: 5px; margin-top: 3px;">{{ tag }}</el-tag>
                 <br />
               </div>
-              <div v-if="item.user_obj.length" style="margin-top:5px">
+              <div v-if="item.user_obj.length" style="margin-top: 5px;">
                 <span v-for="user in item.user_obj" :key="user.profile.username" class="editer">
                   <el-avatar fit="cover" class="loginUser-userAvatar" :size="20" :src="'be/images/userphotos/' + user.profile.image"></el-avatar>
                   <router-link :to="'/users/' + user._id.$oid">{{ user.profile.username }}</router-link>
@@ -213,7 +213,7 @@
       <!-- 在Detail页面渲染的侧导航条内容 -->
       <ul v-if="$route.path === '/video'">
         <li v-for="(key, val) in msg" :key="val" class="belong-to-detail">
-          <h3 style="display:block;">{{ tranTagCategories(val) }}</h3>
+          <h3 style="display: block;">{{ tranTagCategories(val) }}</h3>
           <!-- 根据tag名称自动渲染tag颜色 -->
           <div class="tag-ul">
             <div v-for="item in key" :key="item" :class="val != 'Author' && 'tag'">
@@ -227,10 +227,10 @@
                   </div>
                 </div>
                 <div v-else-if="val == 'Author'">
-                  <p :ref="val" :class="val" style="display:inline;">
+                  <p :ref="val" :class="val" style="display: inline;">
                     <span @click.left="gotoHome(item)" @click.middle="gotoHome(item, true)">{{ item.replace(/_/g, " ") }}</span>
                   </p>
-                  <el-button v-if="val == 'Author'" size="mini" style="margin-left:5px;display:inline;" @click="openAuthorData(item)">详情</el-button>
+                  <el-button v-if="val == 'Author'" size="mini" style="margin-left: 5px; display: inline;" @click="openAuthorData(item)">详情</el-button>
                 </div>
                 <!-- 其他情况 -->
                 <div v-else>
@@ -254,20 +254,18 @@ import EditTags from "../components/EditTags";
 export default {
   components: {
     EditTags,
-    ShowAuthorData
+    ShowAuthorData,
     // pvTag
   },
   props: {
     msg: {
-      type: Object,
-      default() {
-        return {};
-      }
+      type: [Object, Array],
+      required: true,
     },
     name: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -291,7 +289,7 @@ export default {
       // Tag 颜色列表
       colorTagList: ["Copyright", "Language", "Character", "General", "Meta", "Soundtrack", "Author"],
       // 溢出元素表
-      overflowed: []
+      overflowed: [],
     };
   },
   computed: {
@@ -321,11 +319,11 @@ export default {
           Author: this.$t("Author"),
           Meta: this.$t("Meta"),
           Language: this.$t("Language"),
-          Soundtrack: this.$t("Soundtrack")
+          Soundtrack: this.$t("Soundtrack"),
         };
         return map[name];
       };
-    }
+    },
   },
   watch: {
     // 如果标签编辑界面被关闭，则重新请求页面数据
@@ -339,7 +337,7 @@ export default {
       this.$nextTick(function() {
         this.freshOverflow();
       });
-    }
+    },
   },
   mounted() {
     // 查看是否登录
@@ -362,13 +360,13 @@ export default {
         if (_blank) {
           let routerPath = this.$router.resolve({
             path: "/home",
-            query: { keyword: key }
+            query: { keyword: key },
           });
           window.open(routerPath.href, "_blank");
         } else {
           this.$router.push({
             path: "/home",
-            query: { keyword: key }
+            query: { keyword: key },
           });
         }
       } else {
@@ -390,7 +388,7 @@ export default {
     postVideo() {
       this.$router.push({
         path: "/postvideo",
-        query: { use_tags: this.pid }
+        query: { use_tags: this.pid },
       });
     },
     // 查看标签编辑历史
@@ -400,9 +398,9 @@ export default {
       this.axios({
         method: "post",
         url: "/be/video/tag_log.do",
-        data: { vid: this.pid, lang: localStorage.getItem("lang") }
+        data: { vid: this.pid, lang: localStorage.getItem("lang") },
       })
-        .then(res => {
+        .then((res) => {
           this.tagLog = res.data.data;
           this.loading2 = false;
         })
@@ -439,9 +437,9 @@ export default {
     // 更新溢出项
     freshOverflow() {
       this.overflowed = [];
-      this.colorTagList.forEach(i => {
+      this.colorTagList.forEach((i) => {
         if (this.$refs[i]) {
-          this.$refs[i].forEach(i2 => {
+          this.$refs[i].forEach((i2) => {
             if (Math.floor(this.getTextSize(i2.innerText, "100%", '"Avenir", Helvetica, Arial, sans-serif').width) > i2.offsetWidth) {
               this.overflowed.push(i2.innerText);
             }
@@ -469,8 +467,8 @@ export default {
       result.height = parseFloat(window.getComputedStyle(span).height) - result.height;
       document.body.removeChild(span);
       return result;
-    }
-  }
+    },
+  },
 };
 </script>
 

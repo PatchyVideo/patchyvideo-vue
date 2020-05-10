@@ -43,7 +43,7 @@ export default {
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
-      failedData: [{ count: "null" }, { page: "null" }, { page_count: "null" }, { posts: "null" }]
+      failedData: [{ count: "null" }, { page: "null" }, { page_count: "null" }, { posts: "null" }],
     };
   },
   created() {
@@ -55,12 +55,12 @@ export default {
     this.axios({
       method: "post",
       url: "be/posts/list_failed.do",
-      data: { page: 1, page_size: 99999 }
-    }).then(res => {
+      data: { page: 1, page_size: 99999 },
+    }).then((res) => {
       this.failedData = res.data.data;
     });
   },
-  methods: {}
+  methods: {},
 };
 </script>
 

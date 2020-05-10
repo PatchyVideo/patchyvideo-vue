@@ -123,7 +123,7 @@
             @keyup.enter.native="login"
           ></el-input>
         </el-form-item>
-        <p style="text-align: left;margin-top:30px">
+        <p style="text-align: left; margin-top: 30px;">
           <router-link to="/forgetPassword" class="forgetPassword">{{ $t("forget_psd") }}</router-link>
         </p>
         <p id="status" style="text-align: center;" :class="{ alert: status != $t('status') }">{{ status }}</p>
@@ -150,7 +150,7 @@ export default {
       // 用户信息
       loginFormRef: {
         login_name: "",
-        login_password: ""
+        login_password: "",
       },
       // 事先向服务器请求的 session 值
       session: "",
@@ -158,17 +158,17 @@ export default {
       rules: {
         login_name: [
           { required: true, message: this.$t("username_tip"), trigger: "blur" },
-          { min: 2, max: 32, message: this.$t("username_msg"), trigger: "blur" }
+          { min: 2, max: 32, message: this.$t("username_msg"), trigger: "blur" },
         ],
         login_password: [
           { required: true, message: this.$t("psd_tip"), trigger: "blur" },
-          { min: 6, max: 64, message: this.$t("psd_msg"), trigger: "blur" }
-        ]
+          { min: 6, max: 64, message: this.$t("psd_msg"), trigger: "blur" },
+        ],
       },
       // 登录状态
       status: this.$t("status"),
       // 视频列表是否属于加载状态的判断
-      loading: false
+      loading: false,
     };
   },
   created() {
@@ -183,14 +183,14 @@ export default {
     open2() {
       this.$message({
         message: this.$t("login_success_msg"),
-        type: "success"
+        type: "success",
       });
     },
 
     open3() {
       this.$message({
         message: this.$t("login_fail_msg"),
-        type: "warning"
+        type: "warning",
       });
     },
 
@@ -200,17 +200,17 @@ export default {
       this.loading = true;
 
       // 表单验证
-      this.$refs.loginFormRef.validate(valid => {
+      this.$refs.loginFormRef.validate((valid) => {
         if (valid) {
           // 验证成功，先获取 session
           this.axios({
             method: "post",
             url: "be/auth/get_session.do",
             data: {
-              type: "LOGIN"
-            }
+              type: "LOGIN",
+            },
           })
-            .then(result => {
+            .then((result) => {
               this.session = result.data.data;
 
               // 请求登录
@@ -220,10 +220,10 @@ export default {
                 data: {
                   username: this.loginFormRef.login_name,
                   password: this.loginFormRef.login_password,
-                  session: this.session
-                }
+                  session: this.session,
+                },
               })
-                .then(result => {
+                .then((result) => {
                   if (result.status == 200) {
                     if (result.data.status == "SUCCEED") {
                       this.open2();
@@ -291,8 +291,8 @@ export default {
       // 字符串拼接 cookie
       window.document.cookie = "username" + ":" + username + ";path=/;expires=" + date.toUTCString();
       window.document.cookie = "userAvatar" + "=" + userAvatar + ";path=/;expires=" + date.toUTCString();
-    }
-  }
+    },
+  },
 };
 </script>
 

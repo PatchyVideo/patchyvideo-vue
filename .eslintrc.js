@@ -5,20 +5,20 @@ module.exports = {
     commonjs: true,
     es6: true,
     jquery: true,
-    node: true
+    node: true,
   },
   extends: ["plugin:vue/recommended", "eslint:recommended", "@vue/prettier"],
   parserOptions: {
-    parser: "babel-eslint"
+    parser: "babel-eslint",
   },
   rules: {
     "prettier/prettier": "warn",
     "vue/component-tags-order": [
       "warn",
       {
-        order: ["i18n", "template", "script", "style"]
-      }
+        order: ["i18n", "template", "script", "style"],
+      },
     ],
-    "vue/no-v-html": "off"
-  }
+    "vue/no-v-html": "off",
+  },
 };

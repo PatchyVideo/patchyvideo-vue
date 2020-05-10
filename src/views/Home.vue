@@ -77,7 +77,7 @@ export default {
     Footer,
     subscribed,
     homemain,
-    girdhomemain
+    girdhomemain,
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -86,14 +86,14 @@ export default {
       // true 表示网格视图，false 表示列表视图
       flag: false,
       label: ["主页"],
-      labelInfo: ["主页", "订阅"]
+      labelInfo: ["主页", "订阅"],
     };
   },
   computed: {},
   watch: {
     $route() {
       this.activeName = "first";
-    }
+    },
   },
   created() {
     switch (this.$store.state.homeVideoDisplayStatus) {
@@ -118,8 +118,8 @@ export default {
       localStorage.setItem("homeVideoDisplayStatus", flag + 0);
       this.$store.commit("changeHomeVDS", flag + 0);
       location.reload();
-    }
-  }
+    },
+  },
 };
 </script>
 

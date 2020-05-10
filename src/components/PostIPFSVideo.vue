@@ -121,8 +121,8 @@
             :file-list="list.cover"
             :data="coverData"
           >
-            <el-button size type="primary" style="margin-right:10px;">{{ $t("upload_cover") }}</el-button>
-            <span v-if="noCover" slot="tip" style="color:red">{{ $t("upload_no_cover") }}</span>
+            <el-button size type="primary" style="margin-right: 10px;">{{ $t("upload_cover") }}</el-button>
+            <span v-if="noCover" slot="tip" style="color: red;">{{ $t("upload_no_cover") }}</span>
             <div slot="tip" class="el-upload__tip">{{ $t("upload_limit") }}</div>
           </el-upload>
         </el-form-item>
@@ -131,14 +131,14 @@
           <div class="tagsEdit">
             <h3>{{ $t("label") }}</h3>
             <div class="tagBox">
-              <p v-if="tags == ''" style="margin-bottom:10px;">{{ $t("no_label") }}</p>
+              <p v-if="tags == ''" style="margin-bottom: 10px;">{{ $t("no_label") }}</p>
               <el-tag v-for="item in tags" v-else :key="item" effect="dark">{{ item }}</el-tag>
             </div>
           </div>
         </el-form-item>
         <el-form-item>
           <!-- Wiki链接 -->
-          <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color:#409EFF;float:right;font-size:17px;">{{ $t("HowToPost") }}</a>
+          <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color: #409eff; float: right; font-size: 17px;">{{ $t("HowToPost") }}</a>
         </el-form-item>
         <!-- 上传视频的按钮 -->
         <el-form-item style="text-align: center;">
@@ -179,7 +179,7 @@ export default {
         original_url: "",
         title: "",
         desc: "",
-        cover: []
+        cover: [],
       },
       // 上传视频封面的携带数据
       coverData: { type: "cover" },
@@ -190,16 +190,16 @@ export default {
           {
             required: true,
             message: this.$t("not_input_title"),
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         desc: [
           {
             required: true,
             message: this.$t("not_introductory_video"),
-            trigger: "blur"
-          }
-        ]
+            trigger: "blur",
+          },
+        ],
       },
       // 校验封面是否上传
       noCover: false,
@@ -210,7 +210,7 @@ export default {
       // 标签页面传入的参数
       noData: "",
       // 视频的标签数组
-      tags: []
+      tags: [],
     };
   },
   computed: {
@@ -237,7 +237,7 @@ export default {
       } else {
         return "";
       }
-    }
+    },
   },
   created() {},
   mounted() {},
@@ -266,7 +266,7 @@ export default {
     // 上传视频
     postMultiVideos() {
       this.loading = true;
-      this.$refs.list.validate(valid => {
+      this.$refs.list.validate((valid) => {
         // 同时校验表单和封面数据
         if (valid && this.list.cover.length) {
           this.axios({
@@ -281,9 +281,9 @@ export default {
               original_url: this.list.original_url,
               copy: this.copy,
               pid: this.pid,
-              rank: this.rank
-            }
-          }).then(result => {
+              rank: this.rank,
+            },
+          }).then((result) => {
             if (result.data.status == "SUCCEED") {
               this.open4();
             } else if (result.data.status == "FAILED") {
@@ -316,28 +316,28 @@ export default {
     open2() {
       this.$message({
         message: this.$t("upload_fail"),
-        type: "error"
+        type: "error",
       });
     },
     open3(errorTag) {
       this.$message({
         message: this.$t("label") + errorTag + " " + this.$t("not_exist"),
-        type: "error"
+        type: "error",
       });
     },
     open4() {
       this.$message({
         message: this.$t("upload_success"),
-        type: "success"
+        type: "success",
       });
     },
     open5() {
       this.$message({
         message: this.$t("unknown_err"),
-        type: "error"
+        type: "error",
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <div style="display:inline-flex;margin-right: 10px;">
+  <div style="display: inline-flex; margin-right: 10px;">
     <!--<el-input :class="newClass" v-model="newValue" style="margin-right: 5px;">
       <template v-if="newValue">
         <template v-if="loading">
@@ -26,11 +26,11 @@
     >
       <template v-if="newValue">
         <template v-if="loading">
-          <i slot="suffix" class="el-input__icon el-icon-loading" style="color:#E6A23C;"></i>
+          <i slot="suffix" class="el-input__icon el-icon-loading" style="color: #e6a23c;"></i>
         </template>
         <template v-else>
-          <i v-if="nouse" slot="suffix" class="el-input__icon el-icon-success" style="color:#67C23A;"></i>
-          <i v-else slot="suffix" class="el-input__icon el-icon-error" style="color:#F56C6C;"></i>
+          <i v-if="nouse" slot="suffix" class="el-input__icon el-icon-success" style="color: #67c23a;"></i>
+          <i v-else slot="suffix" class="el-input__icon el-icon-error" style="color: #f56c6c;"></i>
         </template>
       </template>
       <template slot-scope="{ item }">
@@ -44,7 +44,7 @@
               Author: item.cat == 3,
               General: item.cat == 0,
               Meta: item.cat == 4,
-              Soundtrack: item.cat == 6
+              Soundtrack: item.cat == 6,
             }"
             v-html="item.tag || ConvertLangRes(item.langs)"
           ></div>
@@ -68,30 +68,30 @@ export default {
   props: {
     checkValue: {
       type: String,
-      default: ""
+      default: "",
     },
     popperClass: {
       type: String,
-      default: ""
+      default: "",
     },
     placeholder: {
       type: String,
-      default: ""
+      default: "",
     },
     value: {
       type: String,
-      default: ""
+      default: "",
     },
     checkStatus: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data() {
     return {
       newValue: "",
       nouse: true,
-      loading: false
+      loading: false,
     };
   },
   watch: {
@@ -107,7 +107,7 @@ export default {
           this.Check(newValue);
         }
       }
-    }
+    },
   },
   created() {},
   methods: {
@@ -127,7 +127,7 @@ export default {
       this.$emit("update:checkStatus", 0);
       this.loading = true;
       Value = Value.replace(/ /g, "_");
-      this.$emit("check-value-async", Value, res => {
+      this.$emit("check-value-async", Value, (res) => {
         let value = this.value;
         value = value.replace(/ /g, "_");
         if (Value != value) {
@@ -136,8 +136,8 @@ export default {
           return false;
         }
         let resultarr = [];
-        res.map(v => v.langs.map(val => resultarr.push(val.w)));
-        let result = resultarr.filter(v => v == Value);
+        res.map((v) => v.langs.map((val) => resultarr.push(val.w)));
+        let result = resultarr.filter((v) => v == Value);
         this.nouse = result.length <= 0;
         this.$emit("update:checkStatus", result.length <= 0 ? 1 : -1);
         this.loading = false;
@@ -152,7 +152,7 @@ export default {
         { id: 1, lang: "CHS" },
         { id: 2, lang: "CHT" },
         { id: 5, lang: "ENG" },
-        { id: 10, lang: "JPN" }
+        { id: 10, lang: "JPN" },
       ];
       let level = [10, 5, 1, 2];
       let Lang = "";
@@ -161,18 +161,18 @@ export default {
       // 经过一系列计算得出主副语言
 
       // 匹配当前语言的 ID
-      let CurrLangID = LangList.find(x => {
+      let CurrLangID = LangList.find((x) => {
         return x.lang == this.$i18n.locale;
       });
       CurrLangID = CurrLangID ? CurrLangID.id : 1;
 
       // 匹配对应 ID 的内容
-      let CurrLangWord = langs.find(x => {
+      let CurrLangWord = langs.find((x) => {
         return x.l == CurrLangID;
       });
       if (!CurrLangWord) {
         for (let i = 0; i < level.length; i++) {
-          CurrLangWord = langs.find(x => {
+          CurrLangWord = langs.find((x) => {
             return x.l == level[i];
           });
           if (CurrLangWord) break;
@@ -186,7 +186,7 @@ export default {
         let SubLangWord = null;
         for (let i = 0; i < level.length; i++) {
           if (level[i] == CurrLangWord.l) continue;
-          SubLangWord = langs.find(x => {
+          SubLangWord = langs.find((x) => {
             return x.l == level[i];
           });
           if (SubLangWord) break;
@@ -200,8 +200,8 @@ export default {
         Lang = mainLang;
       }
       return Lang;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

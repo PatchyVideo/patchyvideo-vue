@@ -41,7 +41,7 @@
 </i18n>
 
 <template>
-  <div style="position:relative">
+  <div style="position: relative;">
     <!-- 没有评分就提交（分数 < 1）时  弹出框 -->
 
     <el-dialog :title="$t('prompt')" :visible.sync="dialogVisible" width="30%">
@@ -80,8 +80,8 @@ export default {
   props: {
     type: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
   data: function() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -99,16 +99,16 @@ export default {
         // 序号 1 起
         index: 0,
         // 位置 左 0 右 1
-        position: 0
+        position: 0,
       },
-      data: {}
+      data: {},
     };
   },
   watch: {
     pid() {
       this.getMyScore();
     },
-    scoreStatus() {}
+    scoreStatus() {},
   },
   created() {
     this.isLogin() ? this.getMyScore() : this.getTotalRating();
@@ -132,8 +132,8 @@ export default {
       this.axios({
         method: "post",
         url: url,
-        data: data
-      }).then(res => {
+        data: data,
+      }).then((res) => {
         let data = res.data;
         if (data.data.reason === "NOT_RATED") {
           // 没有评分过
@@ -164,8 +164,8 @@ export default {
       this.axios({
         method: "post",
         url: url,
-        data: data
-      }).then(res => {
+        data: data,
+      }).then((res) => {
         this.data = res.data.data;
         // console.log(this.data);
       });
@@ -235,7 +235,7 @@ export default {
       this.axios({
         method: "post",
         url: url,
-        data: data
+        data: data,
       }).then(() => {
         // let data = res.data;
         this.scoreStatus = true;
@@ -254,8 +254,8 @@ export default {
       } else {
         return false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -32,7 +32,7 @@
   <div class="unreadMsg">
     <div class="unreadMsg-title">{{ $t("allMsg") }}</div>
     <div v-loading="loading" class="unreadMsg-detail">
-      <div v-if="loading || !allMsg.length" style="min-height:400px">{{ $t("noMsg") }}</div>
+      <div v-if="loading || !allMsg.length" style="min-height: 400px;">{{ $t("noMsg") }}</div>
       <!-- 所有消息列表 -->
       <div v-else>
         <div v-for="(item, index) in allMsg" :key="index" class="replyDetail" @click="toDetail(item.replied_type, item.replied_obj.$oid)">
@@ -42,7 +42,7 @@
           </div>
           <!-- 右半部分 -->
           <div class="commentContent">
-            <div style="font-size:15px">
+            <div style="font-size: 15px;">
               <router-link :to="'/users/' + item.replied_by.$oid" target="_blank">
                 {{ commentUser(item.replied_by.$oid).profile.username }}
               </router-link>
@@ -76,7 +76,7 @@ export default {
       // 用户信息数据
       allUsers: [],
       // 数据是否正在加载的标志
-      loading: false
+      loading: false,
     };
   },
   computed: {
@@ -125,7 +125,7 @@ export default {
           (Array(2).join(0) + s).slice(-2)
         );
       };
-    }
+    },
   },
   created() {},
   mounted() {
@@ -140,14 +140,14 @@ export default {
         url: "be/notes/list_all.do",
         data: {
           page: this.page,
-          page_size: 20
-        }
+          page_size: 20,
+        },
       })
-        .then(result => {
+        .then((result) => {
           this.allMsg = result.data.data.notes;
           // 整理用户的ID
           let UIDs = result.data.data.notes;
-          UIDs = UIDs.map(data => {
+          UIDs = UIDs.map((data) => {
             return data.replied_by.$oid;
           });
           // 查询用户的信息
@@ -155,19 +155,19 @@ export default {
             method: "post",
             url: "/be/user/profile_batch.do",
             data: {
-              uids: UIDs
-            }
+              uids: UIDs,
+            },
           })
-            .then(result => {
+            .then((result) => {
               this.allUsers = result.data.data;
               this.loading = false;
             })
-            .catch(error => {
+            .catch((error) => {
               this.loading = false;
               console.log(error);
             });
         })
-        .catch(error => {
+        .catch((error) => {
           this.loading = false;
           console.log(error);
         });
@@ -201,18 +201,18 @@ export default {
       if (type == "video") {
         let routeData = this.$router.resolve({
           path: "/video",
-          query: { id: id }
+          query: { id: id },
         });
         window.open(routeData.href, "_blank");
       } else if (type == "playlist") {
         let routeData = this.$router.resolve({
           path: "/listdetail",
-          query: { id: id }
+          query: { id: id },
         });
         window.open(routeData.href, "_blank");
       } else return;
-    }
-  }
+    },
+  },
 };
 </script>
 

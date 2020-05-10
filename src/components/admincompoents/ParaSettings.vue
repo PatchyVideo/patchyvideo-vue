@@ -35,7 +35,7 @@
     <div v-loading="loading">
       <el-form ref="form" :model="data" label-width="60px" :disabled="!isEdit">
         <el-form-item v-for="(item, index) in data" :key="index" :label="index">
-          <el-input v-model="data[index]" style="width:600px" :placeholder="item"></el-input>
+          <el-input v-model="data[index]" style="width: 600px;" :placeholder="item"></el-input>
           <el-button
             v-if="isEdit"
             type="primary"
@@ -68,10 +68,10 @@ export default {
         BILICOOKIE_bili_jct: "",
         DEFAULT_BLACKLIST: "",
         DEFAULT_BLACKLIST_POPULAR_TAG: "",
-        YOUTUBE_API_KEYS: ""
+        YOUTUBE_API_KEYS: "",
       },
       // 加载状态
-      loading: false
+      loading: false,
     };
   },
   mounted() {
@@ -84,9 +84,9 @@ export default {
       await this.axios({
         method: "post",
         url: "/be/config/listconfig.do",
-        data: {}
+        data: {},
       })
-        .then(ret => {
+        .then((ret) => {
           this.data = ret.data.data;
         })
         .catch(() => {});
@@ -101,14 +101,14 @@ export default {
         url: "/be/config/setconfig.do",
         data: {
           attr: this.targetPara,
-          data: this.data[this.targetPara]
-        }
+          data: this.data[this.targetPara],
+        },
       })
         .then(() => {})
         .catch(() => {});
       this.loading = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

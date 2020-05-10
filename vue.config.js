@@ -14,7 +14,7 @@ const utils = {
   },
   resolve: function(dir) {
     return path.join(__dirname, "..", dir);
-  }
+  },
 };
 
 module.exports = {
@@ -25,8 +25,8 @@ module.exports = {
       new BundleAnalyzerPlugin(),
       new webpack.ProvidePlugin({
         jQuery: "jquery",
-        $: "jquery"
-      })
+        $: "jquery",
+      }),
     ],
     module: {
       rules: [
@@ -35,10 +35,10 @@ module.exports = {
           loader: "url-loader",
           options: {
             limit: 10000,
-            name: utils.assetsPath("fonrs/[name].[hash:7].[ext]")
-          }
-        }
-      ]
+            name: utils.assetsPath("fonrs/[name].[hash:7].[ext]"),
+          },
+        },
+      ],
     },
     performance: {
       hints: "warning",
@@ -49,8 +49,8 @@ module.exports = {
       //只给出 js 文件的性能提示
       assetFilter: function(assetFilename) {
         return assetFilename.endsWith(".js");
-      }
-    }
+      },
+    },
   },
   devServer: {
     host: "127.0.0.1",
@@ -60,29 +60,29 @@ module.exports = {
         target: "https://thvideo.tv/v/",
         changeOrigin: true,
         pathRewrite: {
-          "^/v/": ""
-        }
+          "^/v/": "",
+        },
       },
       "/be/": {
         target: "https://thvideo.tv/be/",
         changeOrigin: true,
         pathRewrite: {
-          "^/be/": ""
-        }
+          "^/be/": "",
+        },
       },
       "/images/": {
         target: "https://thvideo.tv/images/",
         changeOrigin: true,
         pathRewrite: {
-          "^/images/": ""
-        }
+          "^/images/": "",
+        },
       },
       "/autocomplete/ ": {
         target: "https://thvideo.tv/autocomplete/",
         changeOrigin: true,
         pathRewrite: {
-          "^/autocomplete/": ""
-        }
+          "^/autocomplete/": "",
+        },
       },
       "/proxy/bili/x/player/videoshot": {
         target: "https://api.bilibili.com/x/player/videoshot",
@@ -90,11 +90,11 @@ module.exports = {
         headers: {
           host: "api.bilibili.com",
           origin: "https://t.bilibili.com",
-          referer: "https://t.bilibili.com/"
+          referer: "https://t.bilibili.com/",
         },
         pathRewrite: {
-          "^/proxy/bili/x/player/videoshot": ""
-        }
+          "^/proxy/bili/x/player/videoshot": "",
+        },
       },
       "/proxy/bili/cover/bfs/videoshot/": {
         target: "http://i0.hdslb.com/bfs/videoshot/",
@@ -102,11 +102,11 @@ module.exports = {
         headers: {
           host: "i0.hdslb.com",
           origin: "https://t.bilibili.com",
-          referer: "https://t.bilibili.com/"
+          referer: "https://t.bilibili.com/",
         },
         pathRewrite: {
-          "^/proxy/bili/cover/bfs/videoshot/": ""
-        }
+          "^/proxy/bili/cover/bfs/videoshot/": "",
+        },
       },
       "/proxy/bili/x/player/": {
         target: "https://api.bilibili.com/x/player/",
@@ -114,16 +114,16 @@ module.exports = {
         headers: {
           host: "api.bilibili.com",
           origin: "https://www.bilibili.com",
-          referer: "https://www.bilibili.com"
+          referer: "https://www.bilibili.com",
         },
         pathRewrite: {
-          "^/proxy/bili/x/player/": ""
-        }
-      }
-    }
+          "^/proxy/bili/x/player/": "",
+        },
+      },
+    },
   },
 
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     config.module
       .rule("i18n")
       .resourceQuery(/blockType=i18n/)
@@ -131,5 +131,5 @@ module.exports = {
       .use("i18n")
       .loader("@kazupon/vue-i18n-loader")
       .end();
-  }
+  },
 };

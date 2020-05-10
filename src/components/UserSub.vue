@@ -13,7 +13,7 @@
   <div>
     <el-card v-loading="loading" class="box-card">
       <el-collapse v-model="activeNames" @change="handleChange">
-        <el-collapse-item title="已订阅的文本" name="1" style="text-align: center">
+        <el-collapse-item title="已订阅的文本" name="1" style="text-align: center;">
           <div v-for="i in subDataTextNameData" :key="i">
             <div class="sub-text">
               <h4>{{ i }}</h4>
@@ -46,7 +46,7 @@
           </transition>-->
         </el-collapse-item>
         <el-collapse-item title="已订阅的标签/文本" name="2">
-          <div v-for="i in subDataTagsNameData" :key="i" style="margin-bottom: 20px">
+          <div v-for="i in subDataTagsNameData" :key="i" style="margin-bottom: 20px;">
             <div class="sub-tags">
               <h4>{{ i }}</h4>
               <div>
@@ -102,7 +102,7 @@
                       Author: item.cat === 3,
                       General: item.cat === 0,
                       Meta: item.cat === 4,
-                      Soundtrack: item.cat === 6
+                      Soundtrack: item.cat === 6,
                     }"
                     v-html="item.tag || ConvertLangRes(item.langs)"
                   >
@@ -116,7 +116,7 @@
 
           <div class="sub-action">
             <el-button type="primary" @click.native="subAdd(subTagsIptValue, subTagsIptName, 'tag')">添加标签订阅</el-button>
-            <el-button style="margin: 0" @click.native="subAddIptVisible = false">取消</el-button>
+            <el-button style="margin: 0;" @click.native="subAddIptVisible = false">取消</el-button>
           </div>
         </div>
 
@@ -146,7 +146,7 @@ export default {
       couponSelected: [],
       options: [
         { value: "tag", label: "Tag/Text" },
-        { value: "text", label: "Text Only" }
+        { value: "text", label: "Text Only" },
       ],
       sites: [
         { tag: "site:acfun", cat: 6, cnt: null },
@@ -160,7 +160,7 @@ export default {
         { tag: "OR", cat: 6, cnt: null },
         { tag: "NOT", cat: 6, cnt: null },
         { tag: "date:", cat: 6, cnt: null },
-        { tag: "tags:", cat: 6, cnt: null }
+        { tag: "tags:", cat: 6, cnt: null },
       ],
       iptVal3: "",
       // 进行搜索的时候关键字的开头位置(起始位置)
@@ -184,7 +184,7 @@ export default {
       subAddIptVisible: false,
 
       activeNames: ["1", "2"],
-      subObj: []
+      subObj: [],
     };
   },
   created() {
@@ -219,7 +219,7 @@ export default {
         { id: 1, lang: "CHS" },
         { id: 2, lang: "CHT" },
         { id: 5, lang: "ENG" },
-        { id: 10, lang: "JPN" }
+        { id: 10, lang: "JPN" },
       ];
       let level = [10, 5, 1, 2];
       let Lang = "";
@@ -228,18 +228,18 @@ export default {
       // 经过一系列计算得出主副语言
 
       // 匹配当前语言的 ID
-      let CurrLangID = LangList.find(x => {
+      let CurrLangID = LangList.find((x) => {
         return x.lang == this.$i18n.locale;
       });
       CurrLangID = CurrLangID ? CurrLangID.id : 1;
 
       // 匹配对应 ID 的内容
-      let CurrLangWord = langs.find(x => {
+      let CurrLangWord = langs.find((x) => {
         return x.l == CurrLangID;
       });
       if (!CurrLangWord) {
         for (let i = 0; i < level.length; i++) {
-          CurrLangWord = langs.find(x => {
+          CurrLangWord = langs.find((x) => {
             return x.l == level[i];
           });
           if (CurrLangWord) break;
@@ -253,7 +253,7 @@ export default {
         let SubLangWord = null;
         for (let i = 0; i < level.length; i++) {
           if (level[i] == CurrLangWord.l) continue;
-          SubLangWord = langs.find(x => {
+          SubLangWord = langs.find((x) => {
             return x.l == level[i];
           });
           if (SubLangWord) break;
@@ -335,14 +335,14 @@ export default {
       let url = "/be/autocomplete/ql?q=" + query;
       this.axios({
         method: "get",
-        url: url
-      }).then(result => {
+        url: url,
+      }).then((result) => {
         this.taglist = result.data;
         cb(result.data);
       });
     },
     createFilter(query) {
-      return sites => {
+      return (sites) => {
         return sites.tag.toLowerCase().indexOf(query.toLowerCase()) === 0;
       };
     },
@@ -353,19 +353,19 @@ export default {
         data: {
           qtype: this.couponSelected,
           name: this.subAddName,
-          query: this.subAddIptValue
-        }
+          query: this.subAddIptValue,
+        },
       })
-        .then(res => {
+        .then((res) => {
           if (res.data.status === "SUCCEED") {
             this.$message({
               message: "添加成功",
-              type: "success"
+              type: "success",
             });
             this.subShowAll();
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -374,13 +374,13 @@ export default {
       this.axios({
         method: "post",
         url: "/be/subs/del.do",
-        data: { subid: m._id.$oid }
+        data: { subid: m._id.$oid },
       })
-        .then(res => {
+        .then((res) => {
           if (res.data.status === "SUCCEED") {
             this.$message({
               message: "删除成功",
-              type: "success"
+              type: "success",
             });
           }
           this.subShowAll();
@@ -393,7 +393,7 @@ export default {
     },
     subNameMap(arr, str) {
       let nameData = new Set(
-        arr.map(item => {
+        arr.map((item) => {
           return item.name;
         })
       );
@@ -410,14 +410,14 @@ export default {
     },
     subQtMap(i, str) {
       if (str === "text") {
-        return this.subDataText.filter(item => {
+        return this.subDataText.filter((item) => {
           if (item.name === i) {
             return item;
           }
         });
       }
       if (str === "tag") {
-        return this.subDataTags.filter(item => {
+        return this.subDataTags.filter((item) => {
           if (item.name === i) {
             return item;
           }
@@ -446,7 +446,7 @@ export default {
         if (value === "") {
           this.$message({
             message: this.$t("值不能为空！"),
-            type: "warning"
+            type: "warning",
           });
           this.loading = false;
           return;
@@ -461,13 +461,13 @@ export default {
           qtype: str,
           name: "",
           query: m.iptValue,
-          subid: m._id.$oid
-        }
-      }).then(res => {
+          subid: m._id.$oid,
+        },
+      }).then((res) => {
         if (res.data.status === "SUCCEED") {
           this.$message({
             message: "修改成功",
-            type: "success"
+            type: "success",
           });
         }
         this.subShowAll();
@@ -478,11 +478,11 @@ export default {
       this.axios({
         method: "post",
         url: "be/subs/all.do",
-        data: {}
+        data: {},
       })
-        .then(res => {
+        .then((res) => {
           // console.log(res.data.data);
-          this.subDataText = res.data.data.subs.filter(item => {
+          this.subDataText = res.data.data.subs.filter((item) => {
             return item.qt === "text";
           });
           // let e = [];
@@ -494,7 +494,7 @@ export default {
           // }
           // this.subDataTextIptId = e;
           this.subNameMap(this.subDataText, "text");
-          this.subDataTags = res.data.data.subs.filter(item => {
+          this.subDataTags = res.data.data.subs.filter((item) => {
             return item.qt === "tag";
           });
           this.subNameMap(this.subDataTags, "tag");
@@ -508,10 +508,10 @@ export default {
       this.axios({
         method: "post",
         url: "be/subs/tags.do",
-        data: {}
+        data: {},
       }).then(() => {});
-    }
-  }
+    },
+  },
 };
 </script>
 

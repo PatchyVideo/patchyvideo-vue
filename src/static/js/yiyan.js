@@ -42,13 +42,13 @@ const yiyan = [
   "拳打八云敬老院，脚踢红魔幼儿园",
   "前方到站：幻想乡。请到站的旅客提前到车门前等候，未到站的旅客请不要下车。",
   "欢迎乘坐八云号动车组，本次列车是GSK999次列车，列车由博丽神社开往红魔馆，途径雾之湖站。",
-  "你知道吗？如果用TNT搭建TNT阵列塔，一塔的爆炸量相当于9个红魔馆。"
+  "你知道吗？如果用TNT搭建TNT阵列塔，一塔的爆炸量相当于9个红魔馆。",
 ];
 
 function getYiyan(short) {
   let yy = yiyan;
   if (short) {
-    yy = yy.filter(v => v.length <= 40);
+    yy = yy.filter((v) => v.length <= 40);
   }
   let random = Math.floor(Math.random() * 100, 2) % yy.length;
   return yy[random];

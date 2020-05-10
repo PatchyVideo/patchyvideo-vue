@@ -56,20 +56,20 @@
           <div class="second">
             <el-switch
               v-model="value"
-              style="display: block"
+              style="display: block;"
               active-color="#13ce66"
               inactive-color="#ff4949"
               :active-text="$t('show_url_time')"
               :inactive-text="$t('show_all')"
             ></el-switch>
             <transition mode="out-in">
-              <el-table v-show="value" :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
+              <el-table v-show="value" :data="tableData" style="width: 100%;" :row-class-name="tableRowClassName">
                 <el-table-column prop="url" label="URL" align="center"></el-table-column>
                 <el-table-column prop="time" label="TIME" align="center"></el-table-column>
               </el-table>
             </transition>
             <transition mode="out-in">
-              <el-table v-show="!value" :data="tableData" stripe style="width: 100%">
+              <el-table v-show="!value" :data="tableData" stripe style="width: 100%;">
                 <el-table-column prop="url" label="URL" align="center"></el-table-column>
                 <el-table-column prop="time" label="TIME" align="center"></el-table-column>
                 <el-table-column prop="exception" label="EXCEPTION" align="center"></el-table-column>
@@ -97,30 +97,30 @@ export default {
         {
           url: "null",
           time: "null",
-          exception: "null"
-        }
+          exception: "null",
+        },
       ],
       centerDialogVisible: false,
       value: true,
       doingState: true,
-      failedState: false
+      failedState: false,
     };
   },
   watch: {
-    value() {}
+    value() {},
   },
   created() {
     this.axios({
       method: "post",
       url: "be/posts/list_pending.do",
-      data: { page: 1, page_size: 9999 }
-    }).then(res => {
+      data: { page: 1, page_size: 9999 },
+    }).then((res) => {
       let obj = res.data.data;
       let array = [];
       for (let i in obj) {
         array.push({
           url: obj[i].url,
-          tags: JSON.parse(JSON.stringify(obj[i].tags).replace(/(",)+/g, '、",'))
+          tags: JSON.parse(JSON.stringify(obj[i].tags).replace(/(",)+/g, '、",')),
         });
       }
       this.tableData2 = array;
@@ -128,8 +128,8 @@ export default {
     this.axios({
       method: "post",
       url: "be/posts/list_failed.do",
-      data: { page: 1, page_size: 99999 }
-    }).then(res => {
+      data: { page: 1, page_size: 99999 },
+    }).then((res) => {
       this.failedData = JSON.parse(JSON.stringify(res.data.data.posts));
       let _that = this;
       let array = [];
@@ -141,7 +141,7 @@ export default {
           let array = [
             { url: _that.failedData[index].post_param.url },
             { time: this.formatDate(_that.failedData[index].time) },
-            { exception: JSON.stringify(_that.failedData[index].ret) }
+            { exception: JSON.stringify(_that.failedData[index].ret) },
           ];
           m[index] = array;
         }
@@ -226,8 +226,8 @@ export default {
           (Array(2).join(0) + s).slice(-2)
         );
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

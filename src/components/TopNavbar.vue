@@ -164,7 +164,7 @@
                   Author: item.cat == 3,
                   General: item.cat == 0,
                   Meta: item.cat == 4,
-                  Soundtrack: item.cat == 6
+                  Soundtrack: item.cat == 6,
                 }"
                 v-html="item.tag || ConvertLangRes(item.langs)"
               ></div>
@@ -198,7 +198,7 @@
           <el-badge :value="messagesNum" :hidden="!messagesNum" class="item">
             <router-link target="_blank" class="loginUser-message" to="/messages">{{ $t("user.message") }}</router-link>
           </el-badge>
-          <a class="loginUser-signup" style="cursor:pointer" @click="dialogVisible = true">{{ $t("user.logout") }}</a>
+          <a class="loginUser-signup" style="cursor: pointer;" @click="dialogVisible = true">{{ $t("user.logout") }}</a>
         </div>
       </div>
     </div>
@@ -245,13 +245,13 @@ export default {
         { tag: "OR", cat: 6, cnt: null },
         { tag: "NOT", cat: 6, cnt: null },
         { tag: "date:", cat: 6, cnt: null },
-        { tag: "tags:", cat: 6, cnt: null }
+        { tag: "tags:", cat: 6, cnt: null },
       ],
       infoTipMark: false,
       // 未读信息的数量
       messagesNum: 0,
       // 控制读取未读信息方法的变量
-      queryMessages: ""
+      queryMessages: "",
     };
   },
   computed: {
@@ -266,12 +266,12 @@ export default {
       } else {
         return "be/images/userphotos/" + this.$store.state.userAvatar;
       }
-    }
+    },
   },
   watch: {
     iptVal2() {
       this.iptVal = this.iptVal2;
-    }
+    },
   },
   created() {
     // 查看是否在别的设备上登录过
@@ -297,13 +297,13 @@ export default {
       this.axios({
         method: "post",
         url: "be/user/whoami",
-        data: {}
-      }).then(result => {
+        data: {},
+      }).then((result) => {
         if (result.data.data == "UNAUTHORISED_OPERATION" && this.getCookie()) {
           this.axios({
             method: "post",
             url: "/be/logout.do",
-            data: {}
+            data: {},
           }).then(() => {
             this.open(this.$t("user.login_expire_prompt"));
             this.isLogin = false;
@@ -333,7 +333,7 @@ export default {
       this.axios({
         method: "post",
         url: "/be/logout.do",
-        data: {}
+        data: {},
       }).then(() => {
         this.isLogin = false;
         // 清除所有 session 值(退出登录)
@@ -365,9 +365,9 @@ export default {
         this.$router
           .push({
             path: "/home",
-            query: { keyword: this.iptVal, qtype: this.searchType }
+            query: { keyword: this.iptVal, qtype: this.searchType },
           })
-          .catch(err => {
+          .catch((err) => {
             return err;
           });
       } else {
@@ -425,12 +425,12 @@ export default {
       this.axios({
         method: "post",
         url: "be/notes/list_unread.do",
-        data: {}
+        data: {},
       })
-        .then(result => {
+        .then((result) => {
           this.messagesNum = result.data.data.notes.length;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -464,8 +464,8 @@ export default {
       let url = "/autocomplete/?q=" + query;
       this.axios({
         method: "get",
-        url: url
-      }).then(result => {
+        url: url,
+      }).then((result) => {
         if (result.status == "FALIED") {
           cb([]);
           return;
@@ -503,8 +503,8 @@ export default {
       let url = "/be/autocomplete/ql?q=" + query;
       this.axios({
         method: "get",
-        url: url
-      }).then(result => {
+        url: url,
+      }).then((result) => {
         if (result.status == "FALIED") {
           cb([]);
           return;
@@ -515,7 +515,7 @@ export default {
     },
     // 搜索输入框内的搜索文字是否包含网站内容
     createFilter(query) {
-      return sites => {
+      return (sites) => {
         return sites.tag.toLowerCase().indexOf(query.toLowerCase()) === 0;
       };
     },
@@ -557,7 +557,7 @@ export default {
         { id: 1, lang: "CHS" },
         { id: 2, lang: "CHT" },
         { id: 5, lang: "ENG" },
-        { id: 10, lang: "JPN" }
+        { id: 10, lang: "JPN" },
       ];
       let level = [10, 5, 1, 2];
       let Lang = "";
@@ -566,18 +566,18 @@ export default {
       // 经过一系列计算得出主副语言
 
       // 匹配当前语言的 ID
-      let CurrLangID = LangList.find(x => {
+      let CurrLangID = LangList.find((x) => {
         return x.lang == this.$i18n.locale;
       });
       CurrLangID = CurrLangID ? CurrLangID.id : 1;
 
       // 匹配对应 ID 的内容
-      let CurrLangWord = langs.find(x => {
+      let CurrLangWord = langs.find((x) => {
         return x.l == CurrLangID;
       });
       if (!CurrLangWord) {
         for (let i = 0; i < level.length; i++) {
-          CurrLangWord = langs.find(x => {
+          CurrLangWord = langs.find((x) => {
             return x.l == level[i];
           });
           if (CurrLangWord) break;
@@ -591,7 +591,7 @@ export default {
         let SubLangWord = null;
         for (let i = 0; i < level.length; i++) {
           if (level[i] == CurrLangWord.l) continue;
-          SubLangWord = langs.find(x => {
+          SubLangWord = langs.find((x) => {
             return x.l == level[i];
           });
           if (SubLangWord) break;
@@ -619,7 +619,7 @@ export default {
     open(message) {
       this.$message({
         message: message,
-        type: "error"
+        type: "error",
       });
     },
     handleSelect2(item) {
@@ -631,8 +631,8 @@ export default {
       // 光标设置焦点事件
       $("#ipt").focus();
       this.infoTipMark = true;
-    }
-  }
+    },
+  },
 };
 </script>
 

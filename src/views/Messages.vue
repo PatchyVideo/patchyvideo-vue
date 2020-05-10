@@ -64,7 +64,7 @@ export default {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 显示信息类型，0 代表未读消息，1 代表已读消息
-      messageType: 0
+      messageType: 0,
     };
   },
   created() {
@@ -73,7 +73,7 @@ export default {
     // 修改网站标题
     document.title = "消息中心 - Patchyvideo";
   },
-  methods: {}
+  methods: {},
 };
 </script>
 

@@ -77,8 +77,8 @@
 import topnavbar from "../components/TopNavbar.vue";
 import Footer from "../components/Footer.vue";
 
-import IPFS from "ipfs";
-import VideoStream from "videostream";
+// import IPFS from "ipfs";
+// import VideoStream from "videostream";
 
 export default {
   components: { topnavbar, Footer },
@@ -88,59 +88,56 @@ export default {
   computed: {
     nodeShow() {
       return document.getElementById("nodes");
-    }
+    },
   },
   created() {
     // 修改网站标题
     document.title = this.$t("title") + " - Patchyvideo";
   },
   mounted() {
-    //// IPFS Settings ////
-    const ipfs = new IPFS({
-      repo: "/ipfs"
-    });
-
-    const Interval = 5 * 1000;
-    ipfs.once("ready", () => {
-      // console.log("ipfs node ready.");
-      this.nodeShow.innerHTML = this.$t("content.connecting_tip");
-      setInterval(() => {
-        ipfs.swarm.peers((err, peerInfos) => {
-          if (err) {
-            throw err;
-          }
-          // console.log(peerInfos.length+" ipfs node(s) connect.");
-          this.nodeShow.innerHTML = peerInfos.length + this.$t("content.connect_success_tip");
-        });
-      }, Interval);
-      const player = document.getElementById("player");
-      this.genIpfsVideo(ipfs, "QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh", player);
-    });
+    // //// IPFS Settings ////
+    // const ipfs = new IPFS({
+    //   repo: "/ipfs",
+    // });
+    // const Interval = 5 * 1000;
+    // ipfs.once("ready", () => {
+    //   // console.log("ipfs node ready.");
+    //   this.nodeShow.innerHTML = this.$t("content.connecting_tip");
+    //   setInterval(() => {
+    //     ipfs.swarm.peers((err, peerInfos) => {
+    //       if (err) {
+    //         throw err;
+    //       }
+    //       // console.log(peerInfos.length+" ipfs node(s) connect.");
+    //       this.nodeShow.innerHTML = peerInfos.length + this.$t("content.connect_success_tip");
+    //     });
+    //   }, Interval);
+    //   const player = document.getElementById("player");
+    //   this.genIpfsVideo(ipfs, "QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh", player);
+    // });
   },
   methods: {
     // This is a function to simplify the js
     // Need: Ipfs node init
-    genIpfsVideo(ipfsnode, hash, element) {
-      let stream;
-
-      const exampleFile = {
-        createReadStream(opts) {
-          const { start, end } = opts;
-          stream = ipfsnode.catReadableStream(hash, {
-            offset: start,
-            length: end && end - start
-          });
-          stream.on("error", err => {
-            console.log(err);
-          });
-          return stream;
-        }
-      };
-      let vs = new VideoStream(exampleFile, element);
-
-      return vs;
-    }
-  }
+    // genIpfsVideo(ipfsnode, hash, element) {
+    //   let stream;
+    //   const exampleFile = {
+    //     createReadStream(opts) {
+    //       const { start, end } = opts;
+    //       stream = ipfsnode.catReadableStream(hash, {
+    //         offset: start,
+    //         length: end && end - start,
+    //       });
+    //       stream.on("error", (err) => {
+    //         console.log(err);
+    //       });
+    //       return stream;
+    //     },
+    //   };
+    //   let vs = new VideoStream(exampleFile, element);
+    //   return vs;
+    // },
+  },
 };
 </script>
 

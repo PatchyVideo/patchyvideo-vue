@@ -9,12 +9,12 @@ export default {
   props: {
     html: {
       type: String,
-      default: ""
+      default: "",
     },
     fontsize: {
       type: Number,
-      default: 0.9
-    }
+      default: 0.9,
+    },
   },
   mounted() {
     let style = document.createElement("style");
@@ -40,6 +40,6 @@ export default {
             "\n</li></ul>"
         );
       });
-  }
+  },
 };
 </script>

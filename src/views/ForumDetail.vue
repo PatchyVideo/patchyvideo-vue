@@ -5,7 +5,7 @@
     <div class="content mt-4">
       <div>
         <el-alert type="info">
-          <div style="color:black;font-size:1.2em">
+          <div style="color: black; font-size: 1.2em;">
             <h3>{{ Finfo[fid].title || "神秘板块" }}</h3>
             <p style="white-space: pre-wrap;">
               {{ Finfo[fid].desc || "板块还没有简介哦~" }}
@@ -14,7 +14,7 @@
         </el-alert>
       </div>
       <!-- 帖子表 -->
-      <el-table :data="threadList" :empty-text="emptyText" style="width: 100%">
+      <el-table :data="threadList" :empty-text="emptyText" style="width: 100%;">
         <el-table-column label="帖子">
           <template slot-scope="thread">
             <div>
@@ -51,12 +51,12 @@
           </template>
         </el-table-column>
       </el-table>
-      <div v-if="threadList.length != threadResult.length" style="text-align:center;color:gray">
+      <div v-if="threadList.length != threadResult.length" style="text-align: center; color: gray;">
         本页含有{{ threadResult.length - threadList.length }}个隐藏贴
-        <span style="color:#409eff" @click="threadList = threadResult">显示</span>
+        <span style="color: #409eff;" @click="threadList = threadResult">显示</span>
       </div>
-      <div style="text-align:center;margin-top:4px">
-        <el-button type="primary" size="small" plain style="display:inline-flex;vertical-align:middle;" disabled>暂无功能</el-button>
+      <div style="text-align: center; margin-top: 4px;">
+        <el-button type="primary" size="small" plain style="display: inline-flex; vertical-align: middle;" disabled>暂无功能</el-button>
         <el-pagination
           background
           layout="jumper, prev, pager, next, sizes"
@@ -65,17 +65,17 @@
           :page-size.sync="pageSize"
           :page-sizes="[10, 20, 30, 40]"
           class="page-selector"
-          style="display:inline-flex;vertical-align:middle;"
+          style="display: inline-flex; vertical-align: middle;"
         ></el-pagination>
-        <el-button type="primary" size="small" plain style="display:inline-flex;vertical-align:middle;" @click="post2">发表新帖</el-button>
+        <el-button type="primary" size="small" plain style="display: inline-flex; vertical-align: middle;" @click="post2">发表新帖</el-button>
       </div>
       <el-dialog :title="(Finfo[fid].title || '神秘板块') + ' > 发表新帖'" :visible.sync="postT.visible">
-        <h2 style="display:inline-flex;color: #2c3e50;">{{ Finfo[fid].title || "神秘板块" }} ></h2>
-        <el-form :model="postF" style="display:inline-flex" @submit.native.prevent>
-          <el-input v-model="postF.title" style="width:320px" placeholder="在这里填写标题~"></el-input
+        <h2 style="display: inline-flex; color: #2c3e50;">{{ Finfo[fid].title || "神秘板块" }} ></h2>
+        <el-form :model="postF" style="display: inline-flex;" @submit.native.prevent>
+          <el-input v-model="postF.title" style="width: 320px;" placeholder="在这里填写标题~"></el-input
         ></el-form>
         <div class="t"></div>
-        <div style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;">
+        <div style="margin-top: 16px; border: 1px solid #d1d5da; border-radius: 3px; margin-left: 58px;">
           <div class="left-avatar">
             <el-avatar size="large" :src="user.avatar"></el-avatar>
           </div>
@@ -94,7 +94,7 @@
           </div>
         </div>
         <div slot="footer" class="dialog-footer">
-          <span style="color:gray">注：建议先预览再发帖，提前发现问题</span>&emsp;
+          <span style="color: gray;">注：建议先预览再发帖，提前发现问题</span>&emsp;
           <el-button @click="postF.show = true">预览</el-button>
           <el-button type="primary" @click="post()">发表</el-button>
         </div>
@@ -105,7 +105,7 @@
           {{ postF.title || "Loading..." }}
         </h2>
         <div class="t"></div>
-        <div style="margin-top:16px;border: 1px solid #d1d5da;border-radius: 3px;margin-left:58px;">
+        <div style="margin-top: 16px; border: 1px solid #d1d5da; border-radius: 3px; margin-left: 58px;">
           <div class="left-avatar">
             <el-avatar size="large" :src="user.avatar"></el-avatar>
           </div>
@@ -142,15 +142,15 @@ export default {
   components: {
     topNavbar,
     cfooter,
-    ThreadComment
+    ThreadComment,
   },
   data() {
     return {
       Finfo: {
         "5e8fce11beb63ebb98f8b50c": {
           title: "意见反馈",
-          desc: "在这里反馈在帕琪站遇到的问题~\n建议将问题详细描述并尽量附带截图或日志。\n（截图可以使用 img标签 + 图床，日志请尽量使用 pastebin）"
-        }
+          desc: "在这里反馈在帕琪站遇到的问题~\n建议将问题详细描述并尽量附带截图或日志。\n（截图可以使用 img标签 + 图床，日志请尽量使用 pastebin）",
+        },
       },
       emptyText: "少女祈祷中...",
       threadList: [],
@@ -160,13 +160,13 @@ export default {
       pageSize: 20,
       postT: {
         visible: false,
-        comment: {}
+        comment: {},
       },
       postF: {
         show: false,
         title: "",
-        comment: ""
-      }
+        comment: "",
+      },
     };
   },
   computed: {
@@ -176,12 +176,12 @@ export default {
     user() {
       return {
         username: this.$store.state.username,
-        avatar: this.$store.state.userAvatar == "default" ? require("../static/img/defaultAvatar.jpg") : "be/images/userphotos/" + this.$store.state.userAvatar
+        avatar: this.$store.state.userAvatar == "default" ? require("../static/img/defaultAvatar.jpg") : "be/images/userphotos/" + this.$store.state.userAvatar,
       };
     },
     maxcount() {
       return this.threadList ? this.threadList.length : 0;
-    }
+    },
   },
   watch: {
     page() {
@@ -189,7 +189,7 @@ export default {
     },
     pageSize() {
       this.fetchData();
-    }
+    },
   },
   mounted() {
     this.fetchData();
@@ -202,40 +202,40 @@ export default {
         data: {
           forum_id: this.$route.params.fid,
           page: this.page,
-          page_size: this.pageSize
-        }
+          page_size: this.pageSize,
+        },
       })
-        .then(result => {
+        .then((result) => {
           if (result.data.status == "SUCCEED") {
             this.threadList = [];
             this.threadResult = [];
-            result.data.data.threads_pinned.forEach(value => {
+            result.data.data.threads_pinned.forEach((value) => {
               if (!value.deleted && !value.hidden) this.threadList.push(value);
               if (!value.deleted) this.threadResult.push(value);
             });
-            result.data.data.threads.forEach(value => {
+            result.data.data.threads.forEach((value) => {
               if (!value.deleted && !value.hidden) this.threadList.push(value);
               if (!value.deleted) this.threadResult.push(value);
             });
             const threadAuthorUIDs = [];
-            result.data.data.threads.forEach(data => {
+            result.data.data.threads.forEach((data) => {
               threadAuthorUIDs.push(data.thread_obj[0].owner.$oid);
             });
             this.axios({
               method: "post",
               url: "/be/user/profile_batch.do",
               data: {
-                uids: threadAuthorUIDs
-              }
-            }).then(result => {
-              result.data.data.forEach(data => {
+                uids: threadAuthorUIDs,
+              },
+            }).then((result) => {
+              result.data.data.forEach((data) => {
                 this.$set(this.threadAuthorsInfo, data._id.$oid, data);
               });
             });
             changeSiteTitle((this.Finfo[this.fid].title || "神秘板块") + " - 讨论板");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           this.emptyText = error.toString();
           // this.$router.push({ path: "/404" });
         });
@@ -250,26 +250,26 @@ export default {
         data: {
           forum_id: this.$route.params.fid,
           title: this.postF.title,
-          text: this.postF.comment
-        }
+          text: this.postF.comment,
+        },
       })
-        .then(result => {
+        .then((result) => {
           if (result.data.status == "SUCCEED") {
             this.$message({
               type: "success",
-              message: "发帖成功！正在跳转~"
+              message: "发帖成功！正在跳转~",
             });
             this.$router.push({
-              path: "/forum/" + this.$route.params.fid + "/post/" + result.data.data.thread_id
+              path: "/forum/" + this.$route.params.fid + "/post/" + result.data.data.thread_id,
             });
           } else {
             throw result.data.status;
           }
         })
-        .catch(e => {
+        .catch((e) => {
           this.$message({
             type: "error",
-            message: "发帖失败：" + e.message
+            message: "发帖失败：" + e.message,
           });
         });
     },
@@ -286,8 +286,8 @@ export default {
       } catch (e) {
         return '<div style="font-family:Consolas">Error: ' + e.message.replace(/ /g, "&nbsp;").replace(/\n/g, "<br />") + "</div>";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

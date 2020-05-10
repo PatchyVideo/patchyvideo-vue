@@ -171,14 +171,14 @@ export default {
       badapple: "https://ipfs.globalupload.io/QmcAmXANyKjCfRoy9HAHA2tK4c3ujHH2yekwZwNTD6gTDh",
       lanlanlu: "https://ipfs.globalupload.io/QmT2LT2D513dTe1bNuBogfDCpZakaEuPquJmozYx6X6Gmq",
       erxiaojie: "https://ipfs.globalupload.io/QmNdrzSXnYyiTJGS3tj3SswhpJLpjhmNbTLm15hWR7kLdE",
-      count: 0
+      count: 0,
     };
   },
   computed: {
     // 搜索的关键字
     player() {
       return document.getElementById("player");
-    }
+    },
   },
   created() {
     // player.autoplay = "true"
@@ -206,8 +206,8 @@ export default {
     },
     playErxiaojie() {
       this.player.src = this.erxiaojie;
-    }
-  }
+    },
+  },
 };
 </script>
 

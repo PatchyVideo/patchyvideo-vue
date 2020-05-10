@@ -39,24 +39,24 @@ export default {
     // 标签种类
     type: {
       type: String,
-      default: "none"
+      default: "none",
     },
     // 标签内容
     tipText: {
       type: String,
-      required: true
+      required: true,
     },
     // 标签ID
     tagID: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       // Tag 颜色列表
-      colorTagList: ["Copyright", "Language", "Character", "General", "Meta", "Soundtrack", "Author"]
+      colorTagList: ["Copyright", "Language", "Character", "General", "Meta", "Soundtrack", "Author"],
     };
   },
   created() {},
@@ -68,20 +68,20 @@ export default {
         if (_blank) {
           let routerPath = this.$router.resolve({
             path: "/home",
-            query: { keyword: key }
+            query: { keyword: key },
           });
           window.open(routerPath.href, "_blank");
         } else {
           this.$router.push({
             path: "/home",
-            query: { keyword: key }
+            query: { keyword: key },
           });
         }
       } else {
         this.$router.push({ path: "/home" });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

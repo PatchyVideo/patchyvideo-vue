@@ -37,26 +37,26 @@ export default {
     tagconhis,
     tagconlist,
     topnavbar,
-    Footer
+    Footer,
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       activeName: "first",
       label: ["历史和贡献"],
-      labelInfo: ["标签编辑历史", "标签贡献排行榜"]
+      labelInfo: ["标签编辑历史", "标签贡献排行榜"],
     };
   },
   computed: {},
   watch: {
     $route() {
       this.activeName = "first";
-    }
+    },
   },
   created() {},
   mounted() {},
   updated() {},
-  methods: {}
+  methods: {},
 };
 </script>
 

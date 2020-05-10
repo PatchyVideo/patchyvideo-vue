@@ -39,10 +39,10 @@ export const isMaxFileSize = (file, fileMaxSize = 2) => {
  * @desc 读取图片文件为base64文件格式
  * @retutn 返回base64文件
  */
-export const readFile = file => {
+export const readFile = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = e => {
+    reader.onload = (e) => {
       const data = e.target.result;
       resolve(data);
     };
@@ -61,14 +61,14 @@ export const readFile = file => {
  * @desc 加载真实图片
  * @return 读取成功返回图片真实宽高对象 ag: {width:100,height:100}
  */
-export const loadImage = src => {
+export const loadImage = (src) => {
   return new Promise((resolve, reject) => {
     const image = new Image();
     image.src = src;
     image.onload = () => {
       const data = {
         width: image.width,
-        height: image.height
+        height: image.height,
       };
       resolve(data);
     };

@@ -64,7 +64,7 @@
     <img class="footImg" height="150px" src="../static/img/footImg.png" />
     <!-- 语言选项 -->
     <div class="patchyvideo-languageSettings">
-      <p style="margin-top:10px">
+      <p style="margin-top: 10px;">
         <strong>{{ $t("LanguageSettings") }}</strong>
       </p>
       <span @click="locale = 'CHS'">简体中文</span>
@@ -99,7 +99,7 @@
     </div>
     <!-- 最下部的网站声明 -->
     <div>
-      <p class="patchyvideo-declear yiyan" style="color:gray;" v-text="yiyan"></p>
+      <p class="patchyvideo-declear yiyan" style="color: gray;" v-text="yiyan"></p>
       <p class="patchyvideo-declear">
         © 2019-{{ new Date().getFullYear() }} PatchyVideo(Client:
         <a :href="'https://github.com/suwadaimyojin/patchyvideo-vue/commit/' + commitOfClient">{{ commitOfClient2 }}</a>
@@ -125,7 +125,7 @@ export default {
       // 多语言支持
       locale: localStorage.getItem("lang"),
       // 吾有一言，请诸位静听
-      yiyan: ""
+      yiyan: "",
     };
   },
   computed: {
@@ -134,13 +134,13 @@ export default {
     },
     commitOfServer2() {
       return this.commitOfServer.slice(0, 8);
-    }
+    },
   },
   watch: {
     locale(val) {
       localStorage.setItem("lang", val);
       location.reload();
-    }
+    },
   },
   created() {
     this.yiyan = getYiyan(true);
@@ -155,19 +155,19 @@ export default {
       // 获取前端地址
       this.axios({
         method: "get",
-        url: "/v/fe/?" + new Date().getTime()
-      }).then(result => {
+        url: "/v/fe/?" + new Date().getTime(),
+      }).then((result) => {
         this.commitOfClient = result.data;
       });
       // 获取后端地址
       this.axios({
         method: "get",
-        url: "/v/be/?" + new Date().getTime()
-      }).then(result => {
+        url: "/v/be/?" + new Date().getTime(),
+      }).then((result) => {
         this.commitOfServer = result.data;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

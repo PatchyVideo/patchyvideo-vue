@@ -74,13 +74,13 @@ export default {
     Footer,
     PostSingleVideo,
     PostMultiVideos,
-    PostIPFSVideo
+    PostIPFSVideo,
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       //默认打开的标签页
-      activeName: "first"
+      activeName: "first",
     };
   },
   created() {
@@ -90,7 +90,7 @@ export default {
     document.title = this.$t("title") + " - Patchyvideo";
   },
   mounted() {},
-  methods: {}
+  methods: {},
 };
 </script>
 

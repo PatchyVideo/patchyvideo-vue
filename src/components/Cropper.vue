@@ -72,7 +72,7 @@
     </el-dialog>
     <el-dialog :modal="false" :title="$t('upload_userphoto')" :visible.sync="dialogVisible" width="40%" top="30vh" :before-close="handleClose">
       <el-input v-if="isShowNetUp" v-model="imgNetUpUrl" :placeholder="$t('enter_url_prompt')" style="margin: 20px 0px 30px;"></el-input>
-      <span class="dialog-footer" style="text-align: center;margin: 20px 0px 30px;">
+      <span class="dialog-footer" style="text-align: center; margin: 20px 0px 30px;">
         <el-button v-if="!isShowNetUp" type="primary" @click="handleOpenFile()">{{ $t("from_file") }}</el-button>
         <el-button v-if="!isShowNetUp" type="primary" @click="showNetUp(true)">{{ $t("from_url") }}</el-button>
         <el-button v-if="isShowNetUp" @click="imgNetUrlup()">{{ $t("ok") }}</el-button>
@@ -100,7 +100,7 @@ import { VueCropper } from "vue-cropper";
 import { isImageFile, readFile } from "../static/js/upload.js"; // 见下文
 export default {
   components: {
-    VueCropper
+    VueCropper,
     // isImageFile,
     // isMaxFileSize,
     // readFile,
@@ -110,35 +110,35 @@ export default {
     // 最大上传文件的大小
     maxFileSize: {
       type: Number,
-      default: 2 // (MB)
+      default: 2, // (MB)
     },
     // 按钮文字
     buttonName: {
       type: String,
-      default: "Add Image"
+      default: "Add Image",
     },
     // 提示内容
     tips: {
       type: String,
-      default: ""
+      default: "",
     },
     // 图片裁剪比列
     fixedNumber: {
       type: Array,
       default: function() {
         return [];
-      }
+      },
     },
     // 图片文件分辨率的宽度
     width: {
       type: Number,
-      default: 460
+      default: 460,
     },
     // 图片文件分辨率的高度
     height: {
       type: Number,
-      default: 300
-    }
+      default: 300,
+    },
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -170,8 +170,8 @@ export default {
         fixedNumber: this.fixedNumber,
         original: false,
         canMoveBox: true,
-        canMove: true
-      }
+        canMove: true,
+      },
     };
   },
   methods: {
@@ -205,9 +205,9 @@ export default {
         url: "be/helper/upload_image.do",
         data: formObj,
         processData: false,
-        contentType: false
+        contentType: false,
       })
-        .then(res => {
+        .then((res) => {
           if (res.data.status == "SUCCEED") {
             this.file_key = res.data.data.file_key;
             this.changePhtoto(this.file_key);
@@ -226,8 +226,8 @@ export default {
       this.axios({
         method: "post",
         url: "be/user/changephoto.do",
-        data: { file_key: key }
-      }).then(res => {
+        data: { file_key: key },
+      }).then((res) => {
         // this.getMyData();
         this.$emit("subUploadSucceed", this.url, true);
         let img = res.data.data;
@@ -236,7 +236,7 @@ export default {
         this.loading = false;
         this.$message({
           message: this.$t("upload_succeed"),
-          type: "success"
+          type: "success",
         });
         this.dialogVisible = false;
       });
@@ -249,9 +249,9 @@ export default {
       this.axios({
         method: "post",
         url: "/be/helper/upload_image_url.do",
-        data: { url: this.imgNetUpUrl, type: "userphoto" }
+        data: { url: this.imgNetUpUrl, type: "userphoto" },
       })
-        .then(res => {
+        .then((res) => {
           if (res.data.status === "SUCCEED") {
             this.file_key = res.data.data.file_key;
             this.changePhtoto(this.file_key);
@@ -330,7 +330,7 @@ export default {
     },
     // 封面上传功能
     uploadCover() {
-      this.$refs.cropper.getCropBlob(async imgRes => {
+      this.$refs.cropper.getCropBlob(async (imgRes) => {
         try {
           // 文件大小限制
           // if (!isMaxFileSize(imgRes, this.maxFileSize)) {
@@ -365,8 +365,8 @@ export default {
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
       // 字符串拼接 cookie
       window.document.cookie = "userAvatar" + "=" + username + ";path=/;expires=" + date.toGMTString();
-    }
-  }
+    },
+  },
 };
 </script>
 

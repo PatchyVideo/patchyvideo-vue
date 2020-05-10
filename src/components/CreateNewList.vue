@@ -72,7 +72,7 @@
       </el-form-item>
       <el-form-item>
         <el-checkbox v-model="list.private">{{ $t("set_as_private_playlist") }}</el-checkbox>
-        <a href="https://patchyvideo.wiki/Playlist" target="_blank" style="float:right">{{ $t("showListRules") }}</a>
+        <a href="https://patchyvideo.wiki/Playlist" target="_blank" style="float: right;">{{ $t("showListRules") }}</a>
       </el-form-item>
       <!-- 封面上传,暂时用不上 -->
       <el-form-item v-if="false">
@@ -88,7 +88,7 @@
         </el-upload>-->
       </el-form-item>
       <el-form-item class="createList">
-        <el-button type="primary" style="width:80%" @click="onSubmit">{{ $t("create_now") }}</el-button>
+        <el-button type="primary" style="width: 80%;" @click="onSubmit">{{ $t("create_now") }}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -101,8 +101,8 @@ export default {
     // 创建列表完成后是否需要跳转
     needGo: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -112,7 +112,7 @@ export default {
         title: "",
         desc: "",
         cover: "",
-        private: false
+        private: false,
       },
       // 校验数据
       rules: {
@@ -120,19 +120,19 @@ export default {
           {
             required: true,
             message: this.$t("no_title_prompt"),
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         desc: [
           {
             required: true,
             message: this.$t("no_desc_prompt"),
-            trigger: "blur"
-          }
-        ]
+            trigger: "blur",
+          },
+        ],
       },
       // 页面是否出于加载状态的标志
-      loading: false
+      loading: false,
     };
   },
   created() {},
@@ -150,7 +150,7 @@ export default {
       // 先使页面出于加载状态
       this.loading = true;
       // 表单验证
-      this.$refs.list.validate(async valid => {
+      this.$refs.list.validate(async (valid) => {
         if (valid) {
           await this.axios({
             method: "post",
@@ -159,10 +159,10 @@ export default {
               title: this.list.title,
               desc: this.list.desc,
               cover: this.list.cover,
-              private: this.list.private
-            }
+              private: this.list.private,
+            },
           })
-            .then(result => {
+            .then((result) => {
               // 提交失败的情况
               if (result.data.status == "FAILED") {
                 this.open(this.$t("create_failed"));
@@ -196,16 +196,16 @@ export default {
     open(message) {
       this.$message({
         message: message,
-        type: "error"
+        type: "error",
       });
     },
     open2(message) {
       this.$message({
         message: message,
-        type: "success"
+        type: "success",
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -120,18 +120,18 @@
             <h3>{{ $t("tag") }}</h3>
             <div class="tagBox">
               <p v-if="tags == ''">{{ $t("no_tag") }}</p>
-              <el-tag v-for="item in tags" v-else :key="item" effect="dark" style="margin-left:5px;margin-right:5px;margin-top:5px">{{ item }}</el-tag>
+              <el-tag v-for="item in tags" v-else :key="item" effect="dark" style="margin-left: 5px; margin-right: 5px; margin-top: 5px;">{{ item }}</el-tag>
             </div>
           </div>
         </div>
       </el-collapse-transition>
       <!-- 发布类型 -->
       <div class="RepostType">
-        <el-select v-model="RepostType" :placeholder="$t('choose_repost_type')" style="width:30%">
+        <el-select v-model="RepostType" :placeholder="$t('choose_repost_type')" style="width: 30%;">
           <el-option v-for="item in RepostTypes" :key="item.label" :label="item.label" :value="item.value"></el-option>
         </el-select>
         <!-- Wiki 链接 -->
-        <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color:#409EFF;float:right;margin-right:100px;margin-top:10px;">{{
+        <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color: #409eff; float: right; margin-right: 100px; margin-top: 10px;">{{
           $t("PostRules")
         }}</a>
       </div>
@@ -179,12 +179,12 @@ export default {
         { value: "official_repost", label: this.$t("official_repost") },
         {
           value: "authorized_translation",
-          label: this.$t("authorized_translation")
+          label: this.$t("authorized_translation"),
         },
         { value: "authorized_repost", label: this.$t("authorized_repost") },
         { value: "translation", label: this.$t("translation") },
         { value: "repost", label: this.$t("repost") },
-        { value: "unknown", label: this.$t("unknown") }
+        { value: "unknown", label: this.$t("unknown") },
       ],
       // 匹配短地址，用以扩展成完整地址
       EXPANDERS: {},
@@ -193,7 +193,7 @@ export default {
       //是否点击了上传视频按钮，如果点击了则置为真，使 Tag 组件返回 Tag 数据
       isReally: false,
       //重置子组件到初始状态
-      refreshMark: new Date()
+      refreshMark: new Date(),
     };
   },
   computed: {
@@ -228,7 +228,7 @@ export default {
       } else {
         return "";
       }
-    }
+    },
   },
   created() {},
   mounted() {
@@ -378,10 +378,10 @@ export default {
             method: "post",
             url: "/be/helper/get_ytb_info",
             data: {
-              url: responseURL
-            }
+              url: responseURL,
+            },
           })
-          .then(result => {
+          .then((result) => {
             let data = result.data;
             that.setVideoMetadata(data.data.thumbnailURL, data.data.title, data.data.desc);
             that.autotag(data.data.utags, data.data.title, data.data.desc);
@@ -398,10 +398,10 @@ export default {
             method: "post",
             url: "/be/helper/get_twitter_info",
             data: {
-              url: responseURL
-            }
+              url: responseURL,
+            },
           })
-          .then(result => {
+          .then((result) => {
             let data = result.data;
             that.setVideoMetadata(data.data.thumbnailURL, data.data.title, data.data.desc);
             that.autotag([], data.data.title, data.data.desc);
@@ -442,10 +442,10 @@ export default {
           utags: utags,
           title: title,
           desc: desc,
-          lang: localStorage.getItem("lang")
-        }
+          lang: localStorage.getItem("lang"),
+        },
       })
-        .then(result => {
+        .then((result) => {
           // 向编辑标签组件传送标签
           if (result.data.status == "SUCCEED") {
             // 获取到的标签与已有标签查重
@@ -553,7 +553,7 @@ export default {
     openSuccessfully() {
       this.$message({
         message: this.$t("url_passed"),
-        type: "success"
+        type: "success",
       });
     },
     // URL 验证失败的弹出框
@@ -596,7 +596,7 @@ export default {
       if (referrer) {
         header = JSON.stringify({
           Referer: referrer,
-          "User-Agent": user_agent
+          "User-Agent": user_agent,
         });
       } else {
         header = JSON.stringify({ "User-Agent": user_agent });
@@ -611,7 +611,7 @@ export default {
         url: url,
         success: success,
         error: error,
-        complete: complete
+        complete: complete,
       });
     },
     // 匹配视频数据
@@ -671,10 +671,10 @@ export default {
           copy: this.copy,
           url: this.VideoURL,
           tags: this.tags,
-          repost_type: this.RepostType
-        }
+          repost_type: this.RepostType,
+        },
       })
-        .then(result => {
+        .then((result) => {
           if (result.data.status == "SUCCEED") {
             this.open4();
             this.show = false;
@@ -726,28 +726,28 @@ export default {
     open2() {
       this.$message({
         message: this.$t("post_failed"),
-        type: "error"
+        type: "error",
       });
     },
     open3(errorTag) {
       this.$message({
         message: this.$t("tag_not_exist", { tag: errorTag }),
-        type: "error"
+        type: "error",
       });
     },
     open4() {
       this.$message({
         message: this.$t("post_succeed"),
-        type: "success"
+        type: "success",
       });
     },
     open5() {
       this.$message({
         message: this.$t("unknown_error"),
-        type: "error"
+        type: "error",
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

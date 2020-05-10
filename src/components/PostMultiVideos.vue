@@ -69,7 +69,7 @@
       <div v-if="false" class="tagsEdit">
         <h3>{{ $t("tag") }}</h3>
         <div class="tagBox">
-          <p v-if="tags == ''" style="margin-bottom:10px;">{{ $t("no_tag") }}</p>
+          <p v-if="tags == ''" style="margin-bottom: 10px;">{{ $t("no_tag") }}</p>
           <el-tag v-for="item in tags" v-else :key="item" effect="dark">{{ item }}</el-tag>
         </div>
       </div>
@@ -79,11 +79,13 @@
         <i v-if="!advancedOptions" class="el-icon-caret-bottom"></i>
         <i v-else class="el-icon-caret-top"></i>
         <!-- Wiki链接 -->
-        <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color:#409EFF;float:right;margin-right:100px;margin-top:0px;">{{ $t("PostRules") }}</a>
+        <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color: #409eff; float: right; margin-right: 100px; margin-top: 0px;">{{
+          $t("PostRules")
+        }}</a>
       </p>
-      <el-collapse-transition style="margin-bottom:20px">
+      <el-collapse-transition style="margin-bottom: 20px;">
         <div v-show="advancedOptions" class="options">
-          <el-checkbox v-model="as_copies" style="margin-top:10px">{{ $t("mutually_copies") }}</el-checkbox>
+          <el-checkbox v-model="as_copies" style="margin-top: 10px;">{{ $t("mutually_copies") }}</el-checkbox>
         </div>
       </el-collapse-transition>
       <!-- 上传视频的按钮 -->
@@ -118,7 +120,7 @@ export default {
       // 是否互为副本
       as_copies: false,
       // 是否显示高级选项的标志
-      advancedOptions: false
+      advancedOptions: false,
     };
   },
   computed: {
@@ -145,7 +147,7 @@ export default {
       } else {
         return "";
       }
-    }
+    },
   },
   created() {},
   mounted() {},
@@ -174,9 +176,9 @@ export default {
           copy: this.copy,
           videos: videos,
           tags: this.tags,
-          as_copies: this.as_copies
-        }
-      }).then(result => {
+          as_copies: this.as_copies,
+        },
+      }).then((result) => {
         if (result.data.status == "SUCCEED") {
           this.open4();
         } else if (result.data.status == "FAILED") {
@@ -196,28 +198,28 @@ export default {
     open2() {
       this.$message({
         message: this.$t("post_failed"),
-        type: "error"
+        type: "error",
       });
     },
     open3(errorTag) {
       this.$message({
         message: this.$t("tag_not_exist", { tag: errorTag }),
-        type: "error"
+        type: "error",
       });
     },
     open4() {
       this.$message({
         message: this.$t("post_succeed"),
-        type: "success"
+        type: "success",
       });
     },
     open5() {
       this.$message({
         message: this.$t("unknown_error"),
-        type: "error"
+        type: "error",
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

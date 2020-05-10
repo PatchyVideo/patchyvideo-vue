@@ -131,7 +131,7 @@ export default {
       Language_count: 0,
       SoundtrackObj_count: 0,
 
-      loading: true // 读取状态
+      loading: true, // 读取状态
     };
   },
   watch: {
@@ -144,7 +144,7 @@ export default {
     },
     count() {
       this.getData(this.page, this.count);
-    }
+    },
   },
   created() {
     this.getMaxCount();
@@ -170,10 +170,10 @@ export default {
           data: {
             page: 1,
             page_size: 20,
-            lang: localStorage.getItem("lang")
-          }
+            lang: localStorage.getItem("lang"),
+          },
         })
-          .then(result => {
+          .then((result) => {
             this.TagData = result.data.data.tags;
             this.videoData = result.data.data.videos;
             this.getTagCategories();
@@ -191,10 +191,10 @@ export default {
             page: 1,
             page_size: 20,
             uid: this.$route.params.id,
-            lang: localStorage.getItem("lang")
-          }
+            lang: localStorage.getItem("lang"),
+          },
         })
-          .then(result => {
+          .then((result) => {
             this.TagData = result.data.data.tags;
 
             this.videoData = result.data.data.videos;
@@ -216,10 +216,10 @@ export default {
           data: {
             page: e,
             page_size: count,
-            lang: localStorage.getItem("lang")
-          }
+            lang: localStorage.getItem("lang"),
+          },
         })
-          .then(result => {
+          .then((result) => {
             this.TagData = result.data.data.tags;
             this.videoData = result.data.data.videos;
             this.getTagCategories();
@@ -237,10 +237,10 @@ export default {
             page: e,
             page_size: count,
             uid: this.$route.params.id,
-            lang: localStorage.getItem("lang")
-          }
+            lang: localStorage.getItem("lang"),
+          },
         })
-          .then(result => {
+          .then((result) => {
             this.TagData = result.data.data.tags;
 
             this.videoData = result.data.data.videos;
@@ -259,7 +259,7 @@ export default {
       for (let i in this.TagData) {
         AarryAll.push({
           value: this.TagData[i].count,
-          name: this.TagData[i].tag
+          name: this.TagData[i].tag,
         });
         Aarryname.push(this.TagData[i].tag);
       }
@@ -269,16 +269,16 @@ export default {
         method: "post",
         url: "be/tags/query_tag_categories.do",
         data: {
-          tags: Aarryname
-        }
-      }).then(result => {
+          tags: Aarryname,
+        },
+      }).then((result) => {
         this.totallNum(result.data.data.categorie_map);
         this.drawLine();
       });
     },
     getcount(name) {
       // 统计计数
-      return this.TagData.filter(element => {
+      return this.TagData.filter((element) => {
         if (element.tag == name) {
           return element.count;
         }
@@ -349,47 +349,47 @@ export default {
             {
               name: "General",
               // value: this.General_count,
-              children: this.GeneralObj
+              children: this.GeneralObj,
             },
             {
               name: "Character",
               // value: this.Character_count,
-              children: this.CharacterObj
+              children: this.CharacterObj,
             },
             {
               name: "Copyright",
               // value: this.Copyright_count,
-              children: this.CopyrightObj
+              children: this.CopyrightObj,
             },
             {
               name: "Author",
               // value: this.Author_count,
-              children: this.AuthorObj
+              children: this.AuthorObj,
             },
             {
               name: "Meta",
               // value: this.Meta_count,
-              children: this.MetaObj
+              children: this.MetaObj,
             },
             {
               name: "Language",
               // value: this.Meta_count,
-              children: this.LanguageObj
+              children: this.LanguageObj,
             },
             {
               name: "Soundtrack",
               // value: this.Meta_count,
-              children: this.SoundtrackObj
-            }
-          ]
-        }
+              children: this.SoundtrackObj,
+            },
+          ],
+        },
       });
     },
     changeLine() {
       // 切换视频排列顺序
       this.flag = !this.flag;
-    }
-  }
+    },
+  },
 };
 </script>
 

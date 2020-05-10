@@ -90,13 +90,13 @@ export default {
       // 标签种类
       tagCategories: [],
       // 打开标签的序号
-      activeName: "0"
+      activeName: "0",
     };
   },
   computed: {
     aqwe() {
       return "asda";
-    }
+    },
   },
   mounted() {
     // 初始化页面名为 home
@@ -112,16 +112,16 @@ export default {
       this.axios({
         method: "post",
         url: "be/tags/query_categories.do",
-        data: {}
-      }).then(result => {
+        data: {},
+      }).then((result) => {
         let categories = result.data.data.categories;
         for (let i = 0; i < categories.length; i++) {
           this.tagCategories.push(categories[i].name);
         }
         this.loading = false;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

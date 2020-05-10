@@ -130,8 +130,10 @@
           <el-checkbox v-model="playlist_metadata.private">{{ $t("edit_list_info_dialog.set_private_list") }}</el-checkbox>
         </el-form-item>
         <el-form-item class="createList">
-          <el-button type="primary" style="width:80%" :loading="loading" @click="onSubmit">{{ $t("edit_list_info_dialog.btn_ok") }}</el-button>
-          <el-button style="width:80%;margin-top:10px;margin-left:0px" @click="openListEdit = false">{{ $t("edit_list_info_dialog.btn_cancel") }}</el-button>
+          <el-button type="primary" style="width: 80%;" :loading="loading" @click="onSubmit">{{ $t("edit_list_info_dialog.btn_ok") }}</el-button>
+          <el-button style="width: 80%; margin-top: 10px; margin-left: 0px;" @click="openListEdit = false">{{
+            $t("edit_list_info_dialog.btn_cancel")
+          }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -161,7 +163,7 @@
             <!--<img src="../static/img/5.png" style="float:left;margin-top:50px;" />
             <img src="../static/img/1.png" style="float:right;margin-top:50px;" />-->
             <h2>{{ videolistName }}</h2>
-            <img :src="'/images/covers/' + videolistDetail.playlist.cover" style="min-height:200px" />
+            <img :src="'/images/covers/' + videolistDetail.playlist.cover" style="min-height: 200px;" />
             <p>{{ videolistDesc }}</p>
           </div>
           <!-- 打开 Tag 编辑页面 -->
@@ -214,7 +216,7 @@
                   <router-link
                     :to="{
                       path: './postvideo',
-                      query: getInsertData(item)
+                      query: getInsertData(item),
                     }"
                     class="insert-video"
                   >
@@ -228,11 +230,11 @@
                 <h4 v-if="item.item.part_name">P{{ item.item.url.slice(item.item.url.indexOf("=") + 1, item.item.url.length) }}:{{ item.item.part_name }}</h4>
                 <p>{{ item.item.desc }}</p>
                 <div>
-                  <img :src="require('../static/img/' + item.item.site + '.png')" width="16px" style="margin-right:2px" />
+                  <img :src="require('../static/img/' + item.item.site + '.png')" width="16px" style="margin-right: 2px;" />
                   <a :href="item.item.url">
                     {{ item.item.url }}
                   </a>
-                  <i class="fa fa-copy fa-lg" style="margin-left:2px" @click="copyVideoLink(item.item.url)"></i>
+                  <i class="fa fa-copy fa-lg" style="margin-left: 2px;" @click="copyVideoLink(item.item.url)"></i>
                 </div>
               </div>
               <div v-if="editable" class="item_end">
@@ -289,7 +291,7 @@ export default {
     ListFolderView,
     SetCover,
     Comments,
-    Score
+    Score,
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -299,13 +301,13 @@ export default {
         title: "",
         desc: "",
         cover: "",
-        private: false
+        private: false,
       },
       // 视频列表的详细信息
       videolistDetail: {
         playlist: {
-          cover: ""
-        }
+          cover: "",
+        },
       },
       // 判断是否登录
       isLogin: false,
@@ -345,25 +347,25 @@ export default {
           {
             required: true,
             message: this.$t("edit_list_info_dialog.list_title_err_tip"),
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         desc: [
           {
             required: true,
             message: this.$t("edit_list_info_dialog.list_introduction_err_tip"),
-            trigger: "blur"
-          }
-        ]
+            trigger: "blur",
+          },
+        ],
       },
       // 播放列表目录页面是否显示
-      showListFolder: false
+      showListFolder: false,
     };
   },
   computed: {
     f1() {
       return this.$store.state.refreshCount;
-    }
+    },
   },
   watch: {
     page() {
@@ -374,7 +376,7 @@ export default {
     },
     f1() {
       this.getVideoList(this.page, this.count);
-    }
+    },
   },
   mounted() {
     // 查看是否登录
@@ -388,7 +390,7 @@ export default {
     getInsertData(e) {
       let obj = {
         pid: this.videolistPid,
-        rank: e.rank
+        rank: e.rank,
       };
       return obj;
     },
@@ -399,7 +401,7 @@ export default {
         pid: this.videolistPid,
         vid: e._id.$oid,
         page: this.page,
-        page_size: this.maxcount
+        page_size: this.maxcount,
       };
 
       return obj;
@@ -420,9 +422,9 @@ export default {
       this.axios({
         method: "post",
         url: "be/lists/get_playlist.do",
-        data: { page: e, page_size: count, pid: this.$route.query.id }
+        data: { page: e, page_size: count, pid: this.$route.query.id },
       })
-        .then(result => {
+        .then((result) => {
           // 请求失败的情况
           if (result.data.status == "FAILED") {
             // 列表不存在的情况，跳转到 404 页面
@@ -451,9 +453,9 @@ export default {
             method: "post",
             url: "be/lists/get_playlist_metadata.do",
             data: {
-              pid: this.videolistPid
-            }
-          }).then(result => {
+              pid: this.videolistPid,
+            },
+          }).then((result) => {
             this.playlist_metadata.title = result.data.data.playlist.title.english;
             this.playlist_metadata.desc = result.data.data.playlist.desc.english;
             this.playlist_metadata.private = result.data.data.playlist.private;
@@ -475,7 +477,7 @@ export default {
     // 复制视频连接
     copyVideoLink: function(url) {
       this.$alert("视频链接复制" + (copyToClipboardText(url) ? "成功！" : "失败！"), "分享链接", {
-        confirmButtonText: "确定"
+        confirmButtonText: "确定",
       });
     },
     // 添加视频
@@ -484,8 +486,8 @@ export default {
         path: "./postvideo",
         query: {
           pid: this.videolistPid,
-          rank: -1
-        }
+          rank: -1,
+        },
       });
     },
     // 从其他网站的收藏夹导入视频
@@ -494,8 +496,8 @@ export default {
         path: "./createVideoList",
         query: {
           pid: this.videolistPid,
-          exist: 1
-        }
+          exist: 1,
+        },
       });
     },
     // 提交视频详情修改数据
@@ -508,8 +510,8 @@ export default {
           pid: this.videolistPid,
           title: this.playlist_metadata.title,
           desc: this.playlist_metadata.desc,
-          private: this.playlist_metadata.private
-        }
+          private: this.playlist_metadata.private,
+        },
       }).then(() => {
         this.open(this.$t("commit_tip"));
         this.openListEdit = false;
@@ -523,8 +525,8 @@ export default {
         method: "post",
         url: "/be/list/inverse.do",
         data: {
-          pid: this.videolistPid
-        }
+          pid: this.videolistPid,
+        },
       }).then(() => {
         this.open(this.$t("oper_tip"));
         this.getVideoList();
@@ -536,8 +538,8 @@ export default {
         method: "post",
         url: "be/lists/del_playlist.do",
         data: {
-          pid: this.videolistPid
-        }
+          pid: this.videolistPid,
+        },
       }).then(() => {
         this.open(this.$t("delete_tip"));
         this.$router.push({ path: "/lists" });
@@ -556,10 +558,10 @@ export default {
     open(message) {
       this.$message({
         message: message,
-        type: "success"
+        type: "success",
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

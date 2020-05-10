@@ -165,9 +165,9 @@ export default {
         method: "post",
         url: "be/user/exists.do",
         data: {
-          username: value
-        }
-      }).then(result => {
+          username: value,
+        },
+      }).then((result) => {
         if (result.data.data == true) {
           callback(new Error(this.$t("account_limit")));
         } else {
@@ -189,7 +189,7 @@ export default {
         signup_username: "",
         signup_password1: "",
         signup_password2: "",
-        signup_email: ""
+        signup_email: "",
       },
       // 事先向服务器请求的 session 值
       session: "",
@@ -198,34 +198,34 @@ export default {
           {
             required: true,
             message: this.$t("input_account"),
-            trigger: "blur"
+            trigger: "blur",
           },
           { validator: checkUsername, trigger: "blur" },
           {
             min: 2,
             max: 32,
             message: this.$t("account_limit"),
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         signup_password1: [
           { required: true, message: this.$t("input_psd"), trigger: "blur" },
-          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" }
+          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" },
         ],
         signup_password2: [
           { required: true, message: "请重复密码", trigger: "blur" },
           { validator: validatePass2, trigger: "blur" },
-          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" }
+          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" },
         ],
         signup_email: [
           { required: false, message: this.$t("input_email"), trigger: "blur" },
-          { type: "email", message: this.$t("email_limit"), trigger: ["blur"] }
-        ]
+          { type: "email", message: this.$t("email_limit"), trigger: ["blur"] },
+        ],
       },
       // 登录状态
       status: this.$t("ready"),
       // 视频列表是否属于加载状态的判断
-      loading: false
+      loading: false,
     };
   },
   created() {
@@ -238,21 +238,21 @@ export default {
     open2() {
       this.$message({
         message: this.$t("signup_success"),
-        type: "success"
+        type: "success",
       });
     },
 
     open3() {
       this.$message({
         message: this.$t("username_exist"),
-        type: "warning"
+        type: "warning",
       });
     },
 
     open4() {
       this.$message({
         message: this.$t("unknown_err"),
-        type: "warning"
+        type: "warning",
       });
     },
 
@@ -262,16 +262,16 @@ export default {
       this.loading = true;
 
       // 表单验证
-      this.$refs.signupFormRef.validate(valid => {
+      this.$refs.signupFormRef.validate((valid) => {
         if (valid) {
           // 验证成功，先获取 session
           this.axios({
             method: "post",
             url: "be/auth/get_session.do",
             data: {
-              type: "SIGNUP"
-            }
-          }).then(result => {
+              type: "SIGNUP",
+            },
+          }).then((result) => {
             this.session = result.data.data;
 
             // 请求登录
@@ -282,9 +282,9 @@ export default {
                 username: this.signupFormRef.signup_username,
                 password: this.signupFormRef.signup_password1,
                 email: this.signupFormRef.signup_email,
-                session: this.session
-              }
-            }).then(result => {
+                session: this.session,
+              },
+            }).then((result) => {
               if (result.status == 200) {
                 if (result.data.status == "SUCCEED") {
                   this.open2();
@@ -315,8 +315,8 @@ export default {
           return false;
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

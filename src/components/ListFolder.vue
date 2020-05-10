@@ -146,8 +146,8 @@
           <el-input v-model="newFolderForm.name" :placeholder="$t('name')"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="width:80%" :loading="loading" @click="createFolder">{{ $t("add") }}</el-button>
-          <el-button style="width:80%;margin-top:10px;margin-left:0px" @click="showNewFolderDialog = false">{{ $t("cancel") }}</el-button>
+          <el-button type="primary" style="width: 80%;" :loading="loading" @click="createFolder">{{ $t("add") }}</el-button>
+          <el-button style="width: 80%; margin-top: 10px; margin-left: 0px;" @click="showNewFolderDialog = false">{{ $t("cancel") }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -164,8 +164,8 @@
           <el-input v-model="renameFolderForm.name" :placeholder="$t('name')"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="width:80%" :loading="loading" @click="renameFolder">{{ $t("rename") }}</el-button>
-          <el-button style="width:80%;margin-top:10px;margin-left:0px" @click="showRenameFolderDialog = false">{{ $t("cancel") }}</el-button>
+          <el-button type="primary" style="width: 80%;" :loading="loading" @click="renameFolder">{{ $t("rename") }}</el-button>
+          <el-button style="width: 80%; margin-top: 10px; margin-left: 0px;" @click="showRenameFolderDialog = false">{{ $t("cancel") }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -173,22 +173,22 @@
     <el-button @click="copyPathLink">{{ $t("copy_folder_addr") }}</el-button>
     <el-breadcrumb separator="/">
       <el-breadcrumb-item v-for="i in toNavigablePath()" :key="i.dst">
-        <a style="font-size: 21px" @click="navigateTo(i.dst)">{{ i.name }}</a>
+        <a style="font-size: 21px;" @click="navigateTo(i.dst)">{{ i.name }}</a>
       </el-breadcrumb-item>
     </el-breadcrumb>
     <el-row v-if="this.$route.params.id != 'me'">
-      <el-col style="width: 100%">
+      <el-col style="width: 100%;">
         <div class="folder-view">
           <el-container>
             <el-aside :style="{ width: asideWidth + 'px', position: 'relative', cursor: 'e-resize' }">
-              <div class="asaide-shelter" style="position: absolute;width: 99%;height: 100%;cursor: default"></div>
+              <div class="asaide-shelter" style="position: absolute; width: 99%; height: 100%; cursor: default;"></div>
               <el-tree
                 ref="folderTree"
                 node-key="path"
                 :props="props"
                 :load="loadNode"
                 :expand-on-click-node="false"
-                style="width: 100%"
+                style="width: 100%;"
                 lazy
                 @node-click="handleTreeNodeClick"
               ></el-tree>
@@ -200,7 +200,12 @@
               </el-switch>-->
             </el-aside>
             <el-main>
-              <el-table ref="currentFolderTable" :data="currentFolderChildrens" style="width: 100%" @selection-change="handleCurrentFolderTableSelectionChange">
+              <el-table
+                ref="currentFolderTable"
+                :data="currentFolderChildrens"
+                style="width: 100%;"
+                @selection-change="handleCurrentFolderTableSelectionChange"
+              >
                 <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column :label="$t('cover')" width="180" height="100">
                   <template slot-scope="scope">
@@ -252,18 +257,18 @@
       </el-col>
     </el-row>
     <el-row v-if="this.$route.params.id == 'me'">
-      <el-col style="width: 60%">
+      <el-col style="width: 60%;">
         <div class="folder-view">
           <el-container>
             <el-aside :style="{ width: asideWidth + 'px', position: 'relative', cursor: 'e-resize' }">
-              <div class="asaide-shelter" style="position: absolute;width: 97%;height: 100%;cursor: default"></div>
+              <div class="asaide-shelter" style="position: absolute; width: 97%; height: 100%; cursor: default;"></div>
               <el-tree
                 ref="folderTree"
                 node-key="path"
                 :props="props"
                 :load="loadNode"
                 :expand-on-click-node="false"
-                style="width: 190px"
+                style="width: 190px;"
                 lazy
                 @node-click="handleTreeNodeClick"
               ></el-tree>
@@ -272,7 +277,7 @@
                 v-model="currentFolderObject.privateView"
                 :active-text="$t('private')"
                 :inactive-text="$t('public')"
-                style="width: 97%;cursor: default;"
+                style="width: 97%; cursor: default;"
                 @change="handleCurrentFolderPrivateViewChanged"
               ></el-switch>
               <!--<el-switch
@@ -291,7 +296,12 @@
               <!--<div v-if="loggedIn && editable" class="operations">
                 <el-button type="primary" round @click="addToCurrectFolder" :disabled="this.currentSelectedPlaylists.length == 0">添加至当前目录</el-button>
               </div>-->
-              <el-table ref="currentFolderTable" :data="currentFolderChildrens" style="width: 100%" @selection-change="handleCurrentFolderTableSelectionChange">
+              <el-table
+                ref="currentFolderTable"
+                :data="currentFolderChildrens"
+                style="width: 100%;"
+                @selection-change="handleCurrentFolderTableSelectionChange"
+              >
                 <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column :label="$t('cover')" width="180" height="100" align="center">
                   <template slot-scope="scope">
@@ -342,7 +352,7 @@
         </div>
       </el-col>
 
-      <el-col v-if="loggedIn && editable" style="width: 40%">
+      <el-col v-if="loggedIn && editable" style="width: 40%;">
         <div class="raw-playlist">
           <div id="select-order" class="head">
             <el-input
@@ -359,7 +369,7 @@
             </el-select>
           </div>
           <el-switch v-model="showMyPlaylistsOnly" :active-text="$t('my_playlist')" :inactive-text="$t('all')"></el-switch>
-          <el-table ref="rawPlaylists" :data="currentPlaylists" style="width: 100%" @selection-change="handlePlaylistTableSelectionChange">
+          <el-table ref="rawPlaylists" :data="currentPlaylists" style="width: 100%;" @selection-change="handlePlaylistTableSelectionChange">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column :label="$t('cover')" width="180" height="100" align="center">
               <template slot-scope="scope">
@@ -428,7 +438,7 @@ export default {
           (Array(2).join(0) + s).slice(-2)
         );
       }
-    }
+    },
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -442,7 +452,7 @@ export default {
       // for folder view
       props: {
         label: "name",
-        isLeaf: "leaf"
+        isLeaf: "leaf",
       },
       currentFolderChildrens: [],
       currentFolderObject: { privateView: false },
@@ -452,14 +462,14 @@ export default {
       showNewFolderDialog: false,
       showRenameFolderDialog: false,
       newFolderForm: {
-        name: ""
+        name: "",
       },
       renameFolderForm: {
         name: "",
-        row: null
+        row: null,
       },
       folderNameRules: {
-        name: [{ required: true, message: this.$t("input_name"), trigger: "blur" }]
+        name: [{ required: true, message: this.$t("input_name"), trigger: "blur" }],
       },
       priavteView: false,
 
@@ -475,8 +485,8 @@ export default {
       playlistOrderOptions: [
         { value: "latest", label: this.$t("latest") },
         { value: "oldest", label: this.$t("oldest") },
-        { value: "last_modified", label: this.$t("last_modified") }
-      ]
+        { value: "last_modified", label: this.$t("last_modified") },
+      ],
     };
   },
   watch: {
@@ -491,7 +501,7 @@ export default {
     },
     showMyPlaylistsOnly() {
       this.loadCurrentPlaylists();
-    }
+    },
   },
   created() {
     this.loggedIn = JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "";
@@ -505,7 +515,7 @@ export default {
     let asideObj = this.$refs.aside.getElementsByClassName("el-aside")[0];
     let _that = this;
 
-    asideObj.onmousedown = e => {
+    asideObj.onmousedown = (e) => {
       const disX = e.clientX;
       const asideWidth = parseInt(asideObj.style.width);
       let asideBorder = parseInt(asideObj.style.width) * 0.99;
@@ -535,7 +545,7 @@ export default {
             name: obj[i].name,
             leaf: false,
             path: obj[i].path,
-            children: []
+            children: [],
           });
         }
       }
@@ -551,10 +561,10 @@ export default {
         url: "be/folder/view",
         data: {
           path: node.data.path,
-          uid: this.user_id
+          uid: this.user_id,
         },
-        withCredentials: true
-      }).then(result => {
+        withCredentials: true,
+      }).then((result) => {
         result = result.data;
         if (result.status == "SUCCEED") {
           resolve(this.folderObjectToTreeNode(result.data.children));
@@ -575,10 +585,10 @@ export default {
         url: "be/folder/view",
         data: {
           path: this.currentPath,
-          uid: this.user_id
+          uid: this.user_id,
         },
-        withCredentials: true
-      }).then(result => {
+        withCredentials: true,
+      }).then((result) => {
         result = result.data;
         if (result.status == "SUCCEED") {
           this.currentFolderChildrens = result.data.children;
@@ -588,7 +598,7 @@ export default {
             if (this.$route.params.id != "me") {
               this.$router.push({
                 path: `/users/${this.user_id}/`,
-                query: { path: this.currentPath }
+                query: { path: this.currentPath },
               });
               // this.$router.push(`/users/${this.user_id}/${path}`);
             }
@@ -620,21 +630,21 @@ export default {
         return [
           {
             dst: "/",
-            name: "root"
-          }
+            name: "root",
+          },
         ];
       } else {
         let result = [];
         let priorPath = "/";
         result.push({
           dst: priorPath,
-          name: "root"
+          name: "root",
         });
         for (let i = 0; i < paths.length; ++i) {
           priorPath += paths[i] + "/";
           let curObj = {
             dst: priorPath,
-            name: paths[i]
+            name: paths[i],
           };
           result.push(curObj);
         }
@@ -652,9 +662,9 @@ export default {
         data: {
           path: this.currentPath,
           private_edit: this.currentFolderObject.privateEdit,
-          private_view: this.currentFolderObject.privateView
+          private_view: this.currentFolderObject.privateView,
         },
-        withCredentials: true
+        withCredentials: true,
       });
     },
 
@@ -666,17 +676,17 @@ export default {
         url: "be/folder/create",
         data: {
           root: this.currentPath,
-          name: folderName
+          name: folderName,
         },
-        withCredentials: true
-      }).then(result => {
+        withCredentials: true,
+      }).then((result) => {
         result = result.data;
         if (result.status == "SUCCEED") {
           this.showNewFolderDialog = false;
           this.newFolderForm.name = "";
           this.$message({
             message: this.$t("create_success"),
-            type: "success"
+            type: "success",
           });
           this.refreshCurrentFolder();
           const curTreeNode = this.$refs.folderTree.getNode(this.currentPath);
@@ -685,7 +695,7 @@ export default {
               name: folderName,
               path: this.currentPath + folderName + "/",
               leaf: false,
-              children: []
+              children: [],
             });
           }
         } else {
@@ -703,21 +713,21 @@ export default {
       this.loading = true;
       if (this.currentSelectedItems) {
         let pathsToDelete = [];
-        this.currentSelectedItems.forEach(obj => {
+        this.currentSelectedItems.forEach((obj) => {
           if (typeof obj.playlist_object == "undefined") pathsToDelete.push(obj.path);
         });
         let pidsToDelete = [];
-        this.currentSelectedItems.forEach(obj => {
+        this.currentSelectedItems.forEach((obj) => {
           if (typeof obj.playlist_object !== "undefined") pidsToDelete.push(obj.playlist_object._id.$oid);
         });
         this.axios({
           method: "post",
           url: "be/folder/delete_many",
           data: {
-            paths: pathsToDelete
+            paths: pathsToDelete,
           },
-          withCredentials: true
-        }).then(result => {
+          withCredentials: true,
+        }).then((result) => {
           result = result.data;
           if (result.status == "SUCCEED") {
             for (let i = 0; i < pathsToDelete.length; ++i) {
@@ -729,9 +739,9 @@ export default {
               url: "be/folder/del_pid",
               data: {
                 path: this.currentPath,
-                pids: pidsToDelete
+                pids: pidsToDelete,
               },
-              withCredentials: true
+              withCredentials: true,
             }).then(() => {
               this.$message.success(this.$t("del_success"));
               this.getFolder();
@@ -749,8 +759,8 @@ export default {
         this.axios({
           method: "post",
           url: "be/user/profile.do",
-          data: { uid: this.user_id }
-        }).then(res => {
+          data: { uid: this.user_id },
+        }).then((res) => {
           uid = res.data.data._id.$oid;
           const url = `https://patchyvideo.com/#/users/${uid}?path=${this.currentPath}`;
           copyToClipboardText(url);
@@ -775,10 +785,10 @@ export default {
             page: this.currentPlaylistPage,
             page_size: this.currentPlaylistPageSize,
             order: this.currentPlaylistOrder,
-            query: this.currentPlaylistSearchTerm
+            query: this.currentPlaylistSearchTerm,
           },
-          withCredentials: true
-        }).then(result => {
+          withCredentials: true,
+        }).then((result) => {
           result = result.data;
           if (result.status == "SUCCEED") {
             this.allPlaylistsCount = result.data.count;
@@ -798,10 +808,10 @@ export default {
             page: this.currentPlaylistPage,
             page_size: this.currentPlaylistPageSize,
             order: this.currentPlaylistOrder,
-            query: this.currentPlaylistSearchTerm
+            query: this.currentPlaylistSearchTerm,
           },
-          withCredentials: true
-        }).then(result => {
+          withCredentials: true,
+        }).then((result) => {
           result = result.data;
           if (result.status == "SUCCEED") {
             this.allPlaylistsCount = result.data.count;
@@ -815,7 +825,7 @@ export default {
     addToCurrectFolder() {
       this.loading = true;
       let pidsToAdd = [];
-      this.currentSelectedPlaylists.forEach(obj => {
+      this.currentSelectedPlaylists.forEach((obj) => {
         pidsToAdd.push(obj._id.$oid);
       });
       this.axios({
@@ -823,11 +833,11 @@ export default {
         url: "be/folder/add_pid",
         data: {
           path: this.currentPath,
-          pids: pidsToAdd
+          pids: pidsToAdd,
         },
-        withCredentials: true
+        withCredentials: true,
       })
-        .then(result => {
+        .then((result) => {
           result = result.data;
           if (result.status == "SUCCEED") {
             this.$message.success(this.$t("add_sucess"));
@@ -849,10 +859,10 @@ export default {
         url: "be/folder/rename",
         data: {
           path: row.path,
-          new_name: this.renameFolderForm.name
+          new_name: this.renameFolderForm.name,
         },
-        withCredentials: true
-      }).then(result => {
+        withCredentials: true,
+      }).then((result) => {
         result = result.data;
         if (result.status == "SUCCEED") {
           this.showRenameFolderDialog = false;
@@ -865,7 +875,7 @@ export default {
                 name: this.renameFolderForm.name,
                 path: result.data,
                 leaf: false,
-                children: []
+                children: [],
               });
             }
           });
@@ -883,8 +893,8 @@ export default {
       this.renameFolderForm.name = row.name;
       this.renameFolderForm.row = row;
       this.showRenameFolderDialog = true;
-    }
-  }
+    },
+  },
 };
 </script>
 

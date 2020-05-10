@@ -51,13 +51,13 @@
 <template>
   <div>
     <div class="tag-box">
-      <el-tag key style="margin: 0 5px" :type="visibleSites.includes('') ? '' : 'info'" @click="e => onSitesChange()">全部</el-tag>
+      <el-tag key style="margin: 0 5px;" :type="visibleSites.includes('') ? '' : 'info'" @click="(e) => onSitesChange()">全部</el-tag>
       <el-tag
         v-for="item in allSites"
         :key="item.id"
-        style="margin: 0 5px"
+        style="margin: 0 5px;"
         :type="visibleSites.includes(item.id) ? '' : 'info'"
-        @click="e => onSitesChange(item.id)"
+        @click="(e) => onSitesChange(item.id)"
         >{{ item.label }}</el-tag
       >
     </div>
@@ -88,7 +88,7 @@
               </a>
               <div class="video-detail">
                 <div class="title-div">
-                  <img :src="require('../../static/img/' + item.item.site + '.png')" width="16px" style="margin-right:2px;display:inline;" />
+                  <img :src="require('../../static/img/' + item.item.site + '.png')" width="16px" style="margin-right: 2px; display: inline;" />
                   <h4>
                     <router-link target="_blank" :title="item.item.title" :to="{ path: '/video', query: { id: item._id.$oid } }" tag="a">{{
                       item.item.title
@@ -154,7 +154,7 @@ export default {
         { value: "latest", label: this.$t("latest") },
         { value: "oldest", label: this.$t("oldest") },
         { value: "video_latest", label: this.$t("latest_video") },
-        { value: "video_oldest", label: this.$t("oldest_video") }
+        { value: "video_oldest", label: this.$t("oldest_video") },
       ],
       // 当前视频列表的排列顺序
       couponSelected: "",
@@ -194,9 +194,9 @@ export default {
         { label: "Acfun", id: "acfun" },
         { label: "站酷", id: "zcool" },
         { label: "IPFS", id: "ipfs" },
-        { label: "weibo", id: "weibo-mobile" }
+        { label: "weibo", id: "weibo-mobile" },
       ],
-      screen_width: 1900
+      screen_width: 1900,
     };
   },
   computed: {
@@ -248,10 +248,10 @@ export default {
     },
     // B站分P视频的哪一P
     pageOfVideo() {
-      return url => {
+      return (url) => {
         return url.slice(url.indexOf("=") + 1, url.length);
       };
-    }
+    },
   },
   watch: {
     page() {
@@ -328,7 +328,7 @@ export default {
       if (newV.query.keyword != oldV.query.keyword || newV.query.qtype != oldV.query.qtype) {
         // 修改网站标题
         document.title = this.$t("search_result", {
-          result: newV.query.keyword
+          result: newV.query.keyword,
         });
         this.ifSearch = true;
         this.searchKeyWord = newV.query.keyword;
@@ -341,7 +341,7 @@ export default {
         this.getSearchData(this.page, this.count, newV.query.keyword);
         return;
       }
-    }
+    },
   },
   created() {
     this.screen_width = document.body.clientWidth;
@@ -386,7 +386,7 @@ export default {
     // 此外，此函数在其他页面也有调用，在优化的时候请注意其他页面的同步
     copyVideoLink: function(url) {
       this.$alert("视频链接复制" + (copyToClipboardText(url) ? "成功！" : "失败！"), "分享链接", {
-        confirmButtonText: "确定"
+        confirmButtonText: "确定",
       });
     },
     // 请求播放列表数据
@@ -413,9 +413,9 @@ export default {
           order: this.couponSelected,
           hide_placeholder: !this.checked,
           additional_constraint: sites,
-          lang: localStorage.getItem("lang")
-        }
-      }).then(result => {
+          lang: localStorage.getItem("lang"),
+        },
+      }).then((result) => {
         this.maxcount = result.data.data.count;
         // 取得总页数制作分页
         this.maxpage = Math.ceil(result.data.data.count / count);
@@ -433,7 +433,7 @@ export default {
         let ntags = {};
         tagswithcount = Object.keys(tagswithcount)
           .sort((a, b) => tagswithcount[b] - tagswithcount[a])
-          .forEach(key => {
+          .forEach((key) => {
             ntags[key] = tags[key];
           });
 
@@ -483,9 +483,9 @@ export default {
           query: str,
           qtype: this.$route.query.qtype,
           additional_constraint: sites,
-          lang: localStorage.getItem("lang")
-        }
-      }).then(result => {
+          lang: localStorage.getItem("lang"),
+        },
+      }).then((result) => {
         if (result.data.status == "SUCCEED") {
           this.maxcount = result.data.data.count;
           // 取得总页数制作分页
@@ -521,14 +521,14 @@ export default {
           if (result.data.data.reason == "INCORRECT_QUERY") {
             this.$message({
               message: this.$t("syntax_error"),
-              type: "error"
+              type: "error",
             });
           }
           // NOT使用错误的时候
           else if (result.data.data.reason == "FAILED_NOT_OP") {
             this.$message({
               message: this.$t("syntax_error_not"),
-              type: "error"
+              type: "error",
             });
           }
         }
@@ -610,8 +610,8 @@ export default {
       } else {
         return "此视频没有简介哦";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
