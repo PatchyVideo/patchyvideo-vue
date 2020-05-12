@@ -58,7 +58,6 @@
 
     <div class="tagpage">
       <div v-loading="loading" class="content">
-        {{ aqwe }}
         <!-- 每个标签种类的表单 -->
         <el-tabs v-model="activeName" type="border-card">
           <el-tab-pane v-for="(item, i) in tagCategories" :key="item" :lazy="true" :label="$t('tag_categories.' + item)" :name="i.toString()">
