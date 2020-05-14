@@ -1,40 +1,37 @@
+/* Vue */
 import Vue from "vue";
+
+/* App */
 import App from "./App.vue";
+
+/* Vue config */
+Vue.config.productionTip = false;
+
+/* Vue router */
 import router from "./router";
+
+/* Vuex */
 import store from "./store";
+
+/* Vue axios */
 import axios from "axios";
+// Vue.prototype.$axios = axios;
 import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
+
+/* Element-UI */
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import "font-awesome/css/font-awesome.min.css";
-import linkify from "vue-linkify";
-import shadow from "./plugins/shadow.js";
-
-// 以下三个包为按需导入的图表必须项
-import echarts from "echarts/lib/echarts";
-import "echarts/lib/chart/sunburst";
-import "echarts/lib/component/legend";
-
-import { VueCropper } from "vue-cropper";
-import VueI18n from "vue-i18n";
-Vue.config.productionTip = false;
-Vue.use(VueAxios, axios);
 Vue.use(ElementUI);
-Vue.use(VueCropper);
-Vue.use(VueI18n);
-Vue.use(shadow);
-Vue.directive("linkified", linkify);
-Vue.prototype.$axios = axios;
-Vue.prototype.$echarts = echarts;
 
+/* Vue i18n */
+import VueI18n from "vue-i18n";
+Vue.use(VueI18n);
 const i18n = new VueI18n({
   locale: "CHS", // set locale
   fallbackLocale: "ENG",
 });
-
-// 导入神秘的 css
-import "./static/css/common.css";
-
 // 多浏览器语言识别兼容，统一小写
 const localMap = {
   en: "ENG",
@@ -46,17 +43,6 @@ const localMap = {
   "zh-hk": "CHT",
   ja: "JPN",
 };
-
-console.log("巴瓦鲁魔法服务器启动！");
-console.log(
-  "%cPatchy%cVideo",
-  "color:#9c71b2;font-size:2rem;font-family: Arial,Helvetica,sans-serif;padding: 5px 5px;font-weight: 700;",
-  "color:#ffb458;font-size:2rem;font-family: Arial,Helvetica,sans-serif;padding: 5px 10px;font-weight: 700;"
-);
-console.log("朋友，你知道东方Project吗？我让你加群，好吗？QQ群：757676234");
-console.log(
-  "....,[[[[[[[[[`......................... ..          .. ....O@@@.... ........=^....................\n................................. O..... ..          .. ....O@@@.... ........=^....................\n................................. O..... ..          .. ....O@@@.... ........=^....................\n................................. O..... ..          .. ....O@@@.... ........=^....................\n...........,O^................... O..... ..          .. ....O@@@.... ........=^....................\n.........,ooO^................... *..... ..          .. .,*@@OO@@@]..........=^....................\n.........=ooO^..................]@@@]]@@@@[[[[[[[[[[[[*@@@@@@@*....*@`.......=^....................\n.........=ooO^..........,]@@@[@@O*[...........................,@.....**.....,**....................\n.........=ooO^......,**[...,*[.......................@.........@^.....*@],@[..@]`..................\n.........=ooO^....**`..]O[`........]*O[[[[[[*O]]....=O^........@......=**@*......,*@]..............\n.........=ooO^..,@`.*[.........,*[...............,*`=^,*`....**...*...=^.............**............\n.........=OO@`.,@.=^.,]*O[[[`@`.....................*@****,*.********.@................**..........\n............**[.,**`......,*...,]]OO@@@@@@@OO]]]`....,@**************@..................*^.........\n............@*O`.......*.*]@OooooO@OOOO*[[[*,[[OOOOO@`,*@`********,@*^*................**^.........\n..........,@`.........*.@*oooo**@OO[*************,*OOO*@`.,[OOOO[@[[[[[OO*]]...........*=*.........\n........**`..]@**@O`.***.,**o*@O`*******************OO@^@.**......*`**........[O`....****@@@@@@@@@@\n......,@,O*ooooo@OOO^.*****.*@O***=************=^*****O@*^****.....,*.****.......@*`....=@@^.......\n......*@*ooooo*@OOOOOO@@@@@**=^**.*.............O*****=@*.*****......@@@@@]]......@*@O@@OOO@^......\n........*@ooo*@[*`********@**O.***^***OOO=OOO^=`O`...***`.*****.*....*OOOOOOOO@**`.O.*@OO*@@` .....\n..........*@OO^`....**,`*=**OO***O^=OOOOOOOOOO=O=*=O**`..*@*].....,*OOOOOOOOOOO@*o*@*.,@OOO@@*.....\n............***^....*`O***OOO^*=O@*=OOOOOOOOOOOOO@`OOO,***O@.**=O^*********=OOO@@*o**`*.@@O^*.[@`..\n...........,@,**=o**^*O**@OO@^*OO@@*OOOOOOOOOOO@OOOOOOO***=@^O**O@*=*****,`**OOO@@=*.***.O,`.,@`...\n...........*^**^oooooOO^=@O^=^OOOOO@OOOOOOOOOOO@@^@OOOOOO^=O*=OOO@*=OO****OO*OOO@OO@*`.**,*,@[.    \n...........@`@@oooo*OOO^=@^.=*@O***@OooooooOOOOO@.OOOOOOOO*O@OOOO@*=OOOO^*OOOOOO@OOOOOO@*`=*.......\n@@@@@@@@@@@@@@Oooo*OOOOO=*..,@*@@`=^@OOOOOooooO^@.=OOOOooOOO@[@OO@*OOOOOO*=OOOOO@OOOOOO@O**@    ...\n@@@@@@@@@@@@.@@@*][OOOO@O^......,.............,`..,@@O**@*oo@..@O^=OOOOOOOOOOOOO@OOOOOO@*[`........\n           ..,...,@@@@@@@....,]]][...................,`...[*@...O`OOOOOOOO@OOO@@@OOOOOO@*@@]]`.....\n           ......@*OOOO^,`*@@@@@@`..................,*]`.......=^@OOOOOOOO@OOO@@@OOOOOO*OOOOO],*@]]\n...............,@*oooo*^.=@@@@@@@*.................,@@]]`.....=@*@oOOOOOO@@OOO@@@OOOOOOO@]......[*O\n..............*@*oooo**.*,*``,.....................O@@@@@@@@@`...OOOO@@@@@@@@@@@@OOOOOOOOOO@@@*]]`.\n..........,@OOoOOOOOo@`,=,^*=*``.......................[[@@@@`...O==OoOOOOOo^@@@@@OOOOOOOO@@@@@@@@@\n..........@OOOO.,OOOo@...............................****`***^*]=*ooooooooooo@@@@@@OOOOOOOOOOOOOOO@\n.........=@@OOOOO*OOOo@`...............................,.[=*^*,.=@*oooooooooo@@@@@@OOOOOOOOOOOOOOOO\n.... ....****OOOOOOOOOOO@].....................................*O*OoOOOOOOOOO@Oo@@@@OOOOOOOOOOOOOOO\n.... ...@**oO@*@@@@O@@@*...[O]........,OOO]`.................,]@OOO...OOOOOOOOOOo@@@OOOOOOOOOOOOOOO\n.....,@*^[*o*@@@ooo*@@^........,*@*]].,[OOO*`...........,]@@@@^=OOOO]OO*OOOOO@OOo@@@@OO@@@OOOOOOO@@\n...*@[`.=OO=OOOO@=o=@@*...........,^**,*@@@@@*@@@@@@@O@@@@[`...=OO@@OOOOOOOOO@*[..@@@@OO@@@@@@@@@@@\n.@@@@@OO@*^..,@@[@@@`@.*.........=`O.*******,..=^@[*.............*@O@**@@@@[.**...@@@@@@O@@@@@*[[[`\n,@@@@OOO@@^..,@`****=*.........*[=O[.@`****]OO@@[.[*^,*.............,*...,@@@OO@@*O@**@@@@OO@@]]*..\n...***..**,@@@*.***,@]]]]]]O**]*@@@@[.****,`@^]@@^.,*@^=^.........**=^..]@OOOOOOOO@*O]*.,[@@@@@@@@@\n.... ....**********@@@]]@**@[`.**************..*,O@@*,@*=`......****=****@OOOOOOO**oo@@*.***.......\n.... .....   .....****..*.********.................**.*@],**]`........**,@**[*@,*@*ooo*O@....   . .\n.... .....   ....................................... .**,@@@@@`,*`*[[@^.**oooo*@OOO@@@@@.*....... .\n.... .....   ........................................... ........[[[[[***=@=**@OOOOOO@*.****.......\n.... .....   .............................................. ..       .....,@*`@O@@OOOOO@.***.......\n.... .....   .............................................. ..       .......**.*@@@@@@@@`*.        \n.... .....   .............................................. ..       .......................       "
-);
 if (!localStorage.getItem("lang")) {
   // 多浏览器语言设定兼容方案
   let lang = (navigator.language || navigator.browserLanguage).toLowerCase();
@@ -64,6 +50,38 @@ if (!localStorage.getItem("lang")) {
 }
 i18n.locale = localStorage.getItem("lang");
 
+/* Vue cropper (splitted) */
+// import { VueCropper } from "vue-cropper";
+// Vue.use(VueCropper);
+
+/* jquery (splitted) */
+// import $ from "jquery";
+
+/* echarts (splitted) */
+// import echarts from "echarts";
+// import echarts from "echarts/lib/echarts";
+// import "echarts/lib/chart/sunburst";
+// import "echarts/lib/component/legend";
+// Vue.prototype.$echarts = echarts;
+
+/* 如若需要使用字体，导入该文件即可。 */
+// import "./ttf/cnfont.less"
+
+/* Vue linkify */
+import linkify from "vue-linkify";
+Vue.directive("linkified", linkify);
+
+/* Vue shadow dom */
+import shadow from "./plugins/shadow.js";
+Vue.use(shadow);
+
+/* Common css */
+import "./static/css/common.css";
+
+/* console logs */
+import "./log";
+
+/* VM */
 new Vue({
   i18n,
   router,

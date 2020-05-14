@@ -102,6 +102,10 @@
 </template>
 
 <script>
+import echarts from "echarts/lib/echarts";
+import "echarts/lib/chart/sunburst";
+import "echarts/lib/component/legend";
+
 export default {
   components: {},
   data() {
@@ -337,7 +341,7 @@ export default {
       // 基于准备好的 dom，初始化 echarts 实例
       // 绘制图表
       // console.log(this.$echarts);
-      let myChart = this.$echarts.init(document.getElementById("myChart"));
+      let myChart = echarts.init(document.getElementById("myChart"));
       myChart.setOption({
         series: {
           type: "sunburst",
