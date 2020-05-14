@@ -23,7 +23,7 @@
     "OfficialAccount":"B站官方账户",
     "JoinUs":"招募祈愿",
     "AboutIPFS":"IPFS相关",
-    "IPFS":"幻想之物",
+    "IPFS":"IPFS视频上传",
     "WhatIsIPFS":"IPFS是什么?",
     "Codes":"代码相关",
     "Repositories":"项目仓库",
@@ -36,7 +36,7 @@
     "OfficialAccount":"BiliBili Official Account",
     "JoinUs":"Join Us",
     "AboutIPFS":"About IPFS",
-    "IPFS":"IPFS",
+    "IPFS":"IPFS Videos Upload",
     "WhatIsIPFS":"What is IPFS?",
     "Codes":"Codes",
     "Repositories":"Repositories",
@@ -48,7 +48,7 @@
     "Wiki":"網站維基",
     "OfficialAccount":"B站官方账户",
     "JoinUs":"招募祈願",
-    "AboutIPFS":"關於IPFS",
+    "AboutIPFS":"視頻上傳",
     "IPFS":"幻想之物",
     "WhatIsIPFS":"什麼是IPFS?",
     "Codes":"代碼相關",
@@ -86,8 +86,8 @@
         <p>
           <strong>{{ $t("AboutIPFS") }}</strong>
         </p>
-        <router-link to="/ipfs">{{ $t("IPFS") }}</router-link>
-        <a href="https://zh.wikipedia.org/wiki/%E6%98%9F%E9%99%85%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F">{{ $t("WhatIsIPFS") }}</a>
+        <a href="https://patchyvideo.wiki/Upload">{{ $t("WhatIsIPFS") }}</a>
+        <a href="https://zh.wikipedia.org/wiki/%E6%98%9F%E9%99%85%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F">{{ $t("IPFS") }}</a>
       </div>
       <div class="patchyvideo-links-item">
         <p>
