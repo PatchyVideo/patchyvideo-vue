@@ -693,7 +693,7 @@ export default {
     },
     // 刷新视频信息
     refreshVideo(item) {
-      this.$axios({
+      this.axios({
         method: "post",
         url: "be/videos/refresh.do",
         data: {

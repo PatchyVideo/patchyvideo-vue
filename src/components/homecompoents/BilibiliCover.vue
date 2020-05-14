@@ -83,7 +83,7 @@ export default {
   watch: {
     hover() {
       if (this.hover && !this.loadStatus) {
-        this.$axios({
+        this.axios({
           method: "get",
           url: `/proxy/bili/x/player/videoshot?aid=${this.aid}&index=1`,
         })
