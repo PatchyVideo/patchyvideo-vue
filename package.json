@@ -1,6 +1,6 @@
 {
   "name": "patchyvideo",
-  "version": "0.2.1-alpha.16",
+  "version": "0.3.0-alpha.17",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --open --port 8080",
@@ -25,10 +25,11 @@
     "markdown-it-mark": "^3.0.0",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
+    "moment": "^2.25.3",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",
     "vue-cropper": "^0.5.2",
-    "vue-i18n": "^8.17.4",
+    "vue-i18n": "^8.17.6",
     "vue-linkify": "^1.0.1",
     "vue-router": "^3.1.6",
     "vuex": "^3.3.0"
