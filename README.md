@@ -154,7 +154,7 @@ username: 储存的用户名
 
 ```bash
 # 拉取代码
-$ git clone https://github.com/PatchyVideo/patchyvideo-vue.git
+$ git clone --recursive https://github.com/PatchyVideo/patchyvideo-vue.git
 $ cd patchyvideo-vue
 
 # 安装依赖

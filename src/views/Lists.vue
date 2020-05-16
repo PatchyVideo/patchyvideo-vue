@@ -401,13 +401,13 @@ export default {
   border-radius: 20px;
 }
 
-.shadow:hover {
-  // animation-name: anim-shadow;
-  // animation-iteration-count: infinite;
-  // animation-direction: alternate;
-  // animation-fill-mode: forwards;
-  // animation-duration: 5000ms;
-}
+// .shadow:hover {
+// animation-name: anim-shadow;
+// animation-iteration-count: infinite;
+// animation-direction: alternate;
+// animation-fill-mode: forwards;
+// animation-duration: 5000ms;
+// }
 .recommend {
   display: flex;
   flex-wrap: wrap;

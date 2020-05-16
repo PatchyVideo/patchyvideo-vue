@@ -23,7 +23,7 @@ function getFolderParam(params) {
 
 function loadi18n(cpath, source, folder) {
   let jsonSource = JSON.parse(source.replace(/(^\s*)|(\s*$)/g, "") || "{}");
-  const i18nDir = path.resolve("./i18n");
+  const i18nDir = path.resolve("./i18n/patchyvideo-vue");
   fs.readdirSync(i18nDir).forEach((file) => {
     let srcFile;
     if (folder !== true) {

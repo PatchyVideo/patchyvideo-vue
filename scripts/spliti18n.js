@@ -37,7 +37,7 @@ vuefiles.forEach((v) => {
   if (j[0]) {
     let con = JSON.parse(j[0][1]);
     for (let c in con) {
-      writeFileRecursive(".\\i18n\\" + c + "\\" + v.replace(/.vue$/, ".json"), JSON.stringify(con[c]));
+      writeFileRecursive(".\\i18n\\patchyvideo-vue\\" + c + "\\" + v.replace(/.vue$/, ".json"), JSON.stringify(con[c]));
       fs.writeFileSync("./" + v, j[0].input.replace(/<i18n>([\S\s]*)<\/i18n>/g, "<i18n folder></i18n>"));
     }
   }
