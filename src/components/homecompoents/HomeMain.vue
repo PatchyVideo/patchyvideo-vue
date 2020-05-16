@@ -60,7 +60,7 @@
                 <!-- 内容 -->
                 <p
                   :class="{ shortDescForPageVideos: item.item.part_name }"
-                  :title="toGMT(item.item.upload_time.$date) + '\n' + (item.item.desc || '此视频没有简介哦')"
+                  :title="toGMT(item.item.upload_time.$date) + '\n' + (item.item.desc || $t('nodesc'))"
                 >
                   {{ getDesc(item.item.desc) }}
                 </p>
@@ -75,7 +75,9 @@
                 <div class="time-up">{{ toGMT(item.item.upload_time.$date) + "\n" }}</div>
               </div>
               <div class="rating-box">
-                <span v-show="item.total_rating" class="rating" title="评分">{{ (item.total_rating / item.total_rating_user || 0).toFixed(1) }}</span>
+                <span v-show="item.total_rating" class="rating" :title="$t('score.title')">{{
+                  (item.total_rating / item.total_rating_user || 0).toFixed(1)
+                }}</span>
               </div>
             </div>
           </li>
@@ -341,9 +343,13 @@ export default {
     // -------------------------危险提示-------------------------
     // 此外，此函数在其他页面也有调用，在优化的时候请注意其他页面的同步
     copyVideoLink: function(url) {
-      this.$alert("视频链接复制" + (copyToClipboardText(url) ? "成功！" : "失败！"), "分享链接", {
-        confirmButtonText: "确定",
-      });
+      this.$alert(
+        this.$t("copy_link.info", { status: copyToClipboardText(url) ? this.$t("copy_link.status.ok") : this.$t("copy_link.status.fail") }),
+        this.$t("copy_link.title"),
+        {
+          confirmButtonText: this.$t("copy_link.confirm"),
+        }
+      );
     },
     // 请求播放列表数据
     getListVideo: function(e, count) {
@@ -566,7 +572,7 @@ export default {
         d = d.replace(/\s(?=\s)/g, ""); // 删除连续空格
         return d;
       } else {
-        return "此视频没有简介哦";
+        return this.$t("nodesc");
       }
     },
   },

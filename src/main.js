@@ -30,7 +30,7 @@ import VueI18n from "vue-i18n";
 Vue.use(VueI18n);
 const i18n = new VueI18n({
   locale: "CHS", // set locale
-  fallbackLocale: "ENG",
+  fallbackLocale: "CHS",
 });
 // 多浏览器语言识别兼容，统一小写
 const localMap = {
