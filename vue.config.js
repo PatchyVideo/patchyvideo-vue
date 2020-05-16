@@ -16,6 +16,10 @@ const utils = {
     return path.join(__dirname, "..", dir);
   },
 };
+const packageJson = require("./package.json");
+process.env.VUE_APP_VERSION = packageJson.version;
+const moment = require("moment");
+process.env.VUE_APP_BUILDTIME = moment().format("YYYY-MM-DD HH:mm");
 
 module.exports = {
   publicPath: "./",
@@ -124,6 +128,14 @@ module.exports = {
   },
 
   chainWebpack: (config) => {
+    config.plugin("html").tap((args) => {
+      if (process.env.NODE_ENV === "production") {
+        args[0].minify.removeComments = false;
+        args[0].minify.minifyCSS = true;
+        args[0].minify.minifyJS = true;
+      }
+      return args;
+    });
     config.module
       .rule("i18n")
       .resourceQuery(/blockType=i18n/)

@@ -92,6 +92,7 @@ Wiki：[https://patchyvideo.wiki/](https://patchyvideo.wiki/)
 - axios：数据获取
   - vue-axios：Vue 适配
 - jquery：滚动动画和一些 DOM 操作
+- moment: 日期格式化
 - less-loader：Less 样式
 - font-awesome：图标
 - echarts：统计图表
