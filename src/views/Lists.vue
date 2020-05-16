@@ -18,60 +18,6 @@
       暂无
 -->
 
-<i18n>
-{
-  "CHS": {
-    "title":"视频列表",
-    "create_playList":"创建播放列表",
-    "search":{
-        "input_tip":"搜索列表...",
-        "btn":"搜索",
-        "downlist":{
-            "latest":"时间正序",
-            "oldest":"时间倒序",
-            "last_modified":"最近修改"
-        }
-    },
-    "err_tip":"没有搜索到视频列表",
-    "statistics":"共{count}个视频",
-    "author":"作者："
-
-  },
-  "ENG": {
-    "title":"playlists",
-    "create_playList":"Create playlist",
-    "search":{
-        "input_tip":"Search list...",
-        "btn":"Search",
-        "downlist":{
-            "latest":"Latest",
-            "oldest":"Oldest",
-            "last_modified":"Last Modified"
-        }
-    },
-    "err_tip":"No playlist found",
-    "statistics":"Total {count} videos",
-    "author":"Creator:"
-  },
-  "CHT": {
-    "title":"視頻列表",
-    "create_playList":"創建播放列表",
-    "search":{
-        "input_tip":"搜索列表...",
-        "btn":"搜索",
-        "downlist":{
-            "latest":"時間正序",
-            "oldest":"時間倒序",
-            "last_modified":"最近修改"
-        }
-    },
-    "err_tip":"沒有搜索到視頻列表",
-    "statistics":"共{count}個視頻",
-    "author":"作者："
-  }
-}
-</i18n>
-
 <template>
   <div>
     <topnavbar />
@@ -614,3 +560,5 @@ export default {
   margin-top: 20px;
 }
 </style>
+
+<i18n folder></i18n>

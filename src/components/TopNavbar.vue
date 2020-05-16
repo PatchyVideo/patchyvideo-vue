@@ -7,95 +7,6 @@
     更新日志：
 -->
 
-<i18n>
-{
-  "CHS": {
-    "navbar": {
-      "index": "首页",
-      "playlist": "播放列表",
-      "postvideo": "发布视频",
-      "edittag": "标签"
-    },
-
-    "search": {
-      "tag_text": "标签/文本",
-      "text": "仅文本",
-      "prompt": "请输入标签",
-      "button": "搜索"
-    },
-    "user": {
-      "signup": "注册",
-      "login": "登录",
-      "message": "消息",
-      "logout": "退出",
-      "logout_prompt": "你确定要退出登陆吗?",
-      "login_expire_prompt": "登录已过期，请新登录！"
-    },
-    "prompt": {
-      "msg": "提示",
-      "ok": "确 定",
-      "cancel": "取 消"
-    }
-  },
-  "ENG": {
-    "navbar": {
-      "index": "Home",
-      "playlist": "Playlists",
-      "postvideo": "Post Video",
-      "edittag": "Tags"
-    },
-
-    "search": {
-      "tag_text": "Tag/Text",
-      "text": "Text Only",
-      "prompt": "Search...",
-      "button": "Search"
-    },
-    "user": {
-      "signup": "Sign up",
-      "login": "Log in",
-      "message": "Messages",
-      "logout": "Log out",
-      "logout_prompt": "Are you sure you want to log out?",
-      "login_expire_prompt": "Your session has expired. Please relogin"
-    },
-    "prompt": {
-      "msg": "Are you sure?",
-      "ok": "OK",
-      "cancel": "Cancel"
-    }
-  },
-  "CHT": {
-    "navbar": {
-      "index": "首頁",
-      "playlist": "播放列表",
-      "postvideo": "發布視頻",
-      "edittag": "標簽"
-    },
-
-    "search": {
-      "tag_text": "標簽/文本",
-      "text": "僅文本",
-      "prompt": "請輸入標簽",
-      "button": "搜索"
-    },
-    "user": {
-      "signup": "註冊",
-      "login": "登錄",
-      "message": "消息",
-      "logout": "退出",
-      "logout_prompt": "妳確定要退出登陸嗎?",
-      "login_expire_prompt": "登錄已過期，請新登錄！"
-    },
-    "prompt": {
-      "msg": "提示",
-      "ok": "確 定",
-      "cancel": "取 消"
-    }
-  }
-}
-</i18n>
-
 <template>
   <div>
     <!-- 退出登录的弹出框 -->
@@ -762,3 +673,5 @@ export default {
   color: #ff7792;
 }
 </style>
+
+<i18n folder></i18n>

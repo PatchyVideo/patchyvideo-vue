@@ -1,15 +1,4 @@
-<i18n>
-{
-  "CHS": {
-    "log_view":"日志查看",
-    "log_type":" 日志类型: ",
-    "log_time_range":" 时间范围: "
-  },
-  "ENG": {
-    "log_view":"Log view"
-  }
-}
-</i18n>
+<i18n folder></i18n>
 <template>
   <div v-loading="loading">
     <h1>{{ $t("log_view") }}</h1>

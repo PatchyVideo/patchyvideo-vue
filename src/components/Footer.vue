@@ -14,50 +14,6 @@
     4/1/2020: v1.1.0
       1.翻新了foot排版,将顶部导航栏的wiki,ipfs,bug反馈界面以及语言选择界面移动到了里面
 -->
-<i18n>
-{
-  "CHS": {
-    "LanguageSettings":"语言选项",
-    "About":"关于帕琪站",
-    "Wiki":"网站维基",
-    "OfficialAccount":"B站官方账户",
-    "JoinUs":"招募祈愿",
-    "AboutIPFS":"IPFS相关",
-    "IPFS":"IPFS视频上传",
-    "WhatIsIPFS":"IPFS是什么?",
-    "Codes":"代码相关",
-    "Repositories":"项目仓库",
-    "bug_report":"反馈BUG"
-  },
-  "ENG": {
-    "LanguageSettings":"Languages",
-    "About":"About Patchyvideo",
-    "Wiki":"Wiki",
-    "OfficialAccount":"BiliBili Official Account",
-    "JoinUs":"Join Us",
-    "AboutIPFS":"About IPFS",
-    "IPFS":"IPFS Videos Upload",
-    "WhatIsIPFS":"What is IPFS?",
-    "Codes":"Codes",
-    "Repositories":"Repositories",
-    "bug_report":"Report Bugs"
-  },
-  "CHT": {
-    "LanguageSettings":"語言選項",
-    "About":"關於帕琪站",
-    "Wiki":"網站維基",
-    "OfficialAccount":"B站官方账户",
-    "JoinUs":"招募祈願",
-    "AboutIPFS":"視頻上傳",
-    "IPFS":"幻想之物",
-    "WhatIsIPFS":"什麼是IPFS?",
-    "Codes":"代碼相關",
-    "Repositories":"項目倉庫",
-    "bug_report":"反饋BUG"
-  }
-}
-</i18n>
-
 <template>
   <div class="patchyvideo-footer">
     <!-- 插图 -->
@@ -289,3 +245,5 @@ export default {
   }
 }
 </style>
+
+<i18n folder></i18n>

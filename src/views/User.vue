@@ -33,64 +33,6 @@ Vue.prototype.$echarts = echarts;
 
 -->
 
-<i18n>
-{
-  "CHS": {
-    "title":"创建播放列表",
-    "me":{
-        "tab1":"我的信息",
-        "tab2":"我贡献的索引",
-        "tab3":"我的文件夹",
-        "tab4":"我的播放列表",
-        "tab5":"发布状态",
-        "tab6":"黑名单",
-        "tab7":"订阅"
-    },
-    "outer_user":{
-        "tab1":"用户信息",
-        "tab2":"他贡献的索引",
-        "tab3":"他的文件夹",
-        "tab4":"他的收藏"
-    }
-  },
-  "ENG": {
-    "title":"Create playlist",
-    "me":{
-        "tab1":"Profile",
-        "tab2":"My posts",
-        "tab3":"My folder",
-        "tab4":"My playlists",
-        "tab5":"Post status",
-        "tab6":"Blacklist",
-        "tab7":"Subscribed"
-    },
-    "outer_user":{
-        "tab1":"Profile",
-        "tab2":"Posts",
-        "tab3":"Folder",
-        "tab4":"Playlists"
-    }
-  },
-  "CHT": {
-    "title":"創建播放列表",
-    "me":{
-        "tab1":"我的信息",
-        "tab2":"我貢獻的索引",
-        "tab3":"我的文件夾",
-        "tab4":"我的播放列表",
-        "tab5":"發布狀態",
-        "tab6":"黑名單"
-    },
-    "outer_user":{
-        "tab1":"用戶信息",
-        "tab2":"他貢獻的索引",
-        "tab3":"他的文件夾",
-        "tab4":"他的收藏"
-    }
-  }
-}
-</i18n>
-
 <template>
   <div>
     <topnavbar></topnavbar>
@@ -282,3 +224,5 @@ h4 {
   background-color: #fafafa;
 }
 </style>
+
+<i18n folder></i18n>

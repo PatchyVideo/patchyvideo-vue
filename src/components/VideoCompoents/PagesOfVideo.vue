@@ -9,14 +9,6 @@
       4/28/2020: v1.0
         release;
 -->
-<i18n>
-{
-  "CHS": {
-    "test":"test!"
-  }
-}
-</i18n>
-
 <template>
   <div class="PagesOfVideo">
     <!-- 确认是否发布分P的对话框 -->
@@ -297,3 +289,5 @@ export default {
   visibility: visible;
 }
 </style>
+
+<i18n folder></i18n>

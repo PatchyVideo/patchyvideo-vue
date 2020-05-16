@@ -5,62 +5,6 @@
 需要安装依赖：npm install vue-cropper -s
 -->
 
-<i18n>
-{
-  "CHS": {
-    "title": "图片裁剪",
-    "cancel": "取消",
-    "ok": "确定",
-    "upload_userphoto": "上传头像",
-    "enter_url_prompt": "请输入图片URL",
-    "from_file": "本地上传",
-    "from_url": "网络上传",
-    "upload": "上传",
-    "no_file_prompt": "请选择要上传的头像!",
-    "file_size_prompt": "上传头像图片大小不能超过 2MB!",
-    "upload_succeed": "上传成功！",
-    "no_url_prompt": "请输入链接!",
-    "INCORRECT_UPLOAD_TYPE": "上传文件不支持该图片格式!",
-    "upload_failed": "上传失败！",
-    "open_failed": "选择图片失败"
-  },
-  "ENG": {
-    "title": "Crop image",
-    "cancel": "Cancel",
-    "ok": "OK",
-    "upload_userphoto": "Upload photo",
-    "enter_url_prompt": "Please enter image URL",
-    "from_file": "Local files",
-    "from_url": "From URL",
-    "upload": "Upload",
-    "no_file_prompt": "Please choose your photo",
-    "file_size_prompt": "File size cannot exceed 2MB",
-    "upload_succeed": "Upload succeed",
-    "no_url_prompt": "Please enter image URL",
-    "INCORRECT_UPLOAD_TYPE": "File format not supported",
-    "upload_failed": "Upload failed",
-    "open_failed": "Open file failed"
-  },
-  "CHT": {
-    "title": "圖片裁剪",
-    "cancel": "取消",
-    "ok": "確定",
-    "upload_userphoto": "上傳頭像",
-    "enter_url_prompt": "請輸入圖片URL",
-    "from_file": "本地上傳",
-    "from_url": "網絡上傳",
-    "upload": "上傳",
-    "no_file_prompt": "請選擇要上傳的頭像!",
-    "file_size_prompt": "上傳頭像圖片大小不能超過 2MB!",
-    "upload_succeed": "上傳成功！",
-    "no_url_prompt": "請輸入鏈接!",
-    "INCORRECT_UPLOAD_TYPE": "上傳文件不支持該圖片格式!",
-    "upload_failed": "上傳失敗！",
-    "open_failed": "選擇圖片失敗"
-  }
-}
-</i18n>
-
 <template>
   <div v-loading="loading" class="custom-upload">
     <el-dialog :title="$t('title')" :visible.sync="showCropper" top="6vh" width="50%" height="600" class="cropper-dialog" center append-to-body>
@@ -448,3 +392,5 @@ form {
   }
 }
 </style>
+
+<i18n folder></i18n>

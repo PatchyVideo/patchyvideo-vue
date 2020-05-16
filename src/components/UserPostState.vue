@@ -1,26 +1,3 @@
-<i18n>
-{
-    "CHS": {
-        "pending_post": "待处理的索引",
-        "no_pending": "暂无待处理的索引",
-        "failed_post": "失败的索引",
-        "total_count": "共计{count}个"
-    },
-    "ENG": {
-        "pending_post": "Pending posts",
-        "no_pending": "No pending posts",
-        "failed_post": "Failed posts",
-        "total_count": "Total {count}"
-    },
-    "CHT": {
-        "pending_post": "待處理的索引",
-        "no_pending": "暫無待處理的索引",
-        "failed_post": "失敗的索引",
-        "total_count": "共計{count}個"
-    }
-}
-</i18n>
-
 <template>
   <div class="bigbox">
     <div class="doing">
@@ -91,3 +68,5 @@ export default {
   }
 }
 </style>
+
+<i18n folder></i18n>

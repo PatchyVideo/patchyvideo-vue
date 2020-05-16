@@ -1,18 +1,3 @@
-<i18n>
-{
-	"CHS": {
-		"title":"用户管理",
-		"latest":"时间正序",
-		"oldest":"时间倒序"
-	},
-	"ENG": {
-		"title":"User management interface",
-		"latest":"Latest",
-		"oldest":"Oldest"
-	}
-}
-</i18n>
-
 <template>
   <div v-loading="loading">
     <!-- 编辑用户权限的对话框 -->
@@ -347,3 +332,5 @@ export default {
   color: #959595;
 }
 </style>
+
+<i18n folder></i18n>

@@ -12,53 +12,6 @@
       2.提交列表新增未登录报错的情况
 -->
 
-<i18n>
-{
-  "CHS": {
-    "this_is_playlist_title": "这里是列表标题",
-    "describe_your_playlist": "来介绍一下自己的列表吧~",
-    "set_as_private_playlist": "设为私有列表",
-    "create_now": "立即创建",
-    "no_title_prompt": "还没输入标题呢",
-    "no_desc_prompt": "不来介绍一下列表吗？",
-    "one_cover_prompt": "只能上传一个封面！",
-    "delete_confirm_prompt": "确定移除 {name}？",
-    "create_failed": "列表创建失败，请重试！",
-    "not_login": "登录验证失败，请先登录！",
-    "create_succeed": "列表创建成功！",
-    "showListRules":"查看创建播放列表的规则"
-  },
-  "ENG": {
-    "this_is_playlist_title": "Title",
-    "describe_your_playlist": "Describe this playlist",
-    "set_as_private_playlist": "Private Playlist",
-    "create_now": "Create",
-    "no_title_prompt": "Please enter title",
-    "no_desc_prompt": "Please enter description",
-    "one_cover_prompt": "You can upload only one cover",
-    "delete_confirm_prompt": "Are you sure you want to remove {name}?",
-    "create_failed": "Operation failed, please try again",
-    "not_login": "Authentication failed, please relogin",
-    "create_succeed": "Playlist successfully created",
-    "showListRules":"See the rules of creating a list"
-  },
-  "CHT": {
-    "this_is_playlist_title": "這裏是列表標題",
-    "describe_your_playlist": "來介紹壹下自己的列表吧~",
-    "set_as_private_playlist": "設為私有列表",
-    "create_now": "立即創建",
-    "no_title_prompt": "還沒輸入標題呢",
-    "no_desc_prompt": "不來介紹壹下列表嗎？",
-    "one_cover_prompt": "只能上傳壹個封面！",
-    "delete_confirm_prompt": "確定移除 {name}？",
-    "create_failed": "列表創建失敗，請重試！",
-    "not_login": "登錄驗證失敗，請先登錄！",
-    "create_succeed": "列表創建成功！",
-    "showListRules":"查看創建播放列表的規則"
-  }
-}
-</i18n>
-
 <template>
   <div v-loading="loading" class="listForm">
     <el-form ref="list" :model="list" label-width="auto" :rules="rules">
@@ -217,3 +170,5 @@ export default {
   text-align: center;
 }
 </style>
+
+<i18n folder></i18n>

@@ -1,36 +1,3 @@
-<i18n>
-    {
-    "CHS": {
-    "page_count": "显示 {count} / {maxcount} 个视频",
-    "no_result": "没有搜索到订阅的视频",
-    "show_deleted": "显示已失效视频",
-    "blacklist_prompt": "*已屏蔽含有敏感标签的视频，可在个人界面设置",
-    "latest": "发布时间正序",
-    "oldest": "发布时间倒序",
-    "latest_video": "原视频上传时间正序",
-    "oldest_video": "原视频上传时间倒序",
-    "popular_tags": "热门标签",
-    "search_result": "搜索结果 - {result}",
-    "syntax_error": "查询语法错误！",
-    "syntax_error_not": "所输入的查询不能与NOT连用！"
-    },
-    "ENG": {
-    "page_count": "Showing {count} / {maxcount} videos",
-    "no_result": "No video found",
-    "show_deleted": "Show deleted videos",
-    "blacklist_prompt": "*Some videos are blacklisted, you can change your blacklist setting in your settings panel.",
-    "latest": "Latest",
-    "oldest": "Oldest",
-    "latest_video": "Latest Video",
-    "oldest_video": "Oldest Video",
-    "popular_tags": "Popular Tags",
-    "search_result": "Search - {result}",
-    "syntax_error": "Syntax error in query",
-    "syntax_error_not": "NOT cannot be used here"
-    }
-    }
-</i18n>
-
 <template>
   <div>
     <!-- <topnavbar /> -->
@@ -635,3 +602,5 @@ export default {
   color: #606266;
 }
 </style>
+
+<i18n folder></i18n>

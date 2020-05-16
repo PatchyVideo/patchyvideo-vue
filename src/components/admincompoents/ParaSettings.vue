@@ -1,13 +1,4 @@
-<i18n>
-{
-  "CHS": {
-	"para_settings":"网站参数设置"
-  },
-  "ENG": {
-	"para_settings":"Site parameter settings "
-  }
-}
-</i18n>
+<i18n folder></i18n>
 <template>
   <div>
     <!-- 修改参数的提示框 -->

@@ -24,50 +24,6 @@
 
 -->
 
-<i18n>
-{
-  "CHS": {
-    "enter_tag": "请输入标签",
-    "edit_common_tags": "编辑共有标签",
-    "tag_already_exist": "标签已存在",
-    "tag_not_exist": "标签不存在",
-    "recommnad_tags": "推荐标签：",
-    "save": "保存修改",
-    "cancel":"不保存关闭",
-    "issave":"已经修改tag但没有保存,是否保存?",
-    "tag_add_succeed": "Tag添加成功！",
-    "tag_modify_succeed": "修改成功！",
-    "unknown_error": "未知错误"
-  },
-  "ENG": {
-    "enter_tag": "Enter tag",
-    "edit_common_tags": "Edit common tag",
-    "tag_already_exist": "Tag already exist",
-    "tag_not_exist": "Tag not exist",
-    "recommnad_tags": "Related tags:",
-    "save": "Save",
-    "cancel":"Close without saving",
-    "issave":"The tag has been modified but not saved. Do you want to save it?",
-    "tag_add_succeed": "Tag added",
-    "tag_modify_succeed": "Tags saved",
-    "unknown_error": "An unknown error has occurred, please report bug"
-  },
-  "CHT": {
-    "enter_tag": "請輸入標簽",
-    "edit_common_tags": "編輯共有標簽",
-    "tag_already_exist": "標簽已存在",
-    "tag_not_exist": "標簽不存在",
-    "recommnad_tags": "推薦標簽：",
-    "save": "保存修改",
-    "cancel":"不保存關閉",
-    "issave":"已經修改tag但沒有保存,是否保存?",
-    "tag_add_succeed": "Tag添加成功！",
-    "tag_modify_succeed": "修改成功！",
-    "unknown_error": "未知錯誤"
-  }
-}
-</i18n>
-
 <template>
   <transition mode="out-in">
     <div v-if="visible" class="EditTags" :class="{ active: msg != '' }">
@@ -1115,3 +1071,5 @@ div {
   color: #ff7792;
 }
 </style>
+
+<i18n folder></i18n>

@@ -13,42 +13,6 @@
       1.错误信息尚未进行分类
 -->
 
-<i18n>
-{
-  "CHS": {
-    "reset_psd":"重置密码",
-    "psd_input_tip":"请输入新的密码",
-    "repeat_input_tip":"请重复密码",
-    "err_tip":"两次输入密码不一致!",
-    "input_psd":"请输入密码",
-    "psd_limit":"长度在 6 到 64 个字符",
-    "fail_msg":"请求失败，请重新在找回密码界面发送邮件！",
-    "success_msg":"密码重置成功！"
-
-  },
-  "ENG": {
-    "reset_psd":"Reset Password",
-    "psd_input_tip":"Please enter a new password",
-    "repeat_input_tip":"Please repeat password",
-    "err_tip":"Passwords mismatch",
-    "input_psd":"Please enter password",
-    "psd_limit":"Password length: 6 to 64 characters",
-    "fail_msg":"Reset failed, please report bug",
-    "success_msg":"An reset password email has been sent to your email address."
-  },
-  "CHT": {
-    "reset_psd":"重置密碼",
-    "psd_input_tip":"請輸入新的密碼",
-    "repeat_input_tip":"請重復密碼",
-    "err_tip":"兩次輸入密碼不壹致!",
-    "input_psd":"請輸入密碼",
-    "psd_limit":"長度在 6 到 64 個字符",
-    "fail_msg":"請求失敗，請重新在找回密碼界面發送郵件！",
-    "success_msg":"密碼重置成功！"
-  }
-}
-</i18n>
-
 <template>
   <div class="loginPic">
     <!-- 重置密码框正文 -->
@@ -349,3 +313,5 @@ i:hover {
   margin-top: 30px;
 }
 </style>
+
+<i18n folder></i18n>

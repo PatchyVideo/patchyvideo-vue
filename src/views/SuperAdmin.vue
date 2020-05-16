@@ -6,29 +6,6 @@
 	待完成
 -->
 
-<i18n>
-{
-  "CHS": {
-	"user_management":"用户管理",
-	"log_view":"日志查看",
-	"para_settings":"网站参数设置",
-	"scripts":"网站脚本"
-  },
-  "ENG": {
-	"user_management":"User management",
-	"log_view":"Log view",
-	"para_settings":"Site parameter settings",
-	"scripts":"Web site scripts"
-  },
-  "CHT": {
-	"user_management":"用戶管理",
-	"log_view":"日誌查看",
-	"para_settings":"網站參數設置",
-	"scripts":"網站腳本"
-  }
-}
-</i18n>
-
 <template>
   <div>
     <topnavbar></topnavbar>
@@ -107,3 +84,5 @@ export default {
   margin: auto;
 }
 </style>
+
+<i18n folder></i18n>

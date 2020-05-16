@@ -26,7 +26,9 @@ module.exports = {
   outputDir: "dist",
   configureWebpack: {
     plugins: [
-      new BundleAnalyzerPlugin(),
+      new BundleAnalyzerPlugin({
+        openAnalyzer: false,
+      }),
       new webpack.ProvidePlugin({
         jQuery: "jquery",
         $: "jquery",
@@ -142,6 +144,9 @@ module.exports = {
       .type("javascript/auto")
       .use("i18n")
       .loader("@intlify/vue-i18n-loader")
+      .end()
+      .use("i18n-folder-loader")
+      .loader("./src/plugins/i18n-folder-loader.js")
       .end();
   },
 };

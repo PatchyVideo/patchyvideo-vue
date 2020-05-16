@@ -10,26 +10,6 @@
     ★待解决问题：
       暂无
 -->
-<i18n>
-{
-  "CHS": {
-    "title":"创建播放列表",
-    "create":"创建新列表",
-    "import":"导入已有列表"
-  },
-  "ENG": {
-    "title":"Create playlist",
-    "create":"Create a new list",
-    "import":"Import existing list"
-  },
-  "CHT": {
-    "title":"創建播放列表",
-    "create":"創建新列表",
-    "import":"導入已有列表"
-  }
-}
-</i18n>
-
 <template>
   <div>
     <topnavbar />
@@ -95,3 +75,5 @@ export default {
   width: 80%;
 }
 </style>
+
+<i18n folder></i18n>

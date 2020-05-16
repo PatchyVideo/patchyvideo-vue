@@ -7,14 +7,6 @@
         2.（必需）tipText（String）：标签的内容
         3.tagID（Number）：标签的ID
  -->
-<i18n>
-{
-  "CHS": {
-    "test":"test!"
-  }
-}
-</i18n>
-
 <template>
   <div class="tag">
     <el-tooltip effect="light" :content="tipText.replace(/_/g, ' ')" placement="left">
@@ -138,3 +130,5 @@ export default {
   color: #b3b3b3;
 }
 </style>
+
+<i18n folder></i18n>

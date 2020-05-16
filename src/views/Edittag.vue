@@ -8,50 +8,6 @@
       2.标签搜索功能的实现
 -->
 
-<i18n>
-{
-  "CHS": {
-    "title":"编辑标签",
-    "search_tag":"搜索标签",
-    "tag_categories":{
-        "General":"综合",
-        "Character":"角色",
-        "Copyright":"作品",
-        "Author":"up主",
-        "Meta":"元数据",
-        "Language":"语言",
-        "Soundtrack":"原曲"
-    }
-  },
-  "ENG": {
-    "title":"Edit tag",
-    "search_tag":"Search tag",
-    "tag_categories":{
-        "General":"General",
-        "Character":"Character",
-        "Copyright":"Copyright",
-        "Author":"Author",
-        "Meta":"Meta",
-        "Language":"Language",
-        "Soundtrack":"Soundtrack"
-    }
-  },
-  "CHT": {
-    "title":"編輯標簽",
-    "search_tag":"搜索標簽",
-    "tag_categories":{
-        "General":"綜合",
-        "Character":"角色",
-        "Copyright":"作品",
-        "Author":"up主",
-        "Meta":"元數據",
-        "Language":"語言",
-        "Soundtrack":"原曲"
-    }
-  }
-}
-</i18n>
-
 <template>
   <div>
     <topnavbar />
@@ -142,3 +98,5 @@ export default {
   width: calc(100% - 30px);
 }
 </style>
+
+<i18n folder></i18n>

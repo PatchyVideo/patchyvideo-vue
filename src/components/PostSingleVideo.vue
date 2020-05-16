@@ -24,83 +24,6 @@
       暂无
 -->
 
-<i18n>
-{
-  "CHS": {
-    "video_url": "视频地址",
-    "get_info": "获取信息",
-    "tag": "标签",
-    "no_tag": "暂无标签！",
-    "choose_repost_type": "请修改视频的发布类型",
-    "PostRules":"发布规则",
-    "post_video": "发布视频",
-    "official": "原始发布",
-    "official_repost": "官方再发布",
-    "authorized_translation": "授权翻译",
-    "authorized_repost": "授权转载",
-    "translation": "自发翻译",
-    "repost": "自发搬运",
-    "unknown": "其他",
-    "url_passed": "URL验证成功!",
-    "invalid_url": "非法地址或者不支持指向的网站!",
-    "enter_url": "请输入视频地址!",
-    "fetch_failed": "获取视频信息失败,请检查链接是否有效!",
-    "post_failed": "视频上传失败！",
-    "tag_not_exist": "标签 {tag} 不存在！",
-    "post_succeed": "上传成功！",
-    "unknown_error": "未知错误"
-  },
-  "ENG": {
-    "video_url": "Video URL",
-    "get_info": "Fetch",
-    "tag": "Tags",
-    "no_tag": "No tags",
-    "choose_repost_type": "Please select a repost type",
-    "PostRules":"Post rules",
-    "post_video": "Post video",
-    "official": "Original",
-    "official_repost": "Official Repost",
-    "authorized_translation": "Authorized Translation",
-    "authorized_repost": "Authorized Repost",
-    "translation": "User Translation",
-    "repost": "User Repost",
-    "unknown": "Other",
-    "url_passed": "URL verify succeed",
-    "invalid_url": "Invalid URL or not supported website",
-    "enter_url": "Please enter video URL",
-    "fetch_failed": "Fetch failed",
-    "post_failed": "Ipload failed",
-    "tag_not_exist": "Tag {tag} does not exist",
-    "post_succeed": "Upload succeed",
-    "unknown_error": "Unknown error, please report bug"
-  },
-  "CHT": {
-    "video_url": "視頻地址",
-    "get_info": "獲取信息",
-    "tag": "標簽",
-    "no_tag": "暫無標簽！",
-    "choose_repost_type": "請修改視頻的發布類型",
-    "PostRules":"發布規則",
-    "post_video": "發布視頻",
-    "official": "原始發布",
-    "official_repost": "官方再發布",
-    "authorized_translation": "授權翻譯",
-    "authorized_repost": "授權轉載",
-    "translation": "自發翻譯",
-    "repost": "自發搬運",
-    "unknown": "其他",
-    "url_passed": "URL驗證成功!",
-    "invalid_url": "非法地址或者不支持指向的網站!",
-    "enter_url": "請輸入視頻地址!",
-    "fetch_failed": "獲取視頻信息失敗,請檢查鏈接是否有效!",
-    "post_failed": "視頻上傳失敗！",
-    "tag_not_exist": "標簽 {tag} 不存在！",
-    "post_succeed": "上傳成功！",
-    "unknown_error": "未知錯誤"
-  }
-}
-</i18n>
-
 <template>
   <div v-loading="loading" class="postBox">
     <div class="content">
@@ -818,3 +741,5 @@ export default {
   background-size: cover;
 }
 </style>
+
+<i18n folder></i18n>

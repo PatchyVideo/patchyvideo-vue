@@ -16,29 +16,6 @@
     1/18/2020：
       release
 -->
-<i18n>
-{
-  "CHS": {
-    "title":"发布视频",
-    "single_release":"单个发布",
-    "batch_release":"批量发布",
-    "IPFS_release":"IPFS视频发布"
-  },
-  "ENG": {
-    "title":"Post video",
-    "single_release":"Single",
-    "batch_release":"Batch",
-    "IPFS_release":"IPFS video"
-  },
-  "CHT": {
-    "title":"發布視頻",
-    "single_release":"單個發布",
-    "batch_release":"批量發布",
-    "IPFS_release":"IPFS視頻發布"
-  }
-}
-</i18n>
-
 <template>
   <div>
     <topnavbar />
@@ -110,3 +87,5 @@ export default {
   width: 80%;
 }
 </style>
+
+<i18n folder></i18n>
