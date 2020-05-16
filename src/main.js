@@ -72,7 +72,7 @@ import linkify from "vue-linkify";
 Vue.directive("linkified", linkify);
 
 /* Vue shadow dom */
-import shadow from "./plugins/shadow.js";
+import shadow from "../plugins/shadow.js";
 Vue.use(shadow);
 
 /* Common css */

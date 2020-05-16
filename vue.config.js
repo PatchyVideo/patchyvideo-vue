@@ -146,7 +146,7 @@ module.exports = {
       .loader("@intlify/vue-i18n-loader")
       .end()
       .use("i18n-folder-loader")
-      .loader("./src/plugins/i18n-folder-loader.js")
+      .loader("./plugins/i18n-folder-loader.js")
       .end();
   },
 };
