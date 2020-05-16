@@ -1,4 +1,3 @@
-<i18n folder></i18n>
 <template>
   <div>
     <!-- 修改参数的提示框 -->
@@ -104,3 +103,5 @@ export default {
 </script>
 
 <style scoped></style>
+
+<i18n folder></i18n>

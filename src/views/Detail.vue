@@ -4,7 +4,6 @@
     功能：展示展示视频的详细信息
     更新日志：
 -->
-<i18n folder></i18n>
 <template>
   <div>
     <topnavbar />
@@ -1038,3 +1037,5 @@ export default {
   font-size: 12px;
 }
 </style>
+
+<i18n folder></i18n>

@@ -1,4 +1,3 @@
-<i18n folder></i18n>
 <template>
   <div v-loading="loading">
     <h1>{{ $t("log_view") }}</h1>
@@ -302,3 +301,5 @@ export default {
   color: #f56c6c;
 }
 </style>
+
+<i18n folder></i18n>
