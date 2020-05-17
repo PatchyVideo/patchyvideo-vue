@@ -7,6 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "spliti18n": "node ./scripts/spliti18n.js",
+    "synci18n": "node ./scripts/synci18n.js",
     "format": "prettier --write \"{src,i18n,scripts}/**/*.{html,htm,js,jsx,ts,tsx,css,less,scss,sass,vue,json}\""
   },
   "dependencies": {
