@@ -28,10 +28,28 @@ Vue.use(ElementUI);
 /* Vue i18n */
 import VueI18n from "vue-i18n";
 Vue.use(VueI18n);
+
+// Element-UI i18n
+import elCHS from "element-ui/lib/locale/lang/zh-CN.js";
+import elCHT from "element-ui/lib/locale/lang/zh-TW.js";
+import elENG from "element-ui/lib/locale/lang/en.js";
+const elementi18n = {
+  CHS: elCHS,
+  CHT: elCHT,
+  ENG: elENG,
+};
+
 const i18n = new VueI18n({
   locale: "CHS", // set locale
   fallbackLocale: "CHS",
+  messages: {
+    ...elementi18n,
+  },
 });
+
+import ElementLocale from "element-ui/lib/locale";
+ElementLocale.i18n((key, value) => i18n.t(key, value));
+
 // 多浏览器语言识别兼容，统一小写
 const localMap = {
   en: "ENG",
