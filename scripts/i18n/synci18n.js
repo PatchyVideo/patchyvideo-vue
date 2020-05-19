@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const merge = require("webpack-merge");
+const _ = require("lodash");
 
 function keycount(obj) {
   let count = 0;
@@ -43,7 +43,7 @@ module.exports = function(rl, nl) {
     let j = JSON.parse(fs.readFileSync(rfile).toString());
     if (fs.existsSync(nfile)) {
       const nj = JSON.parse(fs.readFileSync(nfile).toString());
-      j = merge(j, nj);
+      j = _.merge(j, nj);
       keys += keycount(j) - keycount(nj);
     }
     writeFileRecursive(nfile, JSON.stringify(j, null, 2));
