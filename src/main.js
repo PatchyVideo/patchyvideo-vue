@@ -29,6 +29,16 @@ Vue.use(ElementUI);
 import VueI18n from "vue-i18n";
 Vue.use(VueI18n);
 
+// Common i18n
+import cmCHS from "../i18n/patchyvideo-vue/CHS/common.json";
+import cmCHT from "../i18n/patchyvideo-vue/CHT/common.json";
+import cmENG from "../i18n/patchyvideo-vue/ENG/common.json";
+const commoni18n = {
+  CHS: cmCHS,
+  CHT: cmCHT,
+  ENG: cmENG,
+};
+
 // Element-UI i18n
 import elCHS from "element-ui/lib/locale/lang/zh-CN.js";
 import elCHT from "element-ui/lib/locale/lang/zh-TW.js";
@@ -44,6 +54,7 @@ const i18n = new VueI18n({
   fallbackLocale: "CHS",
   messages: {
     ...elementi18n,
+    ...commoni18n,
   },
 });
 

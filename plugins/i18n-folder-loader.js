@@ -4,7 +4,7 @@ const loaderUtils = require("loader-utils");
 const _ = require("lodash");
 
 module.exports = function(source) {
-  let i18nj = { ...loadi18nc() };
+  let i18nj = {};
   const params = loaderUtils.parseQuery(this.resourceQuery);
   const folder = getParam(params, "folder");
   if (folder) i18nj = _.merge(i18nj, loadi18n(this.resourcePath, source, folder, this));
@@ -58,16 +58,6 @@ function alli18n() {
       });
     };
     read(i18nDir, file);
-  });
-  return i18nj;
-}
-
-function loadi18nc() {
-  let i18nj = {};
-  const i18nDir = path.resolve("./i18n/patchyvideo-vue");
-  fs.readdirSync(i18nDir).forEach((file) => {
-    if (fs.existsSync(path.resolve(i18nDir, file, "common.json")))
-      _.setWith(i18nj, file + "._common", JSON.parse(fs.readFileSync(path.resolve(i18nDir, file, "common.json")).toString()), Object);
   });
   return i18nj;
 }
