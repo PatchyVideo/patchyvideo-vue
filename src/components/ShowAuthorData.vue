@@ -414,7 +414,7 @@ export default {
     adduserSpace() {
       if (this.URLval == "") {
         if (!this.nowSubmit) {
-          this.open4(this.$("enter_url"));
+          this.open4(this.$t("enter_url"));
         }
         return;
       }

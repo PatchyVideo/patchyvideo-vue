@@ -1,6 +1,5 @@
 const webpack = require("webpack");
 const path = require("path");
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const utils = {
   assetsPath: function(_path) {
     const assetsSubDirectory =
@@ -26,9 +25,6 @@ module.exports = {
   outputDir: "dist",
   configureWebpack: {
     plugins: [
-      new BundleAnalyzerPlugin({
-        openAnalyzer: false,
-      }),
       new webpack.ProvidePlugin({
         jQuery: "jquery",
         $: "jquery",
@@ -130,6 +126,9 @@ module.exports = {
   },
 
   chainWebpack: (config) => {
+    if (process.env.NODE_ENV == "production") {
+      config.plugin("webpack-bundle-analyzer").use(require("webpack-bundle-analyzer").BundleAnalyzerPlugin);
+    }
     config.plugin("html").tap((args) => {
       if (process.env.NODE_ENV === "production") {
         args[0].minify.removeComments = false;
