@@ -18,13 +18,18 @@
 
 Wiki：[https://patchyvideo.wiki/](https://patchyvideo.wiki/)
 
-第一版基于 Flask 框架开发，第二版基于 Vue 框架开发。网站目前正常运作。
+第一版基于 Flask 开发，第二版基于 Vue 开发。网站目前正常运作。
 基于用户可登陆注册上传修改视频，以及对 Tag 的增删改除，目前 Vue 版重构正式完成并已上线。
 
-> 后端/第一版可至 [PatchyVideo/PatchyVideo](https://github.com/PatchyVideo/PatchyVideo) 查看
-> 移动端可至 [PatchyVideo/patchyvideo-mobile](https://github.com/PatchyVideo/patchyvideo-mobile) 查看
-
 同时感谢 zyddnys 提供的开源后端接口，让此项目的出现和运营成为可能。
+
+## 相关项目
+
+> 后端/第一版： [PatchyVideo/PatchyVideo](https://github.com/PatchyVideo/PatchyVideo)
+
+> 移动端： [PatchyVideo/patchyvideo-mobile](https://github.com/PatchyVideo/patchyvideo-mobile)
+
+> 国际化： [PatchyVideo/i18n](https://github.com/PatchyVideo/i18n)
 
 ## 网页架构
 
@@ -64,51 +69,6 @@ Wiki：[https://patchyvideo.wiki/](https://patchyvideo.wiki/)
 - ResetPassword：重置密码页
 - ForgetPassword：找回密码页
 - User：用户页
-
-## 项目依赖表
-
-在这里列出本项目使用的开源项目，同时感谢这些项目作者的付出。
-
-- eslint：代码分析
-  - eslint-plugin-prettier：Prettier 插件
-  - eslint-plugin-vue：Vue 插件
-  - babel-eslint：Babel 插件
-  - lint-staged：提交审查
-- prettier：格式化
-- webpack-bundle-analyzer：大小分析
-- vue：框架
-- vue-router：路由
-  - vue-temmplate-compiler：动态路由
-- vuex：数据存储
-- @vue/cli-service：Vue CLI
-  - @vue/cli-plugin-router：Router
-  - @vue/cli-plugin-vuex：Vuex
-  - @vue/cli-plugin-element：Element
-  - @vue/cli-plugin-babel：Babel
-  - @vue/cli-plugin-eslint：ESLint
-- element-ui：组件库
-- vue-i18n：国际化
-  - @kazupon/vue-i18n-loader：Loader
-- axios：数据获取
-  - vue-axios：Vue 适配
-- jquery：滚动动画和一些 DOM 操作
-- moment: 日期格式化
-- less-loader：Less 样式
-- font-awesome：图标
-- echarts：统计图表
-- vue-cropper：上传头像裁剪
-- vue-linkify：链接转换
-- html-entities：HTML 编码
-- markdown-it：Markdown 渲染
-  - markdown-it-abbr：缩写
-  - markdown-it-container：框
-  - markdown-it-deflist：列表
-  - markdown-it-footnote：脚注
-  - markdown-it-ins：更改
-  - markdown-it-mark：标记
-  - markdown-it-sub：下标
-  - markdown-it-sup：上标
-- highlight.js：代码高亮
 
 ## 未来可能会上线的功能（卫星）
 
@@ -152,23 +112,94 @@ username: 储存的用户名
 
 ### 一些基本操作
 
+#### 拉取代码
+
 ```bash
-# 拉取代码
+# 使用 recursive
 $ git clone --recursive https://github.com/PatchyVideo/patchyvideo-vue.git
 $ cd patchyvideo-vue
 
+# 或使用 submodule update
+$ git clone https://github.com/PatchyVideo/patchyvideo-vue.git
+$ cd patchyvideo-vue
+$ git submodule init
+$ git submodule update
+
 # 安装依赖
 $ npm i
+```
 
+#### 实用工具
+
+```bash
 # 运行代码检查/格式化
 $ npm run lint
 
+# i18n 相关
+$ npm run i18n
+```
+
+#### 运行代码
+
+```bash
 # 启动本地调试
 $ npm run serve
 
 # 构建
 $ npm run build
 ```
+
+## 项目依赖表
+
+在这里列出本项目使用的开源项目，同时感谢这些项目作者的付出。
+
+### 运行时（打包进项目）
+
+- vue：框架
+- vue-router：路由
+- vuex：数据存储
+- element-ui：组件库
+- vue-i18n：国际化
+- axios：数据获取
+  - vue-axios：Vue 适配
+- jquery：滚动动画和一些 DOM 操作
+- font-awesome：图标
+- echarts：统计图表
+- vue-cropper：上传头像裁剪
+- vue-linkify：链接转换
+- html-entities：HTML 编码
+- markdown-it：Markdown 渲染
+  - markdown-it-abbr：缩写
+  - markdown-it-container：框
+  - markdown-it-deflist：列表
+  - markdown-it-footnote：脚注
+  - markdown-it-ins：更改
+  - markdown-it-mark：标记
+  - markdown-it-sub：下标
+  - markdown-it-sup：上标
+- highlight.js：代码高亮
+
+### 调试时（不完全打包或不打包）
+
+- eslint：代码分析
+  - eslint-plugin-prettier：Prettier 插件
+  - eslint-plugin-vue：Vue 插件
+  - babel-eslint：Babel 插件
+  - lint-staged：提交审查
+- prettier：格式化
+- @vue/cli-service：Vue CLI
+  - @vue/cli-plugin-router：Router
+  - @vue/cli-plugin-vuex：Vuex
+  - @vue/cli-plugin-element：Element
+  - @vue/cli-plugin-babel：Babel
+  - @vue/cli-plugin-eslint：ESLint
+- webpack-bundle-analyzer：大小分析
+- vue-template-compiler：动态路由
+- @intlify/vue-i18n-loader：i18n loader
+- less-loader：Less 样式 & loader
+- moment: 日期格式化
+- lodash: 对象操作
+- colors: 控制台上色
 
 ## 写在最后
 

@@ -3,7 +3,7 @@
   "version": "0.3.0-alpha.17",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --port 8080",
+    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "i18n": "node ./scripts/i18n",
@@ -47,6 +47,7 @@
     "@vue/cli-service": "^4.3.1",
     "@vue/eslint-config-prettier": "^6.0.0",
     "babel-eslint": "^10.1.0",
+    "colors": "^1.4.0",
     "eslint": "^7.0.0",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-vue": "^7.0.0-alpha.1",
