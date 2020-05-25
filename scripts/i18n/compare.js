@@ -47,7 +47,7 @@ module.exports = function(rl, nl) {
         nfiles.push(path.relative("./i18n/patchyvideo-vue/" + rl, filedir));
       }
       if (stats.isDirectory()) {
-        filesP(filedir);
+        filesN(filedir);
       }
     });
   }

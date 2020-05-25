@@ -1,5 +1,5 @@
 /* Lib */
-import merge from "lodash/merge";
+// import merge from "lodash/merge";
 
 /* Vue */
 import Vue from "vue";
@@ -32,16 +32,6 @@ Vue.use(ElementUI);
 import VueI18n from "vue-i18n";
 Vue.use(VueI18n);
 
-// Common i18n
-import cmCHS from "../i18n/patchyvideo-vue/CHS/common.json";
-import cmCHT from "../i18n/patchyvideo-vue/CHT/common.json";
-import cmENG from "../i18n/patchyvideo-vue/ENG/common.json";
-const commoni18n = {
-  CHS: { _common: cmCHS },
-  CHT: { _common: cmCHT },
-  ENG: { _common: cmENG },
-};
-
 // Element-UI i18n
 import elCHS from "element-ui/lib/locale/lang/zh-CN.js";
 import elCHT from "element-ui/lib/locale/lang/zh-TW.js";
@@ -55,7 +45,7 @@ const elementi18n = {
 const i18n = new VueI18n({
   locale: "CHS", // set locale
   fallbackLocale: "CHS",
-  messages: merge(elementi18n, commoni18n),
+  messages: elementi18n,
 });
 
 import ElementLocale from "element-ui/lib/locale";
