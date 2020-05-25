@@ -1,6 +1,6 @@
 <!-- vue组件：pv-tag.vue -->
 <!-- 
-    功能：Patchyvideo的标签组件
+    功能：PatchyVideo的标签组件
     参数：
         1.type（String）：标签的种类，可选值：
           Copyright, Language, Character, Author, General, Meta, Soundtrack,none

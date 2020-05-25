@@ -170,7 +170,7 @@ export default {
     // 初始化页面名为 signup
     this.$store.commit("changeBgc", "signup");
     // 修改网站标题
-    document.title = this.$t("signup") + " - Patchyvideo";
+    document.title = this.$t("signup") + " - PatchyVideo";
   },
   methods: {
     open2() {

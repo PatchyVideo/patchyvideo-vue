@@ -51,7 +51,7 @@ export default {
     // 初始化页面名为 home
     this.$store.commit("changeBgc", "home");
     // 修改网站标题
-    document.title = "消息中心 - Patchyvideo";
+    document.title = "消息中心 - PatchyVideo";
   },
   methods: {},
 };

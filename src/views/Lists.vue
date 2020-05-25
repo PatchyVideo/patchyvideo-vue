@@ -145,7 +145,7 @@ export default {
     this.couponSelected = this.options[0].value;
     this.checkURL();
     // 修改网站标题
-    document.title = this.$t("title") + " - Patchyvideo";
+    document.title = this.$t("title") + " - PatchyVideo";
   },
   methods: {
     // 格式化 URL

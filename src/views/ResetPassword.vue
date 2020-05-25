@@ -108,7 +108,7 @@ export default {
     // 初始化页面名为 login
     this.$store.commit("changeBgc", "resetPassword");
     // 修改网站标题
-    document.title = this.$t("reset_psd") + " - Patchyvideo";
+    document.title = this.$t("reset_psd") + " - PatchyVideo";
   },
   mounted() {
     console.log("背景图片p站ID：30602715，如有侵权请联系本站开发者（本站账号：admin）删除");

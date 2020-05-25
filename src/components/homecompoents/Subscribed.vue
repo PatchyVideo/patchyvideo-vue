@@ -178,7 +178,7 @@ export default {
       // 监听路由 query 的值，当 query 的值为空时，说明默认是首页，调用 this.getListVideo 获取首页数据并渲染。
       if (JSON.stringify(this.$route.query) === "{}") {
         // 修改网站标题
-        document.title = "Patchyvideo";
+        document.title = "PatchyVideo";
         this.ifSearch = false;
         this.getListVideo(this.page, this.count);
         return;

@@ -121,7 +121,7 @@ export default {
     // 初始化页面名为 login
     this.$store.commit("changeBgc", "login");
     // 修改网站标题
-    //document.title = this.$t("login") + " - Patchyvideo";
+    //document.title = this.$t("login") + " - PatchyVideo";
     changeSiteTitle(this.$t("login"));
   },
   mounted() {},

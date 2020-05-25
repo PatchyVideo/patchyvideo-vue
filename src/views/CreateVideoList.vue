@@ -48,7 +48,7 @@ export default {
     // 初始化页面名为 list
     this.$store.commit("changeBgc", "createVideoList");
     // 修改网站标题
-    document.title = this.$t("title") + " - Patchyvideo";
+    document.title = this.$t("title") + " - PatchyVideo";
     // 判断是否是从已有列表导入
     if (JSON.stringify(this.$route.query.exist) == "1") {
       this.activeName = "second";

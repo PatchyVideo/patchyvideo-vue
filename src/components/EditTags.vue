@@ -1,4 +1,4 @@
-﻿<!--
+<!--
     更新日志：
     1/11/2020：v1.0
      新增保存功能 TAG校验功能，功能基本已完成
@@ -180,8 +180,8 @@ export default {
       default: "",
     },
     really: {
-      type: String,
-      default: "",
+      type: Boolean,
+      default: false,
     },
     visible: {
       type: Boolean,

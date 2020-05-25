@@ -21,7 +21,7 @@
       <!-- 网站icon &标题 -->
       <div class="iconAndTitle">
         <img class="patchyvideo-icon" src="../static/img/patchyvideo.svg" />
-        <span class="patchyvideo-title">Patchy Video</span>
+        <span class="patchyvideo-title">PatchyVideo</span>
       </div>
 
       <!-- 左面的四个页面链接 -->

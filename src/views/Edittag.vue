@@ -57,7 +57,7 @@ export default {
     // 初始化页面名为 home
     this.$store.commit("changeBgc", "tag");
     // 修改网站标题
-    document.title = this.$t("title") + " - Patchyvideo";
+    document.title = this.$t("title") + " - PatchyVideo";
     this.requestTagCategories();
   },
   methods: {
