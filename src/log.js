@@ -1,6 +1,6 @@
 global.log = function() {
   console.log(
-    "%cPatchy%cVideo%c" + process.env.VUE_APP_VERSION + "%c\nBuilt at: " + process.env.VUE_APP_BUILDTIME,
+    "%cPatchy%cVideo%c" + process.env.VUE_APP_VERSION + "%c\nBuilt@" + process.env.VUE_APP_BUILDTIME,
     "color:#9c71b2;font-size:2rem;font-family: Arial,Helvetica,sans-serif;padding: 5px;font-weight: 700;",
     "color:#ffb458;font-size:2rem;font-family: Arial,Helvetica,sans-serif;padding: 5px;font-weight: 700;",
     "color:#6a8935;font-size:0.9rem;font-family: Arial,Helvetica,sans-serif;padding: 5px;",
@@ -17,9 +17,6 @@ global.log = function() {
     console.log.apply(this, c);
   }
 };
-
-global.log();
-console.log("朋友，你知道 东方Project 吗？我让你加群，好吗？QQ群：757676234");
 
 const logicon = `                                                         _LL::;cL;
                                 ;Z8,:;L7ixF1jJ7TJ7ijFx77g@g@gX, ;LXC_
@@ -106,6 +103,9 @@ if (localStorage.getItem("CON_color_icon")) {
 } else {
   console.log(logicon);
 }
+
+global.log();
+console.log("朋友，你知道 东方Project 吗？我让你加群，好吗？QQ群：757676234");
 
 global.enableColorMode = function() {
   localStorage.setItem("CON_color_icon", true);
