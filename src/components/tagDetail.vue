@@ -85,9 +85,13 @@
       ></CheckInput>
       <el-button type="info" @click="addTag()">{{ $t("add_tag") }}</el-button>
       <!-- Wiki链接 -->
-      <a href="https://patchyvideo.wiki/Tags" target="_blank" style="color: #409eff; float: right; margin-right: 100px; margin-top: 15px;">{{
-        $t("rulesOfTags")
-      }}</a>
+      <a
+        href="https://patchyvideo.wiki/Tags"
+        target="_blank"
+        rel="noopener noreferrer"
+        style="color: #409eff; float: right; margin-right: 100px; margin-top: 15px;"
+        >{{ $t("rulesOfTags") }}</a
+      >
     </div>
     <!-- 表格正文 -->
     <el-table :data="tagData" style="width: 100%;">

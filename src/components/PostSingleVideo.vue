@@ -54,9 +54,13 @@
           <el-option v-for="item in RepostTypes" :key="item.label" :label="item.label" :value="item.value"></el-option>
         </el-select>
         <!-- Wiki 链接 -->
-        <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color: #409eff; float: right; margin-right: 100px; margin-top: 10px;">{{
-          $t("PostRules")
-        }}</a>
+        <a
+          href="https://patchyvideo.wiki/Upload"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="color: #409eff; float: right; margin-right: 100px; margin-top: 10px;"
+          >{{ $t("PostRules") }}</a
+        >
       </div>
       <!-- 视频上传 -->
       <el-button class="postButton" type="primary" @click="postSingleVideo">

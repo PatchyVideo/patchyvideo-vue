@@ -103,7 +103,7 @@
           </el-form-item>
           <el-form-item :label="$t('user_url')" prop="userSpaces">
             <p v-for="(URL, index) in author.userSpaces" :key="URL">
-              <a :key="URL" target="_blank" :href="URL">{{ URL }}</a>
+              <a :key="URL" target="_blank" rel="noopener noreferrer" :href="URL">{{ URL }}</a>
               <el-button type="text" style="margin-left: 5px;" @click="deluserSpace(index)">删除</el-button>
             </p>
             <p v-if="!author.userSpaces.length">{{ $t("no_user_url") }}</p>
@@ -217,7 +217,7 @@
           </el-form-item>
           <el-form-item :v-else="$t('user_url')" prop="userSpaces">
             <p v-for="URL in author.userSpaces" :key="URL">
-              <a :key="URL" target="_blank" :href="URL">{{ URL }}</a>
+              <a :key="URL" target="_blank" rel="noopener noreferrer" :href="URL">{{ URL }}</a>
             </p>
             <p v-if="!author.userSpaces.length">{{ $t("no_user_url") }}</p>
           </el-form-item>

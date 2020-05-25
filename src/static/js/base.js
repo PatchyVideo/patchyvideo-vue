@@ -3,7 +3,7 @@ function getSiteTitle() {
 }
 
 function changeSiteTitle(title) {
-  document.title = title + " - Patchyvideo";
+  document.title = title + " - PatchyVideo";
 }
 
 export { getSiteTitle, changeSiteTitle };

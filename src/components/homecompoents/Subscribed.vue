@@ -46,7 +46,7 @@
                 </h4>
                 <p>{{ item.item.desc }}</p>
                 <div>
-                  <a target="_blank" :href="item.item.url">{{ item.item.url }}</a>
+                  <a target="_blank" rel="noopener noreferrer" :href="item.item.url">{{ item.item.url }}</a>
                   <i class="fa fa-copy fa-lg" style="margin-left: 2px;" @click="copyVideoLink(item.item.url)"></i>
                 </div>
               </div>

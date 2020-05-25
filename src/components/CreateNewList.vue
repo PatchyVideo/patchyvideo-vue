@@ -25,7 +25,7 @@
       </el-form-item>
       <el-form-item>
         <el-checkbox v-model="list.private">{{ $t("set_as_private_playlist") }}</el-checkbox>
-        <a href="https://patchyvideo.wiki/Playlist" target="_blank" style="float: right;">{{ $t("showListRules") }}</a>
+        <a href="https://patchyvideo.wiki/Playlist" target="_blank" rel="noopener noreferrer" style="float: right;">{{ $t("showListRules") }}</a>
       </el-form-item>
       <!-- 封面上传,暂时用不上 -->
       <el-form-item v-if="false">

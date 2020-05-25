@@ -31,7 +31,13 @@
           <li v-for="item in listvideo" :key="item._id.$oid" class="list-item">
             <div class="video-item">
               <!-- 封面图片 -->
-              <a target="_blank" :href="item.item.url" tag="a" style="width: 200px; height: 125px; margin-right: 20px; display: inline-block;">
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                :href="item.item.url"
+                tag="a"
+                style="width: 200px; height: 125px; margin-right: 20px; display: inline-block;"
+              >
                 <div class="video-thumbnail">
                   <bilibili-cover
                     v-if="item.item.site === 'bilibili'"

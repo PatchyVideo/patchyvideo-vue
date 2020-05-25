@@ -93,7 +93,7 @@
       <el-checkbox v-model="UsingEnter">{{ $t("usingEnter") }}</el-checkbox>
       <span>
         {{ $t("respect") }}
-        <a href="https://patchyvideo.wiki/Comments" target="_blank" style="color: #409eff;">{{ $t("commentRules") }}</a>
+        <a href="https://patchyvideo.wiki/Comments" target="_blank" rel="noopener noreferrer" style="color: #409eff;">{{ $t("commentRules") }}</a>
         {{ $t("yo") }}
       </span>
       <el-button type="primary" :loading="posting" @click="postcomment()">{{ $t("post") }}</el-button>

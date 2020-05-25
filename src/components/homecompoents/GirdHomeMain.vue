@@ -30,7 +30,7 @@
         <ul>
           <li v-for="item in listvideo" :key="item._id.$oid" class="list-item">
             <div class="video-item">
-              <a target="_blank" :href="item.item.url" tag="a">
+              <a target="_blank" rel="noopener noreferrer" :href="item.item.url" tag="a">
                 <div class="video-thumbnail">
                   <img :src="'/images/covers/' + item.item.cover_image" />
                   <div class="Imgcover"></div>

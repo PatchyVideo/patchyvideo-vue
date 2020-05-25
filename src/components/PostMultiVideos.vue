@@ -35,9 +35,13 @@
         <i v-if="!advancedOptions" class="el-icon-caret-bottom"></i>
         <i v-else class="el-icon-caret-top"></i>
         <!-- Wiki链接 -->
-        <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color: #409eff; float: right; margin-right: 100px; margin-top: 0px;">{{
-          $t("PostRules")
-        }}</a>
+        <a
+          href="https://patchyvideo.wiki/Upload"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="color: #409eff; float: right; margin-right: 100px; margin-top: 0px;"
+          >{{ $t("PostRules") }}</a
+        >
       </p>
       <el-collapse-transition style="margin-bottom: 20px;">
         <div v-show="advancedOptions" class="options">
