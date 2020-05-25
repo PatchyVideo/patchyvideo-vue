@@ -210,6 +210,7 @@ export default {
       colorTagList: ["Copyright", "Language", "Character", "General", "Meta", "Soundtrack", "Author"],
       // 溢出元素表
       overflowed: [],
+      onresizehandler: null,
     };
   },
   computed: {
@@ -269,9 +270,13 @@ export default {
     });
     // 监听resize
     let _this = this;
-    window.onresize = () => {
+    this.onresizehandler = function() {
       _this.freshOverflow();
     };
+    window.addEventListener("resize", this.onresizehandler);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.onresizehandler);
   },
   methods: {
     // 点击标签显示标签的搜索结果

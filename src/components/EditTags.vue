@@ -1,4 +1,4 @@
-<!--
+﻿<!--
     更新日志：
     1/11/2020：v1.0
      新增保存功能 TAG校验功能，功能基本已完成
@@ -213,6 +213,7 @@ export default {
       infoTipMark: false,
       // 自动补全标签的内容
       taglist: [],
+      onkeydownhandler: null,
     };
   },
   watch: {
@@ -244,7 +245,7 @@ export default {
   created() {
     let that = this;
     // 当前页面监视键盘输入
-    document.onkeydown = function(e) {
+    this.onkeydownhandler = function(e) {
       // 事件对象兼容
       let e1 = e || event || window.event || arguments.callee.caller.arguments[0];
       // 键盘按键判断: 左箭头 -37; 上箭头 -38; 右箭头 -39; 下箭头 -40
@@ -255,6 +256,7 @@ export default {
         }
       }
     };
+    window.addEventListener("keydown", this.onkeydownhandler);
     if (this.msg != "") {
       this.getCommonTags(); // 防止组件更新时没有调用
     }
@@ -286,6 +288,9 @@ export default {
         _that.isInfoTipClick = true;
       };
     }
+  },
+  beforeDestroy() {
+    window.removeEventListener("keydown", this.onkeydownhandler);
   },
   methods: {
     // watchAutoComplete(){

@@ -162,7 +162,7 @@ export default {
       // 未读信息的数量
       messagesNum: 0,
       // 控制读取未读信息方法的变量
-      queryMessages: "",
+      queryMessages: 0,
     };
   },
   computed: {
@@ -202,6 +202,9 @@ export default {
   },
   mounted() {},
   updated() {},
+  destroyed() {
+    if (this.queryMessages) clearInterval(this.queryMessages);
+  },
   methods: {
     // 测试用户的登录状态
     checkUser() {
