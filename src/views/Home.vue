@@ -53,7 +53,7 @@
     <!-- home页面的正文 -->
     <el-tabs v-model="activeName" type="border-card">
       <el-tab-pane :label="labelInfo[0]" name="first">
-        <i :class="{ 'el-icon-s-grid': flag, 'el-icon-menu': !flag }" @click="changeLine"></i>
+        <i style="margin-top:5px" :class="{ 'el-icon-s-grid': flag, 'el-icon-menu': !flag }" @click="changeLine"></i>
         <homemain v-if="activeName === 'first' && !flag"></homemain>
         <girdhomemain v-if="activeName === 'first' && flag"></girdhomemain>
       </el-tab-pane>
