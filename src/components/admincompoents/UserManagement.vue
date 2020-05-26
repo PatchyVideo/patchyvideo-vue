@@ -37,8 +37,8 @@
         </el-row>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{ $t("edit_dialog.cancel") }}</el-button>
-        <el-button type="primary" @click="handleOk(updateUserData)">{{ $t("edit_dialog.confirm") }}</el-button>
+        <el-button @click="dialogVisible = false">{{ $t("_common.botton.cancel") }}</el-button>
+        <el-button type="primary" @click="handleOk(updateUserData)">{{ $t("_common.botton.confirm") }}</el-button>
       </span>
     </el-dialog>
 
@@ -151,7 +151,7 @@ export default {
   },
   watch: {},
   created() {
-    this.couponSelected = this.options[0].value;
+    this.couponSelected = this.usermanagement.form.options[0].value;
     this.usermanagement.form.timeRange = [
       this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date(new Date().getTime() - 24 * 60 * 60 * 1000)),
       this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date()),

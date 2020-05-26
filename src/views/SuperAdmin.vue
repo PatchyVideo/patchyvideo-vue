@@ -11,7 +11,13 @@
     <topnavbar></topnavbar>
 
     <!-- 管理员身份验证界面 -->
-    <div v-if="!admin" v-loading="!admin" class="adminloading" element-loading-text="少女祈祷中" element-loading-spinner="el-icon-loading"></div>
+    <div
+      v-if="!admin"
+      v-loading="!admin"
+      class="adminloading"
+      :element-loading-text="$t('_common.global_text.loading')"
+      element-loading-spinner="el-icon-loading"
+    ></div>
 
     <el-tabs v-else v-model="activeName">
       <!-- 用户管理 -->

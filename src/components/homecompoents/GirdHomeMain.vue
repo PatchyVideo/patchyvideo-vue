@@ -1,7 +1,13 @@
 <template>
   <div>
     <div class="tag-box">
-      <el-tag key style="margin: 0 5px;" :type="visibleSites.includes('') ? '' : 'info'" @click="(e) => onSitesChange()">全部</el-tag>
+      <el-tag
+        key
+        v-t="'_common.global_text.all'"
+        style="margin: 0 5px;"
+        :type="visibleSites.includes('') ? '' : 'info'"
+        @click="(e) => onSitesChange()"
+      ></el-tag>
       <el-tag
         v-for="item in allSites"
         :key="item.id"
@@ -337,10 +343,7 @@ export default {
     copyVideoLink: function(url) {
       this.$alert(
         this.$t("copy_link.info", { status: copyToClipboardText(url) ? this.$t("copy_link.status.ok") : this.$t("copy_link.status.fail") }),
-        this.$t("copy_link.title"),
-        {
-          confirmButtonText: this.$t("copy_link.confirm"),
-        }
+        this.$t("copy_link.title")
       );
     },
     // 请求播放列表数据

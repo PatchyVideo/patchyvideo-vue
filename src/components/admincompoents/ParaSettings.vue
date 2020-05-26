@@ -7,8 +7,8 @@
         <code place="newTargetPara">{{ data[targetPara] }}</code>
       </i18n>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{ $t("para_change.cancel") }}</el-button>
-        <el-button type="primary" @click="setPara">{{ $t("para_change.confirm") }}</el-button>
+        <el-button @click="dialogVisible = false">{{ $t("_common.botton.cancel") }}</el-button>
+        <el-button type="primary" @click="setPara">{{ $t("_common.botton.confirm") }}</el-button>
       </span>
     </el-dialog>
 
