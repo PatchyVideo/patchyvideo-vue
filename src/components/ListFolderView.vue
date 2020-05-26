@@ -7,109 +7,6 @@
     ★待解决问题：
     
 -->
-<i18n>
-{
-    "CHS":{
-        "cancel":"取 消",
-        "ok":"确 定",
-        "name":"名称",
-        "rename":"重命名",
-        "cover":"封面",
-        "title":"标题",
-        "video_num":"视频数",
-        "modif_date":"修改日期",
-        "search_list":"搜索列表...",
-        "search":"搜索",
-        "my_playlist":"我的播放列表",
-        "all":"全部",
-        "private":"私有",
-        "public":"公开",
-        "copy_folder_addr":"点击复制文件夹地址",
-        "tip":"提示",
-        "confirm_tip":"确认删除吗？此操作不可逆",
-        "new_folder":"新建文件夹",
-        "add":"添加",
-        "del_select":"删除选择项",
-        "add_2_cur_dir":"添加至当前目录",
-        "input_name":"请输入名称",
-        "no_permissions":"您没有权限查看此文件夹",
-        "create_success":"创建成功",
-        "folder_exist":"文件夹已存在",
-        "name_limit":"名称不能含有/或*",
-        "del_success":"删除成功",
-        "login_please":"请登录",
-        "add_sucess":"添加成功",
-        "invalid_path_or_name":"无效路径或名称"
-
-
-    },
-    "ENG":{
-        "cancel":"Cancel",
-        "ok":"O K",
-        "name":"Name",
-        "rename":"Rename",
-        "cover":"Cover",
-        "title":"Title",
-        "video_num":"Number of videos",
-        "modif_date":"Modification date",
-        "search_list":"Search list...",
-        "search":"Search",
-        "my_playlist":"My playlist",
-        "all":"All",
-        "private":"Private",
-        "public":"Public",
-        "copy_folder_addr":"Click To Copy Folder Address",
-        "tip":"Tip",
-        "confirm_tip":"Are you sure you want to delete? This operation is irreversible",
-        "new_folder":"New folder",
-        "add":"Add",
-        "del_select":"Delete selected",
-        "add_2_cur_dir":"Add to current folder",
-        "input_name":"Please enter a name",
-        "no_permissions":"You do not have permission to view this folder",
-        "create_success":"Create succeed",
-        "folder_exist":"The folder already exists",
-        "name_limit":"The name cannot contain'/'or'*'",
-        "del_success":"Delete succeed",
-        "login_please":"Please sign in",
-        "add_sucess":"Add succeed",
-        "invalid_path_or_name":"Invalid path or name"
-    },
-    "CHT":{
-        "cancel":"取 消",
-        "ok":"確 定",
-        "name":"名稱",
-        "rename":"重命名",
-        "cover":"封面",
-        "title":"標題",
-        "video_num":"視頻數",
-        "modif_date":"修改日期",
-        "search_list":"搜索列表...",
-        "search":"搜索",
-        "my_playlist":"我的播放列表",
-        "all":"全部",
-        "private":"私有",
-        "public":"公開",
-        "copy_folder_addr":"點擊復制文件夾地址",
-        "tip":"提示",
-        "confirm_tip":"確認刪除嗎？此操作不可逆",
-        "new_folder":"新建文件夾",
-        "add":"添加",
-        "del_select":"刪除選擇項",
-        "add_2_cur_dir":"添加至當前目錄",
-        "input_name":"請輸入名稱",
-        "no_permissions":"您沒有權限查看此文件夾",
-        "create_success":"創建成功",
-        "folder_exist":"文件夹已存在",
-        "name_limit":"名稱不能含有/或*",
-        "del_success":"刪除成功",
-        "login_please":"請登錄",
-        "add_sucess":"添加成功",
-        "invalid_path_or_name":"無效路徑或名稱"
-    }
-}
-</i18n>
-
 <template>
   <div v-show="visible" ref="aside" v-loading="loading">
     <el-dialog :title="$t('tip')" :visible.sync="dialogVisible" :modal-append-to-body="false" width="30%">
@@ -687,3 +584,5 @@ export default {
   }
 }
 </style>
+
+<i18n folder></i18n>

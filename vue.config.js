@@ -1,6 +1,5 @@
 const webpack = require("webpack");
 const path = require("path");
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const utils = {
   assetsPath: function(_path) {
     const assetsSubDirectory =
@@ -16,13 +15,16 @@ const utils = {
     return path.join(__dirname, "..", dir);
   },
 };
+const packageJson = require("./package.json");
+process.env.VUE_APP_VERSION = packageJson.version;
+const moment = require("moment");
+process.env.VUE_APP_BUILDTIME = moment().format("YYYY-MM-DD HH:mm");
 
 module.exports = {
   publicPath: "./",
   outputDir: "dist",
   configureWebpack: {
     plugins: [
-      new BundleAnalyzerPlugin(),
       new webpack.ProvidePlugin({
         jQuery: "jquery",
         $: "jquery",
@@ -124,12 +126,26 @@ module.exports = {
   },
 
   chainWebpack: (config) => {
+    if (process.env.NODE_ENV == "production") {
+      config.plugin("webpack-bundle-analyzer").use(require("webpack-bundle-analyzer").BundleAnalyzerPlugin);
+    }
+    config.plugin("html").tap((args) => {
+      if (process.env.NODE_ENV === "production") {
+        args[0].minify.removeComments = false;
+        args[0].minify.minifyCSS = true;
+        args[0].minify.minifyJS = true;
+      }
+      return args;
+    });
     config.module
       .rule("i18n")
       .resourceQuery(/blockType=i18n/)
       .type("javascript/auto")
       .use("i18n")
-      .loader("@kazupon/vue-i18n-loader")
+      .loader("@intlify/vue-i18n-loader")
+      .end()
+      .use("i18n-folder-loader")
+      .loader("./plugins/i18n-folder-loader.js")
       .end();
   },
 };

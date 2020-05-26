@@ -4,96 +4,7 @@
     功能：展示展示视频的详细信息
     更新日志：
 -->
-<i18n>
-{
-  "CHS": {
-  "favorite":"收藏",
-  "modify" :"修改",
-  "copy" : "副本",
-  "add_copy":"添加副本",
-  "del_copy":"删除副本",
-  "sync_replica_label":"同步副本标签",
-  "sync_replica_label_from":"从此副本同步标签",
-  "playlist":"播放列表",
-  "management":"视频等级管理",
-  "official":"原始发布",
-  "official_repost":"官方再发布",
-  "authorized_translation":"授权翻译",
-  "authorized_repost":"授权转载",
-  "translation":"自发翻译",
-  "repost":"自发搬运",
-  "unknown":"其他",
-  "previous_article":"前一篇",
-  "no_previous_article":"没有前一篇了哦",
-  "next_article":"后一篇",
-  "no_next_article":"没有后一篇了哦",
-    "infotip":{
-  "release_type":"请修改视频的发布类型",
-  "nocopies":"此视频不存在副本",
-  "noplaylist":"本视频不包含于任何播放列表中",
-  "create_playlist":"由此视频创建播放列表"
-    }
-  },
-  "ENG": {
-  "favorite":"Add to playlist",
-  "modify":"Change",
-  "copy" : "Copies",
-  "add_copy":"Add copies",
-  "del_copy":"Delete copies",
-  "sync_replica_label":"Synchronize copies tags",
-  "sync_replica_label_from":"Sync tags from this video",
-  "playlist":"Playlists",
-  "management":"Video Level Management",
-  "other":"Other",
-  "official": "Original",
-  "official_repost": "Official Repost",
-  "authorized_translation": "Authorized Translation",
-  "authorized_repost": "Authorized Repost",
-  "translation": "User Translation",
-  "repost": "User Repost",
-  "unknown": "Other",
-  "previous_article":"Previous video",
-  "no_previous_article":"No previous video",
-  "next_article":"Next video",
-  "no_next_article":"No next video",
-  "infotip":{
-  "release_type":"Please select repost type for this video",
-  "nocopies":"No copies exist for this video",
-  "noplaylist":"This video is not included in any playlists",
-   "create_playlist":"Create playlist from this video"
-  }
 
-  },
-  "CHT": {
-  "favorite":"收藏",
-  "modify" :"修改",
-  "copy" : "副本",
-  "add_copy":"添加副本",
-  "del_copy":"刪除副本",
-  "sync_replica_label":"同步副本標簽",
-  "sync_replica_label_from":"從此副本同步標簽",
-  "playlist":"播放列表",
-  "management":"視頻等級管理",
-  "official":"原始發布",
-  "official_repost":"官方再發布",
-  "authorized_translation":"授權翻譯",
-  "authorized_repost":"授權轉載",
-  "translation":"自發翻譯",
-  "repost":"自發搬運",
-  "unknown":"其他",
-  "previous_article":"前壹篇",
-  "no_previous_article":"沒有前壹篇了哦",
-  "next_article":"後壹篇",
-  "no_next_article":"沒有後壹篇了哦",
-    "infotip":{
-  "release_type":"請修改視頻的發布類型",
-  "nocopies":"此視頻不存在副本",
-  "noplaylist":"本視頻不包含於任何播放列表中",
-  "create_playlist":"由此視頻創建播放列表"
-    }
-  }
-}
-</i18n>
 <template>
   <div>
     <topnavbar />
@@ -678,7 +589,7 @@ export default {
     },
     // 刷新视频信息
     refreshVideo(item) {
-      this.$axios({
+      this.axios({
         method: "post",
         url: "be/videos/refresh.do",
         data: {
@@ -1127,3 +1038,5 @@ export default {
   font-size: 12px;
 }
 </style>
+
+<i18n folder></i18n>

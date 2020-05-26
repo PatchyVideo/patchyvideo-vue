@@ -6,7 +6,6 @@ import "../static/css/base.css";
 import { changeSiteTitle } from "../static/js/base";
 import { Loading, Message } from "element-ui";
 import { getYiyan } from "../static/js/yiyan";
-// import $ from "jquery";
 
 Vue.use(VueRouter);
 
@@ -79,14 +78,6 @@ const routes = [
   {
     path: "/superadmin",
     component: () => import("../views/SuperAdmin.vue"),
-  },
-  {
-    path: "/ipfs",
-    component: () => import("../views/IPFS.vue"),
-  },
-  {
-    path: "/ipfs/player",
-    component: () => import("../views/IPFS_player.vue"),
   },
   {
     path: "/messages",

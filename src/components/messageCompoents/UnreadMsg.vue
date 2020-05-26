@@ -8,26 +8,6 @@
       此时需要对将用户ID进行整理发送至后端获取用户的详细信息
       但需要注意的是，前端需要对用户信息和用户ID进行再次匹配，会对浏览器造成一定的运算负担
 -->
-<i18n>
-{
-  "CHS": {
-    "allMsg":"未读消息",
-    "noMsg":"暂无未读消息哦！",
-    "replyTo":"回复了你的评论:"
-  },
-  "ENG": {
-    "allMsg":"Unread Messages",
-    "noMsg":"NO UNREAD MESSAGE YET!",
-    "replyTo":"replied to you:"
-  },
-  "CHT": {
-    "allMsg":"未讀消息",
-    "noMsg":"暫無未讀消息哦！",
-    "replyTo":"回復了你的評論:"
-  }
-}
-</i18n>
-
 <template>
   <div class="unreadMsg">
     <div class="unreadMsg-title">{{ $t("allMsg") }}</div>
@@ -247,3 +227,5 @@ export default {
   color: #909399;
 }
 </style>
+
+<i18n folder></i18n>

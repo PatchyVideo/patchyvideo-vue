@@ -1,53 +1,3 @@
-<i18n>
-    {
-    "CHS": {
-    "page_count": "显示 {count} / {maxcount} 个视频",
-    "no_result": "没有搜索到视频",
-    "show_deleted": "显示已失效视频",
-    "blacklist_prompt": "*已屏蔽含有敏感标签的视频，可在个人界面设置",
-    "latest": "发布时间正序",
-    "oldest": "发布时间倒序",
-    "latest_video": "原视频上传时间正序",
-    "oldest_video": "原视频上传时间倒序",
-    "popular_tags": "热门标签",
-    "search_result": "搜索结果 - {result}",
-    "syntax_error": "查询语法错误！",
-    "syntax_error_not": "所输入的查询不能与NOT连用！",
-    "see_uploaders":"查看上传者"
-    },
-    "ENG": {
-    "page_count": "Showing {count} / {maxcount} videos",
-    "no_result": "No video found",
-    "show_deleted": "Show deleted videos",
-    "blacklist_prompt": "*Some videos are blacklisted, you can change your blacklist setting in your settings panel.",
-    "latest": "Latest",
-    "oldest": "Oldest",
-    "latest_video": "Latest Video",
-    "oldest_video": "Oldest Video",
-    "popular_tags": "Popular Tags",
-    "search_result": "Search - {result}",
-    "syntax_error": "Syntax error in query",
-    "syntax_error_not": "NOT cannot be used here",
-    "see_uploaders":"See Uploaders"
-    },
-    "CHT": {
-    "page_count": "顯示 {count} / {maxcount} 個視頻",
-    "no_result": "沒有搜索到視頻",
-    "show_deleted": "顯示已失效視頻",
-    "blacklist_prompt": "*已屏蔽含有敏感標簽的視頻，可在個人界面設置",
-    "latest": "發布時間正序",
-    "oldest": "發布時間倒序",
-    "latest_video": "原視頻上傳時間正序",
-    "oldest_video": "原視頻上傳時間倒序",
-    "popular_tags": "熱門標簽",
-    "search_result": "搜索結果 - {result}",
-    "syntax_error": "查詢語法錯誤！",
-    "syntax_error_not": "所輸入的查詢不能與NOT連用！",
-    "see_uploaders":"查看上傳者"
-    }
-    }
-</i18n>
-
 <template>
   <div>
     <div class="tag-box">
@@ -81,7 +31,13 @@
           <li v-for="item in listvideo" :key="item._id.$oid" class="list-item">
             <div class="video-item">
               <!-- 封面图片 -->
-              <a target="_blank" :href="item.item.url" tag="a" style="width: 200px; height: 125px; margin-right: 20px; display: inline-block;">
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                :href="item.item.url"
+                tag="a"
+                style="width: 200px; height: 125px; margin-right: 20px; display: inline-block;"
+              >
                 <div class="video-thumbnail">
                   <bilibili-cover
                     v-if="item.item.site === 'bilibili'"
@@ -110,7 +66,7 @@
                 <!-- 内容 -->
                 <p
                   :class="{ shortDescForPageVideos: item.item.part_name }"
-                  :title="toGMT(item.item.upload_time.$date) + '\n' + (item.item.desc || '此视频没有简介哦')"
+                  :title="toGMT(item.item.upload_time.$date) + '\n' + (item.item.desc || $t('nodesc'))"
                 >
                   {{ getDesc(item.item.desc) }}
                 </p>
@@ -125,7 +81,9 @@
                 <div class="time-up">{{ toGMT(item.item.upload_time.$date) + "\n" }}</div>
               </div>
               <div class="rating-box">
-                <span v-show="item.total_rating" class="rating" title="评分">{{ (item.total_rating / item.total_rating_user || 0).toFixed(1) }}</span>
+                <span v-show="item.total_rating" class="rating" :title="$t('score.title')">{{
+                  (item.total_rating / item.total_rating_user || 0).toFixed(1)
+                }}</span>
               </div>
             </div>
           </li>
@@ -311,7 +269,7 @@ export default {
       // 监听路由 query 的值，当 query 的值为空时，说明默认是首页，调用 this.getListVideo 获取首页数据并渲染。
       if (!newV.query.keyword) {
         // 修改网站标题
-        document.title = "Patchyvideo";
+        document.title = "PatchyVideo";
         this.ifSearch = false;
         this.getListVideo(this.page, this.count);
         return;
@@ -345,7 +303,7 @@ export default {
     // 改变侧导航条的标题
     this.$store.commit("changeLeftNavBarTitle", 2);
     // 修改网站标题
-    document.title = "Patchyvideo";
+    document.title = "PatchyVideo";
 
     this.getInfoFromUrl(this.$route);
 
@@ -391,9 +349,13 @@ export default {
     // -------------------------危险提示-------------------------
     // 此外，此函数在其他页面也有调用，在优化的时候请注意其他页面的同步
     copyVideoLink: function(url) {
-      this.$alert("视频链接复制" + (copyToClipboardText(url) ? "成功！" : "失败！"), "分享链接", {
-        confirmButtonText: "确定",
-      });
+      this.$alert(
+        this.$t("copy_link.info", { status: copyToClipboardText(url) ? this.$t("copy_link.status.ok") : this.$t("copy_link.status.fail") }),
+        this.$t("copy_link.title"),
+        {
+          confirmButtonText: this.$t("copy_link.confirm"),
+        }
+      );
     },
     // 请求播放列表数据
     getListVideo: function(e, count) {
@@ -616,7 +578,7 @@ export default {
         d = d.replace(/\s(?=\s)/g, ""); // 删除连续空格
         return d;
       } else {
-        return "此视频没有简介哦";
+        return this.$t("nodesc");
       }
     },
   },
@@ -815,3 +777,5 @@ export default {
   -webkit-box-orient: vertical !important;
 }
 </style>
+
+<i18n folder></i18n>

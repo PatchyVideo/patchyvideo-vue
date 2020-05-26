@@ -10,26 +10,6 @@
      没做分页，默认展示所有视频，如果用户视频多，数据可能会很庞大会有卡顿现象。
 -->
 
-<i18n>
-{
-  "CHS": {
-    "no_data": "暂无数据",
-    "video_list": "视频索引列表",
-    "video_count": "共有{videoCount}个视频"
-  },
-  "ENG": {
-    "no_data": "No data",
-    "video_list": "Video list",
-    "video_count": "Total {videoCount} videos"
-  },
-  "CHT": {
-    "no_data": "暫無數據",
-    "video_list": "視頻索引列表",
-    "video_count": "共有{videoCount}個視頻"
-  }
-}
-</i18n>
-
 <template>
   <div>
     <div v-loading="loading" class="bigbox standard">
@@ -102,6 +82,10 @@
 </template>
 
 <script>
+import echarts from "echarts/lib/echarts";
+import "echarts/lib/chart/sunburst";
+import "echarts/lib/component/legend";
+
 export default {
   components: {},
   data() {
@@ -337,7 +321,7 @@ export default {
       // 基于准备好的 dom，初始化 echarts 实例
       // 绘制图表
       // console.log(this.$echarts);
-      let myChart = this.$echarts.init(document.getElementById("myChart"));
+      let myChart = echarts.init(document.getElementById("myChart"));
       myChart.setOption({
         series: {
           type: "sunburst",
@@ -632,3 +616,5 @@ export default {
   background-color: cornflowerblue;
 }
 </style>
+
+<i18n folder></i18n>

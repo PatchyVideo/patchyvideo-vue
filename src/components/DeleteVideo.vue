@@ -1,17 +1,3 @@
-<i18n>
-{
-    "CHS": {
-        "remove": "从播放列表中移除"
-    },
-    "ENG": {
-        "remove": "Remove from playlist"
-    },
-    "CHT": {
-        "remove": "從播放列表中移除"
-    }
-}
-</i18n>
-
 <template>
   <div>
     <el-tooltip class="item" effect="dark" :content="$t('remove')" placement="top-start">
@@ -51,3 +37,5 @@ export default {
   },
 };
 </script>
+
+<i18n folder></i18n>

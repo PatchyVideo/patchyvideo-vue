@@ -12,82 +12,6 @@
       1.IPFS视频的URL校验有待进一步优化
 -->
 
-<i18n>
-{
-    "CHS":{
-        "cancel":"取 消",
-        "ok":"确 定",
-        "input_addr":"在这里输入IPFS视频的地址w",
-        "input_orig_addr":"在这里输入视频的原地址（没有也没关系w）",
-        "input_title":"在这里输入视频的标题w",
-        "introductory_video":"介绍一下自己的视频吧",
-        "upload_cover":"从这里上传视频封面",
-        "upload_no_cover":"还没上传封面呢！",
-        "upload_limit":"只能一个上传jpg/png文件哦(建议图片比例8：5)",
-        "label":"标签",
-        "no_label":"暂无标签！",
-        "HowToPost":"如何上传IPFS视频?",
-        "post_video":"发布视频",
-        "not_input_addr":"还没输入视频地址呢！",
-        "addr_err":"视频地址格式错误！",
-        "not_input_title":"还没输入标题呢",
-        "not_introductory_video":"不来介绍一下视频吗？",
-        "upload_cover_limit":"只能上传一个封面！",
-        "upload_fail":"视频上传失败！",
-        "not_exist":"不存在！",
-        "upload_success":"上传成功！",
-        "unknown_err":"未知错误"
-    },
-    "ENG":{
-        "cancel":"Cancel",
-        "input_addr":"Enter IPFS video CID here",
-        "input_orig_addr":"Enter the original address of the video here (Optional)",
-        "input_title":"Enter the title of the video here",
-        "introductory_video":"Describe your own video",
-        "upload_cover":"Upload video cover from here",
-        "upload_no_cover":"Haven't uploaded a cover yet!",
-        "upload_limit":"Only one jpg / png file can be uploaded (recommend picture ratio 8: 5)",
-        "label":"label",
-        "no_label":"No tags!",
-        "HowToPost":"How to post IPFS video?",
-        "post_video":"Post video",
-        "not_input_addr":"Please enter video CID",
-        "addr_err":"Incorrect Video URL",
-        "not_input_title":"Haven't entered a title yet",
-        "not_introductory_video":"Don't you introduce the video?",
-        "upload_cover_limit":"Only one cover can be uploaded!",
-        "upload_fail":"Ipload failed",
-        "not_exist":"Does not exist!",
-        "upload_success":"Upload succeed",
-        "unknown_err":"Unknown error, please report bug"
-    },
-    "CHT":{
-        "cancel":"取 消",
-        "ok":"確 定",
-        "input_addr":"在這裏輸入IPFS視頻的地址w",
-        "input_orig_addr":"在這裏輸入視頻的原地址（沒有也沒關系w）",
-        "input_title":"在這裏輸入視頻的標題w",
-        "introductory_video":"介紹壹下自己的視頻吧",
-        "upload_cover":"從這裏上傳視頻封面",
-        "upload_no_cover":"還沒上傳封面呢！",
-        "upload_limit":"只能壹個上傳jpg/png文件哦(建議圖片比例8：5)",
-        "label":"標簽",
-        "no_label":"暫無標簽！",
-        "HowToPost":"如何上傳IPFS視頻?",
-        "post_video":"發布視頻",
-        "not_input_addr":"還沒輸入視頻地址呢！",
-        "addr_err":"視頻地址格式錯誤！",
-        "not_input_title":"還沒輸入標題呢",
-        "not_introductory_video":"不來介紹壹下視頻嗎？",
-        "upload_cover_limit":"只能上傳壹個封面！",
-        "upload_fail":"視頻上傳失敗！",
-        "not_exist":"不存在！",
-        "upload_success":"上傳成功！",
-        "unknown_err":"未知錯誤"
-    }
-}
-</i18n>
-
 <template>
   <div v-loading="loading" class="postBox">
     <div class="content">
@@ -138,7 +62,9 @@
         </el-form-item>
         <el-form-item>
           <!-- Wiki链接 -->
-          <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color: #409eff; float: right; font-size: 17px;">{{ $t("HowToPost") }}</a>
+          <a href="https://patchyvideo.wiki/Upload" target="_blank" rel="noopener noreferrer" style="color: #409eff; float: right; font-size: 17px;">{{
+            $t("HowToPost")
+          }}</a>
         </el-form-item>
         <!-- 上传视频的按钮 -->
         <el-form-item style="text-align: center;">
@@ -388,3 +314,5 @@ export default {
   background-size: cover;
 }
 </style>
+
+<i18n folder></i18n>

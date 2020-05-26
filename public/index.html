@@ -1,18 +1,26 @@
 <!DOCTYPE html>
+<!--
+    ____        __       __         _    ___     __
+   / __ \____ _/ /______/ /_  __  _| |  / (_)___/ /__  ____
+  / /_/ / __ `/ __/ ___/ __ \/ / / / | / / / __  / _ \/ __ \
+ / ____/ /_/ / /_/ /__/ / / / /_/ /| |/ / / /_/ /  __/ /_/ /
+/_/    \__,_/\__/\___/_/ /_/\__, / |___/_/\__,_/\___/\____/
+  Built@<%= VUE_APP_BUILDTIME %>   /____/   V<%= VUE_APP_VERSION %>
+-->
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="icon" href="<%= BASE_URL %>favicon.png" />
-    <title>Patchyvideo</title>
+    <title>PatchyVideo</title>
     <style>
       html,
       body {
         height: 100%;
       }
       .kieru {
-             opacity: 0!important;
+        opacity: 0 !important;
       }
       .irikuchi {
         top: 0;
@@ -27,75 +35,80 @@
         position: fixed;
         background-color: #333;
         opacity: 0.5;
-       }
+      }
       .square {
-        width:400px;height:400px;position:relative;
-        transform:rotate(45deg);
-        -webkit-transform:rotate(45deg);
-        -moz-transform:rotate(45deg);
-        animation:rotate infinite linear 2s;margin:10% auto;
-        -webkit-animation:rotate infinite linear 2s;margin:10% auto;
-        -moz-animation:rotate infinite linear 2s;margin:10% auto;
+        width: 400px;
+        height: 400px;
+        position: relative;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        animation: rotate infinite linear 2s;
+        margin: 10% auto;
+        -webkit-animation: rotate infinite linear 2s;
+        margin: 10% auto;
+        -moz-animation: rotate infinite linear 2s;
+        margin: 10% auto;
       }
       .rect {
-        width:400px;
-        height:200px;
-        position:relative;
-        border:1px #d2d2d2 solid;
-        border-bottom:none;
+        width: 400px;
+        height: 200px;
+        position: relative;
+        border: 1px #d2d2d2 solid;
+        border-bottom: none;
       }
       .inner_circle {
-        width:200px;
-        height:200px;
-        border-radius:200px;
-        position:absolute;
-        z-index:1;
+        width: 200px;
+        height: 200px;
+        border-radius: 200px;
+        position: absolute;
+        z-index: 1;
       }
       .dot {
-        width:50px;
-        height:50px;
-        position:absolute;
-        left:0;
-        right:0;
-        top:0;
-        bottom:0;
-        margin:auto;
-        border-radius:50%;
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        border-radius: 50%;
       }
       .rect_one {
-        border-radius:200px 200px 0 0;
-        background:white;
+        border-radius: 200px 200px 0 0;
+        background: white;
         box-shadow: 0px 0px 10px white;
       }
       .rect_one_one {
-        bottom:-100px;
-        left:0;
-        background: #FF505F;
+        bottom: -100px;
+        left: 0;
+        background: #ff505f;
       }
       .rect_one_two {
-        background:white;
+        background: white;
       }
       .rect_two {
-        border-radius:0 0 200px 200px;
-        background: #FF505F;
+        border-radius: 0 0 200px 200px;
+        background: #ff505f;
         box-shadow: 0px 0px 10px white;
       }
       .rect_two_one {
-        bottom:100px;
-        right:0;
-        background:white;
+        bottom: 100px;
+        right: 0;
+        background: white;
       }
       .rect_two_two {
-        background: #FF505F;
+        background: #ff505f;
       }
       @keyframes rotate {
         from {
-          transform:rotate(0deg);
-          -webkit-transform:rotate(0deg);
+          transform: rotate(0deg);
+          -webkit-transform: rotate(0deg);
         }
         to {
-           transform:rotate(360deg);
-           -webkit-transform:rotate(360deg);
+          transform: rotate(360deg);
+          -webkit-transform: rotate(360deg);
         }
       }
       .iwarei {
@@ -106,40 +119,26 @@
       .funny {
         font-family: cnfont;
         font-weight: normal;
-        margin:auto;
-        text-align:center;
-        color:white;
+        margin: auto;
+        text-align: center;
+        color: white;
         text-shadow: 1px 1px 10px #333;
       }
-      @-webkit-keyframes neon1 {
+      @keyframes neon1 {
         from {
-          text-shadow: 0 0 10px #fff,
-          0 0 20px  #fff,
-          0 0 30px  #fff,
-          0 0 40px  #FF505F,
-          0 0 70px  #FF505F,
-          0 0 80px  #FF505F,
-          0 0 100px #FF505F,
-          0 0 150px #FF505F;
+          text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #ff505f, 0 0 70px #ff505f, 0 0 80px #ff505f, 0 0 100px #ff505f, 0 0 150px #ff505f;
         }
         to {
-          text-shadow: 0 0 5px #fff,
-          0 0 10px #fff,
-          0 0 15px #fff,
-          0 0 20px #FF505F,
-          0 0 35px #FF505F,
-          0 0 40px #FF505F,
-          0 0 50px #FF505F,
-          0 0 75px #FF505F;
+          text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #ff505f, 0 0 35px #ff505f, 0 0 40px #ff505f, 0 0 50px #ff505f, 0 0 75px #ff505f;
         }
       }
       .iwarei h1 {
         animation: neon1 1.5s ease-in-out infinite alternate;
-        font-family: cnfont,monospace;
+        font-family: cnfont, monospace;
         font-weight: normal;
-        margin:auto;
-        text-align:center;
-        color:white;
+        margin: auto;
+        text-align: center;
+        color: white;
         text-shadow: 1px 1px 10px #333;
       }
     </style>
@@ -158,17 +157,11 @@
           </div>
         </div>
       </div>
-      
+
       <div class="iwarei">
         <h1>少 女 祈 禱 中</h1>
       </div>
-      <!--<div class="iwarei">
-        <h1 class="funny">东方project</h1>
-        <h1 class="funny">观象法之为</h1>
-        <h1 class="funny">以体天地之撰 以通神明之德</h1>
-      </div>-->
     </div>
     <div id="app"></div>
-    <!-- built files will be auto injected -->
   </body>
 </html>

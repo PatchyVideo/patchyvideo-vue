@@ -2,29 +2,6 @@
 下次更新时取消该组件的制作
 -->
 
-<i18n>
-{
-  "CHS": {
-    "pending_post": "待处理索引",
-    "failed_post": "已失败索引",
-    "show_url_time": "显示url和时间",
-    "show_all": "显示全部"
-  },
-  "ENG": {
-    "pending_post": "Pending posts",
-    "failed_post": "Failed posts",
-    "show_url_time": "Show URL and time",
-    "show_all": "Show all"
-  },
-  "CHT": {
-    "pending_post": "待處理索引",
-    "failed_post": "已失敗索引",
-    "show_url_time": "顯示url和時間",
-    "show_all": "顯示全部"
-  }
-}
-</i18n>
-
 <template>
   <div>
     <div class="bigbox standard">
@@ -511,3 +488,5 @@ textarea {
   background-size: 100% 100%;
 }
 </style>
+
+<i18n folder></i18n>

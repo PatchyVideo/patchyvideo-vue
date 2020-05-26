@@ -1,26 +1,11 @@
-<i18n>
-{
-	"CHS": {
-		"title":"用户管理",
-		"latest":"时间正序",
-		"oldest":"时间倒序"
-	},
-	"ENG": {
-		"title":"User management interface",
-		"latest":"Latest",
-		"oldest":"Oldest"
-	}
-}
-</i18n>
-
 <template>
   <div v-loading="loading">
     <!-- 编辑用户权限的对话框 -->
-    <el-dialog :title="'编辑用户: ' + editUser.username" :visible.sync="dialogVisible" width="30%">
+    <el-dialog :title="$t('edit_dialog.title', { username: editUser.username })" :visible.sync="dialogVisible" width="30%">
       <div class="usermanagement-form">
         <el-row>
           <el-col :span="5">
-            <label>访问等级</label>
+            <label>{{ $t("user_info.status.label") }}</label>
           </el-col>
           <el-col :span="18">
             <el-input v-model="editUser.status" style="width: 100%;"></el-input>
@@ -28,7 +13,7 @@
         </el-row>
         <el-row>
           <el-col :span="5">
-            <label>访问模式</label>
+            <label>{{ $t("user_info.access_mode.label") }}</label>
           </el-col>
           <el-col :span="18">
             <el-input v-model="editUser.access_mode" style="width: 100%;"></el-input>
@@ -36,7 +21,7 @@
         </el-row>
         <el-row>
           <el-col :span="5">
-            <label>允许的操作</label>
+            <label>{{ $t("user_info.allowed_ops.label") }}</label>
           </el-col>
           <el-col :span="18">
             <el-input v-model="editUser.allowed_ops" placeholder="[ ]" style="width: 100%;"></el-input>
@@ -44,7 +29,7 @@
         </el-row>
         <el-row>
           <el-col :span="5">
-            <label>拒绝的操作</label>
+            <label>{{ $t("user_info.denied_ops.label") }}</label>
           </el-col>
           <el-col :span="18">
             <el-input v-model="editUser.denied_ops" placeholder="[ ]" style="width: 100%;"></el-input>
@@ -52,19 +37,19 @@
         </el-row>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleOk(updateUserData)">确 定</el-button>
+        <el-button @click="dialogVisible = false">{{ $t("edit_dialog.cancel") }}</el-button>
+        <el-button type="primary" @click="handleOk(updateUserData)">{{ $t("edit_dialog.confirm") }}</el-button>
       </span>
     </el-dialog>
 
     <h1>{{ $t("title") }}</h1>
     <!-- 表单 -->
     <div class="usermanagement-form">
-      <el-input v-model="usermanagement.keyword" placeholder="搜索用户名..." clearable @keyup.enter.native="getUserList(true)">
+      <el-input v-model="usermanagement.keyword" :placeholder="$t('search.placeholder')" clearable @keyup.enter.native="getUserList(true)">
         <el-select slot="prepend" v-model="usermanagement.order" class="select">
           <el-option v-for="item in usermanagement.form.options" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
-        <el-button slot="append" icon="el-icon-search" @click="getUserList(true)">查找</el-button>
+        <el-button slot="append" icon="el-icon-search" @click="getUserList(true)">{{ $t("search.submit") }}</el-button>
       </el-input>
     </div>
 
@@ -72,22 +57,22 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" class="demo-table-expand">
-            <el-form-item label="头像">
+            <el-form-item :label="$t('user_info.avatar')">
               <el-avatar :size="30" :src="'be/images/userphotos/' + props.row.profile.image"></el-avatar>
             </el-form-item>
-            <el-form-item label="描述">
+            <el-form-item :label="$t('user_info.desc')">
               <span>{{ props.row.profile.desc }}</span>
             </el-form-item>
-            <el-form-item label="邮箱">
+            <el-form-item :label="$t('user_info.email')">
               <span>{{ props.row.profile.email }}</span>
             </el-form-item>
-            <el-form-item label="创建日期">
+            <el-form-item :label="$t('user_info.cdate')">
               <span>{{ dateFormat("yyyy-MM-dd HH:mm:ss", new Date(props.row.meta.created_at.$date)) }}</span>
             </el-form-item>
-            <el-form-item label="pubkey">
+            <el-form-item :label="$t('user_info.pubkey')">
               <span>{{ '"' + props.row.profile.pubkey + '"' }}</span>
             </el-form-item>
-            <el-form-item label="blacklist设置">
+            <el-form-item :label="$t('user_info.blacklist')">
               <span>{{ props.row.settings.blacklist }}</span>
             </el-form-item>
             <el-form-item label="UID">
@@ -96,18 +81,18 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column label="用戶名" width="200">
+      <el-table-column :label="$t('user_info.username')" width="200">
         <template slot-scope="scope">
           <router-link :to="'/users/' + scope.row._id.$oid" target="_blank">{{ scope.row.profile.username }}</router-link>
         </template>
       </el-table-column>
-      <el-table-column prop="access_control.status" label="访问等级" width="200"></el-table-column>
-      <el-table-column prop="access_control.access_mode" label="访问模式" width="200"></el-table-column>
-      <el-table-column prop="access_control.allowed_ops" label="允许的操作" width="200"></el-table-column>
-      <el-table-column prop="access_control.denied_ops" label="拒绝的操作" width="200"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column prop="access_control.status" :label="$t('user_info.status.label')" width="200"></el-table-column>
+      <el-table-column prop="access_control.access_mode" :label="$t('user_info.access_mode.label')" width="200"></el-table-column>
+      <el-table-column prop="access_control.allowed_ops" :label="$t('user_info.allowed_ops.label')" width="200"></el-table-column>
+      <el-table-column prop="access_control.denied_ops" :label="$t('user_info.denied_ops.label')" width="200"></el-table-column>
+      <el-table-column :label="$t('user_info.edit.label')">
         <template slot-scope="props">
-          <el-button @click="showDialog(props.row._id.$oid)">Edit</el-button>
+          <el-button @click="showDialog(props.row._id.$oid)">{{ $t("user_info.edit.value") }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -129,10 +114,6 @@ export default {
     return {
       dialogVisible: false,
       couponSelected: "",
-      options: [
-        { value: "latest", label: "时间正序" },
-        { value: "oldest", label: "时间倒序" },
-      ],
       // 当前页码
       curPageNum: 1,
       usermanagement: {
@@ -149,8 +130,8 @@ export default {
           type: "2",
           timeRange: [],
           options: [
-            { value: "latest", label: "时间正序" },
-            { value: "oldest", label: "时间倒序" },
+            { value: "latest", label: this.$t("search.options.latest") },
+            { value: "oldest", label: this.$t("search.options.oldest") },
           ],
         },
       },
@@ -347,3 +328,5 @@ export default {
   color: #959595;
 }
 </style>
+
+<i18n folder></i18n>

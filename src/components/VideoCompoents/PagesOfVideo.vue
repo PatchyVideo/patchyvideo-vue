@@ -9,19 +9,11 @@
       4/28/2020: v1.0
         release;
 -->
-<i18n>
-{
-  "CHS": {
-    "test":"test!"
-  }
-}
-</i18n>
-
 <template>
   <div class="PagesOfVideo">
     <!-- 确认是否发布分P的对话框 -->
     <el-dialog title="提示" :visible.sync="confirmPosting" width="30%">
-      <span>你确定要使用当前标签发布" {{ postingPage.part }} "的索引吗？</span>
+      <span>{{ $t("dialog_publish.value") }}</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="confirmPosting = false">取 消</el-button>
         <el-button type="primary" @click="confirmPosting = false">确 定</el-button>
@@ -297,3 +289,5 @@ export default {
   visibility: visible;
 }
 </style>
+
+<i18n folder></i18n>

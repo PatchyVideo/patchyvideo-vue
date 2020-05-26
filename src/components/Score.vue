@@ -1,45 +1,3 @@
-<i18n>
-{
-    "CHS": {
-        "score":"评分",
-        "submit":"提交",
-        "average":"均分",
-        "evaluation":"评价",
-        "login":"登录",
-        "prompt":"提示",
-        "OK":"确 定",
-        "prompt_content":"你还没有评分！无法提交！",
-        "success_prompt":"打分{rating}分成功！",
-        "show_my_score":"我的评分：{myScore}\n均分：{aveScore}"
-
-    },
-    "ENG": {
-        "score":"Score",
-        "submit":"Submit",
-        "average":"Average",
-        "evaluation":"Evaluation",
-        "login":"Login",
-        "prompt":"Prompt",
-        "OK":"O K",
-        "prompt_content":"You have not rated yet! Unable to submit!",
-        "success_prompt":"Successfully score {rating} points!",
-        "show_my_score":"My score：{myScore}\nThe average score：{aveScore}"
-    },
-    "CHT": {
-        "score":"評分",
-        "submit":"提交",
-        "average":"均分",
-        "Evaluation":"評價",
-        "login":"登錄",
-        "prompt":"提示",
-        "OK":"確 定",
-        "prompt_content":"妳還沒有評分！無法提交！",
-        "success_prompt":"打分{rating}分成功！",
-        "show_my_score":"我的评分：{myScore}\n均分：{aveScore}"
-    }
-}
-</i18n>
-
 <template>
   <div style="position: relative;">
     <!-- 没有评分就提交（分数 < 1）时  弹出框 -->
@@ -303,3 +261,5 @@ span {
   color: rgb(175, 175, 175);
 }
 </style>
+
+<i18n folder></i18n>

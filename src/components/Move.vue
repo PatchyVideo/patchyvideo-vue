@@ -1,20 +1,3 @@
-<i18n>
-{
-  "CHS": {
-    "move_up": "上移",
-    "move_down": "下移"
-  },
-  "ENG": {
-    "move_up": "Move Up",
-    "move_down": "Move Down"
-  },
-  "CHT": {
-    "move_up": "上移",
-    "move_down": "下移"
-  }
-}
-</i18n>
-
 <template>
   <div>
     <!--<i class="fa fa-arrow-up move-up" aria-hidden="true" @click="moveUp()"></i>
@@ -103,3 +86,5 @@ i {
   height: 40px;
 }
 </style>
+
+<i18n folder></i18n>

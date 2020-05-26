@@ -2,50 +2,6 @@
 黑名单组件
 -->
 
-<i18n>
-{
-  "CHS": {
-    "default_blacklist": "系统默认屏蔽",
-    "use": "使用此方案",
-    "custom_blacklist": "自定义屏蔽",
-    "blacklist_empty_prompt": "若自定义屏蔽列表为空，则认为没有开启屏蔽",
-    "blacklist_enter_prompt": "请输入多个屏蔽词,鼠标失去焦点后添加，支持空格、换行、逗号分隔",
-    "add_blacklist": "添加屏蔽词",
-    "remove_all_blacklist": "移除全部屏蔽词",
-    "load_blacklist": "导入多个屏蔽词",
-    "tag_notexist_prompt": "输入Tag必须存在于Tag库中!",
-    "tag_already_exist_prompt": "Tag已存在！",
-    "update_successed": "修改成功！"
-  },
-  "ENG": {
-    "default_blacklist": "Default blacklist",
-    "use": "Save changes",
-    "custom_blacklist": "Custom blacklist",
-    "blacklist_empty_prompt": "Blacklist is disabled if not tags is present",
-    "blacklist_enter_prompt": "Enter multiple tags, separated by space, comma or linebreak",
-    "add_blacklist": "Add tag",
-    "remove_all_blacklist": "Remove all tags",
-    "load_blacklist": "Enter multiple tags",
-    "tag_notexist_prompt": "Tags not exist",
-    "tag_already_exist_prompt": "Tag already exist",
-    "update_successed": "Update succeed"
-  },
-  "CHT": {
-    "default_blacklist": "系統默認屏蔽",
-    "use": "使用此方案",
-    "custom_blacklist": "自定義屏蔽",
-    "blacklist_empty_prompt": "若自定義屏蔽列表為空，則認為沒有開啟屏蔽",
-    "blacklist_enter_prompt": "請輸入多個屏蔽詞,鼠標失去焦點後添加，支持空格、換行、逗號分隔",
-    "add_blacklist": "添加屏蔽詞",
-    "remove_all_blacklist": "移除全部屏蔽詞",
-    "load_blacklist": "導入多個屏蔽詞",
-    "tag_notexist_prompt": "輸入Tag必須存在於Tag庫中!",
-    "tag_already_exist_prompt": "Tag已存在！",
-    "update_successed": "修改成功！"
-  }
-}
-</i18n>
-
 <template>
   <div v-loading="loading" class="black-list">
     <el-radio-group ref="radiog" v-model="radio">
@@ -433,3 +389,5 @@ export default {
   color: #ff7792;
 }
 </style>
+
+<i18n folder></i18n>

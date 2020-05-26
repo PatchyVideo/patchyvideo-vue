@@ -21,68 +21,6 @@
     ★待解决问题：
       1.邮件没有查重设置，注册账号的时候没有对邮箱的唯一性进行验证
 -->
-<i18n>
-{
-  "CHS": {
-    "signup":"注册",
-    "login":"登录",
-    "input_username":"请输入用户名",
-    "input_psd":"请输入密码",
-    "input_email":"请输入邮箱",
-    "repeat_psd":"请重复密码",
-    "username_exist":"该用户名已存在！",
-    "psd_err":"两次输入密码不一致!",
-    "input_account":"请输入账号",
-    "account_limit":"长度在 2 到 32 个字符",
-    "psd_limit":"长度在 6 到 64 个字符",
-    "email_limit":"请输入正确的邮箱地址",
-    "signup_success":"注册成功",
-    "unknown_err":"未知错误",
-    "net_err":"网络异常",
-    "ready":"就绪",
-    "format_err":"填写格式不正确！"
-  },
-  "ENG": {
-    "signup":"Signup",
-    "login":"Login",
-    "input_username":"Please enter username",
-    "input_psd":"Please enter password",
-    "input_email":"Please enter email",
-    "repeat_psd":"Please repeat password",
-    "username_exist":"The username has been taken",
-    "psd_err":"Passwords mismatch",
-    "input_account":"Please enter username",
-    "account_limit":"Username length: 2 to 32 characters",
-    "psd_limit":"Password length: 6 to 64 characters",
-    "email_limit":"Please enter a valid email address",
-    "signup_success":"Signup succeed",
-    "unknown_err":"Unknown error, please report bug",
-    "net_err":"Network error, please try again",
-    "ready":"Ready",
-    "format_err":"Please fill all information correctly"
-  },
-  "CHT": {
-    "signup":"註冊",
-    "login":"登錄",
-    "input_username":"請輸入用戶名",
-    "input_psd":"請輸入密碼",
-    "input_email":"請輸入郵箱",
-    "repeat_psd":"請重復密碼",
-    "username_exist":"該用戶名已存在！",
-    "psd_err":"兩次輸入密碼不壹致!",
-    "input_account":"請輸入賬號",
-    "account_limit":"長度在 2 到 32 個字符",
-    "psd_limit":"長度在 6 到 64 個字符",
-    "email_limit":"請輸入正確的郵箱地址",
-    "signup_success":"註冊成功",
-    "unknown_err":"未知錯誤",
-    "net_err":"網絡異常",
-    "ready":"就绪",
-    "format_err":"填寫格式不正確！"
-  }
-}
-</i18n>
-
 <template>
   <div class="signupPic">
     <!-- 注册框正文 -->
@@ -232,7 +170,7 @@ export default {
     // 初始化页面名为 signup
     this.$store.commit("changeBgc", "signup");
     // 修改网站标题
-    document.title = this.$t("signup") + " - Patchyvideo";
+    document.title = this.$t("signup") + " - PatchyVideo";
   },
   methods: {
     open2() {
@@ -469,3 +407,5 @@ i:hover {
   margin-top: 5px;
 }
 </style>
+
+<i18n folder></i18n>

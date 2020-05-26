@@ -29,86 +29,6 @@
       暂无
 -->
 
-<i18n>
-{
-  "CHS": {
-  "tag": {
-      "title":"标签",
-      "title2":"热门标签",
-      "title3":"相关标签",
-      "video_action":"[使用标签发布视频]",
-      "prompt_action":"[查看编辑标签历史]",
-      "edit": "编辑"
-      },
-  "tag_history": {
-      "prompt": "标签编辑历史",
-      "add": "添加:",
-      "del": "删除:",
-      "empty": "暂无记录!"
-    },
-    "categories": {
-      "General":"综合",
-      "Character":"角色",
-      "Copyright":"作品",
-      "Author":"up主",
-      "Meta":"元数据",
-      "Language":"语言",
-      "Soundtrack":"原曲"
-    }
-  },
-  "ENG": {
-    "tag": {
-      "title":"Tag",
-      "title2":"Popular Tags",
-      "title3":"Related Tags",
-      "video_action":"[Post video with tags]",
-      "prompt_action":"[View tag history]",
-      "edit":"Edit"
-      },
-    "tag_history": {
-      "prompt": "Tag History",
-      "add": "Added:",
-      "del": "Removed:",
-      "empty": "No record found"
-    },
-    "categories": {
-      "General":"General",
-      "Character":"Character",
-      "Copyright":"Copyright",
-      "Author":"Author",
-      "Meta":"Meta",
-      "Language":"Language",
-      "Soundtrack":"Soundtrack"
-    }
-  },
-  "CHT": {
-    "tag": {
-      "title":"標簽",
-      "title2":"熱門標簽",
-      "title3":"相關標簽",
-      "video_action":"[使用標簽發布視頻]",
-      "prompt_action":"[查看編輯標簽歷史]",
-      "edit": "編輯"
-      },
-    "tag_history": {
-      "prompt": "標簽編輯歷史",
-      "add": "添加:",
-      "del": "刪除:",
-      "empty": "暫無記錄!"
-    },
-    "categories": {
-      "General":"綜合",
-      "Character":"角色",
-      "Copyright":"作品",
-      "Author":"up主",
-      "Meta":"元數據",
-      "Language":"語言",
-      "Soundtrack":"原曲"
-    }
-  }
-}
-</i18n>
-
 <template>
   <div class="left-navbar">
     <!-- EditTags组件 -->
@@ -290,6 +210,7 @@ export default {
       colorTagList: ["Copyright", "Language", "Character", "General", "Meta", "Soundtrack", "Author"],
       // 溢出元素表
       overflowed: [],
+      onresizehandler: null,
     };
   },
   computed: {
@@ -349,9 +270,13 @@ export default {
     });
     // 监听resize
     let _this = this;
-    window.onresize = () => {
+    this.onresizehandler = function() {
       _this.freshOverflow();
     };
+    window.addEventListener("resize", this.onresizehandler);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.onresizehandler);
   },
   methods: {
     // 点击标签显示标签的搜索结果
@@ -597,3 +522,5 @@ export default {
   color: #ff7792;
 }
 </style>
+
+<i18n folder></i18n>

@@ -1,28 +1,14 @@
-<i18n>
-{
-  "CHS": {
-	"para_settings":"网站参数设置"
-  },
-  "ENG": {
-	"para_settings":"Site parameter settings "
-  }
-}
-</i18n>
 <template>
   <div>
     <!-- 修改参数的提示框 -->
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
-      <span>
-        你确定要修改参数
-        <strong>{{ targetPara }}</strong> 为：
-      </span>
-      <br />
-      <code>{{ data[targetPara] }}</code>
-      <br />
-      <span>吗？</span>
+    <el-dialog :title="$t('para_change.title')" :visible.sync="dialogVisible" width="30%">
+      <i18n path="para_change.value" tag="span" style="white-space: pre;">
+        <strong place="targetPara">{{ targetPara }}</strong>
+        <code place="newTargetPara">{{ data[targetPara] }}</code>
+      </i18n>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="setPara">确 定</el-button>
+        <el-button @click="dialogVisible = false">{{ $t("para_change.cancel") }}</el-button>
+        <el-button type="primary" @click="setPara">{{ $t("para_change.confirm") }}</el-button>
       </span>
     </el-dialog>
 
@@ -31,7 +17,13 @@
       <a class="el-icon-refresh" @click="getPara()"></a>
     </h1>
 
-    <el-switch v-model="isEdit" active-text="编辑" inactive-text="查看" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+    <el-switch
+      v-model="isEdit"
+      :active-text="$t('para_switch.active-text')"
+      :inactive-text="$t('para_switch.inactive-text')"
+      active-color="#13ce66"
+      inactive-color="#ff4949"
+    ></el-switch>
     <div v-loading="loading">
       <el-form ref="form" :model="data" label-width="60px" :disabled="!isEdit">
         <el-form-item v-for="(item, index) in data" :key="index" :label="index">
@@ -43,7 +35,7 @@
               dialogVisible = true;
               targetPara = index;
             "
-            >更新</el-button
+            >{{ $t("para_update") }}</el-button
           >
         </el-form-item>
       </el-form>
@@ -113,3 +105,5 @@ export default {
 </script>
 
 <style scoped></style>
+
+<i18n folder></i18n>

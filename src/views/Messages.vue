@@ -4,26 +4,6 @@
     功能：显示用户的消息
     更新日志：
 -->
-<i18n>
-{
-  "CHS": {
-    "MsgCenter":"消息中心",
-    "UnreadMsg":"未读消息",
-    "AllMsg":"全部消息"
-  },
-  "ENG": {
-    "MsgCenter":"Message Center",
-    "UnreadMsg":"Unread Messages",
-    "AllMsg":"All Messages"
-  },
-  "CHT": {
-    "MsgCenter":"消息中心",
-    "UnreadMsg":"未讀消息",
-    "AllMsg":"全部消息"
-  }
-}
-</i18n>
-
 <template>
   <div class="messages">
     <topnavbar />
@@ -71,7 +51,7 @@ export default {
     // 初始化页面名为 home
     this.$store.commit("changeBgc", "home");
     // 修改网站标题
-    document.title = "消息中心 - Patchyvideo";
+    document.title = "消息中心 - PatchyVideo";
   },
   methods: {},
 };
@@ -115,3 +95,5 @@ export default {
   background-color: rgba(0, 136, 255, 0.123);
 }
 </style>
+
+<i18n folder></i18n>

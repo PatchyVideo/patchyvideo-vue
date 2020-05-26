@@ -7,107 +7,6 @@
     2/1/2020: v1.0 
       release
 -->
-<i18n>
-{
-  "CHS": {
-    "comment":"评论",
-    "commentCount":"共{length}条评论",
-    "nocomment":"暂无评论！",
-    "saySth":"说点儿什么吧~",
-    "usingEnter":"使用Enter键发表评论",
-    "respect":"请遵守",
-    "commentRules":"评论规则",
-    "yo":"哟",
-    "post":"发表",
-    "joinDiscuss":"想要一起参与讨论？",
-    "login":"点我登录",
-    "showRplies":"查看{length}条回复",
-    "replyPrompt":" 回复",
-    "reply":"回复",
-    "hideReply":"收起回复",
-    "manage":"管理",
-    "replyTo":"回复Ta",
-    "hiddencomment":"该评论已被隐藏",
-    "opencomment":"点我展开",
-    "deletedcomment":"抱歉，该评论已被删除",
-    "selectOpts":"请选择操作",
-    "deletcomment":"删除评论",
-    "hidecomment":"隐藏评论",
-    "cancel":"取 消",
-    "getcommentFailed":"获取评论失败，请检查网络设置！",
-    "PsaySth":"请输入内容！",
-    "postSuccessfully":"发表成功！",
-    "postFailed":"发表失败，请检查网络设置！",
-    "operationSuccessfully":"操作成功！",
-    "operationFailed":"操作失败，请检查网络设置！"
-  },
-  "ENG": {
-    "comment":"comment",
-    "commentCount":"{length} comments in total",
-    "nocomment":"No comment here!",
-    "saySth":"Say something...",
-    "usingEnter":"Post comment using Enter key",
-    "respect":"Please respect ",
-    "commentRules":"the commentRules",
-    "yo":" ",
-    "post":"Post",
-    "joinDiscuss":"Want to join the discuss? ",
-    "login":"Click me to login",
-    "showRplies":"Show {length} comments",
-    "replyPrompt":" Reply ",
-    "reply":"Reply",
-    "hideReply":"Hide the reply",
-    "manage":"Manage",
-    "replyTo":"Reply to...",
-    "hiddencomment":"The comment has been hidden. ",
-    "opencomment":"Click me to show the comment",
-    "deletedcomment":"Sorry, the comment has been deleted",
-    "selectOpts":"Please select the operation",
-    "deletcomment":"Delet the comment",
-    "hidecomment":"Hide the comment",
-    "cancel":"Cancel",
-    "getcommentFailed":"Geting comment data failed, please check your Internet!",
-    "PsaySth":"Please say something!",
-    "postSuccessfully":"Post Successfully",
-    "postFailed":"Failed post , please check your Internet!",
-    "operationSuccessfully":"Operate Successfully",
-    "operationFailed":"Failed operation, please check your Internet!"
-  },
-  "CHT": {
-    "comment":"評論",
-    "commentCount":"共{length}條評論",
-    "nocomment":"暫無評論！",
-    "saySth":"說點兒什麼吧~",
-    "usingEnter":"使用Enter鍵發表評論",
-    "respect":"請遵守",
-    "commentRules":"評論規則",
-    "yo":"哦",
-    "post":"發表",
-    "joinDiscuss":"想要一起參與討論？",
-    "login":"點我登錄",
-    "showRplies":"查看{length}條回复",
-    "replyPrompt":" 回复",
-    "reply":"回复",
-    "hideReply":"收起回复",
-    "manage":"管理",
-    "replyTo":"回复Ta",
-    "hiddencomment":"該評論已被隱藏",
-    "opencomment":"點我展開",
-    "deletedcomment":"抱歉，該評論已被刪除",
-    "selectOpts":"請選擇操作",
-    "deletcomment":"刪除評論",
-    "hidecomment":"隱藏評論",
-    "cancel":"取 消",
-    "getcommentFailed":"獲取評論失敗，請檢查網絡設置！",
-    "PsaySth":"請輸入內容！",
-    "postSuccessfully":"發表成功！",
-    "postFailed":"發表失敗，請檢查網絡設置！",
-    "operationSuccessfully":"操作成功！",
-    "operationFailed":"操作失敗，請檢查網絡設置！"
-  }
-}
-</i18n>
-
 <template>
   <div style="text-align: left;">
     <!-- 管理操作的弹出框 -->
@@ -194,7 +93,7 @@
       <el-checkbox v-model="UsingEnter">{{ $t("usingEnter") }}</el-checkbox>
       <span>
         {{ $t("respect") }}
-        <a href="https://patchyvideo.wiki/Comments" target="_blank" style="color: #409eff;">{{ $t("commentRules") }}</a>
+        <a href="https://patchyvideo.wiki/Comments" target="_blank" rel="noopener noreferrer" style="color: #409eff;">{{ $t("commentRules") }}</a>
         {{ $t("yo") }}
       </span>
       <el-button type="primary" :loading="posting" @click="postcomment()">{{ $t("post") }}</el-button>
@@ -957,3 +856,5 @@ tr {
   margin-left: 70px;
 }
 </style>
+
+<i18n folder></i18n>

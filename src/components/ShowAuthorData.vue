@@ -8,119 +8,6 @@
     更新日志：
     ★待解决问题：
 -->
-<i18n>
-{
-  "CHS": {
-    "author_type": "作者类型",
-    "user_url": "官网/空间",
-    "no_user_url": "暂无官网/空间地址",
-    "enter_user_url_prompt": "在这里输入官网/空间地址",
-    "add": "添加",
-    "author_tags": "相关标签",
-    "no_tag": "暂无标签",
-    "no_desc": "暂无简介",
-    "enter_tag_prompt": "请输入标签",
-    "user_desc": "简介",
-    "write_something": "写点儿什么吧~",
-    "user_picture": "头像",
-    "change_method": "切换上传方式",
-    "upload_picture": "从这里上传头像",
-    "file_too_large": "没反应？文件太大了哦",
-    "upload_succeed": "上传成功！",
-    "del": "删除",
-    "no_url": "暂无URL",
-    "enter_pic_url_prompt": "在这里输入头像的URL~",
-    "back": "返回",
-    "commit": "提交修改",
-    "no_author_data": "暂无该作者数据",
-    "individual": "个人",
-    "group": "社团",
-    "refresh": "刷新",
-    "change_author_data": "修改内容",
-    "select_author_type": "请选择作者类型!",
-    "enter_url": "请输入至少一个地址!",
-    "one_picture": "只能上传一个头像！",
-    "update_succeed": "修改成功!",
-    "tag_not_exist": "输入Tag必须存在于Tag库中!",
-    "tag_add_succeed": "Tag添加成功!",
-    "tag_already_exist": "Tag已存在！",
-    "unknown_error": "未知错误"
-  },
-  "ENG": {
-    "author_type": "Author Type",
-    "user_url": "Author URLs",
-    "no_user_url": "No URLs",
-    "enter_user_url_prompt": "Enter author URLs here",
-    "add": "Add",
-    "author_tags": "Author tags",
-    "no_tag": "No tags",
-    "no_desc": "No description",
-    "enter_tag_prompt": "Enter tag",
-    "user_desc": "Description",
-    "write_something": "Describe him/her",
-    "user_picture": "Author Photo",
-    "change_method": "Toggle Upload",
-    "upload_picture": "Upload here",
-    "file_too_large": "File too large",
-    "upload_succeed": "Upload succeed",
-    "del": "Delete",
-    "no_url": "No URL",
-    "enter_pic_url_prompt": "Enter URL to author photo",
-    "back": "Back",
-    "commit": "Commit",
-    "no_author_data": "No author data found",
-    "individual": "Individual",
-    "group": "Doujin Circle",
-    "refresh": "Refreash",
-    "change_author_data": "Contribute",
-    "select_author_type": "Please select author type",
-    "enter_url": "Please enter URL",
-    "one_picture": "Only one photo is allowed",
-    "update_succeed": "Update succeed",
-    "tag_not_exist": "Tag not exist",
-    "tag_add_succeed": "Add tag succeed",
-    "tag_already_exist": "Tag already exist",
-    "unknown_error": "Unknown error, please report bug"
-  },
-  "CHT": {
-    "author_type": "作者類型",
-    "user_url": "官網/空間",
-    "no_user_url": "暫無官網/空間地址",
-    "enter_user_url_prompt": "在這裏輸入官網/空間地址",
-    "add": "添加",
-    "author_tags": "相關標簽",
-    "no_tag": "暫無標簽",
-    "no_desc": "暫無簡介",
-    "enter_tag_prompt": "請輸入標簽",
-    "user_desc": "簡介",
-    "write_something": "寫點兒什麽吧~",
-    "user_picture": "頭像",
-    "change_method": "切換上傳方式",
-    "upload_picture": "從這裏上傳頭像",
-    "file_too_large": "沒反應？文件太大了哦",
-    "upload_succeed": "上傳成功！",
-    "del": "刪除",
-    "no_url": "暫無URL",
-    "enter_pic_url_prompt": "在這裏輸入頭像的URL~",
-    "back": "返回",
-    "commit": "提交修改",
-    "no_author_data": "暫無該作者數據",
-    "individual": "個人",
-    "group": "社團",
-    "refresh": "刷新",
-    "change_author_data": "修改內容",
-    "select_author_type": "請選擇作者類型!",
-    "enter_url": "請輸入至少壹個地址!",
-    "one_picture": "只能上傳壹個頭像！",
-    "update_succeed": "修改成功!",
-    "tag_not_exist": "輸入Tag必須存在於Tag庫中!",
-    "tag_add_succeed": "Tag添加成功!",
-    "tag_already_exist": "Tag已存在！",
-    "unknown_error": "未知錯誤"
-  }
-}
-</i18n>
-
 <template>
   <div v-loading="loading">
     <!-- 头像&各种语言标签 -->
@@ -216,7 +103,7 @@
           </el-form-item>
           <el-form-item :label="$t('user_url')" prop="userSpaces">
             <p v-for="(URL, index) in author.userSpaces" :key="URL">
-              <a :key="URL" target="_blank" :href="URL">{{ URL }}</a>
+              <a :key="URL" target="_blank" rel="noopener noreferrer" :href="URL">{{ URL }}</a>
               <el-button type="text" style="margin-left: 5px;" @click="deluserSpace(index)">删除</el-button>
             </p>
             <p v-if="!author.userSpaces.length">{{ $t("no_user_url") }}</p>
@@ -330,7 +217,7 @@
           </el-form-item>
           <el-form-item :v-else="$t('user_url')" prop="userSpaces">
             <p v-for="URL in author.userSpaces" :key="URL">
-              <a :key="URL" target="_blank" :href="URL">{{ URL }}</a>
+              <a :key="URL" target="_blank" rel="noopener noreferrer" :href="URL">{{ URL }}</a>
             </p>
             <p v-if="!author.userSpaces.length">{{ $t("no_user_url") }}</p>
           </el-form-item>
@@ -527,7 +414,7 @@ export default {
     adduserSpace() {
       if (this.URLval == "") {
         if (!this.nowSubmit) {
-          this.open4(this.$("enter_url"));
+          this.open4(this.$t("enter_url"));
         }
         return;
       }
@@ -808,3 +695,5 @@ export default {
   margin-bottom: 0px;
 }
 </style>
+
+<i18n folder></i18n>

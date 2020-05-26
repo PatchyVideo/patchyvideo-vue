@@ -1,15 +1,3 @@
-<i18n>
-{
-  "CHS": {
-    "log_view":"日志查看",
-    "log_type":" 日志类型: ",
-    "log_time_range":" 时间范围: "
-  },
-  "ENG": {
-    "log_view":"Log view"
-  }
-}
-</i18n>
 <template>
   <div v-loading="loading">
     <h1>{{ $t("log_view") }}</h1>
@@ -17,20 +5,20 @@
     <!-- 表单 -->
     <div class="log-form">
       <!-- 日志类型 -->
-      <span>{{ $t("log_type") }}</span>
-      <el-select v-model="log.form.type" placeholder="请选择日志类型">
-        <el-option label="原始日志" value="1"></el-option>
-        <el-option label="整合后的日志" value="2"></el-option>
+      <span>{{ $t("log_type.value") }}</span>
+      <el-select v-model="log.form.type" :placeholder="$t('log_type.placeholder')">
+        <el-option :label="$t('log_type.types.1')" value="1"></el-option>
+        <el-option :label="$t('log_type.types.2')" value="2"></el-option>
       </el-select>
 
       <!-- 时间范围 -->
-      <span>{{ $t("log_time_range") }}</span>
+      <span>{{ $t("log_time_range.value") }}</span>
       <el-date-picker
         v-model="log.form.timeRange"
         type="datetimerange"
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
+        :range-separator="$t('log_time_range.range-separator')"
+        :start-placeholder="$t('log_time_range.start-placeholder')"
+        :end-placeholder="$t('log_time_range.end-placeholder')"
         value-format="yyyy-MM-dd HH:mm:ss"
       ></el-date-picker>
 
@@ -39,23 +27,25 @@
         <el-option v-for="item in log.form.options" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
       <!-- 操作名 -->
-      <el-input v-model="log.form.op" class="opts" placeholder="操作名(可选)" clearable></el-input>
+      <el-input v-model="log.form.op" class="opts" :placeholder="$t('opname.placeholder')" clearable></el-input>
 
-      <el-button type="primary" @click="getLog()">查找</el-button>
+      <el-button type="primary" @click="getLog()">{{ $t("log_find") }}</el-button>
 
       <br />
 
       <!-- level查看 -->
       <div class="tag-box">
-        <span>level：</span>
-        <el-tag style="margin: 0 5px; cursor: pointer;" :type="log.form.visibleLevels.includes('') ? '' : 'info'" @click="(e) => onLevelsChange()">全部</el-tag>
+        <span>{{ $t("log_level.value") }}:</span>
+        <el-tag style="margin: 0 5px; cursor: pointer;" :type="log.form.visibleLevels.includes('') ? '' : 'info'" @click="(e) => onLevelsChange()">{{
+          $t("log_level.options.all")
+        }}</el-tag>
         <el-tag
           v-for="item in log.form.allLevels"
           :key="item"
           style="margin: 0 5px; cursor: pointer;"
           :type="log.form.visibleLevels.includes(item) ? '' : 'info'"
           @click="(e) => onLevelsChange(item)"
-          >{{ item }}</el-tag
+          >{{ $t("log_level.options." + item) }}</el-tag
         >
       </div>
     </div>
@@ -65,7 +55,7 @@
       <!-- 展开项 -->
       <el-table-column type="expand">
         <template slot-scope="props">
-          <p>日志详情：</p>
+          <p>{{ $t("log_info.value") }}:</p>
           <!-- IP属性，MSG独有 -->
           <div v-if="props.row.ip" class="detailItems">
             <span>
@@ -107,7 +97,7 @@
           <!-- obj属性，显示为json数据 -->
           <div v-if="props.row.obj" class="detailItems">
             <p>
-              <strong>obj:</strong>
+              <strong>{{ $t("log_obj.value") }}:</strong>
             </p>
             <pre class="objCode">{{ props.row.obj }}</pre>
           </div>
@@ -121,11 +111,11 @@
         </template>
       </el-table-column>
       <!-- 日期 -->
-      <el-table-column prop="time.$date" label="日期" :formatter="formatterDate" width="180"></el-table-column>
+      <el-table-column prop="time.$date" :label="$t('log_date.label')" :formatter="formatterDate" width="180"></el-table-column>
       <!-- Level -->
-      <el-table-column label="level" width="100">
+      <el-table-column :label="$t('log_level.value')" width="100">
         <template slot-scope="scope">
-          <span :class="scope.row.level">{{ scope.row.level }}</span>
+          <span :class="scope.row.level">{{ $t("log_level.options." + scope.row.level) }}</span>
         </template>
       </el-table-column>
       <!-- subevents，由于版面关系只渲染“有”，并用黄色标记 -->
@@ -137,9 +127,9 @@
         </template>
       </el-table-column>
       <!-- op -->
-      <el-table-column prop="op" label="op" width="180"></el-table-column>
+      <el-table-column prop="op" :label="$t('opname.value')" width="180"></el-table-column>
       <!-- obj -->
-      <el-table-column label="obj">
+      <el-table-column :label="$t('log_obj.value')">
         <template slot-scope="scope">
           <span v-for="(val, key, index) in scope.row.obj" :key="index">
             <strong>{{ key }}</strong>
@@ -173,8 +163,8 @@ export default {
           type: "1",
           timeRange: [],
           options: [
-            { value: "latest", label: "时间正序" },
-            { value: "oldest", label: "时间倒序" },
+            { value: "latest", label: this.$t("form_options.latest") },
+            { value: "oldest", label: this.$t("form_options.oldest") },
           ],
           allLevels: ["SEC", "MSG", "WARN", "ERR"],
           visibleLevels: [""],
@@ -313,3 +303,5 @@ export default {
   color: #f56c6c;
 }
 </style>
+
+<i18n folder></i18n>

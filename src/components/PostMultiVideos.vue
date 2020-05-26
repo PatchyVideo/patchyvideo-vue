@@ -16,50 +16,6 @@
       暂无
 -->
 
-<i18n>
-{
-  "CHS": {
-    "enter_url_prompt": "请输入视频的URL, 一行一个",
-    "tag": "标签",
-    "no_tag": "暂无标签！",
-    "advance": "高级选项",
-    "PostRules":"发布规则",
-    "mutually_copies": "视频互为副本",
-    "post_video": "发布视频",
-    "post_failed": "视频上传失败！",
-    "tag_not_exist": "标签 {tag} 不存在！",
-    "post_succeed": "上传成功！",
-    "unknown_error": "未知错误"
-  },
-  "ENG": {
-    "enter_url_prompt": "Please enter video URLs, separated by line breaks",
-    "tag": "Tags",
-    "no_tag": "No tags!",
-    "advance": "Advance",
-    "PostRules":"Post rules",
-    "mutually_copies": "Mutually copies",
-    "post_video": "Post video",
-    "post_failed": "Upload failed",
-    "tag_not_exist": "Tag {tag} does not exist",
-    "post_succeed": "Upload succeed",
-    "unknown_error": "Unknown error, please report bug"
-  },
-  "CHT": {
-    "enter_url_prompt": "請輸入視頻的URL, 壹行壹個",
-    "tag": "標簽",
-    "no_tag": "暫無標簽！",
-    "advance": "高級選項",
-    "PostRules":"發布規則",
-    "mutually_copies": "視頻互為副本",
-    "post_video": "發布視頻",
-    "post_failed": "視頻上傳失敗！",
-    "tag_not_exist": "標簽 {tag} 不存在！",
-    "post_succeed": "上傳成功！",
-    "unknown_error": "未知錯誤"
-  }
-}
-</i18n>
-
 <template>
   <div v-loading="loading" class="postBox">
     <div class="content">
@@ -79,9 +35,13 @@
         <i v-if="!advancedOptions" class="el-icon-caret-bottom"></i>
         <i v-else class="el-icon-caret-top"></i>
         <!-- Wiki链接 -->
-        <a href="https://patchyvideo.wiki/Upload" target="_blank" style="color: #409eff; float: right; margin-right: 100px; margin-top: 0px;">{{
-          $t("PostRules")
-        }}</a>
+        <a
+          href="https://patchyvideo.wiki/Upload"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="color: #409eff; float: right; margin-right: 100px; margin-top: 0px;"
+          >{{ $t("PostRules") }}</a
+        >
       </p>
       <el-collapse-transition style="margin-bottom: 20px;">
         <div v-show="advancedOptions" class="options">
@@ -282,3 +242,5 @@ export default {
   background-size: cover;
 }
 </style>
+
+<i18n folder></i18n>

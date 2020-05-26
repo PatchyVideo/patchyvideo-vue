@@ -1,14 +1,3 @@
-<i18n>
-    {
-    "CHS": {
-
-    },
-    "ENG": {
-
-    }
-    }
-</i18n>
-
 <template>
   <div>
     <el-card v-loading="loading" class="box-card">
@@ -837,3 +826,5 @@ export default {
 //   }
 // }
 </style>
+
+<i18n folder></i18n>
