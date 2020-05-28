@@ -675,6 +675,12 @@ export default {
 .Soundtrack {
   color: #ff7792;
 }
+@media (max-width: 1400px) {
+  .top-navbar {
+    padding: 5px 1%;
+    width: 98%;
+  }
+}
 </style>
 
 <i18n folder></i18n>
