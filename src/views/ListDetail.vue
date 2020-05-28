@@ -639,6 +639,7 @@ export default {
 
 .minbox {
   width: 1200px;
+  max-width: 95%;
   margin-left: 12.5px;
   margin-right: 12.5px;
   margin-top: 30px;
