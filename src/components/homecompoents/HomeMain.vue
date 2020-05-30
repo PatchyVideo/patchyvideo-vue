@@ -109,8 +109,6 @@
 <script>
 import left_navbar from "../../components/LeftNavbar.vue";
 import bilibiliCover from "./BilibiliCover.vue";
-
-import { copyToClipboardText } from "../../static/js/generic";
 export default {
   components: { left_navbar, bilibiliCover },
   data() {
@@ -342,20 +340,6 @@ export default {
     handleSizeChange(val) {
       this.count = val;
       this.historyPush();
-    },
-    // 复制视频连接
-    // -------------------------危险提示-------------------------
-    //          此函数因为直接操纵dom可能导致网站受到攻击!
-    // -------------------------危险提示-------------------------
-    // 此外，此函数在其他页面也有调用，在优化的时候请注意其他页面的同步
-    copyVideoLink: function(url) {
-      this.$alert(
-        this.$t("copy_link.info", { status: copyToClipboardText(url) ? this.$t("copy_link.status.ok") : this.$t("copy_link.status.fail") }),
-        this.$t("copy_link.title"),
-        {
-          confirmButtonText: this.$t("copy_link.confirm"),
-        }
-      );
     },
     // 请求播放列表数据
     getListVideo: function(e, count) {
