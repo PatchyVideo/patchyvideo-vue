@@ -34,8 +34,15 @@
             <div class="video-item">
               <router-link target="_blank" :to="{ path: '/video', query: { id: item._id.$oid } }" tag="a">
                 <div class="video-thumbnail">
-                  <img :src="'/images/covers/' + item.item.cover_image" width="200px" height="125px" />
-                  <div class="Imgcover"></div>
+                  <bilibili-cover
+                    v-if="item.item.site === 'bilibili'"
+                    :aid="parseInt(item.item.unique_id.replace('bilibili:av', ''))"
+                    :cover-image="item.item.cover_image"
+                  ></bilibili-cover>
+                  <div v-else>
+                    <img :src="'/images/covers/' + item.item.cover_image" width="200px" height="125px" />
+                    <div class="Imgcover"></div>
+                  </div>
                 </div>
               </router-link>
 
@@ -44,15 +51,19 @@
                 <h4 style="display: inline;">
                   <router-link target="_blank" :to="{ path: '/video', query: { id: item._id.$oid } }" tag="a">{{ item.item.title }}</router-link>
                 </h4>
-                <p>{{ item.item.desc }}</p>
-                <div>
-                  <a target="_blank" rel="noopener noreferrer" :href="item.item.url">{{ item.item.url }}</a>
-                  <i class="fa fa-copy fa-lg" style="margin-left: 2px;" @click="copyVideoLink(item.item.url)"></i>
-                </div>
+                <h5 v-if="item.item.part_name">
+                  <strong>P{{ pageOfVideo(item.item.url) }}:{{ item.item.part_name }}</strong>
+                </h5>
+                <p
+                  :class="{ shortDescForPageVideos: item.item.part_name }"
+                  :title="toGMT(item.item.upload_time.$date) + '\n' + (item.item.desc || $t('nodesc'))"
+                >
+                  {{ getDesc(item.item.desc) }}
+                </p>
+                订阅来源：
+                <el-tag v-for="i in item.sat_objs" :key="'s' + i._id.$oid" style="margin: 0 5px;">{{ i.name || i.qs }}</el-tag>
               </div>
             </div>
-            订阅来源：
-            <el-tag v-for="i in item.sat_objs" :key="'s' + i._id.$oid" style="margin: 0 5px;">{{ i.name || i.qs }}</el-tag>
           </li>
         </ul>
 
@@ -77,10 +88,9 @@
 
 <script>
 import left_navbar from "../../components/LeftNavbar.vue";
-
-// import { copyToClipboardText } from "../../static/js/generic";
+import bilibiliCover from "./BilibiliCover.vue";
 export default {
-  components: { left_navbar },
+  components: { left_navbar, bilibiliCover },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -114,6 +124,43 @@ export default {
       visibleSubs: [""],
       allSubs: {},
     };
+  },
+  computed: {
+    toGMT() {
+      return function(timeStamp) {
+        let upload_time = new Date(timeStamp);
+        // 设置为东八区的时间
+        upload_time.setTime(upload_time.getTime() + 1000 * 3600 * 8);
+        let y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
+        let M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        let d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        let h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
+        let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
+        let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
+        return (
+          "视频发布于 " +
+          y +
+          "-" +
+          // 数字不足两位自动补零，下同
+          (Array(2).join(0) + M).slice(-2) +
+          "-" +
+          (Array(2).join(0) + d).slice(-2) +
+          " " +
+          (Array(2).join(0) + h).slice(-2) +
+          ":" +
+          (Array(2).join(0) + m).slice(-2) +
+          ":" +
+          (Array(2).join(0) + s).slice(-2) +
+          " GMT+8"
+        );
+      };
+    },
+    // B站分P视频的哪一P
+    pageOfVideo() {
+      return (url) => {
+        return url.slice(url.indexOf("=") + 1, url.length);
+      };
+    },
   },
   watch: {
     page() {
@@ -461,6 +508,18 @@ export default {
       }
       this.getListVideo_VideoOnly(this.page, this.count);
     },
+    getDesc(desc) {
+      if (desc) {
+        let d = desc;
+        d = d.replace(/(?:[-—=+~]{4,}([^-—=+~\s]+))?(?:[-—=+~]{4,})(?:$|(?=[^-—=+~>》→]))/g, "$1"); // 删除分割线
+        d = d.replace(/(?:[-—=+~]+)(?=[-—=+~]{4}[>》→])/, ""); // 缩短长箭头
+        d = d.replace(/[↑↓]/g, ""); // 删除上下指向
+        d = d.replace(/\s(?=\s)/g, ""); // 删除连续空格
+        return d;
+      } else {
+        return this.$t("nodesc");
+      }
+    },
   },
 };
 </script>
@@ -518,6 +577,12 @@ export default {
     /*background-color: rgba(255,255,255,0.3);*/
     background-color: rgb(244, 244, 245);
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  }
+  h5 {
+    color: #606266;
+    strong {
+      margin-left: 20px;
+    }
   }
 }
 
@@ -600,6 +665,15 @@ export default {
 .blacklist_prompt {
   font-size: 14px;
   color: #606266;
+}
+
+// 为了兼容B站分P功能做出动态绑定的css，因为优先级的关系只能大量使用!important
+.shortDescForPageVideos {
+  height: 50px !important;
+  /* 使文字变为最多显示4行，多余的使用省略号代替 */
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3 !important;
+  -webkit-box-orient: vertical !important;
 }
 </style>
 
