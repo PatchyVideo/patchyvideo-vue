@@ -40,11 +40,11 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import Footer from "../components/Footer.vue";
-import PostSingleVideo from "../components/PostSingleVideo";
-import PostMultiVideos from "../components/PostMultiVideos";
-import PostIPFSVideo from "../components/PostIPFSVideo";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
+import PostSingleVideo from "@/components/video/edit/post/SingleVideo";
+import PostMultiVideos from "@/components/video/edit/post/MultiVideos";
+import PostIPFSVideo from "@/components/video/edit/post/IPFSVideo";
 export default {
   components: {
     topnavbar,
@@ -87,5 +87,3 @@ export default {
   width: 80%;
 }
 </style>
-
-<i18n folder></i18n>

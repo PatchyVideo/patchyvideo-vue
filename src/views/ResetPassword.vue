@@ -163,7 +163,7 @@ export default {
 .loginPic {
   height: 100%;
   width: 100%;
-  /* background: url("../static/img/resetPassword.jpg") no-repeat top center; */
+  /* background: url("/static/img/resetPassword.jpg") no-repeat top center; */
   background-position: 0 -38px;
   background-size: cover;
   background-attachment: fixed;
@@ -313,5 +313,3 @@ i:hover {
   margin-top: 30px;
 }
 </style>
-
-<i18n folder></i18n>

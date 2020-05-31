@@ -85,7 +85,7 @@
 
 <script>
 // import signup from "../views/SignUp";
-import { changeSiteTitle } from "../static/js/base";
+import { changeSiteTitle } from "@/static/js/base";
 export default {
   components: {
     // signup
@@ -247,7 +247,7 @@ export default {
   height: 100%;
   width: 100%;
   background-color: #fff;
-  /* background: url("../static/img/login.jpg") no-repeat top center; */
+  /* background: url("/static/img/login.jpg") no-repeat top center; */
   /* background-position: 200px 0; */
   background-size: cover;
   background-attachment: fixed;
@@ -397,5 +397,3 @@ i:hover {
   margin-top: 30px;
 }
 </style>
-
-<i18n folder></i18n>

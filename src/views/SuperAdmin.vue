@@ -40,11 +40,11 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import Footer from "../components/Footer.vue";
-import usermanagemennt from "../components/admincompoents/UserManagement.vue";
-import logview from "../components/admincompoents/LogView.vue";
-import parasettings from "../components/admincompoents/ParaSettings.vue";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
+import usermanagemennt from "@/components/admin/UserManagement";
+import logview from "@/components/admin/LogView";
+import parasettings from "@/components/admin/ParaSettings";
 export default {
   components: { topnavbar, Footer, usermanagemennt, logview, parasettings },
   data() {
@@ -90,5 +90,3 @@ export default {
   margin: auto;
 }
 </style>
-
-<i18n folder></i18n>

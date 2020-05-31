@@ -31,10 +31,10 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import tagDetail from "../components/tagDetail.vue";
-import searchTag from "../components/searchTag.vue";
-import Footer from "../components/Footer.vue";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
+import tagDetail from "@/components/tag/Detail";
+import searchTag from "@/components/tag/edit/Search";
 export default {
   components: { topnavbar, tagDetail, searchTag, Footer },
   data() {
@@ -85,7 +85,7 @@ export default {
   width: 100%;
   margin-top: 10px;
   margin-bottom: 20px;
-  /* background-image: url("./../static/img/imoto3.jpg"); */
+  /* background-image: url("/static/img/imoto3.jpg"); */
   background-repeat: no-repeat;
 }
 .content {
@@ -98,5 +98,3 @@ export default {
   width: calc(100% - 30px);
 }
 </style>
-
-<i18n folder></i18n>

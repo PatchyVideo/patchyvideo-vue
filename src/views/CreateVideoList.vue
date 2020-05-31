@@ -31,10 +31,10 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import Footer from "../components/Footer.vue";
-import createNewList from "../components/CreateNewList";
-import leadInExistingList from "../components/LeadInExistingList";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
+import createNewList from "@/components/playlist/edit/Create";
+import leadInExistingList from "@/components/playlist/edit/LeadIn";
 export default {
   components: { topnavbar, Footer, createNewList, leadInExistingList },
   data() {
@@ -75,5 +75,3 @@ export default {
   width: 80%;
 }
 </style>
-
-<i18n folder></i18n>

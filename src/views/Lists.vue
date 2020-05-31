@@ -28,8 +28,8 @@
         <!-- 视频列表介绍 -->
         <div class="deemo shadow">
           <!-- <div class="d_t">
-            <img src="../static/img/4.png" style="float:left" />
-            <img src="../static/img/3.png" style="float:right" />
+            <img src="@/static/img/4.png" style="float:left" />
+            <img src="@/static/img/3.png" style="float:right" />
             <el-button
               type="primary"
               plain
@@ -43,8 +43,8 @@
           <!-- 新建播放列表 -->
           <div id="select-order" class="head">
             <div class="d_t">
-              <!--<img src="../static/img/4.png" style="float:left" />
-              <img src="../static/img/3.png" style="float:right" />-->
+              <!--<img src="@/static/img/4.png" style="float:left" />
+              <img src="@/static/img/3.png" style="float:right" />-->
               <el-button type="primary" plain class="createPlayListButton" @click="createVideoList">{{ $t("create_playList") }}</el-button>
             </div>
             <!-- 搜索框 -->
@@ -106,8 +106,8 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import Footer from "../components/Footer.vue";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
 export default {
   components: { topnavbar, Footer },
   data() {
@@ -430,7 +430,7 @@ export default {
   float: right;
 }
 .main-page-background-img {
-  /* background-image: url("./../static/img/imoto3.jpg"); */
+  /* background-image: url("/static/img/imoto3.jpg"); */
   background-repeat: no-repeat;
   min-height: 800px;
   width: 85%;
@@ -560,5 +560,3 @@ export default {
   margin-top: 20px;
 }
 </style>
-
-<i18n folder></i18n>

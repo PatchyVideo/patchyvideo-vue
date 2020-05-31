@@ -131,12 +131,12 @@
 </template>
 
 <script>
-import topNavbar from "../components/TopNavbar.vue";
-import cfooter from "../components/Footer.vue";
-import ThreadComment from "../components/ThreadComment.vue";
+import topNavbar from "@/components/main/bar/TopNavbar";
+import cfooter from "@/components/main/bar/Footer";
+import ThreadComment from "@/components/forum/thread/Comment";
 
-import { changeSiteTitle } from "../static/js/base";
-import { parse } from "../static/js/postparser";
+import { changeSiteTitle } from "@/static/js/base";
+import { parse } from "@/static/js/postparser";
 
 export default {
   components: {
@@ -176,7 +176,7 @@ export default {
     user() {
       return {
         username: this.$store.state.username,
-        avatar: this.$store.state.userAvatar == "default" ? require("../static/img/defaultAvatar.jpg") : "be/images/userphotos/" + this.$store.state.userAvatar,
+        avatar: this.$store.state.userAvatar == "default" ? require("@/static/img/defaultAvatar.jpg") : "be/images/userphotos/" + this.$store.state.userAvatar,
       };
     },
     maxcount() {
@@ -292,7 +292,7 @@ export default {
 </script>
 
 <style scoped>
-@import "../static/img/svg/style.css";
+@import "/static/img/svg/style.css";
 .content {
   text-align: left;
   max-width: 1110px;

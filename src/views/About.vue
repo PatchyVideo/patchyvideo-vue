@@ -22,5 +22,3 @@ export default {
 </script>
 
 <style scoped></style>
-
-<i18n folder></i18n>

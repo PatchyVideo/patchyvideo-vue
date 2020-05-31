@@ -62,8 +62,8 @@
         <!-- 视频列表介绍 -->
         <div class="deemo shadow">
           <div class="d_t">
-            <!--<img src="../static/img/5.png" style="float:left;margin-top:50px;" />
-            <img src="../static/img/1.png" style="float:right;margin-top:50px;" />-->
+            <!--<img src="@/static/img/5.png" style="float:left;margin-top:50px;" />
+            <img src="@/static/img/1.png" style="float:right;margin-top:50px;" />-->
             <h2>{{ videolistName }}</h2>
             <img :src="'/images/covers/' + videolistDetail.playlist.cover" style="min-height: 200px;" />
             <p>{{ videolistDesc }}</p>
@@ -132,7 +132,7 @@
                 <h4 v-if="item.item.part_name">P{{ item.item.url.slice(item.item.url.indexOf("=") + 1, item.item.url.length) }}:{{ item.item.part_name }}</h4>
                 <p>{{ item.item.desc }}</p>
                 <div>
-                  <img :src="require('../static/img/' + item.item.site + '.png')" width="16px" style="margin-right: 2px;" />
+                  <img :src="require('@/static/img/' + item.item.site + '.png')" width="16px" style="margin-right: 2px;" />
                   <a :href="item.item.url">
                     {{ item.item.url }}
                   </a>
@@ -172,16 +172,16 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import Footer from "../components/Footer.vue";
-import EditTags from "../components/EditTags.vue";
-import Move from "../components/Move.vue";
-import DeleteVideo from "../components/DeleteVideo.vue";
-import SetCover from "../components/SetCover.vue";
-import ListFolderView from "../components/ListFolderView.vue";
-import Comments from "../components/comments.vue";
-import Score from "../components/Score.vue";
-import { copyToClipboardText } from "../static/js/generic";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
+import EditTags from "@/components/tag/edit/Edit";
+import Move from "@/components/playlist/edit/Move";
+import DeleteVideo from "@/components/playlist/edit/VideoDelete";
+import SetCover from "@/components/playlist/edit/CoverSet";
+import ListFolderView from "@/components/playlist/folder/View";
+import Comments from "@/components/forum/Comments";
+import Score from "@/components/video/Score";
+import { copyToClipboardText } from "@/static/js/generic";
 
 export default {
   components: {
@@ -706,5 +706,3 @@ export default {
   text-align: center;
 }
 </style>
-
-<i18n folder></i18n>

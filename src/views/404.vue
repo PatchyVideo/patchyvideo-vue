@@ -39,5 +39,3 @@ export default {
   padding-top: 5%;
 }
 </style>
-
-<i18n folder></i18n>

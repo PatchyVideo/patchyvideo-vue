@@ -28,10 +28,10 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import tagconhis from "../components/TagContributeHistory.vue";
-import tagconlist from "../components/TagContributorRanking.vue";
-import Footer from "../components/Footer.vue";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
+import tagconhis from "@/components/tag/cont/History";
+import tagconlist from "@/components/tag/cont/Ranking";
 export default {
   components: {
     tagconhis,

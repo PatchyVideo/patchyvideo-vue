@@ -124,7 +124,7 @@ export default {
 .loginPic {
   height: 100%;
   width: 100%;
-  /* background: url("../static/img/forgetPassword.png") no-repeat top center; */
+  /* background: url("/static/img/forgetPassword.png") no-repeat top center; */
   /* background-position: 200px 0; */
   background-size: cover;
   background-attachment: fixed;
@@ -274,5 +274,3 @@ i:hover {
   margin-top: 30px;
 }
 </style>
-
-<i18n folder></i18n>
