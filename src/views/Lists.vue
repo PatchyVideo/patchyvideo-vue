@@ -63,18 +63,18 @@
               <!-- 视频列表标题 -->
               <div class="re_top">
                 <h2>
-                  <router-link :to="{ path: '/listdetail', query: { id: item._id.$oid } }" tag="a">{{ item.title.english }}</router-link>
+                  <router-link :to="{ path: '/listdetail', query: { id: item._id.$oid } }" tag="a">{{ item.item.title }}</router-link>
                 </h2>
-                <h5 style="float: right;">{{ $t("statistics", { count: item.videos }) }}</h5>
+                <h5 style="float: right;">{{ $t("statistics", { count: item.item.videos }) }}</h5>
               </div>
               <!-- 视频列表详情 -->
               <div class="re_video">
                 <div class="re_video_img">
-                  <el-image :src="'/images/covers/' + item.cover" fit="contain"></el-image>
+                  <el-image :src="'/images/covers/' + item.item.cover" fit="contain"></el-image>
                 </div>
                 <div class="re_video_desc">
                   <p>
-                    <strong>{{ item.desc.english }}</strong>
+                    <strong>{{ item.item.desc }}</strong>
                   </p>
                 </div>
               </div>

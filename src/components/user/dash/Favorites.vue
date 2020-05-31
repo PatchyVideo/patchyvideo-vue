@@ -34,11 +34,11 @@
           class="list-item"
           tag="a"
         >
-          <img :src="'/images/covers/' + i.cover" alt />
-          <p>{{ i.desc.english }}</p>
-          <h3>{{ i.title.english }}</h3>
+          <img :src="'/images/covers/' + i.item.cover" alt />
+          <p>{{ i.item.desc }}</p>
+          <h3>{{ i.item.title }}</h3>
           <div>
-            <span>videos:{{ i.videos }}</span>
+            <span>videos:{{ i.item.videos }}</span>
             <!--<span>views:{{i.views}}</span>-->
           </div>
         </router-link>
