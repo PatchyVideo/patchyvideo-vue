@@ -207,7 +207,7 @@
             <template slot-scope="scope">
               <img
                 v-if="typeof scope.row.playlist_object != 'undefined'"
-                :src="'/images/covers/' + scope.row.playlist_object.cover"
+                :src="'/images/covers/' + scope.row.playlist_object.item.cover"
                 width="160px"
                 height="100px"
               />
@@ -223,9 +223,9 @@
                 :key="scope.row.playlist_object._id.$oid"
                 tag="a"
               >
-                <h4>{{ scope.row.playlist_object.title.english }}</h4>
+                <h4>{{ scope.row.playlist_object.item.title }}</h4>
                 <p style="width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 50px;">
-                  {{ scope.row.playlist_object.desc.english }}
+                  {{ scope.row.playlist_object.item.desc }}
                 </p>
               </router-link>
               <div v-else>
@@ -236,9 +236,9 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('video_num')" align="center" width="80" prop="playlist_object.videos">
+          <el-table-column :label="$t('video_num')" align="center" width="80" prop="playlist_object.item.videos">
             <template slot-scope="scope">
-              <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{ scope.row.playlist_object.videos }}</h3>
+              <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{ scope.row.playlist_object.item.videos }}</h3>
             </template>
           </el-table-column>
           <el-table-column :label="$t('modif_date')" align="center" prop="playlist_object.meta.modified_at">

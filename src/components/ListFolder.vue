@@ -206,7 +206,7 @@
                   <template slot-scope="scope">
                     <img
                       v-if="typeof scope.row.playlist_object != 'undefined'"
-                      :src="'/images/covers/' + scope.row.playlist_object.cover"
+                      :src="'/images/covers/' + scope.row.playlist_object.item.cover"
                       width="160px"
                       height="100px"
                     />
@@ -222,9 +222,9 @@
                       :key="scope.row.playlist_object._id.$oid"
                       tag="a"
                     >
-                      <h4>{{ scope.row.playlist_object.title.english }}</h4>
+                      <h4>{{ scope.row.playlist_object.item.title }}</h4>
                       <p style="width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 50px;">
-                        {{ scope.row.playlist_object.desc.english }}
+                        {{ scope.row.playlist_object.item.desc }}
                       </p>
                     </router-link>
                     <div v-else>
@@ -235,9 +235,9 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column :label="$t('video_num')" width="200" align="center" prop="playlist_object.videos" sortable>
+                <el-table-column :label="$t('video_num')" width="200" align="center" prop="playlist_object.item.videos" sortable>
                   <template slot-scope="scope">
-                    <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{ scope.row.playlist_object.videos }}</h3>
+                    <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{ scope.row.playlist_object.item.videos }}</h3>
                   </template>
                 </el-table-column>
                 <el-table-column :label="$t('modif_date')" align="center" prop="playlist_object.meta.modified_at" sortable>
@@ -297,7 +297,7 @@
                   <template slot-scope="scope">
                     <img
                       v-if="typeof scope.row.playlist_object != 'undefined'"
-                      :src="'/images/covers/' + scope.row.playlist_object.cover"
+                      :src="'/images/covers/' + scope.row.playlist_object.item.cover"
                       width="160px"
                       height="100px"
                     />
@@ -313,9 +313,9 @@
                       :key="scope.row.playlist_object._id.$oid"
                       tag="a"
                     >
-                      <h4>{{ scope.row.playlist_object.title.english }}</h4>
+                      <h4>{{ scope.row.playlist_object.item.title }}</h4>
                       <p style="width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 50px;">
-                        {{ scope.row.playlist_object.desc.english }}
+                        {{ scope.row.playlist_object.item.desc }}
                       </p>
                     </router-link>
                     <div v-else>
@@ -326,9 +326,9 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column :label="$t('video_num')" align="center" width="100" prop="playlist_object.videos" sortable>
+                <el-table-column :label="$t('video_num')" align="center" width="100" prop="playlist_object.item.videos" sortable>
                   <template slot-scope="scope">
-                    <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{ scope.row.playlist_object.videos }}</h3>
+                    <h3 v-if="typeof scope.row.playlist_object != 'undefined'">{{ scope.row.playlist_object.item.videos }}</h3>
                   </template>
                 </el-table-column>
                 <el-table-column :label="$t('modif_date')" align="center" prop="playlist_object.meta.modified_at" sortable>
@@ -363,18 +363,18 @@
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column :label="$t('cover')" width="180" height="100" align="center">
               <template slot-scope="scope">
-                <img :src="'/images/covers/' + scope.row.cover" width="160px" height="100px" />
+                <img :src="'/images/covers/' + scope.row.item.cover" width="160px" height="100px" />
               </template>
             </el-table-column>
             <el-table-column :label="$t('title')" width="150" align="center" sortable prop="name">
               <template slot-scope="scope">
                 <router-link target="_blank" :to="{ path: '/listdetail', query: { id: scope.row._id.$oid } }" :key="scope.row._id.$oid" tag="a">
-                  <h4>{{ scope.row.title.english }}</h4>
-                  <p style="width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 50px;">{{ scope.row.desc.english }}</p>
+                  <h4>{{ scope.row.item.title }}</h4>
+                  <p style="width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 50px;">{{ scope.row.item.desc }}</p>
                 </router-link>
               </template>
             </el-table-column>
-            <el-table-column :label="$t('video_num')" width="100" align="center" prop="playlist_object.videos" sortable>
+            <el-table-column :label="$t('video_num')" width="100" align="center" prop="playlist_object.item.videos" sortable>
               <template slot-scope="scope">
                 <h3>{{ scope.row.videos }}</h3>
               </template>
@@ -479,6 +479,7 @@ export default {
           // asideObj.style.width = `${asideWidth+l}px`;
         };
         document.onmouseup = function(e) {
+          undefined(e);
           document.onmousemove = null;
           document.onmouseup = null;
         };
@@ -605,6 +606,7 @@ export default {
     },
 
     handleCurrentFolderPrivateViewChanged(new_val) {
+      undefined(new_val);
       this.axios({
         method: "post",
         url: "be/folder/change_access",
@@ -692,6 +694,7 @@ export default {
               },
               withCredentials: true
             }).then(result => {
+              undefined(result);
               this.$message.success(this.$t("del_success"));
               this.getFolder();
             });
@@ -797,6 +800,7 @@ export default {
           this.loading = false;
         })
         .catch(err => {
+          undefined(err);
           this.loading = false;
         });
     },

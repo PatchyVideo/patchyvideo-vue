@@ -157,10 +157,10 @@
         </el-input>
         <div v-if="myVideoList.length" class="myVideoList">
           <div v-for="(item, index) in myVideoList" :key="index" class="myVideoListItem" @click="addToThisList(item._id.$oid)">
-            <h2>{{ item.title.english }}</h2>
-            <h3 style="display:inline-block;color:#909399" v-if="item.private">[私密]</h3>
+            <h2>{{ item.item.title }}</h2>
+            <h3 style="display:inline-block;color:#909399" v-if="item.item.private">[私密]</h3>
             <h3 style="display:inline-block;color:#E6A23C" v-if="item.exist">[已有此视频]</h3>
-            <p>共{{ item.videos }}个视频</p>
+            <p>共{{ item.item.videos }}个视频</p>
           </div>
         </div>
         <p v-else>您还没有视频列表！</p>
@@ -312,7 +312,7 @@
           <ul v-for="item in myVideoData.playlists" :key="item._id.$oid">
             <a v-if="item.prev != ''" @click="shiftID(item.prev)">【{{ $t("previous_article") }}】</a>
             <span v-else>【{{ $t("no_previous_article") }}】</span>
-            <router-link :to="{ path: '/listdetail', query: { id: item._id.$oid } }" tag="a">{{ item.title.english }}</router-link>
+            <router-link :to="{ path: '/listdetail', query: { id: item._id.$oid } }" tag="a">{{ item.item.title }}</router-link>
             <a v-if="item.next != ''" @click="shiftID(item.next)" style="float:right">【{{ $t("next_article") }}】</a>
             <span v-else style="float:right">【{{ $t("no_next_article") }}】</span>
           </ul>

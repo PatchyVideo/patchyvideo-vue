@@ -161,7 +161,7 @@
             <!--<img src="../static/img/5.png" style="float:left;margin-top:50px;" />
             <img src="../static/img/1.png" style="float:right;margin-top:50px;" />-->
             <h2>{{ videolistName }}</h2>
-            <img :src="'/images/covers/' + videolistDetail.playlist.cover" style="min-height:200px" />
+            <img :src="'/images/covers/' + videolistDetail.playlist.item.cover" style="min-height:200px" />
             <p>{{ videolistDesc }}</p>
           </div>
           <!-- 打开 Tag 编辑页面 -->
@@ -293,7 +293,9 @@ export default {
       // 视频列表的详细信息
       videolistDetail: {
         playlist: {
-          cover: ""
+          item: {
+            cover: ""
+          }
         }
       },
       // 判断是否登录
@@ -407,10 +409,10 @@ export default {
           this.videolistDetail = result.data.data;
           // 必须是登录且发来的数据是可编辑的才渲染编辑组件
           this.editable = this.videolistDetail.editable && this.isLogin;
-          this.videolistName = this.videolistDetail.playlist.title.english;
+          this.videolistName = this.videolistDetail.playlist.item.title;
           // 修改网站标题
           document.title = this.videolistName;
-          this.videolistDesc = this.videolistDetail.playlist.desc.english;
+          this.videolistDesc = this.videolistDetail.playlist.item.desc;
           this.videolistVideos = this.videolistDetail.videos;
           this.videolistPid = this.videolistDetail.playlist._id.$oid;
           this.maxcount = result.data.data.count;
@@ -427,9 +429,9 @@ export default {
               pid: this.videolistPid
             }
           }).then(result => {
-            this.playlist_metadata.title = result.data.data.playlist.title.english;
-            this.playlist_metadata.desc = result.data.data.playlist.desc.english;
-            this.playlist_metadata.private = result.data.data.playlist.private;
+            this.playlist_metadata.title = result.data.data.playlist.item.title;
+            this.playlist_metadata.desc = result.data.data.playlist.item.desc;
+            this.playlist_metadata.private = result.data.data.playlist.item.private;
           });
 
           // 加载结束，加载动画消失
