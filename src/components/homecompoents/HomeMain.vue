@@ -54,7 +54,7 @@
               <div class="video-detail">
                 <!-- 图标和标题，以及分P -->
                 <div class="title-div">
-                  <img :src="require('../../static/img/' + item.item.site + '.png')" width="16px" style="margin-right: 2px; display: inline;" />
+                  <img :src="require('../../static/img/' + item.item.site + '.png')" width="16px" style="margin-right: 2px;" />
                   <h4>
                     <router-link target="_blank" :to="{ path: '/video', query: { id: item._id.$oid } }" tag="a">{{ item.item.title }}</router-link>
                   </h4>
@@ -633,7 +633,7 @@ export default {
         display: inline;
       }
       img {
-        vertical-align: bottom;
+        vertical-align: center;
       }
       h5 {
         margin-left: 20px;
