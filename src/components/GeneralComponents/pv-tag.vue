@@ -1,24 +1,23 @@
 <!-- vue组件：pv-tag.vue -->
 <!-- 
-    功能：PatchyVideo的标签组件
+    说明：
+      PatchyVideo的标签组件
+    功能：
+      1.对应不同的标签种类展示不同的颜色√
+      2.点击标签跳转到对应的搜索页面√
+      3.由于宽度原因导致无法全部显示的，鼠标悬停时会显示全部名称
+      4.鼠标悬停的时候显示跳转到wiki按钮
     参数：
-        1.type（String）：标签的种类，可选值：
-          Copyright, Language, Character, Author, General, Meta, Soundtrack,none
-        2.（必需）tipText（String）：标签的内容
-        3.tagID（Number）：标签的ID
+      1.tagType（String）：标签的种类，可选值：
+        Copyright, Language, Character, Author, General, Meta, Soundtrack,none
+      2.（必需）tagText（String）：标签的内容
+      3.tagID（Number）：标签的ID
  -->
 <template>
   <div class="tag">
     <el-tooltip effect="light" :content="tipText.replace(/_/g, ' ')" placement="left">
       <div class="tag-div">
-        <!-- 存在标签颜色 -->
-        <div v-if="colorTagList.indexOf(type) != -1">
-          <p :ref="tipText" class="tag-text" :class="type" @click="gotoHome(tipText)" @click.middle="gotoHome(tipText, true)">{{ tipText }}</p>
-        </div>
-        <!-- 其他情况 -->
-        <div v-else>
-          <p class="tag-text" @click="gotoHome(tipText)" @click.middle="gotoHome(tipText, true)">{{ tipText }}</p>
-        </div>
+        <p :ref="tipText" class="tag-text" :class="type" @click="gotoHome(tipText)" @click.middle="gotoHome(tipText, true)">{{ tipText }}</p>
       </div>
     </el-tooltip>
   </div>
@@ -29,12 +28,12 @@ export default {
   components: {},
   props: {
     // 标签种类
-    type: {
+    tagType: {
       type: String,
       default: "none",
     },
     // 标签内容
-    tipText: {
+    tagText: {
       type: String,
       required: true,
     },
@@ -49,7 +48,17 @@ export default {
     return {
       // Tag 颜色列表
       colorTagList: ["Copyright", "Language", "Character", "General", "Meta", "Soundtrack", "Author"],
+      // Tag 内容更新时的钩子函数
+      onresizehandler: null,
     };
+  },
+  watch: {
+    // 当标签内容发生变动时刷新溢出属性
+    tagText() {
+      this.$nextTick(function() {
+        this.freshOverflow();
+      });
+    },
   },
   created() {},
   mounted() {},
@@ -101,7 +110,8 @@ export default {
   border-color: #ff88a0;
 }
 .tag-text {
-  font-size: 20px;
+  font-size: 16px;
+  font-weight: 800;
   margin: 5px 0 5px 0;
 }
 /* 针对标签种类调整标签颜色 */
