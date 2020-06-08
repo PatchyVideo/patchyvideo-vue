@@ -175,7 +175,6 @@ export default {
   components: {
     EditTags,
     ShowAuthorData,
-    // pvTag
   },
   props: {
     msg: {
@@ -424,7 +423,6 @@ export default {
   margin-inline-end: 0px;
   padding-inline-start: 20px;
   font-size: 100%;
-  line-height: 1.25em;
   width: 100%;
   word-break: break-all;
 }
@@ -481,6 +479,7 @@ export default {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: 800;
 }
 .tag-div:hover {
   border-color: #ff88a0;
@@ -507,13 +506,13 @@ export default {
   color: #585455;
 }
 .Character {
-  color: #0a0;
+  color: #81c784;
 }
 .Author {
-  color: #a00;
+  color: #ff9e80;
 }
 .General {
-  color: #0073ff;
+  color: #80cbc4;
 }
 .Meta {
   color: #f80;
