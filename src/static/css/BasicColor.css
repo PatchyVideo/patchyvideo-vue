@@ -1,0 +1,22 @@
+/* 标签颜色分类 */
+.Copyright {
+  color: #a0a;
+}
+.Language {
+  color: #585455;
+}
+.Character {
+  color: #81c784;
+}
+.Author {
+  color: #ff9e80;
+}
+.General {
+  color: #80cbc4;
+}
+.Meta {
+  color: #f80;
+}
+.Soundtrack {
+  color: #ff7792;
+}
