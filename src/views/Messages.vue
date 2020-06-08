@@ -35,9 +35,9 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import unreadMsg from "../components/messageCompoents/UnreadMsg.vue";
-import allMsg from "../components/messageCompoents/AllMessage.vue";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import unreadMsg from "@/components/user/msg/Unread";
+import allMsg from "@/components/user/msg/All";
 export default {
   components: { topnavbar, unreadMsg, allMsg },
   data() {
@@ -59,7 +59,7 @@ export default {
 
 <style scoped>
 .messages {
-  /* background: url("../static/img/messages.jpg") no-repeat;
+  /* background: url("/static/img/messages.jpg") no-repeat;
   background-size: cover;
   background-position: 0px 50px; */
   height: 100%;

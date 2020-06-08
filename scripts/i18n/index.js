@@ -1,6 +1,10 @@
 const split = require("./spliti18n");
 const sync = require("./synci18n");
 const compare = require("./compare");
+const csv = require("./csv");
+const fs = require("fs");
+
+if (!fs.existsSync("./i18n/patchyvideo-vue")) throw new Error("I18n folder not found.\nTry:\n  $ git submodule init\n  $ git submodule update");
 
 const args = process.argv.splice(2);
 try {
@@ -20,6 +24,11 @@ try {
     case "compare": {
       if (args.length != 3) throw new Error("invalid args.");
       compare(args[1], args[2]);
+      break;
+    }
+    case "csv": {
+      if (args.length < 2) throw new Error("invalid args.");
+      csv(...args.slice(1));
       break;
     }
     default:

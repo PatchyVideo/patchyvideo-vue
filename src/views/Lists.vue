@@ -28,8 +28,8 @@
         <!-- 视频列表介绍 -->
         <div class="deemo shadow">
           <!-- <div class="d_t">
-            <img src="../static/img/4.png" style="float:left" />
-            <img src="../static/img/3.png" style="float:right" />
+            <img src="@/static/img/4.png" style="float:left" />
+            <img src="@/static/img/3.png" style="float:right" />
             <el-button
               type="primary"
               plain
@@ -43,8 +43,8 @@
           <!-- 新建播放列表 -->
           <div id="select-order" class="head">
             <div class="d_t">
-              <!--<img src="../static/img/4.png" style="float:left" />
-              <img src="../static/img/3.png" style="float:right" />-->
+              <!--<img src="@/static/img/4.png" style="float:left" />
+              <img src="@/static/img/3.png" style="float:right" />-->
               <el-button type="primary" plain class="createPlayListButton" @click="createVideoList">{{ $t("create_playList") }}</el-button>
             </div>
             <!-- 搜索框 -->
@@ -63,18 +63,18 @@
               <!-- 视频列表标题 -->
               <div class="re_top">
                 <h2>
-                  <router-link :to="{ path: '/listdetail', query: { id: item._id.$oid } }" tag="a">{{ item.title.english }}</router-link>
+                  <router-link :to="{ path: '/listdetail', query: { id: item._id.$oid } }" tag="a">{{ item.item.title }}</router-link>
                 </h2>
-                <h5 style="float: right;">{{ $t("statistics", { count: item.videos }) }}</h5>
+                <h5 style="float: right;">{{ $t("statistics", { count: item.item.videos }) }}</h5>
               </div>
               <!-- 视频列表详情 -->
               <div class="re_video">
                 <div class="re_video_img">
-                  <el-image :src="'/images/covers/' + item.cover" fit="contain"></el-image>
+                  <el-image :src="'/images/covers/' + item.item.cover" fit="contain"></el-image>
                 </div>
                 <div class="re_video_desc">
                   <p>
-                    <strong>{{ item.desc.english }}</strong>
+                    <strong>{{ item.item.desc }}</strong>
                   </p>
                 </div>
               </div>
@@ -106,8 +106,8 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import Footer from "../components/Footer.vue";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
 export default {
   components: { topnavbar, Footer },
   data() {
@@ -430,7 +430,7 @@ export default {
   float: right;
 }
 .main-page-background-img {
-  /* background-image: url("./../static/img/imoto3.jpg"); */
+  /* background-image: url("/static/img/imoto3.jpg"); */
   background-repeat: no-repeat;
   min-height: 800px;
   width: 85%;

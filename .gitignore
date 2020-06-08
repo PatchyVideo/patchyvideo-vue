@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 /dist
+i18n_export.csv
 
 # local env files
 .env.local

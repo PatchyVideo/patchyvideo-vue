@@ -36,10 +36,10 @@
 </template>
 
 <script>
-import topNavbar from "../components/TopNavbar.vue";
-import cfooter from "../components/Footer.vue";
+import topNavbar from "@/components/main/bar/TopNavbar";
+import cfooter from "@/components/main/bar/Footer";
 
-import { changeSiteTitle } from "../static/js/base";
+import { changeSiteTitle } from "@/static/js/base";
 
 export default {
   components: {

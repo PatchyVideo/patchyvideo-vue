@@ -69,15 +69,15 @@ Vue.prototype.$echarts = echarts;
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import userprofile from "../components/UserProfile.vue";
-import usercontribute from "../components/UserContribute.vue";
-import listfolder from "../components/ListFolder.vue";
-import userfavorites from "../components/UserFavorites.vue";
-import userfolder from "../components/UserFolder.vue";
-import blacklist from "../components/BlackList.vue";
-import usersub from "../components/UserSub.vue";
-import Footer from "../components/Footer.vue";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
+import userprofile from "@/components/user/dash/Profile";
+import usercontribute from "@/components/user/dash/Contribute";
+import listfolder from "@/components/user/dash/Folder";
+import userfavorites from "@/components/user/dash/Favorites";
+import userfolder from "@/components/user/dash/Folder";
+import blacklist from "@/components/user/dash/BlackList";
+import usersub from "@/components/user/dash/Sub";
 export default {
   components: {
     topnavbar,
@@ -188,7 +188,7 @@ h4 {
   width: 98%;
   /* max-width: 3000px; */
   height: 100%;
-  /* background: url("../static/img/imoto.jpg") no-repeat top center; */
+  /* background: url("/static/img/imoto.jpg") no-repeat top center; */
   opacity: 0.9;
   background-size: cover;
   background-attachment: fixed;

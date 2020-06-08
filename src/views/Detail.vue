@@ -4,7 +4,6 @@
     功能：展示展示视频的详细信息
     更新日志：
 -->
-
 <template>
   <div>
     <topnavbar />
@@ -59,10 +58,10 @@
         </el-input>
         <div v-if="myVideoList.length" class="myVideoList">
           <div v-for="(item, index) in myVideoList" :key="index" class="myVideoListItem" @click="addToThisList(item._id.$oid)">
-            <h2>{{ item.title.english }}</h2>
-            <h3 v-if="item.private" style="display: inline-block; color: #909399;">[私密]</h3>
+            <h2>{{ item.item.title }}</h2>
+            <h3 v-if="item.item.private" style="display: inline-block; color: #909399;">[私密]</h3>
             <h3 v-if="item.exist" style="display: inline-block; color: #e6a23c;">[已有此视频]</h3>
-            <p>共{{ item.videos }}个视频</p>
+            <p>共{{ item.item.videos }}个视频</p>
           </div>
         </div>
         <p v-else>您还没有视频列表！</p>
@@ -82,7 +81,7 @@
 
     <!-- Detail 页面的正文 -->
     <div v-loading="loading" class="w detail-page-background-img">
-      <left_navbar :msg="myVideoData.tag_by_category"></left_navbar>
+      <left-navbar :msg="myVideoData.tag_by_category"></left-navbar>
 
       <div class="content">
         <!-- 推荐视频栏开始  -->
@@ -168,7 +167,7 @@
             <h3 v-if="key == 'repost'">{{ $t("repost") }}</h3>
             <h3 v-if="key == 'unknown'">{{ $t("unknown") }}</h3>
             <ul v-for="item in value" :key="item._id.$oid" class="copies">
-              <img :src="require('../static/img/' + item.item.site + '.png')" width="16px" style="margin-right: 2px; vertical-align: middle;" />
+              <img :src="require('@/static/img/' + item.item.site + '.png')" width="16px" style="margin-right: 2px; vertical-align: middle;" />
               <!-- 将页面参数刷新并重载页面，其中 @click.native 应该是 router-link 为了阻止 a 标签的默认跳转事件 -->
               <a :class="{ shortTitleForPageVideos: item.item.part_name }" @click="shiftID(item._id.$oid)">{{ item.item.title }}</a>
               <span v-if="item.item.part_name" class="shortTitleForTitleOfPageVideos"
@@ -211,7 +210,7 @@
           <ul v-for="item in myVideoData.playlists" :key="item._id.$oid">
             <a v-if="item.prev != ''" @click="shiftID(item.prev)">【{{ $t("previous_article") }}】</a>
             <span v-else>【{{ $t("no_previous_article") }}】</span>
-            <router-link :to="{ path: '/listdetail', query: { id: item._id.$oid } }" tag="a">{{ item.title.english }}</router-link>
+            <router-link :to="{ path: '/listdetail', query: { id: item._id.$oid } }" tag="a">{{ item.item.title }}</router-link>
             <a v-if="item.next != ''" style="float: right;" @click="shiftID(item.next)">【{{ $t("next_article") }}】</a>
             <span v-else style="float: right;">【{{ $t("no_next_article") }}】</span>
           </ul>
@@ -245,18 +244,18 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import left_navbar from "../components/LeftNavbar.vue";
-import Footer from "../components/Footer.vue";
-import Comments from "../components/comments.vue";
-import Score from "../components/Score.vue";
-import createNewList from "../components/CreateNewList.vue";
-import PagesOfVideo from "../components/VideoCompoents/PagesOfVideo.vue";
-import { copyToClipboardText } from "../static/js/generic";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
+import leftNavbar from "@/components/main/bar/LeftNavbar";
+import Comments from "@/components/forum/Comments";
+import Score from "@/components/video/Score";
+import createNewList from "@/components/playlist/edit/Create";
+import PagesOfVideo from "@/components/video/PagesOfVideo";
+import { copyToClipboardText } from "@/static/js/generic";
 
 export default {
   components: {
-    left_navbar,
+    leftNavbar,
     topnavbar,
     Footer,
     Comments,

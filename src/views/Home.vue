@@ -66,11 +66,11 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import subscribed from "../components/homecompoents/Subscribed.vue";
-import homemain from "../components/homecompoents/HomeMain.vue";
-import girdhomemain from "../components/homecompoents/GirdHomeMain.vue";
-import Footer from "../components/Footer.vue";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
+import subscribed from "@/components/main/home/Subscribed";
+import homemain from "@/components/main/home/Home";
+import girdhomemain from "@/components/main/home/HomeGird";
 export default {
   components: {
     topnavbar,
