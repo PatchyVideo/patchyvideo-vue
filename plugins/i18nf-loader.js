@@ -5,6 +5,7 @@ const _ = require("lodash");
 let reload = false;
 
 module.exports = function(_, sourceMap) {
+  if (!fs.existsSync("./i18n/patchyvideo-vue")) throw new Error("I18n folder not found.\nTry:\n  $ git submodule init\n  $ git submodule update");
   this.cacheable && this.cacheable();
   this.callback(null, `export default ${generateCode(this)}`, sourceMap);
 };
