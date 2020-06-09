@@ -149,6 +149,15 @@ $ npm run serve
 $ npm run build
 ```
 
+### 项目常用编辑器插件
+
+#### VSCode
+
+- Vetur(octref.vetur): 基本 Vue 高亮、整理
+- Eslint(dbaeumer.vscode-eslint): 代码纠错
+- Prettier - Code formatter(esbenp.prettier-vscode): 代码格式化
+- VSCode Conventional Commits(vivaxy.vscode-conventional-commits): commit 书写辅助
+
 ## 项目依赖表
 
 在这里列出本项目使用的开源项目，同时感谢这些项目作者的付出。
