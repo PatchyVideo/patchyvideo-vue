@@ -1,0 +1,13 @@
+{
+  "conventionalCommits.scopes": [
+    "deps",
+    "main",
+    "admin",
+    "forum",
+    "video",
+    "playlist",
+    "playlist-folder",
+    "tag",
+    "user"
+  ]
+}
