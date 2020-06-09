@@ -1,4 +1,5 @@
 {
+  "vetur.format.defaultFormatter.html": "prettier",
   "conventionalCommits.scopes": [
     "deps",
     "main",
