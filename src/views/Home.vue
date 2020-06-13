@@ -145,10 +145,10 @@ export default {
   font-size: 14px;
   color: #606266;
 }
-i.el-icon-menu {
+i {
   position: absolute;
   font-size: 30px;
-  top: 72px;
+  top: 71px;
   right: 80px;
 }
 </style>
