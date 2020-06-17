@@ -96,7 +96,7 @@ export default {
                 .replace("https://i9.ytimg.com/sb/", "") +
               "&sigh=" +
               cdata[2][7].replace("$", "%24");
-            this.data = cdata[1];
+            this.data = cdata[2];
             this.loadStatus = true;
           })
           .catch((e) => {
