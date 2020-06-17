@@ -9,6 +9,7 @@
     "playlist",
     "playlist-folder",
     "tag",
-    "user"
+    "user",
+    "release"
   ]
 }
