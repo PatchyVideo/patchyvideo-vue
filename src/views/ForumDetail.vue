@@ -118,7 +118,7 @@
             </div>
             <div class="comment-div" style="padding: 15px;">
               <div v-shadow>
-                <thread-comment :html="parse(postF.comment)" :size="0.9"></thread-comment>
+                <thread-comment :html="parse(postF.comment)"></thread-comment>
               </div>
             </div>
           </div>
@@ -292,7 +292,7 @@ export default {
 </script>
 
 <style scoped>
-@import "/static/img/svg/style.css";
+@import "../static/img/svg/style.css";
 .content {
   text-align: left;
   max-width: 1110px;

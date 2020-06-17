@@ -15,13 +15,15 @@
       <div class="comment-box">
         <div class="title-div">
           <p class="title">
-            <span>{{
-              commentAuthorsInfo[comment.meta.created_by.$oid] ? commentAuthorsInfo[comment.meta.created_by.$oid].profile.username : "loading..."
-            }}</span
-            >&nbsp;<span style="color: gray;"><i class="el-icon-date"></i>&thinsp;{{ time(comment.meta.created_at.$date) }}</span
-            >&nbsp;<span style="color: gray;">{{ comment.edited ? "已编辑" : "" }}</span>
+            <span
+              ><strong>{{
+                commentAuthorsInfo[comment.meta.created_by.$oid] ? commentAuthorsInfo[comment.meta.created_by.$oid].profile.username : "loading..."
+              }}</strong></span
+            >&nbsp;<span style="color: gray;"><i class="el-icon-date"></i>&thinsp;{{ time(comment.meta.created_at.$date) }}</span>
           </p>
-          <div v-if="!comment.hidden && (own || comment.meta.created_by.$oid == userId)" class="comment-bar">
+          <div class="comment-bar">
+            <strong style="color: gray;">{{ comment.edited ? "已编辑" : "" }}</strong>
+            &nbsp;
             <i
               class="comment-bar-item pv-icon-pin"
               :style="comment.pinned ? '' : 'transform: rotate(45deg);'"
@@ -30,34 +32,30 @@
             &nbsp;
             <i class="comment-bar-item el-icon-link" @click="copy2()"></i>
             &nbsp;
-            <i class="comment-bar-item el-icon-edit" @click="edit2(comment._id.$oid, comment.content, comment.meta.created_by.$oid)"></i>
+            <i
+              v-if="!comment.hidden && (own || comment.meta.created_by.$oid == userId)"
+              class="comment-bar-item el-icon-edit"
+              @click="edit2(comment._id.$oid, comment.content, comment.meta.created_by.$oid)"
+            ></i>
             &nbsp;
-            <i class="comment-bar-item el-icon-delete" @click="del2(comment._id.$oid)"></i>
+            <i
+              v-if="!comment.hidden && (own || comment.meta.created_by.$oid == userId)"
+              class="comment-bar-item el-icon-delete"
+              @click="del2(comment._id.$oid)"
+            ></i>
             &nbsp;
-            <i class="comment-bar-item pv-icon-reply" @click="reply2('user', comment._id.$oid, comment)"></i>
-          </div>
-          <div v-else-if="userId" class="comment-bar">
-            <i class="comment-bar-item pv-icon-pin" :style="comment.pinned ? '' : 'transform: rotate(45deg);'"></i>
-            &nbsp;
-            <i class="comment-bar-item el-icon-link" @click="copy2()"></i>
-            &nbsp;
-            <i class="comment-bar-item pv-icon-reply" @click="reply2('user', comment._id.$oid, comment)"></i>
-          </div>
-          <div v-else class="comment-bar">
-            <i class="comment-bar-item pv-icon-pin" :style="comment.pinned ? '' : 'transform: rotate(45deg);'"></i>
-            &nbsp;
-            <i class="comment-bar-item el-icon-link" @click="copy2()"></i>
+            <i v-if="userId" class="comment-bar-item pv-icon-reply" @click="reply2('user', comment._id.$oid, comment)"></i>
           </div>
         </div>
-        <div class="comment-div" :style="mini ? 'padding: 5px 15px;' : 'padding: 15px;'">
-          <div v-if="!comment.hidden || forceShow" v-shadow>
-            <thread-comment :html="parse(comment.content)" :size="mini ? 0.8 : 0.9"></thread-comment>
+        <div class="comment-div">
+          <div v-if="!comment.hidden || forceShow" v-shadow :style="mini ? 'padding: 5px 15px;' : 'padding: 15px;'">
+            <thread-comment :html="parse(comment.content)"></thread-comment>
           </div>
-          <div v-else>
+          <div v-else :style="mini ? 'padding: 5px 15px;' : 'padding: 15px;'">
             此回复因离题或语言过激被折叠
             <span style="color: #409eff;" @click="forceShow = true">显示</span>
           </div>
-          <div v-for="(commentC, indexC) in comment.children" :key="indexC">
+          <div v-for="(commentC, indexC) in comment.children" :key="indexC" style="padding: 0px 8px;">
             <thread-comment-box
               :mini="true"
               :comment="commentC"
@@ -86,7 +84,7 @@
                 </div>
                 <div class="comment-div" style="padding: 5px 15px;">
                   <div v-shadow>
-                    <thread-comment :html="parse(adcomment.comment)" :size="0.8"></thread-comment>
+                    <thread-comment :html="parse(adcomment.comment)"></thread-comment>
                   </div>
                 </div>
               </div>
@@ -194,7 +192,7 @@ export default {
 </script>
 
 <style scoped>
-@import "/static/img/svg/style.css";
+@import "../../../static/img/svg/style.css";
 .left-avatar {
   position: absolute;
   left: 16px;
