@@ -222,7 +222,6 @@
 <script>
 import ShowAuthorData from "./edit/AuthorData";
 import CheckInput from "./CheckInput";
-// 语言列表(新建标签用)
 import { getlanguagesList, getlanguagesListLabel } from "@/static/js/languagesList.js";
 export default {
   components: { ShowAuthorData, CheckInput },
@@ -285,7 +284,7 @@ export default {
       loading: true,
       //标签检查状态
       checkTag: 0,
-      //
+      // 语言列表(新建标签用)
       languagesList: getlanguagesList(),
     };
   },
