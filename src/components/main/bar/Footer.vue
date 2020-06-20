@@ -97,7 +97,6 @@ export default {
       locale: localStorage.getItem("lang"),
       // 吾有一言，请诸位静听
       yiyan: getYiyanArray(true, true),
-      yiyanin: 0,
     };
   },
   computed: {
@@ -116,9 +115,6 @@ export default {
   },
   created() {
     this.getCommit();
-  },
-  destroyed() {
-    clearInterval(this.yiyanin);
   },
   methods: {
     // 获取 github 上的 commit 地址
