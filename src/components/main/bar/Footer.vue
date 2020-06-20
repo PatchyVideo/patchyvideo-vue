@@ -175,9 +175,9 @@ export default {
   color: #409eff;
 }
 .patchyvideo-declear {
-  color: #909399;
+  color: #aaa;
   a {
-    color: #909399;
+    color: #999;
   }
   /* text-align: left; */
   font-size: 15px;

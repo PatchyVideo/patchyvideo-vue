@@ -6,19 +6,17 @@
       <div>
         <el-alert type="info">
           <div style="color: black;">
-            <h2>欢迎来到 PatchyVideo 讨论板</h2>
-            <p>
-              最后更新时间：2020/6/17 (0.4.0-alpha.4)<br />
-              讨论板仍在最初测试阶段，有很多功能可能不够完善，仅供测试。<br />
-              语法介绍：<a href="https://patchyvideo.wiki/Forum" target="_blank" rel="noopener noreferrer">https://patchyvideo.wiki/Forum</a><br />
-              如有任何意见可尝试在反馈板提出。
-            </p>
+            <h2 v-t="'hint.title'"></h2>
+            <i18n path="hint.desc" tag="p" style="white-space: pre-wrap;">
+              <span place="version">2020/6/17 (0.4.0-alpha.4)</span>
+              <a place="wikilink" href="https://patchyvideo.wiki/Forum" target="_blank" rel="noopener noreferrer">https://patchyvideo.wiki/Forum</a>
+            </i18n>
           </div>
         </el-alert>
       </div>
       <!-- 板块表 -->
-      <el-table :data="forumList" empty-text="少女祈祷中..." style="width: 100%;">
-        <el-table-column label="板块">
+      <el-table :data="forumList" :empty-text="$t('table.empty-text')" style="width: 100%;">
+        <el-table-column :label="$t('table.forum')">
           <template slot-scope="forum">
             <div>
               <router-link :to="'/forum/' + forum.row.id"

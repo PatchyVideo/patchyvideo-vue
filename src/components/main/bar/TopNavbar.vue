@@ -27,22 +27,22 @@
       <!-- 左面的四个页面链接 -->
       <div class="nav_left">
         <div class="navItem">
-          <router-link to="/home" @click.native="cleanIptV">{{ $t("navbar.index") }}</router-link>
+          <router-link v-t="'navbar.index'" to="/home" @click.native="cleanIptV"></router-link>
         </div>
         <div class="navItem">
-          <router-link to="/lists">{{ $t("navbar.playlist") }}</router-link>
+          <router-link v-t="'navbar.playlist'" to="/lists"></router-link>
         </div>
         <div class="navItem">
-          <router-link to="/postvideo">{{ $t("navbar.postvideo") }}</router-link>
+          <router-link v-t="'navbar.postvideo'" to="/postvideo"></router-link>
         </div>
         <div class="navItem">
-          <router-link to="/edittag">{{ $t("navbar.edittag") }}</router-link>
+          <router-link v-t="'navbar.edittag'" to="/edittag"></router-link>
         </div>
         <div class="navItem">
-          <router-link to="/forum">讨论版</router-link>
+          <router-link v-t="'navbar.forum'" to="/forum"></router-link>
         </div>
         <div class="navItem">
-          <router-link to="/logscontributes">历史和贡献</router-link>
+          <router-link v-t="'navbar.logscontributes'" to="/logscontributes"></router-link>
         </div>
       </div>
 
