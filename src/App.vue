@@ -9,12 +9,12 @@
 
 <script>
 export default {
+  components: {},
   provide() {
     return {
       reload: this.reload,
     };
   },
-  components: {},
   data() {
     return {
       isRouterAlive: true,

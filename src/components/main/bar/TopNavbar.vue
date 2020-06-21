@@ -119,10 +119,10 @@
 <script>
 // import TextComplete from "v-textcomplete";
 export default {
-  inject: ["reload"],
   components: {
     // TextComplete
   },
+  inject: ["reload"],
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
