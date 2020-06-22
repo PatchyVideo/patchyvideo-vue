@@ -60,7 +60,7 @@
       </el-form>
     </el-dialog>
     <!--   <i @click="copyPathLink" class="fa fa-copy fa-1x" style="margin-right: 6px; cursor: pointer;"></i>-->
-    <el-button @click="copyPathLink">{{ $t("copy_folder_addr") }}</el-button>
+    <!-- <el-button @click="copyPathLink">{{ $t("copy_folder_addr") }}</el-button> -->
     <el-breadcrumb separator="/">
       <el-breadcrumb-item v-for="i in toNavigablePath()" :key="i.dst">
         <a style="font-size: 21px;" @click="navigateTo(i.dst)">{{ i.name }}</a>
@@ -301,7 +301,6 @@
 </template>
 
 <script>
-import { copyToClipboardText } from "@/static/js/generic";
 export default {
   filters: {
     formatDate(value) {
@@ -643,24 +642,6 @@ export default {
         });
       }
     },
-    copyPathLink() {
-      let uid = this.user_id;
-      if (this.user_id == "me") {
-        this.axios({
-          method: "post",
-          url: "be/user/profile.do",
-          data: { uid: this.user_id },
-        }).then((res) => {
-          uid = res.data.data._id.$oid;
-          const url = `https://patchyvideo.com/#/users/${uid}?path=${this.currentPath}`;
-          copyToClipboardText(url);
-        });
-      } else {
-        const url = `https://patchyvideo.com/#/users/${uid}?path=${this.currentPath}`;
-        copyToClipboardText(url);
-      }
-    },
-
     handlePlaylistTableSelectionChange(val) {
       this.currentSelectedPlaylists = val;
     },

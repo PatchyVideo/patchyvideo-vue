@@ -148,7 +148,7 @@ export default {
 i {
   position: absolute;
   font-size: 30px;
-  top: 62px;
+  top: 71px;
   right: 80px;
 }
 </style>
