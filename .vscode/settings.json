@@ -1,7 +1,6 @@
 {
   "vetur.format.defaultFormatter.html": "prettier",
   "conventionalCommits.scopes": [
-    "deps",
     "main",
     "admin",
     "forum",
@@ -9,6 +8,9 @@
     "playlist",
     "playlist-folder",
     "tag",
-    "user"
+    "user",
+    "deps",
+    "release",
+    "i18n"
   ]
 }

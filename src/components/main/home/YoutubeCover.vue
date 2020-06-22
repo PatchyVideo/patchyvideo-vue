@@ -1,5 +1,3 @@
-<!-- https://s2.hdslb.com/bfs/static/blive/blfe-dynamic-web/static/js/index.141cf916.js 18:25510 -->
-
 <template>
   <div
     @mouseenter="
@@ -20,16 +18,16 @@
       </div>
       <div
         v-if="loadStatus"
-        class="bilibili-cover"
+        class="u2b-cover"
         :style="
-          'background:url(/proxy/bili/cover/bfs/videoshot/' +
-            data.image[0].replace('//i0.hdslb.com/bfs/videoshot/', '') +
+          'background:url(/proxy/u2b/i9ytimg/sb/' +
+            imgUrl +
             ');background-position: ' +
             x +
             'px ' +
             y +
             'px;background-size:' +
-            data.img_x_len * width +
+            data[3] * width +
             'px;width:' +
             width +
             'px;height:' +
@@ -50,8 +48,8 @@
 <script>
 export default {
   props: {
-    aid: {
-      type: Number,
+    v: {
+      type: String,
       required: true,
     },
     coverImage: {
@@ -70,6 +68,7 @@ export default {
       size: 0,
       width: 200,
       hover: false,
+      imgUrl: "",
       data: null,
       error: null,
       prefresh: null,
@@ -85,18 +84,19 @@ export default {
       if (this.hover && !this.loadStatus) {
         this.axios({
           method: "get",
-          url: `/proxy/bili/x/player/videoshot?aid=${this.aid}&index=1`,
+          url: `/proxy/u2b/watch?v=${this.v}`,
         })
           .then((result) => {
-            if (result.data.code === 0 && result.data.data) {
-              this.data = result.data.data;
-              if (this.prefresh && this.hover) {
-                this.fresh(this.prefresh);
-                this.prefresh = null;
-              }
-            } else {
-              this.error = result.data.message;
-            }
+            const data = result.data.match(/"storyboards":{"playerStoryboardSpecRenderer":{"spec":"([^"]+)"}}/)[1];
+            const cdata = data.split("|").map((v) => v.split("#"));
+            this.imgUrl =
+              cdata[0][0]
+                .replace("$L", "1")
+                .replace("$N", "M0")
+                .replace("https://i9.ytimg.com/sb/", "") +
+              "&sigh=" +
+              cdata[2][7].replace("$", "%24");
+            this.data = cdata[2];
             this.loadStatus = true;
           })
           .catch((e) => {
@@ -115,18 +115,18 @@ export default {
       }
     },
     fresh(e) {
-      const i = Math.floor((e.offsetX / this.width) * this.data.index.length);
-      const n = (this.data.img_y_size / this.data.img_x_size) * this.width;
+      const i = Math.floor((e.offsetX / this.width) * this.data[2]);
+      const n = (this.data[1] / this.data[0]) * this.width;
       this.progress = Math.floor((e.offsetX / this.width) * 100);
-      this.x = (-i % this.data.img_x_len) * this.width;
-      this.y = -Math.floor(i / this.data.img_x_len) * n;
+      this.x = (-i % this.data[3]) * this.width;
+      this.y = -Math.floor(i / this.data[3]) * n;
     },
   },
 };
 </script>
 
 <style scoped>
-.bilibili-cover {
+.u2b-cover {
   left: 0;
 }
 .progress-bar {

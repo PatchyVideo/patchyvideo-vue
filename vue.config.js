@@ -122,6 +122,20 @@ module.exports = {
           "^/proxy/bili/x/player/": "",
         },
       },
+      "/proxy/u2b/watch": {
+        target: "https://www.youtube.com/watch",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/proxy/u2b/watch": "",
+        },
+      },
+      "/proxy/u2b/i9ytimg/sb/": {
+        target: "https://i9.ytimg.com/sb/",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/proxy/u2b/i9ytimg/sb/": "",
+        },
+      },
     },
   },
 

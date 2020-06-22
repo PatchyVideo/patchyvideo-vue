@@ -6,26 +6,24 @@
       <div>
         <el-alert type="info">
           <div style="color: black; font-size: 1.2em;">
-            <h3>{{ Finfo[fid].title || "神秘板块" }}</h3>
-            <p style="white-space: pre-wrap;">
-              {{ Finfo[fid].desc || "板块还没有简介哦~" }}
-            </p>
+            <h3>{{ Finfo[fid].title || $t("unknowforum") }}</h3>
+            <p style="white-space: pre-wrap;">{{ Finfo[fid].desc || $t("unknowdesc") }}</p>
           </div>
         </el-alert>
       </div>
       <!-- 帖子表 -->
       <el-table :data="threadList" :empty-text="emptyText" style="width: 100%;">
-        <el-table-column label="帖子">
+        <el-table-column :label="$t('thread')">
           <template slot-scope="thread">
             <div>
               <router-link :to="'/forum/5e8fce11beb63ebb98f8b50c/post/' + thread.row._id.$oid"
                 ><h3 class="mb-1"><i v-if="thread.row.pinned" class="comment-bar-item pv-icon-pin"></i>{{ thread.row.title }}</h3></router-link
               >
-              <p>帖子还没有预览哦~</p>
+              <p v-t="'nodesc'"></p>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="作者" width="180">
+        <el-table-column :label="$t('author')" width="180">
           <template slot-scope="thread">
             <div v-if="threadAuthorsInfo[thread.row.thread_obj[0].owner.$oid]">
               <router-link
@@ -40,10 +38,10 @@
                 ></el-avatar>
               </router-link>
             </div>
-            <div v-else>Loading...</div>
+            <div v-else>...</div>
           </template>
         </el-table-column>
-        <el-table-column prop="address" label="跟帖" width="60">
+        <el-table-column prop="address" :label="$t('reply')" width="60">
           <template slot-scope="thread">
             <div>
               <b>{{ thread.row.thread_obj[0].count }}</b>
@@ -51,10 +49,10 @@
           </template>
         </el-table-column>
       </el-table>
-      <div v-if="threadList.length != threadResult.length" style="text-align: center; color: gray;">
-        本页含有{{ threadResult.length - threadList.length }}个隐藏贴
-        <span style="color: #409eff;" @click="threadList = threadResult">显示</span>
-      </div>
+      <i18n v-if="threadList.length != threadResult.length" path="hidden.text" tag="div" style="text-align: center; color: gray;">
+        <span place="count">{{ threadResult.length - threadList.length }}</span>
+        <span v-t="'show'" place="show" style="color: #409eff;" @click="threadList = threadResult"></span>
+      </i18n>
       <div style="text-align: center; margin-top: 4px;">
         <el-button type="primary" size="small" plain style="display: inline-flex; vertical-align: middle;" disabled>暂无功能</el-button>
         <el-pagination
@@ -67,12 +65,12 @@
           class="page-selector"
           style="display: inline-flex; vertical-align: middle;"
         ></el-pagination>
-        <el-button type="primary" size="small" plain style="display: inline-flex; vertical-align: middle;" @click="post2">发表新帖</el-button>
+        <el-button v-t="'post'" type="primary" size="small" plain style="display: inline-flex; vertical-align: middle;" @click="post2"></el-button>
       </div>
-      <el-dialog :title="(Finfo[fid].title || '神秘板块') + ' > 发表新帖'" :visible.sync="postT.visible">
-        <h2 style="display: inline-flex; color: #2c3e50;">{{ Finfo[fid].title || "神秘板块" }} ></h2>
+      <el-dialog :title="$t('postdia.title', { forum: Finfo[fid].title || $t('unknowforum') })" :visible.sync="postT.visible">
+        <h2 style="display: inline-flex; color: #2c3e50;">{{ Finfo[fid].title || $t("unknowforum") }} ></h2>
         <el-form :model="postF" style="display: inline-flex;" @submit.native.prevent>
-          <el-input v-model="postF.title" style="width: 320px;" placeholder="在这里填写标题~"></el-input
+          <el-input v-model="postF.title" style="width: 320px;" :placeholder="$t('postdia.titleph')"></el-input
         ></el-form>
         <div class="t"></div>
         <div style="margin-top: 16px; border: 1px solid #d1d5da; border-radius: 3px; margin-left: 58px;">
@@ -83,7 +81,7 @@
             <div class="title-div">
               <p class="title">
                 <span v-if="user.username">{{ user.username }}</span
-                ><span v-else>Loading...</span>&nbsp;<span style="color: gray;">来说点什么吧</span>
+                ><span v-else>...</span>&nbsp;<span v-t="'postdia.titlehint'" style="color: gray;"></span>
               </p>
             </div>
             <div class="comment-div" style="padding: 15px;">
@@ -94,15 +92,15 @@
           </div>
         </div>
         <div slot="footer" class="dialog-footer">
-          <span style="color: gray;">注：建议先预览再发帖，提前发现问题</span>&emsp;
-          <el-button @click="postF.show = true">预览</el-button>
-          <el-button type="primary" @click="post()">发表</el-button>
+          <span v-t="'posthint'" style="color: gray;"></span>&emsp;
+          <el-button v-t="'preview'" @click="postF.show = true"></el-button>
+          <el-button v-t="'postb'" type="primary" @click="post()"></el-button>
         </div>
       </el-dialog>
-      <el-dialog v-if="postF.show" :title="(Finfo[fid].title || '神秘板块') + ' > 预览帖子'" :visible.sync="postF.show">
+      <el-dialog v-if="postF.show" :title="$t('previewdia.title', { forum: Finfo[fid].title || $t('unknowforum') })" :visible.sync="postF.show">
         <h2 style="color: #2c3e50;">
-          {{ Finfo[fid].title || "神秘板块" }} >
-          {{ postF.title || "Loading..." }}
+          {{ Finfo[fid].title || $t("unknowforum") }} >
+          {{ postF.title || "..." }}
         </h2>
         <div class="t"></div>
         <div style="margin-top: 16px; border: 1px solid #d1d5da; border-radius: 3px; margin-left: 58px;">
@@ -112,13 +110,13 @@
           <div class="comment-box">
             <div class="title-div">
               <p class="title">
-                <span>{{ user.username || "Loading" }}</span
+                <span>{{ user.username || "..." }}</span
                 >&nbsp;<span style="color: gray;"><i class="el-icon-date"></i>&thinsp;{{ time(+new Date()) }}</span>
               </p>
             </div>
             <div class="comment-div" style="padding: 15px;">
               <div v-shadow>
-                <thread-comment :html="parse(postF.comment)" :size="0.9"></thread-comment>
+                <thread-comment :html="parse(postF.comment)"></thread-comment>
               </div>
             </div>
           </div>
@@ -292,7 +290,7 @@ export default {
 </script>
 
 <style scoped>
-@import "/static/img/svg/style.css";
+@import "../static/img/svg/style.css";
 .content {
   text-align: left;
   max-width: 1110px;

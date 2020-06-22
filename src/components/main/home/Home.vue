@@ -50,6 +50,11 @@
                     :aid="parseInt(item.item.unique_id.replace('bilibili:av', ''))"
                     :cover-image="item.item.cover_image"
                   ></bilibili-cover>
+                  <youtube-cover
+                    v-else-if="item.item.site === 'youtube'"
+                    :v="item.item.unique_id.replace('youtube:', '')"
+                    :cover-image="item.item.cover_image"
+                  ></youtube-cover>
                   <div v-else>
                     <img :src="'/images/covers/' + item.item.cover_image" width="200px" height="125px" />
                     <div class="Imgcover"></div>
@@ -115,9 +120,10 @@
 <script>
 import leftNavbar from "@/components/main/bar/LeftNavbar";
 import bilibiliCover from "./BilibiliCover";
+import YoutubeCover from "./YoutubeCover";
 import { toGMT } from "@/static/js/toGMT";
 export default {
-  components: { leftNavbar, bilibiliCover },
+  components: { leftNavbar, bilibiliCover, YoutubeCover },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {

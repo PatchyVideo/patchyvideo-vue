@@ -22,7 +22,9 @@
         <p class="u-desc">
           <span>{{ item.user_obj.profile.desc }}</span>
         </p>
-        <h1 class="count">编辑次数：{{ item.count }}</h1>
+        <i18n tag="h1" path="editcount" class="count">
+          <span place="count">{{ item.count }}</span>
+        </i18n>
       </div>
 
       <el-divider></el-divider>

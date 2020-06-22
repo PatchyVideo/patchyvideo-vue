@@ -14,77 +14,9 @@
     <div class="AuthorName">
       <!-- 头像 -->
       <el-avatar fit="cover" style="margin-right: 5px;" :size="30" :src="author.avatar"></el-avatar>
-      <span v-if="authorLanguages.CHS" class="tagLabel">
-        简体中文:
-        <span class="tagName" @click="gotoHome(authorLanguages.CHS)">{{ authorLanguages.CHS }}</span>
-      </span>
-      <span v-if="authorLanguages.CHT" class="tagLabel">
-        繁體中文:
-        <span class="tagName" @click="gotoHome(authorLanguages.CHT)">{{ authorLanguages.CHT }}</span>
-      </span>
-      <span v-if="authorLanguages.JPN" class="tagLabel">
-        日本語:
-        <span class="tagName" @click="gotoHome(authorLanguages.JPN)">{{ authorLanguages.JPN }}</span>
-      </span>
-      <span v-if="authorLanguages.ENG" class="tagLabel">
-        English:
-        <span class="tagName" @click="gotoHome(authorLanguages.ENG)">{{ authorLanguages.ENG }}</span>
-      </span>
-      <span v-if="authorLanguages.KOR" class="tagLabel">
-        한국어:
-        <span class="tagName" @click="gotoHome(authorLanguages.KOR)">{{ authorLanguages.KOR }}</span>
-      </span>
-      <span v-if="authorLanguages.CSY" class="tagLabel">
-        čeština:
-        <span class="tagName" @click="gotoHome(authorLanguages.CSY)">{{ authorLanguages.CSY }}</span>
-      </span>
-      <span v-if="authorLanguages.NLD" class="tagLabel">
-        Nederlands:
-        <span class="tagName" @click="gotoHome(authorLanguages.NLD)">{{ authorLanguages.NLD }}</span>
-      </span>
-      <span v-if="authorLanguages.FRA" class="tagLabel">
-        français:
-        <span class="tagName" @click="gotoHome(authorLanguages.FRA)">{{ authorLanguages.FRA }}</span>
-      </span>
-      <span v-if="authorLanguages.DEU" class="tagLabel">
-        Deutsch:
-        <span class="tagName" @click="gotoHome(authorLanguages.DEU)">{{ authorLanguages.DEU }}</span>
-      </span>
-      <span v-if="authorLanguages.HUN" class="tagLabel">
-        magyar nyelv:
-        <span class="tagName" @click="gotoHome(authorLanguages.HUN)">{{ authorLanguages.HUN }}</span>
-      </span>
-      <span v-if="authorLanguages.ITA" class="tagLabel">
-        italiano:
-        <span class="tagName" @click="gotoHome(authorLanguages.ITA)">{{ authorLanguages.ITA }}</span>
-      </span>
-      <span v-if="authorLanguages.PLK" class="tagLabel">
-        polski:
-        <span class="tagName" @click="gotoHome(authorLanguages.PLK)">{{ authorLanguages.PLK }}</span>
-      </span>
-      <span v-if="authorLanguages.PTB" class="tagLabel">
-        português:
-        <span class="tagName" @click="gotoHome(authorLanguages.PTB)">{{ authorLanguages.PTB }}</span>
-      </span>
-      <span v-if="authorLanguages.ROM" class="tagLabel">
-        limba română:
-        <span class="tagName" @click="gotoHome(authorLanguages.ROM)">{{ authorLanguages.ROM }}</span>
-      </span>
-      <span v-if="authorLanguages.RUS" class="tagLabel">
-        русский язык:
-        <span class="tagName" @click="gotoHome(authorLanguages.RUS)">{{ authorLanguages.RUS }}</span>
-      </span>
-      <span v-if="authorLanguages.ESP" class="tagLabel">
-        español:
-        <span class="tagName" @click="gotoHome(authorLanguages.ESP)">{{ authorLanguages.ESP }}</span>
-      </span>
-      <span v-if="authorLanguages.TRK" class="tagLabel">
-        Türk dili:
-        <span class="tagName" @click="gotoHome(authorLanguages.TRK)">{{ authorLanguages.TRK }}</span>
-      </span>
-      <span v-if="authorLanguages.VIN" class="tagLabel">
-        Tiếng Việt:
-        <span class="tagName" @click="gotoHome(authorLanguages.VIN)">{{ authorLanguages.VIN }}</span>
+      <span v-for="(value, name) in authorLanguages" :key="name" class="tagLabel">
+        {{ getLabel(name) }}:
+        <span class="tagName" @click="gotoHome(authorLanguages[name])">{{ authorLanguages[name] }}</span>
       </span>
       <!-- 标签别名 -->
       <span v-for="item in authorAlias" :key="item" class="tagLabel">
@@ -248,6 +180,7 @@
 </template>
 
 <script>
+import { getlanguagesList, getlanguagesListLabel } from "@/static/js/languagesList.js";
 export default {
   components: {},
   props: {
@@ -326,7 +259,17 @@ export default {
         { name: "infoTip_3", isHidden: false },
       ],
       isInfoTipClick: false,
+      // 语言列表
+      languagesList: getlanguagesList(),
     };
+  },
+  computed: {
+    // 根据语言列表的value获取label
+    getLabel() {
+      return (value) => {
+        return getlanguagesListLabel(value);
+      };
+    },
   },
   watch: {
     authorID() {
