@@ -4,14 +4,6 @@
     功能：可以在这里测试一些神奇的东西
     更新日志：
 -->
-<i18n>
-{
-  "CHS": {
-    "test":"test!"
-  }
-}
-</i18n>
-
 <template>
   <div></div>
 </template>

@@ -1,25 +1,65 @@
-global.log = function() {
-  console.log(
-    "%cPatchy%cVideo%c" + process.env.VUE_APP_VERSION + "%c\nBuilt at: " + process.env.VUE_APP_BUILDTIME,
-    "color:#9c71b2;font-size:2rem;font-family: Arial,Helvetica,sans-serif;padding: 5px;font-weight: 700;",
-    "color:#ffb458;font-size:2rem;font-family: Arial,Helvetica,sans-serif;padding: 5px;font-weight: 700;",
-    "color:#6a8935;font-size:0.9rem;font-family: Arial,Helvetica,sans-serif;padding: 5px;",
-    "color:#c586c0;font-size:1rem;font-family: Arial,Helvetica,sans-serif;padding: 0 5px;"
-  );
-  if (localStorage.getItem("CON_color_icon")) {
-    const str = "Color Mode Enabled.";
-    let c = [""];
-    const colors = ["color:red", "color:orange", "color:green", "color:blue"];
-    for (const i in str) {
-      c[0] += "%c" + str[i];
-      c.push(colors[i % 4]);
-    }
-    console.log.apply(this, c);
+function econf(name, t) {
+  if (t) {
+    localStorage.setItem(`CON_${name}`, true);
+    console.log(`${name} setted, plz refresh.`);
+  } else {
+    localStorage.removeItem(`CON_${name}`);
+    console.log(`${name} unsetted, plz refresh.`);
   }
-};
+}
 
-global.log();
-console.log("朋友，你知道 东方Project 吗？我让你加群，好吗？QQ群：757676234");
+window.PatchyVideo = {
+  ...(window.PatchyVideo ? window.PatchyVideo : {}),
+
+  "++desc++": `[PVCC][${process.env.VUE_APP_VERSION}] PatchyVideo Console Controls`,
+  version: process.env.VUE_APP_VERSION,
+  buildtime: process.env.VUE_APP_BUILDTIME,
+
+  toString() {
+    return `[PVCC][${process.env.VUE_APP_VERSION}] PatchyVideo Console Controls`;
+  },
+
+  log() {
+    console.log(
+      `%cPatchy%cVideo%cVer${process.env.VUE_APP_VERSION}%c\nBuilt@${process.env.VUE_APP_BUILDTIME}`,
+      "color:#9c71b2;font-size:2rem;font-family: Arial,Helvetica,sans-serif;font-weight: 700;",
+      "color:#ffb458;font-size:2rem;font-family: Arial,Helvetica,sans-serif;font-weight: 700;",
+      "color:#6a8935;font-size:0.9rem;font-family: Arial,Helvetica,sans-serif;padding: 0px 5px;",
+      "color:#c586c0;font-size:1rem;font-family: Arial,Helvetica,sans-serif;"
+    );
+    if (localStorage.getItem("CON_color_icon")) {
+      const str = "Color Mode Enabled.";
+      let c = [""];
+      const colors = ["color:red", "color:orange", "color:green", "color:blue"];
+      for (const i in str) {
+        c[0] += "%c" + str[i];
+        c.push(colors[i % 4]);
+      }
+      console.log.apply(this, c);
+    }
+  },
+  refresh() {
+    window.location.reload();
+  },
+
+  colorMode: {
+    enable() {
+      econf("colorMode", true);
+    },
+    disable() {
+      econf("colorMode", false);
+    },
+  },
+
+  logRenderTime: {
+    enable() {
+      econf("logRenderTime", true);
+    },
+    disable() {
+      econf("logRenderTime", false);
+    },
+  },
+};
 
 const logicon = `                                                         _LL::;cL;
                                 ;Z8,:;L7ixF1jJ7TJ7ijFx77g@g@gX, ;LXC_
@@ -63,7 +103,7 @@ x@g@8O4X@Q   @x  ;' 0          _L;; KJ    ;,,IPFs;;,              _;J    j;L1RKL
                                                                           E3c7gjExJJcEg  ,;
                                                                               L6@gDD8D@1`;
 
-if (localStorage.getItem("CON_color_icon")) {
+if (localStorage.getItem("CON_colorMode")) {
   const colors = {
     /* Website */
     patchyvideo: "#ce9bb4",
@@ -107,16 +147,6 @@ if (localStorage.getItem("CON_color_icon")) {
   console.log(logicon);
 }
 
-global.enableColorMode = function() {
-  localStorage.setItem("CON_color_icon", true);
-  console.log("%cColor setted, plz refresh().", "color:#569cd6");
-};
-
-global.disableColorMode = function() {
-  localStorage.removeItem("CON_color_icon");
-  console.log("Color unsetted, plz refresh().");
-};
-
-global.refresh = function() {
-  window.location.reload();
-};
+window.PatchyVideo.log();
+console.log("朋友，你知道 东方Project 吗？我让你加群，好吗？QQ群：757676234");
+console.log('[PVCC] See "PatchyVideo Console Controls" by typing "PatchyVideo".');

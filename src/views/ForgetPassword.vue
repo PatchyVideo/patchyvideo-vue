@@ -11,35 +11,6 @@
     ★待解决问题：
       1.错误信息尚未进行分类
 -->
-<i18n>
-{
-  "CHS": {
-    "title":"忘记密码",
-    "reset_psd":"重置密码",
-    "input_tip":"请输入账户绑定的Email",
-    "email_tip":"请输入邮箱",
-    "err_tip":"请输入正确的邮箱地址",
-    "button":"发送邮件"
-  },
-  "ENG": {
-    "title":"Forget password",
-    "reset_psd":"Reset Password",
-    "input_tip":"Please enter the email associated with the account",
-    "email_tip":"please enter your email",
-    "err_tip":"Please input the correct email address",
-    "button":"Send email"
-  },
-  "CHT": {
-    "title":"忘記密碼",
-    "reset_psd":"重置密碼",
-    "input_tip":"請輸入賬戶綁定的Email",
-    "email_tip":"請輸入郵箱",
-    "err_tip":"請輸入正確的郵箱地址",
-    "button":"發送郵件"
-  }
-}
-</i18n>
-
 <template>
   <div class="loginPic">
     <div v-loading="loading" class="w">
@@ -98,7 +69,7 @@ export default {
     // 初始化页面名为 login
     this.$store.commit("changeBgc", "forgetPassword");
     // 修改网站标题
-    document.title = this.$t("title") + " - Patchyvideo";
+    document.title = this.$t("title") + " - PatchyVideo";
   },
   mounted() {
     console.log("背景图片p站ID：66686322，如有侵权请联系本站开发者（本站账号：admin）删除");
@@ -153,7 +124,7 @@ export default {
 .loginPic {
   height: 100%;
   width: 100%;
-  /* background: url("../static/img/forgetPassword.png") no-repeat top center; */
+  /* background: url("/static/img/forgetPassword.png") no-repeat top center; */
   /* background-position: 200px 0; */
   background-size: cover;
   background-attachment: fixed;

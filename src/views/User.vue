@@ -33,64 +33,6 @@ Vue.prototype.$echarts = echarts;
 
 -->
 
-<i18n>
-{
-  "CHS": {
-    "title":"创建播放列表",
-    "me":{
-        "tab1":"我的信息",
-        "tab2":"我贡献的索引",
-        "tab3":"我的文件夹",
-        "tab4":"我的播放列表",
-        "tab5":"发布状态",
-        "tab6":"黑名单",
-        "tab7":"订阅"
-    },
-    "outer_user":{
-        "tab1":"用户信息",
-        "tab2":"他贡献的索引",
-        "tab3":"他的文件夹",
-        "tab4":"他的收藏"
-    }
-  },
-  "ENG": {
-    "title":"Create playlist",
-    "me":{
-        "tab1":"Profile",
-        "tab2":"My posts",
-        "tab3":"My folder",
-        "tab4":"My playlists",
-        "tab5":"Post status",
-        "tab6":"Blacklist",
-        "tab7":"Subscribed"
-    },
-    "outer_user":{
-        "tab1":"Profile",
-        "tab2":"Posts",
-        "tab3":"Folder",
-        "tab4":"Playlists"
-    }
-  },
-  "CHT": {
-    "title":"創建播放列表",
-    "me":{
-        "tab1":"我的信息",
-        "tab2":"我貢獻的索引",
-        "tab3":"我的文件夾",
-        "tab4":"我的播放列表",
-        "tab5":"發布狀態",
-        "tab6":"黑名單"
-    },
-    "outer_user":{
-        "tab1":"用戶信息",
-        "tab2":"他貢獻的索引",
-        "tab3":"他的文件夾",
-        "tab4":"他的收藏"
-    }
-  }
-}
-</i18n>
-
 <template>
   <div>
     <topnavbar></topnavbar>
@@ -127,15 +69,15 @@ Vue.prototype.$echarts = echarts;
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import userprofile from "../components/UserProfile.vue";
-import usercontribute from "../components/UserContribute.vue";
-import listfolder from "../components/ListFolder.vue";
-import userfavorites from "../components/UserFavorites.vue";
-import userfolder from "../components/UserFolder.vue";
-import blacklist from "../components/BlackList.vue";
-import usersub from "../components/UserSub.vue";
-import Footer from "../components/Footer.vue";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
+import userprofile from "@/components/user/dash/Profile";
+import usercontribute from "@/components/user/dash/Contribute";
+import listfolder from "@/components/user/dash/Folder";
+import userfavorites from "@/components/user/dash/Favorites";
+import userfolder from "@/components/user/dash/Folder";
+import blacklist from "@/components/user/dash/BlackList";
+import usersub from "@/components/user/dash/Sub";
 export default {
   components: {
     topnavbar,
@@ -246,7 +188,7 @@ h4 {
   width: 98%;
   /* max-width: 3000px; */
   height: 100%;
-  /* background: url("../static/img/imoto.jpg") no-repeat top center; */
+  /* background: url("/static/img/imoto.jpg") no-repeat top center; */
   opacity: 0.9;
   background-size: cover;
   background-attachment: fixed;

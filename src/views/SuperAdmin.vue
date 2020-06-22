@@ -6,35 +6,18 @@
 	待完成
 -->
 
-<i18n>
-{
-  "CHS": {
-	"user_management":"用户管理",
-	"log_view":"日志查看",
-	"para_settings":"网站参数设置",
-	"scripts":"网站脚本"
-  },
-  "ENG": {
-	"user_management":"User management",
-	"log_view":"Log view",
-	"para_settings":"Site parameter settings",
-	"scripts":"Web site scripts"
-  },
-  "CHT": {
-	"user_management":"用戶管理",
-	"log_view":"日誌查看",
-	"para_settings":"網站參數設置",
-	"scripts":"網站腳本"
-  }
-}
-</i18n>
-
 <template>
   <div>
     <topnavbar></topnavbar>
 
     <!-- 管理员身份验证界面 -->
-    <div v-if="!admin" v-loading="!admin" class="adminloading" element-loading-text="少女祈祷中" element-loading-spinner="el-icon-loading"></div>
+    <div
+      v-if="!admin"
+      v-loading="!admin"
+      class="adminloading"
+      :element-loading-text="$t('_common.global_text.loading')"
+      element-loading-spinner="el-icon-loading"
+    ></div>
 
     <el-tabs v-else v-model="activeName">
       <!-- 用户管理 -->
@@ -57,11 +40,11 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import Footer from "../components/Footer.vue";
-import usermanagemennt from "../components/admincompoents/UserManagement.vue";
-import logview from "../components/admincompoents/LogView.vue";
-import parasettings from "../components/admincompoents/ParaSettings.vue";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
+import usermanagemennt from "@/components/admin/UserManagement";
+import logview from "@/components/admin/LogView";
+import parasettings from "@/components/admin/ParaSettings";
 export default {
   components: { topnavbar, Footer, usermanagemennt, logview, parasettings },
   data() {

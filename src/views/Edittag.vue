@@ -8,50 +8,6 @@
       2.标签搜索功能的实现
 -->
 
-<i18n>
-{
-  "CHS": {
-    "title":"编辑标签",
-    "search_tag":"搜索标签",
-    "tag_categories":{
-        "General":"综合",
-        "Character":"角色",
-        "Copyright":"作品",
-        "Author":"up主",
-        "Meta":"元数据",
-        "Language":"语言",
-        "Soundtrack":"原曲"
-    }
-  },
-  "ENG": {
-    "title":"Edit tag",
-    "search_tag":"Search tag",
-    "tag_categories":{
-        "General":"General",
-        "Character":"Character",
-        "Copyright":"Copyright",
-        "Author":"Author",
-        "Meta":"Meta",
-        "Language":"Language",
-        "Soundtrack":"Soundtrack"
-    }
-  },
-  "CHT": {
-    "title":"編輯標簽",
-    "search_tag":"搜索標簽",
-    "tag_categories":{
-        "General":"綜合",
-        "Character":"角色",
-        "Copyright":"作品",
-        "Author":"up主",
-        "Meta":"元數據",
-        "Language":"語言",
-        "Soundtrack":"原曲"
-    }
-  }
-}
-</i18n>
-
 <template>
   <div>
     <topnavbar />
@@ -75,10 +31,10 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import tagDetail from "../components/tagDetail.vue";
-import searchTag from "../components/searchTag.vue";
-import Footer from "../components/Footer.vue";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
+import tagDetail from "@/components/tag/Detail";
+import searchTag from "@/components/tag/edit/Search";
 export default {
   components: { topnavbar, tagDetail, searchTag, Footer },
   data() {
@@ -101,7 +57,7 @@ export default {
     // 初始化页面名为 home
     this.$store.commit("changeBgc", "tag");
     // 修改网站标题
-    document.title = this.$t("title") + " - Patchyvideo";
+    document.title = this.$t("title") + " - PatchyVideo";
     this.requestTagCategories();
   },
   methods: {
@@ -129,7 +85,7 @@ export default {
   width: 100%;
   margin-top: 10px;
   margin-bottom: 20px;
-  /* background-image: url("./../static/img/imoto3.jpg"); */
+  /* background-image: url("/static/img/imoto3.jpg"); */
   background-repeat: no-repeat;
 }
 .content {

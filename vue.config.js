@@ -1,6 +1,5 @@
 const webpack = require("webpack");
 const path = require("path");
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const utils = {
   assetsPath: function(_path) {
     const assetsSubDirectory =
@@ -26,7 +25,6 @@ module.exports = {
   outputDir: "dist",
   configureWebpack: {
     plugins: [
-      new BundleAnalyzerPlugin(),
       new webpack.ProvidePlugin({
         jQuery: "jquery",
         $: "jquery",
@@ -124,10 +122,27 @@ module.exports = {
           "^/proxy/bili/x/player/": "",
         },
       },
+      "/proxy/u2b/watch": {
+        target: "https://www.youtube.com/watch",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/proxy/u2b/watch": "",
+        },
+      },
+      "/proxy/u2b/i9ytimg/sb/": {
+        target: "https://i9.ytimg.com/sb/",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/proxy/u2b/i9ytimg/sb/": "",
+        },
+      },
     },
   },
 
   chainWebpack: (config) => {
+    if (process.env.NODE_ENV == "production") {
+      config.plugin("webpack-bundle-analyzer").use(require("webpack-bundle-analyzer").BundleAnalyzerPlugin);
+    }
     config.plugin("html").tap((args) => {
       if (process.env.NODE_ENV === "production") {
         args[0].minify.removeComments = false;
@@ -136,12 +151,21 @@ module.exports = {
       }
       return args;
     });
+    /* 自动注入 i18nf */
     config.module
-      .rule("i18n")
-      .resourceQuery(/blockType=i18n/)
+      .rule("i18nf-auto-inject")
+      .test(/\.vue$/)
+      .pre()
+      .use("i18nf-auto-inject")
+      .loader("./plugins/i18nf-auto-inject.js")
+      .end();
+    /* i18nf loader */
+    config.module
+      .rule("i18nf")
+      .resourceQuery(/blockType=i18nf/)
       .type("javascript/auto")
-      .use("i18n")
-      .loader("@intlify/vue-i18n-loader")
+      .use("i18nf-loader")
+      .loader("./plugins/i18nf-loader.js")
       .end();
   },
 };

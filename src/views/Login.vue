@@ -32,60 +32,6 @@
     ★待解决问题：
       暂无
 -->
-<i18n>
-{
-  "CHS": {
-    "login":"登录",
-    "signup":"注册",
-    "forget_psd":"忘了密码？",
-    "username":"用户名",
-    "psd":"密码",
-    "username_tip":"请输入账号",
-    "username_msg":"长度在 2 到 32 个字符",
-    "psd_tip":"请输入密码",
-    "psd_msg":"长度在 6 到 64 个字符",
-    "status":"就绪",
-    "login_success_msg":"登录成功",
-    "login_fail_msg":"登录失败",
-    "request_failed":"请求失败",
-    "net_err":"网络错误！"
-
-  },
-  "ENG": {
-    "title":"Log in",
-    "signup":"Signup",
-    "forget_psd":"Forgot password?",
-    "username":"Username",
-    "psd":"Password",
-    "username_tip":"Please enter username",
-    "username_msg":"Username length: 2 to 32 characters",
-    "psd_tip":"Please enter the password",
-    "psd_msg":"Password length: 6 to 64 characters",
-    "status":"Ready",
-    "login_success_msg":"Login succeed",
-    "login_fail_msg":"Login failed",
-    "request_failed":"Request failed",
-    "net_err":"Network Error"
-  },
-  "CHT": {
-    "login":"登錄",
-    "signup":"註冊",
-    "forget_psd":"忘了密碼？",
-    "username":"用戶名",
-    "psd":"密碼",
-    "username_tip":"請輸入賬號",
-    "username_msg":"長度在 2 到 32 個字符",
-    "psd_tip":"請輸入密碼",
-    "psd_msg":"長度在 6 到 64 個字符",
-    "status":"就緒",
-    "login_success_msg":"登錄成功",
-    "login_fail_msg":"登錄失敗",
-    "request_failed":"請求失敗",
-    "net_err":"網絡錯誤！"
-  }
-}
-</i18n>
-
 <template>
   <div class="loginPic">
     <!-- 登录框正文 -->
@@ -139,7 +85,7 @@
 
 <script>
 // import signup from "../views/SignUp";
-import { changeSiteTitle } from "../static/js/base";
+import { changeSiteTitle } from "@/static/js/base";
 export default {
   components: {
     // signup
@@ -175,7 +121,7 @@ export default {
     // 初始化页面名为 login
     this.$store.commit("changeBgc", "login");
     // 修改网站标题
-    //document.title = this.$t("login") + " - Patchyvideo";
+    //document.title = this.$t("login") + " - PatchyVideo";
     changeSiteTitle(this.$t("login"));
   },
   mounted() {},
@@ -301,7 +247,7 @@ export default {
   height: 100%;
   width: 100%;
   background-color: #fff;
-  /* background: url("../static/img/login.jpg") no-repeat top center; */
+  /* background: url("/static/img/login.jpg") no-repeat top center; */
   /* background-position: 200px 0; */
   background-size: cover;
   background-attachment: fixed;

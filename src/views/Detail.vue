@@ -4,96 +4,6 @@
     功能：展示展示视频的详细信息
     更新日志：
 -->
-<i18n>
-{
-  "CHS": {
-  "favorite":"收藏",
-  "modify" :"修改",
-  "copy" : "副本",
-  "add_copy":"添加副本",
-  "del_copy":"删除副本",
-  "sync_replica_label":"同步副本标签",
-  "sync_replica_label_from":"从此副本同步标签",
-  "playlist":"播放列表",
-  "management":"视频等级管理",
-  "official":"原始发布",
-  "official_repost":"官方再发布",
-  "authorized_translation":"授权翻译",
-  "authorized_repost":"授权转载",
-  "translation":"自发翻译",
-  "repost":"自发搬运",
-  "unknown":"其他",
-  "previous_article":"前一篇",
-  "no_previous_article":"没有前一篇了哦",
-  "next_article":"后一篇",
-  "no_next_article":"没有后一篇了哦",
-    "infotip":{
-  "release_type":"请修改视频的发布类型",
-  "nocopies":"此视频不存在副本",
-  "noplaylist":"本视频不包含于任何播放列表中",
-  "create_playlist":"由此视频创建播放列表"
-    }
-  },
-  "ENG": {
-  "favorite":"Add to playlist",
-  "modify":"Change",
-  "copy" : "Copies",
-  "add_copy":"Add copies",
-  "del_copy":"Delete copies",
-  "sync_replica_label":"Synchronize copies tags",
-  "sync_replica_label_from":"Sync tags from this video",
-  "playlist":"Playlists",
-  "management":"Video Level Management",
-  "other":"Other",
-  "official": "Original",
-  "official_repost": "Official Repost",
-  "authorized_translation": "Authorized Translation",
-  "authorized_repost": "Authorized Repost",
-  "translation": "User Translation",
-  "repost": "User Repost",
-  "unknown": "Other",
-  "previous_article":"Previous video",
-  "no_previous_article":"No previous video",
-  "next_article":"Next video",
-  "no_next_article":"No next video",
-  "infotip":{
-  "release_type":"Please select repost type for this video",
-  "nocopies":"No copies exist for this video",
-  "noplaylist":"This video is not included in any playlists",
-   "create_playlist":"Create playlist from this video"
-  }
-
-  },
-  "CHT": {
-  "favorite":"收藏",
-  "modify" :"修改",
-  "copy" : "副本",
-  "add_copy":"添加副本",
-  "del_copy":"刪除副本",
-  "sync_replica_label":"同步副本標簽",
-  "sync_replica_label_from":"從此副本同步標簽",
-  "playlist":"播放列表",
-  "management":"視頻等級管理",
-  "official":"原始發布",
-  "official_repost":"官方再發布",
-  "authorized_translation":"授權翻譯",
-  "authorized_repost":"授權轉載",
-  "translation":"自發翻譯",
-  "repost":"自發搬運",
-  "unknown":"其他",
-  "previous_article":"前壹篇",
-  "no_previous_article":"沒有前壹篇了哦",
-  "next_article":"後壹篇",
-  "no_next_article":"沒有後壹篇了哦",
-    "infotip":{
-  "release_type":"請修改視頻的發布類型",
-  "nocopies":"此視頻不存在副本",
-  "noplaylist":"本視頻不包含於任何播放列表中",
-  "create_playlist":"由此視頻創建播放列表"
-    }
-  }
-}
-</i18n>
 <template>
   <div>
     <topnavbar />
@@ -148,10 +58,10 @@
         </el-input>
         <div v-if="myVideoList.length" class="myVideoList">
           <div v-for="(item, index) in myVideoList" :key="index" class="myVideoListItem" @click="addToThisList(item._id.$oid)">
-            <h2>{{ item.title.english }}</h2>
-            <h3 v-if="item.private" style="display: inline-block; color: #909399;">[私密]</h3>
+            <h2>{{ item.item.title }}</h2>
+            <h3 v-if="item.item.private" style="display: inline-block; color: #909399;">[私密]</h3>
             <h3 v-if="item.exist" style="display: inline-block; color: #e6a23c;">[已有此视频]</h3>
-            <p>共{{ item.videos }}个视频</p>
+            <p>共{{ item.item.videos }}个视频</p>
           </div>
         </div>
         <p v-else>您还没有视频列表！</p>
@@ -171,7 +81,7 @@
 
     <!-- Detail 页面的正文 -->
     <div v-loading="loading" class="w detail-page-background-img">
-      <left_navbar :msg="myVideoData.tag_by_category"></left_navbar>
+      <left-navbar :msg="myVideoData.tag_by_category"></left-navbar>
 
       <div class="content">
         <!-- 推荐视频栏开始  -->
@@ -257,7 +167,7 @@
             <h3 v-if="key == 'repost'">{{ $t("repost") }}</h3>
             <h3 v-if="key == 'unknown'">{{ $t("unknown") }}</h3>
             <ul v-for="item in value" :key="item._id.$oid" class="copies">
-              <img :src="require('../static/img/' + item.item.site + '.png')" width="16px" style="margin-right: 2px; vertical-align: middle;" />
+              <img :src="require('@/static/img/' + item.item.site + '.png')" width="16px" style="margin-right: 2px; vertical-align: middle;" />
               <!-- 将页面参数刷新并重载页面，其中 @click.native 应该是 router-link 为了阻止 a 标签的默认跳转事件 -->
               <a :class="{ shortTitleForPageVideos: item.item.part_name }" @click="shiftID(item._id.$oid)">{{ item.item.title }}</a>
               <span v-if="item.item.part_name" class="shortTitleForTitleOfPageVideos"
@@ -300,7 +210,7 @@
           <ul v-for="item in myVideoData.playlists" :key="item._id.$oid">
             <a v-if="item.prev != ''" @click="shiftID(item.prev)">【{{ $t("previous_article") }}】</a>
             <span v-else>【{{ $t("no_previous_article") }}】</span>
-            <router-link :to="{ path: '/listdetail', query: { id: item._id.$oid } }" tag="a">{{ item.title.english }}</router-link>
+            <router-link :to="{ path: '/listdetail', query: { id: item._id.$oid } }" tag="a">{{ item.item.title }}</router-link>
             <a v-if="item.next != ''" style="float: right;" @click="shiftID(item.next)">【{{ $t("next_article") }}】</a>
             <span v-else style="float: right;">【{{ $t("no_next_article") }}】</span>
           </ul>
@@ -334,18 +244,18 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import left_navbar from "../components/LeftNavbar.vue";
-import Footer from "../components/Footer.vue";
-import Comments from "../components/comments.vue";
-import Score from "../components/Score.vue";
-import createNewList from "../components/CreateNewList.vue";
-import PagesOfVideo from "../components/VideoCompoents/PagesOfVideo.vue";
-import { copyToClipboardText } from "../static/js/generic";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
+import leftNavbar from "@/components/main/bar/LeftNavbar";
+import Comments from "@/components/forum/Comments";
+import Score from "@/components/video/Score";
+import createNewList from "@/components/playlist/edit/Create";
+import PagesOfVideo from "@/components/video/PagesOfVideo";
+import { copyToClipboardText } from "@/static/js/generic";
 
 export default {
   components: {
-    left_navbar,
+    leftNavbar,
     topnavbar,
     Footer,
     Comments,

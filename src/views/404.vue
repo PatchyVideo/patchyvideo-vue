@@ -6,23 +6,6 @@
     2/1/2020: v1.0 
       release
 -->
-<i18n>
-{
-  "CHS": {
-    "errmsg":"哎呀，页面好像出错了...",
-    "click2home":"点我返回主页"
-  },
-  "ENG": {
-    "errmsg":"Sorry, this page is not found ...",
-    "click2home":"Click me to return to homepage"
-  },
-  "CHT": {
-    "errmsg":"哎呀，頁面好像出錯了...",
-    "click2home":"點我返回主頁"
-  }
-}
-</i18n>
-
 <template>
   <div>
     <div class="errorPage">

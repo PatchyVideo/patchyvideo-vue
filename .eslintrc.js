@@ -16,7 +16,7 @@ module.exports = {
     "vue/component-tags-order": [
       "warn",
       {
-        order: ["i18n", "template", "script", "style"],
+        order: ["template", "script", "style"],
       },
     ],
     "vue/no-v-html": "off",

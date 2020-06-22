@@ -46,11 +46,28 @@ const yiyan = [
 ];
 
 function getYiyan(short) {
-  let yy = yiyan;
+  let yy = JSON.parse(JSON.stringify(yiyan));
   if (short) {
     yy = yy.filter((v) => v.length <= 40);
   }
   let random = Math.floor(Math.random() * 100, 2) % yy.length;
   return yy[random];
 }
-export { getYiyan };
+
+function getYiyanArray(short, rand) {
+  let yy = JSON.parse(JSON.stringify(yiyan));
+  if (short) {
+    yy = yy.filter((v) => v.length <= 40);
+  }
+  if (rand) {
+    for (let i = 1; i < yy.length; i++) {
+      const random = Math.floor(Math.random() * (i + 1));
+      const tmp = yy[random];
+      yy[random] = yy[i];
+      yy[i] = tmp;
+    }
+  }
+  return yy;
+}
+
+export { getYiyan, getYiyanArray };

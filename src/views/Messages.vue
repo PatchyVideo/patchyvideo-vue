@@ -4,26 +4,6 @@
     功能：显示用户的消息
     更新日志：
 -->
-<i18n>
-{
-  "CHS": {
-    "MsgCenter":"消息中心",
-    "UnreadMsg":"未读消息",
-    "AllMsg":"全部消息"
-  },
-  "ENG": {
-    "MsgCenter":"Message Center",
-    "UnreadMsg":"Unread Messages",
-    "AllMsg":"All Messages"
-  },
-  "CHT": {
-    "MsgCenter":"消息中心",
-    "UnreadMsg":"未讀消息",
-    "AllMsg":"全部消息"
-  }
-}
-</i18n>
-
 <template>
   <div class="messages">
     <topnavbar />
@@ -55,9 +35,9 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import unreadMsg from "../components/messageCompoents/UnreadMsg.vue";
-import allMsg from "../components/messageCompoents/AllMessage.vue";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import unreadMsg from "@/components/user/msg/Unread";
+import allMsg from "@/components/user/msg/All";
 export default {
   components: { topnavbar, unreadMsg, allMsg },
   data() {
@@ -71,7 +51,7 @@ export default {
     // 初始化页面名为 home
     this.$store.commit("changeBgc", "home");
     // 修改网站标题
-    document.title = "消息中心 - Patchyvideo";
+    document.title = "消息中心 - PatchyVideo";
   },
   methods: {},
 };
@@ -79,7 +59,7 @@ export default {
 
 <style scoped>
 .messages {
-  /* background: url("../static/img/messages.jpg") no-repeat;
+  /* background: url("/static/img/messages.jpg") no-repeat;
   background-size: cover;
   background-position: 0px 50px; */
   height: 100%;
