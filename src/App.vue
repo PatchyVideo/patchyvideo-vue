@@ -20,6 +20,14 @@ export default {
       isRouterAlive: true,
     };
   },
+  created() {
+    if (localStorage.getItem("CON_logRenderTime")) console.time("Rendered Time");
+  },
+  mounted() {
+    this.$nextTick(function() {
+      if (localStorage.getItem("CON_logRenderTime")) console.timeEnd("Rendered Time");
+    });
+  },
   methods: {
     reload() {
       this.isRouterAlive = false;
