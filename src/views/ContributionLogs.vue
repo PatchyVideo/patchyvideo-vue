@@ -15,7 +15,7 @@
   <div>
     <topnavbar />
 
-    <el-tabs type="border-card" v-model="activeName">
+    <el-tabs v-model="activeName" type="border-card">
       <el-tab-pane :label="labelInfo[0]" name="first">
         <tagconhis v-if="activeName === 'first'"></tagconhis>
       </el-tab-pane>
@@ -28,35 +28,35 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import tagconhis from "../components/TagContributeHistory.vue";
-import tagconlist from "../components/TagContributorRanking.vue";
-import Footer from "../components/Footer.vue";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
+import tagconhis from "@/components/tag/cont/History";
+import tagconlist from "@/components/tag/cont/Ranking";
 export default {
+  components: {
+    tagconhis,
+    tagconlist,
+    topnavbar,
+    Footer,
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       activeName: "first",
       label: ["历史和贡献"],
-      labelInfo: ["标签编辑历史", "标签贡献排行榜"]
+      labelInfo: ["标签编辑历史", "标签贡献排行榜"],
     };
   },
-  created() {},
   computed: {},
-  mounted() {},
-  updated() {},
-  methods: {},
   watch: {
     $route() {
       this.activeName = "first";
-    }
+    },
   },
-  components: {
-    tagconhis,
-    tagconlist,
-    topnavbar,
-    Footer
-  }
+  created() {},
+  mounted() {},
+  updated() {},
+  methods: {},
 };
 </script>
 

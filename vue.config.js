@@ -1,6 +1,5 @@
 const webpack = require("webpack");
 const path = require("path");
-var BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const utils = {
   assetsPath: function(_path) {
     const assetsSubDirectory =
@@ -14,19 +13,22 @@ const utils = {
   },
   resolve: function(dir) {
     return path.join(__dirname, "..", dir);
-  }
+  },
 };
+const packageJson = require("./package.json");
+process.env.VUE_APP_VERSION = packageJson.version;
+const moment = require("moment");
+process.env.VUE_APP_BUILDTIME = moment().format("YYYY-MM-DD HH:mm");
 
 module.exports = {
   publicPath: "./",
   outputDir: "dist",
   configureWebpack: {
     plugins: [
-      new BundleAnalyzerPlugin(),
       new webpack.ProvidePlugin({
         jQuery: "jquery",
-        $: "jquery"
-      })
+        $: "jquery",
+      }),
     ],
     module: {
       rules: [
@@ -35,10 +37,10 @@ module.exports = {
           loader: "url-loader",
           options: {
             limit: 10000,
-            name: utils.assetsPath("fonrs/[name].[hash:7].[ext]")
-          }
-        }
-      ]
+            name: utils.assetsPath("fonrs/[name].[hash:7].[ext]"),
+          },
+        },
+      ],
     },
     performance: {
       hints: "warning",
@@ -49,8 +51,8 @@ module.exports = {
       //只给出 js 文件的性能提示
       assetFilter: function(assetFilename) {
         return assetFilename.endsWith(".js");
-      }
-    }
+      },
+    },
   },
   devServer: {
     host: "127.0.0.1",
@@ -60,29 +62,29 @@ module.exports = {
         target: "https://thvideo.tv/v/",
         changeOrigin: true,
         pathRewrite: {
-          "^/v/": ""
-        }
+          "^/v/": "",
+        },
       },
       "/be/": {
         target: "https://thvideo.tv/be/",
         changeOrigin: true,
         pathRewrite: {
-          "^/be/": ""
-        }
+          "^/be/": "",
+        },
       },
       "/images/": {
         target: "https://thvideo.tv/images/",
         changeOrigin: true,
         pathRewrite: {
-          "^/images/": ""
-        }
+          "^/images/": "",
+        },
       },
       "/autocomplete/ ": {
         target: "https://thvideo.tv/autocomplete/",
         changeOrigin: true,
         pathRewrite: {
-          "^/autocomplete/": ""
-        }
+          "^/autocomplete/": "",
+        },
       },
       "/proxy/bili/x/player/videoshot": {
         target: "https://api.bilibili.com/x/player/videoshot",
@@ -90,11 +92,11 @@ module.exports = {
         headers: {
           host: "api.bilibili.com",
           origin: "https://t.bilibili.com",
-          referer: "https://t.bilibili.com/"
+          referer: "https://t.bilibili.com/",
         },
         pathRewrite: {
-          "^/proxy/bili/x/player/videoshot": ""
-        }
+          "^/proxy/bili/x/player/videoshot": "",
+        },
       },
       "/proxy/bili/cover/bfs/videoshot/": {
         target: "http://i0.hdslb.com/bfs/videoshot/",
@@ -102,11 +104,11 @@ module.exports = {
         headers: {
           host: "i0.hdslb.com",
           origin: "https://t.bilibili.com",
-          referer: "https://t.bilibili.com/"
+          referer: "https://t.bilibili.com/",
         },
         pathRewrite: {
-          "^/proxy/bili/cover/bfs/videoshot/": ""
-        }
+          "^/proxy/bili/cover/bfs/videoshot/": "",
+        },
       },
       "/proxy/bili/x/player/": {
         target: "https://api.bilibili.com/x/player/",
@@ -114,22 +116,56 @@ module.exports = {
         headers: {
           host: "api.bilibili.com",
           origin: "https://www.bilibili.com",
-          referer: "https://www.bilibili.com"
+          referer: "https://www.bilibili.com",
         },
         pathRewrite: {
-          "^/proxy/bili/x/player/": ""
-        }
-      }
-    }
+          "^/proxy/bili/x/player/": "",
+        },
+      },
+      "/proxy/u2b/watch": {
+        target: "https://www.youtube.com/watch",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/proxy/u2b/watch": "",
+        },
+      },
+      "/proxy/u2b/i9ytimg/sb/": {
+        target: "https://i9.ytimg.com/sb/",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/proxy/u2b/i9ytimg/sb/": "",
+        },
+      },
+    },
   },
 
-  chainWebpack: config => {
+  chainWebpack: (config) => {
+    if (process.env.NODE_ENV == "production") {
+      config.plugin("webpack-bundle-analyzer").use(require("webpack-bundle-analyzer").BundleAnalyzerPlugin);
+    }
+    config.plugin("html").tap((args) => {
+      if (process.env.NODE_ENV === "production") {
+        args[0].minify.removeComments = false;
+        args[0].minify.minifyCSS = true;
+        args[0].minify.minifyJS = true;
+      }
+      return args;
+    });
+    /* 自动注入 i18nf */
     config.module
-      .rule("i18n")
-      .resourceQuery(/blockType=i18n/)
-      .type("javascript/auto")
-      .use("i18n")
-      .loader("@kazupon/vue-i18n-loader")
+      .rule("i18nf-auto-inject")
+      .test(/\.vue$/)
+      .pre()
+      .use("i18nf-auto-inject")
+      .loader("./plugins/i18nf-auto-inject.js")
       .end();
-  }
+    /* i18nf loader */
+    config.module
+      .rule("i18nf")
+      .resourceQuery(/blockType=i18nf/)
+      .type("javascript/auto")
+      .use("i18nf-loader")
+      .loader("./plugins/i18nf-loader.js")
+      .end();
+  },
 };

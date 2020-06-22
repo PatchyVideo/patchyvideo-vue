@@ -16,29 +16,6 @@
     1/18/2020：
       release
 -->
-<i18n>
-{
-  "CHS": {
-    "title":"发布视频",
-    "single_release":"单个发布",
-    "batch_release":"批量发布",
-    "IPFS_release":"IPFS视频发布"
-  },
-  "ENG": {
-    "title":"Post video",
-    "single_release":"Single",
-    "batch_release":"Batch",
-    "IPFS_release":"IPFS video"
-  },
-  "CHT": {
-    "title":"發布視頻",
-    "single_release":"單個發布",
-    "batch_release":"批量發布",
-    "IPFS_release":"IPFS視頻發布"
-  }
-}
-</i18n>
-
 <template>
   <div>
     <topnavbar />
@@ -63,34 +40,34 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import Footer from "../components/Footer.vue";
-import PostSingleVideo from "../components/PostSingleVideo";
-import PostMultiVideos from "../components/PostMultiVideos";
-import PostIPFSVideo from "../components/PostIPFSVideo";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
+import PostSingleVideo from "@/components/video/edit/post/SingleVideo";
+import PostMultiVideos from "@/components/video/edit/post/MultiVideos";
+import PostIPFSVideo from "@/components/video/edit/post/IPFSVideo";
 export default {
+  components: {
+    topnavbar,
+    Footer,
+    PostSingleVideo,
+    PostMultiVideos,
+    PostIPFSVideo,
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       //默认打开的标签页
-      activeName: "first"
+      activeName: "first",
     };
   },
   created() {
     // 初始化页面名为 list
     this.$store.commit("changeBgc", "postVideo");
     // 修改网站标题
-    document.title = this.$t("title") + " - Patchyvideo";
+    document.title = this.$t("title") + " - PatchyVideo";
   },
   mounted() {},
   methods: {},
-  components: {
-    topnavbar,
-    Footer,
-    PostSingleVideo,
-    PostMultiVideos,
-    PostIPFSVideo
-  }
 };
 </script>
 

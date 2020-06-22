@@ -32,64 +32,10 @@
     ★待解决问题：
       暂无
 -->
-<i18n>
-{
-  "CHS": {
-    "login":"登录",
-    "signup":"注册",
-    "forget_psd":"忘了密码？",
-    "username":"用户名",
-    "psd":"密码",
-    "username_tip":"请输入账号",
-    "username_msg":"长度在 2 到 32 个字符",
-    "psd_tip":"请输入密码",
-    "psd_msg":"长度在 6 到 64 个字符",
-    "status":"就绪",
-    "login_success_msg":"登录成功",
-    "login_fail_msg":"登录失败",
-    "request_failed":"请求失败",
-    "net_err":"网络错误！"
-
-  },
-  "ENG": {
-    "title":"Log in",
-    "signup":"Signup",
-    "forget_psd":"Forgot password?",
-    "username":"Username",
-    "psd":"Password",
-    "username_tip":"Please enter username",
-    "username_msg":"Username length: 2 to 32 characters",
-    "psd_tip":"Please enter the password",
-    "psd_msg":"Password length: 6 to 64 characters",
-    "status":"Ready",
-    "login_success_msg":"Login succeed",
-    "login_fail_msg":"Login failed",
-    "request_failed":"Request failed",
-    "net_err":"Network Error"
-  },
-  "CHT": {
-    "login":"登錄",
-    "signup":"註冊",
-    "forget_psd":"忘了密碼？",
-    "username":"用戶名",
-    "psd":"密碼",
-    "username_tip":"請輸入賬號",
-    "username_msg":"長度在 2 到 32 個字符",
-    "psd_tip":"請輸入密碼",
-    "psd_msg":"長度在 6 到 64 個字符",
-    "status":"就緒",
-    "login_success_msg":"登錄成功",
-    "login_fail_msg":"登錄失敗",
-    "request_failed":"請求失敗",
-    "net_err":"網絡錯誤！"
-  }
-}
-</i18n>
-
 <template>
   <div class="loginPic">
     <!-- 登录框正文 -->
-    <div class="w" v-loading="loading">
+    <div v-loading="loading" class="w">
       <!-- 标题 -->
       <h1>
         <router-link to="/home">PatchyVideo</router-link>
@@ -105,9 +51,9 @@
         <el-form-item prop="login_name">
           <el-input
             id="username"
+            v-model="loginFormRef.login_name"
             name="username"
             :placeholder="$t('username')"
-            v-model="loginFormRef.login_name"
             clearable
             prefix-icon="el-icon-user"
           ></el-input>
@@ -115,23 +61,23 @@
         <el-form-item prop="login_password">
           <el-input
             id="password"
+            v-model="loginFormRef.login_password"
             name="password"
             :placeholder="$t('psd')"
-            v-model="loginFormRef.login_password"
             show-password
             prefix-icon="el-icon-lock"
             @keyup.enter.native="login"
           ></el-input>
         </el-form-item>
-        <p style="text-align: left;margin-top:30px">
+        <p style="text-align: left; margin-top: 30px;">
           <router-link to="/forgetPassword" class="forgetPassword">{{ $t("forget_psd") }}</router-link>
         </p>
-        <p id="status" style="text-align: center;" v-bind:class="{ alert: status != $t('status') }">{{ status }}</p>
+        <p id="status" style="text-align: center;" :class="{ alert: status != $t('status') }">{{ status }}</p>
       </el-form>
 
       <!-- 登录按钮 -->
       <div class="bottom in">
-        <div @click="login" class="login in">{{ $t("login") }}</div>
+        <div class="login in" @click="login">{{ $t("login") }}</div>
       </div>
     </div>
   </div>
@@ -139,15 +85,18 @@
 
 <script>
 // import signup from "../views/SignUp";
-import { changeSiteTitle } from "../static/js/base";
+import { changeSiteTitle } from "@/static/js/base";
 export default {
+  components: {
+    // signup
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 用户信息
       loginFormRef: {
         login_name: "",
-        login_password: ""
+        login_password: "",
       },
       // 事先向服务器请求的 session 值
       session: "",
@@ -155,24 +104,24 @@ export default {
       rules: {
         login_name: [
           { required: true, message: this.$t("username_tip"), trigger: "blur" },
-          { min: 2, max: 32, message: this.$t("username_msg"), trigger: "blur" }
+          { min: 2, max: 32, message: this.$t("username_msg"), trigger: "blur" },
         ],
         login_password: [
           { required: true, message: this.$t("psd_tip"), trigger: "blur" },
-          { min: 6, max: 64, message: this.$t("psd_msg"), trigger: "blur" }
-        ]
+          { min: 6, max: 64, message: this.$t("psd_msg"), trigger: "blur" },
+        ],
       },
       // 登录状态
       status: this.$t("status"),
       // 视频列表是否属于加载状态的判断
-      loading: false
+      loading: false,
     };
   },
   created() {
     // 初始化页面名为 login
     this.$store.commit("changeBgc", "login");
     // 修改网站标题
-    //document.title = this.$t("login") + " - Patchyvideo";
+    //document.title = this.$t("login") + " - PatchyVideo";
     changeSiteTitle(this.$t("login"));
   },
   mounted() {},
@@ -180,14 +129,14 @@ export default {
     open2() {
       this.$message({
         message: this.$t("login_success_msg"),
-        type: "success"
+        type: "success",
       });
     },
 
     open3() {
       this.$message({
         message: this.$t("login_fail_msg"),
-        type: "warning"
+        type: "warning",
       });
     },
 
@@ -197,17 +146,17 @@ export default {
       this.loading = true;
 
       // 表单验证
-      this.$refs.loginFormRef.validate(valid => {
+      this.$refs.loginFormRef.validate((valid) => {
         if (valid) {
           // 验证成功，先获取 session
           this.axios({
             method: "post",
             url: "be/auth/get_session.do",
             data: {
-              type: "LOGIN"
-            }
+              type: "LOGIN",
+            },
           })
-            .then(result => {
+            .then((result) => {
               this.session = result.data.data;
 
               // 请求登录
@@ -217,10 +166,10 @@ export default {
                 data: {
                   username: this.loginFormRef.login_name,
                   password: this.loginFormRef.login_password,
-                  session: this.session
-                }
+                  session: this.session,
+                },
               })
-                .then(result => {
+                .then((result) => {
                   if (result.status == 200) {
                     if (result.data.status == "SUCCEED") {
                       this.open2();
@@ -239,8 +188,8 @@ export default {
                       // 如果是从路由守卫跳转到本界面，进入下一个页面
                       else if (this.$store.state.ifRouter == 1) {
                         this.$store.commit("changeifRouter", "2");
-                        var path = this.$store.state.routerPath;
-                        var query = this.$store.state.routerparams;
+                        let path = this.$store.state.routerPath;
+                        let query = this.$store.state.routerparams;
                         // 因为发布视频有参数传入的可能,所以做特别的兼容性调整
                         if (path == "/postvideo") {
                           this.$router.push({ path: path, query: query });
@@ -283,16 +232,13 @@ export default {
     // 设置 cookie
     // 储存变量为 username, userAvatar
     setCookie(username, userAvatar, days) {
-      var date = new Date(); // 获取时间
+      let date = new Date(); // 获取时间
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
       // 字符串拼接 cookie
       window.document.cookie = "username" + ":" + username + ";path=/;expires=" + date.toUTCString();
       window.document.cookie = "userAvatar" + "=" + userAvatar + ";path=/;expires=" + date.toUTCString();
-    }
+    },
   },
-  components: {
-    // signup
-  }
 };
 </script>
 
@@ -301,7 +247,7 @@ export default {
   height: 100%;
   width: 100%;
   background-color: #fff;
-  /* background: url("../static/img/login.jpg") no-repeat top center; */
+  /* background: url("/static/img/login.jpg") no-repeat top center; */
   /* background-position: 200px 0; */
   background-size: cover;
   background-attachment: fixed;

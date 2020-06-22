@@ -13,52 +13,16 @@
       1.错误信息尚未进行分类
 -->
 
-<i18n>
-{
-  "CHS": {
-    "reset_psd":"重置密码",
-    "psd_input_tip":"请输入新的密码",
-    "repeat_input_tip":"请重复密码",
-    "err_tip":"两次输入密码不一致!",
-    "input_psd":"请输入密码",
-    "psd_limit":"长度在 6 到 64 个字符",
-    "fail_msg":"请求失败，请重新在找回密码界面发送邮件！",
-    "success_msg":"密码重置成功！"
-
-  },
-  "ENG": {
-    "reset_psd":"Reset Password",
-    "psd_input_tip":"Please enter a new password",
-    "repeat_input_tip":"Please repeat password",
-    "err_tip":"Passwords mismatch",
-    "input_psd":"Please enter password",
-    "psd_limit":"Password length: 6 to 64 characters",
-    "fail_msg":"Reset failed, please report bug",
-    "success_msg":"An reset password email has been sent to your email address."
-  },
-  "CHT": {
-    "reset_psd":"重置密碼",
-    "psd_input_tip":"請輸入新的密碼",
-    "repeat_input_tip":"請重復密碼",
-    "err_tip":"兩次輸入密碼不壹致!",
-    "input_psd":"請輸入密碼",
-    "psd_limit":"長度在 6 到 64 個字符",
-    "fail_msg":"請求失敗，請重新在找回密碼界面發送郵件！",
-    "success_msg":"密碼重置成功！"
-  }
-}
-</i18n>
-
 <template>
   <div class="loginPic">
     <!-- 重置密码框正文 -->
-    <div class="w" v-loading="loading">
+    <div v-loading="loading" class="w">
       <!-- 标题 -->
       <h1>
         <router-link to="/home">PatchyVideo</router-link>
       </h1>
       <div class="top in">
-        <h3 style="color:#909399">{{ $t("reset_psd") }}</h3>
+        <h3 style="color: #909399;">{{ $t("reset_psd") }}</h3>
       </div>
 
       <!-- 新密码的框 -->
@@ -66,9 +30,9 @@
         <el-form-item prop="password1">
           <el-input
             id="password1"
+            v-model="FormRef.password1"
             name="password1"
             type="password"
-            v-model="FormRef.password1"
             :placeholder="$t('psd_input_tip')"
             prefix-icon="el-icon-lock"
           ></el-input>
@@ -76,9 +40,9 @@
         <el-form-item prop="password2">
           <el-input
             id="password2"
+            v-model="FormRef.password2"
             name="password2"
             type="password"
-            v-model="FormRef.password2"
             :placeholder="$t('repeat_input_tip')"
             prefix-icon="el-icon-key"
           ></el-input>
@@ -87,7 +51,7 @@
 
       <!-- 登录按钮 -->
       <div class="bottom in">
-        <div @click="resetpass()" class="login in">{{ $t("reset_psd") }}</div>
+        <div class="login in" @click="resetpass()">{{ $t("reset_psd") }}</div>
       </div>
     </div>
   </div>
@@ -95,9 +59,10 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
-    var validatePass2 = (rule, value, callback) => {
+    let validatePass2 = (rule, value, callback) => {
       if (value !== this.FormRef.password1) {
         callback(new Error(this.$t("err_tip")));
       } else {
@@ -108,26 +73,26 @@ export default {
       // 邮件地址
       FormRef: {
         password1: "",
-        password2: ""
+        password2: "",
       },
       // 校验密码
       rules: {
         password1: [
           { required: true, message: this.$t("input_psd"), trigger: "blur" },
-          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" }
+          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" },
         ],
         password2: [
           {
             required: true,
             message: this.$t("repeat_input_tip"),
-            trigger: "blur"
+            trigger: "blur",
           },
           { validator: validatePass2, trigger: "blur" },
-          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" }
-        ]
+          { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" },
+        ],
       },
       // 视频列表是否属于加载状态的判断
-      loading: false
+      loading: false,
     };
   },
   computed: {
@@ -137,13 +102,13 @@ export default {
       } else {
         return "";
       }
-    }
+    },
   },
   created() {
     // 初始化页面名为 login
     this.$store.commit("changeBgc", "resetPassword");
     // 修改网站标题
-    document.title = this.$t("reset_psd") + " - Patchyvideo";
+    document.title = this.$t("reset_psd") + " - PatchyVideo";
   },
   mounted() {
     console.log("背景图片p站ID：30602715，如有侵权请联系本站开发者（本站账号：admin）删除");
@@ -154,16 +119,16 @@ export default {
       // 先使页面出于加载状态
       this.loading = true;
       // 表单验证
-      this.$refs.FormRef.validate(valid => {
+      this.$refs.FormRef.validate((valid) => {
         if (valid) {
           this.axios({
             method: "post",
             url: "be/user/resetpass.do",
             data: {
               reset_key: this.reset_key,
-              new_pass: this.FormRef.password1
-            }
-          }).then(result => {
+              new_pass: this.FormRef.password1,
+            },
+          }).then((result) => {
             this.loading = false;
             if (result.data.status == "FAILED") {
               this.open();
@@ -181,17 +146,16 @@ export default {
     open() {
       this.$message({
         message: this.$t("fail_msg"),
-        type: "error"
+        type: "error",
       });
     },
     open2() {
       this.$message({
         message: this.$t("success_msg"),
-        type: "success"
+        type: "success",
       });
-    }
+    },
   },
-  components: {}
 };
 </script>
 
@@ -199,7 +163,7 @@ export default {
 .loginPic {
   height: 100%;
   width: 100%;
-  /* background: url("../static/img/resetPassword.jpg") no-repeat top center; */
+  /* background: url("/static/img/resetPassword.jpg") no-repeat top center; */
   background-position: 0 -38px;
   background-size: cover;
   background-attachment: fixed;

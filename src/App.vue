@@ -1,21 +1,32 @@
 <!-- 当前页面刷新方法：将 router-view 先隐藏后显示 -->
 <!-- 使用方法：子页面在 export default 下声明 inject: ['reload']，然后直接在页面下调用 this.reload -->
+
 <template>
   <div id="app" :class="this.$store.state.bgcMark">
     <router-view v-if="isRouterAlive" />
   </div>
 </template>
+
 <script>
 export default {
+  components: {},
   provide() {
     return {
-      reload: this.reload
+      reload: this.reload,
     };
   },
   data() {
     return {
-      isRouterAlive: true
+      isRouterAlive: true,
     };
+  },
+  created() {
+    if (localStorage.getItem("CON_logRenderTime")) console.time("Rendered Time");
+  },
+  mounted() {
+    this.$nextTick(function() {
+      if (localStorage.getItem("CON_logRenderTime")) console.timeEnd("Rendered Time");
+    });
   },
   methods: {
     reload() {
@@ -23,9 +34,8 @@ export default {
       this.$nextTick(function() {
         this.isRouterAlive = true;
       });
-    }
+    },
   },
-  components: {}
 };
 </script>
 

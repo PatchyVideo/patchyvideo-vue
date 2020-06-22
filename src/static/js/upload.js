@@ -39,10 +39,10 @@ export const isMaxFileSize = (file, fileMaxSize = 2) => {
  * @desc 读取图片文件为base64文件格式
  * @retutn 返回base64文件
  */
-export const readFile = file => {
+export const readFile = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = e => {
+    reader.onload = (e) => {
       const data = e.target.result;
       resolve(data);
     };
@@ -61,14 +61,14 @@ export const readFile = file => {
  * @desc 加载真实图片
  * @return 读取成功返回图片真实宽高对象 ag: {width:100,height:100}
  */
-export const loadImage = src => {
+export const loadImage = (src) => {
   return new Promise((resolve, reject) => {
     const image = new Image();
     image.src = src;
     image.onload = () => {
       const data = {
         width: image.width,
-        height: image.height
+        height: image.height,
       };
       resolve(data);
     };
@@ -88,15 +88,11 @@ export const loadImage = src => {
  *
  */
 export const isAppropriateResolution = async (file, props) => {
-  try {
-    const { width, height } = props;
-    const base64 = await readFile(file);
-    const image = await loadImage(base64);
-    if (image.width !== width || image.height !== height) {
-      throw new Error("上传图片的分辨率必须为" + width + "*" + height);
-    }
-  } catch (error) {
-    throw error;
+  const { width, height } = props;
+  const base64 = await readFile(file);
+  const image = await loadImage(base64);
+  if (image.width !== width || image.height !== height) {
+    throw new Error("上传图片的分辨率必须为" + width + "*" + height);
   }
 };
 
@@ -108,19 +104,15 @@ export const isAppropriateResolution = async (file, props) => {
  * @throw  比例不在限定范围之内则抛出异常
  */
 export const isAppRatio = async (file, ratio) => {
-  try {
-    const [w, h] = ratio;
-    if (h === 0 || w === 0) {
-      const err = "上传图片的比例不能出现0";
-      Message.error(err);
-      throw new Error(err);
-    }
-    const base64 = await readFile(file);
-    const image = await loadImage(base64);
-    if (image.width / image.height !== w / h) {
-      throw new Error("上传图片的宽高比例必须为 " + w + " : " + h);
-    }
-  } catch (error) {
-    throw error;
+  const [w, h] = ratio;
+  if (h === 0 || w === 0) {
+    const err = "上传图片的比例不能出现0";
+    Message.error(err);
+    throw new Error(err);
+  }
+  const base64 = await readFile(file);
+  const image = await loadImage(base64);
+  if (image.width / image.height !== w / h) {
+    throw new Error("上传图片的宽高比例必须为 " + w + " : " + h);
   }
 };

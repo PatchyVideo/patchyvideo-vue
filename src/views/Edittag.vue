@@ -8,61 +8,16 @@
       2.标签搜索功能的实现
 -->
 
-<i18n>
-{
-  "CHS": {
-    "title":"编辑标签",
-    "search_tag":"搜索标签",
-    "tag_categories":{
-        "General":"综合",
-        "Character":"角色",
-        "Copyright":"作品",
-        "Author":"up主",
-        "Meta":"元数据",
-        "Language":"语言",
-        "Soundtrack":"原曲"
-    }
-  },
-  "ENG": {
-    "title":"Edit tag",
-    "search_tag":"Search tag",
-    "tag_categories":{
-        "General":"General",
-        "Character":"Character",
-        "Copyright":"Copyright",
-        "Author":"Author",
-        "Meta":"Meta",
-        "Language":"Language",
-        "Soundtrack":"Soundtrack"
-    }
-  },
-  "CHT": {
-    "title":"編輯標簽",
-    "search_tag":"搜索標簽",
-    "tag_categories":{
-        "General":"綜合",
-        "Character":"角色",
-        "Copyright":"作品",
-        "Author":"up主",
-        "Meta":"元數據",
-        "Language":"語言",
-        "Soundtrack":"原曲"
-    }
-  }
-}
-</i18n>
-
 <template>
   <div>
     <topnavbar />
 
     <div class="tagpage">
-      <div class="content" v-loading="loading">
-        {{ aqwe }}
+      <div v-loading="loading" class="content">
         <!-- 每个标签种类的表单 -->
-        <el-tabs type="border-card" v-model="activeName">
-          <el-tab-pane :lazy="true" v-for="(item, i) in tagCategories" :key="item" :label="$t('tag_categories.' + item)" :name="i.toString()">
-            <tagDetail :tagCategorie="item"></tagDetail>
+        <el-tabs v-model="activeName" type="border-card">
+          <el-tab-pane v-for="(item, i) in tagCategories" :key="item" :lazy="true" :label="$t('tag_categories.' + item)" :name="i.toString()">
+            <tagDetail :tag-categorie="item"></tagDetail>
           </el-tab-pane>
           <el-tab-pane :lazy="true" :label="$t('search_tag')" :name="(tagCategories.length + 1).toString()">
             <searchTag></searchTag>
@@ -76,11 +31,12 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import tagDetail from "../components/tagDetail.vue";
-import searchTag from "../components/searchTag.vue";
-import Footer from "../components/Footer.vue";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import Footer from "@/components/main/bar/Footer";
+import tagDetail from "@/components/tag/Detail";
+import searchTag from "@/components/tag/edit/Search";
 export default {
+  components: { topnavbar, tagDetail, searchTag, Footer },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
@@ -89,20 +45,19 @@ export default {
       // 标签种类
       tagCategories: [],
       // 打开标签的序号
-      activeName: "0"
+      activeName: "0",
     };
   },
-  computed: {},
   computed: {
     aqwe() {
       return "asda";
-    }
+    },
   },
   mounted() {
     // 初始化页面名为 home
     this.$store.commit("changeBgc", "tag");
     // 修改网站标题
-    document.title = this.$t("title") + " - Patchyvideo";
+    document.title = this.$t("title") + " - PatchyVideo";
     this.requestTagCategories();
   },
   methods: {
@@ -112,17 +67,16 @@ export default {
       this.axios({
         method: "post",
         url: "be/tags/query_categories.do",
-        data: {}
-      }).then(result => {
-        var categories = result.data.data.categories;
-        for (var i = 0; i < categories.length; i++) {
+        data: {},
+      }).then((result) => {
+        let categories = result.data.data.categories;
+        for (let i = 0; i < categories.length; i++) {
           this.tagCategories.push(categories[i].name);
         }
         this.loading = false;
       });
-    }
+    },
   },
-  components: { topnavbar, tagDetail, searchTag, Footer }
 };
 </script>
 
@@ -131,7 +85,7 @@ export default {
   width: 100%;
   margin-top: 10px;
   margin-bottom: 20px;
-  /* background-image: url("./../static/img/imoto3.jpg"); */
+  /* background-image: url("/static/img/imoto3.jpg"); */
   background-repeat: no-repeat;
 }
 .content {

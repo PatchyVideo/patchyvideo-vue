@@ -4,26 +4,6 @@
     功能：显示用户的消息
     更新日志：
 -->
-<i18n>
-{
-  "CHS": {
-    "MsgCenter":"消息中心",
-    "UnreadMsg":"未读消息",
-    "AllMsg":"全部消息"
-  },
-  "ENG": {
-    "MsgCenter":"Message Center",
-    "UnreadMsg":"Unread Messages",
-    "AllMsg":"All Messages"
-  },
-  "CHT": {
-    "MsgCenter":"消息中心",
-    "UnreadMsg":"未讀消息",
-    "AllMsg":"全部消息"
-  }
-}
-</i18n>
-
 <template>
   <div class="messages">
     <topnavbar />
@@ -35,11 +15,11 @@
           {{ $t("MsgCenter") }}
         </div>
         <ul class="messageNav-list">
-          <li v-bind:class="{ messageNavListActive: messageType == 0 }" @click="messageType = 0">
+          <li :class="{ messageNavListActive: messageType == 0 }" @click="messageType = 0">
             <i class="el-icon-star-on"></i>
             {{ $t("UnreadMsg") }}
           </li>
-          <li v-bind:class="{ messageNavListActive: messageType == 1 }" @click="messageType = 1">
+          <li :class="{ messageNavListActive: messageType == 1 }" @click="messageType = 1">
             <i class="el-icon-star-on"></i>
             {{ $t("AllMsg") }}
           </li>
@@ -55,31 +35,31 @@
 </template>
 
 <script>
-import topnavbar from "../components/TopNavbar.vue";
-import unreadMsg from "../components/messageCompoents/UnreadMsg.vue";
-import allMsg from "../components/messageCompoents/AllMessage.vue";
+import topnavbar from "@/components/main/bar/TopNavbar";
+import unreadMsg from "@/components/user/msg/Unread";
+import allMsg from "@/components/user/msg/All";
 export default {
+  components: { topnavbar, unreadMsg, allMsg },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 显示信息类型，0 代表未读消息，1 代表已读消息
-      messageType: 0
+      messageType: 0,
     };
   },
   created() {
     // 初始化页面名为 home
     this.$store.commit("changeBgc", "home");
     // 修改网站标题
-    document.title = "消息中心 - Patchyvideo";
+    document.title = "消息中心 - PatchyVideo";
   },
   methods: {},
-  components: { topnavbar, unreadMsg, allMsg }
 };
 </script>
 
 <style scoped>
 .messages {
-  /* background: url("../static/img/messages.jpg") no-repeat;
+  /* background: url("/static/img/messages.jpg") no-repeat;
   background-size: cover;
   background-position: 0px 50px; */
   height: 100%;

@@ -11,52 +11,23 @@
     ★待解决问题：
       1.错误信息尚未进行分类
 -->
-<i18n>
-{
-  "CHS": {
-    "title":"忘记密码",
-    "reset_psd":"重置密码",
-    "input_tip":"请输入账户绑定的Email",
-    "email_tip":"请输入邮箱",
-    "err_tip":"请输入正确的邮箱地址",
-    "button":"发送邮件"
-  },
-  "ENG": {
-    "title":"Forget password",
-    "reset_psd":"Reset Password",
-    "input_tip":"Please enter the email associated with the account",
-    "email_tip":"please enter your email",
-    "err_tip":"Please input the correct email address",
-    "button":"Send email"
-  },
-  "CHT": {
-    "title":"忘記密碼",
-    "reset_psd":"重置密碼",
-    "input_tip":"請輸入賬戶綁定的Email",
-    "email_tip":"請輸入郵箱",
-    "err_tip":"請輸入正確的郵箱地址",
-    "button":"發送郵件"
-  }
-}
-</i18n>
-
 <template>
   <div class="loginPic">
-    <div class="w" v-loading="loading">
+    <div v-loading="loading" class="w">
       <h1>
         <router-link to="/home">PatchyVideo</router-link>
       </h1>
       <div class="top in">
-        <h3 style="color:#909399">{{ $t("reset_psd") }}</h3>
+        <h3 style="color: #909399;">{{ $t("reset_psd") }}</h3>
       </div>
 
       <el-form ref="FormRef" :model="FormRef" class="middle in" :rules="rules">
         <el-form-item prop="email">
           <el-input
             id="email"
+            v-model="FormRef.email"
             name="email"
             type="email"
-            v-model="FormRef.email"
             clearable
             :placeholder="$t('input_tip')"
             prefix-icon="el-icon-message"
@@ -67,7 +38,7 @@
 
       <!-- 登录按钮 -->
       <div class="bottom in">
-        <div @click="resetpass()" class="login in">{{ $t("button") }}</div>
+        <div class="login in" @click="resetpass()">{{ $t("button") }}</div>
       </div>
     </div>
   </div>
@@ -75,29 +46,30 @@
 
 <script>
 export default {
+  components: {},
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       // 邮件地址
       FormRef: {
-        email: ""
+        email: "",
       },
       // 校验地址
       rules: {
         email: [
           { required: true, message: this.$t("email_tip"), trigger: "blur" },
-          { type: "email", message: this.$t("err_tip"), trigger: ["blur"] }
-        ]
+          { type: "email", message: this.$t("err_tip"), trigger: ["blur"] },
+        ],
       },
       // 视频列表是否属于加载状态的判断
-      loading: false
+      loading: false,
     };
   },
   created() {
     // 初始化页面名为 login
     this.$store.commit("changeBgc", "forgetPassword");
     // 修改网站标题
-    document.title = this.$t("title") + " - Patchyvideo";
+    document.title = this.$t("title") + " - PatchyVideo";
   },
   mounted() {
     console.log("背景图片p站ID：66686322，如有侵权请联系本站开发者（本站账号：admin）删除");
@@ -108,16 +80,16 @@ export default {
       // 先使页面出于加载状态
       this.loading = true;
       // 表单验证
-      this.$refs.FormRef.validate(valid => {
+      this.$refs.FormRef.validate((valid) => {
         if (valid) {
           this.axios({
             method: "post",
             url: "be/user/request_resetpass.do",
             data: {
               email: this.FormRef.email,
-              lang: localStorage.getItem("lang")
-            }
-          }).then(result => {
+              lang: localStorage.getItem("lang"),
+            },
+          }).then((result) => {
             this.loading = false;
             if (result.data.status == "FAILED") {
               this.open();
@@ -135,17 +107,16 @@ export default {
     open() {
       this.$message({
         message: "验证失败,请检查邮箱地址是否正确！",
-        type: "error"
+        type: "error",
       });
     },
     open2() {
       this.$message({
         message: "邮件发送成功，请查收！",
-        type: "success"
+        type: "success",
       });
-    }
+    },
   },
-  components: {}
 };
 </script>
 
@@ -153,7 +124,7 @@ export default {
 .loginPic {
   height: 100%;
   width: 100%;
-  /* background: url("../static/img/forgetPassword.png") no-repeat top center; */
+  /* background: url("/static/img/forgetPassword.png") no-repeat top center; */
   /* background-position: 200px 0; */
   background-size: cover;
   background-attachment: fixed;
