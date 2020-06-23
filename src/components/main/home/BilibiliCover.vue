@@ -22,17 +22,17 @@
         v-if="loadStatus"
         class="bilibili-cover"
         :style="
-          'background:url(/proxy/bili/cover/bfs/videoshot/' +
+          'background-image: url(/proxy/bili/cover/bfs/videoshot/' +
             data.image[0].replace('//i0.hdslb.com/bfs/videoshot/', '') +
             ');background-position: ' +
             x +
             'px ' +
             y +
-            'px;background-size:' +
+            'px;background-size: ' +
             data.img_x_len * width +
-            'px;width:' +
+            'px;width: ' +
             width +
-            'px;height:' +
+            'px;height: ' +
             (width / 16) * 9 +
             'px'
         "

@@ -20,17 +20,17 @@
         v-if="loadStatus"
         class="u2b-cover"
         :style="
-          'background:url(/proxy/u2b/i9ytimg/sb/' +
-            imgUrl +
+          'background-image: url(/proxy/u2b/i9ytimg/sb/' +
+            imgUrl.replace('$N', 'M' + pn) +
             ');background-position: ' +
             x +
             'px ' +
             y +
-            'px;background-size:' +
-            data[3] * width +
-            'px;width:' +
+            'px;background-size: ' +
+            parseInt(data[3]) * width +
+            'px;width: ' +
             width +
-            'px;height:' +
+            'px;height: ' +
             (width / 16) * 9 +
             'px'
         "
@@ -72,6 +72,7 @@ export default {
       data: null,
       error: null,
       prefresh: null,
+      pn: 0,
     };
   },
   computed: {
@@ -89,14 +90,9 @@ export default {
           .then((result) => {
             const data = result.data.match(/"storyboards":{"playerStoryboardSpecRenderer":{"spec":"([^"]+)"}}/)[1];
             const cdata = data.split("|").map((v) => v.split("#"));
-            this.imgUrl =
-              cdata[0][0]
-                .replace("$L", "1")
-                .replace("$N", "M0")
-                .replace("https://i9.ytimg.com/sb/", "") +
-              "&sigh=" +
-              cdata[2][7].replace("$", "%24");
+            this.imgUrl = cdata[0][0].replace("$L", "1").replace("https://i9.ytimg.com/sb/", "") + "&sigh=" + cdata[2][7].replace("$", "%24");
             this.data = cdata[2];
+            console.log(cdata);
             this.loadStatus = true;
           })
           .catch((e) => {
@@ -117,9 +113,10 @@ export default {
     fresh(e) {
       const i = Math.floor((e.offsetX / this.width) * this.data[2]);
       const n = (this.data[1] / this.data[0]) * this.width;
-      this.progress = Math.floor((e.offsetX / this.width) * 100);
-      this.x = (-i % this.data[3]) * this.width;
-      this.y = -Math.floor(i / this.data[3]) * n;
+      this.progress = (e.offsetX / this.width) * 100;
+      this.x = ((-i % 100) % this.data[3]) * this.width;
+      this.y = -Math.floor((i % 100) / this.data[3]) * n;
+      this.pn = Math.floor(i / 100);
     },
   },
 };
