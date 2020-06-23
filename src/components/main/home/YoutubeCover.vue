@@ -92,7 +92,6 @@ export default {
             const cdata = data.split("|").map((v) => v.split("#"));
             this.imgUrl = cdata[0][0].replace("$L", "1").replace("https://i9.ytimg.com/sb/", "") + "&sigh=" + cdata[2][7].replace("$", "%24");
             this.data = cdata[2];
-            console.log(cdata);
             this.loadStatus = true;
           })
           .catch((e) => {
