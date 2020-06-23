@@ -45,10 +45,6 @@
                   <router-link target="_blank" :to="{ path: '/video', query: { id: item._id.$oid } }" tag="a">{{ item.item.title }}</router-link>
                 </h4>
                 <p>{{ item.item.desc }}</p>
-                <div>
-                  <a target="_blank" rel="noopener noreferrer" :href="item.item.url">{{ item.item.url }}</a>
-                  <i class="fa fa-copy fa-lg" style="margin-left: 2px;" @click="copyVideoLink(item.item.url)"></i>
-                </div>
               </div>
             </div>
             订阅来源：
@@ -77,8 +73,6 @@
 
 <script>
 import leftNavbar from "@/components/main/bar/LeftNavbar";
-
-// import { copyToClipboardText } from "@/static/js/generic";
 export default {
   components: { leftNavbar },
   data() {
