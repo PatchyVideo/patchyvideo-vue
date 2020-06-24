@@ -7,7 +7,6 @@ const yiyan = [
   "我只是个路过的博丽巫女，给我记住了！",
   "是在这里死亡呢，还是死后留在这里呢，还请选择吧",
   "是~ 这~ 样~ 的~ 吗~",
-  "我做东方整活页面，好吗？",
   "八云紫又过了一个17岁生日",
   "魔理沙偷走了重要的服务器",
   "幽幽子桑，白玉楼的樱花开了",
@@ -16,6 +15,7 @@ const yiyan = [
   // 现实之句
   "Windows 正在更新中，你的电脑将重启多次，请坐和放宽。",
   "Windows 更新失败，正在滚回以前的版本...",
+  "我做东方整活页面，好吗？",
   "女巫！八卦炉！Best Match! Are you ready? 普通的黑白魔法使！魔理沙魔理沙魔理沙！Yeah~",
   "我幽幽子，就是饿死，死外边，从白玉楼跳下去，也绝对不碰米斯蒂娅一根毛！A moment later.... 真香诶",
   "敌羞吾去脱她衣",
@@ -58,10 +58,23 @@ const yiyan = [
   "慧音东游，见四妖精辩日，问其故。桑尼曰：“我以日始出时去人近，而日中时远也。” 露娜以日初出远，而日中时近也。 斯塔曰：“日初出大如车盖，及日中则如盘盂，此不为远者小而近者大乎？” 冰精则驳之：“日初出沧沧凉凉，及其日中如探汤，此不为近者热而远者凉乎？” 慧音不能决也。众妖精笑曰：“孰为汝多知乎？”",
 ];
 
+function getByteLen(val) {
+  var len = 0;
+  for (var i = 0; i < val.length; i++) {
+    var length = val.charCodeAt(i);
+    if (length >= 0 && length <= 128) {
+      len += 1;
+    } else {
+      len += 2;
+    }
+  }
+  return len;
+}
+
 function getYiyan(short) {
   let yy = JSON.parse(JSON.stringify(yiyan));
   if (short) {
-    yy = yy.filter((v) => v.length <= 40);
+    yy = yy.filter((v) => getByteLen(v) <= 80);
   }
   let random = Math.floor(Math.random() * 100, 2) % yy.length;
   return yy[random];
@@ -70,7 +83,7 @@ function getYiyan(short) {
 function getYiyanArray(short, rand) {
   let yy = JSON.parse(JSON.stringify(yiyan));
   if (short) {
-    yy = yy.filter((v) => v.length <= 40);
+    yy = yy.filter((v) => getByteLen(v) <= 80);
   }
   if (rand) {
     for (let i = 1; i < yy.length; i++) {

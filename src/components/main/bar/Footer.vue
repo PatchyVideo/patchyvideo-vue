@@ -42,8 +42,8 @@
         <p>
           <strong>{{ $t("AboutIPFS") }}</strong>
         </p>
-        <a href="https://patchyvideo.wiki/Upload" rel="noopener noreferrer">{{ $t("WhatIsIPFS") }}</a>
-        <a href="https://zh.wikipedia.org/wiki/%E6%98%9F%E9%99%85%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F" rel="noopener noreferrer">{{ $t("IPFS") }}</a>
+        <a href="https://patchyvideo.wiki/Upload" rel="noopener noreferrer">{{ $t("IPFS") }}</a>
+        <a href="https://zh.wikipedia.org/wiki/%E6%98%9F%E9%99%85%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F" rel="noopener noreferrer">{{ $t("WhatIsIPFS") }}</a>
       </div>
       <div class="patchyvideo-links-item">
         <p>
@@ -56,7 +56,7 @@
     <!-- 最下部的网站声明 -->
     <div>
       <p class="patchyvideo-declear patchyvideo-declear-top">
-        <vue-typed-js :strings="yiyan" :type-speed="75" :back-speed="15" :back-delay="4000" :shuffle="true" :loop="true" style="display:block;"
+        <vue-typed-js :strings="yiyan" :type-speed="75" :back-speed="15" :back-delay="4000" :loop="true" style="display:block;"
           ><span class="typing"></span
         ></vue-typed-js>
       </p>
