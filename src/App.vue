@@ -21,11 +21,11 @@ export default {
     };
   },
   created() {
-    if (localStorage.getItem("CON_logRenderTime")) console.time("Rendered Time");
+    if (localStorage.getItem("CON_logRenderTime")) console.time("RenderTime");
   },
   mounted() {
     this.$nextTick(function() {
-      if (localStorage.getItem("CON_logRenderTime")) console.timeEnd("Rendered Time");
+      if (localStorage.getItem("CON_logRenderTime")) console.timeEnd("RenderTime");
     });
   },
   methods: {

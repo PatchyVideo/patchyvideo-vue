@@ -1,10 +1,10 @@
 function econf(name, t) {
   if (t) {
-    localStorage.setItem(`CON_${name}`, true);
-    console.log(`${name} setted, plz refresh.`);
+    localStorage.setItem(`CON_${name}`, "1");
+    console.log(`${name} setted, plz refresh(Ctrl+R).`);
   } else {
     localStorage.removeItem(`CON_${name}`);
-    console.log(`${name} unsetted, plz refresh.`);
+    console.log(`${name} unsetted, plz refresh(Ctrl+R).`);
   }
 }
 
@@ -43,6 +43,7 @@ window.PatchyVideo = {
   },
 
   colorMode: {
+    "++desc++": "Enable colored log. Just bullshit.",
     enable() {
       econf("colorMode", true);
     },
@@ -52,6 +53,7 @@ window.PatchyVideo = {
   },
 
   logRenderTime: {
+    "++desc++": "Log render time.(created(time) -> mounted -> $nextTick(timeEnd))",
     enable() {
       econf("logRenderTime", true);
     },
@@ -59,7 +61,23 @@ window.PatchyVideo = {
       econf("logRenderTime", false);
     },
   },
+
+  globalPVCC: {
+    "++desc++": "Put another copy of PVCC in global.(May cause errors)",
+    enable() {
+      econf("globalPVCC", true);
+    },
+    disable() {
+      econf("globalPVCC", false);
+    },
+  },
 };
+
+if (localStorage.getItem("CON_globalPVCC"))
+  for (const i in window.PatchyVideo) {
+    if (i == "++desc++" || i == "toString") continue;
+    global[i] = window.PatchyVideo[i];
+  }
 
 const logicon = `                                                         _LL::;cL;
                                 ;Z8,:;L7ixF1jJ7TJ7ijFx77g@g@gX, ;LXC_
