@@ -10,7 +10,6 @@ function toGMT() {
     let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
     let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
     return (
-      "视频发布于 " +
       y +
       "-" +
       // 数字不足两位自动补零，下同
