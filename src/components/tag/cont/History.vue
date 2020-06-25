@@ -1,7 +1,5 @@
 <template>
   <div v-loading="loading" class="bang">
-    <h2 v-if="error">网络受到了异常波动！魔法代码：{{ btoa(error) }}</h2>
-
     <ul>
       <li v-for="(item, index) in hisList" :key="index">
         <div v-if="item.add.length > 0 || item.del.length > 0">
@@ -18,22 +16,22 @@
             </div>
             <div>
               <p>
-                编辑者：
+                {{ $t("editor") }}
                 <router-link :to="'/users/' + item.user_obj[0]._id.$oid">
                   <img :src="'be/images/userphotos/' + item.user_obj[0].profile.image" alt="头像" width="24px" height="24px" class="u-img" />
                   {{ item.user_obj[0].profile.username }}
                 </router-link>
-                &nbsp;编辑时间：{{ date2str(item.time.$date, GMT) }}
+                &nbsp;{{ $t("edittime") }}{{ date2str(item.time.$date, GMT) }}
               </p>
               <div class="titleTag">
                 <div v-if="item.add.length > 0" class="tag">
-                  添加：
+                  {{ $t("add") }}
                   <div v-for="(val, key) in item.add" :key="key" class="tag-div tag-add">
                     <p @click="gotoHome(val)">{{ val }}</p>
                   </div>
                 </div>
                 <div v-if="item.del.length > 0" class="tag">
-                  删除：
+                  {{ $t("del") }}
                   <div v-for="(val, key) in item.del" :key="key" class="tag-div tag-del">
                     <p @click="gotoHome(val)">{{ val }}</p>
                   </div>
@@ -68,7 +66,7 @@ export default {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       loading: true,
-      error: "",
+
       hisList: [],
       dataNextPage: [],
       page: 1,
@@ -133,10 +131,8 @@ export default {
               $("html").animate({ scrollTop: 0 }, 100);
             }
           })
-          .catch((error) => {
-            this.error = error.message;
-            this.hisList = [];
-            this.loading = false;
+          .catch(() => {
+            this.$router.push({ path: "/404" });
           });
       }
       // 后页检测
@@ -156,9 +152,6 @@ export default {
           }
         });
       }
-    },
-    btoa(str) {
-      return btoa(str);
     },
     // 将时间戳转换为时间字符串
     // time: 时间戳 GMT:时区 (数字：-12~12)

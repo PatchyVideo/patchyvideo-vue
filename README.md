@@ -33,7 +33,9 @@ Wiki：[https://patchyvideo.wiki/](https://patchyvideo.wiki/)
 
 ## 网页架构
 
-网页目前大致分为六个区域：
+components 文件夹已按功能分类，可以按照文件夹名快速找到对应组件。
+
+对于 view 则大致分为六个区域：
 
 ### 主架
 
@@ -124,6 +126,8 @@ $ git clone https://github.com/PatchyVideo/patchyvideo-vue.git
 $ cd patchyvideo-vue
 $ git submodule init
 $ git submodule update
+
+# 注：切换分支后请再次运行 "$ git submodule update" 同步子 Repo， 如未同步遇到的问题均视为无效。
 
 # 安装依赖
 $ npm i

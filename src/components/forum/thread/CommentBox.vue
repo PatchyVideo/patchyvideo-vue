@@ -17,12 +17,12 @@
           <p class="title">
             <span
               ><strong>{{
-                commentAuthorsInfo[comment.meta.created_by.$oid] ? commentAuthorsInfo[comment.meta.created_by.$oid].profile.username : "loading..."
+                commentAuthorsInfo[comment.meta.created_by.$oid] ? commentAuthorsInfo[comment.meta.created_by.$oid].profile.username : "..."
               }}</strong></span
             >&nbsp;<span style="color: gray;"><i class="el-icon-date"></i>&thinsp;{{ time(comment.meta.created_at.$date) }}</span>
           </p>
           <div class="comment-bar">
-            <strong style="color: gray;">{{ comment.edited ? "已编辑" : "" }}</strong>
+            <strong style="color: gray;">{{ comment.edited ? $t("edited") : "" }}</strong>
             &nbsp;
             <i
               class="comment-bar-item pv-icon-pin"
@@ -52,8 +52,8 @@
             <thread-comment :html="parse(comment.content)"></thread-comment>
           </div>
           <div v-else :style="mini ? 'padding: 5px 15px;' : 'padding: 15px;'">
-            此回复因离题或语言过激被折叠
-            <span style="color: #409eff;" @click="forceShow = true">显示</span>
+            {{ $t("hidden.label") }}
+            <span style="color: #409eff;" @click="forceShow = true">{{ $t("hidden.show") }}</span>
           </div>
           <div v-for="(commentC, indexC) in comment.children" :key="indexC" style="padding: 0px 8px;">
             <thread-comment-box
@@ -78,7 +78,7 @@
               <div class="comment-box">
                 <div class="title-div">
                   <p class="title">
-                    <span>{{ adcomment.username || "Loading" }}</span
+                    <span>{{ adcomment.username || "..." }}</span
                     >&nbsp;<span style="color: gray;"><i class="el-icon-date"></i>&thinsp;{{ time(adcomment.date) }}</span>
                   </p>
                 </div>

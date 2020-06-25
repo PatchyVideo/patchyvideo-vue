@@ -218,7 +218,7 @@ export default {
   },
   watch: {
     tags(n) {
-      this.$emit("getEditTagsData", n);
+      this.$emit("get-edit-tags-data", n);
     },
     tagsForRec(newVal, oldVal) {
       if (JSON.stringify(oldVal) != "[]" || this.animeMark != 0) {
@@ -575,7 +575,7 @@ export default {
     saveTag() {
       if (/*this.msg===""*/ this.$route.path === "/postvideo") {
         // 如果没有 pid,则处在提交视频界面，返回给父组件 tags
-        this.$emit("getEditTagsData", this.tags);
+        this.$emit("get-edit-tags-data", this.tags);
         // this.closeTagPanel();
       }
       // 如果有 pid 按照正常路线走

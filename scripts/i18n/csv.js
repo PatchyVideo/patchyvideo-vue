@@ -26,7 +26,7 @@ module.exports = function(...args) {
       const f = path.resolve("./i18n/patchyvideo-vue", arg, file);
       i18n[file] = i18n[file] || {};
       i18n[file][arg] = i18n[file][arg] || {};
-      i18n[file][arg] = _.merge(i18n[file][arg], JSON.parse(fs.readFileSync(f).toString()));
+      i18n[file][arg] = _.merge(i18n[file][arg], JSON.parse(fs.readFileSync(f).toString() || "{}"));
     });
   }
   for (const file in i18n) {
@@ -48,7 +48,7 @@ module.exports = function(...args) {
           args,
           (res, val) => {
             const c = _.get(i18nc, `${val}.${k}`);
-            return `${res},"${c ? c.replace(/"/g, '""') : ""}"`;
+            return `${res},"${_.isString(c) ? c.replace(/"/g, '""') : ""}"`;
           },
           ""
         ) +

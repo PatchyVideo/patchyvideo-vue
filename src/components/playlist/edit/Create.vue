@@ -133,7 +133,7 @@ export default {
                 this.list.cover = "";
                 this.list.private = false;
                 if (this.needGo) this.$router.push({ path: "/lists" });
-                else this.$emit("closeMe", true);
+                else this.$emit("close-me", true);
               }
             })
             .catch(() => {

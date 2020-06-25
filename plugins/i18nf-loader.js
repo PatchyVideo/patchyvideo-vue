@@ -51,13 +51,13 @@ function loadJson() {
   };
   filesN(path.resolve("./i18n/patchyvideo-vue"));
   nfiles.forEach((f) => {
-    global.PVi18nJsonFileCache[f] = JSON.parse(fs.readFileSync(f).toString());
+    global.PVi18nJsonFileCache[f] = JSON.parse(fs.readFileSync(f).toString() || "{}");
   });
 }
 
 function readJson(f) {
-  if (reload) return JSON.parse(fs.readFileSync(f).toString());
-  if (!global.PVi18nJsonFileCache[f]) global.PVi18nJsonFileCache[f] = JSON.parse(fs.readFileSync(f).toString());
+  if (reload) return JSON.parse(fs.readFileSync(f).toString() || "{}");
+  if (!global.PVi18nJsonFileCache[f]) global.PVi18nJsonFileCache[f] = JSON.parse(fs.readFileSync(f).toString() || "{}");
   return global.PVi18nJsonFileCache[f];
 }
 

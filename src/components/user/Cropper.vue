@@ -173,7 +173,7 @@ export default {
         data: { file_key: key },
       }).then((res) => {
         // this.getMyData();
-        this.$emit("subUploadSucceed", this.url, true);
+        this.$emit("sub-upload-succeed", this.url, true);
         let img = res.data.data;
         this.$store.commit("getUserAvatar", img);
         this.setCookie(img, 7);
@@ -292,7 +292,7 @@ export default {
           this.loading = true;
           // this.imgFile = new File([imgRes],"裁剪后的图片");
           this.url = await window.URL.createObjectURL(imgRes);
-          this.$emit("subUploadSucceed", this.url, false);
+          this.$emit("sub-upload-succeed", this.url, false);
           this.loading = false;
           this.showCropper = false;
           this.dialogVisible = false;

@@ -43,5 +43,7 @@ PatchyVideo FrontEnd i18n -- help
   - Example: sy CHS CHT
 - (cp)compare [r] [n]: compare language keys.
   - Example: cp CHS CHT
+- csv [lang]: export i18n csv
+  - Example: csv CHS
 `);
 }

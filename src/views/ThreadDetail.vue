@@ -6,8 +6,8 @@
       <el-row>
         <el-col :span="18">
           <h2>
-            <span v-if="fid">{{ Finfo[fid].title || "神秘板块" }}&nbsp;>&nbsp;</span>
-            <i v-if="pinned" class="comment-bar-item pv-icon-pin"></i>{{ title || "Loading..." }}
+            <span v-if="fid">{{ Finfo[fid].title || $t("unknowforum") }}&nbsp;>&nbsp;</span>
+            <i v-if="pinned" class="comment-bar-item pv-icon-pin"></i>{{ title || "..." }}
           </h2>
           <div class="t"></div>
           <div v-for="(comment, index) in commentList" :key="index">
@@ -25,7 +25,10 @@
             ></thread-comment-box>
           </div>
           <div>
-            <el-dialog :title="(replyT.type == 'thread' ? '主帖' : '楼中楼') + ' > 发表回复'" :visible.sync="replyT.visible">
+            <el-dialog
+              :title="$t('replydia.title', { type: replyT.type == 'thread' ? $t('replydia.thread') : $t('replydia.comment') })"
+              :visible.sync="replyT.visible"
+            >
               <thread-comment-box v-if="replyT.comment" :pre="true" :comment="replyT.comment" :comment-authors-info="commentAuthorsInfo"></thread-comment-box>
               <div style="margin-top: 16px; border: 1px solid #d1d5da; border-radius: 3px; margin-left: 58px;">
                 <div class="left-avatar">
@@ -35,7 +38,7 @@
                   <div class="title-div">
                     <p class="title">
                       <span v-if="user.username">{{ user.username }}</span
-                      ><span v-else>Loading...</span>&nbsp;<span style="color: gray;">回复：</span>
+                      ><span v-else>...</span>&nbsp;<span v-t="'replydia.reply'" style="color: gray;"></span>
                     </p>
                   </div>
                   <div class="comment-div" style="padding: 15px;">
@@ -46,12 +49,16 @@
                 </div>
               </div>
               <div slot="footer" class="dialog-footer">
-                <span style="color: gray;">注：建议先预览再发帖，提前发现问题</span>&emsp;
-                <el-button @click="replyF.show = true">预览</el-button>
-                <el-button type="primary" :disabled="processing" @click="reply()">发表</el-button>
+                <span v-t="'posthint'" style="color: gray;"></span>&emsp;
+                <el-button v-t="'preview'" @click="replyF.show = true"></el-button>
+                <el-button v-t="'postb'" type="primary" :disabled="processing" @click="reply()"></el-button>
               </div>
             </el-dialog>
-            <el-dialog v-if="replyF.show" :title="(replyT.type == 'thread' ? '主帖' : '楼中楼') + ' > 预览回复'" :visible.sync="replyF.show">
+            <el-dialog
+              v-if="replyF.show"
+              :title="$t('previewdia.title', { type: replyT.type == 'thread' ? $t('replydia.thread') : $t('replydia.comment') })"
+              :visible.sync="replyF.show"
+            >
               <thread-comment-box
                 v-if="replyT.comment"
                 :pre="true"
@@ -75,7 +82,7 @@
                 <div class="comment-box">
                   <div class="title-div">
                     <p class="title">
-                      <span>{{ user.username || "Loading" }}</span
+                      <span>{{ user.username || "..." }}</span
                       >&nbsp;<span style="color: gray;"><i class="el-icon-date"></i>&thinsp;{{ time(+new Date()) }}</span>
                     </p>
                   </div>
@@ -89,7 +96,7 @@
             </el-dialog>
           </div>
           <div>
-            <el-dialog title="编辑回复" :visible.sync="editF.visible">
+            <el-dialog :title="$t('editdia.title')" :visible.sync="editF.visible">
               <div style="margin-top: 16px; border: 1px solid #d1d5da; border-radius: 3px; margin-left: 58px;">
                 <div class="left-avatar">
                   <el-avatar
@@ -102,8 +109,8 @@
                 <div class="comment-box">
                   <div class="title-div">
                     <p class="title">
-                      <span>{{ commentAuthorsInfo[editF.uid] ? commentAuthorsInfo[editF.uid].profile.username : "loading..." }}</span
-                      >&nbsp;<span style="color: gray;">编辑：</span>
+                      <span>{{ commentAuthorsInfo[editF.uid] ? commentAuthorsInfo[editF.uid].profile.username : "..." }}</span
+                      >&nbsp;<span v-t="'editdia.edit'" style="color: gray;"></span>
                     </p>
                   </div>
                   <div class="comment-div" style="padding: 15px;">
@@ -114,12 +121,12 @@
                 </div>
               </div>
               <div slot="footer" class="dialog-footer">
-                <span style="color: gray;">注：建议先预览再发帖，提前发现问题</span>&emsp;
-                <el-button @click="editF.show = true">预览</el-button>
-                <el-button type="primary" :disabled="processing" @click="edit()">提交</el-button>
+                <span v-t="'posthint'" style="color: gray;"></span>&emsp;
+                <el-button v-t="'preview'" @click="editF.show = true"></el-button>
+                <el-button v-t="'subb'" type="primary" :disabled="processing" @click="edit()"></el-button>
               </div>
             </el-dialog>
-            <el-dialog v-if="editF.show" title="预览回复" :visible.sync="editF.show">
+            <el-dialog v-if="editF.show" :title="$t('editpredia.title')" :visible.sync="editF.show">
               <div style="margin-top: 16px; border: 1px solid #d1d5da; border-radius: 3px; margin-left: 58px;">
                 <div class="left-avatar">
                   <el-avatar
@@ -132,9 +139,9 @@
                 <div class="comment-box">
                   <div class="title-div">
                     <p class="title">
-                      <span>{{ commentAuthorsInfo[editF.uid] ? commentAuthorsInfo[editF.uid].profile.username : "loading..." }}</span
+                      <span>{{ commentAuthorsInfo[editF.uid] ? commentAuthorsInfo[editF.uid].profile.username : "..." }}</span
                       >&nbsp;<span style="color: gray;"><i class="el-icon-date"></i>&thinsp;{{ time(+new Date()) }}</span
-                      >&nbsp;<span style="color: gray;">已编辑</span>
+                      >&nbsp;<span v-t="$t('edited')" style="color: gray;"></span>
                     </p>
                   </div>
                   <div class="comment-div" style="padding: 15px;">
@@ -148,14 +155,12 @@
           </div>
         </el-col>
         <el-col :span="6" style="text-align: center; position: fixed; top: 90px; max-width: 277.5px; margin-left: 832.5px;">
-          {{ (commentList.length || 0) != 0 ? "帖子共有" + commentList.length + "个回复" : "帖子看起来很冷清呢" }}<br />
-          <span v-if="user.username">
-            <el-button type="primary" size="small" plain @click="reply2('thread', $route.params.tid, commentList[0])">发表回复</el-button>
-            <el-button type="primary" size="small" plain @click="pint2($route.params.tid)">置顶帖子</el-button>
-            <el-button type="danger" size="small" plain @click="delt2($route.params.tid)">删除帖子</el-button>
-          </span></el-col
-        ></el-row
-      >
+          {{ (commentList.length || 0) != 0 ? $t("totalreply.text", { count: commentList.length }) : $t("totalreply.empty") }}<br />
+          <span v-if="user.username"
+            ><el-button v-t="'reply'" type="primary" size="small" plain @click="reply2('thread', $route.params.tid, commentList[0])"></el-button
+            ><el-button v-t="'pin'" type="primary" size="small" plain @click="pint2($route.params.tid)"></el-button
+            ><el-button v-t="'del'" type="danger" size="small" plain @click="delt2($route.params.tid)"></el-button></span></el-col
+      ></el-row>
     </div>
 
     <cfooter></cfooter>

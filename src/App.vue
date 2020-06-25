@@ -9,16 +9,24 @@
 
 <script>
 export default {
+  components: {},
   provide() {
     return {
       reload: this.reload,
     };
   },
-  components: {},
   data() {
     return {
       isRouterAlive: true,
     };
+  },
+  created() {
+    if (localStorage.getItem("CON_logRenderTime")) console.time("RenderTime");
+  },
+  mounted() {
+    this.$nextTick(function() {
+      if (localStorage.getItem("CON_logRenderTime")) console.timeEnd("RenderTime");
+    });
   },
   methods: {
     reload() {
