@@ -66,7 +66,7 @@ this.addEventListener("fetch", function(event) {
       const signal = controller.signal;
       setTimeout(() => {
         controller.abort();
-      }, 500);
+      }, 200);
       if (checkP == null || !checkP.isPending()) checkP = MakeQuerablePromise(fetch("http://127.0.0.1:15120", { signal }));
       event.respondWith(
         checkP
@@ -78,6 +78,8 @@ this.addEventListener("fetch", function(event) {
             return swroure(event);
           })
           .catch(() => {
+            routeCache = {};
+            cacheTime = +new Date() + 5000;
             return fetch(event.request);
           })
       );
