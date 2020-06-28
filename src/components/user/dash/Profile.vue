@@ -40,7 +40,7 @@
           <p>{{ $t("cur_pic") }}</p>
           <p>{{ $t("pic_prompt") }}</p>
           <div>
-            <App-cropper :width="300" :height="300" :fixed-number="[1, 1]" @subUploadSucceed="getShopImages" />
+            <App-cropper :width="300" :height="300" :fixed-number="[1, 1]" @sub-upload-succeed="getShopImages" />
           </div>
           <!--<form
             action="/be/helper/upload_image.do"

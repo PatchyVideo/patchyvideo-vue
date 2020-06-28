@@ -71,7 +71,7 @@
 
     <!-- 标签编辑组件 -->
     <!-- :key="refreshMark"-->
-    <EditTags ref="EditTags" :msg="use_tags" :really="isReally" :visible.sync="showTagPanel" class="EditTags" @getEditTagsData="TagShow"></EditTags>
+    <EditTags ref="EditTags" :msg="use_tags" :really="isReally" :visible.sync="showTagPanel" class="EditTags" @get-edit-tags-data="TagShow"></EditTags>
   </div>
 </template>
 
