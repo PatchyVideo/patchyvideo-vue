@@ -104,7 +104,7 @@
             <i class="fa fa-copy fa-1x" style="margin-left: 4px;" @click="copyVideoLink(myVideoData.video.item.url)"></i>
           </h4>
           <!-- 视频上传时间（？） -->
-          <h5 style="text-align: center;">{{ videodate }}</h5>
+          <h5 style="text-align: center;">{{ toGMT(myVideoData.video.item.upload_time.$date) }}</h5>
 
           <!-- 视频详细信息 -->
           <div class="re_video">
@@ -252,6 +252,7 @@ import Score from "@/components/video/Score";
 import createNewList from "@/components/playlist/edit/Create";
 import PagesOfVideo from "@/components/video/PagesOfVideo";
 import { copyToClipboardText } from "@/static/js/generic";
+import { toGMT } from "@/static/js/toGMT";
 
 export default {
   components: {
@@ -389,33 +390,7 @@ export default {
       }
     },
     // 视频的上传日期
-    videodate() {
-      let upload_time = new Date(this.myVideoData.video.item.upload_time.$date);
-      // 设置为东八区的时间
-      upload_time.setTime(upload_time.getTime() + 1000 * 3600 * 8);
-      let y = upload_time.getFullYear(); // getFullYear 方法以四位数字返回年份
-      let M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-      let d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-      let h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
-      let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
-      let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
-      return (
-        "视频发布于 " +
-        y +
-        "-" +
-        // 数字不足两位自动补零，下同
-        (Array(2).join(0) + M).slice(-2) +
-        "-" +
-        (Array(2).join(0) + d).slice(-2) +
-        " " +
-        (Array(2).join(0) + h).slice(-2) +
-        ":" +
-        (Array(2).join(0) + m).slice(-2) +
-        ":" +
-        (Array(2).join(0) + s).slice(-2) +
-        " GMT+8"
-      );
-    },
+    toGMT,
     // 判断是否登录的标志
     isLogin() {
       if (JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "") {
