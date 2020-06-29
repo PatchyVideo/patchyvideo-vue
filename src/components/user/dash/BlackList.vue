@@ -219,7 +219,7 @@ export default {
       this.textareaValue = "";
     },
     querySearchAsync(queryString, cb) {
-      let url = "/autocomplete/?q=" + queryString;
+      let url = "/be/autocomplete/ql?q=" + queryString;
       this.axios({
         method: "get",
         url: url,
