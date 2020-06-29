@@ -71,7 +71,7 @@
           rel="noopener noreferrer"
           >{{ commitOfClient2 }}</a
         >;S:<a :href="'https://github.com/PatchyVideo/PatchyVideo/commit/' + commitOfServer" rel="noopener noreferrer">{{ commitOfServer2 }}</a
-        >) うちょうてんネットワーク
+        >)
       </p>
     </div>
   </div>
