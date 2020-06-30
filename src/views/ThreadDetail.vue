@@ -187,7 +187,7 @@ export default {
     return {
       Finfo: {
         "5e8fce11beb63ebb98f8b50c": {
-          title: "意见反馈",
+          title: this.$t("finfoTitle"),
         },
       },
       title: "",
@@ -365,7 +365,7 @@ export default {
             result.data.data.users.forEach((data) => {
               this.$set(this.commentAuthorsInfo, data._id.$oid, data);
             });
-            changeSiteTitle(this.title + " - 讨论板");
+            changeSiteTitle(this.title + " - " + this.$t("discussBroad"));
           }
         })
         .catch((error) => {
@@ -407,7 +407,7 @@ export default {
           if (result.data.status == "SUCCEED") {
             this.$message({
               type: "success",
-              message: (pinned ? "取消" : "") + "置顶成功！",
+              message: (pinned ? this.$t("cancel") : "") + this.$t("pinInfo.pinSuccessfully"),
             });
             this.fetchData();
           } else {
@@ -417,7 +417,7 @@ export default {
         .catch((e) => {
           this.$message({
             type: "error",
-            message: (pinned ? "取消" : "") + "置顶失败：" + e.message,
+            message: (pinned ? this.$t("cancel") : "") + this.$t("pinInfo.pinUnsuccessfully") + e.message,
           });
         });
     },
@@ -434,7 +434,7 @@ export default {
           if (result.data.status == "SUCCEED") {
             this.$message({
               type: "success",
-              message: (this.pinned ? "取消" : "") + "置顶成功！",
+              message: (this.pinned ? this.$t("cancel") : "") + this.$t("pinInfo.pinSuccessfully"),
             });
             this.fetchData();
           } else {
@@ -444,7 +444,7 @@ export default {
         .catch((e) => {
           this.$message({
             type: "error",
-            message: (this.pinned ? "取消" : "") + "置顶失败：" + e.message,
+            message: (this.pinned ? this.$t("cancel") : "") + this.$t("pinInfo.pinUnsuccessfully") + e.message,
           });
         });
     },
@@ -462,13 +462,13 @@ export default {
     edit() {
       if (this.editF.comment == this.editF.bcomment) {
         const msgl = [
-          "还没有编辑任何信息哦！",
-          "还没有编辑任何信息呢...",
-          "先编辑下再发布吧！",
-          "呐呐，编辑完再发布有什么错嘛？",
-          "我说没有编辑就是没有编辑啦！编辑完再发布嘛！",
+          this.$t("maiMengMsg.msg1"),
+          this.$t("maiMengMsg.msg2"),
+          this.$t("maiMengMsg.msg3"),
+          this.$t("maiMengMsg.msg4"),
+          this.$t("maiMengMsg.msg5"),
         ];
-        const msg = msgl[this.editF.count] || "你就没有其他事可做吗";
+        const msg = msgl[this.editF.count] || this.$t("maiMengMsg.msg6");
         this.$set(this.editF, "count", this.editF.count + 1);
         this.$message({
           type: "info",
@@ -489,7 +489,7 @@ export default {
           if (result.data.status == "SUCCEED") {
             this.$message({
               type: "success",
-              message: "提交成功！",
+              message: this.$t("submitSuccessfully"),
             });
             this.fetchData();
             this.$set(this.editF, "visible", false);
@@ -501,14 +501,14 @@ export default {
         .catch((e) => {
           this.$message({
             type: "error",
-            message: "提交失败：" + e.message,
+            message: this.$t("submitUnsuccessfully") + e.message,
           });
         });
     },
     del2(id) {
-      this.$confirm("此操作将删除所选的回复，确定要继续吗？", "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
+      this.$confirm(this.$t("delInfo.confirmInfo"), this.$t("warning"), {
+        confirmButtonText: this.$t("confirm"),
+        cancelButtonText: this.$t("cancel"),
         type: "warning",
       })
         .then(() => {
@@ -523,7 +523,7 @@ export default {
               if (result.data.status == "SUCCEED") {
                 this.$message({
                   type: "success",
-                  message: "删除成功！",
+                  message: this.$t("delInfo.delSuccessfully"),
                 });
                 this.fetchData();
               } else {
@@ -533,21 +533,21 @@ export default {
             .catch((e) => {
               this.$message({
                 type: "error",
-                message: "删除失败：" + e.message,
+                message: this.$t("delInfo.delUnsuccessfully") + e.message,
               });
             });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "删除已取消",
+            message: this.$t("delInfo.delCancelled"),
           });
         });
     },
     delt2(id) {
-      this.$confirm("此操作将删除帖子的所有内容，真的确定要继续吗？\n请三思！", "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
+      this.$confirm(this.$t("delInfo.delAll"), this.$t("warning"), {
+        confirmButtonText: this.$t("confirm"),
+        cancelButtonText: this.$t("cancel"),
         type: "warning",
       })
         .then(() => {
@@ -562,7 +562,7 @@ export default {
               if (result.data.status == "SUCCEED") {
                 this.$message({
                   type: "success",
-                  message: "删除成功！",
+                  message: this.$t("delInfo.delSuccessfully"),
                 });
                 this.$router.push({
                   path: "/forum/" + (this.fid || ""),
@@ -574,14 +574,14 @@ export default {
             .catch((e) => {
               this.$message({
                 type: "error",
-                message: "删除失败：" + e.message,
+                message: this.$t("delInfo.delUnsuccessfully") + e.message,
               });
             });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "删除已取消",
+            message: this.$t("delInfo.delCancelled"),
           });
         });
     },
@@ -591,9 +591,9 @@ export default {
         return;
       }
       if (this.replyF.comment != "") {
-        this.$confirm("此操作将清空您已存的编辑，确定要继续吗？", "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
+        this.$confirm(this.$t("replyInfo.clearReply"), this.$t("warning"), {
+          confirmButtonText: this.$t("confirm"),
+          cancelButtonText: this.$t("cancel"),
           type: "warning",
         })
           .then(() => {
@@ -603,7 +603,7 @@ export default {
           .catch(() => {
             this.$message({
               type: "info",
-              message: "回复已取消",
+              message: this.$t("replyInfo.clearReply"),
             });
           });
       } else {
@@ -615,7 +615,7 @@ export default {
       if (this.replyF.comment.replace(/[\s]/g, "") == "") {
         this.$message({
           type: "info",
-          message: "填写下发布的内容吧！",
+          message: this.$t("replyInfo.noContent"),
         });
         return;
       }
@@ -635,7 +635,7 @@ export default {
                 if (result.data.status == "SUCCEED") {
                   this.$message({
                     type: "success",
-                    message: "发表成功！",
+                    message: this.$t("replyInfo.replySuccessfully"),
                   });
                   this.fetchData();
                   this.$set(this.replyT, "visible", false);
@@ -662,7 +662,7 @@ export default {
                 if (result.data.status == "SUCCEED") {
                   this.$message({
                     type: "success",
-                    message: "发表成功！",
+                    message: this.$t("replyInfo.replySuccessfully"),
                   });
                   this.fetchData();
                   this.$set(this.replyT, "visible", false);
@@ -680,7 +680,7 @@ export default {
       } catch (e) {
         this.$message({
           type: "error",
-          message: "发表失败：" + e.message,
+          message: this.$t("replyInfo.replyUnsuccessfully") + e.message,
         });
       }
     },
