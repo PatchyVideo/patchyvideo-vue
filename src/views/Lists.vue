@@ -126,11 +126,7 @@ export default {
       // 视频列表是否属于加载状态的判断
       loading: true,
       // 视频列表的排序规则
-      options: [
-        { value: "latest", label: "时间正序" },
-        { value: "oldest", label: "时间倒序" },
-        { value: "last_modified", label: "最新修改" },
-      ],
+      options: [{ value: "latest" }, { value: "oldest" }, { value: "last_modified" }],
       // 当前视频列表的排列顺序
       couponSelected: "latest",
       // 视频列表的搜索关键字

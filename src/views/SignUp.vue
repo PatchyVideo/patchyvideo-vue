@@ -151,7 +151,7 @@ export default {
           { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" },
         ],
         signup_password2: [
-          { required: true, message: "请重复密码", trigger: "blur" },
+          { required: true, message: this.$t("repeat_psd"), trigger: "blur" },
           { validator: validatePass2, trigger: "blur" },
           { min: 6, max: 64, message: this.$t("psd_limit"), trigger: "blur" },
         ],
