@@ -37,7 +37,7 @@
           v-model="inputValue"
           :fetch-suggestions="querySearchAsync"
           :trigger-on-focus="false"
-          placeholder="请输入标签"
+          :placeholder="$t('Input_tags')"
           class="input-new-tag"
           size="small"
           style="margin: 20px 0px; width: 60%;"

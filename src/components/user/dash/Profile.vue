@@ -105,7 +105,7 @@
 
           <el-input v-model="myEmail" :placeholder="$t('enter_email')" prefix-icon="el-icon-message"></el-input>
           <button @click="bindEmail()">{{ $t("bind") }}</button>
-          <p v-if="myData.email !== ''" style="margin-top: 20px;">已绑定邮箱:{{ myData.email }}</p>
+          <p v-if="myData.email !== ''" style="margin-top: 20px;">{{ $t("bind_email") }}:{{ myData.email }}</p>
         </div>
       </div>
     </div>
