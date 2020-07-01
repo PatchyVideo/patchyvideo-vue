@@ -1,5 +1,3 @@
-<!-- https://s2.hdslb.com/bfs/static/blive/blfe-dynamic-web/static/js/index.141cf916.js 18:25510 -->
-
 <template>
   <div
     @mouseenter="
@@ -23,7 +21,7 @@
         class="bilibili-cover"
         :style="
           'background-image: url(/proxy/bili/cover/bfs/videoshot/' +
-            data.image[0].replace('//i0.hdslb.com/bfs/videoshot/', '') +
+            data.image[pn].replace('//i0.hdslb.com/bfs/videoshot/', '') +
             ');background-position: ' +
             x +
             'px ' +
@@ -54,6 +52,10 @@ export default {
       type: Number,
       required: true,
     },
+    cid: {
+      type: Number,
+      default: 0,
+    },
     coverImage: {
       type: String,
       required: true,
@@ -73,6 +75,8 @@ export default {
       data: null,
       error: null,
       prefresh: null,
+      pn: 0,
+      t: [],
     };
   },
   computed: {
@@ -83,26 +87,55 @@ export default {
   watch: {
     hover() {
       if (this.hover && !this.loadStatus) {
-        this.axios({
-          method: "get",
-          url: `/proxy/bili/x/player/videoshot?aid=${this.aid}&index=1`,
-        })
-          .then((result) => {
+        if (this.cid) {
+          this.axios({
+            method: "get",
+            url: `/proxy/bili/x/player/videoshot?cid=${this.cid}&aid=${this.aid}&jsonp=jsonp`,
+          }).then((result) => {
             if (result.data.code === 0 && result.data.data) {
               this.data = result.data.data;
-              if (this.prefresh && this.hover) {
-                this.fresh(this.prefresh);
-                this.prefresh = null;
-              }
+              this.axios({
+                method: "get",
+                responseType: "arraybuffer",
+                url: `/proxy/bili/cover/bfs/videoshot/${result.data.data.pvdata.replace("//i0.hdslb.com/bfs/videoshot/", "")}`,
+              })
+                .then((result2) => {
+                  const i = result2.data;
+                  const r = new DataView(i);
+                  const n = new Uint8Array(i.byteLength);
+                  for (let l = 0; l < n.length; l += 2) {
+                    const o = (r.getUint8(l) << 8) | r.getUint8(l + 1);
+                    this.t.push(o);
+                  }
+                  this.loadStatus = true;
+                })
+                .catch((e) => {
+                  this.error = e.message;
+                  this.loadStatus = true;
+                });
             } else {
               this.error = result.data.message;
             }
-            this.loadStatus = true;
-          })
-          .catch((e) => {
-            this.error = e.message;
-            this.loadStatus = true;
           });
+        } else {
+          this.axios({
+            method: "get",
+            url: `/proxy/bili/x/player/videoshot?aid=${this.aid}&index=1`,
+          })
+            .then((result) => {
+              if (result.data.code === 0 && result.data.data) {
+                this.data = result.data.data;
+                this.t = result.data.data.index;
+              } else {
+                this.error = result.data.message;
+              }
+              this.loadStatus = true;
+            })
+            .catch((e) => {
+              this.error = e.message;
+              this.loadStatus = true;
+            });
+        }
       }
     },
   },
@@ -115,11 +148,12 @@ export default {
       }
     },
     fresh(e) {
-      const i = Math.floor((e.offsetX / this.width) * this.data.index.length);
+      const i = Math.floor((e.offsetX / this.width) * this.t.length);
       const n = (this.data.img_y_size / this.data.img_x_size) * this.width;
-      this.progress = Math.floor((e.offsetX / this.width) * 100);
-      this.x = (-i % this.data.img_x_len) * this.width;
-      this.y = -Math.floor(i / this.data.img_x_len) * n;
+      this.progress = (e.offsetX / this.width) * 100;
+      this.x = ((-i % 100) % this.data.img_x_len) * this.width;
+      this.y = -Math.floor((i % 100) / this.data.img_x_len) * n;
+      this.pn = Math.floor(i / 100);
     },
   },
 };
