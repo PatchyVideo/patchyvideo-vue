@@ -681,9 +681,16 @@ export default {
     padding: 5px 0;
     & div:first-child {
       padding-left: 2%;
+      transition: 1s;
     }
     & div:last-child {
       padding-right: 2%;
+      transition: 1s;
+    }
+  }
+  .nav_left {
+    .navItem {
+      white-space: nowrap;
     }
   }
 }
