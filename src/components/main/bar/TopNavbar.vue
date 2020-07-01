@@ -675,4 +675,16 @@ export default {
 .Soundtrack {
   color: #ff7792;
 }
+@media (max-width: 1400px) {
+  .top-navbar {
+    width: 100%;
+    padding: 5px 0;
+    &:firstchild {
+      padding-left: 2%;
+    }
+    &:lastchild {
+      padding-right: 2%;
+    }
+  }
+}
 </style>
