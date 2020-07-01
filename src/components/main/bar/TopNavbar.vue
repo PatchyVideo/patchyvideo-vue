@@ -679,10 +679,10 @@ export default {
   .top-navbar {
     width: 100%;
     padding: 5px 0;
-    &:firstchild {
+    & div:first-child {
       padding-left: 2%;
     }
-    &:lastchild {
+    & div:last-child {
       padding-right: 2%;
     }
   }
