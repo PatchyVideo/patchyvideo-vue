@@ -66,11 +66,9 @@
         <a href="mailto:zyddnys@outlook.com" rel="noopener noreferrer">zyddnys@outlook.com</a>
       </p>
       <p class="patchyvideo-declear">
-        © 2019-{{ new Date().getFullYear() }} PatchyVideo(C:<a
-          :href="'https://github.com/PatchyVideo/patchyvideo-vue/commit/' + commitOfClient"
-          rel="noopener noreferrer"
-          >{{ commitOfClient2 }}</a
-        >;S:<a :href="'https://github.com/PatchyVideo/PatchyVideo/commit/' + commitOfServer" rel="noopener noreferrer">{{ commitOfServer2 }}</a
+        © 2019-{{ buildTime.slice(0, 4) }} PatchyVideo (Client:
+        <a :href="'https://github.com/PatchyVideo/patchyvideo-vue/commit/' + commitOfClient" rel="noopener noreferrer">{{ buildVersion }}</a
+        >; Server: <a :href="'https://github.com/PatchyVideo/PatchyVideo/commit/' + commitOfServer" rel="noopener noreferrer">{{ commitOfServer2 }}</a
         >)
       </p>
     </div>
@@ -97,6 +95,8 @@ export default {
       locale: localStorage.getItem("lang"),
       // 吾有一言，请诸位静听
       yiyan: getYiyanArray(true, true),
+      buildTime: process.env.VUE_APP_BUILDTIME,
+      buildVersion: process.env.VUE_APP_VERSION,
     };
   },
   computed: {
