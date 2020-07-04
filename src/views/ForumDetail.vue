@@ -146,11 +146,11 @@ export default {
     return {
       Finfo: {
         "5e8fce11beb63ebb98f8b50c": {
-          title: "意见反馈",
-          desc: "在这里反馈在帕琪站遇到的问题~\n建议将问题详细描述并尽量附带截图或日志。\n（截图可以使用 img标签 + 图床，日志请尽量使用 pastebin）",
+          title: this.$t("title"),
+          desc: this.$t("desc"),
         },
       },
-      emptyText: "少女祈祷中...",
+      emptyText: this.$t("emptyText"),
       threadList: [],
       threadResult: [],
       threadAuthorsInfo: {},
@@ -230,7 +230,7 @@ export default {
                 this.$set(this.threadAuthorsInfo, data._id.$oid, data);
               });
             });
-            changeSiteTitle((this.Finfo[this.fid].title || "神秘板块") + " - 讨论板");
+            changeSiteTitle((this.Finfo[this.fid].title || this.$t("unknowforum")) + this.$t("discussionBoard"));
           }
         })
         .catch((error) => {
@@ -255,7 +255,7 @@ export default {
           if (result.data.status == "SUCCEED") {
             this.$message({
               type: "success",
-              message: "发帖成功！正在跳转~",
+              message: this.$t("postInfo.postSuccessfully"),
             });
             this.$router.push({
               path: "/forum/" + this.$route.params.fid + "/post/" + result.data.data.thread_id,
@@ -267,7 +267,7 @@ export default {
         .catch((e) => {
           this.$message({
             type: "error",
-            message: "发帖失败：" + e.message,
+            message: this.$t("postInfo.postUnsuccessfully") + e.message,
           });
         });
     },

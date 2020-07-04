@@ -43,8 +43,8 @@ export default {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       activeName: "first",
-      label: ["历史和贡献"],
-      labelInfo: ["标签编辑历史", "标签贡献排行榜"],
+      label: [this.$t("label")],
+      labelInfo: [this.$t("history"), this.$t("contribution")],
     };
   },
   computed: {},

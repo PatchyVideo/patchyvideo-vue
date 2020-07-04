@@ -49,8 +49,8 @@ export default {
       forumList: [
         {
           id: "5e8fce11beb63ebb98f8b50c",
-          name: "意见反馈",
-          desc: "在这里反馈在帕琪站遇到的问题~",
+          name: this.$t("forumList.name"),
+          desc: this.$t("forumList.desc"),
         },
       ],
     };

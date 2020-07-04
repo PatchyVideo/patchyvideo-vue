@@ -106,13 +106,13 @@ export default {
     },
     open() {
       this.$message({
-        message: "验证失败,请检查邮箱地址是否正确！",
+        message: this.$t("verification_failed"),
         type: "error",
       });
     },
     open2() {
       this.$message({
-        message: "邮件发送成功，请查收！",
+        message: this.$t("post_successfully"),
         type: "success",
       });
     },
