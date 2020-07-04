@@ -35,7 +35,9 @@
     </div>
     <!-- 合并标签按钮 -->
     <div class="video-list-header">
-      <el-button :disabled="mergeDst == -1 || mergeSrc == -1" class="video-list-header-el-select" @click="onMergeTagButtonClicked">合并标签</el-button>
+      <el-button :disabled="mergeDst == -1 || mergeSrc == -1" class="video-list-header-el-select" @click="onMergeTagButtonClicked">{{
+        $t("mergeTags")
+      }}</el-button>
     </div>
     <!-- 添加标签列表 -->
     <div class="addTag">
@@ -185,7 +187,7 @@
         </template>
       </el-table-column>
       <!-- 合并标签选项 -->
-      <el-table-column prop label="合并选项" min-width="130">
+      <el-table-column prop :label="$t('mergeOpts')" min-width="130">
         <template slot-scope="scope">
           <el-select v-model="mergeArray[scope.$index]" placeholder="-" @change="(arg1) => onMergeOptionChanged(scope.row, scope.$index, arg1)">
             <el-option v-for="item in mergeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>

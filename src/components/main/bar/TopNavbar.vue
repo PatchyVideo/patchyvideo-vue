@@ -34,15 +34,15 @@
         <router-link v-t="'navbar.playlist'" to="/lists"></router-link>
       </el-menu-item>
       <el-submenu index="video">
-        <template slot="title">视频</template>
+        <template slot="title">{{ $t("navbar.video") }}</template>
         <el-menu-item>
           <router-link v-t="'navbar.postvideo'" to="/postvideo"></router-link>
         </el-menu-item>
       </el-submenu>
       <el-submenu index="tag">
-        <template slot="title">标签</template>
+        <template slot="title">{{ $t("navbar.tag") }}</template>
         <el-menu-item>
-          <router-link to="/edittag">编辑标签</router-link>
+          <router-link v-t="'navbar.edittag'" to="/edittag"></router-link>
         </el-menu-item>
         <el-menu-item>
           <router-link v-t="'navbar.logscontributes'" to="/logscontributes"></router-link>
