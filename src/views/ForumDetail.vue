@@ -146,8 +146,8 @@ export default {
     return {
       Finfo: {
         "5e8fce11beb63ebb98f8b50c": {
-          title: this.$t("title"),
-          desc: this.$t("desc"),
+          title: this.$t("Finfo.5e8fce11beb63ebb98f8b50c.title"),
+          desc: this.$t("Finfo.5e8fce11beb63ebb98f8b50c.desc"),
         },
       },
       emptyText: this.$t("emptyText"),
@@ -230,7 +230,7 @@ export default {
                 this.$set(this.threadAuthorsInfo, data._id.$oid, data);
               });
             });
-            changeSiteTitle((this.Finfo[this.fid].title || this.$t("unknowforum")) + this.$t("discussionBoard"));
+            changeSiteTitle(this.$t("Forum", { title: this.Finfo[this.fid].title || this.$t("unknowforum") }));
           }
         })
         .catch((error) => {
@@ -267,7 +267,7 @@ export default {
         .catch((e) => {
           this.$message({
             type: "error",
-            message: this.$t("postInfo.postUnsuccessfully") + e.message,
+            message: this.$t("postInfo.postFailed", { result: e.message }),
           });
         });
     },

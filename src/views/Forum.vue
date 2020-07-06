@@ -49,8 +49,8 @@ export default {
       forumList: [
         {
           id: "5e8fce11beb63ebb98f8b50c",
-          name: this.$t("forumList.name"),
-          desc: this.$t("forumList.desc"),
+          name: this.$t("forumList.5e8fce11beb63ebb98f8b50c.name"),
+          desc: this.$t("forumList.5e8fce11beb63ebb98f8b50c.desc"),
         },
       ],
     };

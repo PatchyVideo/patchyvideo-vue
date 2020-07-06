@@ -187,7 +187,7 @@ export default {
     return {
       Finfo: {
         "5e8fce11beb63ebb98f8b50c": {
-          title: this.$t("finfoTitle"),
+          title: this.$t("5e8fce11beb63ebb98f8b50c.finfoTitle"),
         },
       },
       title: "",
@@ -407,7 +407,7 @@ export default {
           if (result.data.status == "SUCCEED") {
             this.$message({
               type: "success",
-              message: (pinned ? this.$t("cancel") : "") + this.$t("pinInfo.pinSuccessfully"),
+              message: this.$t("pinInfo.pinSuccessfully", { cancel: pinned ? this.$t("cancel") : "" }),
             });
             this.fetchData();
           } else {
@@ -417,7 +417,7 @@ export default {
         .catch((e) => {
           this.$message({
             type: "error",
-            message: (pinned ? this.$t("cancel") : "") + this.$t("pinInfo.pinUnsuccessfully") + e.message,
+            message: this.$t("pinInfo.pinFailed", { cancel: pinned ? this.$t("cancel") : "", result: e.message }),
           });
         });
     },
@@ -444,7 +444,7 @@ export default {
         .catch((e) => {
           this.$message({
             type: "error",
-            message: (this.pinned ? this.$t("cancel") : "") + this.$t("pinInfo.pinUnsuccessfully") + e.message,
+            message: this.$t("pinInfo.pinFailed", { cancel: this.pinned ? this.$t("cancel") : "", result: e.message }),
           });
         });
     },
@@ -461,14 +461,8 @@ export default {
     },
     edit() {
       if (this.editF.comment == this.editF.bcomment) {
-        const msgl = [
-          this.$t("maiMengMsg.msg1"),
-          this.$t("maiMengMsg.msg2"),
-          this.$t("maiMengMsg.msg3"),
-          this.$t("maiMengMsg.msg4"),
-          this.$t("maiMengMsg.msg5"),
-        ];
-        const msg = msgl[this.editF.count] || this.$t("maiMengMsg.msg6");
+        const msgl = this.$t("editHint");
+        const msg = msgl[this.editF.count] || this.$t("editHint.5");
         this.$set(this.editF, "count", this.editF.count + 1);
         this.$message({
           type: "info",
@@ -501,7 +495,7 @@ export default {
         .catch((e) => {
           this.$message({
             type: "error",
-            message: this.$t("submitUnsuccessfully") + e.message,
+            message: this.$t("submitFailed", { result: e.message }),
           });
         });
     },
@@ -533,7 +527,7 @@ export default {
             .catch((e) => {
               this.$message({
                 type: "error",
-                message: this.$t("delInfo.delUnsuccessfully") + e.message,
+                message: this.$t("delInfo.delFailed", { result: e.message }),
               });
             });
         })
@@ -574,7 +568,7 @@ export default {
             .catch((e) => {
               this.$message({
                 type: "error",
-                message: this.$t("delInfo.delUnsuccessfully") + e.message,
+                message: this.$t("delInfo.delFailed", { result: e.message }),
               });
             });
         })
@@ -680,7 +674,7 @@ export default {
       } catch (e) {
         this.$message({
           type: "error",
-          message: this.$t("replyInfo.replyUnsuccessfully") + e.message,
+          message: this.$t("replyInfo.replyFailed", { result: e.message }),
         });
       }
     },

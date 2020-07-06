@@ -331,7 +331,7 @@ export default {
       // 本页面的视频的等级
       theVideoRank: 3,
       // 视频的等级（0 ~ 3，其中 3 为所有人可见）
-      videoRanks: [this.$t("changeRank.rank0"), this.$t("changeRank.rank1"), this.$t("changeRank.rank2"), this.$t("changeRank.rank3")],
+      videoRanks: this.$t("changeRank.ranks"),
       // 本页面的视频的发布类型
       RepostType: "",
       // 视频的发布类型
@@ -521,7 +521,7 @@ export default {
           .then((result) => {
             this.myVideoData = result.data.data;
             this.iframeUrl = this.regToIframe(this.myVideoData.video.item.url, this.myVideoData.video.item.cid || "");
-            this.theVideoRank = result.data.data.video.clearence;
+            this.theVideoRank = this.$t("changeRank.ranks")[result.data.data.video.clearence];
             if (result.data.data.video.comment_thread) {
               this.sid = result.data.data.video.comment_thread.$oid;
             }
