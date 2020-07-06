@@ -35,7 +35,7 @@
           <strong>{{ $t("About") }}</strong>
         </p>
         <a href="https://patchyvideo.wiki" target="_blank" rel="noopener noreferrer">{{ $t("Wiki") }}</a>
-        <a href="https://space.bilibili.com/515657675" rel="noopener noreferrer">{{ $t("OfficialAccount") }}</a>
+        <a href="https://space.bilibili.com/515657675" target="_blank" rel="noopener noreferrer">{{ $t("OfficialAccount") }}</a>
         <a href="https://patchyvideo.wiki/JoinUs" target="_blank" rel="noopener noreferrer">{{ $t("JoinUs") }}</a>
       </div>
       <div class="patchyvideo-links-item">
@@ -43,7 +43,9 @@
           <strong>{{ $t("AboutIPFS") }}</strong>
         </p>
         <a href="https://patchyvideo.wiki/Upload" rel="noopener noreferrer">{{ $t("IPFS") }}</a>
-        <a href="https://zh.wikipedia.org/wiki/%E6%98%9F%E9%99%85%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F" rel="noopener noreferrer">{{ $t("WhatIsIPFS") }}</a>
+        <a href="https://zh.wikipedia.org/wiki/%E6%98%9F%E9%99%85%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F" target="_blank" rel="noopener noreferrer">{{
+          $t("WhatIsIPFS")
+        }}</a>
       </div>
       <div class="patchyvideo-links-item">
         <p>
@@ -61,14 +63,15 @@
         ></vue-typed-js>
       </p>
       <p class="patchyvideo-declear patchyvideo-declear-top">
-        QQ: <a href="https://jq.qq.com/?k=fOJYEJt1" rel="noopener noreferrer">757676234</a> | Telegram:
-        <a href="https://t.me/PatchyVideo" rel="noopener noreferrer">t.me/PatchyVideo</a> | Email:
-        <a href="mailto:zyddnys@outlook.com" rel="noopener noreferrer">zyddnys@outlook.com</a>
+        QQ: <a href="https://jq.qq.com/?k=fOJYEJt1" target="_blank" rel="noopener noreferrer">757676234</a> | Telegram:
+        <a href="https://t.me/PatchyVideo" target="_blank" rel="noopener noreferrer">t.me/PatchyVideo</a> | Email:
+        <a href="mailto:zyddnys@outlook.com" target="_blank" rel="noopener noreferrer">zyddnys@outlook.com</a>
       </p>
       <p class="patchyvideo-declear">
         © 2019-{{ buildTime.slice(0, 4) }} PatchyVideo (Client:
-        <a :href="'https://github.com/PatchyVideo/patchyvideo-vue/commit/' + commitOfClient" rel="noopener noreferrer">{{ buildVersion }}</a
-        >; Server: <a :href="'https://github.com/PatchyVideo/PatchyVideo/commit/' + commitOfServer" rel="noopener noreferrer">{{ commitOfServer2 }}</a
+        <a :href="'https://github.com/PatchyVideo/patchyvideo-vue/commit/' + commitOfClient" target="_blank" rel="noopener noreferrer">{{ buildVersion }}</a
+        >; Server:
+        <a :href="'https://github.com/PatchyVideo/PatchyVideo/commit/' + commitOfServer" target="_blank" rel="noopener noreferrer">{{ commitOfServer2 }}</a
         >)
       </p>
     </div>
