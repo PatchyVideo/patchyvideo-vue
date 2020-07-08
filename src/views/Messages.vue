@@ -38,6 +38,7 @@
 import topnavbar from "@/components/main/bar/TopNavbar";
 import unreadMsg from "@/components/user/msg/Unread";
 import allMsg from "@/components/user/msg/All";
+import { changeSiteTitle } from "@/static/js/base";
 export default {
   components: { topnavbar, unreadMsg, allMsg },
   data() {
@@ -51,7 +52,7 @@ export default {
     // 初始化页面名为 home
     this.$store.commit("changeBgc", "home");
     // 修改网站标题
-    document.title = "消息中心 - PatchyVideo";
+    changeSiteTitle(this.$t("MsgCenter"));
   },
   methods: {},
 };
