@@ -75,7 +75,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <EditTags :msg="noData" :visible.sync="showTagPanel" class="EditTags" @getEditTagsData="TagShow"></EditTags>
+    <EditTags :msg="noData" :visible.sync="showTagPanel" class="EditTags" @get-edit-tags-data="TagShow"></EditTags>
   </div>
 </template>
 

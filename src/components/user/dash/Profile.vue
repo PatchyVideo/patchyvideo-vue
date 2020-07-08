@@ -40,7 +40,7 @@
           <p>{{ $t("cur_pic") }}</p>
           <p>{{ $t("pic_prompt") }}</p>
           <div>
-            <App-cropper :width="300" :height="300" :fixed-number="[1, 1]" @subUploadSucceed="getShopImages" />
+            <App-cropper :width="300" :height="300" :fixed-number="[1, 1]" @sub-upload-succeed="getShopImages" />
           </div>
           <!--<form
             action="/be/helper/upload_image.do"
@@ -105,7 +105,7 @@
 
           <el-input v-model="myEmail" :placeholder="$t('enter_email')" prefix-icon="el-icon-message"></el-input>
           <button @click="bindEmail()">{{ $t("bind") }}</button>
-          <p v-if="myData.email !== ''" style="margin-top: 20px;">已绑定邮箱:{{ myData.email }}</p>
+          <p v-if="myData.email !== ''" style="margin-top: 20px;">{{ $t("bound_email", { email: myData.email }) }}</p>
         </div>
       </div>
     </div>

@@ -17,37 +17,45 @@
         <el-button type="primary" @click="cleanLocalStorage">{{ $t("prompt.ok") }}</el-button>
       </span>
     </el-dialog>
-    <div class="top-navbar">
+    <el-menu class="top-navbar" mode="horizontal" text-color="#303133" active-text-color="#303133">
       <!-- 网站icon &标题 -->
-      <div class="iconAndTitle">
+      <el-menu-item>
         <img class="patchyvideo-icon" src="@/static/img/patchyvideo.svg" />
         <span class="patchyvideo-title">PatchyVideo</span>
-      </div>
+      </el-menu-item>
+
+      <li style="padding:0 15px"></li>
 
       <!-- 左面的四个页面链接 -->
-      <div class="nav_left">
-        <div class="navItem">
-          <router-link v-t="'navbar.index'" to="/home" @click.native="cleanIptV"></router-link>
-        </div>
-        <div class="navItem">
-          <router-link v-t="'navbar.playlist'" to="/lists"></router-link>
-        </div>
-        <div class="navItem">
+      <el-menu-item>
+        <router-link v-t="'navbar.index'" to="/home" @click.native="cleanIptV"></router-link>
+      </el-menu-item>
+      <el-menu-item>
+        <router-link v-t="'navbar.playlist'" to="/lists"></router-link>
+      </el-menu-item>
+      <el-submenu index="video">
+        <template slot="title">{{ $t("navbar.video") }}</template>
+        <el-menu-item>
           <router-link v-t="'navbar.postvideo'" to="/postvideo"></router-link>
-        </div>
-        <div class="navItem">
+        </el-menu-item>
+      </el-submenu>
+      <el-submenu index="tag">
+        <template slot="title">{{ $t("navbar.tag") }}</template>
+        <el-menu-item>
           <router-link v-t="'navbar.edittag'" to="/edittag"></router-link>
-        </div>
-        <div class="navItem">
-          <router-link v-t="'navbar.forum'" to="/forum"></router-link>
-        </div>
-        <div class="navItem">
+        </el-menu-item>
+        <el-menu-item>
           <router-link v-t="'navbar.logscontributes'" to="/logscontributes"></router-link>
-        </div>
-      </div>
+        </el-menu-item>
+      </el-submenu>
+      <el-menu-item>
+        <router-link v-t="'navbar.forum'" to="/forum"></router-link>
+      </el-menu-item>
+
+      <li style="padding:0 15px"></li>
 
       <!-- 搜索框 -->
-      <div class="search-bar-query">
+      <el-menu-item>
         <el-autocomplete
           id="ipt"
           ref="ipt"
@@ -85,34 +93,40 @@
           <!-- 搜索按钮 -->
           <el-button slot="append" icon="el-icon-search" @click="gotoHome"></el-button>
         </el-autocomplete>
-      </div>
+      </el-menu-item>
 
-      <div>
-        <!-- 登录和注册按钮 -->
-        <div v-if="!isLogin" class="loginUser">
-          <router-link to="/login" class="loginUser-login" @click.native="login">{{ $t("user.login") }}</router-link>
-          <router-link to="/signup" class="loginUser-signup">{{ $t("user.signup") }}</router-link>
-        </div>
+      <li style="padding:0 15px"></li>
 
-        <!-- 登录成功后的用户界面 -->
-        <div v-else class="userHome">
-          <el-tooltip effect="light" :content="this.$store.state.username" placement="bottom">
-            <div @click="gotoUserPage">
-              <el-avatar fit="cover" class="loginUser-userAvatar" :size="40" :src="userAvatar"></el-avatar>
-            </div>
-          </el-tooltip>
-          <!-- <router-link
+      <!-- 登录和注册按钮 -->
+      <el-menu-item v-if="!isLogin">
+        <router-link to="/login" @click.native="login">{{ $t("user.login") }}</router-link>
+      </el-menu-item>
+      <el-menu-item v-if="!isLogin">
+        <router-link to="/signup">{{ $t("user.signup") }}</router-link>
+      </el-menu-item>
+
+      <!-- 登录成功后的用户界面 -->
+      <el-menu-item v-if="isLogin">
+        <el-tooltip effect="light" :content="this.$store.state.username" placement="bottom">
+          <div @click="gotoUserPage">
+            <el-avatar fit="cover" :size="40" :src="userAvatar"></el-avatar>
+          </div>
+        </el-tooltip>
+      </el-menu-item>
+      <!-- <router-link
             class="loginUser-login"
             style="max-width:100px;overflow: hidden;"
             to="/users/me"
           >{{this.$store.state.username}}</router-link>-->
-          <el-badge :value="messagesNum" :hidden="!messagesNum" class="item">
-            <router-link target="_blank" class="loginUser-message" to="/messages">{{ $t("user.message") }}</router-link>
-          </el-badge>
-          <a class="loginUser-signup" style="cursor: pointer;" @click="dialogVisible = true">{{ $t("user.logout") }}</a>
-        </div>
-      </div>
-    </div>
+      <el-menu-item v-if="isLogin">
+        <el-badge :value="messagesNum" :hidden="!messagesNum">
+          <router-link target="_blank" to="/messages">{{ $t("user.message") }}</router-link>
+        </el-badge>
+      </el-menu-item>
+      <el-menu-item v-if="isLogin">
+        <a style="cursor: pointer;" @click="dialogVisible = true">{{ $t("user.logout") }}</a>
+      </el-menu-item>
+    </el-menu>
   </div>
 </template>
 
@@ -550,19 +564,32 @@ export default {
 };
 </script>
 
+<style>
+.top-navbar > .el-menu-item,
+.top-navbar > .el-submenu > .el-submenu__title {
+  font-size: 18px;
+  padding: 0 10px;
+  transition: 0.5s;
+}
+@media (min-width: 1600px) and (max-width: 1800px) {
+  .top-navbar > .el-menu-item,
+  .top-navbar > .el-submenu > .el-submenu__title {
+    padding: 0 16px;
+  }
+}
+@media (min-width: 1800px) {
+  .top-navbar > .el-menu-item,
+  .top-navbar > .el-submenu > .el-submenu__title {
+    padding: 0 20px;
+  }
+}
+</style>
+
 <style scoped lang="less">
 .top-navbar {
-  height: 40px;
-  padding: 5px 5%;
-  width: 90%;
   display: flex;
-  display: -webkit-flex;
-  align-items: center;
-  justify-content: space-between;
-  overflow: hidden;
-  position: relative;
-  background-color: rgb(255, 255, 255);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+  justify-content: center;
+  padding: 0;
 }
 .iconAndTitle {
   display: flex;

@@ -170,6 +170,7 @@
 <script>
 import ShowAuthorData from "@/components/tag/edit/AuthorData";
 import EditTags from "@/components/tag/edit/Edit";
+import { toGMT as tagLogDate } from "@/static/js/toGMT";
 // import pvTag from "../components/GeneralComponents/pv-tag.vue";
 export default {
   components: {
@@ -245,6 +246,8 @@ export default {
         return map[name];
       };
     },
+    // 标签的修改日期
+    tagLogDate,
   },
   watch: {
     // 如果标签编辑界面被关闭，则重新请求页面数据
@@ -332,32 +335,6 @@ export default {
         .catch(() => {
           this.loading2 = false;
         });
-    },
-    // 标签的修改日期
-    tagLogDate(date) {
-      let upload_time = new Date(date);
-      // 设置为东八区的时间
-      upload_time.setTime(upload_time.getTime());
-      let y = upload_time.getFullYear(); //getFullYear 方法以四位数字返回年份
-      let M = upload_time.getMonth() + 1; // getMonth 方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-      let d = upload_time.getDate(); // getDate 方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-      let h = upload_time.getHours(); // getHours 方法返回 Date 对象的小时 (0 ~ 23)
-      let m = upload_time.getMinutes(); // getMinutes 方法返回 Date 对象的分钟 (0 ~ 59)
-      let s = upload_time.getSeconds(); // getSeconds 方法返回 Date 对象的秒数 (0 ~ 59)
-      return (
-        y +
-        "-" +
-        // 数字不足两位自动补零，下同
-        (Array(2).join(0) + M).slice(-2) +
-        "-" +
-        (Array(2).join(0) + d).slice(-2) +
-        " " +
-        (Array(2).join(0) + h).slice(-2) +
-        ":" +
-        (Array(2).join(0) + m).slice(-2) +
-        ":" +
-        (Array(2).join(0) + s).slice(-2)
-      );
     },
     // 更新溢出项
     freshOverflow() {

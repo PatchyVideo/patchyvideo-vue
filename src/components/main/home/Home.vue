@@ -48,6 +48,7 @@
                   <bilibili-cover
                     v-if="item.item.site === 'bilibili'"
                     :aid="parseInt(item.item.unique_id.replace('bilibili:av', ''))"
+                    :cid="item.item.cid"
                     :cover-image="item.item.cover_image"
                   ></bilibili-cover>
                   <youtube-cover

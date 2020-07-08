@@ -163,5 +163,12 @@
       </div>
     </div>
     <div id="app"></div>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function() {
+          if (navigator.serviceWorker.controller == null) navigator.serviceWorker.register("/sw.js");
+        });
+      }
+    </script>
   </body>
 </html>

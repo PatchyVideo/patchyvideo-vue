@@ -45,7 +45,7 @@
         popper-class="my-autocomplete"
         :placeholder="$t('add_to_category', { cat: tagCategorie })"
         :check-status.sync="checkTag"
-        @check-value-async="querySearchAsync2"
+        @check-value-async="querySearchAsync"
         @keyup.enter.native="addTag"
       ></CheckInput>
       <el-button type="info" @click="addTag()">{{ $t("add_tag") }}</el-button>
@@ -713,19 +713,7 @@ export default {
         type: "error",
       });
     },
-    // 下面是消息补全框的方法
     querySearchAsync(queryString, cb) {
-      // this.infoTipMark = true;
-      let url = "/autocomplete/?q=" + queryString;
-      this.axios({
-        method: "get",
-        url: url,
-      }).then((result) => {
-        this.taglist = result.data;
-        cb(result.data);
-      });
-    },
-    querySearchAsync2(queryString, cb) {
       // this.infoTipMark = true;
       let url = "/be/autocomplete/ql?q=" + queryString;
       this.axios({
