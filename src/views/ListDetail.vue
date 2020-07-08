@@ -380,13 +380,9 @@ export default {
     },
     // 复制视频连接
     copyVideoLink: function(url) {
-      this.$alert(
-        this.$t("copy_tips.copy_URL", { result: copyToClipboardText(url) ? this.$t("copy_tips.succeed") : this.$t("copy_tips.fail") }),
-        this.$t("copy_tips.share_URL"),
-        {
-          confirmButtonText: this.$t("copy_tips.confirm"),
-        }
-      );
+      this.$alert(copyToClipboardText(url) ? this.$t("copy_tips.succeed") : this.$t("copy_tips.fail"), this.$t("copy_tips.share_URL"), {
+        confirmButtonText: this.$t("copy_tips.confirm"),
+      });
     },
     // 添加视频
     addVideo() {

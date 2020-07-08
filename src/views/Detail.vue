@@ -479,7 +479,7 @@ export default {
     },
     // 复制视频连接
     copyVideoLink: function(url) {
-      this.$alert(this.$t("URL_copy") + (copyToClipboardText(url) ? this.$t("succeed") : this.$t("fail")), this.$t("share_URL"), {
+      this.$alert(copyToClipboardText(url) ? this.$t("URL_copy.succeed") : this.$t("URL_copy.fail"), this.$t("URL_copy.share_URL"), {
         confirmButtonText: this.$t("confirm"),
       });
     },
