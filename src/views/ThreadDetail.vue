@@ -365,7 +365,7 @@ export default {
             result.data.data.users.forEach((data) => {
               this.$set(this.commentAuthorsInfo, data._id.$oid, data);
             });
-            changeSiteTitle(this.title + " - " + this.$t("discussBroad"));
+            changeSiteTitle(this.$t("forum", { title: this.title }));
           }
         })
         .catch((error) => {
@@ -407,7 +407,8 @@ export default {
           if (result.data.status == "SUCCEED") {
             this.$message({
               type: "success",
-              message: this.$t("pinInfo.pinSuccessfully", { cancel: pinned ? this.$t("cancel") : "" }),
+              // pinned表示操作之前帖子处于的状态，下同
+              message: pinned ? this.$t("pinInfo.unpinSuccess") : this.$t("pinInfo.pinSuccess"),
             });
             this.fetchData();
           } else {
@@ -417,10 +418,15 @@ export default {
         .catch((e) => {
           this.$message({
             type: "error",
-            message: this.$t("pinInfo.pinFailed", { cancel: pinned ? this.$t("cancel") : "", result: e.message }),
+            message: pinned ? this.$t("pinInfo.unpinFailed", { reason: e.message }) : this.$t("pinInfo.pinFailed", { reason: e.message }),
           });
         });
     },
+    /**
+     * pin a comment
+     * @param {string} id thread id
+     * @param {Boolean} pinned thread pin status
+     */
     pint2(id) {
       this.axios({
         method: "post",
@@ -434,7 +440,7 @@ export default {
           if (result.data.status == "SUCCEED") {
             this.$message({
               type: "success",
-              message: (this.pinned ? this.$t("cancel") : "") + this.$t("pinInfo.pinSuccessfully"),
+              message: this.pinned ? this.$t("pinInfo.unpinSuccess") : this.$t("pinInfo.pinSuccess"),
             });
             this.fetchData();
           } else {
@@ -444,7 +450,7 @@ export default {
         .catch((e) => {
           this.$message({
             type: "error",
-            message: this.$t("pinInfo.pinFailed", { cancel: this.pinned ? this.$t("cancel") : "", result: e.message }),
+            message: this.pinned ? this.$t("pinInfo.unpinFailed", { reason: e.message }) : this.$t("pinInfo.pinFailed", { reason: e.message }),
           });
         });
     },
@@ -483,7 +489,7 @@ export default {
           if (result.data.status == "SUCCEED") {
             this.$message({
               type: "success",
-              message: this.$t("submitSuccessfully"),
+              message: this.$t("submitSuccess"),
             });
             this.fetchData();
             this.$set(this.editF, "visible", false);
@@ -517,7 +523,7 @@ export default {
               if (result.data.status == "SUCCEED") {
                 this.$message({
                   type: "success",
-                  message: this.$t("delInfo.delSuccessfully"),
+                  message: this.$t("delInfo.delSuccess"),
                 });
                 this.fetchData();
               } else {
@@ -556,7 +562,7 @@ export default {
               if (result.data.status == "SUCCEED") {
                 this.$message({
                   type: "success",
-                  message: this.$t("delInfo.delSuccessfully"),
+                  message: this.$t("delInfo.delSuccess"),
                 });
                 this.$router.push({
                   path: "/forum/" + (this.fid || ""),
@@ -629,7 +635,7 @@ export default {
                 if (result.data.status == "SUCCEED") {
                   this.$message({
                     type: "success",
-                    message: this.$t("replyInfo.replySuccessfully"),
+                    message: this.$t("replyInfo.replySuccess"),
                   });
                   this.fetchData();
                   this.$set(this.replyT, "visible", false);
@@ -656,7 +662,7 @@ export default {
                 if (result.data.status == "SUCCEED") {
                   this.$message({
                     type: "success",
-                    message: this.$t("replyInfo.replySuccessfully"),
+                    message: this.$t("replyInfo.replySuccess"),
                   });
                   this.fetchData();
                   this.$set(this.replyT, "visible", false);

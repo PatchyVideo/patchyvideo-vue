@@ -112,7 +112,7 @@ export default {
     },
     open2() {
       this.$message({
-        message: this.$t("post_successfully"),
+        message: this.$t("post_success"),
         type: "success",
       });
     },

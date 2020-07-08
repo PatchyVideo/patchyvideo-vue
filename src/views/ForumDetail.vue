@@ -255,7 +255,7 @@ export default {
           if (result.data.status == "SUCCEED") {
             this.$message({
               type: "success",
-              message: this.$t("postInfo.postSuccessfully"),
+              message: this.$t("postInfo.postSuccess"),
             });
             this.$router.push({
               path: "/forum/" + this.$route.params.fid + "/post/" + result.data.data.thread_id,
