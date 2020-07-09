@@ -30,9 +30,9 @@
         <router-link to="home">PatchyVideo</router-link>
       </h1>
       <div class="top in">
-        <router-link to="/login">{{ $t("login") }}</router-link>
+        <router-link :to="session ? '/login?session=' + session : '/login'">{{ $t("login") }}</router-link>
         <b>·</b>
-        <router-link to="/signup">{{ $t("signup") }}</router-link>
+        <router-link :to="session ? '/signup?session=' + session : '/signup'">{{ $t("signup") }}</router-link>
       </div>
 
       <!-- 输入账号和密码的框 -->
@@ -129,7 +129,7 @@ export default {
         signup_password2: "",
         signup_email: "",
       },
-      // 事先向服务器请求的 session 值
+      // URL自带或事先向服务器请求的 session 值
       session: "",
       rules: {
         signup_username: [
@@ -172,6 +172,10 @@ export default {
     // 修改网站标题
     document.title = this.$t("signup") + " - PatchyVideo";
   },
+  mounted() {
+    // 从URL获取session值
+    this.session = this.$route.query.session || "";
+  },
   methods: {
     open2() {
       this.$message({
@@ -200,29 +204,22 @@ export default {
       this.loading = true;
 
       // 表单验证
-      this.$refs.signupFormRef.validate((valid) => {
+      this.$refs.signupFormRef.validate(async (valid) => {
         if (valid) {
           // 验证成功，先获取 session
+          await this.getSession();
+          // 请求登录
           this.axios({
             method: "post",
-            url: "be/auth/get_session.do",
+            url: "be/signup.do",
             data: {
-              type: "SIGNUP",
+              username: this.signupFormRef.signup_username,
+              password: this.signupFormRef.signup_password1,
+              email: this.signupFormRef.signup_email,
+              session: this.session,
             },
-          }).then((result) => {
-            this.session = result.data.data;
-
-            // 请求登录
-            this.axios({
-              method: "post",
-              url: "be/signup.do",
-              data: {
-                username: this.signupFormRef.signup_username,
-                password: this.signupFormRef.signup_password1,
-                email: this.signupFormRef.signup_email,
-                session: this.session,
-              },
-            }).then((result) => {
+          })
+            .then((result) => {
               if (result.status == 200) {
                 if (result.data.status == "SUCCEED") {
                   this.open2();
@@ -244,8 +241,12 @@ export default {
               } else {
                 this.status = this.$t("net_err");
               }
+            })
+            .catch(() => {
+              this.loading = false;
+              this.open4();
+              this.status = this.$t("net_err");
             });
-          });
         } else {
           this.status = this.$t("format_err");
           // 加载结束,加载动画消失
@@ -253,6 +254,27 @@ export default {
           return false;
         }
       });
+    },
+    // 获取session
+    async getSession() {
+      // 如URL无session，则从后端获取
+      if (!this.session) {
+        await this.axios({
+          method: "post",
+          url: "be/auth/get_session.do",
+          data: {
+            type: "SIGNUP",
+          },
+        })
+          .then((result) => {
+            this.session = result.data.data;
+          })
+          .catch(() => {
+            this.loading = false;
+            this.open4();
+            this.status = this.$t("net_err");
+          });
+      }
     },
   },
 };
