@@ -28,10 +28,6 @@ export default {
         localStorage.setItem("username", "");
         // 清除 cookie
         this.clearCookie();
-        // 刷新界面
-        location.reload();
-        this.loading = false;
-        this.dialogVisible = false;
       });
     }
     this.axios({
