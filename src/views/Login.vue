@@ -79,6 +79,15 @@
       <div class="bottom in">
         <div class="login in" @click="login">{{ $t("login") }}</div>
       </div>
+
+      <div class="loginhr">
+        <div class="loginhrhint">或使用第三方登录</div>
+        <div class="loginhrpad"></div>
+      </div>
+
+      <div class="bottom in">
+        <div class="login in"><a href="/be/oauth?type=qq">通过 QQ 登录</a></div>
+      </div>
     </div>
   </div>
 </template>
@@ -295,12 +304,11 @@ a {
   top: 100px;
   display: block;
   width: 300px;
-  height: 420px;
+  height: 480px;
   padding: 50px;
   background-color: white;
   box-shadow: 0px 0px 80px #ffeef1;
   background-position-x: 50%;
-  left: 200px;
   margin: auto;
 }
 .w h1 {
@@ -355,6 +363,9 @@ a {
   color: #fff;
   background: #ff99ad;
 }
+.login > a {
+  color: #fff;
+}
 .login:hover {
   cursor: pointer;
   background: #ff7792;
@@ -404,5 +415,31 @@ i:hover {
 }
 .el-form-item {
   margin-top: 30px;
+}
+
+.loginhr {
+  height: 14px;
+  position: relative;
+}
+.loginhrhint {
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  left: 50%;
+  background-color: #fff;
+  color: #888;
+  text-align: center;
+  -webkit-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+  padding: 0 10px;
+}
+.loginhrpad {
+  border-bottom: 1px solid #dedfe0;
+  position: relative;
+  top: -3px;
+  left: 0;
+  width: 100%;
+  height: 14px;
+  z-index: 1;
 }
 </style>
