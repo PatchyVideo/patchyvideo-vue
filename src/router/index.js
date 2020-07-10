@@ -55,7 +55,7 @@ const routes = [
   },
   {
     path: "/login_redirect",
-    component: () => import("../views/Login_redirect.vue"),
+    component: () => import("../views/LoginRedirect.vue"),
   },
   {
     path: "/signup",
