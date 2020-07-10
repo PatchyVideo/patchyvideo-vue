@@ -19,7 +19,6 @@ export default {
         url: "/be/logout.do",
         data: {},
       }).then(() => {
-        this.isLogin = false;
         // 清除所有 session 值(退出登录)
         sessionStorage.clear();
         // 清除用户名
