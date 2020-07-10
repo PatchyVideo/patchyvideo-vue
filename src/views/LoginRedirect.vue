@@ -12,8 +12,7 @@ export default {
   created() {},
   mounted() {
     // check if user is logged in
-    if (JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "")
-    {
+    if (JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "") {
       // logout
       this.axios({
         method: "post",
