@@ -1,5 +1,5 @@
 <template>
-  <div>正在拉取用户信息……</div>
+  <div></div>
 </template>
 
 <script>
@@ -11,6 +11,30 @@ export default {
   },
   created() {},
   mounted() {
+    // check if user is logged in
+    if (JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "")
+    {
+      // logout
+      this.axios({
+        method: "post",
+        url: "/be/logout.do",
+        data: {},
+      }).then(() => {
+        this.isLogin = false;
+        // 清除所有 session 值(退出登录)
+        sessionStorage.clear();
+        // 清除用户名
+        this.$store.commit("clearUserName");
+        // 清除本地数据
+        localStorage.setItem("username", "");
+        // 清除 cookie
+        this.clearCookie();
+        // 刷新界面
+        location.reload();
+        this.loading = false;
+        this.dialogVisible = false;
+      });
+    }
     this.axios({
       method: "post",
       url: "/be/user/myprofile.do",
@@ -23,26 +47,11 @@ export default {
         this.$store.commit("changeifTruelyLogin", 1);
         // 利用 cookie 储存登录状态
         this.setCookie(result.data.data.profile.username, result.data.data.profile.image, 7);
-      }
-      if (this.$store.state.ifRouter == 0) {
-        // 如果是从登录按钮跳转到本界面，回到上一个页面
-        this.$store.commit("changeifRouter", "2");
-        this.$router.go(-1);
-      } else if (this.$store.state.ifRouter == 1) {
-        // 如果是从路由守卫跳转到本界面，进入下一个页面
-        this.$store.commit("changeifRouter", "2");
-        let path = this.$store.state.routerPath;
-        let query = this.$store.state.routerparams;
-        // 因为发布视频有参数传入的可能,所以做特别的兼容性调整
-        if (path == "/postvideo") {
-          this.$router.push({ path: path, query: query });
-        } else {
-          this.$router.push({ path: path });
-        }
-      } else {
-        // 如果是从其他地方跳转到本界面，回到 home 页面
-        this.$store.commit("changeifRouter", "2");
+        // login successful, redirect to home page
         this.$router.push({ path: "/home" });
+      } else {
+        // unable to acquire user info, redirect to login page
+        this.$router.push({ path: "/login" });
       }
     });
   },
