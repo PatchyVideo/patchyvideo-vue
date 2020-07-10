@@ -44,6 +44,8 @@
         <router-link :to="session ? '/login?session=' + session : '/login'">{{ $t("login") }}</router-link>
         <b>·</b>
         <router-link :to="session ? '/signup?session=' + session : '/signup'">{{ $t("signup") }}</router-link>
+        <b>·</b>
+        <a href="/be/oauth?type=qq">{{ $t("login_qq") }}</a>
       </div>
 
       <!-- 输入账号和密码的框 -->
