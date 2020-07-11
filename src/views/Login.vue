@@ -81,12 +81,12 @@
       </div>
 
       <div class="loginhr">
-        <div class="loginhrhint">或使用第三方登录</div>
+        <div v-t="'loginhr'" class="loginhrhint"></div>
         <div class="loginhrpad"></div>
       </div>
 
       <div class="bottom in">
-        <div class="login in"><a href="/be/oauth?type=qq">通过 QQ 登录</a></div>
+        <div class="login in"><a v-t="'loginvia.qq'" href="/be/oauth?type=qq"></a></div>
       </div>
     </div>
   </div>
