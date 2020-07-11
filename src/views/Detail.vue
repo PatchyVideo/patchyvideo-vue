@@ -108,13 +108,21 @@
 
           <!-- 视频详细信息 -->
           <div class="re_video">
-            <!-- B站，A站，n站和油管显示内嵌视频播放 -->
-            <iframe
-              v-if="iframeUrl !== ''"
-              :src="iframeUrl"
-              allowfullscreen="true"
-              style="width: 948px; height: 763px; margin: 10px auto 30px; display: block;"
-            ></iframe>
+            <el-tabs v-if="enable_video_play" id="embd_dplayer_switch" v-model="activeVideoPlayer" @tab-click="onPlayerSwitchTabActivate">
+              <!-- B站，A站，n站和油管显示内嵌视频播放 -->
+              <el-tab-pane label="普通播放器" name="embd">
+                <iframe
+                  v-if="iframeUrl !== ''"
+                  :src="iframeUrl"
+                  allowfullscreen="true"
+                  style="width: 948px; height: 763px; margin: 10px auto 30px; display: block;"
+                ></iframe>
+              </el-tab-pane>
+              <el-tab-pane v-if="isVideoSupportedByDplayer" label="高端播放器" name="dplayer">
+                <div v-if="dplayer_enabled" id="dplayer"></div>
+                <h1 v-else>加载中，请等待不超过10秒</h1>
+              </el-tab-pane>
+            </el-tabs>
             <!-- 如果是 ipfs 视频则播放视频 -->
             <video
               v-if="isIpfs"
@@ -253,6 +261,8 @@ import createNewList from "@/components/playlist/edit/Create";
 import PagesOfVideo from "@/components/video/PagesOfVideo";
 import { copyToClipboardText } from "@/static/js/generic";
 import { toGMT } from "@/static/js/toGMT";
+import DPlayer from "dplayer";
+import flvjs from "flv.js";
 
 export default {
   components: {
@@ -360,6 +370,10 @@ export default {
       URL_EXPANDERS: {},
       // 内嵌播放的视频链接
       iframeUrl: "",
+      enable_video_play: true,
+      activeVideoPlayer: "embd",
+      dplayer_handle: null,
+      dplayer_enabled: false,
     };
   },
   computed: {
@@ -835,6 +849,63 @@ export default {
         }
         this.loadingList = false;
       });
+    },
+    isVideoSupportedByDplayer() {
+      let video_url = this.myVideoData.video.item.url;
+      let regBili = /(https:\/\/|http:\/\/)www.bilibili.com\/video\/av(\S+)\?p=(\S+)/;
+      if (regBili.exec(video_url) !== null) {
+        return true;
+      }
+      return false;
+    },
+    onPlayerSwitchTabActivate() {
+      if (this.activeVideoPlayer !== "dplayer") return;
+      // dplayer selected
+
+      // step 1: check if video site if supported and not already loaded
+      if (!this.isVideoSupportedByDplayer() || this.dplayer_enabled) return;
+      // step 2: if so, query video stream from backend
+      this.axios({
+        method: "post",
+        url: "/be/helper/get_video_stream",
+        data: {
+          url: this.myVideoData.video.item.url,
+        },
+      }).then((result) => {
+        if (result.data.status == "SUCCEED") {
+          // step 3: create dplayer_handle
+          let list_of_streams = result.data.data;
+          console.log(list_of_streams);
+          let top_quality_stream = list_of_streams[0];
+          let stream_format = top_quality_stream.format;
+          let stream_url = top_quality_stream.src[0];
+          let video_obj = null;
+          if (stream_format == "flv") {
+            video_obj = {
+              type: "customFlv",
+              customType: {
+                customFlv: function(video) {
+                  const flvPlayer = flvjs.createPlayer({
+                    type: "flv",
+                    url: stream_url,
+                  });
+                  flvPlayer.attachMediaElement(video);
+                  flvPlayer.load();
+                },
+              },
+            };
+          }
+          this.dplayer_handle = new DPlayer({
+            container: document.getElementById("dplayer"),
+            screenshot: true,
+            video: video_obj,
+          });
+        } else {
+          this.open4(this.$t("addTo.fail"));
+          this.addToList = false;
+        }
+      });
+      this.dplayer_enabled = true;
     },
   },
 };
