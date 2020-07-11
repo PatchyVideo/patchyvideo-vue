@@ -44,8 +44,6 @@
         <router-link :to="session ? '/login?session=' + session : '/login'">{{ $t("login") }}</router-link>
         <b>·</b>
         <router-link :to="session ? '/signup?session=' + session : '/signup'">{{ $t("signup") }}</router-link>
-        <b>·</b>
-        <a href="/be/oauth?type=qq">{{ $t("login_qq") }}</a>
       </div>
 
       <!-- 输入账号和密码的框 -->
@@ -83,12 +81,14 @@
       </div>
 
       <div class="loginhr">
-        <div class="loginhrhint">或使用第三方登录</div>
+        <div class="loginhrhint">{{ $t("third_party_login") }}</div>
         <div class="loginhrpad"></div>
       </div>
 
       <div class="bottom in">
-        <div class="login in"><a href="/be/oauth?type=qq">通过 QQ 登录</a></div>
+        <div class="login in">
+          <a href="/be/oauth?type=qq">{{ $t("login_qq") }}</a>
+        </div>
       </div>
     </div>
   </div>
