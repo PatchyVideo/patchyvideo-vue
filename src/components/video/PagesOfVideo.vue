@@ -1,14 +1,3 @@
-<!--    vue组件：PagesOfVideo.vue     -->
-<!--
-    功能：视频详情中判断该视频在B站是否有分P
-    必要传入参数：
-      aid:string类型，视频的av号
-    其他说明：
-      组件会
-    更新日志：
-      4/28/2020: v1.0
-        release;
--->
 <template>
   <div class="PagesOfVideo">
     <!-- 确认是否发布分P的对话框 -->

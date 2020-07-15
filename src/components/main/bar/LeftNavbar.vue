@@ -1,34 +1,3 @@
-<!--    vue组件：LeftNavbar.vue     -->
-<!--
-    组件：左侧的标签导航栏
-    大小：15%（最小150px） * 100%
-    功能：home页面下对标签进行导航
-    包含组件：EditTags.vue
-    必要传入参数：
-      1.标题的名称(从vuex的"leftNavBarTitle"参数里获取)
-      2.（Home页面下）从https://www.patchyvideo.com/listvideo.do请求来的数据的data.data.tags
-      3.（Detail页面下）从https://www.patchyvideo.com/getvideo.do请求来的数据的data.data.tag_by_category
-    更新日志：
-    12/1/2019: v1.0 
-      release
-    12/23/2019: v1.0.1
-      1.实现了动态调整标题的功能
-    12/30/2019：v1.0.2
-      1.实现了根据tag类型自动渲染tag颜色的功能
-      2.实现了将Home页面渲染的导航栏和Detail页面渲染的导航栏分开的功能
-    1/8/2020：v1.0.3
-      1.实现了点击标签进行搜索的功能
-      2.删掉了一些冗余的代码和变量
-    1/30/2020：v1.0.4
-      1.实现了在视频详情页面编辑标签，使用标签发布视频的功能
-    2/1/2020：v1.0.5
-      1.获取登录信息的时机调整
-    2/4/2020：v1.0.6
-      1.侧导航栏的标题在搜索界面会变成“相关标签”
-    ★待解决问题：
-      暂无
--->
-
 <template>
   <div class="left-navbar">
     <!-- EditTags组件 -->
@@ -73,7 +42,7 @@
     <div class="left_list">
       <!-- 导航栏标题 -->
       <div class="titleTag">
-        <h1>{{ title }}</h1>
+        <h1 class="text-2xl font-bold">{{ title }}</h1>
         <div class="editTagButton">
           <el-button v-if="$route.path === '/video' && isLogin == true" size="mini" :disabled="showTagPanel" @click="openEditTags">{{
             $t("tag.edit")

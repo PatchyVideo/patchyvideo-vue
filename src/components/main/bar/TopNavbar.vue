@@ -1,12 +1,3 @@
-<!--    vue组件：TopNavbar.vue     -->
-<!--
-    组件：页面顶部的导航栏
-    大小：100% * 80px
-    功能：网站主导航栏
-    必要传入参数：无
-    更新日志：
--->
-
 <template>
   <div>
     <!-- 退出登录的弹出框 -->
@@ -20,7 +11,7 @@
     <el-menu class="top-navbar" mode="horizontal" text-color="#303133" active-text-color="#303133">
       <!-- 网站icon &标题 -->
       <el-menu-item>
-        <img class="patchyvideo-icon" src="@/static/img/patchyvideo.svg" />
+        <img class="patchyvideo-icon inline-block" src="@/static/img/patchyvideo.svg" />
         <span class="patchyvideo-title">PatchyVideo</span>
       </el-menu-item>
 
@@ -553,6 +544,8 @@ export default {
 </style>
 
 <style scoped lang="less">
+@import url("https://fonts.loli.net/css2?family=Quicksand:wght@700&display=swap");
+
 .top-navbar {
   display: flex;
   justify-content: center;
@@ -567,8 +560,9 @@ export default {
   height: 30px;
 }
 .patchyvideo-title {
+  font-family: "Quicksand", sans-serif;
   font-size: 24px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.5px;
 }
 .nav_left {

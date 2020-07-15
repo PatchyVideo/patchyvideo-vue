@@ -1,12 +1,3 @@
-<!--
-    页面：paychyvideo的播放列表目录页面
-    功能：展示用户创建的播放列表目录
-    更新日志：
-    2/12/2019: v1.0
-
-    ★待解决问题：
-    
--->
 <template>
   <div v-show="visible" ref="aside" v-loading="loading">
     <el-dialog :title="$t('tip')" :visible.sync="dialogVisible" :modal-append-to-body="false" width="30%">

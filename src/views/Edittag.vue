@@ -1,13 +1,3 @@
-<!--    vue页面：Edittag.vue     -->
-<!--
-    页面：paychyvideo的标签编辑界面
-    功能：用户可以在这里编辑标签
-    包含组件：TopNavbar.vue、Foot.vue、tagDetail.vue、searchTag.vue
-    更新日志：
-    ★待解决问题：
-      2.标签搜索功能的实现
--->
-
 <template>
   <div>
     <topnavbar />

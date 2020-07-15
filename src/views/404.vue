@@ -1,11 +1,3 @@
-<!--    vue页面：404.vue     -->
-<!--
-    组件：网站的404页面
-    功能：网站的网址错误页面
-    更新日志：
-    2/1/2020: v1.0 
-      release
--->
 <template>
   <div>
     <div class="errorPage">

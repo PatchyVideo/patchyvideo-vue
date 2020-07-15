@@ -1,39 +1,4 @@
-<!--
-新增user模块 需要安装依赖
-npm install --save-dev less-loader less
-npm install echarts --save
-npm install font-awesome --save
-
-————————————————————————————
-
-img文件夹下新增 imoto.jpg test.png imoto_left.jpg imoto_left2.jpg
-
-main.js文件下需要添加：
-import echarts from 'echarts';
-Vue.prototype.$echarts = echarts;
-
-   vue页面：User.vue
-
-    页面：paychyvideo的注册页面
-    功能：用户由此注册账号
-    包含组件：UserContribute、UserFavorites、Userprofile
-    更新日志：
-    1/1/2020: v1.0
-    现在可以查看其他用户界面。
-    1/22/2020: v1.1
-    新增贡献索引状态状态页面。
-    修改密码功能以及邮箱功能完成。
-    更新了切换状态的字体图标。
-
-    ★待解决问题：
-    问题：1. 页面布局不是依照100%宽度做的，所以并不能适应，最终展示分辨率大小还有待商榷
-          2. 当用户输入的UID非法时，应跳转至404页面，暂时没做
-          3. 预订取消userfolder模块。
-
-
--->
-
-<template>
+﻿<template>
   <div>
     <topnavbar></topnavbar>
     <div class="content w">

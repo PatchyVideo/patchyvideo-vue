@@ -1,10 +1,3 @@
-<!--
-
-2/11/2020：v1.0.0
-1.新增图片裁剪组件
-需要安装依赖：npm install vue-cropper -s
--->
-
 <template>
   <div v-loading="loading" class="custom-upload">
     <el-dialog :title="$t('title')" :visible.sync="showCropper" top="6vh" width="50%" height="600" class="cropper-dialog" center append-to-body>

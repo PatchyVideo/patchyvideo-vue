@@ -1,10 +1,3 @@
-<!--    vue页面：ListDetail.vue     -->
-<!--
-    页面：视频列表的详细信息
-    功能：展示展示视频列表的详细信息
-    更新日志：
--->
-
 <template>
   <div class="listDetail">
     <topnavbar />

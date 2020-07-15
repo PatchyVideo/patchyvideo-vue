@@ -1,21 +1,3 @@
-<!--    vue组件：PostMultiVideos.vue     -->
-<!--
-    组件：上传多个视频
-    大小：100% * 800(最小高度)
-    功能：上传多个视频
-    必要传入参数：无
-    包含组件：EditTags.vue
-    更新日志：
-    1/18/2020：v1.0
-      release
-    1/21/2020：v1.0.1
-      1.现在可以通过URL传入的参数来进一步更新上传视频的信息
-    2/2/2020：v1.0.2
-      1.样式微调
-    ★待解决问题：
-      暂无
--->
-
 <template>
   <div v-loading="loading" class="postBox">
     <div class="content">

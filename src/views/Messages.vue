@@ -1,9 +1,3 @@
-<!--    vue页面：Messages.vue     -->
-<!--
-    组件：网站的消息页面
-    功能：显示用户的消息
-    更新日志：
--->
 <template>
   <div class="messages">
     <topnavbar />

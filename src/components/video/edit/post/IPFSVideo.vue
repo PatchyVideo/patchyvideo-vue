@@ -1,17 +1,3 @@
-<!--    vue组件：PostIPFSVideo.vue     -->
-<!--
-    组件：上传ipfs视频
-    大小：100% * 800(最小高度)
-    功能：上传ipfs视频
-    必要传入参数：无
-    包含组件：PostVideo.vue
-    更新日志：
-    2/5/2020：v1.0
-      release
-    ★待解决问题：
-      1.IPFS视频的URL校验有待进一步优化
--->
-
 <template>
   <div v-loading="loading" class="postBox">
     <div class="content">

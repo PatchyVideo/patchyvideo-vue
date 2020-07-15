@@ -1,15 +1,4 @@
-﻿<!--
-    页面：paychyvideo的个人收藏夹页面
-    功能：展示用户创建的所有收藏夹信息
-    更新日志：
-    12/31/2019: v1.0
-
-    ★待解决问题：
-     因个人界面接口较特殊，需登录后才能获取，登录需携带Cookie，请先在官网登录后再打开此页面。
-     本地登录提示错误暂未做处理。
--->
-
-<template>
+﻿<template>
   <div v-loading="loading">
     <div v-if="firstmaxcount == 0" class="data_null standard">
       <p>{{ $t("no_data") }}</p>

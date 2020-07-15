@@ -2,7 +2,6 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "@/store/index.js";
 import axios from "axios";
-import "@/static/css/base.css";
 import { changeSiteTitle } from "@/static/js/base";
 import { Loading, Message } from "element-ui";
 import { getYiyan } from "@/static/js/yiyan";

@@ -28,6 +28,9 @@ import "element-ui/lib/theme-chalk/index.css";
 import "font-awesome/css/font-awesome.min.css";
 Vue.use(ElementUI);
 
+/* TailWind CSS */
+import "./assets/css/tailwind.css";
+
 /* Vue i18n */
 import VueI18n from "vue-i18n";
 Vue.use(VueI18n);
@@ -93,9 +96,6 @@ Vue.directive("linkified", linkify);
 /* Vue shadow dom */
 import shadow from "../plugins/shadow.js";
 Vue.use(shadow);
-
-/* Common css */
-import "./static/css/common.css";
 
 /* console logs */
 import "./log";

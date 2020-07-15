@@ -1,7 +1,3 @@
-<!--
-黑名单组件
--->
-
 <template>
   <div v-loading="loading" class="black-list">
     <el-radio-group ref="radiog" v-model="radio">

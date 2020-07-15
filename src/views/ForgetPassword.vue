@@ -1,16 +1,3 @@
-<!--    vue页面：ForgetPassword.vue     -->
-<!--
-    页面：paychyvideo的找回密码界面
-    功能：用户由此找回密码
-    更新日志：
-    1/22/2020：v1.0
-      release
-    2/1/2020：v1.0.1
-      1.修复了按下回车页面刷新的bug
-      2.加入输入邮箱后按下回车自动提交的功能
-    ★待解决问题：
-      1.错误信息尚未进行分类
--->
 <template>
   <div class="loginPic">
     <div v-loading="loading" class="w">

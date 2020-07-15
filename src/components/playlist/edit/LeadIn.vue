@@ -1,16 +1,3 @@
-<!--    vue组件：Foot.vue     -->
-<!--
-    组件：导入播放列表
-    大小：100% * 800px（最小）
-    功能：导入现有的播放列表
-    必要传入参数：无
-    更新日志：
-    12/3/2019: v1.0 
-      release
-    12/10/2019: v1.0.1
-      1.修改了注释内容  
--->
-
 <template>
   <div v-loading="loading" class="listForm">
     <el-form ref="list" :model="list" label-width="auto" :rules="rules">

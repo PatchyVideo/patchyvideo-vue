@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="tag-box">
+    <div class="tag-box text-center">
       <el-tag
         key
         v-t="'_common.global_text.all'"
@@ -17,10 +17,8 @@
         >{{ item.label }}</el-tag
       >
     </div>
-    <div v-loading="loading" class="w main-page-background-img">
-      <left-navbar :msg="tags" :name="'main'"></left-navbar>
-
-      <div class="content">
+    <div v-loading="loading" class="w main-page-background-img flex mx-auto max-w-screen-xl">
+      <div class="content inline-block">
         <!-- 播放列表的抬头 -->
         <div class="video-list-header">
           <p v-if="maxcount">{{ $t("page_count", { count: count2, maxcount: maxcount }) }}</p>
@@ -70,14 +68,12 @@
                   <h4>
                     <router-link target="_blank" :to="{ path: '/video', query: { id: item._id.$oid } }" tag="a">{{ item.item.title }}</router-link>
                   </h4>
-                  <h5 v-if="item.item.part_name">
-                    <strong>P{{ pageOfVideo(item.item.url) }}:{{ item.item.part_name }}</strong>
-                  </h5>
+                  <h5 v-if="item.item.part_name" class="text-xs p-0 -mt-1 font-light">P{{ pageOfVideo(item.item.url) }}:{{ item.item.part_name }}</h5>
                 </div>
                 <!-- 图标和标题 -->
                 <!-- 内容 -->
                 <p
-                  :class="{ shortDescForPageVideos: item.item.part_name }"
+                  :class="{ 'whitespace-pre-line': true, shortDescForPageVideos: item.item.part_name }"
                   :title="toGMT(item.item.upload_time.$date) + '\n' + (item.item.desc || $t('nodesc'))"
                 >
                   {{ getDesc(item.item.desc) }}
@@ -119,12 +115,11 @@
 </template>
 
 <script>
-import leftNavbar from "@/components/main/bar/LeftNavbar";
 import bilibiliCover from "./BilibiliCover";
 import YoutubeCover from "./YoutubeCover";
 import { toGMT } from "@/static/js/toGMT";
 export default {
-  components: { leftNavbar, bilibiliCover, YoutubeCover },
+  components: { bilibiliCover, YoutubeCover },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {

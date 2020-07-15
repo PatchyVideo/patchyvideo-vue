@@ -1,9 +1,3 @@
-<!--    vue页面：Detail.vue     -->
-<!--
-    页面：视频的详细信息
-    功能：展示展示视频的详细信息
-    更新日志：
--->
 <template>
   <div>
     <topnavbar />

@@ -1,21 +1,3 @@
-<!--
- * @Author: your name
- * @Date: 2020-03-01 13:02:28
- * @LastEditTime: 2020-03-01 18:25:26
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \patchyvideo-vue\src\views\PostVideo.vue
- -->
-<!--    vue页面：PostVideo.vue     -->
-<!--
-    页面：paychyvideo的视频上传页面
-    功能：用户可以上传视频
-    包含组件：TopNavbar.vue、Foot.vue、PostSingleVideo.vue、PostMultiVideos.vue、PostIPFSVideo.vue 
-    其他说明：1.用户必须登录才能进入此页面；2.本页面暂时只支持a站，b站，n站，推特和油管的视频上传
-    更新日志：
-    1/18/2020：
-      release
--->
 <template>
   <div>
     <topnavbar />

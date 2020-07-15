@@ -1,8 +1,4 @@
-﻿<!--
-下次更新时取消该组件的制作
--->
-
-<template>
+﻿<template>
   <div>
     <div class="bigbox standard">
       <div class="aside">

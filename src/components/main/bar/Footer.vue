@@ -1,26 +1,10 @@
-<!--    vue组件：Foot.vue     -->
-<!--
-    组件：网站最底端的声明
-    大小：100% * 100px
-    功能：网站的版权声明等
-    必要传入参数：无
-    更新日志：
-    12/3/2019：v1.0 
-      release
-    12/10/2019：v1.0.1
-      1.修改了注释内容  
-    2/7/2020：v1.0.2
-      1.显示内容更改为网站的代码提交地址的前八位
-    4/1/2020: v1.1.0
-      1.翻新了foot排版,将顶部导航栏的wiki,ipfs,bug反馈界面以及语言选择界面移动到了里面
--->
 <template>
   <div class="patchyvideo-footer">
     <!-- 插图 -->
     <img class="footImg" src="@/static/img/footImg.png" />
     <!-- 语言选项 -->
     <div class="patchyvideo-languageSettings">
-      <p style="margin-top: 10px;">
+      <p class="mt-3">
         <strong>{{ $t("LanguageSettings") }}</strong>
       </p>
       <span @click="locale = 'CHS'">简体中文</span>
@@ -29,7 +13,7 @@
       <span @click="locale = 'ENG'">English</span>
     </div>
     <!-- 网站上方的链接 -->
-    <div class="patchyvideo-links">
+    <div class="patchyvideo-links text-center">
       <div class="patchyvideo-links-item">
         <p>
           <strong>{{ $t("About") }}</strong>
@@ -56,18 +40,18 @@
       </div>
     </div>
     <!-- 最下部的网站声明 -->
-    <div>
-      <p class="patchyvideo-declear patchyvideo-declear-top">
+    <div class="text-center">
+      <p class="patchyvideo-declear patchyvideo-declear-top text-gray-600">
         <vue-typed-js :strings="yiyan" :type-speed="75" :back-speed="15" :back-delay="4000" :loop="true" style="display:block;"
           ><span class="typing"></span
         ></vue-typed-js>
       </p>
-      <p class="patchyvideo-declear patchyvideo-declear-top">
+      <p class="patchyvideo-declear patchyvideo-declear-top text-gray-600">
         QQ: <a href="https://jq.qq.com/?k=fOJYEJt1" target="_blank" rel="noopener noreferrer">757676234</a> | Telegram:
         <a href="https://t.me/PatchyVideo" target="_blank" rel="noopener noreferrer">t.me/PatchyVideo</a> | Email:
         <a href="mailto:zyddnys@outlook.com" target="_blank" rel="noopener noreferrer">zyddnys@outlook.com</a>
       </p>
-      <p class="patchyvideo-declear">
+      <p class="patchyvideo-declear text-gray-600">
         © 2019-{{ buildTime.slice(0, 4) }} PatchyVideo (Client:
         <a :href="'https://github.com/PatchyVideo/patchyvideo-vue/commit/' + commitOfClient" target="_blank" rel="noopener noreferrer">{{ buildVersion }}</a
         >; Server:
@@ -174,10 +158,6 @@ export default {
   color: #409eff;
 }
 .patchyvideo-declear {
-  color: #aaa;
-  a {
-    color: #999;
-  }
   /* text-align: left; */
   font-size: 15px;
   line-height: 25px;

@@ -1,12 +1,3 @@
-<!-- vue组件：pv-tag.vue -->
-<!-- 
-    功能：PatchyVideo的标签组件
-    参数：
-        1.type（String）：标签的种类，可选值：
-          Copyright, Language, Character, Author, General, Meta, Soundtrack,none
-        2.（必需）tipText（String）：标签的内容
-        3.tagID（Number）：标签的ID
- -->
 <template>
   <div class="tag">
     <el-tooltip effect="light" :content="tipText.replace(/_/g, ' ')" placement="left">

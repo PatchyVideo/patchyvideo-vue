@@ -1,20 +1,4 @@
 const webpack = require("webpack");
-const path = require("path");
-const utils = {
-  assetsPath: function(_path) {
-    const assetsSubDirectory =
-      process.env.NODE_ENV === "production"
-        ? // 生产环境下的 static 路径
-          "static"
-        : // 开发环境下的 static 路径
-          "static";
-
-    return path.posix.join(assetsSubDirectory, _path);
-  },
-  resolve: function(dir) {
-    return path.join(__dirname, "..", dir);
-  },
-};
 const packageJson = require("./package.json");
 process.env.VUE_APP_VERSION = packageJson.version;
 const moment = require("moment");
@@ -30,29 +14,6 @@ module.exports = {
         $: "jquery",
       }),
     ],
-    module: {
-      rules: [
-        {
-          test: /\.(woff2?|eot|ttf|otf)(\?.*)$/,
-          loader: "url-loader",
-          options: {
-            limit: 10000,
-            name: utils.assetsPath("fonrs/[name].[hash:7].[ext]"),
-          },
-        },
-      ],
-    },
-    performance: {
-      hints: "warning",
-      //入口起点的最大体积
-      maxEntrypointSize: 50000000,
-      //生成文件的最大体积
-      maxAssetSize: 30000000,
-      //只给出 js 文件的性能提示
-      assetFilter: function(assetFilename) {
-        return assetFilename.endsWith(".js");
-      },
-    },
   },
   devServer: {
     host: "127.0.0.1",

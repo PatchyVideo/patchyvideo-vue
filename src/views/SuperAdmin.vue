@@ -1,11 +1,3 @@
-<!--
-
-	组件：管理员页面
-	更新日志：
-	2/16/2020:
-	待完成
--->
-
 <template>
   <div>
     <topnavbar></topnavbar>

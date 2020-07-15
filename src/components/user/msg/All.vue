@@ -1,13 +1,3 @@
-<!--    vue组件：AllMessage.vue     -->
-<!--
-    组件：网站消息界面
-    功能：展示用户的所有消息
-    更新日志：
-    其他说明：
-      由于后端原因请求数据的接口只能获取到用户的iID
-      此时需要对将用户ID进行整理发送至后端获取用户的详细信息
-      但需要注意的是，前端需要对用户信息和用户ID进行再次匹配，会对浏览器造成一定的运算负担
--->
 <template>
   <div class="unreadMsg">
     <div class="unreadMsg-title">{{ $t("allMsg") }}</div>

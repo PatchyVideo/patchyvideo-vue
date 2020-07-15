@@ -1,15 +1,3 @@
-<!--    vue页面：PostVideo.vue     -->
-<!--
-    页面：paychyvideo的视频列表创建页面
-    功能：用户可以创建视频列表
-    包含组件：TopNavbar.vue、Foot.vue
-    其他说明：1.用户必须登录才能进入此页面
-    更新日志：
-    1/22/2020：
-      release
-    ★待解决问题：
-      暂无
--->
 <template>
   <div>
     <topnavbar />

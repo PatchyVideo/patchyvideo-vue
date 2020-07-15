@@ -1,17 +1,4 @@
-﻿<!--    vue页面：ContributionLogs.vue     -->
-<!--
-    页面：paychyvideo的标签编辑历史和贡献排行榜
-    功能：展示网站标签编辑历史和贡献排行榜
-    包含组件：
-    其他说明：
-    更新日志：
-      3/27/2020:
-        建立
-    ★待解决问题：
-      1. 
--->
-
-<template>
+﻿<template>
   <div>
     <topnavbar />
 

@@ -1,30 +1,4 @@
-﻿<!--
-    更新日志：
-    1/11/2020：v1.0
-     新增保存功能 TAG校验功能，功能基本已完成
-    1/27/2020：v1.0.1
-      1.新增标签补全功能
-    1/30/2020：v1.0.2
-      1.新增在视频详情页面修改视频标签的功能
-     使用方法：
-     需要父组件绑定 1.msg属性 值为视频的Pid
-                    2.visible.sync属性 值为布尔值，true打开，false关闭。默认false关闭.
-    ★更改内容：
-      1/28/2020：
-        1.HTML:新的输入框
-        2.CSS:#ipt和#add进行修改(原来的全部注释掉了),在最下方新增了css(从哪里开始已标记)
-        3.JavaScript:第300行新增一句:this.iptVal = ""(加入标签成功之后输入框清空);
-        新增方法handleSelect和querySearchAsync;新增变量taglist
-      1/30/2020：
-        1.JavaScript：saveTag方法修改，实现对于视频标签编辑的兼容;、
-        新增方法：open5和open6
-      2/8/2020：
-        1.created添加代码（216~221行）
-        2.新增方法：getCommonTags2
-
--->
-
-<template>
+﻿<template>
   <transition mode="out-in">
     <div v-if="visible" class="EditTags" :class="{ active: msg != '' }">
       <el-dialog

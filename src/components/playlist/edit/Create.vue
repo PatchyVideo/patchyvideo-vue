@@ -1,17 +1,3 @@
-<!--    vue组件：CreateNewList.vue     -->
-<!--
-    组件：创建播放列表
-    大小：100% * 800px（最小）
-    功能：创建一个新的播放列表
-    必要传入参数：无
-    更新日志：
-    1/22/2020: v1.0 
-      release
-    2/1/2020: v1.0.1
-      1.新增创建播放列表在创建成功之后跳转到视频列表列表页面的功能
-      2.提交列表新增未登录报错的情况
--->
-
 <template>
   <div v-loading="loading" class="listForm">
     <el-form ref="list" :model="list" label-width="auto" :rules="rules">
