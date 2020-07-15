@@ -176,7 +176,7 @@ export default {
         this.$emit("sub-upload-succeed", this.url, true);
         let img = res.data.data;
         this.$store.commit("getUserAvatar", img);
-        this.setCookie(img, 7);
+        this.setUser(img);
         this.loading = false;
         this.$message({
           message: this.$t("upload_succeed"),
@@ -303,12 +303,10 @@ export default {
         }
       });
     },
-    // 设置 cookie
-    setCookie(username, days) {
-      let date = new Date(); // 获取时间
-      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
-      // 字符串拼接 cookie
-      window.document.cookie = "userAvatar" + "=" + username + ";path=/;expires=" + date.toGMTString();
+    setUser(avatar) {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
+      userInfo.avatar = avatar;
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
     },
   },
 };
