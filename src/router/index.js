@@ -1,4 +1,4 @@
-﻿import Vue from "vue";
+import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "@/store/index.js";
 import axios from "axios";
@@ -52,6 +52,10 @@ const routes = [
   {
     path: "/login",
     component: () => import("../views/Login.vue"),
+  },
+  {
+    path: "/login_redirect",
+    component: () => import("../views/LoginRedirect.vue"),
   },
   {
     path: "/signup",
@@ -211,11 +215,11 @@ router.beforeEach((to, from, next) => {
       // from 从哪个路径跳转而来
       // next('/xxx') 表示放行，或强制跳转到 /xxx
 
-      if (to.path == "/messages" && !getCookie()) {
+      if (to.path == "/messages" && !getUser()) {
         return next("/home");
       }
       if (to.path == "/postvideo" || to.path == "/edittag" || to.path == "/users/me" || to.path == "/createVideoList" || to.path == "/superadmin") {
-        if (getCookie() && store.state.ifTruelyLogin != 2) {
+        if (getUser() && store.state.ifTruelyLogin != 2) {
           // console.log("已登录放行");
           return next();
         } else {
@@ -284,20 +288,7 @@ router.beforeEach((to, from, next) => {
     });
 });
 
-// 获取 cookie
-function getCookie() {
-  if (document.cookie.length > 0) {
-    let arr = document.cookie.split("; ");
-    for (let i = 0; i < arr.length; i++) {
-      let arr2 = arr[i].split(":");
-      // 判断查找相对应的值
-      if (arr2[0] == "username") {
-        if (arr2[1] != "") {
-          return true;
-        }
-      }
-    }
-  }
-  return false;
+function getUser() {
+  return !!JSON.parse(localStorage.getItem("userInfo") || "{}").username;
 }
 export default router;

@@ -1,4 +1,4 @@
-﻿<!--
+<!--
 新增user模块 需要安装依赖
 npm install --save-dev less-loader less
 npm install echarts --save
@@ -73,9 +73,9 @@ import topnavbar from "@/components/main/bar/TopNavbar";
 import Footer from "@/components/main/bar/Footer";
 import userprofile from "@/components/user/dash/Profile";
 import usercontribute from "@/components/user/dash/Contribute";
-import listfolder from "@/components/user/dash/Folder";
+import listfolder from "@/components/user/dash/ListFolder";
 import userfavorites from "@/components/user/dash/Favorites";
-import userfolder from "@/components/user/dash/Folder";
+import userfolder from "@/components/user/dash/UserFolder";
 import blacklist from "@/components/user/dash/BlackList";
 import usersub from "@/components/user/dash/Sub";
 export default {
