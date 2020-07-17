@@ -64,9 +64,37 @@
           <div class="d_t">
             <!--<img src="@/static/img/5.png" style="float:left;margin-top:50px;" />
             <img src="@/static/img/1.png" style="float:right;margin-top:50px;" />-->
-            <h2>{{ videolistName }}</h2>
-            <img :src="'/images/covers/' + videolistDetail.playlist.item.cover" style="min-height: 200px;" />
-            <p>{{ videolistDesc }}</p>
+            <div class="leftcon">
+              <img :src="'/images/covers/' + videolistDetail.playlist.item.cover" style="min-height: 200px;" />
+            </div>
+            <div class="rightcon">
+              <h2 style="text-align: left;">{{ videolistName }}</h2>
+              <p style="text-align: left;margin: 0;">{{ videolistDesc }}</p>
+              <div class="tagbox">
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Author']" :key="item" type="author" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Author"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Character']" :key="item" type="character" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Character"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Copyright']" :key="item" type="copyright" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Copyright"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['General']" :key="item" type="general" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["General"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Language']" :key="item" type="language" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Language"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Meta']" :key="item" type="meta" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Meta"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Soundtrack']" :key="item" type="soundtrak" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Soundtrack"][index] }}
+                </el-tag>
+              </div>
+            </div>
+            <div class="taglist" style="display: inline-block;padding-right:35px;"></div>
           </div>
           <!-- 打开 Tag 编辑页面 -->
           <div v-if="editable" class="edit_box">
@@ -211,6 +239,15 @@ export default {
           item: {
             cover: "",
           },
+          tags_category: {
+            Author: [],
+            Character: [],
+            Copyright: [],
+            General: [],
+            Language: [],
+            Meta: [],
+            Soundtrack: [],
+          },
         },
       },
       // 判断是否登录
@@ -345,6 +382,7 @@ export default {
           document.title = this.videolistName;
           this.videolistDesc = this.videolistDetail.playlist.item.desc;
           this.videolistVideos = this.videolistDetail.videos;
+          // this.videolistTags = this.videolistDetail.playlist.tag_category;
           this.videolistPid = this.videolistDetail.playlist._id.$oid;
           this.maxcount = result.data.data.count;
           this.maxpage = result.data.data.page_count;
@@ -614,11 +652,6 @@ export default {
   width: 85%;
   margin-top: 20px;
 }
-.d_t {
-  width: 100%;
-  margin-bottom: 0px;
-  padding-bottom: 5px;
-}
 .d_t h2 {
   padding-top: 20px;
 }
@@ -632,6 +665,66 @@ export default {
   height: 200px;
   margin: 10px;
   background-color: rgba(255, 255, 255, 0);
+}
+.d_t {
+  width: 100%;
+  margin-bottom: 0px;
+  padding-bottom: 5px;
+  overflow: auto;
+  zoom: 1;
+  .leftcon {
+    float: left;
+    padding: 10px 2% 0;
+  }
+  .rightcon {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    float: left;
+    vertical-align: top;
+    min-width: 750px;
+    max-width: 790px;
+    min-height: 220px;
+    .tagbox {
+      flex-wrap: wrap;
+      position: relative;
+      left: -4px;
+      .el-tag {
+        float: left;
+        border-radius: 50px;
+        margin-right: 15px;
+        margin-top: 8px;
+      }
+      .el-tag--author {
+        border-color: #aa0000;
+        color: #aa0000;
+      }
+      .el-tag--character {
+        border-color: #00aa00;
+        color: #00aa00;
+      }
+      .el-tag--copyright {
+        border-color: #aa00aa;
+        color: #aa00aa;
+      }
+      .el-tag--general {
+        border-color: #0073ff;
+        color: #0073ff;
+      }
+      .el-tag--language {
+        border-color: #585455;
+        color: #585455;
+      }
+      .el-tag--meta {
+        border-color: #ff8800;
+        color: #ff8800;
+      }
+      .el-tag--soundtrak {
+        border-color: #ff7792;
+        color: #ff7792;
+      }
+    }
+  }
 }
 
 .EditTagsButton {
