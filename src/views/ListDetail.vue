@@ -391,6 +391,7 @@ export default {
           document.title = this.videolistName;
           this.videolistDesc = this.videolistDetail.playlist.item.desc;
           this.videolistVideos = this.videolistDetail.videos;
+          // this.videolistTags = this.videolistDetail.playlist.tag_category;
           this.videolistPid = this.videolistDetail.playlist._id.$oid;
           this.maxcount = result.data.data.count;
           this.maxpage = result.data.data.page_count;
@@ -661,11 +662,6 @@ export default {
   width: 85%;
   margin-top: 20px;
 }
-.d_t {
-  width: 100%;
-  margin-bottom: 0px;
-  padding-bottom: 5px;
-}
 .d_t h2 {
   padding-top: 20px;
 }
@@ -686,7 +682,6 @@ export default {
   padding-bottom: 5px;
   overflow: auto;
   zoom: 1;
-
   .leftcon {
     float: left;
     padding: 10px 2% 0;
@@ -704,7 +699,6 @@ export default {
       flex-wrap: wrap;
       position: relative;
       left: -4px;
-      text-align: left;
       .el-tag {
         float: left;
         border-radius: 50px;
@@ -739,31 +733,8 @@ export default {
         border-color: #ff7792;
         color: #ff7792;
       }
-      .button-new-tag {
-        margin-left: 10px;
-        height: 32px;
-        line-height: 30px;
-        padding-top: 0;
-        padding-bottom: 0;
-        margin-top: 8px;
-        margin-left: 0;
-        border-radius: 50px;
-      }
-      .input-new-tag {
-        width: 90px;
-        margin-left: 10px;
-        vertical-align: bottom;
-      }
-      .el-input {
-        margin-top: 8px;
-        margin-left: 0;
-        border-radius: 50px;
-      }
     }
   }
-}
-.edit_box button > span {
-  pointer-events: none !important;
 }
 
 .EditTagsButton {
