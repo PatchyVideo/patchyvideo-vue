@@ -64,9 +64,39 @@
           <div class="d_t">
             <!--<img src="@/static/img/5.png" style="float:left;margin-top:50px;" />
             <img src="@/static/img/1.png" style="float:right;margin-top:50px;" />-->
-            <h2>{{ videolistName }}</h2>
-            <img :src="'/images/covers/' + videolistDetail.playlist.item.cover" style="min-height: 200px;" />
-            <p>{{ videolistDesc }}</p>
+            <div class="leftcon">
+              <img :src="'/images/covers/' + videolistDetail.playlist.item.cover" style="min-height: 200px;" />
+            </div>
+            <div class="rightcon">
+              <div class="videotitbox">
+                <h2 style="text-align: left;">{{ videolistName }}</h2>
+                <p>{{ videolistDesc }}</p>
+              </div>
+              <div class="tagbox">
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Author']" :key="item" type="author" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Author"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Character']" :key="item" type="character" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Character"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Copyright']" :key="item" type="copyright" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Copyright"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['General']" :key="item" type="general" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["General"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Language']" :key="item" type="language" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Language"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Meta']" :key="item" type="meta" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Meta"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Soundtrack']" :key="item" type="soundtrak" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Soundtrack"][index] }}
+                </el-tag>
+              </div>
+            </div>
+            <div class="taglist" style="display: inline-block;padding-right:35px;"></div>
           </div>
           <!-- 打开 Tag 编辑页面 -->
           <div v-if="editable" class="edit_box">
@@ -641,9 +671,9 @@ export default {
 }
 .d_t p {
   width: 60%;
-  text-align: center;
+  text-align: left;
   white-space: pre-line;
-  margin: 0px auto;
+  margin: 10px 0 0;
 }
 .d_t img {
   height: 200px;
