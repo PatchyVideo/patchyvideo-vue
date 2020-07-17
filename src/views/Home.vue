@@ -85,8 +85,8 @@ export default {
       activeName: "first",
       // true 表示网格视图，false 表示列表视图
       flag: false,
-      label: ["主页"],
-      labelInfo: ["主页", "订阅"],
+      label: [this.$t("home")],
+      labelInfo: [this.$t("home"), this.$t("Subscribed")],
     };
   },
   computed: {},

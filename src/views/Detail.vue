@@ -11,33 +11,33 @@
     <!-- 更改视频级别的弹出框 -->
     <el-dialog :title="$t('management')" :visible.sync="managementBox" width="30%">
       <div style="width: 80%; margin: 0 auto;">
-        <el-select v-model="theVideoRank" placeholder="请修改视频的等级" style="width: 100%;">
-          <el-option v-for="(val, key) in videoRanks" :key="key" :label="key" :value="val">{{ key }}</el-option>
+        <el-select v-model="theVideoRank" :placeholder="$t('changeRank.title')" style="width: 100%;">
+          <el-option v-for="(item, index) in videoRanks" :key="index" :label="item" :value="index">{{ item }}</el-option>
         </el-select>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="managementBox = false">取 消</el-button>
-        <el-button type="primary" :loading="loading" @click="manageVideo()">确 定</el-button>
+        <el-button @click="managementBox = false">{{ $t("cancel") }}</el-button>
+        <el-button type="primary" :loading="loading" @click="manageVideo()">{{ $t("confirm") }}</el-button>
       </span>
     </el-dialog>
 
     <!-- 更改视频级别的弹出框 -->
-    <el-dialog title="修改视频发布类型" :visible.sync="changeRepostType" width="30%">
+    <el-dialog :title="$t('infotip.title')" :visible.sync="changeRepostType" width="30%">
       <div style="width: 80%; margin: 0 auto;">
         <el-select v-model="RepostType" :placeholder="$t('infotip.release_type')" style="width: 100%;">
           <el-option v-for="item in RepostTypes" :key="item.label" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="changeRepostType = false">取 消</el-button>
-        <el-button type="primary" :loading="loading" @click="repostType()">确 定</el-button>
+        <el-button @click="changeRepostType = false">{{ $t("cancel") }}</el-button>
+        <el-button type="primary" :loading="loading" @click="repostType()">{{ $t("confirm") }}</el-button>
       </span>
     </el-dialog>
 
     <!--添加到我的播放列表的弹出框 -->
-    <el-dialog title="添加到列表" :visible.sync="addToList" width="30%">
+    <el-dialog :title="$t('addTo.title')" :visible.sync="addToList" width="30%">
       <!-- 新建列表的嵌套弹出框 -->
-      <el-dialog width="60%" title="新建列表:" :visible.sync="newListDialog" append-to-body>
+      <el-dialog width="60%" :title="$t('addTo.newList')" :visible.sync="newListDialog" append-to-body>
         <createNewList
           :need-go="!newListDialog"
           style="margin: 0 auto;"
@@ -48,23 +48,23 @@
           "
         ></createNewList>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="newListDialog = false">取 消</el-button>
+          <el-button @click="newListDialog = false">{{ $t("cancel") }}</el-button>
         </div>
       </el-dialog>
 
       <div v-loading="loadingList">
-        <el-input v-model="myListQuery" placeholder="搜索我的列表..." @keyup.enter.native="getMyList()">
+        <el-input v-model="myListQuery" :placeholder="$t('addTo.search')" @keyup.enter.native="getMyList()">
           <el-button slot="append" icon="el-icon-search" @click="getMyList()"></el-button>
         </el-input>
         <div v-if="myVideoList.length" class="myVideoList">
           <div v-for="(item, index) in myVideoList" :key="index" class="myVideoListItem" @click="addToThisList(item._id.$oid)">
             <h2>{{ item.item.title }}</h2>
-            <h3 v-if="item.item.private" style="display: inline-block; color: #909399;">[私密]</h3>
-            <h3 v-if="item.exist" style="display: inline-block; color: #e6a23c;">[已有此视频]</h3>
-            <p>共{{ item.item.videos }}个视频</p>
+            <h3 v-if="item.item.private" style="display: inline-block; color: #909399;">{{ $t("addTo.private") }}</h3>
+            <h3 v-if="item.exist" style="display: inline-block; color: #e6a23c;">{{ $t("addTo.exist") }}</h3>
+            <p>{{ $t("addTo.total", { count: item.item.videos }) }}</p>
           </div>
         </div>
-        <p v-else>您还没有视频列表！</p>
+        <p v-else>{{ $t("addTo.NULL") }}</p>
         <!-- ElementUI 自带的分页器 -->
         <el-pagination
           background
@@ -75,7 +75,7 @@
           :page-size="10"
           @current-change="handleCurrentChange"
         ></el-pagination>
-        <el-button class="createNewList" type="primary" @click="newListDialog = true">新建列表</el-button>
+        <el-button class="createNewList" type="primary" @click="newListDialog = true">{{ $t("addTo.newList") }}</el-button>
       </div>
     </el-dialog>
 
@@ -150,7 +150,7 @@
               </router-link>
             </p>
             <p v-else>
-              此视频有{{ myVideoData.copies.length }}个副本
+              {{ $t("copies_num", { count: myVideoData.copies.length }) }}
               <router-link v-if="isLogin == true" :to="{ path: './postvideo', query: { copy: pid } }" tag="a">
                 <el-button type="text">[{{ $t("add_copy") }}]</el-button>
               </router-link>
@@ -196,7 +196,7 @@
               </el-dropdown>
             </p>
             <p v-else>
-              此视频存在于{{ myVideoData.playlists.length }}个播放列表中
+              {{ $t("playlists_num", { count: myVideoData.playlists.length }) }}
               <el-dropdown v-if="isLogin == true" @command="handleCommand">
                 <span class="el-dropdown-link">
                   <i class="el-icon-more"></i>
@@ -223,17 +223,17 @@
       </div>
 
       <!-- 删除副本的提示框 -->
-      <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
-        <span>确认删除？</span>
+      <el-dialog :title="$t('delet_copies.title')" :visible.sync="dialogVisible" width="30%">
+        <span>{{ $t("delet_copies.confirm") }}</span>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button @click="dialogVisible = false">{{ $t("cancel") }}</el-button>
           <el-button
             type="primary"
             @click="
               dialogVisible = false;
               breaklink();
             "
-            >确 定</el-button
+            >{{ $t("confirm") }}</el-button
           >
         </span>
       </el-dialog>
@@ -331,12 +331,7 @@ export default {
       // 本页面的视频的等级
       theVideoRank: 3,
       // 视频的等级（0 ~ 3，其中 3 为所有人可见）
-      videoRanks: {
-        仅管理员可见: 0,
-        登录用户可见: 1,
-        发布者和管理员可见: 2,
-        所有人可见: 3,
-      },
+      videoRanks: this.$t("changeRank.ranks"),
       // 本页面的视频的发布类型
       RepostType: "",
       // 视频的发布类型
@@ -484,8 +479,8 @@ export default {
     },
     // 复制视频连接
     copyVideoLink: function(url) {
-      this.$alert("视频链接复制" + (copyToClipboardText(url) ? "成功！" : "失败！"), "分享链接", {
-        confirmButtonText: "确定",
+      this.$alert(copyToClipboardText(url) ? this.$t("URL_copy.succeed") : this.$t("URL_copy.fail"), this.$t("URL_copy.share_URL"), {
+        confirmButtonText: this.$t("confirm"),
       });
     },
     // 设置内嵌播放链接
@@ -526,7 +521,7 @@ export default {
           .then((result) => {
             this.myVideoData = result.data.data;
             this.iframeUrl = this.regToIframe(this.myVideoData.video.item.url, this.myVideoData.video.item.cid || "");
-            this.theVideoRank = result.data.data.video.clearence;
+            this.theVideoRank = this.$t("changeRank.ranks")[result.data.data.video.clearence];
             if (result.data.data.video.comment_thread) {
               this.sid = result.data.data.video.comment_thread.$oid;
             }
@@ -574,13 +569,13 @@ export default {
           this.searchVideo();
           setTimeout(() => {
             this.$message({
-              message: "更新成功！",
+              message: this.$t("refresh.succeed"),
               type: "success",
             });
           }, 500);
         } else {
           this.$message({
-            message: "更新失败",
+            message: this.$t("refresh.fail"),
             type: "warning",
           });
         }
@@ -613,19 +608,19 @@ export default {
         },
       }).then((result) => {
         if (result.data.status == "SUCCEED") {
-          this.open1("修改成功！");
+          this.open1(this.$t("changeRank.succeed"));
           this.loading = false;
           this.managementBox = false;
           this.searchVideo();
         } else {
-          this.open4("修改失败，请重试！");
+          this.open4(this.$t("changeRank.fail"));
         }
       });
     },
     // 修改发布类型
     repostType() {
       if (this.RepostType == "") {
-        this.open4("请选择发布类型！");
+        this.open4(this.$t("choose_type"));
         return;
       }
       this.loading = true;
@@ -638,12 +633,12 @@ export default {
         },
       }).then((result) => {
         if (result.data.status == "SUCCEED") {
-          this.open1("修改成功！");
+          this.open1(this.$t("changeRank.succeed"));
           this.loading = false;
           this.changeRepostType = false;
           this.searchVideo();
         } else {
-          this.open4("修改失败，请重试！");
+          this.open4(this.$t("changeRank.fail"));
         }
       });
     },
@@ -725,7 +720,7 @@ export default {
       if (link_type == "video") {
         let ret = `<div class="url-tools">`;
         // 利用 name 属性保存绑定的 URL
-        ret += `<button name="${url}">添加副本</button>`;
+        ret += `<button name="${url}">${this.$t("add_copy")}</button>`;
         ret += `</div>`;
         return ret;
       }
@@ -747,18 +742,18 @@ export default {
         },
       }).then((result) => {
         if (result.data.status == "SUCCEED") {
-          this.open1("副本添加成功！");
+          this.open1(this.$t("copies.succeed"));
           // this.searchVideo();
           // 不知道为什么只能通过刷新才能显示副本
           this.$router.go(0);
         } else if (result.data.status == "FAILED") {
-          this.open4("副本添加失败！");
+          this.open4(this.$t("copies.fail"));
         } else if (result.data.status == "ERROR") {
           if (result.data.data == "UNAUTHORISED_OPERATION") {
-            this.open4("登录信息错误，请重新登录！");
+            this.open4(this.$t("copies.unauthorized"));
           }
         } else {
-          this.open4("未知错误");
+          this.open4(this.$t("unknow_err"));
         }
         this.loading = false;
       });
@@ -775,14 +770,14 @@ export default {
         },
       }).then((result) => {
         if (result.data.status == "SUCCEED") {
-          this.open1("同步成功！");
+          this.open1(this.$t("async.succeed"));
           // this.searchVideo();
           // 不知道为什么只能通过刷新才能显示副本
           this.$router.go(0);
         } else if (result.data.status == "FAILED") {
-          this.open4("同步失败！");
+          this.open4(this.$t("async.fail"));
         } else {
-          this.open4("未知错误");
+          this.open4(this.$t("unknow_err"));
         }
         this.loading = false;
       });
@@ -832,10 +827,10 @@ export default {
       }).then((result) => {
         if (result.data.status == "SUCCEED") {
           this.myListQuery = "";
-          this.open1("添加成功！");
+          this.open1(this.$t("addTo.succeed"));
           this.addToList = false;
         } else {
-          this.open4("添加失败！");
+          this.open4(this.$t("addTo.fail"));
           this.addToList = false;
         }
         this.loadingList = false;

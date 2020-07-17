@@ -3,7 +3,7 @@
     <!-- <topnavbar /> -->
     <!-- home页面的正文 -->
     <div class="tag-box">
-      <el-tag key style="margin: 0 5px;" :type="visibleSubs.includes('') ? '' : 'info'" @click="(e) => onSubsChange()">全部</el-tag>
+      <el-tag key style="margin: 0 5px;" :type="visibleSubs.includes('') ? '' : 'info'" @click="(e) => onSubsChange()">{{ $t("all") }}</el-tag>
       <el-tag
         v-for="item in allSubs"
         :key="item._id.$oid"
@@ -47,7 +47,7 @@
                 <p>{{ item.item.desc }}</p>
               </div>
             </div>
-            订阅来源：
+            {{ $t("subscribed_from") }}
             <el-tag v-for="i in item.sat_objs" :key="'s' + i._id.$oid" style="margin: 0 5px;">{{ i.name || i.qs }}</el-tag>
           </li>
         </ul>
