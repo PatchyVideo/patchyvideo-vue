@@ -68,8 +68,10 @@
               <img :src="'/images/covers/' + videolistDetail.playlist.item.cover" style="min-height: 200px;" />
             </div>
             <div class="rightcon">
-              <h2 style="text-align: left;">{{ videolistName }}</h2>
-              <p style="text-align: left;margin: 0;">{{ videolistDesc }}</p>
+              <div class="videotitbox">
+                <h2 style="text-align: left;">{{ videolistName }}</h2>
+                <p>{{ videolistDesc }}</p>
+              </div>
               <div class="tagbox">
                 <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Author']" :key="item" type="author" effect="plain">
                   {{ videolistDetail.playlist.tags_category["Author"][index] }}
@@ -657,9 +659,9 @@ export default {
 }
 .d_t p {
   width: 60%;
-  text-align: center;
+  text-align: left;
   white-space: pre-line;
-  margin: 0px auto;
+  margin: 10px 0 0;
 }
 .d_t img {
   height: 200px;
