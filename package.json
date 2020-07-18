@@ -51,7 +51,7 @@
     "eslint-plugin-vue": "^7.0.0-alpha.9",
     "less-loader": "^6.2.0",
     "lint-staged": "^10.2.11",
-    "lodash": "^4.17.16",
+    "lodash": "^4.17.19",
     "moment": "^2.27.0",
     "prettier": "^1.19.1",
     "vue-template-compiler": "^2.6.11"
