@@ -10,7 +10,7 @@
     <topnavbar />
 
     <!-- EditTags 组件-->
-    <EditTags v-if="showTagPanel" ref="editTag" :msg="temporaryValForVLP" :visible.sync="showTagPanel"></EditTags>
+    <EditTags v-if="showTagPanel" ref="editTag" :panel="panelType" :msg="temporaryValForVLP" :visible.sync="showTagPanel"></EditTags>
 
     <!-- 编辑视频列表时的对话框 -->
     <el-dialog :title="$t('edit_list_info_dialog.title')" :visible.sync="openListEdit" width="40%" :close-on-click-modal="false">
@@ -109,7 +109,10 @@
 
             <el-button type="info" @click="openListEdit = true">{{ $t("btn_group.edit_list_info") }}</el-button>
 
-            <el-button type="primary" class="EditTagsButton" :disabled="showTagPanel" @click="openEditTags">{{ $t("btn_group.edit_common_tags") }}</el-button>
+            <el-button type="primary" class="EditTagsButton" :disabled="showTagPanel" @click="openEditTags(1)">
+              编辑列表标签
+            </el-button>
+            <el-button type="primary" class="EditTagsButton" :disabled="showTagPanel" @click="openEditTags()">{{ $t("btn_group.edit_common_tags") }}</el-button>
 
             <el-button type="warning" @click="inverse()">{{ $t("btn_group.reverse_list") }}</el-button>
             <el-button type="danger" @click="dialogVisible = true">{{ $t("btn_group.delete") }}</el-button>
@@ -250,6 +253,8 @@ export default {
             Meta: [],
             Soundtrack: [],
           },
+          tags_translated: [],
+          tags_tags: [],
         },
       },
       // 判断是否登录
@@ -282,6 +287,8 @@ export default {
       openListEdit: false,
       // 打开列表标签编辑页面
       showTagPanel: false,
+      // 判断是列表标签还是共有标签
+      panelType: 1,
       // 打开删除列表的确认界面
       dialogVisible: false,
       // 编辑列表详情的校验数据
@@ -490,7 +497,8 @@ export default {
       });
     },
     // 打开 Tag 编辑页面
-    openEditTags: function() {
+    openEditTags: function(n) {
+      this.panelType = n;
       this.temporaryValForVLP = this.videolistPid;
       this.showTagPanel = true;
       // this.$refs.editTag.getCommonTags();
@@ -674,6 +682,7 @@ export default {
   padding-bottom: 5px;
   overflow: auto;
   zoom: 1;
+
   .leftcon {
     float: left;
     padding: 10px 2% 0;
@@ -691,6 +700,7 @@ export default {
       flex-wrap: wrap;
       position: relative;
       left: -4px;
+      text-align: left;
       .el-tag {
         float: left;
         border-radius: 50px;
@@ -725,8 +735,31 @@ export default {
         border-color: #ff7792;
         color: #ff7792;
       }
+      .button-new-tag {
+        margin-left: 10px;
+        height: 32px;
+        line-height: 30px;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-top: 8px;
+        margin-left: 0;
+        border-radius: 50px;
+      }
+      .input-new-tag {
+        width: 90px;
+        margin-left: 10px;
+        vertical-align: bottom;
+      }
+      .el-input {
+        margin-top: 8px;
+        margin-left: 0;
+        border-radius: 50px;
+      }
     }
   }
+}
+.edit_box button > span {
+  pointer-events: none !important;
 }
 
 .EditTagsButton {
@@ -801,5 +834,10 @@ export default {
 
 .createList {
   text-align: center;
+}
+@media (max-width: 1400px) {
+  .main-page-background-img {
+    width: 94%;
+  }
 }
 </style>

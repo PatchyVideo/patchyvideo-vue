@@ -187,6 +187,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    panel: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -342,19 +346,35 @@ export default {
         return;
       }
       if (this.$route.path === "/listdetail") {
-        this.axios({
-          method: "post",
-          url: "be/list/getcommontags.do",
-          data: { pid: this.msg, lang: localStorage.getItem("lang") },
-        })
-          .then((res) => {
-            this.tags = res.data.data; // 原始数据
-            this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); // 深拷贝，推荐 Tag 数据用
-            this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); // 得到原始 Tag 数据
-            this.getTagCategories(this.tags); // 范围转换后展示原始数据
-            this.getRecTags(this.tags); // 获取推荐 TAG
+        if (this.panel === 1) {
+          this.axios({
+            method: "post",
+            url: "be/lists/get_playlist.do",
+            data: { pid: this.msg, lang: localStorage.getItem("lang") },
           })
-          .catch(() => {});
+            .then((res) => {
+              this.tags = res.data.data.tags[1]; // 原始数据
+              this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); // 深拷贝，推荐 Tag 数据用
+              this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); // 得到原始 Tag 数据
+              this.getTagCategories(this.tags); // 范围转换后展示原始数据
+              this.getRecTags(this.tags); // 获取推荐 TAG
+            })
+            .catch(() => {});
+        } else {
+          this.axios({
+            method: "post",
+            url: "be/list/getcommontags.do",
+            data: { pid: this.msg, lang: localStorage.getItem("lang") },
+          })
+            .then((res) => {
+              this.tags = res.data.data; // 原始数据
+              this.tagsForRec = JSON.parse(JSON.stringify(this.tags)); // 深拷贝，推荐 Tag 数据用
+              this.tagsOrigin = JSON.parse(JSON.stringify(this.tags)); // 得到原始 Tag 数据
+              this.getTagCategories(this.tags); // 范围转换后展示原始数据
+              this.getRecTags(this.tags); // 获取推荐 TAG
+            })
+            .catch(() => {});
+        }
       }
       if (this.$route.path === "/video" || this.$route.path === "/postvideo") {
         this.axios({
@@ -573,39 +593,51 @@ export default {
       // 第一轮 Event Loop 结束 开始第二轮执行 setTimeout
     },
     saveTag() {
-      if (/*this.msg===""*/ this.$route.path === "/postvideo") {
-        // 如果没有 pid,则处在提交视频界面，返回给父组件 tags
-        this.$emit("get-edit-tags-data", this.tags);
-        // this.closeTagPanel();
-      }
-      // 如果有 pid 按照正常路线走
-      // 提交视频的标签
-      else if (this.$route.path === "/video") {
+      if (this.panel === 1) {
         this.axios({
           method: "post",
-          url: "be/videos/edittags.do",
-          data: { video_id: this.msg, tags: this.tags },
-        }).then(() => {
-          this.open5();
-          this.closeTagPanel(true);
-        });
-      }
-      // 提交视频列表的标签
-      else {
-        this.axios({
-          method: "post",
-          url: "be/list/setcommontags.do",
+          url: "be/list/set_tags.do",
           data: { pid: this.msg, tags: this.tags },
         }).then(() => {
           this.open5();
           this.closeTagPanel(true);
         });
+      } else {
+        if (/*this.msg===""*/ this.$route.path === "/postvideo") {
+          // 如果没有 pid,则处在提交视频界面，返回给父组件 tags
+          this.$emit("get-edit-tags-data", this.tags);
+          // this.closeTagPanel();
+        }
+        // 如果有 pid 按照正常路线走
+        // 提交视频的标签
+        else if (this.$route.path === "/video") {
+          this.axios({
+            method: "post",
+            url: "be/videos/edittags.do",
+            data: { video_id: this.msg, tags: this.tags },
+          }).then(() => {
+            this.open5();
+            this.closeTagPanel(true);
+          });
+        }
+        // 提交视频列表的标签
+        else {
+          this.axios({
+            method: "post",
+            url: "be/list/setcommontags.do",
+            data: { pid: this.msg, tags: this.tags },
+          }).then(() => {
+            this.open5();
+            this.closeTagPanel(true);
+          });
+        }
       }
     },
     closeTagPanel(b) {
       if (b === true) {
         this.$emit("update:visible", false);
       }
+      this.$parent.getVideoList();
     },
     infoTipEvent(event) {
       // this.isInfoTipClick = true;
