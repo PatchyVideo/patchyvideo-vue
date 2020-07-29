@@ -477,7 +477,7 @@ export default {
       return url;
     },
     // URL 验证成功的弹出框
-    openSuccessfully() {
+    openSuccess() {
       this.$message({
         message: this.$t("url_passed"),
         type: "success",

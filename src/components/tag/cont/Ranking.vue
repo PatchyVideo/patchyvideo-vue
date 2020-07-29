@@ -38,10 +38,10 @@ export default {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
       options: [
-        { value: 24 * 7 * 52 * 10, label: "至今为止" },
-        { value: 24 * 30, label: "过去一个月" },
-        { value: 24 * 7, label: "过去一周" },
-        { value: 24 * 1, label: "过去一天" },
+        { value: 24 * 7 * 52 * 10, label: this.$t("to_date") },
+        { value: 24 * 30, label: this.$t("last_month") },
+        { value: 24 * 7, label: this.$t("last_week") },
+        { value: 24 * 1, label: this.$t("last_day") },
       ],
       couponSelected: "",
       loading: true,

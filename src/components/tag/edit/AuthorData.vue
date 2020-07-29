@@ -107,8 +107,8 @@
               :file-list="avatarKey"
               :data="avatarData"
             >
-              <el-button size type="primary" style="margin-right: 10px;">
-                {{ $t("change_method") }}
+              <el-button type="primary" style="margin-right: 10px;">
+                {{ $t("upload_picture") }}
               </el-button>
               <div>{{ $t("file_too_large") }}</div>
             </el-upload>

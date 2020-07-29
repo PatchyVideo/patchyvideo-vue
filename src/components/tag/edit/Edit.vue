@@ -309,9 +309,6 @@ export default {
     handleClose(done) {
       done();
     },
-    open1() {
-      this.$message("这是一条消息提示");
-    },
     open2() {
       this.$message({
         message: this.$t("tag_add_succeed"),
