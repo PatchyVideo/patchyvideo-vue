@@ -10,7 +10,7 @@
     <topnavbar />
 
     <!-- EditTags 组件-->
-    <EditTags v-if="showTagPanel" ref="editTag" :msg="temporaryValForVLP" :visible.sync="showTagPanel"></EditTags>
+    <EditTags v-if="showTagPanel" ref="editTag" :panel="panelType" :msg="temporaryValForVLP" :visible.sync="showTagPanel"></EditTags>
 
     <!-- 编辑视频列表时的对话框 -->
     <el-dialog :title="$t('edit_list_info_dialog.title')" :visible.sync="openListEdit" width="40%" :close-on-click-modal="false">
@@ -79,7 +79,10 @@
 
             <el-button type="info" @click="openListEdit = true">{{ $t("btn_group.edit_list_info") }}</el-button>
 
-            <el-button type="primary" class="EditTagsButton" :disabled="showTagPanel" @click="openEditTags">{{ $t("btn_group.edit_common_tags") }}</el-button>
+            <el-button type="primary" class="EditTagsButton" :disabled="showTagPanel" @click="openEditTags(1)">
+              编辑列表标签
+            </el-button>
+            <el-button type="primary" class="EditTagsButton" :disabled="showTagPanel" @click="openEditTags()">{{ $t("btn_group.edit_common_tags") }}</el-button>
 
             <el-button type="warning" @click="inverse()">{{ $t("btn_group.reverse_list") }}</el-button>
             <el-button type="danger" @click="dialogVisible = true">{{ $t("btn_group.delete") }}</el-button>
@@ -211,6 +214,17 @@ export default {
           item: {
             cover: "",
           },
+          tags_category: {
+            Author: [],
+            Character: [],
+            Copyright: [],
+            General: [],
+            Language: [],
+            Meta: [],
+            Soundtrack: [],
+          },
+          tags_translated: [],
+          tags_tags: [],
         },
       },
       // 判断是否登录
@@ -243,6 +257,8 @@ export default {
       openListEdit: false,
       // 打开列表标签编辑页面
       showTagPanel: false,
+      // 判断是列表标签还是共有标签
+      panelType: 1,
       // 打开删除列表的确认界面
       dialogVisible: false,
       // 编辑列表详情的校验数据
@@ -450,7 +466,8 @@ export default {
       });
     },
     // 打开 Tag 编辑页面
-    openEditTags: function() {
+    openEditTags: function(n) {
+      this.panelType = n;
       this.temporaryValForVLP = this.videolistPid;
       this.showTagPanel = true;
       // this.$refs.editTag.getCommonTags();
@@ -633,6 +650,91 @@ export default {
   margin: 10px;
   background-color: rgba(255, 255, 255, 0);
 }
+.d_t {
+  width: 100%;
+  margin-bottom: 0px;
+  padding-bottom: 5px;
+  overflow: auto;
+  zoom: 1;
+
+  .leftcon {
+    float: left;
+    padding: 10px 2% 0;
+  }
+  .rightcon {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    float: left;
+    vertical-align: top;
+    min-width: 750px;
+    max-width: 790px;
+    min-height: 220px;
+    .tagbox {
+      flex-wrap: wrap;
+      position: relative;
+      left: -4px;
+      text-align: left;
+      .el-tag {
+        float: left;
+        border-radius: 50px;
+        margin-right: 15px;
+        margin-top: 8px;
+      }
+      .el-tag--author {
+        border-color: #aa0000;
+        color: #aa0000;
+      }
+      .el-tag--character {
+        border-color: #00aa00;
+        color: #00aa00;
+      }
+      .el-tag--copyright {
+        border-color: #aa00aa;
+        color: #aa00aa;
+      }
+      .el-tag--general {
+        border-color: #0073ff;
+        color: #0073ff;
+      }
+      .el-tag--language {
+        border-color: #585455;
+        color: #585455;
+      }
+      .el-tag--meta {
+        border-color: #ff8800;
+        color: #ff8800;
+      }
+      .el-tag--soundtrak {
+        border-color: #ff7792;
+        color: #ff7792;
+      }
+      .button-new-tag {
+        margin-left: 10px;
+        height: 32px;
+        line-height: 30px;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-top: 8px;
+        margin-left: 0;
+        border-radius: 50px;
+      }
+      .input-new-tag {
+        width: 90px;
+        margin-left: 10px;
+        vertical-align: bottom;
+      }
+      .el-input {
+        margin-top: 8px;
+        margin-left: 0;
+        border-radius: 50px;
+      }
+    }
+  }
+}
+.edit_box button > span {
+  pointer-events: none !important;
+}
 
 .EditTagsButton {
   /* width: 70%; */
@@ -706,5 +808,10 @@ export default {
 
 .createList {
   text-align: center;
+}
+@media (max-width: 1400px) {
+  .main-page-background-img {
+    width: 94%;
+  }
 }
 </style>
