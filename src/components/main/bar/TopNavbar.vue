@@ -33,12 +33,15 @@
       <el-menu-item>
         <router-link v-t="'navbar.playlist'" to="/lists"></router-link>
       </el-menu-item>
-      <el-submenu index="video">
+      <!-- <el-submenu index="video">
         <template slot="title">{{ $t("navbar.video") }}</template>
         <el-menu-item>
           <router-link v-t="'navbar.postvideo'" to="/postvideo"></router-link>
         </el-menu-item>
-      </el-submenu>
+      </el-submenu> -->
+      <el-menu-item>
+        <router-link v-t="'navbar.postvideo'" to="/postvideo"></router-link>
+      </el-menu-item>
       <el-submenu index="tag">
         <template slot="title">{{ $t("navbar.tag") }}</template>
         <el-menu-item>
