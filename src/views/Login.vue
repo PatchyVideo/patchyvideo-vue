@@ -232,18 +232,18 @@ export default {
       if (!this.session) {
         try {
           const result = await this.axios({
-          method: "post",
-          url: "be/auth/get_session.do",
-          data: {
-            type: "LOGIN",
-          },
+            method: "post",
+            url: "be/auth/get_session.do",
+            data: {
+              type: "LOGIN",
+            },
           });
-            this.session = result.data.data;
+          this.session = result.data.data;
         } catch (e) {
-            this.loading = false;
-            this.open3();
-            this.status = this.$t("net_err");
-      }
+          this.loading = false;
+          this.open3();
+          this.status = this.$t("net_err");
+        }
       }
     },
     setUser(username, avatar) {

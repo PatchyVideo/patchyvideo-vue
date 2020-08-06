@@ -112,4 +112,16 @@ function copyToClipboardText(txt) {
   document.body.removeChild(el);
   return res;
 }
-export { copyToClipboard, copyToClipboardText };
+
+function createAndDownloadFile(filename, content) {
+  var link = document.createElement("a");
+  link.download = filename;
+  link.style.display = "none";
+  var blob = new Blob([content]);
+  link.href = URL.createObjectURL(blob);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+export { copyToClipboard, copyToClipboardText, createAndDownloadFile };
