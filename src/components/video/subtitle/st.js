@@ -36,5 +36,5 @@ export const upload = async (vid, lang, format, content) => {
         content,
       },
     })
-  ).data?.data?.subid?.$oid;
+  ).data?.data?.subid;
 };
