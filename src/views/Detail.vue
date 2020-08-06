@@ -140,7 +140,7 @@
         </div>
 
         <!-- 字幕区 -->
-        <SubTitle :vid="myVideoData.video._id.$oid"></SubTitle>
+        <SubTitle v-if="myVideoData.video._id" :vid="myVideoData.video._id.$oid"></SubTitle>
 
         <!-- 副本列表 -->
         <div class="Copies_blibili">

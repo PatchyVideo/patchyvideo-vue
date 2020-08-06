@@ -1,21 +1,23 @@
 <template>
   <div>
-    <el-dialog
-      :title="stv ? `字幕文件：${stvdata.format.toUpperCase()} ${stvdata.lang}(${filesize(stvdata.size)})` : '字幕文件'"
+    <DownView
+      :vid="vid"
+      :format="stvdata.format"
+      :lang="stvdata.lang"
+      :size="stvdata.size"
+      :content="stvdata.content || ''"
+      :author="stvdata.meta ? stvdata.meta.created_by : ''"
       :visible.sync="stv"
-      width="70%"
-    >
-      <textarea v-model="stvdata.content" class="ctext" readonly rows="20" spellcheck="false"></textarea>
-      <span slot="footer">
-        <el-button @click="copy(stvdata.content)">复制</el-button>
-        <el-button @click="dl(stvdata)">下载</el-button>
-        <el-button @click="stv = false">关闭</el-button>
-      </span>
-    </el-dialog>
+    ></DownView>
+
+    <UpView :vid="vid" :visible.sync="stuv"></UpView>
 
     <div class="new_top">
-      <h2 style="text-align:center">字幕文件</h2>
-      <p>本视频有{{ stList.length }}个字幕</p>
+      <h2 style="text-align:center">字幕文件<span class="tr">测试版</span></h2>
+      <div class="flex-b">
+        <div>本视频有{{ stList.length }}个字幕</div>
+        <div class="up" @click="openup">上传字幕</div>
+      </div>
     </div>
     <div>
       <div v-for="st in stList" :key="st._id.$oid">
@@ -27,16 +29,18 @@
 </template>
 
 <script>
-import stapi from "./st.js";
+import DownView from "./DownView";
+import UpView from "./UpView";
+import { list as stapiList, get as stapiGet } from "./st.js";
 import filesize from "filesize";
-import { copyToClipboardText, createAndDownloadFile } from "@/static/js/generic";
 
 export default {
+  components: {
+    DownView,
+    UpView,
+  },
   props: {
-    vid: {
-      type: String,
-      required: true,
-    },
+    vid: { type: String, required: true },
   },
   data() {
     return {
@@ -44,37 +48,23 @@ export default {
       stv: false,
       stvdata: {},
       stvcache: {},
+      stuv: false,
     };
   },
   async created() {
-    this.stList = await stapi.list(this.vid);
+    this.stList = await stapiList(this.vid);
   },
   methods: {
-    filesize(size) {
-      return filesize(size);
-    },
+    filesize,
     async show(subid) {
       if (!this.stvcache[subid]) {
-        this.stvcache[subid] = await stapi.get(subid);
+        this.stvcache[subid] = await stapiGet(subid);
       }
       this.stvdata = this.stvcache[subid];
       this.stv = true;
     },
-    copy(c) {
-      if (copyToClipboardText(c)) {
-        this.$message({
-          message: "复制成功",
-          type: "success",
-        });
-      }
-    },
-    dl(d) {
-      if (createAndDownloadFile(`${this.vid}_${d.lang}_${d.meta.created_by || "求闻转译志"}.${d.format}`, d.content)) {
-        this.$message({
-          message: "下载已触发，请保存文件",
-          type: "info",
-        });
-      }
+    openup() {
+      this.stuv = true;
     },
   },
 };
@@ -82,6 +72,7 @@ export default {
 
 <style>
 .new_top {
+  position: relative;
   border-bottom: 3px solid #21c6ef;
 }
 .format {
@@ -94,12 +85,22 @@ export default {
 .size {
   color: gray;
 }
-.ctext {
-  width: 100%;
-  outline: none;
-}
 .gets {
   cursor: pointer;
   color: green;
+}
+.flex-b {
+  display: flex;
+  justify-content: space-between;
+}
+.up {
+  cursor: pointer;
+}
+.tr {
+  font-size: 12px;
+  vertical-align: top;
+  background: #d5eef8;
+  padding: 1px 2px;
+  border-radius: 0.25rem;
 }
 </style>
