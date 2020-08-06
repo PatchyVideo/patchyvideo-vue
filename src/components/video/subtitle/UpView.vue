@@ -17,8 +17,8 @@
         </div>
       </el-col>
       <el-col :span="16">
-        <h3 class="bbg">字幕内容</h3>
-        粘贴字幕文件内容或将文件拖入输入区
+        <h3 class="bbg">字幕内容(~{{ getSize() }})</h3>
+        粘贴字幕文件内容或将文件拖入输入区（上限8MB）
         <div class="etr">
           <textarea
             v-model="content"
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import filesize from "filesize";
 import { upload } from "./st.js";
 
 export default {
@@ -101,6 +102,9 @@ export default {
           type: "success",
         });
       }
+    },
+    getSize() {
+      return filesize(new Blob([this.content]).size);
     },
   },
 };
