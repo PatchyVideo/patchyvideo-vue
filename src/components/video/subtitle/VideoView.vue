@@ -14,11 +14,13 @@
 
     <EditView v-if="stev" :subid="stevid" :origin="stevdata" :visible.sync="stev"></EditView>
 
+    <OCRView :vid="vid" :visible.sync="ocrv"></OCRView>
+
     <div class="new_top">
       <h2 style="text-align:center">字幕文件<span class="tr">测试版</span></h2>
       <div class="flex-b">
         <div>本视频有{{ stList.length }}个字幕</div>
-        <div><span class="up" @click="openup">上传字幕</span> <span class="up" @click="fetch">刷新</span></div>
+        <div><span class="up" @click="openup">上传字幕</span> <span class="up" @click="fetch">刷新</span> <span class="up" @click="qs">字幕识别</span></div>
       </div>
     </div>
     <div v-loading="loading">
@@ -38,6 +40,7 @@
 import DownView from "./DownView";
 import UpView from "./UpView";
 import EditView from "./EditView";
+import OCRView from "./OCRView";
 import { list as stapiList, get as stapiGet } from "./st.js";
 import filesize from "filesize";
 
@@ -46,6 +49,7 @@ export default {
     DownView,
     UpView,
     EditView,
+    OCRView,
   },
   props: {
     vid: { type: String, required: true },
@@ -60,6 +64,7 @@ export default {
       stevdata: {},
       stevid: "",
       stev: false,
+      ocrv: false,
     };
   },
   async created() {
@@ -83,6 +88,9 @@ export default {
       this.loading = true;
       this.stList = await stapiList(this.vid);
       this.loading = false;
+    },
+    qs() {
+      this.ocrv = true;
     },
   },
 };

@@ -9,7 +9,7 @@ export const list = async (vid) => {
         vid,
       },
     })
-  ).data.data.items;
+  ).data?.data?.items;
 };
 
 export const get = async (subid) => {
@@ -21,7 +21,7 @@ export const get = async (subid) => {
         subid,
       },
     })
-  ).data.data.item;
+  ).data?.data?.item;
 };
 
 export const upload = async (vid, lang, format, content) => {

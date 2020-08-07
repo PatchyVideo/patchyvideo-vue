@@ -4,7 +4,7 @@
     <span slot="footer">
       <el-button @click="copy()">复制</el-button>
       <el-button @click="dl()">下载</el-button>
-      <el-button @click="$emit('update:stv', false)">关闭</el-button>
+      <el-button @click="stv = false">关闭</el-button>
     </span>
   </el-dialog>
 </template>
