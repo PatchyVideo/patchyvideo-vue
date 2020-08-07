@@ -12,8 +12,10 @@
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
+    "dplayer": "^1.26.0",
     "echarts": "^4.8.0",
     "element-ui": "^2.13.2",
+    "flv.js": "^1.5.0",
     "font-awesome": "^4.7.0",
     "highlight.js": "^10.1.1",
     "html-entities": "^1.3.1",
@@ -37,7 +39,7 @@
     "vuex": "^3.5.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^9.0.1",
+    "@commitlint/cli": "^9.1.2",
     "@vue/cli-plugin-babel": "^4.4.6",
     "@vue/cli-plugin-eslint": "^4.4.6",
     "@vue/cli-plugin-router": "^4.4.6",
@@ -51,7 +53,7 @@
     "eslint-plugin-vue": "^7.0.0-alpha.9",
     "less-loader": "^6.2.0",
     "lint-staged": "^10.2.11",
-    "lodash": "^4.17.16",
+    "lodash": "^4.17.19",
     "moment": "^2.27.0",
     "prettier": "^1.19.1",
     "vue-template-compiler": "^2.6.11"
