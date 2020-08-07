@@ -75,7 +75,7 @@ export const del = async (subid) => {
     (
       await axios({
         method: "post",
-        url: "/be/subtitles/update_subtitle_content.do",
+        url: "/be/subtitles/delete_subtitle.do",
         data: {
           subid,
         },
