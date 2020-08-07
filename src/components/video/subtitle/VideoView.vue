@@ -1,0 +1,132 @@
+<template>
+  <div>
+    <DownView
+      :vid="vid"
+      :format="stvdata.format"
+      :lang="stvdata.lang"
+      :size="stvdata.size"
+      :content="stvdata.content || ''"
+      :author="stvdata.meta ? stvdata.meta.created_by : ''"
+      :visible.sync="stv"
+    ></DownView>
+
+    <UpView :vid="vid" :visible.sync="stuv"></UpView>
+
+    <EditView v-if="stev" :subid="stevid" :origin="stevdata" :visible.sync="stev"></EditView>
+
+    <OCRView :vid="vid" :visible.sync="ocrv"></OCRView>
+
+    <div class="new_top">
+      <h2 style="text-align:center">字幕文件<span class="tr">测试版</span></h2>
+      <div class="flex-b">
+        <div>本视频有{{ stList.length }}个字幕</div>
+        <div><span class="up" @click="openup">上传字幕</span> <span class="up" @click="fetch">刷新</span> <span class="up" @click="qs">字幕识别</span></div>
+      </div>
+    </div>
+    <div v-loading="loading">
+      <div v-for="st in stList" :key="st._id.$oid">
+        <span class="format" v-text="st.format"></span>&nbsp;
+        <span v-text="st.lang"></span>
+        <span class="size">({{ filesize(st.size) }})</span>
+        &nbsp;by&nbsp;<span v-text="st.meta.created_by || '求闻转译志'"></span>&nbsp; <span v-if="st.autogen" title="生成器版本">({{ st.version }})</span>&nbsp;
+        <span class="gets" @click="show(st._id.$oid)">获取</span>&nbsp;
+        <span class="gets" @click="edit(st._id.$oid)">编辑</span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import DownView from "./DownView";
+import UpView from "./UpView";
+import EditView from "./EditView";
+import OCRView from "./OCRView";
+import { list as stapiList, get as stapiGet } from "./st.js";
+import filesize from "filesize";
+
+export default {
+  components: {
+    DownView,
+    UpView,
+    EditView,
+    OCRView,
+  },
+  props: {
+    vid: { type: String, required: true },
+  },
+  data() {
+    return {
+      loading: true,
+      stList: [],
+      stv: false,
+      stvdata: {},
+      stuv: false,
+      stevdata: {},
+      stevid: "",
+      stev: false,
+      ocrv: false,
+    };
+  },
+  async created() {
+    await this.fetch();
+  },
+  methods: {
+    filesize,
+    async show(subid) {
+      this.stvdata = await stapiGet(subid);
+      this.stv = true;
+    },
+    async edit(subid) {
+      this.stevdata = await stapiGet(subid);
+      this.stevid = subid;
+      this.stev = true;
+    },
+    openup() {
+      this.stuv = true;
+    },
+    async fetch() {
+      this.loading = true;
+      this.stList = await stapiList(this.vid);
+      this.loading = false;
+    },
+    qs() {
+      this.ocrv = true;
+    },
+  },
+};
+</script>
+
+<style>
+.new_top {
+  position: relative;
+  border-bottom: 3px solid #21c6ef;
+}
+.format {
+  text-transform: uppercase;
+  background-color: orange;
+  color: white;
+  padding: 2px;
+  border-radius: 0.25rem;
+}
+.size {
+  color: gray;
+}
+.gets {
+  cursor: pointer;
+  color: green;
+}
+.flex-b {
+  display: flex;
+  justify-content: space-between;
+}
+.up {
+  cursor: pointer;
+}
+.tr {
+  font-size: 12px;
+  vertical-align: top;
+  background: #d5eef8;
+  padding: 1px 2px;
+  border-radius: 0.25rem;
+}
+</style>

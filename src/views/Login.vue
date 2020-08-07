@@ -81,14 +81,12 @@
       </div>
 
       <div class="loginhr">
-        <div class="loginhrhint">{{ $t("third_party_login") }}</div>
+        <div v-t="'loginhr'" class="loginhrhint"></div>
         <div class="loginhrpad"></div>
       </div>
 
       <div class="bottom in">
-        <div class="login in">
-          <a href="/be/oauth?type=qq">{{ $t("login_qq") }}</a>
-        </div>
+        <div class="login in"><a v-t="'loginvia.qq'" href="/be/oauth?type=qq"></a></div>
       </div>
     </div>
   </div>
@@ -184,7 +182,7 @@ export default {
                   // 加载结束,加载动画消失
                   this.loading = false;
                   // 利用 cookie 储存登录状态
-                  this.setCookie(this.loginFormRef.login_name, result.data.data.image, 7);
+                  this.setUser(this.loginFormRef.login_name, result.data.data.image);
                   // 如果是从登录按钮跳转到本界面，回到上一个页面
                   if (this.$store.state.ifRouter == 0) {
                     this.$store.commit("changeifRouter", "2");
@@ -232,31 +230,27 @@ export default {
     async getSession() {
       // 如URL无session，则从后端获取
       if (!this.session) {
-        await this.axios({
-          method: "post",
-          url: "be/auth/get_session.do",
-          data: {
-            type: "LOGIN",
-          },
-        })
-          .then((result) => {
-            this.session = result.data.data;
-          })
-          .catch(() => {
-            this.loading = false;
-            this.open3();
-            this.status = this.$t("net_err");
+        try {
+          const result = await this.axios({
+            method: "post",
+            url: "be/auth/get_session.do",
+            data: {
+              type: "LOGIN",
+            },
           });
+          this.session = result.data.data;
+        } catch (e) {
+          this.loading = false;
+          this.open3();
+          this.status = this.$t("net_err");
+        }
       }
     },
-    // 设置 cookie
-    // 储存变量为 username, userAvatar
-    setCookie(username, userAvatar, days) {
-      let date = new Date(); // 获取时间
-      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
-      // 字符串拼接 cookie
-      window.document.cookie = "username" + ":" + username + ";path=/;expires=" + date.toUTCString();
-      window.document.cookie = "userAvatar" + "=" + userAvatar + ";path=/;expires=" + date.toUTCString();
+    setUser(username, avatar) {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
+      userInfo.username = username;
+      userInfo.avatar = avatar;
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
     },
   },
 };

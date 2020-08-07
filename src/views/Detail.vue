@@ -147,6 +147,9 @@
           <PagesOfVideo v-if="myVideoData.video.item.site == 'bilibili'" :aid="aid"></PagesOfVideo>
         </div>
 
+        <!-- 字幕区 -->
+        <SubTitle v-if="myVideoData.video._id" :vid="myVideoData.video._id.$oid"></SubTitle>
+
         <!-- 副本列表 -->
         <div class="Copies_blibili">
           <div class="new_top">
@@ -259,6 +262,7 @@ import Comments from "@/components/forum/Comments";
 import Score from "@/components/video/Score";
 import createNewList from "@/components/playlist/edit/Create";
 import PagesOfVideo from "@/components/video/PagesOfVideo";
+import SubTitle from "@/components/video/subtitle/VideoView";
 import { copyToClipboardText } from "@/static/js/generic";
 import { toGMT } from "@/static/js/toGMT";
 import DPlayer from "dplayer";
@@ -273,6 +277,7 @@ export default {
     Score,
     createNewList,
     PagesOfVideo,
+    SubTitle,
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");

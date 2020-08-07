@@ -203,7 +203,7 @@ export default {
     if (this.$store.state.ifTruelyLogin == 0) {
       this.checkUser();
     }
-    this.getCookie();
+    this.getUser();
     // 查看是否登录
     if (JSON.stringify(this.$store.state.username) != "null" && this.$store.state.username != "") {
       this.isLogin = true;
@@ -227,7 +227,7 @@ export default {
         url: "be/user/whoami",
         data: {},
       }).then((result) => {
-        if (result.data.data == "UNAUTHORISED_OPERATION" && this.getCookie()) {
+        if (result.data.data == "UNAUTHORISED_OPERATION" && this.getUser()) {
           this.axios({
             method: "post",
             url: "/be/logout.do",
@@ -240,9 +240,7 @@ export default {
             // 清除用户名
             this.$store.commit("clearUserName");
             // 清除本地数据
-            localStorage.setItem("username", "");
-            // 清除cookie
-            this.clearCookie();
+            localStorage.removeItem("userInfo");
             // 改变用户登录状态
             this.$store.commit("changeifTruelyLogin", "2");
           });
@@ -269,9 +267,7 @@ export default {
         // 清除用户名
         this.$store.commit("clearUserName");
         // 清除本地数据
-        localStorage.setItem("username", "");
-        // 清除 cookie
-        this.clearCookie();
+        localStorage.removeItem("userInfo");
         // 刷新界面
         location.reload();
         this.loading = false;
@@ -309,44 +305,15 @@ export default {
       this.$store.commit("getTopNavbarSearching", "");
       // this.reload();
     },
-    //清除 cookie
-    clearCookie: function() {
-      this.setCookie("", -1);
-      this.setCookie("session", -1);
-      this.setCookie("userAvatar", -1);
-    },
-    // 设置 cookie
-    // 储存变量为 username
-    setCookie(username, days) {
-      let date = new Date(); // 获取时间
-      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
-      // 字符串拼接 cookie
-      window.document.cookie = "username" + ":" + username + ";path=/;expires=" + date.toGMTString();
-      window.document.cookie = "userAvatar" + "=" + username + ";path=/;expires=" + date.toGMTString();
-    },
-    // 获取 cookie
-    getCookie: function() {
-      if (document.cookie.length > 0) {
-        let arr = document.cookie.split("; ");
-        for (let i = 0; i < arr.length; i++) {
-          let arr3 = arr[i].split("=");
-          // 判断查找相对应的值
-          if (arr3[0] == "userAvatar") {
-            this.$store.commit("getUserAvatar", arr3[1]);
-          }
-          let arr2 = arr[i].split(":");
-          // 判断查找相对应的值
-          if (arr2[0] == "username") {
-            if (arr2[1] != "") {
-              this.isLogin = true;
-              this.$store.commit("getUserName", arr2[1]);
-            }
-          }
-        }
+    getUser() {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
+      if (userInfo && userInfo.username) {
+        this.$store.commit("getUserAvatar", userInfo.avatar);
+        this.$store.commit("getUserName", userInfo.username);
         return true;
+      } else {
+        return false;
       }
-      this.$store.commit("getUserName", "");
-      return false;
     },
     // 获取未读通知数量
     getUnreadCount() {

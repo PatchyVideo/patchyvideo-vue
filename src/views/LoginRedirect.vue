@@ -24,7 +24,7 @@ export default {
         // 清除用户名
         this.$store.commit("clearUserName");
         // 清除本地数据
-        localStorage.setItem("username", "");
+        localStorage.removeItem("userInfo");
         // 清除 cookie
         this.clearCookie();
       });
@@ -40,7 +40,7 @@ export default {
         this.$store.commit("getUserAvatar", result.data.data.profile.image);
         this.$store.commit("changeifTruelyLogin", 1);
         // 利用 cookie 储存登录状态
-        this.setCookie(result.data.data.profile.username, result.data.data.profile.image, 7);
+        this.setUser(result.data.data.profile.username, result.data.data.profile.image);
         // login successful, redirect to home page
         this.$router.push({ path: "/home" });
       } else {
@@ -50,12 +50,11 @@ export default {
     });
   },
   methods: {
-    setCookie(username, userAvatar, days) {
-      let date = new Date(); // 获取时间
-      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days); // 保存的天数
-      // 字符串拼接 cookie
-      window.document.cookie = "username" + ":" + username + ";path=/;expires=" + date.toUTCString();
-      window.document.cookie = "userAvatar" + "=" + userAvatar + ";path=/;expires=" + date.toUTCString();
+    setUser(username, avatar) {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
+      userInfo.username = username;
+      userInfo.avatar = avatar;
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
     },
   },
 };

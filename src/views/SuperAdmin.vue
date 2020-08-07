@@ -34,6 +34,11 @@
       <el-tab-pane :label="$t('para_settings')" name="third" :lazy="true">
         <parasettings></parasettings>
       </el-tab-pane>
+
+      <!-- 字幕识别列队 -->
+      <el-tab-pane label="字幕识别列队" name="ocrlist" :lazy="true">
+        <OCRList></OCRList>
+      </el-tab-pane>
     </el-tabs>
     <Footer></Footer>
   </div>
@@ -45,8 +50,17 @@ import Footer from "@/components/main/bar/Footer";
 import usermanagemennt from "@/components/admin/UserManagement";
 import logview from "@/components/admin/LogView";
 import parasettings from "@/components/admin/ParaSettings";
+import OCRList from "@/components/admin/OCRList";
+
 export default {
-  components: { topnavbar, Footer, usermanagemennt, logview, parasettings },
+  components: {
+    topnavbar,
+    Footer,
+    usermanagemennt,
+    logview,
+    parasettings,
+    OCRList,
+  },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
     return {
