@@ -12,17 +12,23 @@
 
     <UpView :vid="vid" :visible.sync="stuv"></UpView>
 
+    <EditView v-if="stev" :subid="stevid" :origin="stevdata" :visible.sync="stev"></EditView>
+
     <div class="new_top">
       <h2 style="text-align:center">字幕文件<span class="tr">测试版</span></h2>
       <div class="flex-b">
         <div>本视频有{{ stList.length }}个字幕</div>
-        <div class="up" @click="openup">上传字幕</div>
+        <div><span class="up" @click="openup">上传字幕</span> <span class="up" @click="fetch">刷新</span></div>
       </div>
     </div>
-    <div>
+    <div v-loading="loading">
       <div v-for="st in stList" :key="st._id.$oid">
-        <span class="format" v-text="st.format"></span> <span v-text="st.lang"></span><span class="size">({{ filesize(st.size) }})</span> by
-        <span v-text="st.meta.created_by || '求闻转译志'"></span> <span class="gets" @click="show(st._id.$oid)">获取</span>
+        <span class="format" v-text="st.format"></span>&nbsp;
+        <span v-text="st.lang"></span>
+        <span class="size">({{ filesize(st.size) }})</span>
+        &nbsp;by&nbsp;<span v-text="st.meta.created_by || '求闻转译志'"></span>&nbsp; <span v-if="st.autogen" title="生成器版本">({{ st.version }})</span>&nbsp;
+        <span class="gets" @click="show(st._id.$oid)">获取</span>&nbsp;
+        <span class="gets" @click="edit(st._id.$oid)">编辑</span>
       </div>
     </div>
   </div>
@@ -31,6 +37,7 @@
 <script>
 import DownView from "./DownView";
 import UpView from "./UpView";
+import EditView from "./EditView";
 import { list as stapiList, get as stapiGet } from "./st.js";
 import filesize from "filesize";
 
@@ -38,33 +45,44 @@ export default {
   components: {
     DownView,
     UpView,
+    EditView,
   },
   props: {
     vid: { type: String, required: true },
   },
   data() {
     return {
+      loading: true,
       stList: [],
       stv: false,
       stvdata: {},
-      stvcache: {},
       stuv: false,
+      stevdata: {},
+      stevid: "",
+      stev: false,
     };
   },
   async created() {
-    this.stList = await stapiList(this.vid);
+    await this.fetch();
   },
   methods: {
     filesize,
     async show(subid) {
-      if (!this.stvcache[subid]) {
-        this.stvcache[subid] = await stapiGet(subid);
-      }
-      this.stvdata = this.stvcache[subid];
+      this.stvdata = await stapiGet(subid);
       this.stv = true;
+    },
+    async edit(subid) {
+      this.stevdata = await stapiGet(subid);
+      this.stevid = subid;
+      this.stev = true;
     },
     openup() {
       this.stuv = true;
+    },
+    async fetch() {
+      this.loading = true;
+      this.stList = await stapiList(this.vid);
+      this.loading = false;
     },
   },
 };
