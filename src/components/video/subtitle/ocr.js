@@ -25,3 +25,32 @@ export const req = async (vid) => {
     ).data?.status == "SUCCEED"
   );
 };
+
+export const list = async (order, page, page_size) => {
+  return (
+    await axios({
+      method: "post",
+      url: "/be/subtitles/admin/list_pending_ocr_requests.do",
+      data: {
+        order,
+        page,
+        page_size,
+      },
+    })
+  ).data?.data;
+};
+
+export const edit = async (vid, status) => {
+  return (
+    (
+      await axios({
+        method: "post",
+        url: "/be/subtitles/admin/set_request_status.do",
+        data: {
+          vid,
+          status,
+        },
+      })
+    ).data?.status == "SUCCEED"
+  );
+};
