@@ -924,6 +924,17 @@ export default {
               screenshot: true,
               video: video_obj,
             });
+          } else if (this.dplayer_stream_format == "mp4") {
+            // mp4
+            video_obj = {
+              type: "mp4",
+              url: stream_url,
+            };
+            this.dplayer_handle = new DPlayer({
+              container: document.getElementById("dplayer"),
+              screenshot: true,
+              video: video_obj,
+            });
           } else {
             alert("format " + this.dplayer_stream_format + " not supported");
           }
@@ -936,48 +947,76 @@ export default {
       this.loading = false;
     },
     async onSubtitleSelectionChanged(subid) {
-      this.loading = true;
-      console.log("translating...");
-      // process.versions = {
-      //   node: "114514"
-      // };
-      let sub_content = await this.$refs.subtitle.get_translated(subid, "zh-CN");
-      console.log("done translating");
-      this.loading = false;
-      if (this.dplayer_handle !== null && this.dplayer_stream_format == "flv") {
-        this.dplayer_handle.destroy();
-        let sub_obj = {
-          url: "data:text/vtt," + sub_content,
-          type: "webvtt",
-          fontSize: "25px",
-          bottom: "10%",
-          color: "#ffffff",
-        };
-        let stream_url = this.dplayer_stream_url;
-        let video_obj = {
-          type: "customFlv",
-          customType: {
-            customFlv: function(video) {
-              console.log("url=");
-              console.log(stream_url);
-              const flvPlayer = flvjs.createPlayer({
-                type: "flv",
-                url: stream_url,
-              });
-              flvPlayer.attachMediaElement(video);
-              flvPlayer.load();
-            },
-          },
-        };
-        this.dplayer_handle = new DPlayer({
-          container: document.getElementById("dplayer"),
-          screenshot: true,
-          video: video_obj,
-          subtitle: sub_obj,
-        });
-      } else {
-        alert("dplayer not created or unsupported format");
-      }
+      this.$refs.subtitle.select_language(async (lang) => {
+        console.log("selected " + lang);
+        this.loading = true;
+        console.log("translating...");
+        let sub_content = "";
+        if (lang == "none") {
+          sub_content = await this.$refs.subtitle.get_subtitle_content(subid);
+          sub_content = sub_content.content;
+        } else {
+          sub_content = await this.$refs.subtitle.get_translated(subid, lang);
+        }
+        console.log("done translating");
+        this.loading = false;
+        if (this.dplayer_handle !== null) {
+          if (this.dplayer_stream_format == "flv") {
+            this.dplayer_handle.destroy();
+            let sub_obj = {
+              url: "data:text/vtt," + sub_content,
+              type: "webvtt",
+              fontSize: "30px",
+              bottom: "5%",
+              color: "#ffffff",
+            };
+            let stream_url = this.dplayer_stream_url;
+            let video_obj = {
+              type: "customFlv",
+              customType: {
+                customFlv: function(video) {
+                  console.log("url=");
+                  console.log(stream_url);
+                  const flvPlayer = flvjs.createPlayer({
+                    type: "flv",
+                    url: stream_url,
+                  });
+                  flvPlayer.attachMediaElement(video);
+                  flvPlayer.load();
+                },
+              },
+            };
+            this.dplayer_handle = new DPlayer({
+              container: document.getElementById("dplayer"),
+              screenshot: true,
+              video: video_obj,
+              subtitle: sub_obj,
+            });
+          } else if (this.dplayer_stream_format == "mp4") {
+            this.dplayer_handle.destroy();
+            let sub_obj = {
+              url: "data:text/vtt," + sub_content,
+              type: "webvtt",
+              fontSize: "30px",
+              bottom: "5%",
+              color: "#ffffff",
+            };
+            let stream_url = this.dplayer_stream_url;
+            let video_obj = {
+              type: "mp4",
+              url: stream_url,
+            };
+            this.dplayer_handle = new DPlayer({
+              container: document.getElementById("dplayer"),
+              screenshot: true,
+              video: video_obj,
+              subtitle: sub_obj,
+            });
+          }
+        } else {
+          alert("dplayer not created or unsupported format");
+        }
+      });
     },
   },
 };

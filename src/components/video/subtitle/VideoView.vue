@@ -16,6 +16,8 @@
 
     <OCRView :vid="vid" :visible.sync="ocrv"></OCRView>
 
+    <SelectLanguageView ref="selectLanguageViewRef" :visible.sync="selectLangugaeVisible"></SelectLanguageView>
+
     <div class="new_top">
       <h2 style="text-align:center">字幕文件<span class="tr">测试版</span></h2>
       <div class="flex-b">
@@ -41,6 +43,7 @@ import DownView from "./DownView";
 import UpView from "./UpView";
 import EditView from "./EditView";
 import OCRView from "./OCRView";
+import SelectLanguageView from "./SelectLanguageView";
 import { list as stapiList, get as stapiGet, get_translated as stapiGetTranslated } from "./st.js";
 import filesize from "filesize";
 
@@ -50,6 +53,7 @@ export default {
     UpView,
     EditView,
     OCRView,
+    SelectLanguageView,
   },
   props: {
     vid: { type: String, required: true },
@@ -65,6 +69,7 @@ export default {
       stevid: "",
       stev: false,
       ocrv: false,
+      selectLangugaeVisible: false,
     };
   },
   async created() {
@@ -86,6 +91,11 @@ export default {
     },
     openup() {
       this.stuv = true;
+    },
+    select_language(callback) {
+      this.$refs.selectLanguageViewRef.callback = callback;
+      this.selectLangugaeVisible = true;
+      return this.$refs.selectLanguageViewRef.selected_language;
     },
     async get_subtitle_content(subid) {
       return await stapiGet(subid);

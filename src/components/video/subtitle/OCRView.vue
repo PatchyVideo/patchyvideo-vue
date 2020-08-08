@@ -1,5 +1,6 @@
 <template>
   <el-dialog title="字幕识别" :visible.sync="ovrv">
+    <div>注意：目前只支持Bilibili和YouTube</div>
     <div v-loading="loading">识别状态：{{ trans(status) }}({{ status }})</div>
     <span slot="footer">
       <el-button v-if="canReq(status)" @click="req">申请识别</el-button>
