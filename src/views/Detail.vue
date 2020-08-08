@@ -108,21 +108,31 @@
 
           <!-- 视频详细信息 -->
           <div class="re_video">
-            <el-tabs v-if="enable_video_play" id="embd_dplayer_switch" v-model="activeVideoPlayer" @tab-click="onPlayerSwitchTabActivate">
-              <!-- B站，A站，n站和油管显示内嵌视频播放 -->
-              <el-tab-pane label="普通播放器" name="embd">
-                <iframe
-                  v-if="iframeUrl !== ''"
-                  :src="iframeUrl"
-                  allowfullscreen="true"
-                  style="width: 948px; height: 763px; margin: 10px auto 30px; display: block;"
-                ></iframe>
-              </el-tab-pane>
-              <el-tab-pane v-if="isVideoSupportedByDplayer" label="高端播放器" name="dplayer">
-                <div v-if="dplayer_enabled" id="dplayer"></div>
-                <h1 v-else>加载中，请等待不超过10秒</h1>
-              </el-tab-pane>
-            </el-tabs>
+            <div v-if="isVideoSupportedByDplayer">
+              <el-tabs v-if="enable_video_play" id="embd_dplayer_switch" v-model="activeVideoPlayer" @tab-click="onPlayerSwitchTabActivate">
+                <!-- B站，A站，n站和油管显示内嵌视频播放 -->
+                <el-tab-pane label="普通播放器" name="embd">
+                  <iframe
+                    v-if="iframeUrl !== ''"
+                    :src="iframeUrl"
+                    allowfullscreen="true"
+                    style="width: 948px; height: 763px; margin: 10px auto 30px; display: block;"
+                  ></iframe>
+                </el-tab-pane>
+                <el-tab-pane v-if="isVideoSupportedByDplayer" label="高端播放器" name="dplayer">
+                  <div v-if="dplayer_enabled" id="dplayer"></div>
+                  <h1 v-else>Not supported</h1>
+                </el-tab-pane>
+              </el-tabs>
+            </div>
+            <div v-else>
+              <iframe
+                v-if="iframeUrl !== ''"
+                :src="iframeUrl"
+                allowfullscreen="true"
+                style="width: 948px; height: 763px; margin: 10px auto 30px; display: block;"
+              ></iframe>
+            </div>
             <!-- 如果是 ipfs 视频则播放视频 -->
             <video
               v-if="isIpfs"
@@ -862,10 +872,12 @@ export default {
     },
     isVideoSupportedByDplayer() {
       let video_url = this.myVideoData.video.item.url;
+      console.log(video_url);
       let regBili = /(https:\/\/|http:\/\/)www.bilibili.com\/video\/av(\S+)\?p=(\S+)/;
       if (regBili.exec(video_url) !== null) {
         return true;
       }
+      console.log("not supported");
       return false;
     },
     onPlayerSwitchTabActivate() {
