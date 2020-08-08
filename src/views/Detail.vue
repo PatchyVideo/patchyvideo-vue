@@ -6,6 +6,7 @@
 -->
 <template>
   <div>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     <topnavbar />
 
     <!-- 更改视频级别的弹出框 -->
