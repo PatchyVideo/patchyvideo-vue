@@ -148,7 +148,7 @@
         </div>
 
         <!-- 字幕区 -->
-        <SubTitle v-if="myVideoData.video._id" :vid="myVideoData.video._id.$oid"></SubTitle>
+        <SubTitle v-if="myVideoData.video._id" ref="subtitle" :vid="myVideoData.video._id.$oid" @selection-changed="onSubtitleSelectionChanged"></SubTitle>
 
         <!-- 副本列表 -->
         <div class="Copies_blibili">
@@ -379,6 +379,8 @@ export default {
       activeVideoPlayer: "embd",
       dplayer_handle: null,
       dplayer_enabled: false,
+      dplayer_stream_url: null,
+      dplayer_stream_format: null,
     };
   },
   computed: {
@@ -870,6 +872,7 @@ export default {
       // step 1: check if video site if supported and not already loaded
       if (!this.isVideoSupportedByDplayer() || this.dplayer_enabled) return;
       // step 2: if so, query video stream from backend
+      this.loading = true;
       this.axios({
         method: "post",
         url: "/be/helper/get_video_stream",
@@ -884,8 +887,10 @@ export default {
           let top_quality_stream = list_of_streams[0];
           let stream_format = top_quality_stream.format;
           let stream_url = top_quality_stream.src[0];
+          this.dplayer_stream_url = stream_url;
+          this.dplayer_stream_format = stream_format;
           let video_obj = null;
-          if (stream_format == "flv") {
+          if (this.dplayer_stream_format == "flv") {
             video_obj = {
               type: "customFlv",
               customType: {
@@ -899,18 +904,65 @@ export default {
                 },
               },
             };
+            this.dplayer_handle = new DPlayer({
+              container: document.getElementById("dplayer"),
+              screenshot: true,
+              video: video_obj,
+            });
+          } else {
+            alert("format " + this.dplayer_stream_format + " not supported");
           }
-          this.dplayer_handle = new DPlayer({
-            container: document.getElementById("dplayer"),
-            screenshot: true,
-            video: video_obj,
-          });
         } else {
           this.open4(this.$t("addTo.fail"));
           this.addToList = false;
         }
       });
       this.dplayer_enabled = true;
+      this.loading = false;
+    },
+    async onSubtitleSelectionChanged(subid) {
+      this.loading = true;
+      console.log("translating...");
+      // process.versions = {
+      //   node: "114514"
+      // };
+      let sub_content = await this.$refs.subtitle.get_translated(subid, "zh-CN");
+      console.log("done translating");
+      this.loading = false;
+      if (this.dplayer_handle !== null && this.dplayer_stream_format == "flv") {
+        this.dplayer_handle.destroy();
+        let sub_obj = {
+          url: "data:text/vtt," + sub_content,
+          type: "webvtt",
+          fontSize: "25px",
+          bottom: "10%",
+          color: "#000000",
+        };
+        let stream_url = this.dplayer_stream_url;
+        let video_obj = {
+          type: "customFlv",
+          customType: {
+            customFlv: function(video) {
+              console.log("url=");
+              console.log(stream_url);
+              const flvPlayer = flvjs.createPlayer({
+                type: "flv",
+                url: stream_url,
+              });
+              flvPlayer.attachMediaElement(video);
+              flvPlayer.load();
+            },
+          },
+        };
+        this.dplayer_handle = new DPlayer({
+          container: document.getElementById("dplayer"),
+          screenshot: true,
+          video: video_obj,
+          subtitle: sub_obj,
+        });
+      } else {
+        alert("dplayer not created or unsupported format");
+      }
     },
   },
 };

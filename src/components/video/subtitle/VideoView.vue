@@ -29,8 +29,8 @@
         <span v-text="st.lang"></span>
         <span class="size">({{ filesize(st.size) }})</span>
         &nbsp;by&nbsp;<span v-text="st.meta.created_by || '求闻转译志'"></span>&nbsp; <span v-if="st.autogen" title="生成器版本">({{ st.version }})</span>&nbsp;
-        <span class="gets" @click="show(st._id.$oid)">获取</span>&nbsp;
-        <span class="gets" @click="edit(st._id.$oid)">编辑</span>
+        <span class="gets" @click="show(st._id.$oid)">获取</span>&nbsp; <span class="gets" @click="edit(st._id.$oid)">编辑</span>&nbsp;
+        <span class="gets" @click="use(st._id.$oid)">使用</span>
       </div>
     </div>
   </div>
@@ -41,7 +41,7 @@ import DownView from "./DownView";
 import UpView from "./UpView";
 import EditView from "./EditView";
 import OCRView from "./OCRView";
-import { list as stapiList, get as stapiGet } from "./st.js";
+import { list as stapiList, get as stapiGet, get_translated as stapiGetTranslated } from "./st.js";
 import filesize from "filesize";
 
 export default {
@@ -81,8 +81,17 @@ export default {
       this.stevid = subid;
       this.stev = true;
     },
+    use(subid) {
+      this.$emit("selection-changed", subid);
+    },
     openup() {
       this.stuv = true;
+    },
+    async get_subtitle_content(subid) {
+      return await stapiGet(subid);
+    },
+    async get_translated(content, lang) {
+      return await stapiGetTranslated(content, lang);
     },
     async fetch() {
       this.loading = true;

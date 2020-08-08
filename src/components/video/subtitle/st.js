@@ -83,3 +83,16 @@ export const del = async (subid) => {
     ).data?.status == "SUCCEED"
   );
 };
+
+export const get_translated = async (subid, lang) => {
+  return (
+    await axios({
+      method: "post",
+      url: "/be/subtitles/get_single_translated.do",
+      data: {
+        subid,
+        lang,
+      },
+    })
+  ).data?.data;
+};
