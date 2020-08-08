@@ -6,7 +6,6 @@
 -->
 <template>
   <div>
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     <topnavbar />
 
     <!-- 更改视频级别的弹出框 -->
@@ -279,6 +278,9 @@ export default {
     createNewList,
     PagesOfVideo,
     SubTitle,
+  },
+  metaInfo: {
+    meta: [{ name: "Content-Security-Policy", content: "upgrade-insecure-requests" }],
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -887,7 +889,7 @@ export default {
           console.log(list_of_streams);
           let top_quality_stream = list_of_streams[0];
           let stream_format = top_quality_stream.format;
-          let stream_url = top_quality_stream.src[0];
+          let stream_url = top_quality_stream.src[0].replace(/^http:\/\//i, "https://");
           this.dplayer_stream_url = stream_url;
           this.dplayer_stream_format = stream_format;
           let video_obj = null;

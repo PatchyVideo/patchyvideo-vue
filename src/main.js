@@ -6,6 +6,8 @@ import Vue from "vue";
 
 /* App */
 import App from "./App.vue";
+import VueMeta from "vue-meta";
+Vue.use(VueMeta);
 
 /* Vue config */
 Vue.config.productionTip = false;
