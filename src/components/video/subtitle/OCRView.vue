@@ -60,7 +60,7 @@ export default {
       return sList[status] || "未知状态";
     },
     canReq(status) {
-      const sList = ["NoRecord", "RecordOutOfDate"];
+      const sList = ["NoRecord", "RecordOutOfDate", "RecordExists", "Error"];
       return sList.indexOf(status) > -1;
     },
     async req() {
