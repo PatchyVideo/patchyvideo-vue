@@ -897,10 +897,10 @@ export default {
       }).then((result) => {
         if (result.data.status == "SUCCEED") {
           // step 3: create dplayer_handle
-          let list_of_streams = result.data.data;
+          let list_of_streams = result.data.data.streams;
           console.log(list_of_streams);
           let top_quality_stream = list_of_streams[0];
-          let stream_format = top_quality_stream.format;
+          let stream_format = top_quality_stream.container;
           let stream_url = top_quality_stream.src[0].replace(/^http:\/\//i, "https://");
           this.dplayer_stream_url = stream_url;
           this.dplayer_stream_format = stream_format;
@@ -951,7 +951,7 @@ export default {
           type: "webvtt",
           fontSize: "25px",
           bottom: "10%",
-          color: "#000000",
+          color: "#ffffff",
         };
         let stream_url = this.dplayer_stream_url;
         let video_obj = {
