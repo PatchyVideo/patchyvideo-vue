@@ -58,45 +58,45 @@
       <li style="padding:0 15px"></li>
 
       <!-- 搜索框 -->
-      <el-menu-item>
-        <el-autocomplete
-          id="ipt"
-          ref="ipt"
-          v-model="iptVal"
-          :fetch-suggestions="querySearchAsync2"
-          :trigger-on-focus="false"
-          :placeholder="$t('search.prompt')"
-          @select="handleSelect2"
-          @keyup.enter.native="gotoHome"
-        >
-          <!-- 搜索条件 -->
-          <el-select slot="prepend" v-model="searchType">
-            <el-option :label="$t('search.tag_text')" value="tag"></el-option>
-            <el-option :label="$t('search.text')" value="text"></el-option>
-          </el-select>
-          <!-- 自动补全的模板 -->
-          <template slot-scope="{ item }">
-            <div class="adviceList">
-              <div
-                class="name"
-                :class="{
-                  Copyright: item.cat == 2,
-                  Language: item.cat == 5,
-                  Character: item.cat == 1,
-                  Author: item.cat == 3,
-                  General: item.cat == 0,
-                  Meta: item.cat == 4,
-                  Soundtrack: item.cat == 6,
-                }"
-                v-html="item.tag || ConvertLangRes(item.langs)"
-              ></div>
-              <div v-if="item.cnt != null" class="addr">{{ item.cnt }}</div>
-            </div>
-          </template>
-          <!-- 搜索按钮 -->
-          <el-button slot="append" icon="el-icon-search" @click="gotoHome"></el-button>
-        </el-autocomplete>
-      </el-menu-item>
+      <!-- <el-menu-item> -->
+      <el-autocomplete
+        id="ipt"
+        ref="ipt"
+        v-model="iptVal"
+        :fetch-suggestions="querySearchAsync2"
+        :trigger-on-focus="false"
+        :placeholder="$t('search.prompt')"
+        @select="handleSelect2"
+        @keyup.enter.native="gotoHome"
+      >
+        <!-- 搜索条件 -->
+        <el-select slot="prepend" v-model="searchType">
+          <el-option :label="$t('search.tag_text')" value="tag"></el-option>
+          <el-option :label="$t('search.text')" value="text"></el-option>
+        </el-select>
+        <!-- 自动补全的模板 -->
+        <template slot-scope="{ item }">
+          <div class="adviceList">
+            <div
+              class="name"
+              :class="{
+                Copyright: item.cat == 2,
+                Language: item.cat == 5,
+                Character: item.cat == 1,
+                Author: item.cat == 3,
+                General: item.cat == 0,
+                Meta: item.cat == 4,
+                Soundtrack: item.cat == 6,
+              }"
+              v-html="item.tag || ConvertLangRes(item.langs)"
+            ></div>
+            <div v-if="item.cnt != null" class="addr">{{ item.cnt }}</div>
+          </div>
+        </template>
+        <!-- 搜索按钮 -->
+        <el-button slot="append" icon="el-icon-search" @click="gotoHome"></el-button>
+      </el-autocomplete>
+      <!-- </el-menu-item> -->
 
       <li style="padding:0 15px"></li>
 
@@ -671,5 +671,8 @@ export default {
 }
 .Soundtrack {
   color: #ff7792;
+}
+.el-autocomplete {
+  line-height: 60px;
 }
 </style>
