@@ -10,7 +10,7 @@
     <topnavbar />
 
     <!-- EditTags 组件-->
-    <EditTags v-if="showTagPanel" ref="editTag" :msg="temporaryValForVLP" :visible.sync="showTagPanel"></EditTags>
+    <EditTags v-if="showTagPanel" ref="editTag" :panel="panelType" :msg="temporaryValForVLP" :visible.sync="showTagPanel"></EditTags>
 
     <!-- 编辑视频列表时的对话框 -->
     <el-dialog :title="$t('edit_list_info_dialog.title')" :visible.sync="openListEdit" width="40%" :close-on-click-modal="false">
@@ -64,9 +64,39 @@
           <div class="d_t">
             <!--<img src="@/static/img/5.png" style="float:left;margin-top:50px;" />
             <img src="@/static/img/1.png" style="float:right;margin-top:50px;" />-->
-            <h2>{{ videolistName }}</h2>
-            <img :src="'/images/covers/' + videolistDetail.playlist.item.cover" style="min-height: 200px;" />
-            <p>{{ videolistDesc }}</p>
+            <div class="leftcon">
+              <img :src="'/images/covers/' + videolistDetail.playlist.item.cover" style="min-height: 200px;" />
+            </div>
+            <div class="rightcon">
+              <div class="videotitbox">
+                <h2 style="text-align: left;">{{ videolistName }}</h2>
+                <p>{{ videolistDesc }}</p>
+              </div>
+              <div class="tagbox">
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Author']" :key="item" type="author" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Author"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Character']" :key="item" type="character" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Character"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Copyright']" :key="item" type="copyright" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Copyright"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['General']" :key="item" type="general" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["General"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Language']" :key="item" type="language" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Language"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Meta']" :key="item" type="meta" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Meta"][index] }}
+                </el-tag>
+                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Soundtrack']" :key="item" type="soundtrak" effect="plain">
+                  {{ videolistDetail.playlist.tags_category["Soundtrack"][index] }}
+                </el-tag>
+              </div>
+            </div>
+            <div class="taglist" style="display: inline-block;padding-right:35px;"></div>
           </div>
           <!-- 打开 Tag 编辑页面 -->
           <div v-if="editable" class="edit_box">
@@ -79,7 +109,10 @@
 
             <el-button type="info" @click="openListEdit = true">{{ $t("btn_group.edit_list_info") }}</el-button>
 
-            <el-button type="primary" class="EditTagsButton" :disabled="showTagPanel" @click="openEditTags">{{ $t("btn_group.edit_common_tags") }}</el-button>
+            <el-button type="primary" class="EditTagsButton" :disabled="showTagPanel" @click="openEditTags(1)">
+              编辑列表标签
+            </el-button>
+            <el-button type="primary" class="EditTagsButton" :disabled="showTagPanel" @click="openEditTags()">{{ $t("btn_group.edit_common_tags") }}</el-button>
 
             <el-button type="warning" @click="inverse()">{{ $t("btn_group.reverse_list") }}</el-button>
             <el-button type="danger" @click="dialogVisible = true">{{ $t("btn_group.delete") }}</el-button>
@@ -211,6 +244,17 @@ export default {
           item: {
             cover: "",
           },
+          tags_category: {
+            Author: [],
+            Character: [],
+            Copyright: [],
+            General: [],
+            Language: [],
+            Meta: [],
+            Soundtrack: [],
+          },
+          tags_translated: [],
+          tags_tags: [],
         },
       },
       // 判断是否登录
@@ -243,6 +287,8 @@ export default {
       openListEdit: false,
       // 打开列表标签编辑页面
       showTagPanel: false,
+      // 判断是列表标签还是共有标签
+      panelType: 1,
       // 打开删除列表的确认界面
       dialogVisible: false,
       // 编辑列表详情的校验数据
@@ -345,6 +391,7 @@ export default {
           document.title = this.videolistName;
           this.videolistDesc = this.videolistDetail.playlist.item.desc;
           this.videolistVideos = this.videolistDetail.videos;
+          // this.videolistTags = this.videolistDetail.playlist.tag_category;
           this.videolistPid = this.videolistDetail.playlist._id.$oid;
           this.maxcount = result.data.data.count;
           this.maxpage = result.data.data.page_count;
@@ -450,7 +497,8 @@ export default {
       });
     },
     // 打开 Tag 编辑页面
-    openEditTags: function() {
+    openEditTags: function(n) {
+      this.panelType = n;
       this.temporaryValForVLP = this.videolistPid;
       this.showTagPanel = true;
       // this.$refs.editTag.getCommonTags();
@@ -614,24 +662,104 @@ export default {
   width: 85%;
   margin-top: 20px;
 }
-.d_t {
-  width: 100%;
-  margin-bottom: 0px;
-  padding-bottom: 5px;
-}
 .d_t h2 {
   padding-top: 20px;
 }
 .d_t p {
   width: 60%;
-  text-align: center;
+  text-align: left;
   white-space: pre-line;
-  margin: 0px auto;
+  margin: 10px 0 0;
 }
 .d_t img {
   height: 200px;
   margin: 10px;
   background-color: rgba(255, 255, 255, 0);
+}
+.d_t {
+  width: 100%;
+  margin-bottom: 0px;
+  padding-bottom: 5px;
+  overflow: auto;
+  zoom: 1;
+
+  .leftcon {
+    float: left;
+    padding: 10px 2% 0;
+  }
+  .rightcon {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    float: left;
+    vertical-align: top;
+    min-width: 750px;
+    max-width: 790px;
+    min-height: 220px;
+    .tagbox {
+      flex-wrap: wrap;
+      position: relative;
+      left: -4px;
+      text-align: left;
+      .el-tag {
+        float: left;
+        border-radius: 50px;
+        margin-right: 15px;
+        margin-top: 8px;
+      }
+      .el-tag--author {
+        border-color: #aa0000;
+        color: #aa0000;
+      }
+      .el-tag--character {
+        border-color: #00aa00;
+        color: #00aa00;
+      }
+      .el-tag--copyright {
+        border-color: #aa00aa;
+        color: #aa00aa;
+      }
+      .el-tag--general {
+        border-color: #0073ff;
+        color: #0073ff;
+      }
+      .el-tag--language {
+        border-color: #585455;
+        color: #585455;
+      }
+      .el-tag--meta {
+        border-color: #ff8800;
+        color: #ff8800;
+      }
+      .el-tag--soundtrak {
+        border-color: #ff7792;
+        color: #ff7792;
+      }
+      .button-new-tag {
+        margin-left: 10px;
+        height: 32px;
+        line-height: 30px;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-top: 8px;
+        margin-left: 0;
+        border-radius: 50px;
+      }
+      .input-new-tag {
+        width: 90px;
+        margin-left: 10px;
+        vertical-align: bottom;
+      }
+      .el-input {
+        margin-top: 8px;
+        margin-left: 0;
+        border-radius: 50px;
+      }
+    }
+  }
+}
+.edit_box button > span {
+  pointer-events: none !important;
 }
 
 .EditTagsButton {
@@ -706,5 +834,10 @@ export default {
 
 .createList {
   text-align: center;
+}
+@media (max-width: 1400px) {
+  .main-page-background-img {
+    width: 94%;
+  }
 }
 </style>
