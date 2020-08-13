@@ -947,7 +947,7 @@ export default {
       this.loading = false;
     },
     async onSubtitleSelectionChanged(subid) {
-      this.$refs.subtitle.select_language(async (lang) => {
+      this.$refs.subtitle.select_language(async (lang, translator) => {
         console.log("selected " + lang);
         this.loading = true;
         console.log("translating...");
@@ -956,7 +956,7 @@ export default {
           sub_content = await this.$refs.subtitle.get_subtitle_content(subid);
           sub_content = sub_content.content;
         } else {
-          sub_content = await this.$refs.subtitle.get_translated(subid, lang);
+          sub_content = await this.$refs.subtitle.get_translated(subid, lang, translator);
         }
         console.log("done translating");
         this.loading = false;

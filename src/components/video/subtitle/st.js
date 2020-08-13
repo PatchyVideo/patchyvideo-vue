@@ -84,7 +84,7 @@ export const del = async (subid) => {
   );
 };
 
-export const get_translated = async (subid, lang) => {
+export const get_translated = async (subid, lang, translator) => {
   return (
     await axios({
       method: "post",
@@ -92,6 +92,7 @@ export const get_translated = async (subid, lang) => {
       data: {
         subid,
         lang,
+        translator,
       },
     })
   ).data?.data;

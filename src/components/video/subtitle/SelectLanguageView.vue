@@ -1,6 +1,9 @@
 <template>
   <el-dialog title="选择语言Select Language" :visible.sync="showSelectLanguageDialog" width="70%">
-    <el-select v-model="selected_language" style="width: 100%;">
+    <el-select v-model="selected_translator" style="width: 40%;">
+      <el-option v-for="item in availableTranslators" :key="item.label" :label="item.label" :value="item.value"></el-option>
+    </el-select>
+    <el-select v-model="selected_language" style="width: 60%;">
       <el-option v-for="item in availableLanguages" :key="item.label" :label="item.label" :value="item.value"></el-option>
     </el-select>
     <span slot="footer">
@@ -19,6 +22,11 @@ export default {
     return {
       showSelectLanguageDialog: this.visible,
       selected_language: "none",
+      selected_translator: "googletrans",
+      availableTranslators: [
+        { value: "googletrans", label: "Google Public" },
+        { value: "baidutrans", label: "Baidu Public" },
+      ],
       availableLanguages: [
         { value: "none", label: "<None>" },
         { value: "zh-CN", label: "简体中文" },
@@ -54,7 +62,7 @@ export default {
   methods: {
     use_translation() {
       this.showSelectLanguageDialog = false;
-      this.callback(this.selected_language);
+      this.callback(this.selected_language, this.selected_translator);
       this.$emit("language-selected", this.selected_language);
     },
   },

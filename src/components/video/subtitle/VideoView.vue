@@ -100,8 +100,8 @@ export default {
     async get_subtitle_content(subid) {
       return await stapiGet(subid);
     },
-    async get_translated(content, lang) {
-      return await stapiGetTranslated(content, lang);
+    async get_translated(content, lang, translator) {
+      return await stapiGetTranslated(content, lang, translator);
     },
     async fetch() {
       this.loading = true;
