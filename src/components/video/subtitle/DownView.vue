@@ -16,6 +16,7 @@ import { copyToClipboardText, createAndDownloadFile } from "@/static/js/generic"
 export default {
   props: {
     vid: { type: String, required: true },
+    title: { type: String, required: true },
     format: { type: String, default: "srt" },
     lang: { type: String, default: "UNKNOWN" },
     size: { type: Number, default: 0 },
@@ -47,7 +48,7 @@ export default {
       }
     },
     dl() {
-      if (createAndDownloadFile(`${this.vid}_${this.lang}_${this.author || "求闻转译志"}.${this.format}`, this.content)) {
+      if (createAndDownloadFile(`${this.title}_${this.vid}_${this.lang}_${this.author || "求闻转译志"}.${this.format}`, this.content)) {
         this.$message({
           message: "下载已触发，请保存文件",
           type: "info",

@@ -2,6 +2,7 @@
   <div>
     <DownView
       :vid="vid"
+      :title="title"
       :format="stvdata.format"
       :lang="stvdata.lang"
       :size="stvdata.size"
@@ -59,6 +60,7 @@ export default {
   },
   props: {
     vid: { type: String, required: true },
+    title: { type: String, required: true },
   },
   data() {
     return {

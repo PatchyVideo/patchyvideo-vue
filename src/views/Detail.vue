@@ -158,7 +158,13 @@
         </div>
 
         <!-- 字幕区 -->
-        <SubTitle v-if="myVideoData.video._id" ref="subtitle" :vid="myVideoData.video._id.$oid" @selection-changed="onSubtitleSelectionChanged"></SubTitle>
+        <SubTitle
+          v-if="myVideoData.video._id"
+          ref="subtitle"
+          :title="myVideoData.video.item.title"
+          :vid="myVideoData.video._id.$oid"
+          @selection-changed="onSubtitleSelectionChanged"
+        ></SubTitle>
 
         <!-- 副本列表 -->
         <div class="Copies_blibili">
