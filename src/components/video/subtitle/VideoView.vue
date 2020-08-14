@@ -31,7 +31,8 @@
         <span class="format" v-text="st.format"></span>&nbsp;
         <span v-text="st.lang"></span>
         <span class="size">({{ filesize(st.size) }})</span>
-        &nbsp;by&nbsp;<span v-if="st.meta.created_by" v-text="st.meta.created_by"></span
+        &nbsp;by&nbsp;<span v-if="st.meta.created_by"
+          ><a :href="'/#/users/' + st.user_obj._id.$oid">{{ st.user_obj.profile.username }}</a></span
         ><span v-else><a href="https://github.com/PatchyVideo/MMDOCR-HighPerformance">求闻转译志</a></span
         >&nbsp; <span v-if="st.autogen" title="生成器版本">({{ st.version }})</span>&nbsp; <span class="gets" @click="show(st._id.$oid)">获取</span>&nbsp;
         <span class="gets" @click="edit(st._id.$oid)">编辑</span>&nbsp;
@@ -110,6 +111,7 @@ export default {
     async fetch() {
       this.loading = true;
       this.stList = await stapiList(this.vid);
+      console.log(this.stList);
       this.loading = false;
     },
     qs() {

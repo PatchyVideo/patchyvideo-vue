@@ -72,7 +72,7 @@ export default {
         });
       } else {
         this.$message({
-          message: "申请提交失败，可能是队列繁忙或没有权限",
+          message: "申请提交失败，可能是该视频已经被最新版求闻转译志识别过，或者你没有登录",
           type: "error",
         });
       }
