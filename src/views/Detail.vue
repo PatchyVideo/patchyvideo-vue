@@ -458,6 +458,12 @@ export default {
     this.searchVideo();
   },
   mounted() {
+    let recaptchaScript = document.createElement("script");
+    recaptchaScript.setAttribute("src", "https://cdn.dashjs.org/v3.1.0/dash.all.min.js");
+    document.head.appendChild(recaptchaScript);
+    let recaptchaScript2 = document.createElement("script");
+    recaptchaScript2.setAttribute("src", "http://bilibili.github.io/flv.js/dist/flv.js");
+    document.head.appendChild(recaptchaScript2);
     this.buildUrlMatchers();
     // 防止B站侦测 ferrer 导致视频链接跳转出现 404
     $("head").append('<meta name="referrer" content="never">');
@@ -941,6 +947,17 @@ export default {
               screenshot: true,
               video: video_obj,
             });
+          } else if (this.dplayer_stream_format == "dash") {
+            // mp4
+            video_obj = {
+              type: "dash",
+              url: stream_url,
+            };
+            this.dplayer_handle = new DPlayer({
+              container: document.getElementById("dplayer"),
+              screenshot: true,
+              video: video_obj,
+            });
           } else {
             alert("format " + this.dplayer_stream_format + " not supported");
           }
@@ -1010,6 +1027,26 @@ export default {
             let stream_url = this.dplayer_stream_url;
             let video_obj = {
               type: "mp4",
+              url: stream_url,
+            };
+            this.dplayer_handle = new DPlayer({
+              container: document.getElementById("dplayer"),
+              screenshot: true,
+              video: video_obj,
+              subtitle: sub_obj,
+            });
+          } else if (this.dplayer_stream_format == "dash") {
+            this.dplayer_handle.destroy();
+            let sub_obj = {
+              url: "data:text/vtt," + sub_content,
+              type: "webvtt",
+              fontSize: "30px",
+              bottom: "5%",
+              color: "#ffffff",
+            };
+            let stream_url = this.dplayer_stream_url;
+            let video_obj = {
+              type: "dash",
               url: stream_url,
             };
             this.dplayer_handle = new DPlayer({
