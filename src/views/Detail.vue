@@ -909,6 +909,14 @@ export default {
       }).then((result) => {
         if (result.data.status == "SUCCEED") {
           // step 3: create dplayer_handle
+          let extra = {};
+          if ("extra" in result.data.data) {
+            extra = result.data.data.extra;
+          }
+          let danmaku = "";
+          if ("danmaku" in extra) {
+            danmaku = extra.danmaku;
+          }
           let list_of_streams = result.data.data.streams;
           console.log(list_of_streams);
           let top_quality_stream = list_of_streams[0];
@@ -916,6 +924,7 @@ export default {
           let stream_url = top_quality_stream.src[0].replace(/^http:\/\//i, "https://");
           this.dplayer_stream_url = stream_url;
           this.dplayer_stream_format = stream_format;
+          this.dplayer_danmaku_url = danmaku;
           let video_obj = null;
           if (this.dplayer_stream_format == "flv") {
             video_obj = {
@@ -957,6 +966,9 @@ export default {
               container: document.getElementById("dplayer"),
               screenshot: true,
               video: video_obj,
+              danmaku: {
+                addition: [danmaku],
+              },
             });
           } else {
             alert("format " + this.dplayer_stream_format + " not supported");
