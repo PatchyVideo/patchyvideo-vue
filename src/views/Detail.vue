@@ -968,6 +968,7 @@ export default {
               video: video_obj,
               danmaku: {
                 addition: [danmaku],
+                bottom: "15%",
               },
             });
           } else {
