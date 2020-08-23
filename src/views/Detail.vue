@@ -120,7 +120,7 @@
                   ></iframe>
                 </el-tab-pane>
                 <el-tab-pane v-if="isVideoSupportedByDplayer" label="高端播放器" name="dplayer">
-                  <div v-if="dplayer_enabled" id="dplayer"></div>
+                  <div v-if="dplayer_enabled" id="dplayer" style="width: 948px; height: 763px; margin: 10px auto 30px; display: block;"></div>
                   <h1 v-else>Not supported</h1>
                 </el-tab-pane>
               </el-tabs>
