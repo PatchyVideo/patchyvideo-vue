@@ -85,15 +85,22 @@ export const del = async (subid) => {
 };
 
 export const get_translated = async (subid, lang, translator) => {
-  return (
-    await axios({
-      method: "post",
-      url: "/be/subtitles/get_single_translated.do",
-      data: {
-        subid,
-        lang,
-        translator,
-      },
-    })
-  ).data?.data;
+  for (;;) {
+    try {
+      return (
+        await axios({
+          method: "post",
+          url: "/be/subtitles/get_single_translated.do",
+          data: {
+            subid,
+            lang,
+            translator,
+          },
+        })
+      ).data?.data;
+    } catch (e) {
+      console.log(e);
+      continue;
+    }
+  }
 };
