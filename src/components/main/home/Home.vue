@@ -26,8 +26,9 @@
           <p v-if="maxcount">{{ $t("page_count", { count: count2, maxcount: maxcount }) }}</p>
           <p v-else>{{ $t("no_result") }}</p>
           <el-checkbox v-model="checked" class="show_deleted">{{ $t("show_deleted") }}</el-checkbox>
-          <!-- <p class="blacklist_prompt">{{ $t("blacklist_prompt") }}</p> -->
-          <p class="blacklist_prompt">*己屏蔽含有敏感标签的视频，你可以点击<router-link to="/users/me?six">[这里]</router-link>修改黑名单设置</p>
+          <i18n path="blacklist_prompt" tag="label" for="koko">
+            <router-link to="/users/me?six">{{ $t("koko") }}</router-link>
+          </i18n>
           <el-select id="select-order" v-model="couponSelected">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
