@@ -31,6 +31,7 @@ export default {
     visible(n) {
       this.ovrv = n;
       if (n) this.fetch();
+      if (!n && this.eaf != 0) this.autoFetch();
     },
     ovrv(n) {
       if (n != this.visible) this.$emit("update:visible", n);
