@@ -30,6 +30,7 @@
         </el-form-item>
         <el-form-item>
           <el-checkbox v-model="playlist_metadata.private">{{ $t("edit_list_info_dialog.set_private_list") }}</el-checkbox>
+          <el-checkbox v-model="videolistDetail.playlist.item.privateEdit">{{ $t("edit_list_info_dialog.allow_others_edit_list_tags") }}</el-checkbox>
         </el-form-item>
         <el-form-item class="createList">
           <el-button type="primary" style="width: 80%;" :loading="loading" @click="onSubmit">{{ $t("edit_list_info_dialog.btn_ok") }}</el-button>
@@ -73,27 +74,85 @@
                 <p>{{ videolistDesc }}</p>
               </div>
               <div class="tagbox">
-                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Author']" :key="item" type="author" effect="plain">
+                <el-tag
+                  v-for="(item, index) in videolistDetail.playlist.tags_category['Author']"
+                  :key="item"
+                  type="author"
+                  effect="plain"
+                  @click="gotoSearch(item)"
+                  @click.middle.native="gotoSearch(item, true)"
+                >
                   {{ videolistDetail.playlist.tags_category["Author"][index] }}
                 </el-tag>
-                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Character']" :key="item" type="character" effect="plain">
+                <el-tag
+                  v-for="(item, index) in videolistDetail.playlist.tags_category['Character']"
+                  :key="item"
+                  type="character"
+                  effect="plain"
+                  @click="gotoSearch(item)"
+                  @click.middle.native="gotoSearch(item, true)"
+                >
                   {{ videolistDetail.playlist.tags_category["Character"][index] }}
                 </el-tag>
-                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Copyright']" :key="item" type="copyright" effect="plain">
+                <el-tag
+                  v-for="(item, index) in videolistDetail.playlist.tags_category['Copyright']"
+                  :key="item"
+                  type="copyright"
+                  effect="plain"
+                  @click="gotoSearch(item)"
+                  @click.middle.native="gotoSearch(item, true)"
+                >
                   {{ videolistDetail.playlist.tags_category["Copyright"][index] }}
                 </el-tag>
-                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['General']" :key="item" type="general" effect="plain">
+                <el-tag
+                  v-for="(item, index) in videolistDetail.playlist.tags_category['General']"
+                  :key="item"
+                  type="general"
+                  effect="plain"
+                  @click="gotoSearch(item)"
+                  @click.middle.native="gotoSearch(item, true)"
+                >
                   {{ videolistDetail.playlist.tags_category["General"][index] }}
                 </el-tag>
-                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Language']" :key="item" type="language" effect="plain">
+                <el-tag
+                  v-for="(item, index) in videolistDetail.playlist.tags_category['Language']"
+                  :key="item"
+                  type="language"
+                  effect="plain"
+                  @click="gotoSearch(item)"
+                  @click.middle.native="gotoSearch(item, true)"
+                >
                   {{ videolistDetail.playlist.tags_category["Language"][index] }}
                 </el-tag>
-                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Meta']" :key="item" type="meta" effect="plain">
+                <el-tag
+                  v-for="(item, index) in videolistDetail.playlist.tags_category['Meta']"
+                  :key="item"
+                  type="meta"
+                  effect="plain"
+                  @click="gotoSearch(item)"
+                  @click.middle.native="gotoSearch(item, true)"
+                >
                   {{ videolistDetail.playlist.tags_category["Meta"][index] }}
                 </el-tag>
-                <el-tag v-for="(item, index) in videolistDetail.playlist.tags_category['Soundtrack']" :key="item" type="soundtrak" effect="plain">
+                <el-tag
+                  v-for="(item, index) in videolistDetail.playlist.tags_category['Soundtrack']"
+                  :key="item"
+                  type="soundtrak"
+                  effect="plain"
+                  @click="gotoSearch(item)"
+                  @click.middle.native="gotoSearch(item, true)"
+                >
                   {{ videolistDetail.playlist.tags_category["Soundtrack"][index] }}
                 </el-tag>
+                <!-- 是"自己",能编辑 -->
+                <!-- <div v-if="!owner">
+                  <el-tag v-show="videolistDetail.playlist.item.privateEdit" type="character" effect="plain" @click="allowEdit"> -状态-允许其他人编辑 </el-tag>
+                  <el-tag v-show="!videolistDetail.playlist.item.privateEdit" type="author" effect="plain" @click="allowEdit"> -状态-不允许其他人编辑 </el-tag>
+                </div> -->
+                <!-- 是"其他人",无法编辑 -->
+                <!-- <div v-if="!owner && !privateEdit">
+                  <el-tag type="cantedit" effect="plain" @click="allowEdit"> 无法编辑列表标签(用户设置) </el-tag>
+                </div> -->
               </div>
             </div>
             <div class="taglist" style="display: inline-block;padding-right:35px;"></div>
@@ -109,8 +168,8 @@
 
             <el-button type="info" @click="openListEdit = true">{{ $t("btn_group.edit_list_info") }}</el-button>
 
-            <el-button type="primary" class="EditTagsButton" :disabled="showTagPanel" @click="openEditTags(1)">
-              编辑列表标签
+            <el-button type="primary" class="EditTagsButton" :disabled="!owner" @click="openEditTags(1)">
+              {{ $t("btn_group.edit_list_tags") }}
             </el-button>
             <el-button type="primary" class="EditTagsButton" :disabled="showTagPanel" @click="openEditTags()">{{ $t("btn_group.edit_common_tags") }}</el-button>
 
@@ -243,6 +302,8 @@ export default {
         playlist: {
           item: {
             cover: "",
+            //是否允许其他人编辑
+            privateEdit: true,
           },
           tags_category: {
             Author: [],
@@ -261,6 +322,8 @@ export default {
       isLogin: false,
       // 视频编辑功能是否可见的标志
       editable: false,
+      //区分"自己"和"其他人"
+      owner: false,
       // 视频列表的名称
       videolistName: "",
       // 视频列表的介绍
@@ -386,6 +449,8 @@ export default {
           this.videolistDetail = result.data.data;
           // 必须是登录且发来的数据是可编辑的才渲染编辑组件
           this.editable = this.videolistDetail.editable && this.isLogin;
+          this.owner = this.videolistDetail.owner;
+          this.privateEdit = this.videolistDetail.playlist.item.privateEdit;
           this.videolistName = this.videolistDetail.playlist.item.title;
           // 修改网站标题
           document.title = this.videolistName;
@@ -410,6 +475,7 @@ export default {
             this.playlist_metadata.title = result.data.data.playlist.item.title;
             this.playlist_metadata.desc = result.data.data.playlist.item.desc;
             this.playlist_metadata.private = result.data.data.playlist.item.private;
+            this.privateEdit = result.data.data.playlist.privateEdit;
           });
 
           // 加载结束，加载动画消失
@@ -462,6 +528,7 @@ export default {
           title: this.playlist_metadata.title,
           desc: this.playlist_metadata.desc,
           private: this.playlist_metadata.private,
+          privateEdit: this.videolistDetail.playlist.item.privateEdit,
         },
       }).then(() => {
         this.open(this.$t("commit_tip"));
@@ -512,6 +579,25 @@ export default {
         message: message,
         type: "success",
       });
+    },
+    // 点击标签显示标签的搜索结果
+    gotoSearch(key, _blank = false) {
+      if (key != "") {
+        if (_blank) {
+          let routerPath = this.$router.resolve({
+            path: "/home",
+            query: { keyword: key },
+          });
+          window.open(routerPath.href, "_blank");
+        } else {
+          this.$router.push({
+            path: "/home",
+            query: { keyword: key },
+          });
+        }
+      } else {
+        this.$router.push({ path: "/home" });
+      }
     },
   },
 };
@@ -704,6 +790,7 @@ export default {
         border-radius: 50px;
         margin-right: 15px;
         margin-top: 8px;
+        cursor: pointer;
       }
       .el-tag--author {
         border-color: #aa0000;
@@ -730,6 +817,16 @@ export default {
         color: #ff8800;
       }
       .el-tag--soundtrak {
+        border-color: #ff7792;
+        color: #ff7792;
+      }
+      .el-tag--cantedit {
+        border-color: #585455;
+        background: linear-gradient(45deg, #ddd 25%, #eee 0, #eee 50%, #ddd 0, #ddd 75%, #eee 0);
+        background-size: 10px 10px;
+        color: #585455;
+      }
+      .el-tag--notallowedit {
         border-color: #ff7792;
         color: #ff7792;
       }

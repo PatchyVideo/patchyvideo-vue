@@ -132,6 +132,9 @@ export default {
       // let str = this.$route.query.path.replace(/\//g,"");
       this.$refs.folder.navigateTo(this.$route.query.path);
     }
+    if (Object.keys(this.$route.query).toString() === "six") {
+      this.activeName = "six";
+    }
   },
   methods: {
     isUidNull() {
