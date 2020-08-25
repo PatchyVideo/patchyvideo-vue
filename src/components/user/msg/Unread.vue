@@ -33,7 +33,7 @@
             </div>
 
             <span class="commentDate">
-              {{ commentdate(item.time.$date) }}
+              {{ toGMT(item.time.$date) }}
             </span>
           </div>
         </div>
