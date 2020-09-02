@@ -30,7 +30,7 @@
         </el-form-item>
         <el-form-item>
           <el-checkbox v-model="playlist_metadata.private">{{ $t("edit_list_info_dialog.set_private_list") }}</el-checkbox>
-          <el-checkbox v-model="videolistDetail.playlist.item.privateEdit">{{ $t("edit_list_info_dialog.allow_others_edit_list_tags") }}</el-checkbox>
+          <el-checkbox v-model="allowOthersEdit">{{ $t("edit_list_info_dialog.allow_others_edit_list_tags") }}</el-checkbox>
         </el-form-item>
         <el-form-item class="createList">
           <el-button type="primary" style="width: 80%;" :loading="loading" @click="onSubmit">{{ $t("edit_list_info_dialog.btn_ok") }}</el-button>
@@ -379,6 +379,10 @@ export default {
     f1() {
       return this.$store.state.refreshCount;
     },
+    // 是否允许他人编辑
+    allowOthersEdit() {
+      return !this.videolistDetail.playlist.item.privateEdit || false;
+    },
   },
   watch: {
     page() {
@@ -450,7 +454,6 @@ export default {
           // 必须是登录且发来的数据是可编辑的才渲染编辑组件
           this.editable = this.videolistDetail.editable && this.isLogin;
           this.owner = this.videolistDetail.owner;
-          this.privateEdit = this.videolistDetail.playlist.item.privateEdit;
           this.videolistName = this.videolistDetail.playlist.item.title;
           // 修改网站标题
           document.title = this.videolistName;
@@ -475,7 +478,6 @@ export default {
             this.playlist_metadata.title = result.data.data.playlist.item.title;
             this.playlist_metadata.desc = result.data.data.playlist.item.desc;
             this.playlist_metadata.private = result.data.data.playlist.item.private;
-            this.privateEdit = result.data.data.playlist.privateEdit;
           });
 
           // 加载结束，加载动画消失
