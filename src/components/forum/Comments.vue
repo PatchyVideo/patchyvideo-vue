@@ -172,7 +172,7 @@
                       v-if="isLogin"
                       class="replycomment"
                       type="text"
-                      @click="openReplyBox(index, commentUser(replyc.meta.created_by.$oid).profile.username, reply._id.$oid)"
+                      @click="openReplyBox(index, commentUser(replyc.meta.created_by.$oid).profile.username, replyc._id.$oid)"
                       >{{ $t("reply") }}</el-button
                     >
                     <!-- 权限操作 -->

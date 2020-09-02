@@ -108,13 +108,31 @@
 
           <!-- 视频详细信息 -->
           <div class="re_video">
-            <!-- B站，A站，n站和油管显示内嵌视频播放 -->
-            <iframe
-              v-if="iframeUrl !== ''"
-              :src="iframeUrl"
-              allowfullscreen="true"
-              style="width: 948px; height: 763px; margin: 10px auto 30px; display: block;"
-            ></iframe>
+            <div v-if="isVideoSupportedByDplayer">
+              <el-tabs v-if="enable_video_play" id="embd_dplayer_switch" v-model="activeVideoPlayer" @tab-click="onPlayerSwitchTabActivate">
+                <!-- B站，A站，n站和油管显示内嵌视频播放 -->
+                <el-tab-pane label="普通播放器" name="embd">
+                  <iframe
+                    v-if="iframeUrl !== ''"
+                    :src="iframeUrl"
+                    allowfullscreen="true"
+                    style="width: 948px; height: 763px; margin: 10px auto 30px; display: block;"
+                  ></iframe>
+                </el-tab-pane>
+                <el-tab-pane v-if="isVideoSupportedByDplayer" label="高端播放器" name="dplayer">
+                  <div v-if="dplayer_enabled" id="dplayer" style="width: 948px; height: 763px; margin: 10px auto 30px; display: block;"></div>
+                  <h1 v-else>Not supported</h1>
+                </el-tab-pane>
+              </el-tabs>
+            </div>
+            <div v-else>
+              <iframe
+                v-if="iframeUrl !== ''"
+                :src="iframeUrl"
+                allowfullscreen="true"
+                style="width: 948px; height: 763px; margin: 10px auto 30px; display: block;"
+              ></iframe>
+            </div>
             <!-- 如果是 ipfs 视频则播放视频 -->
             <video
               v-if="isIpfs"
@@ -138,6 +156,15 @@
         <div>
           <PagesOfVideo v-if="myVideoData.video.item.site == 'bilibili'" :aid="aid"></PagesOfVideo>
         </div>
+
+        <!-- 字幕区 -->
+        <SubTitle
+          v-if="myVideoData.video._id"
+          ref="subtitle"
+          :title="myVideoData.video.item.title"
+          :vid="myVideoData.video._id.$oid"
+          @selection-changed="onSubtitleSelectionChanged"
+        ></SubTitle>
 
         <!-- 副本列表 -->
         <div class="Copies_blibili">
@@ -251,8 +278,11 @@ import Comments from "@/components/forum/Comments";
 import Score from "@/components/video/Score";
 import createNewList from "@/components/playlist/edit/Create";
 import PagesOfVideo from "@/components/video/PagesOfVideo";
+import SubTitle from "@/components/video/subtitle/VideoView";
 import { copyToClipboardText } from "@/static/js/generic";
 import { toGMT } from "@/static/js/toGMT";
+import DPlayer from "dplayer";
+import flvjs from "flv.js";
 
 export default {
   components: {
@@ -263,6 +293,10 @@ export default {
     Score,
     createNewList,
     PagesOfVideo,
+    SubTitle,
+  },
+  metaInfo: {
+    meta: [{ name: "Content-Security-Policy", content: "upgrade-insecure-requests" }],
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -360,6 +394,12 @@ export default {
       URL_EXPANDERS: {},
       // 内嵌播放的视频链接
       iframeUrl: "",
+      enable_video_play: true,
+      activeVideoPlayer: "embd",
+      dplayer_handle: null,
+      dplayer_enabled: false,
+      dplayer_stream_url: null,
+      dplayer_stream_format: null,
     };
   },
   computed: {
@@ -418,6 +458,12 @@ export default {
     this.searchVideo();
   },
   mounted() {
+    let recaptchaScript = document.createElement("script");
+    recaptchaScript.setAttribute("src", "https://cdn.dashjs.org/v3.1.0/dash.all.min.js");
+    document.head.appendChild(recaptchaScript);
+    let recaptchaScript2 = document.createElement("script");
+    recaptchaScript2.setAttribute("src", "http://bilibili.github.io/flv.js/dist/flv.js");
+    document.head.appendChild(recaptchaScript2);
     this.buildUrlMatchers();
     // 防止B站侦测 ferrer 导致视频链接跳转出现 404
     $("head").append('<meta name="referrer" content="never">');
@@ -834,6 +880,198 @@ export default {
           this.addToList = false;
         }
         this.loadingList = false;
+      });
+    },
+    isVideoSupportedByDplayer() {
+      let video_url = this.myVideoData.video.item.url;
+      console.log(video_url);
+      let regBili = /(https:\/\/|http:\/\/)www.bilibili.com\/video\/av(\S+)\?p=(\S+)/;
+      if (regBili.exec(video_url) !== null) {
+        return true;
+      }
+      console.log("not supported");
+      return false;
+    },
+    onPlayerSwitchTabActivate() {
+      if (this.activeVideoPlayer !== "dplayer") return;
+      // dplayer selected
+
+      // step 1: check if video site if supported and not already loaded
+      if (!this.isVideoSupportedByDplayer() || this.dplayer_enabled) return;
+      // step 2: if so, query video stream from backend
+      this.loading = true;
+      this.axios({
+        method: "post",
+        url: "/be/helper/get_video_stream",
+        data: {
+          url: this.myVideoData.video.item.url,
+        },
+      }).then((result) => {
+        if (result.data.status == "SUCCEED") {
+          // step 3: create dplayer_handle
+          let extra = {};
+          if ("extra" in result.data.data) {
+            extra = result.data.data.extra;
+          }
+          let danmaku = "";
+          if ("danmaku" in extra) {
+            danmaku = extra.danmaku;
+          }
+          let list_of_streams = result.data.data.streams;
+          console.log(list_of_streams);
+          let top_quality_stream = list_of_streams[0];
+          let stream_format = top_quality_stream.container;
+          let stream_url = top_quality_stream.src[0].replace(/^http:\/\//i, "https://");
+          this.dplayer_stream_url = stream_url;
+          this.dplayer_stream_format = stream_format;
+          this.dplayer_danmaku_url = danmaku;
+          let video_obj = null;
+          if (this.dplayer_stream_format == "flv") {
+            video_obj = {
+              type: "customFlv",
+              customType: {
+                customFlv: function(video) {
+                  const flvPlayer = flvjs.createPlayer({
+                    type: "flv",
+                    url: stream_url,
+                  });
+                  flvPlayer.attachMediaElement(video);
+                  flvPlayer.load();
+                },
+              },
+            };
+            this.dplayer_handle = new DPlayer({
+              container: document.getElementById("dplayer"),
+              screenshot: true,
+              video: video_obj,
+            });
+          } else if (this.dplayer_stream_format == "mp4") {
+            // mp4
+            video_obj = {
+              type: "mp4",
+              url: stream_url,
+            };
+            this.dplayer_handle = new DPlayer({
+              container: document.getElementById("dplayer"),
+              screenshot: true,
+              video: video_obj,
+            });
+          } else if (this.dplayer_stream_format == "dash") {
+            // mp4
+            video_obj = {
+              type: "dash",
+              url: stream_url,
+            };
+            this.dplayer_handle = new DPlayer({
+              container: document.getElementById("dplayer"),
+              screenshot: true,
+              video: video_obj,
+              danmaku: {
+                addition: [danmaku],
+                bottom: "15%",
+              },
+            });
+          } else {
+            alert("format " + this.dplayer_stream_format + " not supported");
+          }
+        } else {
+          this.open4(this.$t("addTo.fail"));
+          this.addToList = false;
+        }
+      });
+      this.dplayer_enabled = true;
+      this.loading = false;
+    },
+    async onSubtitleSelectionChanged(subid) {
+      this.$refs.subtitle.select_language(async (lang, translator) => {
+        console.log("selected " + lang);
+        this.loading = true;
+        console.log("translating...");
+        let sub_content = "";
+        if (lang == "none") {
+          sub_content = await this.$refs.subtitle.get_subtitle_content(subid);
+          sub_content = sub_content.content;
+        } else {
+          sub_content = await this.$refs.subtitle.get_translated(subid, lang, translator);
+        }
+        console.log("done translating");
+        this.loading = false;
+        if (this.dplayer_handle !== null) {
+          if (this.dplayer_stream_format == "flv") {
+            this.dplayer_handle.destroy();
+            let sub_obj = {
+              url: "data:text/vtt," + sub_content,
+              type: "webvtt",
+              fontSize: "30px",
+              bottom: "5%",
+              color: "#ffffff",
+            };
+            let stream_url = this.dplayer_stream_url;
+            let video_obj = {
+              type: "customFlv",
+              customType: {
+                customFlv: function(video) {
+                  console.log("url=");
+                  console.log(stream_url);
+                  const flvPlayer = flvjs.createPlayer({
+                    type: "flv",
+                    url: stream_url,
+                  });
+                  flvPlayer.attachMediaElement(video);
+                  flvPlayer.load();
+                },
+              },
+            };
+            this.dplayer_handle = new DPlayer({
+              container: document.getElementById("dplayer"),
+              screenshot: true,
+              video: video_obj,
+              subtitle: sub_obj,
+            });
+          } else if (this.dplayer_stream_format == "mp4") {
+            this.dplayer_handle.destroy();
+            let sub_obj = {
+              url: "data:text/vtt," + sub_content,
+              type: "webvtt",
+              fontSize: "30px",
+              bottom: "5%",
+              color: "#ffffff",
+            };
+            let stream_url = this.dplayer_stream_url;
+            let video_obj = {
+              type: "mp4",
+              url: stream_url,
+            };
+            this.dplayer_handle = new DPlayer({
+              container: document.getElementById("dplayer"),
+              screenshot: true,
+              video: video_obj,
+              subtitle: sub_obj,
+            });
+          } else if (this.dplayer_stream_format == "dash") {
+            this.dplayer_handle.destroy();
+            let sub_obj = {
+              url: "data:text/vtt," + sub_content,
+              type: "webvtt",
+              fontSize: "30px",
+              bottom: "5%",
+              color: "#ffffff",
+            };
+            let stream_url = this.dplayer_stream_url;
+            let video_obj = {
+              type: "dash",
+              url: stream_url,
+            };
+            this.dplayer_handle = new DPlayer({
+              container: document.getElementById("dplayer"),
+              screenshot: true,
+              video: video_obj,
+              subtitle: sub_obj,
+            });
+          }
+        } else {
+          alert("dplayer not created or unsupported format");
+        }
       });
     },
   },
