@@ -85,12 +85,12 @@
         v-model="comment"
         type="textarea"
         :autosize="{ minRows: 4 }"
-        :placeholder="$t('saySth')"
+        :placeholder="$t('post.placeholder')"
         maxlength="500"
         show-word-limit
         @keyup.enter.native="postcommentOnInput()"
       ></el-input>
-      <el-checkbox v-model="UsingEnter" v-t="'post.cfg.usingEnter'"></el-checkbox>
+      <el-checkbox v-model="UsingEnter">{{ $t("post.cfg.usingEnter") }}</el-checkbox>
       <i18n path="post.term" tag="span">
         <a v-t="'post.rules'" place="rules" href="https://patchyvideo.wiki/Comments" target="_blank" rel="noopener noreferrer" style="color: #409eff;"></a>
       </i18n>
