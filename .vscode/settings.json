@@ -12,5 +12,9 @@
     "deps",
     "release",
     "i18n"
+  ],
+  "i18n-ally.localesPaths": [
+    "i18n",
+    "scripts/i18n"
   ]
 }
