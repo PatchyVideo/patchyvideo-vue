@@ -168,13 +168,11 @@
 
             <el-button type="info" @click="openListEdit = true">{{ $t("btn_group.edit_list_info") }}</el-button>
 
-            <el-button type="primary" class="EditTagsButton" :disabled="!owner" @click="openEditTags(1)">
-              {{ $t("btn_group.edit_list_tags") }}
-            </el-button>
+            <el-button type="primary" class="EditTagsButton" @click="openEditTags(1)">{{ $t("btn_group.edit_list_tags") }}</el-button>
             <el-button type="primary" class="EditTagsButton" :disabled="showTagPanel" @click="openEditTags()">{{ $t("btn_group.edit_common_tags") }}</el-button>
 
             <el-button type="warning" @click="inverse()">{{ $t("btn_group.reverse_list") }}</el-button>
-            <el-button type="danger" @click="dialogVisible = true">{{ $t("btn_group.delete") }}</el-button>
+            <el-button :disabled="!owner" type="danger" @click="dialogVisible = true">{{ $t("btn_group.delete") }}</el-button>
           </div>
           <!-- 没有编辑权限的时候只提供加入收藏功能 -->
           <div v-else>
