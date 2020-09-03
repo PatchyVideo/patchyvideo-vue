@@ -30,7 +30,7 @@
         </el-form-item>
         <el-form-item>
           <el-checkbox v-model="playlist_metadata.private">{{ $t("edit_list_info_dialog.set_private_list") }}</el-checkbox>
-          <el-checkbox v-model="allowOthersEdit">{{ $t("edit_list_info_dialog.allow_others_edit") }}</el-checkbox>
+          <el-checkbox v-model="videolistDetail.playlist.item.privateEdit">{{ $t("edit_list_info_dialog.allow_others_edit_list_tags") }}</el-checkbox>
         </el-form-item>
         <el-form-item class="createList">
           <el-button type="primary" style="width: 80%;" :loading="loading" @click="onSubmit">{{ $t("edit_list_info_dialog.btn_ok") }}</el-button>
@@ -377,10 +377,6 @@ export default {
     f1() {
       return this.$store.state.refreshCount;
     },
-    // 是否允许他人编辑
-    allowOthersEdit() {
-      return !this.videolistDetail.playlist.item.privateEdit || false;
-    },
   },
   watch: {
     page() {
@@ -457,7 +453,8 @@ export default {
           document.title = this.videolistName;
           this.videolistDesc = this.videolistDetail.playlist.item.desc;
           this.videolistVideos = this.videolistDetail.videos;
-          // this.videolistTags = this.videolistDetail.playlist.tag_category;
+          // privateEdit和显示"允许他人编辑"的逻辑相反,故这里取反
+          this.videolistDetail.playlist.item.privateEdit = !this.videolistDetail.playlist.item.privateEdit;
           this.videolistPid = this.videolistDetail.playlist._id.$oid;
           this.maxcount = result.data.data.count;
           this.maxpage = result.data.data.page_count;
@@ -528,7 +525,7 @@ export default {
           title: this.playlist_metadata.title,
           desc: this.playlist_metadata.desc,
           private: this.playlist_metadata.private,
-          privateEdit: this.videolistDetail.playlist.item.privateEdit,
+          privateEdit: !this.videolistDetail.playlist.item.privateEdit,
         },
       }).then(() => {
         this.open(this.$t("commit_tip"));
