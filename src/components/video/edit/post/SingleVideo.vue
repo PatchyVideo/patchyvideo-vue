@@ -164,7 +164,11 @@ export default {
     // ×而且此时必定会同时传入视频的分类
     if (this.$route.query.url != undefined) {
       this.VideoURL = this.$route.query.url;
-      this.RepostType = this.$route.query.type;
+      if (this.$route.query.type == undefined) {
+        this.RepostType = this.$route.query.type;
+      } else {
+        this.RepostType = "unknown";
+      }
       this.onFetchVideo_Click();
     }
   },
