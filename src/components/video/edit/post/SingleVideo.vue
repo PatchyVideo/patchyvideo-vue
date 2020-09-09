@@ -180,7 +180,7 @@ export default {
       // B站的匹配规则
       this.PARSERS[
         "^(https:\\/\\/|http:\\/\\/)?(www\\.|m\\.)?(bilibili\\.com\\/video\\/([aA][vV][\\d]+|BV[a-zA-Z0-9]+)(\\?p=[\\d]+)?|b23\\.tv\\/([aA][vV][\\d]+|BV[a-zA-Z0-9]+)(\\?p=[\\d]+)?|b23.tv\\/[\\w\\d]+)"
-      ] = function(responseDOM) {
+      ] = function(responseDOM, responseURL) {
         let err = responseDOM.find("div.error-body");
         if (err.length > 0) {
           that.setVideoMetadata("", "", "");
@@ -198,14 +198,14 @@ export default {
             return i;
           })
           .slice(1, -4);
-        that.autotag(utags, title, desc);
+        that.autotag(utags, title, desc, responseURL);
         that.setVideoMetadata(thumbnailURL, title, desc);
       };
       this.EXPANDERS["^([aA][vV][\\d]+|BV[a-zA-Z0-9]+)"] = function(short_link) {
         return "https://www.bilibili.com/video/" + short_link;
       };
       // A站的匹配规则
-      this.PARSERS["^(https:\\/\\/|http:\\/\\/)?(www\\.|m\\.)?acfun\\.cn\\/v\\/[aA][cC][\\d]+"] = function(responseDOM) {
+      this.PARSERS["^(https:\\/\\/|http:\\/\\/)?(www\\.|m\\.)?acfun\\.cn\\/v\\/[aA][cC][\\d]+"] = function(responseDOM, responseURL) {
         let err = responseDOM.find("div.error-body");
         if (err.length > 0) {
           that.setVideoMetadata("", "", "");
@@ -227,14 +227,17 @@ export default {
             return i;
           })
           .slice(1, -4);
-        that.autotag(utags, title, desc);
+        that.autotag(utags, title, desc, responseURL);
         that.setVideoMetadata(thumbnailURL, title, desc);
       };
       this.EXPANDERS["^ac[\\d]+"] = function(short_link) {
         return "https://www.acfun.cn/v/" + short_link;
       };
       // N站的匹配规则
-      this.PARSERS["^(https:\\/\\/|http:\\/\\/)?(www\\.|sp\\.|m\\.)?(nicovideo\\.jp\\/watch\\/(s|n)m[\\d]+|nico\\.ms\\/(s|n)m[\\d]+)"] = function(responseDOM) {
+      this.PARSERS["^(https:\\/\\/|http:\\/\\/)?(www\\.|sp\\.|m\\.)?(nicovideo\\.jp\\/watch\\/(s|n)m[\\d]+|nico\\.ms\\/(s|n)m[\\d]+)"] = function(
+        responseDOM,
+        responseURL
+      ) {
         // TODO: handle error
         let thumbnailURL = responseDOM.filter('meta[itemprop="thumbnailUrl"]').attr("content");
         if (thumbnailURL == null) {
@@ -256,7 +259,7 @@ export default {
         for (let i = 0; i < utags.length; ++i) {
           utags_array.push($(utags[i]).attr("content"));
         }
-        that.autotag(utags_array, title, desc);
+        that.autotag(utags_array, title, desc, responseURL);
         that.setVideoMetadata(thumbnailURL, title, desc);
       };
       this.EXPANDERS["^(s|n)m[\\d]+"] = function(short_link) {
@@ -315,7 +318,7 @@ export default {
           .then((result) => {
             let data = result.data;
             that.setVideoMetadata(data.data.thumbnailURL, data.data.title, data.data.desc);
-            that.autotag(data.data.utags, data.data.title, data.data.desc);
+            that.autotag(data.data.utags, data.data.title, data.data.desc, responseURL);
           })
           .catch(() => {
             that.setVideoMetadata("", "", "");
@@ -335,7 +338,7 @@ export default {
           .then((result) => {
             let data = result.data;
             that.setVideoMetadata(data.data.thumbnailURL, data.data.title, data.data.desc);
-            that.autotag([], data.data.title, data.data.desc);
+            that.autotag([], data.data.title, data.data.desc, responseURL);
           })
           .catch(() => {
             that.setVideoMetadata("", "", "");
@@ -343,7 +346,7 @@ export default {
           });
       };
       // 站酷的匹配规则
-      this.PARSERS["https://www.zcool.com.cn/work/[0-9a-zA-Z=]*.html"] = function(responseDOM) {
+      this.PARSERS["https://www.zcool.com.cn/work/[0-9a-zA-Z=]*.html"] = function(responseDOM, responseURL) {
         let err = responseDOM.find("div.error-body");
         if (err.length > 0) {
           that.setVideoMetadata("", "", "");
@@ -360,11 +363,11 @@ export default {
         desc = desc.replace(/\s+/g, "");
         desc = desc.replace(/<br\s*?\/?>/g, "\n");
         that.setVideoMetadata("", title, desc);
-        that.autotag([], title, desc);
+        that.autotag([], title, desc, responseURL);
       };
     },
     // 自动标签功能
-    autotag(utags, title = "", desc = "") {
+    autotag(utags, title = "", desc = "", video_url = "") {
       // this.refreshMark = +new Date();
       this.axios({
         method: "post",
@@ -373,6 +376,7 @@ export default {
           utags: utags,
           title: title,
           desc: desc,
+          url: video_url,
           lang: localStorage.getItem("lang"),
         },
       })
