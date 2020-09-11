@@ -58,6 +58,11 @@ export default {
     return {
       //默认打开的标签页
       activeName: "first",
+      tag: [
+        { label: "singlevideo", value: "first" },
+        { label: "multivideos", value: "second" },
+        { label: "IPFSvideo", value: "third" },
+      ],
     };
   },
   created() {
@@ -65,6 +70,12 @@ export default {
     this.$store.commit("changeBgc", "postVideo");
     // 修改网站标题
     document.title = this.$t("title") + " - PatchyVideo";
+    // 根据参数调整tab
+    this.tag.map((item) => {
+      if (item.label == this.$route.query.tag) {
+        this.activeName = item.value;
+      }
+    });
   },
   mounted() {},
   methods: {},
