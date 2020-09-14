@@ -81,7 +81,7 @@
 
     <!-- Detail 页面的正文 -->
     <div v-loading="loading" class="w detail-page-background-img">
-      <left-navbar :msg="myVideoData.tag_by_category"></left-navbar>
+      <left-navbar :msg="myVideoData.tag_by_category" :sub-tags="userTagSubscriptions" @subscribe-changed="updateUserSubs"></left-navbar>
 
       <div class="content">
         <!-- 推荐视频栏开始  -->
@@ -282,6 +282,7 @@ import SubTitle from "@/components/video/subtitle/VideoView";
 import { copyToClipboardText } from "@/static/js/generic";
 import { toGMT } from "@/static/js/toGMT";
 import DPlayer from "dplayer";
+import axios from "axios";
 //import flvjs from "flv.js";
 
 export default {
@@ -394,6 +395,8 @@ export default {
       URL_EXPANDERS: {},
       // 内嵌播放的视频链接
       iframeUrl: "",
+      // 用户订阅的标签
+      userTagSubscriptions: [],
       enable_video_play: true,
       activeVideoPlayer: "embd",
       dplayer_handle: null,
@@ -551,6 +554,18 @@ export default {
       }
       return "";
     },
+    async updateUserSubs() {
+      // userTagSubscriptions
+      this.userTagSubscriptions = (
+        await axios({
+          method: "post",
+          url: "/be/subs/tags.do",
+          data: {
+            lang: localStorage.getItem("lang"),
+          },
+        })
+      ).data?.data.tags;
+    },
     // 查询视频详细信息
     async searchVideo() {
       this.loading = true;
@@ -564,12 +579,16 @@ export default {
             lang: localStorage.getItem("lang"),
           },
         })
-          .then((result) => {
+          .then(async (result) => {
             this.myVideoData = result.data.data;
             this.iframeUrl = this.regToIframe(this.myVideoData.video.item.url, this.myVideoData.video.item.cid || "");
             this.theVideoRank = this.$t("changeRank.ranks")[result.data.data.video.clearence];
             if (result.data.data.video.comment_thread) {
               this.sid = result.data.data.video.comment_thread.$oid;
+            }
+
+            if (this.isLogin) {
+              await this.updateUserSubs();
             }
 
             // 修改网站标题
