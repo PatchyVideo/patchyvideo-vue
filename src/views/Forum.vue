@@ -9,7 +9,9 @@
             <h2 v-t="'hint.title'"></h2>
             <i18n path="hint.desc" tag="p" style="white-space: pre-wrap;">
               <span place="version">2020/6/20 (0.4.0-beta.1)</span>
-              <a place="wikilink" href="https://patchyvideo.wiki/Forum" target="_blank" rel="noopener noreferrer">https://patchyvideo.wiki/Forum</a>
+              <a place="wikilink" :href="'https://patchyvideo.wiki' + $getWikiLang() + '/Forum'" target="_blank" rel="noopener noreferrer"
+                >https://patchyvideo.wiki/Forum</a
+              >
             </i18n>
           </div>
         </el-alert>

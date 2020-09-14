@@ -92,7 +92,14 @@
       ></el-input>
       <el-checkbox v-model="UsingEnter">{{ $t("post.cfg.usingEnter") }}</el-checkbox>
       <i18n path="post.term" tag="span">
-        <a v-t="'post.rules'" place="rules" href="https://patchyvideo.wiki/Comments" target="_blank" rel="noopener noreferrer" style="color: #409eff;"></a>
+        <a
+          v-t="'post.rules'"
+          place="rules"
+          :href="'https://patchyvideo.wiki/' + $getWikiLang() + '/Comments'"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="color: #409eff;"
+        ></a>
       </i18n>
       <el-button v-t="'post.submit'" type="primary" :loading="posting" @click="postcomment()"></el-button>
     </div>

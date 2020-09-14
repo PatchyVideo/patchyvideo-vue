@@ -51,7 +51,7 @@
       <el-button type="info" @click="addTag()">{{ $t("add_tag") }}</el-button>
       <!-- Wiki链接 -->
       <a
-        href="https://patchyvideo.wiki/Tags"
+        :href="'https://patchyvideo.wiki/' + $getWikiLang() + '/Tags'"
         target="_blank"
         rel="noopener noreferrer"
         style="color: #409eff; float: right; margin-right: 100px; margin-top: 15px;"
