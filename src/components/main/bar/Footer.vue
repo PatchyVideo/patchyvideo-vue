@@ -34,15 +34,15 @@
         <p>
           <strong>{{ $t("About") }}</strong>
         </p>
-        <a href="https://patchyvideo.wiki" target="_blank" rel="noopener noreferrer">{{ $t("Wiki") }}</a>
+        <a :href="'https://patchyvideo.wiki/' + $getWikiLang() + '/home'" target="_blank" rel="noopener noreferrer">{{ $t("Wiki") }}</a>
         <a href="https://space.bilibili.com/515657675" target="_blank" rel="noopener noreferrer">{{ $t("OfficialAccount") }}</a>
-        <a href="https://patchyvideo.wiki/JoinUs" target="_blank" rel="noopener noreferrer">{{ $t("JoinUs") }}</a>
+        <a :href="'https://patchyvideo.wiki/' + $getWikiLang() + '/JoinUs'" target="_blank" rel="noopener noreferrer">{{ $t("JoinUs") }}</a>
       </div>
       <div class="patchyvideo-links-item">
         <p>
           <strong>{{ $t("AboutIPFS") }}</strong>
         </p>
-        <a href="https://patchyvideo.wiki/Upload" rel="noopener noreferrer">{{ $t("IPFS") }}</a>
+        <a :href="'https://patchyvideo.wiki/' + $getWikiLang() + '/Upload'" rel="noopener noreferrer">{{ $t("IPFS") }}</a>
         <a href="https://zh.wikipedia.org/wiki/%E6%98%9F%E9%99%85%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F" target="_blank" rel="noopener noreferrer">{{
           $t("WhatIsIPFS")
         }}</a>
@@ -51,7 +51,7 @@
         <p>
           <strong>{{ $t("Codes") }}</strong>
         </p>
-        <a href="https://patchyvideo.wiki/Repositories" target="_blank" rel="noopener noreferrer">{{ $t("Repositories") }}</a>
+        <a :href="'https://patchyvideo.wiki/' + $getWikiLang() + '/Repositories'" target="_blank" rel="noopener noreferrer">{{ $t("Repositories") }}</a>
         <a href="https://github.com/zyddnys/PatchyVideo/issues" target="_blank" rel="noopener noreferrer">{{ $t("bug_report") }}</a>
       </div>
     </div>

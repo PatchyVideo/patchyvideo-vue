@@ -55,7 +55,7 @@
         </el-select>
         <!-- Wiki 链接 -->
         <a
-          href="https://patchyvideo.wiki/Upload"
+          :href="'https://patchyvideo.wiki/' + $getWikiLang() + '/Upload'"
           target="_blank"
           rel="noopener noreferrer"
           style="color: #409eff; float: right; margin-right: 100px; margin-top: 10px;"
