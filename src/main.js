@@ -71,6 +71,16 @@ if (!localStorage.getItem("lang")) {
 }
 i18n.locale = localStorage.getItem("lang");
 
+// wiki语言兼容性设置
+Vue.prototype.$getWikiLang = function() {
+  const wikiLangMap = [{ ENG: "en" }, { CHS: "zh" }, { CHT: "zh" }];
+  var wikiLang = "zh";
+  wikiLangMap.map((item) => {
+    if (Object.keys(item)[0] == i18n.locale) wikiLang = Object.values(item)[0];
+  });
+  return wikiLang;
+};
+
 /* Vue cropper (splitted) */
 // import { VueCropper } from "vue-cropper";
 // Vue.use(VueCropper);

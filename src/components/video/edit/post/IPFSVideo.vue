@@ -62,9 +62,13 @@
         </el-form-item>
         <el-form-item>
           <!-- Wiki链接 -->
-          <a href="https://patchyvideo.wiki/Upload" target="_blank" rel="noopener noreferrer" style="color: #409eff; float: right; font-size: 17px;">{{
-            $t("HowToPost")
-          }}</a>
+          <a
+            :href="'https://patchyvideo.wiki/' + $getWikiLang() + '/Upload'"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="color: #409eff; float: right; font-size: 17px;"
+            >{{ $t("HowToPost") }}</a
+          >
         </el-form-item>
         <!-- 上传视频的按钮 -->
         <el-form-item style="text-align: center;">
