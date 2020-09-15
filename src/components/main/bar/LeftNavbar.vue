@@ -78,6 +78,7 @@
           <el-button v-if="$route.path === '/video' && isLogin == true" size="mini" :disabled="showTagPanel" @click="openEditTags">{{
             $t("tag.edit")
           }}</el-button>
+          <el-checkbox v-model="showSubscribeOps" style="margin-left: 10px;">{{ $t("tag.showSubscribeOps") }}</el-checkbox>
         </div>
         <p v-if="$route.path === '/video' && isLogin == true" @click="postVideo">
           {{ $t("tag.video_action") }}
@@ -145,7 +146,7 @@
                       <span @click.left="gotoHome(item)" @click.middle="gotoHome(item, true)">{{ item.replace(/_/g, " ") }}</span>
                     </p>
                   </div>
-                  <div v-if="isLogin && subTags" style="display: inline; overflow:hidden;">
+                  <div v-if="isLogin && subTags && showSubscribeOps" style="display: inline; overflow:hidden;">
                     <el-button v-show="subTags.indexOf(item) == -1" size="mini" style="margin-left: 5px; display: inline;" @click="subscribeToTag(item)">{{
                       $t("tag.subscribe")
                     }}</el-button>
@@ -162,7 +163,7 @@
                   <el-button v-if="val == 'Author'" size="mini" style="margin-left: 5px; display: inline;" @click="openAuthorData(item)">{{
                     $t("tag.author_detail")
                   }}</el-button>
-                  <div v-if="isLogin && subTags" style="display: inline; overflow:hidden;">
+                  <div v-if="isLogin && subTags && showSubscribeOps" style="display: inline; overflow:hidden;">
                     <el-button v-show="subTags.indexOf(item) == -1" size="mini" style="margin-left: 5px; display: inline;" @click="subscribeToTag(item)">{{
                       $t("tag.subscribe")
                     }}</el-button>
@@ -177,7 +178,7 @@
                   <p>
                     <span @click.left="gotoHome(item)" @click.middle="gotoHome(item, true)">{{ item.replace(/_/g, " ") }}</span>
                   </p>
-                  <div v-if="isLogin && subTags" style="display: inline; overflow:hidden;">
+                  <div v-if="isLogin && subTags && showSubscribeOps" style="display: inline; overflow:hidden;">
                     <el-button v-show="subTags.indexOf(item) == -1" size="mini" style="margin-left: 5px; display: inline;" @click="subscribeToTag(item)">{{
                       $t("tag.subscribe")
                     }}</el-button>
@@ -245,6 +246,8 @@ export default {
       // 溢出元素表
       overflowed: [],
       onresizehandler: null,
+      // 是否显示订阅按钮
+      showSubscribeOps: false,
     };
   },
   computed: {
