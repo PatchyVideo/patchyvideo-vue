@@ -81,7 +81,7 @@
 
     <!-- Detail 页面的正文 -->
     <div v-loading="loading" class="w detail-page-background-img">
-      <left-navbar :msg="myVideoData.tag_by_category"></left-navbar>
+      <left-navbar :msg="myVideoData.tag_by_category" :sub-tags="userTagSubscriptions" @subscribe-changed="updateUserSubs"></left-navbar>
 
       <div class="content">
         <!-- 推荐视频栏开始  -->
@@ -282,7 +282,8 @@ import SubTitle from "@/components/video/subtitle/VideoView";
 import { copyToClipboardText } from "@/static/js/generic";
 import { toGMT } from "@/static/js/toGMT";
 import DPlayer from "dplayer";
-import flvjs from "flv.js";
+import axios from "axios";
+//import flvjs from "flv.js";
 
 export default {
   components: {
@@ -394,6 +395,8 @@ export default {
       URL_EXPANDERS: {},
       // 内嵌播放的视频链接
       iframeUrl: "",
+      // 用户订阅的标签
+      userTagSubscriptions: [],
       enable_video_play: true,
       activeVideoPlayer: "embd",
       dplayer_handle: null,
@@ -462,7 +465,7 @@ export default {
     recaptchaScript.setAttribute("src", "https://cdn.dashjs.org/v3.1.0/dash.all.min.js");
     document.head.appendChild(recaptchaScript);
     let recaptchaScript2 = document.createElement("script");
-    recaptchaScript2.setAttribute("src", "http://bilibili.github.io/flv.js/dist/flv.js");
+    recaptchaScript2.setAttribute("src", "https://bilibili.github.io/flv.js/dist/flv.js");
     document.head.appendChild(recaptchaScript2);
     this.buildUrlMatchers();
     // 防止B站侦测 ferrer 导致视频链接跳转出现 404
@@ -551,6 +554,18 @@ export default {
       }
       return "";
     },
+    async updateUserSubs() {
+      // userTagSubscriptions
+      this.userTagSubscriptions = (
+        await axios({
+          method: "post",
+          url: "/be/subs/tags.do",
+          data: {
+            lang: localStorage.getItem("lang"),
+          },
+        })
+      ).data?.data.tags;
+    },
     // 查询视频详细信息
     async searchVideo() {
       this.loading = true;
@@ -564,12 +579,16 @@ export default {
             lang: localStorage.getItem("lang"),
           },
         })
-          .then((result) => {
+          .then(async (result) => {
             this.myVideoData = result.data.data;
             this.iframeUrl = this.regToIframe(this.myVideoData.video.item.url, this.myVideoData.video.item.cid || "");
             this.theVideoRank = this.$t("changeRank.ranks")[result.data.data.video.clearence];
             if (result.data.data.video.comment_thread) {
               this.sid = result.data.data.video.comment_thread.$oid;
+            }
+
+            if (this.isLogin) {
+              await this.updateUserSubs();
             }
 
             // 修改网站标题
@@ -928,17 +947,18 @@ export default {
           let video_obj = null;
           if (this.dplayer_stream_format == "flv") {
             video_obj = {
-              type: "customFlv",
-              customType: {
-                customFlv: function(video) {
-                  const flvPlayer = flvjs.createPlayer({
-                    type: "flv",
-                    url: stream_url,
-                  });
-                  flvPlayer.attachMediaElement(video);
-                  flvPlayer.load();
-                },
-              },
+              // type: "customFlv",
+              // customType: {
+              //   customFlv: function(video) {
+              //     const flvPlayer = flvjs.createPlayer({
+              //       type: "flv",
+              //       url: stream_url,
+              //     });
+              //     flvPlayer.attachMediaElement(video);
+              //     flvPlayer.load();
+              //   },
+              // },
+              url: stream_url,
             };
             this.dplayer_handle = new DPlayer({
               container: document.getElementById("dplayer"),
@@ -948,7 +968,7 @@ export default {
           } else if (this.dplayer_stream_format == "mp4") {
             // mp4
             video_obj = {
-              type: "mp4",
+              //type: "mp4",
               url: stream_url,
             };
             this.dplayer_handle = new DPlayer({
@@ -1008,19 +1028,20 @@ export default {
             };
             let stream_url = this.dplayer_stream_url;
             let video_obj = {
-              type: "customFlv",
-              customType: {
-                customFlv: function(video) {
-                  console.log("url=");
-                  console.log(stream_url);
-                  const flvPlayer = flvjs.createPlayer({
-                    type: "flv",
-                    url: stream_url,
-                  });
-                  flvPlayer.attachMediaElement(video);
-                  flvPlayer.load();
-                },
-              },
+              // type: "customFlv",
+              // customType: {
+              //   customFlv: function(video) {
+              //     console.log("url=");
+              //     console.log(stream_url);
+              //     const flvPlayer = flvjs.createPlayer({
+              //       type: "flv",
+              //       url: stream_url,
+              //     });
+              //     flvPlayer.attachMediaElement(video);
+              //     flvPlayer.load();
+              //   },
+              // },
+              url: stream_url,
             };
             this.dplayer_handle = new DPlayer({
               container: document.getElementById("dplayer"),
@@ -1039,7 +1060,7 @@ export default {
             };
             let stream_url = this.dplayer_stream_url;
             let video_obj = {
-              type: "mp4",
+              //type: "mp4",
               url: stream_url,
             };
             this.dplayer_handle = new DPlayer({

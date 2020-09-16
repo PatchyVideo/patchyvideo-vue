@@ -26,6 +26,7 @@
           <p v-if="maxcount">{{ $t("page_count", { count: count2, maxcount: maxcount }) }}</p>
           <p v-else>{{ $t("no_result") }}</p>
           <el-checkbox v-model="checked" class="show_deleted">{{ $t("show_deleted") }}</el-checkbox>
+          <el-checkbox v-model="show_auto" class="show_deleted">显示自动发布视频</el-checkbox>
           <p class="blacklist_prompt">{{ $t("blacklist_prompt") }}</p>
           <el-select id="select-order" v-model="couponSelected">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -141,6 +142,7 @@ export default {
       pageMark: false,
       //是否显示隐藏视频
       checked: false,
+      show_auto: false,
       visibleSites: [""],
       allSites: [
         { label: "Bilibili", id: "bili" },
@@ -217,6 +219,14 @@ export default {
       // }
     },
     checked() {
+      if (this.ifSearch) {
+        this.getSearchData(this.page, this.count, this.searchKeyWord);
+      } else {
+        this.getListVideo(this.page, this.count);
+      }
+      this.historyPush();
+    },
+    show_auto() {
       if (this.ifSearch) {
         this.getSearchData(this.page, this.count, this.searchKeyWord);
       } else {
@@ -304,6 +314,7 @@ export default {
         }
         sites = "ANY(" + sites + ")";
       }
+      const additional_constraint = sites + (this.show_auto ? "" : "NOT Auto_tagged");
       // 请求数据
       this.axios({
         method: "post",
@@ -313,7 +324,7 @@ export default {
           page_size: count,
           order: this.couponSelected,
           hide_placeholder: !this.checked,
-          additional_constraint: sites,
+          additional_constraint: additional_constraint,
           lang: localStorage.getItem("lang"),
         },
       }).then((result) => {
@@ -373,6 +384,7 @@ export default {
         }
         sites = "ANY(" + sites + ")";
       }
+      const additional_constraint = sites + (this.show_auto ? "" : "NOT Auto_tagged");
       this.axios({
         method: "post",
         url: "be/queryvideo.do",
@@ -383,7 +395,7 @@ export default {
           hide_placeholder: !this.checked,
           query: str,
           qtype: this.$route.query.qtype,
-          additional_constraint: sites,
+          additional_constraint: additional_constraint,
           lang: localStorage.getItem("lang"),
         },
       }).then((result) => {
@@ -476,6 +488,7 @@ export default {
       this.count != 20 && (query.page_count = this.count);
       this.couponSelected != "latest" && (query.coupon = this.couponSelected);
       this.checked && (query.showDeleted = this.checked);
+      this.show_auto && (query.showAuto = this.show_auto);
       this.visibleSites.indexOf("") == -1 && (query.visibleSites = visibleSites);
       this.$route.query.keyword && (query.keyword = this.$route.query.keyword);
       this.$route.query.qtype && (query.qtype = this.$route.query.qtype);
@@ -498,6 +511,7 @@ export default {
       this.page = parseInt(route.query.page) || this.page;
       this.count = parseInt(route.query.page_count || this.count);
       this.checked = route.query.showDeleted == "true";
+      this.show_auto = route.query.showAuto == "true";
       this.visibleSites = route.query.visibleSites ? JSON.parse(atob(route.query.visibleSites)) : this.visibleSites;
     },
     getDesc(desc) {

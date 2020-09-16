@@ -78,6 +78,7 @@
           <el-button v-if="$route.path === '/video' && isLogin == true" size="mini" :disabled="showTagPanel" @click="openEditTags">{{
             $t("tag.edit")
           }}</el-button>
+          <el-checkbox v-model="showSubscribeOps" style="margin-left: 10px;">{{ $t("tag.showSubscribeOps") }}</el-checkbox>
         </div>
         <p v-if="$route.path === '/video' && isLogin == true" @click="postVideo">
           {{ $t("tag.video_action") }}
@@ -145,18 +146,47 @@
                       <span @click.left="gotoHome(item)" @click.middle="gotoHome(item, true)">{{ item.replace(/_/g, " ") }}</span>
                     </p>
                   </div>
+                  <div v-if="isLogin && subTags && showSubscribeOps" style="display: inline; overflow:hidden;">
+                    <el-button v-show="subTags.indexOf(item) == -1" size="mini" style="margin-left: 5px; display: inline;" @click="subscribeToTag(item)">{{
+                      $t("tag.subscribe")
+                    }}</el-button>
+                    <el-button v-show="subTags.indexOf(item) != -1" size="mini" class="sub-btn" @click="unsubscribeToTag(item)">
+                      <span class="subed">{{ $t("tag.subscribed") }}</span>
+                      <span class="unsub">{{ $t("tag.unsubscribe") }}</span>
+                    </el-button>
+                  </div>
                 </div>
                 <div v-else-if="val == 'Author'">
                   <p :ref="val" :class="val" style="display: inline;">
                     <span @click.left="gotoHome(item)" @click.middle="gotoHome(item, true)">{{ item.replace(/_/g, " ") }}</span>
                   </p>
-                  <el-button v-if="val == 'Author'" size="mini" style="margin-left: 5px; display: inline;" @click="openAuthorData(item)">详情</el-button>
+                  <el-button v-if="val == 'Author'" size="mini" style="margin-left: 5px; display: inline;" @click="openAuthorData(item)">{{
+                    $t("tag.author_detail")
+                  }}</el-button>
+                  <div v-if="isLogin && subTags && showSubscribeOps" style="display: inline; overflow:hidden;">
+                    <el-button v-show="subTags.indexOf(item) == -1" size="mini" style="margin-left: 5px; display: inline;" @click="subscribeToTag(item)">{{
+                      $t("tag.subscribe")
+                    }}</el-button>
+                    <el-button v-show="subTags.indexOf(item) != -1" size="mini" class="sub-btn" @click="unsubscribeToTag(item)">
+                      <span class="subed">{{ $t("tag.subscribed") }}</span>
+                      <span class="unsub">{{ $t("tag.unsubscribe") }}</span>
+                    </el-button>
+                  </div>
                 </div>
                 <!-- 其他情况 -->
                 <div v-else>
                   <p>
                     <span @click.left="gotoHome(item)" @click.middle="gotoHome(item, true)">{{ item.replace(/_/g, " ") }}</span>
                   </p>
+                  <div v-if="isLogin && subTags && showSubscribeOps" style="display: inline; overflow:hidden;">
+                    <el-button v-show="subTags.indexOf(item) == -1" size="mini" style="margin-left: 5px; display: inline;" @click="subscribeToTag(item)">{{
+                      $t("tag.subscribe")
+                    }}</el-button>
+                    <el-button v-show="subTags.indexOf(item) != -1" size="mini" class="sub-btn" @click="unsubscribeToTag(item)">
+                      <span class="subed">{{ $t("tag.subscribed") }}</span>
+                      <span class="unsub">{{ $t("tag.unsubscribe") }}</span>
+                    </el-button>
+                  </div>
                 </div>
               </el-tooltip>
             </div>
@@ -187,6 +217,10 @@ export default {
       type: String,
       default: "",
     },
+    subTags: {
+      type: Array,
+      required: false,
+    },
   },
   data() {
     this.$i18n.locale = localStorage.getItem("lang");
@@ -212,6 +246,8 @@ export default {
       // 溢出元素表
       overflowed: [],
       onresizehandler: null,
+      // 是否显示订阅按钮
+      showSubscribeOps: false,
     };
   },
   computed: {
@@ -282,6 +318,30 @@ export default {
     window.removeEventListener("resize", this.onresizehandler);
   },
   methods: {
+    // 添加标签订阅
+    subscribeToTag(tag) {
+      this.axios({
+        method: "post",
+        url: "/be/subs/add.do",
+        data: {
+          query: tag,
+        },
+      }).then(() => {
+        this.$emit("subscribe-changed");
+      });
+    },
+    // 取消标签订阅
+    unsubscribeToTag(tag) {
+      this.axios({
+        method: "post",
+        url: "/be/subs/del_tag.do",
+        data: {
+          tag: tag,
+        },
+      }).then(() => {
+        this.$emit("subscribe-changed");
+      });
+    },
     // 点击标签显示标签的搜索结果
     gotoHome(key, _blank = false) {
       if (key != "") {
@@ -497,5 +557,20 @@ export default {
 }
 .Soundtrack {
   color: #ff7792;
+}
+.sub-btn {
+  margin-left: 5px;
+  display: inline;
+  overflow: hidden;
+}
+.sub-btn .unsub {
+  margin-left: 5px;
+  display: none;
+}
+.sub-btn:hover .subed {
+  display: none;
+}
+.sub-btn:hover .unsub {
+  display: inline;
 }
 </style>
