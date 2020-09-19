@@ -108,10 +108,10 @@
 
           <!-- 视频详细信息 -->
           <div class="re_video">
-            <div v-if="isVideoSupportedByDplayer">
-              <el-tabs v-if="enable_video_play" id="embd_dplayer_switch" v-model="activeVideoPlayer" @tab-click="onPlayerSwitchTabActivate">
+            <div v-if="myVideoData.video.item.site == 'bilibili'">
+              <el-tabs id="embd_dplayer_switch" v-model="activeVideoPlayer" @tab-click="onPlayerSwitchTabActivate">
                 <!-- B站，A站，n站和油管显示内嵌视频播放 -->
-                <el-tab-pane label="普通播放器" name="embd">
+                <el-tab-pane :label="$t('regular_player')" name="embd">
                   <iframe
                     v-if="iframeUrl !== ''"
                     :src="iframeUrl"
@@ -119,7 +119,7 @@
                     style="width: 948px; height: 763px; margin: 10px auto 30px; display: block;"
                   ></iframe>
                 </el-tab-pane>
-                <el-tab-pane v-if="isVideoSupportedByDplayer" label="高端播放器" name="dplayer">
+                <el-tab-pane :label="$t('advanced_player')" name="dplayer">
                   <div v-if="dplayer_enabled" id="dplayer" style="width: 948px; height: 763px; margin: 10px auto 30px; display: block;"></div>
                   <h1 v-else>Not supported</h1>
                 </el-tab-pane>
@@ -397,7 +397,6 @@ export default {
       iframeUrl: "",
       // 用户订阅的标签
       userTagSubscriptions: [],
-      enable_video_play: true,
       activeVideoPlayer: "embd",
       dplayer_handle: null,
       dplayer_enabled: false,
