@@ -2,23 +2,23 @@
   <el-dialog title="上传字幕" :visible.sync="stuv" width="70%">
     <el-row :gutter="20">
       <el-col :span="8">
-        <h3 class="bbg">字幕属性</h3>
+        <h3 class="bbg">{{ $t("subtitle_properties") }}</h3>
         <div class="option">
-          字幕类型：
+          {{ $t("subtitle_type") }}
           <el-select v-model="stype" size="small">
             <el-option v-for="item in stypes" :key="item" :label="item" :value="item"></el-option>
           </el-select>
         </div>
         <div class="option">
-          字幕语言：
+          {{ $t("subtitle_lang") }}
           <el-select v-model="slang" size="small">
             <el-option v-for="item in slangs" :key="item" :label="item" :value="item"></el-option>
           </el-select>
         </div>
       </el-col>
       <el-col :span="16">
-        <h3 class="bbg">字幕内容(~{{ getSize() }})</h3>
-        粘贴字幕文件内容或将文件拖入输入区（上限8MB）
+        <h3 class="bbg">{{ $t("subtitle_size", { size: getSize() }) }}</h3>
+        {{ $t("paste_prompt") }}
         <div class="etr">
           <textarea
             v-model="content"
@@ -34,13 +34,15 @@
             "
             @drop.prevent="drop"
           ></textarea>
-          <div :class="{ et: true, vb: !dragging }"><h2 class="ct">拖入以上传</h2></div>
+          <div :class="{ et: true, vb: !dragging }">
+            <h2 class="ct">{{ $t("drag_upload") }}</h2>
+          </div>
         </div>
       </el-col>
     </el-row>
     <span slot="footer">
-      <el-button @click="upload">上传</el-button>
-      <el-button @click="stuv = false">关闭</el-button>
+      <el-button @click="upload">{{ $t("upload") }}</el-button>
+      <el-button @click="stuv = false">{{ $t("close") }}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -98,7 +100,7 @@ export default {
       const r = await upload(this.vid, this.slang, this.stype, this.content);
       if (r) {
         this.$message({
-          message: `上传成功！字幕ID：${r}`,
+          message: this.$t("upload_succeed", { r: r }),
           type: "success",
         });
       }

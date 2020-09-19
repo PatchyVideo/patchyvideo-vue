@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="选择语言Select Language" :visible.sync="showSelectLanguageDialog" width="70%">
+  <el-dialog :title="$t('select_lang')" :visible.sync="showSelectLanguageDialog" width="70%">
     <el-select v-model="selected_translator" style="width: 40%;">
       <el-option v-for="item in availableTranslators" :key="item.label" :label="item.label" :value="item.value"></el-option>
     </el-select>
@@ -7,8 +7,9 @@
       <el-option v-for="item in availableLanguages" :key="item.label" :label="item.label" :value="item.value"></el-option>
     </el-select>
     <span slot="footer">
-      <el-button @click="use_translation()">翻译</el-button>
-      <el-button @click="showSelectLanguageDialog = false">关闭</el-button>
+      <el-button @click="use_translation()">{{ $t("download_translated") }}</el-button>
+      <el-button @click="use_translation()">{{ $t("translate") }}</el-button>
+      <el-button @click="showSelectLanguageDialog = false">{{ $t("close") }}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -64,6 +65,9 @@ export default {
       this.showSelectLanguageDialog = false;
       this.callback(this.selected_language, this.selected_translator);
       this.$emit("language-selected", this.selected_language);
+    },
+    download_translation() {
+      alert("not implemented");
     },
   },
 };
