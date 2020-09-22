@@ -17,6 +17,7 @@
       <h3 class="desc">{{ $t("prompt") }}</h3>
       <el-form-item prop="URL">
         <el-input v-model="list.URL" :placeholder="$t('url_placeholder')" @keyup.enter.native="onSubmit"></el-input>
+        <el-checkbox v-model="use_autotag">使用自动标签</el-checkbox>
       </el-form-item>
       <el-form-item class="leadInList">
         <el-button type="primary" style="width: 80%;" @click="onSubmit">{{ $t("upload_now") }}</el-button>
@@ -41,6 +42,8 @@ export default {
       },
       // 页面是否出于加载状态的标志
       loading: false,
+      // 是否使用自动标签
+      use_autotag: false,
     };
   },
   computed: {
@@ -87,6 +90,7 @@ export default {
               data: {
                 url: this.list.URL,
                 lang: localStorage.getItem("lang"),
+                use_autotag: this.use_autotag,
               },
             }).then((result) => {
               this.loading = false;

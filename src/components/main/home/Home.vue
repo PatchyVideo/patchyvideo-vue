@@ -364,6 +364,7 @@ export default {
           hide_placeholder: !this.checked,
           additional_constraint: additional_constraint,
           lang: localStorage.getItem("lang"),
+          human_readable_tag: true,
         },
       }).then((result) => {
         this.maxcount = result.data.data.count;
