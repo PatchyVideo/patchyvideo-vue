@@ -976,7 +976,7 @@ export default {
               video: video_obj,
             });
           } else if (this.dplayer_stream_format == "dash") {
-            // mp4
+            // dash
             video_obj = {
               type: "dash",
               url: stream_url,
