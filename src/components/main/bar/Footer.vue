@@ -64,7 +64,8 @@
       </p>
       <p class="patchyvideo-declear patchyvideo-declear-top">
         QQ: <a href="https://jq.qq.com/?k=fOJYEJt1" target="_blank" rel="noopener noreferrer">757676234</a> | Telegram:
-        <a href="https://t.me/PatchyVideo" target="_blank" rel="noopener noreferrer">t.me/PatchyVideo</a> | Email:
+        <a href="https://t.me/PatchyVideo" target="_blank" rel="noopener noreferrer">t.me/PatchyVideo</a> | Discord:
+        <a href="https://discord.gg/FtPPQqz" target="_blank" rel="noopener noreferrer">PatchyVideo</a> | Email:
         <a href="mailto:zyddnys@outlook.com" target="_blank" rel="noopener noreferrer">zyddnys@outlook.com</a>
       </p>
       <p class="patchyvideo-declear">
