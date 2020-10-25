@@ -56,7 +56,7 @@
           v-model="iptVal"
           :fetch-suggestions="querySearchAsync2"
           :trigger-on-focus="false"
-          :placeholder="$t('search.prompt')"
+          :placeholder="searchType == 'tag' ? $t('search.prompt') : $t('search.prompt2')"
           @select="handleSelect2"
           @keyup.enter.native="gotoHome"
         >
