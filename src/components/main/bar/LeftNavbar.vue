@@ -220,6 +220,7 @@ export default {
     subTags: {
       type: Array,
       required: false,
+      default: null,
     },
   },
   data() {
