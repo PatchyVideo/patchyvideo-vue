@@ -108,10 +108,10 @@
 
           <!-- 视频详细信息 -->
           <div class="re_video">
-            <div v-if="isVideoSupportedByDplayer">
-              <el-tabs v-if="enable_video_play" id="embd_dplayer_switch" v-model="activeVideoPlayer" @tab-click="onPlayerSwitchTabActivate">
+            <div v-if="myVideoData.video.item.site == 'bilibili'">
+              <el-tabs id="embd_dplayer_switch" v-model="activeVideoPlayer" @tab-click="onPlayerSwitchTabActivate">
                 <!-- B站，A站，n站和油管显示内嵌视频播放 -->
-                <el-tab-pane label="普通播放器" name="embd">
+                <el-tab-pane :label="$t('regular_player')" name="embd">
                   <iframe
                     v-if="iframeUrl !== ''"
                     :src="iframeUrl"
@@ -119,7 +119,7 @@
                     style="width: 948px; height: 763px; margin: 10px auto 30px; display: block;"
                   ></iframe>
                 </el-tab-pane>
-                <el-tab-pane v-if="isVideoSupportedByDplayer" label="高端播放器" name="dplayer">
+                <el-tab-pane :label="$t('advanced_player')" name="dplayer">
                   <div v-if="dplayer_enabled" id="dplayer" style="width: 948px; height: 763px; margin: 10px auto 30px; display: block;"></div>
                   <h1 v-else>Not supported</h1>
                 </el-tab-pane>
@@ -397,7 +397,6 @@ export default {
       iframeUrl: "",
       // 用户订阅的标签
       userTagSubscriptions: [],
-      enable_video_play: true,
       activeVideoPlayer: "embd",
       dplayer_handle: null,
       dplayer_enabled: false,
@@ -936,14 +935,21 @@ export default {
           if ("danmaku" in extra) {
             danmaku = extra.danmaku;
           }
+          let duration = 0;
+          if ("duration_ms" in extra) {
+            duration = Math.floor(extra.duration_ms / 1000) + 1;
+          }
           let list_of_streams = result.data.data.streams;
           console.log(list_of_streams);
           let top_quality_stream = list_of_streams[0];
           let stream_format = top_quality_stream.container;
-          let stream_url = top_quality_stream.src[0].replace(/^http:\/\//i, "https://");
-          this.dplayer_stream_url = stream_url;
+          let stream_urls = top_quality_stream.src.map((x) => {
+            return x.replace(/^http:\/\//i, "https://");
+          });
+          this.dplayer_stream_urls = stream_urls;
           this.dplayer_stream_format = stream_format;
           this.dplayer_danmaku_url = danmaku;
+          this.dplayer_video_duration = duration;
           let video_obj = null;
           if (this.dplayer_stream_format == "flv") {
             video_obj = {
@@ -958,7 +964,7 @@ export default {
               //     flvPlayer.load();
               //   },
               // },
-              url: stream_url,
+              url: stream_urls[0],
             };
             this.dplayer_handle = new DPlayer({
               container: document.getElementById("dplayer"),
@@ -969,7 +975,7 @@ export default {
             // mp4
             video_obj = {
               //type: "mp4",
-              url: stream_url,
+              url: stream_urls[0],
             };
             this.dplayer_handle = new DPlayer({
               container: document.getElementById("dplayer"),
@@ -977,10 +983,14 @@ export default {
               video: video_obj,
             });
           } else if (this.dplayer_stream_format == "dash") {
-            // mp4
+            // dash
+            var url = stream_urls[0];
+            if (stream_urls.length == 2) {
+              url = this.generateDashMPD(stream_urls, this.dplayer_video_duration);
+            }
             video_obj = {
               type: "dash",
-              url: stream_url,
+              url: url,
             };
             this.dplayer_handle = new DPlayer({
               container: document.getElementById("dplayer"),
@@ -1001,6 +1011,34 @@ export default {
       });
       this.dplayer_enabled = true;
       this.loading = false;
+    },
+    generateDashMPD(srcs, duration) {
+      return `data:application/dash+xml,<?xml version="1.0"?>
+<!-- MPD file Generated with GPAC version 0.5.2-DEV-revVersion: 0.5.2-426-gc5ad4e4+dfsg5-5  at 2020-08-19T04:56:58.806Z-->
+<MPD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="urn:mpeg:dash:schema:mpd:2011"
+  xsi:schemaLocation="urn:mpeg:dash:schema:mpd:2011 DASH-MPD.xsd"
+  type="static"
+  mediaPresentationDuration="PT${duration}S"
+  minBufferTime="PT2S"
+  profiles="urn:mpeg:dash:profile:isoff-on-demand:2011">
+ <ProgramInformation moreInformationURL="http://gpac.sourceforge.net">
+  <Title>title</Title>
+ </ProgramInformation>
+
+ <Period>
+  <AdaptationSet subsegmentAlignment="true" subsegmentStartsWithSAP="1">
+   <Representation id="1" mimeType="video/mp4" codecs="avc1.64001f" width="1920" height="1080" frameRate="30" sar="1:1" startWithSAP="1" bandwidth="0">
+    <BaseURL>${srcs[0].replaceAll("&", "&amp;")}</BaseURL>
+   </Representation>
+  </AdaptationSet>
+  <AdaptationSet subsegmentAlignment="true" subsegmentStartsWithSAP="1">
+   <Representation id="2" mimeType="audio/mp4" codecs="mp4a.40.2" startWithSAP="1" bandwidth="0">
+    <BaseURL>${srcs[1].replaceAll("&", "&amp;")}</BaseURL>
+   </Representation>
+  </AdaptationSet>
+ </Period>
+</MPD>`;
     },
     async onSubtitleSelectionChanged(subid) {
       this.$refs.subtitle.select_language(async (lang, translator) => {
@@ -1026,7 +1064,7 @@ export default {
               bottom: "5%",
               color: "#ffffff",
             };
-            let stream_url = this.dplayer_stream_url;
+            let stream_urls = this.dplayer_stream_urls;
             let video_obj = {
               // type: "customFlv",
               // customType: {
@@ -1041,7 +1079,7 @@ export default {
               //     flvPlayer.load();
               //   },
               // },
-              url: stream_url,
+              url: stream_urls[0],
             };
             this.dplayer_handle = new DPlayer({
               container: document.getElementById("dplayer"),
@@ -1058,10 +1096,10 @@ export default {
               bottom: "5%",
               color: "#ffffff",
             };
-            let stream_url = this.dplayer_stream_url;
+            let stream_urls = this.dplayer_stream_urls;
             let video_obj = {
               //type: "mp4",
-              url: stream_url,
+              url: stream_urls[0],
             };
             this.dplayer_handle = new DPlayer({
               container: document.getElementById("dplayer"),
@@ -1078,10 +1116,14 @@ export default {
               bottom: "5%",
               color: "#ffffff",
             };
-            let stream_url = this.dplayer_stream_url;
+            let stream_urls = this.dplayer_stream_urls;
+            var url = stream_urls[0];
+            if (stream_urls.length == 2) {
+              url = this.generateDashMPD(stream_urls, this.dplayer_video_duration);
+            }
             let video_obj = {
               type: "dash",
-              url: stream_url,
+              url: url,
             };
             this.dplayer_handle = new DPlayer({
               container: document.getElementById("dplayer"),

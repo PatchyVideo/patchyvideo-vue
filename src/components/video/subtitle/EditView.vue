@@ -1,16 +1,18 @@
 <template>
-  <el-dialog title="编辑字幕" :visible.sync="stev" width="70%">
+  <el-dialog :title="$t('edit_subtitle')" :visible.sync="stev" width="70%">
     <el-row :gutter="20">
       <el-col :span="8">
-        <h3 class="bbg">字幕属性</h3>
+        <h3 class="bbg">{{ $t("subtitle_properties") }}</h3>
         <div class="option">
-          字幕类型<span v-if="stype != origin.format">(已编辑)</span>：
+          {{ $t("subtitle_type") }}<span v-if="stype != origin.format">{{ $t("edited") }}</span
+          >：
           <el-select v-model="stype" size="small">
             <el-option v-for="item in stypes" :key="item" :label="item" :value="item"></el-option>
           </el-select>
         </div>
         <div class="option">
-          字幕语言<span v-if="slang != origin.lang">(已编辑)</span>：
+          {{ $t("subtitle_lang") }}<span v-if="slang != origin.lang">{{ $t("edited") }}</span
+          >：
           <el-select v-model="slang" size="small">
             <el-option v-for="item in slangs" :key="item" :label="item" :value="item"></el-option>
           </el-select>
@@ -18,9 +20,10 @@
       </el-col>
       <el-col :span="16">
         <h3 class="bbg">
-          字幕内容<span :class="{ war: getBytes() > 8388608 }">(~{{ getSize() }})</span><span v-if="content != origin.content">(已编辑)</span>
+          {{ $t("subtitle_content") }}<span :class="{ war: getBytes() > 8388608 }">(~{{ getSize() }})</span
+          ><span v-if="content != origin.content">{{ $t("edited") }}</span>
         </h3>
-        粘贴字幕文件内容或将文件拖入输入区（上限8MB）
+        {{ $t("paste_prompt") }}
         <div class="etr">
           <textarea
             v-model="content"
@@ -36,14 +39,16 @@
             "
             @drop.prevent="drop"
           ></textarea>
-          <div :class="{ et: true, vb: !dragging }"><h2 class="ct">拖入以上传</h2></div>
+          <div :class="{ et: true, vb: !dragging }">
+            <h2 class="ct">{{ $t("drag_upload") }}</h2>
+          </div>
         </div>
       </el-col>
     </el-row>
     <span slot="footer">
-      <el-button @click="del">删除</el-button>
-      <el-button @click="edit">提交</el-button>
-      <el-button @click="stev = false">关闭</el-button>
+      <el-button @click="del">{{ $t("delete") }}</el-button>
+      <el-button @click="edit">{{ $t("submit") }}</el-button>
+      <el-button @click="stev = false">{{ $t("close") }}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -102,7 +107,7 @@ export default {
       if (this.stype != this.origin.format || this.slang != this.origin.lang) {
         if (!(await changeMeta(this.subid, this.slang, this.stype))) {
           this.$message({
-            message: "尝试修改源信息失败",
+            message: this.$t("update_failed"),
             type: "error",
           });
           return;
@@ -111,34 +116,34 @@ export default {
       if (this.content != this.origin.content) {
         if (!(await changeContent(this.subid, this.content))) {
           this.$message({
-            message: "尝试修改内容失败",
+            message: this.$t("update_failed"),
             type: "error",
           });
           return;
         }
       }
       this.$message({
-        message: "修改成功",
+        message: this.$t("update_succeed"),
         type: "success",
       });
       this.stev = false;
     },
     async del() {
-      return this.$confirm("此操作将永久删除字幕信息，是否继续？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
+      return this.$confirm(this.$t("delete_prompt"), this.$t("confirm"), {
+        confirmButtonText: this.$t("ok"),
+        cancelButtonText: this.$t("cancel"),
         type: "warning",
       })
         .then(async () => {
           if (await del(this.subid)) {
             this.$message({
               type: "success",
-              message: "删除成功",
+              message: this.$t("delete_succeed"),
             });
             this.stev = false;
           } else {
             this.$message({
-              message: "删除失败",
+              message: this.$t("delete_failed"),
               type: "error",
             });
           }

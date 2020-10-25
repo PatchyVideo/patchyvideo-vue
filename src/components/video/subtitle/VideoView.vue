@@ -20,10 +20,15 @@
     <SelectLanguageView ref="selectLanguageViewRef" :visible.sync="selectLangugaeVisible"></SelectLanguageView>
 
     <div class="new_top">
-      <h2 style="text-align:center">字幕文件<span class="tr">测试版</span></h2>
+      <h2 style="text-align:center">
+        {{ $t("subtitle_function") }}<span class="tr">{{ $t("beta") }}</span>
+      </h2>
       <div class="flex-b">
-        <div>本视频有{{ stList.length }}个字幕</div>
-        <div><span class="up" @click="openup">上传字幕</span> <span class="up" @click="fetch">刷新</span> <span class="up" @click="qs">字幕识别</span></div>
+        <div>{{ $t("subtitle_count", { len: stList.length }) }}</div>
+        <div>
+          <span class="up" @click="openup">{{ $t("upload_subtitle") }}</span> <span class="up" @click="fetch">{{ $t("refresh") }}</span>
+          <span class="up" @click="qs">{{ $t("ocr") }}</span>
+        </div>
       </div>
     </div>
     <div v-loading="loading">
@@ -34,9 +39,11 @@
         &nbsp;by&nbsp;<span v-if="st.meta.created_by"
           ><a :href="'/#/users/' + st.user_obj._id.$oid">{{ st.user_obj.profile.username }}</a></span
         ><span v-else><a href="https://github.com/PatchyVideo/MMDOCR-HighPerformance">求闻转译志</a></span
-        >&nbsp; <span v-if="st.autogen" title="生成器版本">({{ st.version }})</span>&nbsp; <span class="gets" @click="show(st._id.$oid)">获取</span>&nbsp;
-        <span class="gets" @click="edit(st._id.$oid)">编辑</span>&nbsp;
-        <span class="gets" @click="use(st._id.$oid)">使用</span>
+        >&nbsp; <span v-if="st.autogen" :title="$t('ocr_version')">({{ st.version }})</span>&nbsp;
+        <span class="gets" @click="show(st._id.$oid)">{{ $t("download") }}</span
+        >&nbsp; <span class="gets" @click="edit(st._id.$oid)">{{ $t("edit") }}</span
+        >&nbsp;
+        <span class="gets" @click="use(st._id.$oid)">{{ $t("use") }}</span>
       </div>
     </div>
   </div>

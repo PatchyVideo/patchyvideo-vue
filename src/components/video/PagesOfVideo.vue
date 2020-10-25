@@ -12,25 +12,25 @@
 <template>
   <div class="PagesOfVideo">
     <!-- 确认是否发布分P的对话框 -->
-    <el-dialog title="提示" :visible.sync="confirmPosting" width="30%">
+    <el-dialog :title="$t('prompt')" :visible.sync="confirmPosting" width="30%">
       <span>{{ $t("dialog_publish.value") }}</span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="confirmPosting = false">取 消</el-button>
-        <el-button type="primary" @click="confirmPosting = false">确 定</el-button>
+        <el-button @click="confirmPosting = false">{{ $t("dialog_publish.cancel") }}</el-button>
+        <el-button type="primary" @click="confirmPosting = false">{{ $t("dialog_publish.ok") }}</el-button>
       </span>
     </el-dialog>
 
     <!-- 正文 -->
     <div class="new_top">
-      <h2 style="text-align: center;">视频选集</h2>
-      <p v-if="videoPages > 1">本视频有{{ videoPages }}个分P</p>
-      <p v-else>本视频没有分P</p>
+      <h2 style="text-align: center;">{{ $t("video_parts") }}</h2>
+      <p v-if="videoPages > 1">{{ $t("video_part_count", { videoPages: videoPages }) }}</p>
+      <p v-else>{{ $t("no_multipart") }}</p>
     </div>
     <div
       v-if="videoPages != 1"
       v-loading="loading"
       class="PagesDetail"
-      element-loading-text="加载分P中"
+      :element-loading-text="$t('loading')"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(255,255,255,1)"
     >
@@ -53,14 +53,14 @@
         <span>P{{ item.page }}&nbsp;</span>
         <span class="PageName">{{ item.part || "" }}&nbsp;</span>
         <span v-if="item.loading" style="color: #909399;">
-          获取索引状态中
+          {{ $t("loading_post_status") }}
           <i class="el-icon-loading"></i>
         </span>
         <div v-else style="display: inline;">
-          <span v-if="item.isPosted" style="color: #67c23a; font-size: 12px;">已索引</span>
+          <span v-if="item.isPosted" style="color: #67c23a; font-size: 12px;">{{ $t("posted") }}</span>
           <span v-else>
-            <span style="color: #f56c6c; font-size: 12px;">未索引!</span>
-            <span class="PostNewIndex">点击添加此分P的索引</span>
+            <span style="color: #f56c6c; font-size: 12px;">{{ $t("not_posted") }}!</span>
+            <span class="PostNewIndex">{{ $t("click_to_post") }}</span>
           </span>
         </div>
       </div>
