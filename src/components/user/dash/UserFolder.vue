@@ -407,7 +407,7 @@ export default {
 
   width: 50%;
   height: 900px;
-  background: url("/static/img/imoto_left.jpg") no-repeat;
+  background: url("~@/static/img/imoto_left.jpg") no-repeat;
   background-size: 100% 100%;
   /* background-color: #D5D5D5; */
 }
