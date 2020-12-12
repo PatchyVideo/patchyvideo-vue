@@ -129,11 +129,11 @@ module.exports = {
           "^/proxy/u2b/watch": "",
         },
       },
-      "/proxy/u2b/i9ytimg/sb/": {
-        target: "https://i9.ytimg.com/sb/",
+      "/proxy/u2b/iytimg/sb/": {
+        target: "https://i.ytimg.com/sb/",
         changeOrigin: true,
         pathRewrite: {
-          "^/proxy/u2b/i9ytimg/sb/": "",
+          "^/proxy/u2b/iytimg/sb/": "",
         },
       },
     },
