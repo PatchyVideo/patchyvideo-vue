@@ -133,13 +133,14 @@ export default {
     return {
       // 视频列表的排序规则
       options: [
+        { value: "last_modified", label: this.$t("last_modified") },
         { value: "latest", label: this.$t("latest") },
         { value: "oldest", label: this.$t("oldest") },
         { value: "video_latest", label: this.$t("latest_video") },
         { value: "video_oldest", label: this.$t("oldest_video") },
       ],
       // 当前视频列表的排列顺序
-      couponSelected: "latest",
+      couponSelected: "last_modified",
       // 当前页数
       page: 1,
       // 全部分页数

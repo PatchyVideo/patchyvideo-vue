@@ -108,6 +108,7 @@ export default {
     return {
       // 视频列表的排序规则
       options: [
+        { value: "last_modified", label: this.$t("last_modified") },
         { value: "latest", label: this.$t("latest") },
         { value: "oldest", label: this.$t("oldest") },
         { value: "video_latest", label: this.$t("latest_video") },
