@@ -338,6 +338,11 @@ export default {
         type: "error",
       });
     },
+    clearTags() {
+      this.tags = [];
+      this.tagsForRec = [];
+      this.tagsOrigin = [];
+    },
     getCommonTags() {
       if (this.msg === "") {
         return;

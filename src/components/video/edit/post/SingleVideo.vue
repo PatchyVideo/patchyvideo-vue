@@ -650,6 +650,7 @@ export default {
             this.open4();
             this.show = false;
             this.VideoURL = "";
+            this.$refs["EditTags"].clearTags();
           } else if (result.data.status == "FAILED") {
             if (result.data.data.reason == "TAG_NOT_EXIST") {
               let errorTag = result.data.data.aux;
