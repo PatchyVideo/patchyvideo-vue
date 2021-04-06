@@ -294,11 +294,9 @@ export default {
         return "https://www.nicovideo.jp/watch/" + short_link;
       };
       // YouTube的匹配规则
-      this.PARSERS["^(https:\\/\\/(www\\.|m\\.)?youtube\\.com\\/watch\\?v=[-\\w]+|https:\\/\\/youtu\\.be\\/(watch\\?v=[-\\w]+|[-\\w]+))"] = function(
-        responseText,
-        responseDOM,
-        responseURL
-      ) {
+      this.PARSERS[
+        "^(https:\\/\\/(www\\.|m\\.)?youtube\\.com\\/watch\\?v=[-\\w]+|https:\\/\\/youtu\\.be\\/(watch\\?v=[-\\w]+|[-\\w]+))|(https:\\/\\/)?(www\\.|m\\.)?youtube\\.com\\/tv#\\/(watch\\?v=[-\\w]+|[-\\w]+)"
+      ] = function(responseText, responseDOM, responseURL) {
         // let vidid = "";
         // if (responseURL.indexOf("youtube.com") >= 0) {
         //   let idx = responseURL.lastIndexOf("=");
