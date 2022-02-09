@@ -29,6 +29,20 @@
           <el-tag v-for="item in tags" v-else :key="item" effect="dark">{{ item }}</el-tag>
         </div>
       </div>
+      <!-- 发布类型 -->
+      <div class="RepostType">
+        <el-select v-model="RepostType" :placeholder="$t('choose_repost_type')" style="width: 30%;">
+          <el-option v-for="item in RepostTypes" :key="item.label" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+        <!-- Wiki 链接 -->
+        <a
+          :href="'https://patchyvideo.wiki/' + $getWikiLang() + '/Upload'"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="color: #409eff; float: right; margin-right: 100px; margin-top: 10px;"
+          >{{ $t("PostRules") }}</a
+        >
+      </div>
       <!-- 高级选项 -->
       <p class="advancedOptions" @click="showAdvancedOptions">
         {{ $t("advance") }}
@@ -81,6 +95,21 @@ export default {
       as_copies: false,
       // 是否显示高级选项的标志
       advancedOptions: false,
+      // 本页面的视频的发布类型
+      RepostType: "unknown",
+      // 视频的发布类型
+      RepostTypes: [
+        { value: "official", label: this.$t("official") },
+        { value: "official_repost", label: this.$t("official_repost") },
+        {
+          value: "authorized_translation",
+          label: this.$t("authorized_translation"),
+        },
+        { value: "authorized_repost", label: this.$t("authorized_repost") },
+        { value: "translation", label: this.$t("translation") },
+        { value: "repost", label: this.$t("repost") },
+        { value: "unknown", label: this.$t("unknown") },
+      ],
     };
   },
   computed: {
@@ -137,6 +166,7 @@ export default {
           videos: videos,
           tags: this.tags,
           as_copies: this.as_copies,
+          repost_type: this.RepostType,
         },
       }).then((result) => {
         if (result.data.status == "SUCCEED") {
