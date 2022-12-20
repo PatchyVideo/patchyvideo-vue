@@ -89,7 +89,7 @@
           <h4 style="color: #606266;">
             {{ videoType }}:
             <el-button v-if="isLogin" type="text" @click="changeRepostType = true">{{ $t("modify") }}</el-button>
-            <i v-if="isAdmin" class="el-icon-refresh" style="float: right;" @click="refreshVideo(myVideoData)"></i>
+            <i class="el-icon-refresh" style="float: right;" @click="refreshVideo(myVideoData)"></i>
           </h4>
           <div class="re_top">
             <h2>{{ myVideoData.video.item.title }}</h2>
