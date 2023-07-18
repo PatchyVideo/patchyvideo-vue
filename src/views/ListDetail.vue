@@ -161,6 +161,7 @@
           <div v-if="editable" class="edit_box">
             <el-button type="success" @click="addVideo">{{ $t("btn_group.add_video") }}</el-button>
             <el-button type="success" @click="addFromList">{{ $t("btn_group.import_from_other") }}</el-button>
+            <el-button type="success" @click="exportVideoLinks">导出视频链接</el-button>
             <el-popover style="margin: 0px 10px;" width="100%" trigger="click">
               <ListFolderView v-if="isLogin" ref="listFolder" :msg="temporaryValForVLP" :visible.sync="showListFolder"></ListFolderView>
               <el-button slot="reference" type="primary" class="EditTagsButton" @click="openListFolder">{{ $t("btn_group.add_favorite") }}</el-button>
@@ -513,6 +514,36 @@ export default {
           exist: 1,
         },
       });
+    },
+    // 导出视频链接
+    exportVideoLinks() {
+      this.axios({
+        method: "post",
+        url: "be/lists/get_playlist_url_only.do",
+        data: { page: 0, page_size: 10, pid: this.$route.query.id },
+      })
+        .then((result) => {
+          // 请求失败的情况
+          if (result.data.status == "FAILED") {
+            // 列表不存在的情况，跳转到 404 页面
+            if (result.data.data.reason == "PLAYLIST_NOT_EXIST") {
+              this.$router.push({ path: "*" });
+            }
+          }
+          // 页面存在的情况下
+          let detail = result.data.data;
+          let urls = detail.urls;
+          let urls_joined = urls.join("\n");
+          navigator.clipboard.writeText(urls_joined).then(() => {
+            this.$message({
+              message: "视频链接已复制到剪贴板",
+              type: "success",
+            });
+          });
+        })
+        .catch(() => {
+          this.$router.push({ path: "/404" });
+        });
     },
     // 提交视频详情修改数据
     onSubmit() {
