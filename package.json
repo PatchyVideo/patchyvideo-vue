@@ -48,7 +48,7 @@
     "@vue/cli-plugin-eslint": "^4.5.7",
     "@vue/cli-plugin-router": "^4.5.7",
     "@vue/cli-plugin-vuex": "^4.5.7",
-    "@vue/cli-service": "^4.5.7",
+    "@vue/cli-service": "^5.0.8",
     "@vue/eslint-config-prettier": "^6.0.0",
     "babel-eslint": "^10.1.0",
     "colors": "^1.4.0",
